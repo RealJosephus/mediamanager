@@ -1,0 +1,9 @@
+{
+  "name": "@mediamanager/http",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "GPL-2.0-only",
+  "exports": { ".": "./index.js", "./*": "./*" },
+  "mediamanager": { "id": "http", "name": "HTTP", "entry": "index.js" },
+  "dependencies": { "@mediamanager/plugin-sdk": "0.1.0" }
+}

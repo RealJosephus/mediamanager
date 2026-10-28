@@ -1,4 +1,6 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
+import { Readable } from 'node:stream';
+import { finished } from 'node:stream/promises';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
 import { StorageError, checkAbort, requireCapability } from '@mediamanager/plugin-sdk/storage/errors';
 import { baseName, isWithin, normalizePath, parentPath, validateName } from '@mediamanager/plugin-sdk/storage/paths';
@@ -19,7 +21,7 @@ const xmlParser = new XMLParser({
   ignorePiTags: true,
 });
 
-function statusError(status, operation, retryAfter = null, { createOnly = false, destinationExclusive = false } = {}) {
+function statusError(status, operation, retryAfter = null, { destinationExclusive = false } = {}) {
   let code = ({
     401: 'authentication-required', 403: 'permission-denied', 404: 'not-found',
     405: 'not-supported', 408: 'timeout', 409: 'version-changed', 412: 'version-changed',
@@ -28,7 +30,7 @@ function statusError(status, operation, retryAfter = null, { createOnly = false,
     504: 'timeout', 507: 'unavailable',
   })[status] ?? 'unavailable';
   if (operation === 'mkdir' && status === 405) code = 'already-exists';
-  if (status === 412 && (createOnly || destinationExclusive)) code = 'already-exists';
+  if (status === 412 && destinationExclusive) code = 'already-exists';
   return new StorageError(code, `The WebDAV ${operation} operation failed.`, { status, operation, retryAfter });
 }
 
@@ -259,6 +261,8 @@ export class WebDavAdapter {
   #maxXmlBytes;
   #closed = false;
   #operations = new Set();
+  #creates = new Set();
+  #closePromise;
 
   constructor(config, { resolveCredential, fetch: fetchImplementation = globalThis.fetch } = {}) {
     if (!config || typeof config !== 'object' || Array.isArray(config)) throw new TypeError('WebDAV configuration must be an object.');
@@ -297,9 +301,9 @@ export class WebDavAdapter {
     });
   }
 
-  #scope(options) {
+  #scope(options, { cleanup = false, retained = false } = {}) {
     checkAbort(options.signal);
-    if (this.#closed) throw new StorageError('closed', 'The WebDAV adapter is closed.');
+    if (this.#closed && !cleanup) throw new StorageError('closed', 'The WebDAV adapter is closed.');
     const timeout = options.deadline === undefined ? this.#timeoutMs : Math.min(this.#timeoutMs, options.deadline - Date.now());
     if (!Number.isFinite(timeout)) throw new TypeError('The operation deadline must be a timestamp.');
     if (timeout <= 0) throw new StorageError('timeout', 'The storage operation deadline expired.');
@@ -310,13 +314,18 @@ export class WebDavAdapter {
     const timer = setTimeout(() => { timedOut = true; controller.abort(); }, Math.max(0, timeout));
     timer.unref();
     const scope = {
+      cleanup, retained,
+      responseCloseFailures: [],
       signal: controller.signal,
       abort: () => controller.abort(),
       error: (error) => {
-        if (timedOut && error?.code === 'cancelled') return new StorageError('timeout', 'The storage operation timed out.');
-        if (error instanceof StorageError) return error;
-        if (controller.signal.aborted) return new StorageError(timedOut ? 'timeout' : 'cancelled', timedOut ? 'The storage operation timed out.' : 'The storage operation was cancelled.');
-        return new StorageError('unavailable', 'The WebDAV transport failed.');
+        let result;
+        if (timedOut && error?.code === 'cancelled') result = new StorageError('timeout', 'The storage operation timed out.');
+        else if (error instanceof StorageError) return error;
+        else if (controller.signal.aborted) result = new StorageError(timedOut ? 'timeout' : 'cancelled', timedOut ? 'The storage operation timed out.' : 'The storage operation was cancelled.');
+        else result = new StorageError('unavailable', 'The WebDAV transport failed.');
+        if (retained || cleanup) Object.defineProperty(result, 'cause', { value: error });
+        return result;
       },
       dispose: () => {
         clearTimeout(timer);
@@ -374,10 +383,13 @@ export class WebDavAdapter {
     return headers;
   }
 
-  async #cancelBody(response, scope) {
+  async #cancelBody(response, scope, preserveFailure = false) {
     if (response?.body && !response.bodyUsed) {
       try { await response.body.cancel(); }
-      catch (error) { if (!scope.signal.aborted) throw scope.error(error); }
+      catch (error) {
+        if (preserveFailure) throw error;
+        if (!scope.signal.aborted) throw scope.error(error);
+      }
     }
   }
 
@@ -628,11 +640,13 @@ export class WebDavAdapter {
     }
   }
 
-  async #mutation(operation, path, { method, headers: initialHeaders = {}, body, statuses, options, errorContext = {} }) {
-    const scope = this.#scope(options);
-    let response;
+  async #mutation(operation, path, { method, headers: initialHeaders = {}, body, statuses, options,
+    errorContext = {}, scope: admittedScope, accepted }) {
+    const scope = admittedScope ?? this.#scope(options);
+    let response, result, failed = false, failure;
     try {
       const headers = await this.#headers(scope, initialHeaders);
+      checkAbort(scope.signal);
       const request = { method, headers, redirect: 'manual', signal: scope.signal };
       if (body !== undefined) {
         request.body = body;
@@ -644,11 +658,159 @@ export class WebDavAdapter {
         if (response.status >= 200 && response.status < 300) throw invalidResponse(`WebDAV returned an unsafe successful ${operation} status.`);
         throw statusError(response.status, operation, response.headers.get('retry-after'), errorContext);
       }
-      return { version: entityTag(response.headers.get('etag')) };
-    } catch (error) { throw scope.error(error); }
+      accepted?.();
+      result = { version: entityTag(response.headers.get('etag')) };
+    } catch (error) {
+      failed = true; failure = scope.error(error);
+    }
     finally {
-      try { await this.#cancelBody(response, scope); }
-      finally { scope.dispose(); }
+      try { await this.#cancelBody(response, scope, Boolean(admittedScope)); }
+      catch (error) {
+        if (!admittedScope) throw error;
+        const closeFailure = scope.error(error);
+        scope.responseCloseFailures.push(closeFailure);
+        if (!failed) { failed = true; failure = closeFailure; }
+      }
+      finally { if (!admittedScope) scope.dispose(); }
+    }
+    if (failed) throw failure;
+    return result;
+  }
+
+  async #create(path, data, size, headers, options) {
+    const scope = this.#scope(options, { retained: true });
+    const pending = Promise.withResolvers();
+    this.#creates.add(pending.promise);
+    const parent = parentPath(path);
+    const scratch = `${parent === '/' ? '' : parent}/.mediamanager-create-${randomUUID()}`;
+    let owned = false, published = false, failed = false, failure;
+    let upload, uploadClosed, uploadFinished, iterator, sourceClose;
+    const cleanupErrors = [];
+    const cancellation = new StorageError('cancelled', 'The WebDAV upload was cancelled.');
+    const closeSource = () => {
+      if (!sourceClose) {
+        sourceClose = (async () => {
+          const release = iterator?.return;
+          if (release != null) {
+            const result = await release.call(iterator);
+            await result?.value;
+          }
+        })();
+        // The owner awaits this exact rejection during teardown.
+        sourceClose.catch(() => {});
+      }
+      return sourceClose;
+    };
+    const cancelUpload = () => { upload?.destroy(cancellation); closeSource(); };
+    try {
+      const input = data instanceof Uint8Array ? [data] : data;
+      const iterate = input?.[Symbol.asyncIterator] ?? input?.[Symbol.iterator];
+      if (typeof iterate !== 'function') throw new TypeError('An upload must provide bytes.');
+      iterator = iterate.call(input);
+      await this.#mutation('mkdir', scratch, { method: 'MKCOL', statuses: [201], options, scope,
+        // A lost/unsafe MKCOL response cannot establish ownership. Never delete
+        // a collection unless this request observed its exclusive creation.
+        accepted: () => { owned = true; } });
+      checkAbort(scope.signal);
+      async function* body() {
+        let count = 0n;
+        for (;;) {
+          checkAbort(scope.signal);
+          let part;
+          try { part = await iterator.next(); }
+          catch (reason) {
+            if (reason instanceof Error) throw reason;
+            const error = new StorageError('unavailable', 'The WebDAV upload source failed.');
+            Object.defineProperty(error, 'cause', { value: reason });
+            throw error;
+          }
+          checkAbort(scope.signal);
+          if (part.done) break;
+          if (!(part.value instanceof Uint8Array)) throw new TypeError('Upload chunks must be bytes.');
+          count += BigInt(part.value.byteLength);
+          if (count > size) throw invalidResponse('The WebDAV upload exceeded its declared length.');
+          yield part.value;
+        }
+        if (count !== size) throw invalidResponse('The WebDAV upload ended before its declared length.');
+      }
+      upload = Readable.from(body(), { objectMode: false, autoDestroy: true });
+      uploadClosed = new Promise(resolve => upload.once('close', resolve));
+      uploadFinished = finished(upload, { cleanup: true });
+      uploadFinished.catch(() => {});
+      scope.signal.addEventListener('abort', cancelUpload, { once: true });
+      let requestBody = upload;
+      if (size === 0n) {
+        for await (const _chunk of upload) { /* Validate and drain an empty entity's real producer. */ }
+        requestBody = Buffer.alloc(0);
+      }
+      await this.#mutation('write', scratch + '/payload', { method: 'PUT', headers, body: requestBody,
+        statuses: [200, 201, 204], options, scope });
+      await uploadFinished;
+      checkAbort(scope.signal);
+      const result = await this.#mutation('rename', scratch + '/payload', {
+        method: 'MOVE', headers: { Destination: this.#url(path).href, Overwrite: 'F' }, statuses: [201],
+        errorContext: { destinationExclusive: true }, options, scope,
+        accepted: () => { published = true; },
+      });
+      return { size, atomic: false, version: result.version };
+    } catch (error) {
+      failed = true; failure = scope.error(error);
+    } finally {
+      scope.signal.removeEventListener('abort', cancelUpload);
+      cleanupErrors.push(...scope.responseCloseFailures);
+      // No business stage may resume during teardown. Abort its transport even
+      // when response cancellation itself rejected; cleanup has its own scope.
+      scope.abort();
+      if (upload) upload.destroy(cancellation);
+      try { await closeSource(); }
+      catch (error) {
+        const safe = error instanceof StorageError ? error
+          : new StorageError('unavailable', 'The WebDAV upload source did not close.');
+        if (!(error instanceof StorageError)) Object.defineProperty(safe, 'cause', { value: error });
+        cleanupErrors.push(safe);
+      }
+      if (uploadClosed) await uploadClosed;
+      if (uploadFinished) {
+        try { await uploadFinished; }
+        catch (error) {
+          if (!failed && error !== cancellation) { failed = true; failure = scope.error(error); }
+        }
+      }
+      if (owned) {
+        // Cleanup belongs to this admitted create. It has its own bounded
+        // transport lifetime after caller cancellation or adapter close.
+        const cleanupScope = this.#scope({}, { cleanup: true });
+        try {
+          await this.#mutation('delete', scratch, { method: 'DELETE', statuses: [200, 204, 404],
+            options: {}, scope: cleanupScope });
+        } catch (error) { cleanupErrors.push(cleanupScope.error(error)); }
+        finally {
+          for (const error of cleanupScope.responseCloseFailures) if (!cleanupErrors.includes(error)) cleanupErrors.push(error);
+          cleanupScope.dispose();
+        }
+      }
+      scope.dispose();
+      pending.resolve(cleanupErrors);
+      // A failed cleanup remains visible to close; it cannot be acknowledged
+      // as released merely because its request has settled.
+      if (!cleanupErrors.length) this.#creates.delete(pending.promise);
+      if (cleanupErrors.length) {
+        const primary = failed ? failure : cleanupErrors[0];
+        const error = new StorageError(primary.code, 'The WebDAV create could not finish every owned operation.',
+          { ...primary.details, publicationConfirmed: published });
+        const causes = failed ? [failure, ...cleanupErrors.filter(error => error !== failure)] : cleanupErrors;
+        Object.defineProperty(error, 'cause', { value: new AggregateError(causes,
+          'WebDAV create and staging cleanup failures.', { cause: primary }) });
+        throw error;
+      }
+      if (failed) {
+        if (published) {
+          const error = new StorageError(failure.code, failure.message, { ...failure.details, publicationConfirmed: true });
+          Object.defineProperty(error, 'cause', { value: failure });
+          throw error;
+        }
+        throw failure;
+      }
     }
   }
 
@@ -668,7 +830,7 @@ export class WebDavAdapter {
       'Content-Type': options.contentType === undefined ? 'application/octet-stream' : safeHeader(options.contentType, 'WebDAV content type'),
       'Content-Length': String(size),
     };
-    if (options.overwrite === false) headers['If-None-Match'] = '*';
+    if (options.overwrite === false) return this.#create(path, data, size, headers, options);
     if (options.ifMatch !== undefined) headers['If-Match'] = options.ifMatch;
     let upload = bytes;
     if (!bytes) {
@@ -687,8 +849,7 @@ export class WebDavAdapter {
     }
     const result = await this.#mutation('write', path, {
       method: 'PUT', headers, body: upload,
-      statuses: options.overwrite === false ? [201] : options.ifMatch !== undefined ? [200, 204] : [200, 201, 204], options,
-      errorContext: { createOnly: options.overwrite === false },
+      statuses: options.ifMatch !== undefined ? [200, 204] : [200, 201, 204], options,
     });
     return { size, atomic: false, version: result.version };
   }
@@ -731,8 +892,18 @@ export class WebDavAdapter {
     });
   }
 
-  async close() {
+  close() {
+    if (this.#closePromise) return this.#closePromise;
+    const closing = Promise.withResolvers();
+    this.#closePromise = closing.promise;
     this.#closed = true;
-    for (const scope of this.#operations) { scope.abort(); scope.dispose(); }
+    for (const scope of this.#operations) if (!scope.cleanup) {
+      scope.abort(); if (!scope.retained) scope.dispose();
+    }
+    (async () => {
+      const failures = (await Promise.all([...this.#creates])).flat();
+      if (failures.length) throw new AggregateError(failures, 'WebDAV staging resources failed to close.', { cause: failures[0] });
+    })().then(closing.resolve, closing.reject);
+    return this.#closePromise;
   }
 }

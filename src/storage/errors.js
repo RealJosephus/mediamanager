@@ -18,7 +18,7 @@ export class StorageError extends Error {
 }
 
 export function checkAbort(signal) {
-  if (signal?.aborted) throw new StorageError('cancelled', 'Storage operation was cancelled.');
+  if (signal?.aborted) throw Object.assign(new StorageError('cancelled', 'Storage operation was cancelled.'), { cause: signal.reason });
 }
 
 export function requireCapability(adapter, capability) {

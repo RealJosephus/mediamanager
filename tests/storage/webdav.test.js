@@ -9,7 +9,7 @@ import { VirtualFileSystem } from '../../src/storage/vfs.js';
 async function server(t, handler) {
   const service = http.createServer(async (request, response) => {
     try { await handler(request, response); }
-    catch { if (!response.headersSent) response.writeHead(500); response.end(); }
+    catch { if (response.destroyed) return; if (!response.headersSent) response.writeHead(500); response.end(); }
   });
   service.listen(0, '127.0.0.1');
   await once(service, 'listening');
@@ -58,6 +58,381 @@ async function read(handle) {
     return Buffer.concat(parts);
   } finally { await handle.close(); }
 }
+
+async function writableDav(t, { before, afterBody } = {}) {
+  const files = new Map(), collections = new Set(['/dav']), requests = [];
+  const pathname = value => decodeURIComponent(new URL(value, 'http://example.test').pathname).replace(/\/$/u, '') || '/';
+  const href = value => value.split('/').map(encodeURIComponent).join('/');
+  const origin = await server(t, async (request, response) => {
+    const path = pathname(request.url), record = { method: request.method, path, headers: request.headers };
+    requests.push(record);
+    const context = { request, response, path, record, files, collections };
+    if (await before?.(context)) return;
+    record.body = await requestBody(request);
+    if (await afterBody?.(context)) return;
+    if (request.method === 'MKCOL') {
+      if (collections.has(path) || files.has(path)) { response.writeHead(405); response.end(); return; }
+      if (!collections.has(path.slice(0, path.lastIndexOf('/')))) { response.writeHead(409); response.end(); return; }
+      collections.add(path); response.writeHead(201); response.end(); return;
+    }
+    if (request.method === 'PUT') {
+      if (!collections.has(path.slice(0, path.lastIndexOf('/')))) { response.writeHead(409); response.end(); return; }
+      // This controlled HTTP endpoint deliberately has the actual provider's
+      // unsafe PUT behavior: it ignores If-None-Match and replaces the entity.
+      const existed = files.has(path); files.set(path, record.body);
+      response.writeHead(existed ? 204 : 201, { ETag: '"uploaded"' }); response.end(); return;
+    }
+    if (request.method === 'MOVE') {
+      const destination = pathname(request.headers.destination);
+      if (!files.has(path)) { response.writeHead(404); response.end(); return; }
+      const existed = files.has(destination) || collections.has(destination);
+      if (existed && request.headers.overwrite === 'F') { response.writeHead(412); response.end(); return; }
+      files.set(destination, files.get(path)); files.delete(path);
+      response.writeHead(existed ? 204 : 201, { ETag: '"published"' }); response.end(); return;
+    }
+    if (request.method === 'DELETE') {
+      const existed = collections.delete(path) || files.delete(path);
+      for (const key of files.keys()) if (key.startsWith(path + '/')) files.delete(key);
+      for (const key of collections) if (key.startsWith(path + '/')) collections.delete(key);
+      response.writeHead(existed ? 204 : 404); response.end(); return;
+    }
+    if (request.method === 'GET') {
+      const bytes = files.get(path);
+      response.writeHead(bytes ? 200 : 404, bytes ? { 'Content-Length': bytes.length } : {}); response.end(bytes); return;
+    }
+    if (request.method === 'PROPFIND') {
+      if (!files.has(path) && !collections.has(path)) { response.writeHead(404); response.end(); return; }
+      const paths = [path];
+      if (request.headers.depth === '1') for (const key of [...collections, ...files.keys()]) {
+        if (key.slice(0, key.lastIndexOf('/')) === path) paths.push(key);
+      }
+      sendXml(response, paths.map(key => resource(href(key), { directory: collections.has(key), size: files.get(key)?.length })));
+      return;
+    }
+    response.writeHead(405); response.end();
+  });
+  return { origin, files, collections, requests,
+    get: async path => {
+      const response = await fetch(origin + href('/dav' + path));
+      return { status: response.status, bytes: Buffer.from(await response.arrayBuffer()) };
+    } };
+}
+
+function createAdapter(service, dependencies) {
+  return new WebDavAdapter({ baseUrl: service.origin + '/dav/', capabilities: { create: true } }, dependencies);
+}
+
+function assertNoStaging(service, paths) {
+  assert.deepEqual([...service.collections], ['/dav'], 'Every owned staging collection must be removed.');
+  assert.deepEqual([...service.files.keys()].sort(), paths.map(path => '/dav' + path).sort(),
+    'Only the declared complete destination entities may remain.');
+}
+
+test('WebDAV exclusive publish preserves complete entities and keeps caller capabilities separate', async t => {
+  const service = await writableDav(t), adapter = createAdapter(service);
+  t.after(() => adapter.close());
+  const path = '/中文 %2F #.nfo', original = Buffer.from('Complete original\0中文 entity.'), replacement = Buffer.from('different replacement');
+  const result = await adapter.write(path, original, { overwrite: false });
+  assert.deepEqual(result, { size: BigInt(original.length), atomic: false, version: '"published"' });
+  assert.deepEqual(await service.get(path), { status: 200, bytes: original });
+  await assert.rejects(adapter.write(path, replacement, { overwrite: false }), { code: 'already-exists' });
+  assert.deepEqual(await service.get(path), { status: 200, bytes: original });
+  await adapter.write('/empty', Buffer.alloc(0), { overwrite: false });
+  assert.deepEqual(await service.get('/empty'), { status: 200, bytes: Buffer.alloc(0) });
+  const chunks = [Buffer.from('streamed '), Buffer.from('中文'), Buffer.from(' complete entity')];
+  await adapter.write('/streamed', (async function* () { yield* chunks; })(), {
+    overwrite: false, size: chunks.reduce((size, chunk) => size + BigInt(chunk.length), 0n),
+  });
+  assert.deepEqual(await service.get('/streamed'), { status: 200, bytes: Buffer.concat(chunks) });
+  await assert.rejects(adapter.mkdir('/public-directory'), { code: 'not-supported' });
+  await assert.rejects(adapter.delete(path), { code: 'not-supported' });
+  await assert.rejects(adapter.rename(path, '/other'), { code: 'not-supported' });
+  assert.deepEqual(await service.get(path), { status: 200, bytes: original });
+  assertNoStaging(service, [path, '/empty', '/streamed']);
+});
+
+test('WebDAV competing exclusive writes publish exactly one complete candidate', async t => {
+  const service = await writableDav(t), adapter = createAdapter(service);
+  t.after(() => adapter.close());
+  const candidates = [Buffer.alloc(128 * 1024, 'A'), Buffer.alloc(192 * 1024, 'B')];
+  const outcomes = await Promise.allSettled(candidates.map(bytes => adapter.write('/winner', bytes, { overwrite: false })));
+  assert.equal(outcomes.filter(value => value.status === 'fulfilled').length, 1);
+  const rejected = outcomes.find(value => value.status === 'rejected');
+  assert.equal(rejected.reason.code, 'already-exists');
+  const winner = outcomes.findIndex(value => value.status === 'fulfilled');
+  assert.deepEqual(await service.get('/winner'), { status: 200, bytes: candidates[winner] });
+  assertNoStaging(service, ['/winner']);
+});
+
+test('WebDAV failed uploads and publication preserve destinations and remove only owned staging', async t => {
+  for (const [method, status, code] of [['MKCOL', 403, 'permission-denied'], ['PUT', 503, 'unavailable'], ['MOVE', 403, 'permission-denied']]) {
+    await t.test(method, async t => {
+      const service = await writableDav(t, { afterBody: ({ request, response, path, record, files }) => {
+        if (request.method !== method) return false;
+        if (method === 'PUT') files.set(path, record.body.subarray(0, 3));
+        response.writeHead(status); response.end(); return true;
+      } });
+      const adapter = createAdapter(service); t.after(() => adapter.close());
+      const original = Buffer.from('existing complete entity'); service.files.set('/dav/existing', original);
+      await assert.rejects(adapter.write('/destination', Buffer.from('complete candidate'), { overwrite: false }), { code });
+      assert.deepEqual(await service.get('/existing'), { status: 200, bytes: original });
+      assert.equal((await service.get('/destination')).status, 404);
+      assertNoStaging(service, ['/existing']);
+    });
+  }
+  for (const lostResponse of [false, true]) await t.test(lostResponse ? 'unknown MKCOL response' : 'foreign collection collision', async t => {
+    let foreign;
+    const sentinel = Buffer.from('foreign ownership remains intact');
+    const service = await writableDav(t, { before: ({ request, response, path, files, collections }) => {
+      if (request.method !== 'MKCOL') return false;
+      foreign = path; collections.add(path); files.set(path + '/sentinel', sentinel);
+      if (lostResponse) response.destroy(); else { response.writeHead(405); response.end(); }
+      return true;
+    } });
+    const adapter = createAdapter(service); t.after(() => adapter.close());
+    await assert.rejects(adapter.write('/destination', Buffer.from('candidate'), { overwrite: false }),
+      { code: lostResponse ? 'unavailable' : 'already-exists' });
+    assert.deepEqual(service.files.get(foreign + '/sentinel'), sentinel);
+    assert.ok(service.collections.has(foreign));
+    assert.equal((await service.get('/destination')).status, 404);
+  });
+});
+
+test('WebDAV publication and ordered cleanup failures retain their separate outcomes', async t => {
+  for (const published of [true, false]) await t.test(published ? 'published target survives failed cleanup' : 'conflict remains the primary failure', async t => {
+    const service = await writableDav(t, { before: ({ request, response }) => {
+      if (request.method !== 'DELETE') return false;
+      response.writeHead(403); response.end(); return true;
+    } });
+    const adapter = createAdapter(service), original = Buffer.from('original'), candidate = Buffer.from('candidate');
+    t.after(() => Promise.allSettled([adapter.close()]));
+    if (!published) service.files.set('/dav/target', original);
+    await assert.rejects(adapter.write('/target', candidate, { overwrite: false }), error => {
+      assert.equal(error.code, published ? 'permission-denied' : 'already-exists');
+      assert.equal(error.details.publicationConfirmed, published);
+      assert.deepEqual(error.cause.errors.map(value => value.code), published ? ['permission-denied'] : ['already-exists', 'permission-denied']);
+      return true;
+    });
+    assert.deepEqual(await service.get('/target'), { status: 200, bytes: published ? candidate : original });
+    assert.ok([...service.collections].some(path => path !== '/dav'));
+    await assert.rejects(adapter.close(), error => error.errors.every(value => value.code === 'permission-denied'));
+  });
+});
+
+async function remainsPending(promise, message) {
+  const pending = Symbol('pending');
+  assert.equal(await Promise.race([promise.then(() => false, () => false),
+    new Promise(resolve => setImmediate(() => resolve(pending)))]), pending, message);
+}
+
+async function beforeAbort(promise, signal) {
+  signal.throwIfAborted();
+  let aborted;
+  const cancellation = new Promise((_resolve, reject) => {
+    aborted = () => reject(signal.reason); signal.addEventListener('abort', aborted, { once: true });
+  });
+  try { return await Promise.race([promise, cancellation]); }
+  finally { signal.removeEventListener('abort', aborted); }
+}
+
+function containsCause(error, reason, seen = new Set()) {
+  if (error === reason) return true;
+  if (error === null || typeof error !== 'object' || seen.has(error)) return false;
+  seen.add(error);
+  if (Object.hasOwn(error, 'cause') && containsCause(error.cause, reason, seen)) return true;
+  return Array.isArray(error.errors) && error.errors.some(value => containsCause(value, reason, seen));
+}
+
+test('WebDAV real upload failures preserve source next errors and every primitive rejection', { timeout: 30000 }, async t => {
+  for (const reason of [false, 0, '', null, undefined,
+    Object.assign(new Error('Controlled source next failure.', { cause: null }), { code: 'CONTROLLED_NEXT', status: 502 }),
+  ]) await t.test('source next rejection ' + String(reason), async t => {
+    const arrived = Promise.withResolvers(), sourceClosed = Promise.withResolvers(), upstreamClosed = Promise.withResolvers();
+    const service = await writableDav(t, { before: ({ request }) => {
+      if (request.method === 'PUT') {
+        request.once('data', () => arrived.resolve()); request.once('close', () => upstreamClosed.resolve());
+      }
+    } });
+    const adapter = createAdapter(service); t.after(() => adapter.close());
+    async function* source() {
+      try { yield Buffer.from('prefix'); await beforeAbort(arrived.promise, t.signal); throw reason; }
+      finally { sourceClosed.resolve(); }
+    }
+    await assert.rejects(adapter.write('/failed', source(), { size: 100, overwrite: false, signal: t.signal }), error => {
+      assert.equal(error.code, 'unavailable');
+      assert.ok(containsCause(error, reason), 'The actual source rejection must remain in the retained operation cause.');
+      return true;
+    });
+    await sourceClosed.promise; await upstreamClosed.promise;
+    assert.equal((await service.get('/failed')).status, 404); assertNoStaging(service, []);
+    await adapter.close();
+  });
+});
+
+test('WebDAV cancelled and closing creates drain the actual upload source before releasing staging', { timeout: 30000 }, async t => {
+  for (const [label, closeAdapter, fault] of [
+    ['caller cancellation', false, null], ['adapter close', true, null],
+    ...[false, 0, '', null, undefined,
+      Object.assign(new Error('Controlled producer close failure.', { cause: false }), { code: 'CONTROLLED_CLOSE', status: 503 }),
+    ].map(reason => ['source cleanup rejection ' + String(reason), false, { reason }]),
+  ]) await t.test(label, async t => {
+    const arrived = Promise.withResolvers(), upstreamClosed = Promise.withResolvers(), release = Promise.withResolvers(), sourceClosed = Promise.withResolvers();
+    const service = await writableDav(t, { before: ({ request }) => {
+      if (request.method === 'PUT') {
+        request.once('data', () => arrived.resolve());
+        request.once('close', () => upstreamClosed.resolve());
+      }
+    } });
+    const adapter = createAdapter(service), controller = new AbortController();
+    async function* source() {
+      try { yield Buffer.from('prefix'); await release.promise; yield Buffer.from('tail'); }
+      finally { sourceClosed.resolve(); }
+    }
+    const producer = source();
+    const data = { [Symbol.asyncIterator]: () => ({ next: () => producer.next(), return: async () => {
+      const result = await producer.return();
+      if (fault) throw fault.reason;
+      return result;
+    } }) };
+    const writing = adapter.write('/cancelled', data, { size: 10, overwrite: false, signal: AbortSignal.any([controller.signal, t.signal]) })
+      .then(result => ({ result }), error => ({ error }));
+    let closing;
+    try {
+      await beforeAbort(arrived.promise, t.signal);
+      if (closeAdapter) closing = adapter.close(); else controller.abort();
+      await remainsPending(writing, 'Cancellation must await the actual held producer and owned staging cleanup.');
+      if (closing) await remainsPending(closing, 'Adapter close must retain ownership of its admitted upload.');
+      release.resolve();
+      const outcome = await writing;
+      assert.equal(outcome.error.code, 'cancelled');
+      if (fault) {
+        assert.equal(outcome.error.cause.errors[0].code, 'cancelled');
+        const cleanup = outcome.error.cause.errors[1];
+        assert.equal(cleanup.code, 'unavailable'); assert.ok(Object.hasOwn(cleanup, 'cause'));
+        assert.equal(cleanup.message, 'The WebDAV upload source did not close.');
+        if (fault.reason instanceof Error) {
+          assert.deepEqual({ code: cleanup.cause.code, status: cleanup.cause.status, message: cleanup.cause.message, cause: cleanup.cause.cause },
+            { code: fault.reason.code, status: fault.reason.status, message: fault.reason.message, cause: fault.reason.cause });
+        } else assert.equal(cleanup.cause, fault.reason);
+        await assert.rejects(adapter.close(), error => error.errors.some(value => Object.hasOwn(value, 'cause') && value.cause === fault.reason));
+      } else await (closing ?? adapter.close());
+      await sourceClosed.promise; await upstreamClosed.promise;
+      assert.equal((await service.get('/cancelled')).status, 404);
+      assertNoStaging(service, []);
+      await assert.rejects(adapter.write('/late', Buffer.from('late'), { overwrite: false }), { code: 'closed' });
+      assert.equal((await service.get('/late')).status, 404);
+    } finally {
+      release.resolve();
+      await Promise.allSettled([writing, closing, adapter.close()]);
+    }
+  });
+});
+
+test('WebDAV admitted mutation response-close failures retain the actual HTTP outcome and original reason', async t => {
+  for (const published of [false, true]) await t.test(published ? 'published response close fails' : 'conflict and response close both fail', async t => {
+    const service = await writableDav(t), original = Buffer.from('original complete entity'), candidate = Buffer.from('candidate complete entity');
+    if (!published) service.files.set('/dav/target', original);
+    const responseFailure = Object.assign(new Error('Controlled response close failure.', { cause: '' }), { code: 'CONTROLLED_RESPONSE_CLOSE', status: 599 });
+    const observedResponses = [];
+    const adapter = createAdapter(service, { fetch: async (url, options) => {
+      const response = await fetch(url, options);
+      if (options.method === 'MOVE') {
+        observedResponses.push({ status: response.status, headers: Object.fromEntries(response.headers) });
+        const body = response.body, cancel = body.cancel.bind(body);
+        let inject = true;
+        Object.defineProperty(body, 'cancel', { value: async () => {
+          await cancel(); if (inject) { inject = false; throw responseFailure; }
+        } });
+      }
+      return response;
+    } });
+    t.after(() => Promise.allSettled([adapter.close()]));
+    await assert.rejects(adapter.write('/target', candidate, { overwrite: false }), error => {
+      assert.equal(error.code, published ? 'unavailable' : 'already-exists');
+      assert.equal(error.details.publicationConfirmed, published);
+      if (!published) assert.equal(error.details.status, 412);
+      const failures = error.cause.errors;
+      if (!published) {
+        assert.equal(failures[0].code, 'already-exists'); assert.equal(failures[0].details.status, 412);
+      }
+      const closing = failures.at(-1);
+      assert.equal(closing.code, 'unavailable');
+      assert.deepEqual({ code: closing.cause.code, status: closing.cause.status, message: closing.cause.message, cause: closing.cause.cause },
+        { code: responseFailure.code, status: responseFailure.status, message: responseFailure.message, cause: responseFailure.cause });
+      return true;
+    });
+    assert.equal(observedResponses.at(-1).status, published ? 201 : 412);
+    assert.deepEqual(await service.get('/target'), { status: 200, bytes: published ? candidate : original });
+    assertNoStaging(service, ['/target']);
+    await assert.rejects(adapter.close(), error => error.errors.some(value => value.cause === responseFailure));
+  });
+});
+
+test('WebDAV close waits for acknowledged publication cleanup and blocks late business admission', { timeout: 30000 }, async t => {
+  await t.test('successful EOF retains actual source return ownership', async t => {
+    const arrived = Promise.withResolvers(), release = Promise.withResolvers();
+    const service = await writableDav(t), adapter = createAdapter(service), bytes = Buffer.from('complete source entity');
+    let yielded = false;
+    const source = { [Symbol.asyncIterator]: () => ({
+      next: async () => { if (yielded) return { done: true }; yielded = true; return { value: bytes, done: false }; },
+      return: async () => { arrived.resolve(); await release.promise; return { done: true }; },
+    }) };
+    const writing = adapter.write('/published', source, { size: bytes.length, overwrite: false, signal: t.signal });
+    writing.catch(() => {});
+    let closing;
+    try {
+      await beforeAbort(arrived.promise, t.signal);
+      assert.deepEqual(await service.get('/published'), { status: 200, bytes });
+      closing = adapter.close();
+      await remainsPending(writing, 'Observed EOF cannot replace actual source return completion.');
+      await remainsPending(closing, 'Close must retain the successful producer until its actual return completes.');
+      release.resolve(); await writing; await closing;
+      assert.deepEqual(await service.get('/published'), { status: 200, bytes }); assertNoStaging(service, ['/published']);
+    } finally { release.resolve(); await Promise.allSettled([writing, closing, adapter.close()]); }
+  });
+  await t.test('owned DELETE can finish after close begins', async t => {
+    const arrived = Promise.withResolvers(), release = Promise.withResolvers();
+    const service = await writableDav(t, { before: async ({ request }) => {
+      if (request.method === 'DELETE') { arrived.resolve(); await release.promise; }
+    } });
+    const adapter = createAdapter(service), bytes = Buffer.from('published before cleanup');
+    const writing = adapter.write('/published', bytes, { overwrite: false, signal: t.signal });
+    writing.catch(() => {});
+    let closing;
+    try {
+      await beforeAbort(arrived.promise, t.signal);
+      assert.deepEqual(await service.get('/published'), { status: 200, bytes });
+      closing = adapter.close();
+      await remainsPending(writing, 'A successful write must wait for its real staging DELETE.');
+      await remainsPending(closing, 'Close must await cleanup of an already published create.');
+      release.resolve();
+      assert.equal((await writing).size, BigInt(bytes.length)); await closing;
+      assert.deepEqual(await service.get('/published'), { status: 200, bytes });
+      assertNoStaging(service, ['/published']);
+    } finally { release.resolve(); await Promise.allSettled([writing, closing, adapter.close()]); }
+  });
+  await t.test('credential completion after close cannot start publication', async t => {
+    const arrived = Promise.withResolvers(), release = Promise.withResolvers();
+    let pause = true;
+    const service = await writableDav(t);
+    const adapter = new WebDavAdapter({ baseUrl: service.origin + '/dav/', credentialRef: 'DAV_AUTH', capabilities: { create: true } }, {
+      resolveCredential: async () => {
+        if (pause && service.files.size) { arrived.resolve(); await release.promise; }
+        return 'Basic controlled';
+      },
+    });
+    const writing = adapter.write('/late', Buffer.from('complete candidate'), { overwrite: false, signal: t.signal })
+      .then(result => ({ result }), error => ({ error }));
+    let closing;
+    try {
+      await beforeAbort(arrived.promise, t.signal); closing = adapter.close();
+      await remainsPending(closing, 'Close must await the already admitted credential resolution.');
+      pause = false; release.resolve();
+      assert.equal((await writing).error.code, 'cancelled'); await closing;
+      assert.equal((await service.get('/late')).status, 404); assertNoStaging(service, []);
+    } finally { pause = false; release.resolve(); await Promise.allSettled([writing, closing, adapter.close()]); }
+  });
+});
 
 test('WebDAV has one strict configuration and a complete conservative capability contract', () => {
   for (const config of [undefined, null, [], {}, { baseUrl: 'ftp://example.test/dav/' },
@@ -280,11 +655,13 @@ test('WebDAV conditional reads reject unproven versions, encoding and truncated 
 test('WebDAV create, replace, collection, delete and cross-directory MOVE are independently gated', async (t) => {
   const requests = [];
   let forcedStatus = null;
+  let forcedMethod = null;
   const origin = await server(t, async (request, response) => {
     requests.push({ method: request.method, url: request.url, headers: request.headers, body: await requestBody(request) });
-    const status = forcedStatus ?? ({ PUT: request.headers['if-none-match'] === '*' ? 201 : 204,
+    const forced = forcedStatus !== null && (forcedMethod === null || forcedMethod === request.method);
+    const status = (forced ? forcedStatus : null) ?? ({ PUT: 204,
       MKCOL: 201, DELETE: 204, MOVE: 201 })[request.method] ?? 500;
-    forcedStatus = null;
+    if (forced) { forcedStatus = null; forcedMethod = null; }
     response.writeHead(status, request.method === 'PUT' ? { ETag: '"written"' } : {});
     response.end();
   });
@@ -294,22 +671,24 @@ test('WebDAV create, replace, collection, delete and cross-directory MOVE are in
   t.after(() => adapter.close());
   const bytes = Buffer.from('<movie>测试</movie>');
   assert.deepEqual(await adapter.write('/电影/%2F #.nfo', bytes, { overwrite: false }), {
-    size: BigInt(bytes.length), atomic: false, version: '"written"',
+    size: BigInt(bytes.length), atomic: false, version: null,
   });
   await adapter.write('/电影/current.nfo', bytes, { ifMatch: '"v1"' });
   await adapter.write('/电影/upsert.nfo', bytes, { overwrite: true });
   await adapter.mkdir('/电影/new');
   await adapter.delete('/电影/old.nfo', { ifMatch: '"v2"' });
   await adapter.rename('/电影/new/name.nfo', '/archive/%2F renamed.nfo');
-  assert.equal(requests[0].url, '/dav/%E7%94%B5%E5%BD%B1/%252F%20%23.nfo');
-  assert.equal(requests[0].headers['if-none-match'], '*');
-  assert.equal(requests[0].headers['content-length'], String(bytes.length));
-  assert.deepEqual(requests[0].body, bytes);
-  assert.equal(requests[1].headers['if-match'], '"v1"');
-  assert.equal(requests[4].headers['if-match'], '"v2"');
-  assert.equal(requests[5].method, 'MOVE');
-  assert.equal(requests[5].headers.overwrite, 'F');
-  assert.equal(requests[5].headers.destination, `${origin}/dav/archive/%252F%20renamed.nfo`);
+  const created = requests.find(request => request.method === 'MOVE'
+    && request.headers.destination === `${origin}/dav/%E7%94%B5%E5%BD%B1/%252F%20%23.nfo`);
+  assert.ok(created); assert.equal(created.headers.overwrite, 'F');
+  const uploaded = requests.find(request => request.method === 'PUT' && request.url === created.url);
+  assert.equal(uploaded.headers['content-length'], String(bytes.length));
+  assert.deepEqual(uploaded.body, bytes);
+  assert.equal(requests.find(request => request.method === 'PUT' && request.url.endsWith('/current.nfo')).headers['if-match'], '"v1"');
+  assert.equal(requests.find(request => request.method === 'DELETE' && request.url.endsWith('/old.nfo')).headers['if-match'], '"v2"');
+  const renamed = requests.find(request => request.method === 'MOVE' && request.url.endsWith('/new/name.nfo'));
+  assert.equal(renamed.headers.overwrite, 'F');
+  assert.equal(renamed.headers.destination, `${origin}/dav/archive/%252F%20renamed.nfo`);
   const beforeNoop = requests.length;
   await adapter.rename('/same', '/same');
   assert.equal(requests.length, beforeNoop);
@@ -317,10 +696,12 @@ test('WebDAV create, replace, collection, delete and cross-directory MOVE are in
   forcedStatus = 412;
   await assert.rejects(adapter.rename('/source', '/destination'), { code: 'already-exists' });
   forcedStatus = 412;
+  forcedMethod = 'MOVE';
   await assert.rejects(adapter.write('/existing', bytes, { overwrite: false }), { code: 'already-exists' });
   forcedStatus = 405;
   await assert.rejects(adapter.mkdir('/existing-directory'), { code: 'already-exists' });
   forcedStatus = 204;
+  forcedMethod = 'MOVE';
   await assert.rejects(adapter.write('/unsafe-create', bytes, { overwrite: false }), { code: 'invalid-response' });
   forcedStatus = 201;
   await assert.rejects(adapter.write('/unsafe-replacement', bytes, { ifMatch: '"v1"' }), { code: 'invalid-response' });
@@ -386,6 +767,9 @@ test('WebDAV cancellation, timeout, close and early read close abort upstream wo
   let streamClosed = new Promise((resolve) => { streamClosedResolve = resolve; });
   let streamEndedAtClose = null;
   const origin = await server(t, (request, response) => {
+    if (['MKCOL', 'MOVE', 'DELETE'].includes(request.method)) {
+      response.writeHead(request.method === 'DELETE' ? 204 : 201); response.end(); return;
+    }
     if (request.method === 'PUT') {
       if (mode === 'write-hang') {
         const resolveClose = upstreamClosedResolve;

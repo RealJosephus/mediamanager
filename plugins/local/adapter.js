@@ -10,8 +10,17 @@ import { watchDirectory } from './watch.js';
 const codes = { ENOENT: 'not-found', ENOTDIR: 'not-directory', EISDIR: 'is-directory',
   EPERM: 'permission-denied', EACCES: 'permission-denied', EEXIST: 'already-exists',
   ENOTEMPTY: 'not-empty', EBUSY: 'unavailable', ABORT_ERR: 'cancelled' };
+const publicFailure = error => Object.fromEntries(['status', 'statusCode', 'errors']
+  .filter(key => error != null && Object.hasOwn(error, key)).map(key => [key, error[key]]));
 const failure = error => error instanceof StorageError ? error
-  : new StorageError(codes[error.code] ?? 'unavailable', error.message, { nativeCode: error.code });
+  : Object.assign(new StorageError(Object.hasOwn(codes, error?.code) ? codes[error.code] : 'unavailable',
+    error?.message ?? 'The local storage operation failed.', { nativeCode: error?.code }), publicFailure(error), { cause: error });
+const combinedFailure = errors => {
+  if (errors.length === 1) return errors[0];
+  const primary = failure(errors[0]);
+  return Object.assign(new StorageError(primary.code, primary.message, primary.details), publicFailure(primary),
+    { cause: new AggregateError(errors, primary.message, { cause: errors[0] }), errors });
+};
 const version = info => `"${createHash('sha256').update([info.dev, info.ino, info.size, info.mtimeNs, info.ctimeNs].join(':')).digest('hex')}"`;
 const date = ns => {
   const fraction = (ns % 1000000000n + 1000000000n) % 1000000000n;
@@ -34,20 +43,6 @@ const entry = (name, info) => ({ name, kind: info.isDirectory() ? 'directory' : 
   size: info.isDirectory() ? null : info.size, modified: date(info.mtimeNs), created: date(createdNanoseconds(info)),
   version: version(info) });
 
-async function* chunks(source, signal) {
-  const iterator = source[Symbol.asyncIterator]?.() ?? source[Symbol.iterator]();
-  const aborted = Promise.withResolvers(), cancel = () => aborted.reject(signal.reason);
-  signal.addEventListener('abort', cancel, { once: true });
-  try {
-    for (;;) { checkAbort(signal); const next = await Promise.race([iterator.next(), aborted.promise]);
-      if (next.done) return; yield next.value; }
-  } finally {
-    signal.removeEventListener('abort', cancel);
-    if (signal.aborted) source.destroy?.(signal.reason);
-    void Promise.resolve(iterator.return?.()).catch(() => {});
-  }
-}
-
 // A root is an administrator-owned directory, not a sandbox against concurrent
 // privileged OS mutations. Existing symlinks, junctions and alternate streams
 // are rejected before every operation, including every recursive delete entry.
@@ -57,6 +52,7 @@ export class LocalAdapter {
   #handles = new Set();
   #pending = new Set();
   #writes = Promise.resolve();
+  #closing;
   static async open(configuration, options = {}) {
     const adapter = new LocalAdapter(configuration);
     await adapter.#target('/', { missing: true });
@@ -180,26 +176,57 @@ export class LocalAdapter {
       const target = await this.#target(value, { missing: true });
       const temporary = options.atomic ? path.join(path.dirname(target), `.storage-${randomUUID()}.tmp`) : target;
       const handle = await fs.open(temporary, options.atomic || options.overwrite === false ? 'wx' : 'w');
-      let count = 0n;
+      let count = 0n, result;
+      const errors = [];
       try {
         const source = data instanceof Uint8Array ? [data] : data;
-        for await (const bytes of chunks(source, signal)) {
-          checkAbort(signal);
-          if (!(bytes instanceof Uint8Array)) throw new TypeError('Upload chunks must be bytes.');
-          for (let offset = 0; offset < bytes.length;) { const result = await handle.write(bytes, offset, bytes.length - offset); if (!result.bytesWritten) throw new Error('Write made no progress.'); offset += result.bytesWritten; }
-          count += BigInt(bytes.length);
-          if (options.size !== undefined && count > BigInt(options.size)) throw new StorageError('invalid-response', 'Upload exceeds its declared length.');
+        const aborted = Promise.withResolvers();
+        const cancellation = () => Object.assign(new StorageError('cancelled', 'Storage operation was cancelled.'),
+          publicFailure(signal.reason), { cause: signal.reason });
+        const active = () => { if (signal.aborted) throw cancellation(); };
+        const cancel = () => aborted.reject(cancellation());
+        // The notification can reject while a synchronous next() throws before
+        // Promise.race subscribes. It owns no source cleanup or business result.
+        void aborted.promise.catch(() => {});
+        signal.addEventListener('abort', cancel, { once: true });
+        let iterator;
+        try {
+          iterator = source[Symbol.asyncIterator]?.() ?? source[Symbol.iterator]();
+          for (;;) {
+            active();
+            const next = await Promise.race([iterator.next(), aborted.promise]);
+            if (next.done) break;
+            const bytes = await next.value;
+            active();
+            if (!(bytes instanceof Uint8Array)) throw new TypeError('Upload chunks must be bytes.');
+            for (let offset = 0; offset < bytes.length;) { const written = await handle.write(bytes, offset, bytes.length - offset); if (!written.bytesWritten) throw new Error('Write made no progress.'); offset += written.bytesWritten; }
+            count += BigInt(bytes.length);
+            if (options.size !== undefined && count > BigInt(options.size)) throw new StorageError('invalid-response', 'Upload exceeds its declared length.');
+          }
+          if (options.size !== undefined && count !== BigInt(options.size)) throw new StorageError('invalid-response', 'Upload does not match its declared length.');
+        } catch (error) { errors.push(error); }
+        finally {
+          signal.removeEventListener('abort', cancel);
+          if (signal.aborted) try { await source?.destroy?.(signal.reason); } catch (error) { errors.push(error); }
+          try { await iterator?.return?.(); } catch (error) { errors.push(error); }
         }
-        if (options.size !== undefined && count !== BigInt(options.size)) throw new StorageError('invalid-response', 'Upload does not match its declared length.');
-        await handle.sync(); await handle.close(); checkAbort(signal);
-        if (options.atomic) {
-          await this.#target(value, { missing: true });
-          if (options.overwrite === false) { await fs.link(temporary, target); await fs.unlink(temporary); }
-          else await fs.rename(temporary, target);
+        if (!errors.length) {
+          await handle.sync(); await handle.close(); active();
+          if (options.atomic) {
+            await this.#target(value, { missing: true });
+            if (options.overwrite === false) { await fs.link(temporary, target); await fs.unlink(temporary); }
+            else await fs.rename(temporary, target);
+          }
+          if (options.modified !== undefined) await fs.utimes(target, new Date(), new Date(options.modified));
+          result = { size: count, version: version(await fs.stat(target, { bigint: true })), atomic: options.atomic === true };
         }
-        if (options.modified !== undefined) await fs.utimes(target, new Date(), new Date(options.modified));
-        return { size: count, version: version(await fs.stat(target, { bigint: true })), atomic: options.atomic === true };
-      } finally { await handle.close(); if (options.atomic) await fs.rm(temporary, { force: true }); }
+      } catch (error) { errors.push(error); }
+      finally {
+        try { await handle.close(); } catch (error) { errors.push(error); }
+        if (options.atomic) try { await fs.rm(temporary, { force: true }); } catch (error) { errors.push(error); }
+      }
+      if (errors.length) throw combinedFailure(errors);
+      return result;
     }, true);
   }
   mkdir(value, options = {}) { return this.#operation(options, async () => {
@@ -247,11 +274,17 @@ export class LocalAdapter {
       return handle;
     });
   }
-  async close() {
-    if (this.#closed) return; this.#closed = true; this.#lifetime.abort();
-    await Promise.allSettled([...this.#pending]);
-    const results = await Promise.allSettled([...this.#handles].map(handle => handle.close()));
-    const failures = results.filter(result => result.status === 'rejected').map(result => result.reason);
-    if (failures.length) throw new AggregateError(failures, 'Local storage handles failed to close.');
+  close() {
+    if (this.#closing) return this.#closing;
+    const closing = Promise.withResolvers();
+    this.#closing = closing.promise;
+    this.#closed = true; this.#lifetime.abort();
+    (async () => {
+      await Promise.allSettled([...this.#pending]);
+      const results = await Promise.allSettled([...this.#handles].map(handle => handle.close()));
+      const failures = results.filter(result => result.status === 'rejected').map(result => result.reason);
+      if (failures.length) throw new AggregateError(failures, 'Local storage handles failed to close.');
+    })().then(closing.resolve, closing.reject);
+    return this.#closing;
   }
 }

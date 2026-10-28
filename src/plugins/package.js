@@ -21,13 +21,14 @@ export async function physicalDirectory(directory, { missing = false } = {}) {
   return resolved;
 }
 
-export async function inspectPackage(directory) {
+export async function inspectPackage(directory, { installed = false } = {}) {
   directory = await physicalDirectory(directory);
   const files = []; let size = 0;
   const visit = async (relative = '') => {
     if (relative.split(path.sep).length > 32) throw new TypeError('Plugin package directory depth exceeds its limit.');
     for (const entry of (await fs.readdir(path.join(directory, relative), { withFileTypes: true })).sort((a,b)=>a.name.localeCompare(b.name))) {
-      if (entry.name === 'node_modules') continue;
+      if (entry.name === 'node_modules' && !installed) continue;
+      if (entry.name.toLowerCase() === 'node_modules') throw new TypeError('Plugin packages cannot contain dependency shadow directories.');
       if (entry.name.startsWith('.') || /[:\\]/.test(entry.name) || entry.isSymbolicLink()) throw new TypeError('Plugin packages cannot contain hidden files, links or alternate streams.');
       const name = path.join(relative, entry.name);
       if (entry.isDirectory()) await visit(name);
@@ -65,20 +66,29 @@ export async function stagePackage(source, root) {
   await fs.mkdir(directory, {recursive:true});
   try {
     for (const file of inspected.files) { const target=path.join(directory,file.name); await fs.mkdir(path.dirname(target),{recursive:true}); await fs.writeFile(target,file.bytes,{flag:'wx'}); }
-    await prepareDependencies(directory, inspected.manifest);
+    await prepareDependencies(root, inspected.manifest);
     return { release, digest:inspected.digest, manifest:inspected.manifest };
   } catch(error) { await fs.rm(directory,{recursive:true,force:true}); throw error; }
 }
 
-// Generated import facades are ordinary files, so instance capture needs no
-// symlink exemption. Rebuilding them binds a restored package to this host SDK.
-async function prepareDependencies(directory, manifest) {
+// One ordinary-file dependency tree belongs to the host, outside release GC.
+// Node resolves it through the release's ancestors; no closer tree may shadow it.
+// Instance capture includes these files. Every admission still verifies fresh
+// bytes and repairs only a missing facade or one differing from this host SDK.
+async function prepareDependencies(hostRoot, manifest) {
+  const packages=await physicalDirectory(path.join(hostRoot,'packages'));
+  if((await fs.readdir(packages)).some(name=>name.toLowerCase()==='node_modules')) {
+    throw new TypeError('Plugin package storage cannot contain dependency shadow directories.');
+  }
   const write = async (relative, content) => {
-    const target=path.join(directory,'node_modules',relative);
+    const target=path.join(hostRoot,'node_modules',relative),bytes=Buffer.from(content);
     await physicalDirectory(path.dirname(target),{missing:true});await fs.mkdir(path.dirname(target),{recursive:true});
-    try { if (!(await fs.lstat(target)).isFile()) throw new TypeError('Generated plugin dependencies must be ordinary files.'); }
+    try {
+      if (!(await fs.lstat(target)).isFile()) throw new TypeError('Generated plugin dependencies must be ordinary files.');
+      if ((await fs.readFile(target)).equals(bytes)) return;
+    }
     catch (error) { if(error.code!=='ENOENT')throw error; }
-    await fs.writeFile(target,content);
+    await fs.writeFile(target,bytes);
   };
   const sdk=JSON.parse(await fs.readFile(path.join(sdkPath,'package.json'),'utf8'));
   await write('@mediamanager/plugin-sdk/package.json',JSON.stringify({name:sdk.name,type:'module',exports:sdk.exports}));
@@ -92,9 +102,9 @@ async function prepareDependencies(directory, manifest) {
 
 export async function verifyRelease(root, descriptor) {
   if (!/^[0-9a-f-]{36}$/.test(descriptor?.release ?? '')) throw new TypeError('Invalid plugin release identity.');
-  const directory=path.join(root,'packages',descriptor.release), inspected=await inspectPackage(directory);
+  const directory=path.join(root,'packages',descriptor.release), inspected=await inspectPackage(directory,{installed:true});
   if(inspected.digest!==descriptor.digest) throw new Error('Installed plugin package integrity check failed.');
   if(JSON.stringify(inspected.manifest)!==JSON.stringify(descriptor.manifest))throw new Error('Installed plugin manifest does not match its persisted descriptor.');
-  await prepareDependencies(directory,inspected.manifest);
+  await prepareDependencies(root,inspected.manifest);
   return directory;
 }

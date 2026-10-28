@@ -1,5 +1,19 @@
 import { StorageError } from './errors.js';
 
+export function singleRange(value) {
+  if (value === undefined) return undefined;
+  const match = /^bytes\s*=\s*(\d*)\s*-\s*(\d*)\s*$/i.exec(value);
+  if (!match || !match[1] && !match[2]) throw new StorageError('not-supported', 'Only a single byte range is supported.');
+  if (!match[1]) {
+    if (BigInt(match[2]) === 0n) throw new StorageError('range-not-satisfiable', 'The suffix range is empty.');
+    return { suffix: BigInt(match[2]) };
+  }
+  const result = { start: BigInt(match[1]) };
+  if (match[2]) result.end = BigInt(match[2]);
+  if (result.end !== undefined && result.end < result.start) throw new StorageError('range-not-satisfiable', 'The range is reversed.');
+  return result;
+}
+
 export function unsignedInteger(value, label = 'value') {
   if (typeof value === 'bigint' && value >= 0n) return value;
   if (typeof value === 'number' && Number.isSafeInteger(value) && value >= 0) return BigInt(value);

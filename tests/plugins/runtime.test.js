@@ -168,11 +168,11 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
  assert.equal((await request('GET','/Plugins',undefined,false,{failureStatus:401})).status,401);
  const listed=await request('GET','/Plugins');const listedBody=await listed.text();
  assert.equal(listed.status,200,listedBody);assert.ok(listedBody,JSON.stringify(errors.map(error=>error.message)));
- assert.deepEqual(JSON.parse(listedBody).map(value=>value.id).sort(),['alist','hdhomerun','local','m3u','nfo','tmdb','webdav','xmltv']);
+ assert.deepEqual(JSON.parse(listedBody).map(value=>value.id).sort(),['alist','hdhomerun','http','local','m3u','nfo','tmdb','webdav','xmltv']);
  const command=await new Promise((resolve,reject)=>execFile(process.execPath,['tools/plugins.js','list'],{windowsHide:true,
    env:{...process.env,MEDIAMANAGER_URL:`http://127.0.0.1:${runtime.networkHost.listeners.find(entry=>entry.scheme==='http').port}`,MEDIAMANAGER_ADMIN_TOKEN:apiKey}},
    (error,stdout,stderr)=>error?reject(error):resolve({stdout,stderr})));
- assert.deepEqual(JSON.parse(command.stdout).map(value=>value.id).sort(),['alist','hdhomerun','local','m3u','nfo','tmdb','webdav','xmltv']);
+ assert.deepEqual(JSON.parse(command.stdout).map(value=>value.id).sort(),['alist','hdhomerun','http','local','m3u','nfo','tmdb','webdav','xmltv']);
  const ordinary=await runtime.users.createUser({Name:'Plugin reader'});
  const login=await runtime.authentication.login({Username:'Plugin reader',Pw:''},{Client:'test',Device:'test',DeviceId:'reader',Version:'1'});
  assert.equal((await request('GET','/Plugins',undefined,true,{token:login.AccessToken,failureStatus:403})).status,403);

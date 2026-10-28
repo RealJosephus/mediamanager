@@ -7,6 +7,8 @@ import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { inspect, isDeepStrictEqual } from 'node:util';
 import { PluginHost } from '../../src/plugins/host.js';
+import { verifyRelease } from '../../src/plugins/package.js';
+import { StorageError } from '../../packages/plugin-sdk/storage/errors.js';
 import { fixturePackage, pluginFixture } from './fixture.js';
 
 const failureValue = cause => cause == null || typeof cause !== 'object' ? cause : ({
@@ -44,6 +46,164 @@ async function diagnosticFixture(t,{onError,...options}={}) {
   t.after(async()=>{await fixture.host.close();diagnostics.verify();});
   return Object.assign(fixture,{diagnostics});
 }
+
+async function dependencyPackage(root,{id='fixture',label='initial',failure,allSdk=false}={}) {
+  const source=await fixturePackage(root,{id,label,failure});
+  const manifestFile=path.join(source,'package.json'),manifest=JSON.parse(await fs.readFile(manifestFile,'utf8'));
+  manifest.dependencies={'@mediamanager/plugin-sdk':'0.1.0','fast-xml-parser':'5.0.0'};
+  await fs.writeFile(manifestFile,JSON.stringify(manifest));
+  const sdk=JSON.parse(await fs.readFile(new URL('../../packages/plugin-sdk/package.json',import.meta.url),'utf8'));
+  const specifiers=Object.keys(sdk.exports).map(name=>sdk.name+name.slice(1));
+  const imports=allSdk?specifiers.map((name,index)=>'import * as sdk'+index+' from '+JSON.stringify(name)+';').join('\n'):'';
+  await fs.mkdir(path.join(source,'lib'));
+  await fs.writeFile(path.join(source,'lib','dependencies.js'),`import { StorageError } from '@mediamanager/plugin-sdk/storage/errors';
+import { XMLParser } from 'fast-xml-parser';
+${imports}
+export const dependencies=expected=>({
+  code:new StorageError('not-found','Controlled dependency consumer').code,
+  value:new XMLParser().parse('<Root><Name>retained</Name></Root>').Root.Name,
+  ${allSdk?'sdkIdentity:StorageError===expected,imports:['+specifiers.map((name,index)=>'['+JSON.stringify(name)+',typeof sdk'+index+"==='object']").join(',')+'],':''}
+});`);
+  const entry=path.join(source,'index.js');
+  await fs.writeFile(entry,"import { dependencies } from './lib/dependencies.js';\n"+
+    (await fs.readFile(entry,'utf8')).replace("  await record('activate');",`  await record('activate');
+  await context.register('route',{method:'GET',path:'/Fixture/Dependencies/'+context.id,handle:async()=>dependencies(context.options.StorageError)});`));
+  return {source,sdk,specifiers};
+}
+
+async function dependencyFiles(hostRoot) {
+  const sdk=JSON.parse(await fs.readFile(new URL('../../packages/plugin-sdk/package.json',import.meta.url),'utf8'));
+  const filenames=['@mediamanager/plugin-sdk/package.json',...Object.values(sdk.exports).map(entry=>'@mediamanager/plugin-sdk/'+entry),
+    'fast-xml-parser/package.json','fast-xml-parser/index.js'].map(relative=>path.join(hostRoot,'node_modules',relative));
+  return Promise.all(filenames.map(async filename=>({filename,bytes:await fs.readFile(filename),
+    mode:(await fs.stat(filename)).mode&0o777})));
+}
+
+async function dependencyFixture(t) {
+  const fixture=await pluginFixture(t),{source}=await dependencyPackage(fixture.root);
+  await fixture.host.install(source);
+  const state=JSON.parse(await fs.readFile(path.join(fixture.host.directory,'state.json'),'utf8'));
+  const descriptor=state.plugins.fixture.package,directory=path.join(fixture.host.directory,'packages',descriptor.release);
+  const files=await dependencyFiles(fixture.host.directory);
+  return {fixture,descriptor,directory,files};
+}
+
+const dependencyResult=(fixture,id='fixture')=>fixture.host.entries('route').find(entry=>entry.path==='/Fixture/Dependencies/'+id).handle({});
+
+test('plugins use the complete shared SDK and XML across update, rollback, release collection and restart',async t=>{
+  const fixture=await pluginFixture(t,{options:{first:{StorageError},second:{StorageError}}});
+  let expected;
+  for(const id of ['first','second']){
+    const {source,sdk,specifiers}=await dependencyPackage(fixture.root,{id,allSdk:true});
+    expected={code:'not-found',value:'retained',sdkIdentity:true,imports:specifiers.map(name=>[name,true])};
+    // Source dependencies are not shipped or executed, including below an entry's helper.
+    for(const relative of ['node_modules','lib/node_modules']){
+      const directory=path.join(source,relative);await fs.mkdir(directory,{recursive:true});
+      await fs.writeFile(path.join(directory,'untrusted.js'),"throw new Error('Source dependency must not execute.');\n");
+    }
+    await fixture.host.install(source);
+    assert.deepEqual(await dependencyResult(fixture,id),expected);
+    const state=JSON.parse(await fs.readFile(path.join(fixture.host.directory,'state.json'),'utf8'));
+    const release=path.join(fixture.host.directory,'packages',state.plugins[id].package.release);
+    for(const relative of ['node_modules','lib/node_modules'])await assert.rejects(fs.lstat(path.join(release,relative)),{code:'ENOENT'});
+    assert.deepEqual(JSON.parse(await fs.readFile(path.join(fixture.host.directory,'node_modules','@mediamanager','plugin-sdk','package.json'),'utf8')).exports,sdk.exports);
+  }
+  const files=await dependencyFiles(fixture.host.directory);
+  for(const {filename}of files){const metadata=await fs.lstat(filename);assert.equal(metadata.isFile(),true);assert.equal(metadata.isSymbolicLink(),false);}
+  await fixture.host.configure('first',{message:'retained configuration'});
+  const state=JSON.parse(await fs.readFile(path.join(fixture.host.directory,'state.json'),'utf8'));
+  const oldRelease=path.join(fixture.host.directory,'packages',state.plugins.first.package.release);
+  const failed=await dependencyPackage(fixture.root,{id:'first',failure:'activate',allSdk:true});
+  await assert.rejects(fixture.host.update('first',failed.source),/Controlled activation failure/);
+  assert.equal(fixture.host.get('first').configuration.message,'retained configuration');
+  for(const id of ['first','second'])assert.deepEqual(await dependencyResult(fixture,id),expected);
+  const replacement=await dependencyPackage(fixture.root,{id:'first',label:'replacement',allSdk:true});
+  await fixture.host.update('first',replacement.source);
+  await assert.rejects(fs.stat(oldRelease),{code:'ENOENT'});
+  for(const id of ['first','second'])assert.deepEqual(await dependencyResult(fixture,id),expected);
+  await fixture.host.uninstall('first');await fixture.reopen();
+  assert.equal(fixture.host.get('first').status,'uninstalled');assert.equal(fixture.host.get('second').status,'active');
+  assert.equal(fixture.host.get('first').configuration.message,'retained configuration');
+  assert.deepEqual(await dependencyResult(fixture,'second'),expected);
+  for(const {filename,bytes}of files)assert.deepEqual(await fs.readFile(filename),bytes);
+});
+
+test('installed release and intermediate dependency shadows fail before activation and remain untouched',async t=>{
+  const {fixture,descriptor,directory,files}=await dependencyFixture(t);
+  await fixture.host.configure('fixture',{message:'retained configuration'});
+  const marker=path.join(fixture.root,'shadow-executed'),events=path.join(fixture.host.directory,'data','fixture','events.txt');
+  const shadows=[path.join(directory,'node_modules'),path.join(directory,'lib','node_modules'),path.join(directory,'NODE_MODULES'),
+    path.join(fixture.host.directory,'packages','node_modules'),path.join(fixture.host.directory,'packages','Node_Modules')];
+  for(const shadow of shadows){
+    await fixture.host.close();const before=await fs.readFile(events);
+    const sdk=path.join(shadow,'@mediamanager','plugin-sdk');await fs.mkdir(sdk,{recursive:true});
+    const manifest=Buffer.from(JSON.stringify({name:'@mediamanager/plugin-sdk',type:'module',exports:{'./storage/errors':'./errors.js'}}));
+    const code=Buffer.from('import fs from "node:fs/promises";await fs.writeFile('+JSON.stringify(marker)+',"executed");export class StorageError {}\n');
+    await fs.writeFile(path.join(sdk,'package.json'),manifest);await fs.writeFile(path.join(sdk,'errors.js'),code);
+    try{
+      await assert.rejects(verifyRelease(fixture.host.directory,descriptor),/dependency shadow directories/);
+      await fixture.reopen();assert.equal(fixture.host.get('fixture').status,'failed');
+      assert.equal(fixture.host.get('fixture').configuration.message,'retained configuration');
+      assert.deepEqual(await fs.readFile(events),before);await assert.rejects(fs.lstat(marker),{code:'ENOENT'});
+      assert.deepEqual(await fs.readFile(path.join(sdk,'package.json')),manifest);assert.deepEqual(await fs.readFile(path.join(sdk,'errors.js')),code);
+      for(const {filename,bytes}of files)assert.deepEqual(await fs.readFile(filename),bytes);
+    }finally{await fs.rm(shadow,{recursive:true,force:true});}
+    await fixture.reopen();assert.equal(fixture.host.get('fixture').status,'active');
+    assert.deepEqual(await dependencyResult(fixture),{code:'not-found',value:'retained'});
+  }
+});
+
+test('matching read-only generated dependencies remain usable across a real plugin restart',async t=>{
+  const {fixture,files}=await dependencyFixture(t);
+  await fixture.host.configure('fixture',{message:'retained configuration'});
+  try{
+    for(const {filename}of files)await fs.chmod(filename,0o444);
+    await fixture.reopen();
+    assert.equal(fixture.host.get('fixture').status,'active');
+    assert.equal(fixture.host.get('fixture').configuration.message,'retained configuration');
+    assert.deepEqual(await dependencyResult(fixture),{code:'not-found',value:'retained'});
+    for(const {filename,bytes}of files)assert.deepEqual(await fs.readFile(filename),bytes);
+  }finally{for(const {filename,mode}of files)await fs.chmod(filename,mode);}
+});
+
+test('changed and missing generated dependencies are rebuilt from the current SDK before plugin restart',async t=>{
+  const {fixture,descriptor,directory,files}=await dependencyFixture(t);
+  await fixture.host.close();
+  for(const {filename,bytes}of files){
+    const changed=Buffer.from(bytes);changed[0]^=1;
+    await fs.writeFile(filename,changed);
+    assert.equal((await fs.readFile(filename)).length,bytes.length,'The actual changed input retains its original length.');
+  }
+  assert.equal(await verifyRelease(fixture.host.directory,descriptor),directory);
+  for(const {filename,bytes}of files)assert.deepEqual(await fs.readFile(filename),bytes);
+  for(const {filename}of files)await fs.unlink(filename);
+  assert.equal(await verifyRelease(fixture.host.directory,descriptor),directory);
+  for(const {filename,bytes}of files)assert.deepEqual(await fs.readFile(filename),bytes);
+  await fixture.reopen();assert.equal(fixture.host.get('fixture').status,'active');
+  assert.deepEqual(await dependencyResult(fixture),{code:'not-found',value:'retained'});
+});
+
+test('generated dependencies reject linked parents and nonregular targets without modifying the linked bytes',async t=>{
+  const {fixture,descriptor,files}=await dependencyFixture(t);
+  await fixture.host.close();
+  const sdk=path.join(fixture.host.directory,'node_modules','@mediamanager','plugin-sdk'),held=path.join(fixture.root,'held-sdk');
+  await fs.rename(sdk,held);let linked=false;
+  try{
+    await fs.symlink(held,sdk,process.platform==='win32'?'junction':'dir');linked=true;
+    await assert.rejects(verifyRelease(fixture.host.directory,descriptor),/Plugin directories must be physical directories/);
+    for(const {filename,bytes}of files.filter(file=>file.filename.startsWith(sdk+path.sep)))
+      assert.deepEqual(await fs.readFile(path.join(held,path.relative(sdk,filename))),bytes);
+  }finally{if(linked)await fs.rm(sdk,{recursive:true});await fs.rename(held,sdk);}
+  const target=files[0].filename;
+  await fs.unlink(target);await fs.mkdir(target);
+  try{
+    await assert.rejects(verifyRelease(fixture.host.directory,descriptor),/Generated plugin dependencies must be ordinary files/);
+    assert.equal((await fs.stat(target)).isDirectory(),true);
+  }finally{await fs.rmdir(target);}
+  await fixture.reopen();assert.equal(fixture.host.get('fixture').status,'active');
+  for(const {filename,bytes}of files)assert.deepEqual(await fs.readFile(filename),bytes);
+  assert.deepEqual(await dependencyResult(fixture),{code:'not-found',value:'retained'});
+});
 
 test('third-party packages install, configure, stop, resume, update bytes, retain data, uninstall and restart', async t=>{
   const fixture=await pluginFixture(t),source=await fixturePackage(fixture.root,{frozen:true});

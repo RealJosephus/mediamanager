@@ -1,6 +1,7 @@
 import { StorageError } from './errors.js';
 import { isWithin, joinPath, normalizePath } from './paths.js';
 import { ordinalIgnoreCaseKey } from './ordinal-comparer.js';
+import { identityPathStyle, parseSourceUri, sourceUriWithin, sourceUriPath, sourceUriFromPath } from './uri.js';
 
 function bindingKey(value) {
   if (typeof value !== 'string' || !value) throw new TypeError('An item ID is required.');
@@ -8,6 +9,7 @@ function bindingKey(value) {
 }
 
 function validateIdentity(path, style) {
+  if (style === 'uri') return parseSourceUri(path, { prefix: true }).canonical;
   if (typeof path !== 'string' || !path || path.includes('\0')) throw new StorageError('invalid-path', 'The identity path is invalid.');
   const canonical = style === 'windows' ? path.replaceAll('\\', '/')
     .replace(/^\/\/\?\/UNC\//iu, '//').replace(/^\/\/\?\/(?=[A-Za-z]:\/)/u, '') : path;
@@ -28,7 +30,7 @@ export class IdentityAccessMap {
   }
 
   addPrefix({ identityRoot, accessRoot, style = 'posix', caseSensitive = true, returnAccess }) {
-    if (!['posix', 'windows'].includes(style)) throw new TypeError('An explicit supported path style is required.');
+    if (!['posix', 'windows', 'uri'].includes(style)) throw new TypeError('An explicit supported path style is required.');
     if (typeof caseSensitive !== 'boolean') throw new TypeError('Identity caseSensitive must be a boolean.');
     const canonicalRoot = validateIdentity(identityRoot, style);
     accessRoot = normalizePath(accessRoot);
@@ -44,8 +46,15 @@ export class IdentityAccessMap {
     this.#prefixes.push(Object.freeze({ identityRoot, accessRoot, style, caseSensitive, canonicalRoot, returnAccess }));
   }
 
-  resolve({ itemId, identityPath, style = 'posix' }) {
+  resolve({ itemId, identityPath, style = identityPathStyle(identityPath) }) {
     if (itemId && this.#bindings.has(bindingKey(itemId))) return this.#bindings.get(bindingKey(itemId));
+    if (style === 'uri') {
+      parseSourceUri(identityPath);
+      const mapping = this.#prefixes.filter(item => item.style === 'uri' && sourceUriWithin(identityPath, item.identityRoot, item.caseSensitive))
+        .sort((left, right) => right.canonicalRoot.length - left.canonicalRoot.length)[0];
+      if (!mapping) throw new StorageError('not-found', 'No access mapping resolves the source URI.');
+      return joinPath(mapping.accessRoot, sourceUriPath(identityPath));
+    }
     const canonical = validateIdentity(identityPath, style);
     const mapping = this.#prefixes.filter((item) => item.style === style && isWithin(item.caseSensitive ? canonical : ordinalIgnoreCaseKey(canonical), item.caseSensitive ? item.canonicalRoot : ordinalIgnoreCaseKey(item.canonicalRoot)))
       .sort((left, right) => right.canonicalRoot.length - left.canonicalRoot.length)[0];
@@ -58,6 +67,11 @@ export class IdentityAccessMap {
     const mapping = this.#prefixes.find((item) => isWithin(virtualPath, item.accessRoot));
     if (!mapping) throw new StorageError('not-found', 'No reversible identity mapping resolves the virtual path.');
     const suffix = virtualPath.slice(mapping.accessRoot === '/' ? 1 : mapping.accessRoot.length + 1);
+    if (mapping.style === 'uri') {
+      const identityPath = sourceUriFromPath('/' + suffix);
+      if (!sourceUriWithin(identityPath, mapping.identityRoot, mapping.caseSensitive)) throw new StorageError('not-found', 'The source URI is outside its access mapping.');
+      return { identityPath, style: 'uri', returnAccess: mapping.returnAccess };
+    }
     const separator = mapping.style === 'windows' && mapping.identityRoot.includes('\\') ? '\\' : '/';
     const root = mapping.identityRoot.replace(/[\\/]+$/u, '');
     return { identityPath: suffix ? `${root}${separator}${suffix.replaceAll('/', separator)}` : mapping.identityRoot,

@@ -6,6 +6,17 @@ import { Worker } from 'node:worker_threads';
 const unavailable = message => Object.assign(new Error(message), { code: 'not-supported', status: 503 });
 const closedError = () => Object.assign(new Error('The archive reader is closed.'), { code: 'closed' });
 const startArchiveWorker = workerData => new Worker(new URL('./archive-worker.js', import.meta.url), { workerData, trackUnmanagedFds: true });
+const operationFailure = errors => errors.length === 1 ? errors[0]
+  : Object.assign(new AggregateError(errors, errors[0]?.message ?? 'Archive cleanup failed.', { cause: errors[0] }),
+    Object.fromEntries(['code', 'status', 'statusCode'].filter(key => errors[0]?.[key] !== undefined).map(key => [key, errors[0][key]])));
+async function withCleanup(operation, cleanups) {
+  let value;
+  const errors = [];
+  try { value = await operation(); } catch (error) { errors.push(error); }
+  for (const cleanup of cleanups) try { await cleanup(); } catch (error) { errors.push(error); }
+  if (errors.length) throw operationFailure(errors);
+  return value;
+}
 
 /** Operation-owned archive access. Only the selected entry is decoded into memory. */
 export class BookArchiveService {
@@ -19,12 +30,13 @@ export class BookArchiveService {
   }
   openArchive(item, options = {}) {
     if (this.#lifetime.signal.aborted) return Promise.reject(closedError());
-    const operation = this.#open(item, options);
-    this.#opening.add(operation);
-    operation.finally(() => this.#opening.delete(operation)).catch(() => {});
+    const opening = { cleanupErrors: [] };
+    const operation = this.#open(item, options, opening); opening.operation = operation;
+    this.#opening.add(opening);
+    operation.finally(() => this.#opening.delete(opening)).catch(() => {});
     return operation;
   }
-  async #open(item, { signal, zipOnly = false } = {}) {
+  async #open(item, { signal, zipOnly = false }, opening) {
     if (!this.vfs || !this.identityMap || !this.spoolPath) throw unavailable('Book archive access requires media storage and an instance spool directory.');
     signal = signal ? AbortSignal.any([signal, this.#lifetime.signal]) : this.#lifetime.signal;
     signal.throwIfAborted();
@@ -36,22 +48,27 @@ export class BookArchiveService {
       const results = await Promise.allSettled([filename, filename + '.entry'].map(async spool => {
         try { await fs.unlink(spool); } catch (error) { if (error.code !== 'ENOENT') throw error; }
       }));
-      const failure = results.find(result => result.status === 'rejected');
-      if (failure) throw failure.reason;
+      const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
+      if (errors.length) throw operationFailure(errors);
     };
     let destination, source, worker, size = 0, lease;
+    const cleanup = async operation => {
+      try { return await operation(); }
+      catch (error) { opening.cleanupErrors.push(error); throw error; }
+    };
+    const closeSource = async () => { const current = source; source = undefined; await cleanup(() => current?.close()); };
+    const closeDestination = async () => { const current = destination; destination = undefined; await cleanup(() => current?.close()); };
     try {
       destination = await fs.open(filename, 'wx');
       source = await this.vfs.openRead(access, { signal });
-      try {
-        for await (const chunk of source.stream) {
-          signal.throwIfAborted();
-          size += chunk.length;
-          if (!Number.isSafeInteger(size)) throw unavailable('The archive exceeds the supported file range.');
-          await destination.writeFile(chunk);
-        }
-      } finally { await source.close(); source = undefined; }
-      await destination.close(); destination = undefined;
+      for await (const chunk of source.stream) {
+        signal.throwIfAborted();
+        size += chunk.length;
+        if (!Number.isSafeInteger(size)) throw unavailable('The archive exceeds the supported file range.');
+        await destination.writeFile(chunk);
+      }
+      await closeSource();
+      await closeDestination();
       signal.throwIfAborted();
       worker = this.createWorker({ filename, size, zipOnly });
       const pending = new Map(); let ordinal = 0, closing;
@@ -75,10 +92,8 @@ export class BookArchiveService {
           fail(reason);
           signal.removeEventListener('abort', onAbort);
           lifetime.removeEventListener('abort', onLifetimeAbort);
-          closing = (async () => {
-            try { await worker.terminate(); }
-            finally { try { await removeSpools(); } finally { owner.#leases.delete(lease); } }
-          })();
+          closing = Promise.resolve().then(() => withCleanup(() => worker.terminate(), [removeSpools]))
+            .finally(() => owner.#leases.delete(lease));
           return closing;
         },
         async read(entry, { signal: readSignal } = {}) {
@@ -109,28 +124,20 @@ export class BookArchiveService {
       if (lifetime.aborted) onLifetimeAbort();
       return lease;
     } catch (error) {
-      if (lease) await lease.close(error);
-      else {
-        try { await worker?.terminate(); }
-        finally {
-          try { await source?.close(); }
-          finally {
-            try { await destination?.close(); }
-            finally { await removeSpools(); }
-          }
-        }
-      }
-      throw error;
+      return withCleanup(() => { throw error; }, lease ? [() => lease.close(error)]
+        : [() => cleanup(() => worker?.terminate()), closeSource, closeDestination, () => cleanup(removeSpools)]);
     }
   }
   close() {
     if (this.#close) return this.#close;
+    const readers = [...this.#leases], openings = [...this.#opening];
     this.#lifetime.abort(closedError());
     this.#close = (async () => {
-      await Promise.allSettled(this.#opening);
-      const results = await Promise.allSettled([...this.#leases].map(lease => lease.close()));
-      const failure = results.find(result => result.status === 'rejected');
-      if (failure) throw failure.reason;
+      await Promise.allSettled(openings.map(opening => opening.operation));
+      const results = await Promise.allSettled(readers.map(lease => lease.close()));
+      const errors = [...openings.flatMap(opening => opening.cleanupErrors),
+        ...results.filter(result => result.status === 'rejected').map(result => result.reason)];
+      if (errors.length) throw operationFailure(errors);
     })();
     return this.#close;
   }

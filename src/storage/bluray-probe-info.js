@@ -39,7 +39,9 @@ export function blurayMediaStreams(plan, referenceRaw) {
     entries = [...entries.slice(0, index), ...mvc, ...entries.slice(index)];
   }
   return entries.map(({ pid, streamType, mediaStream }, Index) => {
-    const stream = { ...mediaStream, Index };
+    // BdInfoExaminer creates MediaStream instances. These two nonnullable
+    // bools retain false even where CLPI supplies no corresponding field.
+    const stream = { IsInterlaced: false, IsHearingImpaired: false, ...mediaStream, Index };
     if (stream.Type === 'Video') return { ...stream, Width: 0, BitRate: 0 };
     if (stream.Type !== 'Audio') return stream;
     const raw = (referenceRaw.streams ?? []).find(value => Number(value.id) === pid
@@ -75,5 +77,8 @@ export function mergeBlurayProbe(plan, firstInfo, referenceRaw) {
   }
   return { ...firstInfo, MediaStreams: streams,
     RunTimeTicks: plan.runTimeTicks > 0n ? plan.runTimeTicks : firstInfo.RunTimeTicks,
-    Chapters: plan.chapters.map(seconds => ({ StartPositionTicks: BigInt(Math.trunc(seconds * 10000000)) })) };
+    // FetchBdInfo creates a new ChapterInfo, whose nonnullable DateTime keeps
+    // MinValue. Use the native SQLite date text consumed by chapter persistence.
+    Chapters: plan.chapters.map(seconds => ({ StartPositionTicks: BigInt(Math.trunc(seconds * 10000000)),
+      ImageDateModified: '0001-01-01 00:00:00' })) };
 }

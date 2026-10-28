@@ -16,6 +16,7 @@ export async function activate(context) {
     defaults: roots.map(root => ({
       id: `application-${createHash('sha256').update(root).digest('hex').slice(0,16)}`, config: { root, createRoot: true, writable: true },
       identityRoot: root, style: process.platform === 'win32' ? 'windows' : 'posix',
+      capabilities: { create:true,replace:true,mkdir:true,delete:true,rename:true,atomicReplace:true,conditionalWrite:false },
     })),
   });
 }

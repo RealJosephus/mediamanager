@@ -17,7 +17,7 @@ export const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const readOutcome = row => ({ opened: row.opened, streamDisposed: row.streamDisposed,
   openFailed: Boolean(row.openError), readFailed: Boolean(row.readError), bytes: row.bytes, sha256: row.sha256, prefix: row.prefix });
 const coverOutcome = row => ({ hasImage: row.hasImage, format: row.format, bytes: row.bytes, sha256: row.sha256,
-  logs: row.logs.map(log => log.level), cancellationRequested: row.cancellationRequested });
+  cancellationRequested: row.cancellationRequested });
 const catalogOutcome = row => ({ archiveFailed: Boolean(row.archiveError), entries: row.entries.map(entry => ({
   ordinal: entry.ordinal, key: entry.key, size: entry.size, isDirectory: entry.isDirectory, read: readOutcome(entry.read) })) });
 const functional = native => ({

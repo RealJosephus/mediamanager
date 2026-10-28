@@ -30,8 +30,8 @@
     {
       "role": "capture",
       "filename": "capture.js",
-      "bytes": 8459,
-      "sha256": "0b7b34b303f2cbd1067d5d56db9261f1e157e61e4784669b9157d7963cfdb3f1"
+      "bytes": 8421,
+      "sha256": "af456cb67e232e9e34d21882eb1faa80e3a10d171c6696d338f46d504aace372"
     },
     {
       "role": "buildProperties",

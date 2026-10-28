@@ -195,7 +195,7 @@ export function assertPortableMountRetarget(sourceValue, targetValue) {
 
 function configuredContract(prefixes) {
   return canonicalPortableMountContract({
-    mounts: prefixes.filter(prefix => !['application','metadata'].includes(prefix.purpose)).map((prefix, index) => ({
+    mounts: prefixes.filter(prefix => prefix.style !== 'uri' && !['application','metadata'].includes(prefix.purpose)).map((prefix, index) => ({
       mountId: `configured-${index}`,
       identityRoot: prefix.identityRoot,
       accessRoot: prefix.accessRoot,

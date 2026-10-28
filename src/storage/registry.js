@@ -7,9 +7,32 @@ export const storageCapabilityNames = Object.freeze([
   'create', 'replace', 'mkdir', 'delete', 'rename', 'atomicReplace', 'conditionalWrite', 'directLease', 'watch'
 ]);
 
+function storageRegistryFailure(errors, fallback) {
+  if (errors.length === 1) return errors[0];
+  const primary = errors[0];
+  let message = fallback;
+  try { if (primary instanceof Error) { const value = primary.message; if (typeof value === 'string') message = value; } }
+  catch { /* Diagnostic properties must not replace an adapter failure. */ }
+  const failure = new AggregateError(errors, message, { cause: primary });
+  for (const name of ['code', 'status', 'statusCode']) {
+    try { const value = primary?.[name]; if (value !== undefined) failure[name] = value; }
+    catch { /* The primary reason remains available even if a getter throws. */ }
+  }
+  return failure;
+}
+
+async function closeAdapters(instances) {
+  const results = await Promise.allSettled(instances.map(instance => Promise.resolve().then(() => instance.close())));
+  const failures = results.filter(result => result.status === 'rejected').map(result => result.reason);
+  if (failures.length) throw storageRegistryFailure(failures, 'Storage instances failed to close.');
+}
+
 function validateAdapter(instance) {
   if (requiredMethods.some(method => typeof instance?.[method] !== 'function')) {
     throw new TypeError('The storage adapter does not implement the required contract.');
+  }
+  if (instance.openResponse !== undefined && typeof instance.openResponse !== 'function') {
+    throw new TypeError('The storage response reader must be a function.');
   }
   const capabilities = instance.capabilities;
   if (!capabilities || typeof capabilities !== 'object' || Array.isArray(capabilities)
@@ -61,9 +84,7 @@ export class StorageRegistry {
       this.#instances.delete(id); this.#instanceTypes.delete(id);
       this.#failures.delete(id);
     }
-    const results = await Promise.allSettled(instances.map(instance => instance.close()));
-    const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
-    if (errors.length) throw new AggregateError(errors, 'Storage instances failed to close.');
+    await closeAdapters(instances);
   }
 
   async createInstance(id, type, config, context = {}) {
@@ -87,9 +108,12 @@ export class StorageRegistry {
       this.#instanceTypes.set(id, type);
       return instance;
     } catch (error) {
-      if (instance?.close) await instance.close();
-      if (!this.#closed && this.#types.get(type) === factory) { this.#failures.set(id,error); this.#instanceTypes.set(id,type); }
-      throw error;
+      const errors = [error];
+      try { const close = instance?.close; if (typeof close === 'function') await close.call(instance); }
+      catch (cleanup) { errors.push(cleanup); }
+      const failure = storageRegistryFailure(errors, 'Storage initialization and cleanup failed.');
+      if (!this.#closed && this.#types.get(type) === factory) { this.#failures.set(id,failure); this.#instanceTypes.set(id,type); }
+      throw failure;
     } finally {
       this.#pending.delete(id);
       done.resolve();
@@ -108,13 +132,12 @@ export class StorageRegistry {
     if (this.#closing) return this.#closing;
     this.#closed = true;
     return this.#closing = (async () => {
-    await Promise.allSettled([...this.#pending.values()].map(value => value.done.promise));
-    const results = await Promise.allSettled([...this.#instances.values()].map((instance) => instance.close()));
-    this.#instances.clear();
-    this.#instanceTypes.clear();
-    this.#failures.clear();
-    const failures = results.filter((result) => result.status === 'rejected').map((result) => result.reason);
-    if (failures.length) throw new AggregateError(failures, 'Some storage instances failed to close.');
+      await Promise.allSettled([...this.#pending.values()].map(value => value.done.promise));
+      const closing = closeAdapters([...this.#instances.values()]);
+      this.#instances.clear();
+      this.#instanceTypes.clear();
+      this.#failures.clear();
+      await closing;
     })();
   }
 }

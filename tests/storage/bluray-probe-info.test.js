@@ -23,7 +23,10 @@ test('Blu-ray merge retains first-file metadata and fills only the first playlis
   assert.deepEqual([merged.Size, merged.Bitrate, merged.Container, merged.Name, merged.Timestamp], [777n, 1000000, 'ts', 'First title', 'Valid']);
   assert.deepEqual(merged.MediaAttachments, [{ FileName: 'first.ttf' }]);
   assert.equal(merged.RunTimeTicks, 35000000n);
-  assert.deepEqual(merged.Chapters, [{ StartPositionTicks: 0n }, { StartPositionTicks: 15000000n }]);
+  assert.deepEqual(merged.Chapters, [
+    { StartPositionTicks: 0n, ImageDateModified: '0001-01-01 00:00:00' },
+    { StartPositionTicks: 15000000n, ImageDateModified: '0001-01-01 00:00:00' },
+  ]);
   assert.deepEqual(merged.MediaStreams.map(stream => [stream.Width ?? null, stream.Height ?? null, stream.BitRate]),
     [[720, 480, 500000], [0, 480, 0], [null, null, 448000]]);
   assert.equal(merged.MediaStreams[0].PixelFormat, 'yuv420p');
@@ -60,6 +63,16 @@ test('Blu-ray reference audio never estimates bitrate or LFE from a channel coun
     [[0, '0.0', null], [0, '0.0', null]]);
 });
 
+test('BDInfo stream defaults retain native nonnullable bool values and preserve actual supplied video flags', () => {
+  const streams = blurayMediaStreams({ streams: [
+    { pid: 4113, streamType: 2, mediaStream: { Type: 'Video', Codec: 'mpeg2video', Height: 480, IsInterlaced: true } },
+    { pid: 4352, streamType: 129, mediaStream: { Type: 'Audio', Codec: 'AC3', SampleRate: 48000 } },
+    { pid: 4608, streamType: 144, mediaStream: { Type: 'Subtitle', Codec: 'pgssub', Language: 'jpn' } },
+  ] }, { streams: [] });
+  assert.deepEqual(streams.map(stream => [stream.Type, stream.IsInterlaced, stream.IsHearingImpaired]),
+    [['Video', true, false], ['Audio', false, false], ['Subtitle', false, false]]);
+});
+
 test('Blu-ray MVC requires the reference SSIF and explicit transport type, and preserves native video order and empty fields', () => {
   const mvcPlan = { ...plan, angleCount: 1, referenceSsif: '/disc/BDMV/STREAM/SSIF/00002.ssif' };
   const raw = { streams: [{ id: '0x1012', codec_type: 'video', codec_name: 'h264', codec_tag: '0x0020',
@@ -68,7 +81,7 @@ test('Blu-ray MVC requires the reference SSIF and explicit transport type, and p
   assert.deepEqual(completed.map(stream => [stream.Index, stream.Type, stream.Codec]),
     [[0, 'Video', 'mpeg2video'], [1, 'Video', 'mpeg2video'], [2, 'Video', 'MVC'], [3, 'Video', 'MVC'], [4, 'Audio', 'AC3']]);
   for (const stream of completed.slice(2, 4)) assert.deepEqual(stream,
-    { Type: 'Video', Codec: 'MVC', Height: 0, IsInterlaced: false, Index: stream.Index, Width: 0, BitRate: 0 });
+    { Type: 'Video', Codec: 'MVC', Height: 0, IsInterlaced: false, IsHearingImpaired: false, Index: stream.Index, Width: 0, BitRate: 0 });
   const first = { MediaStreams: [{ Type: 'Video', Codec: 'h264', Width: 720, Height: 480, PixelFormat: 'yuv420p' }] };
   assert.deepEqual(mergeBlurayProbe(mvcPlan, first, raw).MediaStreams.slice(2, 4), completed.slice(2, 4));
   assert.equal(blurayMediaStreams({ ...mvcPlan, referenceSsif: null }, raw).length, plan.streams.length);

@@ -52,12 +52,15 @@ export class ProbeReadBridge {
     return this.#starting;
   }
 
-  async lease(path, { signal, expiresInMs = 60000, version, relatedPaths = [] } = {}) {
+  async lease(path, { signal, expiresInMs = 60000, version, relatedPaths = [], extensionHint = '' } = {}) {
     checkAbort(signal);
     if (expiresInMs === null ? !signal : !Number.isSafeInteger(expiresInMs) || expiresInMs < 1) {
       throw new TypeError('A lease requires a positive lifetime or an owning cancellation signal.');
     }
     path = normalizePath(path);
+    if (!['', '.smi', '.sami', '.srt', '.subrip', '.ass', '.ssa', '.vtt', '.webvtt'].includes(extensionHint)) {
+      throw new TypeError('A probe filename hint must be a supported text subtitle extension.');
+    }
     await this.start();
     const info = await this.#vfs.stat(path, { signal });
     checkAbort(signal);
@@ -76,7 +79,7 @@ export class ProbeReadBridge {
       if (relatedInfo.kind !== 'file') throw new StorageError('is-directory', 'Related probe objects must be files.');
       objects.set(encodeURIComponent(baseName(relatedPath)), { path: relatedPath, version: relatedInfo.version });
     }
-    const lease = { ...object, objects, expiresAt, reads: new Set(), operations: new Set(), cleanupErrors: [], release: null };
+    const lease = { ...object, objects, expiresAt, extensionHint, reads: new Set(), operations: new Set(), cleanupErrors: [], release: null };
     let timer, releasing;
     const release = () => {
       if (releasing) return releasing;
@@ -99,7 +102,7 @@ export class ProbeReadBridge {
     signal?.addEventListener('abort', onAbort, { once: true });
     if (expiresInMs !== null) { timer = setTimeout(onAbort, expiresInMs); timer.unref(); }
     if (signal?.aborted) await release();
-    return { url: `${this.#origin}/${token}${relatedPaths.length ? '/' + encodeURIComponent(baseName(path)) : ''}`, expiresAt, release,
+    return { url: `${this.#origin}/${token}${extensionHint}${relatedPaths.length ? '/' + encodeURIComponent(baseName(path)) : ''}`, expiresAt, release,
       consistency: lease.version ? 'version-precondition' : 'unversioned' };
   }
 
@@ -110,12 +113,12 @@ export class ProbeReadBridge {
     const finished = Promise.withResolvers();
     const stop = () => controller?.abort();
     try {
-      const match = /^\/([a-f0-9]{64})(?:\/([^/]+))?$/u.exec(request.url ?? '');
+      const match = /^\/([a-f0-9]{64})(\.(?:smi|sami|srt|subrip|ass|ssa|vtt|webvtt))?(?:\/([^/]+))?$/u.exec(request.url ?? '');
       const token = match?.[1];
       lease = this.#leases.get(token);
-      if (!lease || lease.expiresAt !== null && Date.now() >= lease.expiresAt) { response.writeHead(404); response.end(); return; }
+      if (!lease || lease.extensionHint !== (match?.[2] ?? '') || lease.expiresAt !== null && Date.now() >= lease.expiresAt) { response.writeHead(404); response.end(); return; }
       lease.operations.add(finished.promise);
-      const object = lease.objects.get(match?.[2] ?? '');
+      const object = lease.objects.get(match?.[3] ?? '');
       if (!object) { response.writeHead(404); response.end(); return; }
       if (!['GET', 'HEAD'].includes(request.method)) { response.writeHead(405, { Allow: 'GET, HEAD' }); response.end(); return; }
       if (lease.reads.size >= this.#maxConcurrent) { response.writeHead(429); response.end(); return; }

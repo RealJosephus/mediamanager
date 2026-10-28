@@ -861,8 +861,8 @@ function observeProbeFolderOwnership(t, state) {
       if (present) {
         const tables = { sets: links.sets, rows: links.rows, pins: links.pins,
           itemStates: `"${links.schemaName}".item_states`, itemCohorts: `"${links.schemaName}".item_cohorts`,
-          folderChildIds: `"${links.schemaName}".folder_child_ids`, ...links.resourceGraph.tables };
-        // One SELECT observes every resource table at the same statement snapshot.
+          folderChildIds: `"${links.schemaName}".folder_child_ids` };
+        // One SELECT observes all six PostgreSQL resource tables at the same statement snapshot.
         sql = (await state.database.client.query('SELECT jsonb_build_object(' + Object.entries(tables)
           .map(([name, table]) => `'${name}',(SELECT COALESCE(jsonb_agg(to_jsonb(value)), '[]'::jsonb) FROM ${table} value)`)
           .join(',') + ') AS snapshot')).rows[0].snapshot;

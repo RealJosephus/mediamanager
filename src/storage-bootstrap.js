@@ -5,6 +5,7 @@ import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from './storage
 import { StorageFileSystem } from './storage/files.js';
 import { assertPortableMountStorageConfiguration } from './storage/portable-mount-contract.js';
 import { isWithin, joinPath, normalizePath } from './storage/paths.js';
+import { parseSourceUri } from './storage/uri.js';
 
 const clone = value => structuredClone(value);
 const object = value => value && typeof value === 'object' && !Array.isArray(value);
@@ -29,6 +30,7 @@ function validate(configuration) {
   for (const binding of configuration.bindings ?? []) if (!fields(binding,['itemId','accessPath'])) throw new TypeError('Invalid item access binding.');
   for (const mount of configuration.mounts) if (!ids.has(mount.instanceId)) throw new TypeError('A storage mount refers to an unknown instance.');
 }
+export { validate as validateStorageConfiguration };
 async function persist(filename, value) {
   const temporary = filename + '.' + randomUUID() + '.tmp';
   try {
@@ -47,9 +49,11 @@ function mountIdentityOverlays(vfs, declarations, groups) {
   const signature = mount=>JSON.stringify([mount.instanceId,mount.root,
     Object.keys(writeCapabilities).map(name=>mount.capabilities[name]===true)]);
   for (const prefixes of groups) for (const parent of prefixes) {
+    if (parent.style === 'uri') continue;
     const mapping = new IdentityAccessMap(); mapping.addPrefix(parent);
     for (const child of prefixes) {
       if (child===parent) continue;
+      if (child.style === 'uri') continue;
       let target;
       try { target=mapping.resolve({identityPath:child.identityRoot,style:child.style}); }
       catch(error) { if(error.code==='not-found')continue; throw error; }
@@ -74,7 +78,7 @@ function mountIdentityOverlays(vfs, declarations, groups) {
 export async function createConfiguredStorage(filename, { environment = process.env, portableMountContract, plugins } = {}) {
   if (!plugins) throw new TypeError('Configured storage requires a plugin host.');
   filename ??= path.join(plugins.directory,'storage.json');
-  let configuration, current, closed = false, initializing = true, tail = Promise.resolve();
+  let configuration, current, closing, closed = false, initializing = true, tail = Promise.resolve();
   const extensions = new Map(), listeners = new Set(), beforeListeners = new Set();
   const notify = async () => { for (const listener of listeners) await listener(); };
   const report = async error => { try { await plugins.onError(error); } catch { /* Diagnostics cannot interrupt storage ownership transfer. */ } };
@@ -153,12 +157,13 @@ export async function createConfiguredStorage(filename, { environment = process.
     // removes identities, path bindings or configuration.
     for (const extension of plugins.entries('storage')) for (const definition of extension.defaults ?? []) {
       const id = `${extension.type}:${definition.id}`, accessRoot = `/__application/${id}`;
-      if (configuration.prefixes.some(prefix => prefix.purpose!=='metadata' && (definition.style === 'windows'
-        ? prefix.identityRoot.toLowerCase() === definition.identityRoot.toLowerCase() : prefix.identityRoot === definition.identityRoot))) continue;
+      if (configuration.prefixes.some(prefix => prefix.purpose!=='metadata' && (definition.style === 'uri'
+        ? prefix.style === 'uri' && parseSourceUri(prefix.identityRoot, { prefix: true }).canonical === parseSourceUri(definition.identityRoot, { prefix: true }).canonical
+        : definition.style === 'windows' ? prefix.identityRoot.toLowerCase() === definition.identityRoot.toLowerCase() : prefix.identityRoot === definition.identityRoot))) continue;
       configuration.instances.push({id,type:extension.type,config:definition.config});
-      configuration.mounts.push({path:accessRoot,instanceId:id,root:'/',capabilities:{...writeCapabilities}});
+      configuration.mounts.push({path:accessRoot,instanceId:id,root:'/',capabilities:{...definition.capabilities}});
       configuration.prefixes.push({identityRoot:definition.identityRoot,accessRoot,style:definition.style,
-        caseSensitive:definition.style !== 'windows',returnAccess:'Application storage identity is retained.',purpose:'application'});
+        caseSensitive:definition.caseSensitive ?? definition.style !== 'windows',returnAccess:definition.returnAccess ?? 'Application storage identity is retained.',purpose:'application'});
     }
     await plugins.bind('storage', async extension => {
       if (typeof extension.type !== 'string' || typeof extension.create !== 'function' || extensions.has(extension.type)) throw new TypeError('Storage extension type must be unique and provide create().');
@@ -200,6 +205,15 @@ export async function createConfiguredStorage(filename, { environment = process.
       bindPath:value=>enqueue(async()=>{
         if (!fields(value,['identityRoot','instanceId','root','style','caseSensitive','returnAccess','capabilities','purpose'])) throw new TypeError('Invalid storage path binding.');
         const next = clone(configuration), existing = next.prefixes.find(prefix=>prefix.identityRoot===value.identityRoot && (prefix.purpose==='metadata')===(value.purpose==='metadata'));
+        if (value.style === 'uri') {
+          const accessRoot = existing?.accessRoot ?? '/locations/' + randomUUID();
+          next.prefixes = next.prefixes.filter(prefix=>prefix!==existing);
+          next.prefixes.push({identityRoot:value.identityRoot,accessRoot,style:'uri',caseSensitive:value.caseSensitive,
+            returnAccess:value.returnAccess,purpose:value.purpose});
+          next.mounts = next.mounts.filter(mount=>mount.path!==accessRoot);
+          next.mounts.push({path:accessRoot,instanceId:value.instanceId,root:value.root??'/',capabilities:value.capabilities});
+          return change(next);
+        }
         let accessRoot = existing?.accessRoot;
         let inherited = false;
         if (!accessRoot) {
@@ -235,7 +249,11 @@ export async function createConfiguredStorage(filename, { environment = process.
         next.mounts.push({path:accessRoot,instanceId:value.instanceId,root:value.root??'/',capabilities:value.capabilities});
         return change(next);
       }),
-      close:async()=>{if(closed)return;closed=true;unsubscribe();listeners.clear();beforeListeners.clear();await tail;await current.registry.close();},
+      close:()=>{
+        if(closing)return closing;
+        closed=true;
+        return closing=(async()=>{unsubscribe();listeners.clear();beforeListeners.clear();await tail;await current.registry.close();})();
+      },
     };
   } catch(error) {
     closed=true;

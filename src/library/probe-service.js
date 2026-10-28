@@ -187,18 +187,23 @@ export class ProbeService {
 
   async #externalCandidates(item, loaded, virtualPath, signal) {
     if (!probeFileProtocol(item) || item.SupportsLocalMetadata === false) return [];
+    const video = probeIsVideo(item), mapping = video ? this.identityMap : this.externalData.identityMap ?? this.identityMap;
+    // Lyric sidecars are metadata I/O. Their explicit metadata mount can be
+    // independent of the audio body, whose actual probe still uses identityMap.
+    if (!video) virtualPath = mapping.resolve({ identityPath: item.Path,
+      style: /^[A-Za-z]:[\\/]|^\\\\/u.test(item.Path) ? 'windows' : 'posix' });
     const additionalDirectories = [...loaded?.context.externalStreamDirectories ?? []];
     if (loaded?.metadataPath) {
       const identityPath = internalImagePath(loaded.item, loaded.metadataPath);
       try {
-        const accessPath = this.identityMap.resolve({ identityPath, style: /^[A-Za-z]:[\\/]|^\\\\/u.test(identityPath) ? 'windows' : 'posix' });
+        const accessPath = mapping.resolve({ identityPath, style: /^[A-Za-z]:[\\/]|^\\\\/u.test(identityPath) ? 'windows' : 'posix' });
         if ((await this.vfs.stat(accessPath, { signal })).kind === 'directory') additionalDirectories.push({ identityPath, virtualPath: accessPath });
       } catch (error) { if (error.code !== 'not-found') throw error; }
     }
-    const directoryVideo = probeIsVideo(item) && ['Dvd', 'BluRay', 2, 3].includes(item.VideoType);
+    const directoryVideo = video && ['Dvd', 'BluRay', 2, 3].includes(item.VideoType);
     return externalCandidates(this.vfs, virtualPath, item.Path, { signal, additionalDirectories,
       sourceIsDirectory: directoryVideo && !item.IsPlaceHolder && !item.AdditionalParts?.length,
-      useFullFileName: directoryVideo, types: probeIsVideo(item) ? ['Subtitle', 'Audio'] : ['Lyric'] });
+      useFullFileName: directoryVideo, types: video ? ['Subtitle', 'Audio'] : ['Lyric'] });
   }
 
   async refresh(itemId, options = {}) {
@@ -369,7 +374,9 @@ export class ProbeService {
       const isText = stream => /microdvd/iu.test(stream.Codec ?? '') || !(/pgs|dvdsub|vobsub|dvbsub/iu.test(stream.Codec ?? '') || /^(?:sup|sub)$/iu.test(stream.Codec ?? ''));
       const filtered = streams.filter(stream => stream.Type !== 'Subtitle' || stream.IsExternal ||
         allowance !== 'AllowNone' && !(allowance === 'AllowImage' && isText(stream)) && !(allowance === 'AllowText' && !isText(stream)));
-      const rows = filtered.map(stream => probeStreamRow(itemId, stream));
+      const reversePath = loaded?.capturePathScope().reversePath;
+      const rows = filtered.map(stream => probeStreamRow(itemId, reversePath && stream.Path != null
+        ? { ...stream, Path: reversePath(stream.Path) } : stream));
       await database.deleteWhere('MediaStreamInfos', { ItemId: itemId });
       await database.insertBatch('MediaStreamInfos', rows);
       await database.deleteWhere('AttachmentStreamInfos', { ItemId: itemId });

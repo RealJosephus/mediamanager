@@ -1,5 +1,6 @@
 import { StorageError, checkAbort, requireCapability } from './errors.js';
 import { baseName, isWithin, joinPath, normalizePath, validateName } from './paths.js';
+import { singleRange } from './range.js';
 
 const mountCapabilityNames = Object.freeze(['create', 'replace', 'mkdir', 'delete', 'rename', 'conditionalWrite', 'atomicReplace']);
 
@@ -142,6 +143,23 @@ export class VirtualFileSystem {
     if (this.#overlays(path).size) throw new StorageError('is-directory', 'The virtual path is a directory.');
     const resolved = this.resolve(path);
     return resolved.adapter.openRead(resolved.path, options);
+  }
+
+  // A response reader preserves source status and selected delivery headers.
+  // Ordinary openRead still rejects failed reads; byte-only adapters produce
+  // their 200/206 response from the same owned read handle and actual range.
+  async openResponse(path, options = {}) {
+    checkAbort(options.signal);
+    path = normalizePath(path);
+    if (this.#overlays(path).size) throw new StorageError('is-directory', 'The virtual path is a directory.');
+    const resolved = this.resolve(path);
+    if (typeof resolved.adapter.openResponse === 'function') return resolved.adapter.openResponse(resolved.path, options);
+    const handle = await resolved.adapter.openRead(resolved.path, { ...options, range: singleRange(options.rangeHeader) });
+    const headers = { 'accept-ranges': handle.acceptRanges || (handle.rangeHonored || resolved.capabilities.randomRead === true ? 'bytes' : 'none') };
+    if (handle.contentType) headers['content-type'] = handle.contentType;
+    if (handle.contentLength != null) headers['content-length'] = String(handle.contentLength);
+    if (handle.rangeHonored) headers['content-range'] = `bytes ${handle.range.start}-${handle.range.end}/${handle.totalSize ?? '*'}`;
+    return { ...handle, statusCode: handle.rangeHonored ? 206 : 200, headers: Object.freeze(headers), close: handle.close.bind(handle) };
   }
 
   async watch(path, { signal, onChange, onError } = {}) {

@@ -1,10 +1,10 @@
 import { fixturePathStyle } from '../library/fixture-state-path.js';
 import { testFileSystem } from './plugin-files.js';
-import { validationExecutable } from '../../tools/validation/paths.js';
+import { validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { once } from 'node:events';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -16,7 +16,8 @@ import { vfsStreamResult } from '../../src/http/binary-result.js';
 import { startActualWebDav } from './helpers/actual-webdav.js';
 
 const executable = process.env.MEDIAMANAGER_WEBDAV_EXECUTABLE;
-const evidenceDirectory = process.env.MEDIAMANAGER_WEBDAV_EVIDENCE;
+const evidenceDirectory = process.env.MEDIAMANAGER_WEBDAV_EVIDENCE
+  ?? path.join(validationOutputRoot(), `actual-webdav-${randomUUID()}`);
 
 async function read(handle) {
   try {
@@ -50,7 +51,8 @@ test('actual external rclone WebDAV supports independent VFS access, writes, NFO
       const response = await fetch(url, options);
       requests.push({ method: options.method, path: new URL(url).pathname, authenticated: headers.has('authorization'),
         depth: headers.get('depth'), range: headers.get('range'), ifRange: headers.get('if-range'),
-        ifMatch: headers.get('if-match'), destination: headers.get('destination'), status: response.status,
+        ifMatch: headers.get('if-match'), ifNoneMatch: headers.get('if-none-match'),
+        destination: headers.get('destination'), overwrite: headers.get('overwrite'), status: response.status,
         contentRange: response.headers.get('content-range'), contentLength: response.headers.get('content-length'),
         etag: response.headers.get('etag') });
       return response;
@@ -94,6 +96,58 @@ test('actual external rclone WebDAV supports independent VFS access, writes, NFO
     assert.deepEqual(await read(await vfs.openRead(mediaPath)), bytes);
     checks.push({ operation: 'identity/create/stat/read', path: mediaPath,
       sha256: createHash('sha256').update(bytes).digest('hex'), bytes: bytes.length });
+  });
+
+  await t.test('exclusive creation refuses an existing target and preserves its original complete entity', async () => {
+    const replacement = Buffer.from('A create-only request must preserve the existing media entity.');
+    const before = await read(await vfs.openRead(mediaPath));
+    const requestStart = requests.length;
+    try {
+      const outcome = await vfs.write(mediaPath, replacement, { overwrite: false }).then(
+        result => ({ rejected: false, result: { size: String(result.size), atomic: result.atomic, version: result.version } }),
+        error => ({ rejected: true, error: { message: error?.message, code: error?.code, details: error?.details } }));
+      const after = await read(await vfs.openRead(mediaPath));
+      checks.push({ operation: 'exclusive-create-existing-target', path: mediaPath, outcome,
+        attempted: { base64: replacement.toString('base64'), sha256: createHash('sha256').update(replacement).digest('hex') },
+        before: { base64: before.toString('base64'), sha256: createHash('sha256').update(before).digest('hex') },
+        after: { base64: after.toString('base64'), sha256: createHash('sha256').update(after).digest('hex') },
+        requests: requests.slice(requestStart) });
+      assert.equal(outcome.rejected, true);
+      assert.equal(outcome.error.code, 'already-exists');
+      assert.deepEqual(after, before);
+    } finally {
+      await vfs.write(mediaPath, before, { overwrite: true });
+    }
+  });
+
+  await t.test('competing exclusive creates retain one complete entity and release their own remote staging', async () => {
+    const target = '/network/exclusive-race.bin';
+    const candidates = [Buffer.alloc(65537, 0x61), Buffer.alloc(131079, 0x62)];
+    const requestStart = requests.length;
+    const outcomes = await Promise.allSettled(candidates.map(bytes => vfs.write(target, bytes, { overwrite: false })));
+    const retained = await read(await vfs.openRead(target));
+    const listing = await vfs.list('/network');
+    const staging = listing.entries.filter(entry => entry.name.startsWith('.mediamanager-create-'));
+    checks.push({ operation: 'competing-exclusive-creates', path: target,
+      candidates: candidates.map(bytes => ({ bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') })),
+      outcomes: outcomes.map(outcome => outcome.status === 'fulfilled'
+        ? { status: outcome.status, size: String(outcome.value.size), atomic: outcome.value.atomic, version: outcome.value.version }
+        : { status: outcome.status, error: { code: outcome.reason?.code, message: outcome.reason?.message, details: outcome.reason?.details } }),
+      retained: { bytes: retained.length, base64: retained.toString('base64'), sha256: createHash('sha256').update(retained).digest('hex') },
+      staging, requests: requests.slice(requestStart) });
+    const winners = outcomes.map((outcome, index) => outcome.status === 'fulfilled' ? index : null).filter(index => index !== null);
+    assert.equal(winners.length, 1);
+    assert.deepEqual(retained, candidates[winners[0]]);
+    assert.deepEqual(staging, []);
+    assert.equal(listing.complete, true);
+    for (const outcome of outcomes) if (outcome.status === 'rejected') {
+      assert.ok(['already-exists', 'unavailable'].includes(outcome.reason.code));
+      if (outcome.reason.code === 'unavailable') assert.equal(outcome.reason.details.status, 423);
+    }
+    await assert.rejects(vfs.write(target, Buffer.from('must retain the committed entity'), { overwrite: false }), { code: 'already-exists' });
+    assert.deepEqual(await read(await vfs.openRead(target)), retained);
+    await vfs.delete(target);
+    assert.equal((await vfs.list('/network')).entries.some(entry => entry.name === 'exclusive-race.bin'), false);
   });
 
   await t.test('bounded, suffix, open and non-monotonic reads retain one strong entity identity', async () => {

@@ -3,6 +3,7 @@ export { StorageRegistry } from './registry.js';
 export { VirtualFileSystem } from './vfs.js';
 export { IdentityAccessMap } from './identity-mapping.js';
 export { normalizePath, validateName } from './paths.js';
+export { identityPathStyle, sourceUriPath, sourceUriFromPath } from './uri.js';
 export { normalizeRange, resolveRange, rangeHeader, parseContentRange } from './range.js';
 export { ProbeReadBridge } from './probe-bridge.js';
 export { probeRaw, buildHttpProbeArguments } from './ffprobe.js';

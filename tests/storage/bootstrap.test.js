@@ -59,20 +59,48 @@ async function setup(t) {
 async function setupWebDav(t) {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'storage-bootstrap-webdav-'));
   const calls = [];
+  const objects = new Map([
+    ['/dav-a/library/movie.bin', Buffer.from('film')],
+    ['/dav-b/archive/clip.bin', Buffer.from('clip')],
+  ]);
+  const collections = new Set();
   const server = http.createServer(async (request, response) => {
     const parts = []; for await (const part of request) parts.push(part);
     calls.push({ method: request.method, url: request.url, authorization: request.headers.authorization,
-      body: Buffer.concat(parts) });
+      destination: request.headers.destination, overwrite: request.headers.overwrite, body: Buffer.concat(parts) });
     if (request.method === 'PROPFIND') {
+      const bytes = objects.get(request.url);
+      if (!bytes) { response.writeHead(404); response.end(); return; }
       const href = String(request.url).replaceAll('&', '&amp;');
       response.writeHead(207, { 'Content-Type': 'application/xml; charset=utf-8' });
       response.end(`<?xml version="1.0" encoding="utf-8"?><d:multistatus xmlns:d="DAV:"><d:response>`
-        + `<d:href>${href}</d:href><d:propstat><d:prop><d:resourcetype/><d:getcontentlength>4</d:getcontentlength>`
+        + `<d:href>${href}</d:href><d:propstat><d:prop><d:resourcetype/><d:getcontentlength>${bytes.length}</d:getcontentlength>`
         + `<d:getetag>&quot;bootstrap-v1&quot;</d:getetag></d:prop><d:status>HTTP/1.1 200 OK</d:status>`
         + `</d:propstat></d:response></d:multistatus>`);
       return;
     }
-    if (request.method === 'PUT') { response.writeHead(201); response.end(); return; }
+    if (request.method === 'MKCOL') {
+      if (collections.has(request.url)) { response.writeHead(405); response.end(); return; }
+      collections.add(request.url); response.writeHead(201); response.end(); return;
+    }
+    if (request.method === 'PUT') {
+      const parent = request.url.slice(0, request.url.lastIndexOf('/'));
+      if (!collections.has(parent)) { response.writeHead(409); response.end(); return; }
+      objects.set(request.url, Buffer.concat(parts)); response.writeHead(201); response.end(); return;
+    }
+    if (request.method === 'MOVE') {
+      const destination = new URL(request.headers.destination);
+      if (destination.origin !== `http://127.0.0.1:${server.address().port}`) { response.writeHead(403); response.end(); return; }
+      if (!objects.has(request.url)) { response.writeHead(404); response.end(); return; }
+      if (request.headers.overwrite !== 'F' || objects.has(destination.pathname)) { response.writeHead(412); response.end(); return; }
+      objects.set(destination.pathname, objects.get(request.url)); objects.delete(request.url);
+      response.writeHead(201); response.end(); return;
+    }
+    if (request.method === 'DELETE') {
+      if (!collections.delete(request.url)) { response.writeHead(404); response.end(); return; }
+      for (const key of objects.keys()) if (key.startsWith(request.url + '/')) objects.delete(key);
+      response.writeHead(204); response.end(); return;
+    }
     response.writeHead(405); response.end();
   });
   server.listen(0, '127.0.0.1'); await once(server, 'listening');
@@ -92,7 +120,7 @@ async function setupWebDav(t) {
   const filename = path.join(directory, 'storage.json');
   await writeFile(filename, JSON.stringify(configuration));
   t.after(async () => { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); await rm(directory, { recursive: true }); });
-  return { calls, configuration, environment: { DAV_A_AUTH: 'Basic alpha-secret', DAV_B_AUTH: 'Basic beta-secret' }, filename };
+  return { calls, objects, collections, origin, configuration, environment: { DAV_A_AUTH: 'Basic alpha-secret', DAV_B_AUTH: 'Basic beta-secret' }, filename };
 }
 
 test('configured VFS performs authenticated AList API requests without passing secrets to object reads', async t => {
@@ -167,9 +195,19 @@ test('configured WebDAV instances keep credentials, roots and mount capabilities
   assert.equal(storage.vfs.capabilities('/first/new.bin').replace, false);
   assert.equal(storage.vfs.capabilities('/second/new.bin').create, false);
 
+  const writeStart = fixture.calls.length;
   await storage.vfs.write('/first/new.bin', Buffer.from('new'), { overwrite: false });
-  assert.equal(fixture.calls.at(-1).method, 'PUT');
-  assert.equal(fixture.calls.at(-1).authorization, fixture.environment.DAV_A_AUTH);
+  const created = fixture.calls.slice(writeStart);
+  assert.deepEqual(created.map(call => call.method), ['MKCOL', 'PUT', 'MOVE', 'DELETE']);
+  assert.ok(created.every(call => call.authorization === fixture.environment.DAV_A_AUTH));
+  assert.equal(created[2].destination, `${fixture.origin}/dav-a/library/new.bin`);
+  assert.equal(created[2].overwrite, 'F');
+  assert.deepEqual(fixture.objects.get('/dav-a/library/new.bin'), Buffer.from('new'));
+  assert.equal(fixture.collections.size, 0);
+  await assert.rejects(storage.vfs.write('/first/new.bin', Buffer.from('loser'), { overwrite: false }), { code: 'already-exists' });
+  assert.deepEqual(fixture.objects.get('/dav-a/library/new.bin'), Buffer.from('new'));
+  assert.equal(fixture.collections.size, 0);
+  assert.deepEqual([...fixture.objects.keys()].sort(), ['/dav-a/library/movie.bin', '/dav-a/library/new.bin', '/dav-b/archive/clip.bin']);
   const calls = fixture.calls.length;
   await assert.rejects(storage.vfs.write('/first/new.bin', Buffer.from('replace')), { code: 'not-supported' });
   await assert.rejects(storage.vfs.write('/second/new.bin', Buffer.from('create'), { overwrite: false }), { code: 'not-supported' });

@@ -9,14 +9,26 @@ import { liveTvSignalPositions, validateLiveTvExtension, validateLiveTvResult, v
   validateOwnedLiveTvStream } from './live-tv-contract.js';
 import { inspectPackage, stagePackage, verifyRelease, physicalDirectory, officialPackagesPath, validPluginId } from './package.js';
 import { createConfigurationBinding } from '../../packages/plugin-sdk/configuration.js';
+import { lyricSignalPositions, validateLyricExtension, copyLyricProviderResult } from '../lyrics/contract.js';
 
 const error = (status,message) => Object.assign(new Error(message),{status,statusCode:status});
 const object = value => value !== null && typeof value==='object' && !Array.isArray(value);
 const clone = value => JSON.parse(JSON.stringify(value));
-const kinds = new Set(['metadata','similar','intro','storage','task','route','context','imagePaths','tuner','listings','channel']);
+const kinds = new Set(['metadata','similar','intro','storage','task','route','context','imagePaths','tuner','listings','channel','lyric']);
 const signals = { getMetadata:1, search:1, fetch:1, hasChanged:1, save:1, prepareSave:1, validateSave:1, preflight:1,
   getImages:1, getImage:1, getImageResponse:1, getIntros:1, getReferences:2, run:0, enrich:1, handle:0, create:1 };
-const storageSignals = {stat:1,listPage:1,openRead:1,write:2,mkdir:1,delete:1,rename:2,health:0,fileStat:1,openFile:2};
+const storageSignals = {stat:1,listPage:1,openRead:1,openResponse:1,write:2,mkdir:1,delete:1,rename:2,health:0,fileStat:1,openFile:2};
+
+function resourceFailure(failures,message) {
+  const primary=failures[0];
+  return Object.assign(new AggregateError(failures,primary?.message??message,{cause:primary}),
+    Object.fromEntries(['code','status','statusCode'].filter(key=>primary?.[key]!==undefined).map(key=>[key,primary[key]])));
+}
+
+async function closeAfterFailure(primary,close,message) {
+  try{await close();}catch(cleanup){throw resourceFailure([primary,cleanup],message);}
+  throw primary;
+}
 
 async function atomicJson(filename,value) {
   const temporary=filename+'.'+randomUUID()+'.tmp';
@@ -62,10 +74,10 @@ class PluginScope {
         if(done)return Promise.resolve({done:true});
         return scope.track(Promise.resolve().then(()=>iterator[method](...args)).then(value=>{
           scope.controller.signal.throwIfAborted();if(value.done){done=true;scope.resources.delete(close);}return value;
-        }).catch(async cause=>{await close();throw cause;}));
+        }).catch(cause=>closeAfterFailure(cause,close,'A plugin iterator and its cleanup failed.')));
       };
       return {[Symbol.asyncIterator](){return this;},next:(...args)=>advance('next',args),
-        return:value=>scope.track(close(value)),throw:cause=>typeof iterator.throw==='function'?advance('throw',[cause]):scope.track(close().then(()=>{throw cause;}))};
+        return:value=>scope.track(close(value)),throw:cause=>typeof iterator.throw==='function'?advance('throw',[cause]):scope.track(closeAfterFailure(cause,close,'A plugin iterator rejection and its cleanup failed.'))};
     }
     return this.track(result);
   }
@@ -98,7 +110,7 @@ class PluginScope {
           Promise.resolve().then(()=>iterator?.return?.()),
         ]);
         const failures=results.filter(value=>value.status==='rejected').map(value=>value.reason);
-        if(failures.length)throw new AggregateError(failures,'The live stream lease failed to close.');
+        if(failures.length)throw resourceFailure(failures,'The live stream lease failed to close.');
       })().catch(cause=>{scope.closeFailures.push(cause);throw cause;}));
       return closing;
     };
@@ -115,9 +127,11 @@ class PluginScope {
       signal.throwIfAborted();
       const available=()=>{if(closing||!scope.active||!scope.admitted)throw error(503,'The live stream lease is closed.');signal.throwIfAborted();};
       const stream=iterator&&{[Symbol.asyncIterator](){return this;},
-        next(...args){return scope.track(Promise.resolve().then(()=>{available();return iterator.next(...args);}).then(async value=>{
-          available();if(value.done)await close();else if(!(value.value instanceof Uint8Array))throw new TypeError('A live stream body must yield bytes.');return value;
-        }).catch(async cause=>{await close();throw cause;}));},
+        next(...args){return scope.track(Promise.resolve().then(()=>{available();return iterator.next(...args);}).then(value=>{
+          available();if(!value.done&&!(value.value instanceof Uint8Array))throw new TypeError('A live stream body must yield bytes.');return value;
+        }).catch(cause=>closeAfterFailure(cause,close,'A live stream body and its cleanup failed.')).then(async value=>{
+          if(value.done)await close();return value;
+        }));},
         return(value){return scope.track(close().then(()=>({done:true,value})));},
       };
       const lease=Object.freeze({mode:'native',...(resource.profile===undefined?{}:{profile:resource.profile}),
@@ -126,8 +140,7 @@ class PluginScope {
       signal.addEventListener('abort',aborted,{once:true});signal.throwIfAborted();
       return lease;
     } catch(cause) {
-      try{await close();}catch(cleanup){throw new AggregateError([cause,cleanup],'A live stream response was rejected and cleanup failed.');}
-      throw cause;
+      return closeAfterFailure(cause,close,'A live stream response was rejected and cleanup failed.');
     }
   }
   wrap(value,kind) {
@@ -140,6 +153,15 @@ class PluginScope {
       if(liveTvSignalPositions[kind]&&!Object.hasOwn(liveTvSignalPositions[kind],key))return undefined;
       if((kind==='adapter'||kind==='resource')&&key==='close')return property.bind(target);
       if(!wrappers.has(key))wrappers.set(key,(...args)=>{
+        if(kind==='lyric'&&Object.hasOwn(lyricSignalPositions,key)) {
+          const callerSignal=args[lyricSignalPositions[key]]?.signal;
+          const result=scope.call(target,key,args,lyricSignalPositions,false);
+          return scope.track(Promise.resolve(result).then(result=>{
+            if(!scope.active||!scope.admitted)throw error(503,'The plugin is unavailable.');
+            scope.controller.signal.throwIfAborted();callerSignal?.throwIfAborted();
+            return copyLyricProviderResult(key,result);
+          }));
+        }
         const positions=liveTvSignalPositions[kind];
         if(positions&&(!scope.active||!scope.admitted))throw error(503,'The plugin is unavailable.');
         const signal=positions&&(args[positions[key]]?.signal?AbortSignal.any([args[positions[key]].signal,scope.controller.signal]):scope.controller.signal);
@@ -161,10 +183,14 @@ class PluginScope {
         }));
         if(kind==='storage'&&key==='create')return Promise.resolve(result).then(adapter=>scope.wrap(adapter,'adapter'));
         if(key==='prepareSave')return scope.track(Promise.resolve(result).then(prepared=>{
-          let closed=false;
-          const close=async()=>{if(closed)return;closed=true;scope.resources.delete(close);await prepared.close?.();};
+          let closing;
+          const close=()=>closing??=scope.track(Promise.resolve().then(()=>{scope.resources.delete(close);return prepared.close?.();}));
           scope.resources.add(close);
-          return scope.wrap({...prepared,close,async apply(...values){try{return await prepared.apply(...values);}finally{await close();}}},'resource');
+          return scope.wrap({...prepared,close,async apply(...values){
+            let result;
+            try{result=await prepared.apply(...values);}catch(cause){return closeAfterFailure(cause,close,'A prepared save and its cleanup failed.');}
+            await close();return result;
+          }},'resource');
         }));
         return result;
       });
@@ -216,7 +242,7 @@ export class PluginHost {
     let identity=await fs.realpath(this.directory);
     if(process.platform==='win32')identity=identity.replace(/^\\\\\?\\UNC\\/u,'\\\\').replace(/^\\\\\?\\/u,'').toLowerCase();
     try{this.#lease=await acquireOperationLease('plugin-host:'+identity,{label:'Plugin host'});}
-    catch(e){if(['EADDRINUSE','EACCES'].includes(e.cause?.code))throw error(409,'The plugin directory is already in use.');throw e;}
+    catch(e){if(e?.code==='OPERATION_LEASE_ACTIVE')throw Object.assign(error(409,'The plugin directory is already in use.'),{cause:e});throw e;}
     const lock=path.join(this.directory,'host.lock');
     // This is diagnostic state; only the OS lease admits an owner.
     await atomicJson(lock,{pid:process.pid,token:randomUUID()});
@@ -299,6 +325,7 @@ export class PluginHost {
         if(!kinds.has(kind)||!object(value)||!scope.active)throw new TypeError('Invalid plugin extension registration.');
         if(kind==='metadata')validateMetadataExtension(value);
         if(kind==='intro'&&typeof value.getIntros!=='function')throw new TypeError('An intro provider requires getIntros.');
+        if(kind==='lyric')validateLyricExtension(value);
         if(liveTvSignalPositions[kind])validateLiveTvExtension(kind,value);
         const wrapped=scope.wrap(value,kind),entry={kind,value:wrapped};
         active.entries.push(entry);
