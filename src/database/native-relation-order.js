@@ -11,6 +11,7 @@ const layouts = {
   [imageTable]: { table: 'image_order', keys: [['image_id', 'Id', 'bytea']], order: ['ItemId', 'ImageType'] },
   [trailerTable]: { table: 'trailer_order', keys: [['type_id', 'Id', 'integer'], ['item_id', 'ItemId', 'bytea']], order: ['ItemId'] },
   ItemValues: { table: 'item_value_order', keys: [['value_id', 'ItemValueId', 'bytea']], order: ['Type', 'CleanValue'] },
+  MediaSegments: { table: 'media_segment_order', keys: [['segment_id', 'Id', 'bytea']], order: ['ItemId'] },
 };
 export const nativeInsertionOrderedTables = Object.freeze(Object.keys(layouts));
 export function nativeRelationOrderDefinition(name) {
@@ -21,8 +22,11 @@ function layout(name) {
   if (!Object.hasOwn(layouts, name)) throw new TypeError('This relation has no native insertion order.');
   return layouts[name];
 }
-const decode = (row, dialect, columns, consumer = 'runtime') => Object.fromEntries(columns.map(column =>
-  [column.name, decodeValue(column, row[column.name], dialect, consumer)]));
+const decode = (row, dialect, columns, consumer = 'runtime') => {
+  const decoded = {};
+  for (const column of columns) decoded[column.name] = decodeValue(column, row[column.name], dialect, consumer);
+  return decoded;
+};
 
 /** Persist SQLite insertion order wherever a native reader consumes it. */
 export function postgresRelationOrderStatements(schema, controlSchema) {
@@ -66,10 +70,14 @@ export async function orderNativeItemSelection(database, plan) {
   const items = `${q(database.schemaName)}.${q('BaseItems')}`;
   const sequence = `${q(database.controlSchema)}.${q('item_order')}`;
   const key = nativeTextSql(database.schemaName).guidKey;
+  // item_id is the order relation's primary key. Keep its single-slot bound
+  // explicit even when a newly populated relation has no useful statistics.
   const result = await database.client.query({ text: `/* native-item-batch-order */
     WITH RECURSIVE selected AS MATERIALIZED (${plan.text}), fresh AS MATERIALIZED (
       SELECT item."Id", item."ParentId", item."OwnerId", sequence.position
-      FROM ${items} item JOIN ${sequence} sequence ON sequence.item_id = item."Id"
+      FROM ${items} item JOIN LATERAL (
+        SELECT position FROM ${sequence} WHERE item_id = item."Id" LIMIT 1
+      ) sequence ON TRUE
       WHERE EXISTS (SELECT 1 FROM selected WHERE ${key('selected."Id"')}=${key('item."Id"')})
     ), edges AS (
       SELECT child."Id" AS "Child", parent."Id" AS "Parent" FROM fresh child JOIN fresh parent

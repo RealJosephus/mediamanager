@@ -7,19 +7,19 @@ async function withPostgresWriteLock(database, scope, operation, options) {
   if (scope.writeLockDepth > 0) return operation();
   await acquirePostgresWriteLock(database, options);
   scope.writeLockDepth += 1;
-  let result, operationError;
+  let result, operationError, operationFailed = false;
   try { result = await operation(); }
-  catch (error) { operationError = error; }
+  catch (error) { operationError = error; operationFailed = true; }
   finally { scope.writeLockDepth -= 1; }
   try { await releasePostgresWriteLock(database); }
   catch (releaseError) {
     database.discardConnection(releaseError);
-    if (operationError) {
-      throw new AggregateError([operationError, releaseError], operationError.message, { cause: operationError });
+    if (operationFailed) {
+      throw new AggregateError([operationError, releaseError], operationError?.message ?? 'PostgreSQL write and lock release failed.', { cause: operationError });
     }
     throw releaseError;
   }
-  if (operationError) throw operationError;
+  if (operationFailed) throw operationError;
   return result;
 }
 

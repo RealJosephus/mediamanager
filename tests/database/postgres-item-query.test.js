@@ -54,25 +54,31 @@ test('PostgreSQL aggregate counts reject unsafe Int64 conversion', async t => {
     } finally { session.client.query = query; }
   });
 
-  let rows = [{ NextId: null, TotalRecordCount: unsafe }];
-  const nextUpDatabase = {
-    dialect: 'postgres', schemaName: 'media',
-    client: { query: async () => ({ rows }) },
-    rows: async () => [],
-  };
   const request = {
     seriesKeys: ['series-key'],
     userId: '10000000-0000-0000-0000-000000000002',
   };
-  await assert.rejects(queryPostgresNextUpPage(nextUpDatabase, request), /invalid Next Up count/u);
-  rows = [{
-    NextId: nativeTextBytes('10000000-0000-0000-0000-000000000003'),
-    LastId: null,
-    PlayedVersionId: null,
-    Ordinal: unsafe,
-    TotalRecordCount: '1',
-  }];
-  await assert.rejects(queryPostgresNextUpPage(nextUpDatabase, request), /invalid Next Up ordinal/u);
+  await folderDatabase.withConnection(async session => {
+    const setting = async () => (await session.client.query("SELECT current_setting('jit') AS jit, pg_backend_pid() AS pid")).rows[0];
+    const before = await setting();
+    for (const [rows, error] of [
+      [[{ NextId: null, TotalRecordCount: unsafe }], /invalid Next Up count/u],
+      [[{ NextId: nativeTextBytes('10000000-0000-0000-0000-000000000003'), LastId: null,
+        PlayedVersionId: null, Ordinal: unsafe, TotalRecordCount: '1' }], /invalid Next Up ordinal/u],
+    ]) {
+      const query = session.client.query;
+      session.client.query = async (...args) => {
+        const result = await query(...args);
+        // The actual selection must finish before its decoded aggregate is
+        // corrupted. Settings queries and restoration retain their real rows.
+        return result.fields?.some(field => field.name === 'NextId') ? { ...result, rows } : result;
+      };
+      try { await assert.rejects(queryPostgresNextUpPage(session, request), error); }
+      finally { session.client.query = query; }
+      assert.deepEqual(await setting(), before);
+      assert.deepEqual((await session.client.query('SELECT 1 AS restored')).rows, [{ restored: 1 }]);
+    }
+  });
 });
 
 const blank = table => Object.fromEntries(tableDefinition(table).columns
@@ -108,10 +114,11 @@ test('PostgreSQL item query keeps relational filters, ordering, counting and pag
   assert.match(plan.text, /FROM "media"\."BaseItems" i/u);
   assert.match(plan.text, /EXISTS \(SELECT 1 FROM "media"\."AncestorIds"/u);
   assert.match(plan.text, /JOIN "media"\."ItemValues"/u);
-  assert.match(plan.text, /total AS \(SELECT count\(\*\)::bigint AS "TotalRecordCount" FROM ordered\)/u);
+  assert.match(plan.text, /total AS \(SELECT count\(\*\)::bigint AS "TotalRecordCount" FROM selected\)/u);
   assert.match(plan.text, /LEFT JOIN page ON TRUE/u, 'an empty page still returns its SQL count');
+  assert.match(plan.text, /WHERE \(SELECT "TotalRecordCount" FROM total\) > \$\d+/u);
   assert.match(plan.text, /ORDER BY[\s\S]*"ProductionYear" DESC NULLS LAST[\s\S]*"SortName" ASC NULLS FIRST[\s\S]*i\."Id" ASC/u);
-  assert.match(plan.text, /page AS \([^)]*LIMIT \$\d+ OFFSET \$\d+\)/u);
+  assert.match(plan.text, /page AS \([\s\S]*LIMIT \$\d+ OFFSET \$\d+\)/u);
   assert.equal(plan.text.includes("Director's cut"), false, 'request data is never interpolated into SQL');
   assert.ok(plan.values.some(value => Buffer.isBuffer(value) && value.equals(nativeTextBytes("%director's cut%"))));
   assert.equal(plan.startIndex, 40);
@@ -169,7 +176,7 @@ test('PostgreSQL item query applies played-folder virtual episode exclusions bef
   });
   assert.match(hiddenMissing.text, /NOT \(i\."IsVirtualItem" IS TRUE AND TRUE\)/u);
   assert.match(hiddenMissing.text,
-    /total AS \(SELECT count\(\*\)::bigint AS "TotalRecordCount" FROM ordered\)/u);
+    /total AS \(SELECT count\(\*\)::bigint AS "TotalRecordCount" FROM selected\)/u);
 
   const futureEpisodes = buildPostgresItemPageQuery(database, {}, {
     playedFolderScope: {
@@ -366,7 +373,7 @@ test('PostgreSQL provider candidates apply culture ordering and paging in the re
   assert.match(plan.text, /search_scores\("Id", "Score"\) AS/u);
   assert.match(plan.text, /COALESCE\(\(SELECT search_score\."Score"[\s\S]+\), 0\) DESC/u);
   assert.match(plan.text, /COLLATE "pg_catalog"\."da-DK-x-icu" ASC NULLS FIRST/u);
-  assert.match(plan.text, /page AS \(SELECT "Id", __ordinal FROM ordered ORDER BY __ordinal LIMIT \$\d+ OFFSET \$\d+\)/u);
+  assert.match(plan.text, /page AS \(SELECT "Id", __ordinal FROM ordered WHERE \(SELECT "TotalRecordCount" FROM total\) > \$\d+ ORDER BY __ordinal LIMIT \$\d+ OFFSET \$\d+\)/u);
   assert.doesNotMatch(plan.text, /array_position\(/u,
     'requested-id ordering must not replace provider score ordering');
   assert.ok(plan.values.some(value => Array.isArray(value) && value.includes(firstId.replaceAll('-', ''))));
@@ -415,6 +422,39 @@ test('PostgreSQL item query decodes only the selected page and preserves SQL ord
   assert.deepEqual(result.rows, [rows[1], rows[0]]);
   assert.equal(result.total, 17);
   assert.equal(result.startIndex, 4);
+});
+
+test('real PostgreSQL counts beyond the last repository page without executing its item ordering', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
+}, async t => {
+  const postgres = await createPostgresTestDatabase(t, 'empty_repository_page');
+  const ids = Array.from({ length: 32 }, (_, index) => `20e00000-0000-0000-0000-${String(index + 1).padStart(12, '0')}`);
+  await postgres.insertBatch('BaseItems', ids.map((Id, index) => item(Id, 'Movies.Movie', {
+    SortName: String(index).padStart(4, '0'),
+  })));
+  for (const startindex of [ids.length, ids.length + 1]) {
+    const page = await queryPostgresItemPage(postgres, {
+      includeitemtypes: ['Movie'], sortby: ['SortName'], startindex, limit: 5,
+    });
+    assert.equal(page.total, ids.length); assert.deepEqual(page.rows, []);
+    const result = await postgres.client.query({
+      text: 'EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ' + page.plan.text, values: page.plan.values,
+    });
+    const visit = node => {
+      if (node['Node Type'] === 'WindowAgg') assert.equal(node['Actual Loops'], 0,
+        'An empty repository page must not execute the complete item ordering.');
+      for (const child of node.Plans ?? []) visit(child);
+    };
+    visit(result.rows[0]['QUERY PLAN'][0].Plan);
+  }
+  const last = await queryPostgresItemPage(postgres, {
+    includeitemtypes: ['Movie'], sortby: ['SortName'], startindex: ids.length - 1, limit: 5,
+  });
+  assert.equal(last.total, ids.length); assert.deepEqual(last.rows.map(row => row.Id), ids.slice(-1));
+  const adjacent = await queryPostgresItemPage(postgres, {
+    includeitemtypes: ['Movie'], sortby: ['SortName'], adjacentto: ids[15], startindex: 3, limit: 5,
+  });
+  assert.equal(adjacent.total, 3); assert.deepEqual(adjacent.rows, []);
 });
 
 test('real PostgreSQL provider presence uses ordinal-ignore-case without locale false positives', {

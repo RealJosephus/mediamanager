@@ -13,6 +13,11 @@ const statement = (database, sql) => {
   prepared.setReadBigInts(true);
   return prepared;
 };
+const decodeRow = (row, columns, consumer) => {
+  const decoded = {};
+  for (const column of columns) decoded[column.name] = decodeValue(column, row[column.name], 'sqlite', consumer);
+  return decoded;
+};
 
 export class SqliteDatabase {
   constructor(filename, { create = false, readOnly = false, requireMigrationHistory = false } = {}) {
@@ -100,9 +105,20 @@ export class SqliteDatabase {
       predicates.push(`(${table.primaryKey.map(q).join(', ')}) > (${table.primaryKey.map(key => sqliteCellParameter(columnDefinition(table, key))).join(', ')})`);
     }
     const order = orderBy ?? table.primaryKey.map((column) => ({ column, direction: 'ASC' }));
-    let sql = `SELECT ${selected.map(column => sqliteCellProjection(column)).join(', ')} FROM ${q(name)}${predicates.length ? ` WHERE ${predicates.join(' AND ')}` : ''} ORDER BY ${order.map(({ column, direction = 'ASC' }) => { columnDefinition(table, column); if (!['ASC', 'DESC'].includes(direction)) throw new Error('Invalid sort direction'); return `${q(column)} ${direction}`; }).join(', ')}`;
+    // ORDER BY must name the stored column, rather than its raw-byte output
+    // alias. Native TEXT is preflighted as TEXT with the pinned BINARY order.
+    let sql = `SELECT ${selected.map(column => sqliteCellProjection(column)).join(', ')} FROM ${q(name)}${predicates.length ? ` WHERE ${predicates.join(' AND ')}` : ''} ORDER BY ${order.map(({ column, direction = 'ASC' }) => { columnDefinition(table, column); if (!['ASC', 'DESC'].includes(direction)) throw new Error('Invalid sort direction'); return `${q(name)}.${q(column)} ${direction}`; }).join(', ')}`;
     if (limit !== undefined) { if (!Number.isSafeInteger(limit) || limit < 0 || !Number.isSafeInteger(offset) || offset < 0) throw new Error('Invalid pagination'); sql += ' LIMIT ? OFFSET ?'; args.push(limit, offset); }
-    return statement(this.database, sql).all(...args).map((row) => Object.fromEntries(selected.map((column) => [column.name, decodeValue(column, row[column.name], 'sqlite', consumer)])));
+    const query = statement(this.database, sql);
+    query.setReturnArrays(true);
+    return query.all(...args).map(row => {
+      const decoded = {};
+      for (let index = 0; index < selected.length; index++) {
+        const column = selected[index];
+        decoded[column.name] = decodeValue(column, row[index], 'sqlite', consumer);
+      }
+      return decoded;
+    });
   }
   insert(name, values, { consumer = 'runtime' } = {}) {
     const table = tableDefinition(name);
@@ -110,7 +126,40 @@ export class SqliteDatabase {
     for (const column of table.columns) if (!column.nullable && !column.generated && !names.includes(column.name)) throw new TypeError(`Missing ${name}.${column.name}`);
     const args = names.map((key) => encodeValue(columnDefinition(table, key), values[key]));
     const row = statement(this.database, `INSERT INTO ${q(name)} (${names.map(q).join(', ')}) VALUES (${names.map(key => sqliteCellParameter(columnDefinition(table, key))).join(', ')}) RETURNING ${table.columns.map(column => sqliteCellProjection(column)).join(', ')}`).get(...args);
-    return Object.fromEntries(table.columns.map((column) => [column.name, decodeValue(column, row[column.name], 'sqlite', consumer)]));
+    return decodeRow(row, table.columns, consumer);
+  }
+  insertBatch(name, values) {
+    const table = tableDefinition(name);
+    if (!Array.isArray(values)) throw new TypeError('Batch insert values must be an array');
+    if (!values.length) return 0n;
+    const first = values[0];
+    if (!first || typeof first !== 'object' || Array.isArray(first)) {
+      throw new TypeError(`Batch inserts require a consistent ${name} row shape`);
+    }
+    const names = Object.keys(first), columns = table.columns.filter(column => Object.hasOwn(first, column.name));
+    for (const key of names) columnDefinition(table, key);
+    for (const column of table.columns) {
+      if (!column.nullable && !column.generated && !Object.hasOwn(first, column.name)) {
+        throw new TypeError(`Missing ${name}.${column.name}`);
+      }
+    }
+    if (!columns.length) throw new TypeError(`Batch inserts require at least one ${name} column`);
+    for (const row of values) {
+      if (!row || typeof row !== 'object' || Array.isArray(row) || Object.keys(row).length !== names.length
+        || columns.some(column => !Object.hasOwn(row, column.name))) {
+        throw new TypeError(`Batch inserts require a consistent ${name} row shape`);
+      }
+    }
+    // Exchange already consumes and verifies bounded source rows. Reuse the
+    // insert statement and avoid materializing a discarded RETURNING row.
+    const insert = statement(this.database, `INSERT INTO ${q(name)} (${columns.map(column => q(column.name)).join(', ')}) VALUES (${columns.map(column => sqliteCellParameter(column)).join(', ')})`);
+    let inserted = 0n;
+    for (const row of values) {
+      const result = insert.run(...columns.map(column => encodeValue(column, row[column.name])));
+      if (result.changes !== 1n) throw new Error(`SQLite batch insert count mismatch for ${name}`);
+      inserted += result.changes;
+    }
+    return inserted;
   }
   upsert(name, values, { consumer = 'runtime' } = {}) {
     const table = tableDefinition(name);
@@ -123,7 +172,7 @@ export class SqliteDatabase {
       ? changes.map(column => `${q(column.name)} = excluded.${q(column.name)}`).join(', ')
       : `${q(table.primaryKey[0])} = excluded.${q(table.primaryKey[0])}`;
     const row = statement(this.database, `INSERT INTO ${q(name)} (${names.map(q).join(', ')}) VALUES (${names.map(key => sqliteCellParameter(columnDefinition(table, key))).join(', ')}) ON CONFLICT (${table.primaryKey.map(q).join(', ')}) DO UPDATE SET ${assignments} RETURNING ${table.columns.map(column => sqliteCellProjection(column)).join(', ')}`).get(...args);
-    return Object.fromEntries(table.columns.map(column => [column.name, decodeValue(column, row[column.name], 'sqlite', consumer)]));
+    return decodeRow(row, table.columns, consumer);
   }
   update(name, keys, values, { rowVersion } = {}) {
     const table = tableDefinition(name);

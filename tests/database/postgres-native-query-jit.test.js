@@ -8,6 +8,7 @@ import { queryPostgresItemPage } from '../../src/database/postgres-item-query.js
 import { createPostgresNativeItemQueryProjection } from '../../src/library/postgres-native-item-query-projection.js';
 import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
 import { PostgresLinkedChildrenStore } from '../../src/library/postgres-linked-children.js';
+import { quoteIdentifier as q } from '../../src/database/model.js';
 import { loadPostgresPageGraph, queryPostgresFolderStats } from '../../src/library/postgres-library-query.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString, postgresTestRow } from './postgres-fixture.js';
@@ -17,38 +18,34 @@ const text = value => typeof value === 'string' ? value : value?.text ?? '';
 const setting = async session => (await session.client.query("SELECT current_setting('jit') AS jit, pg_backend_pid() AS pid")).rows[0];
 const set = (session, value, local = false) => session.client.query("SELECT set_config('jit', $1, $2) AS jit", [value, local]);
 
-pgCase('native cache reachability restores JIT before preparing or releasing resources on its max=1 pool', async (database, report) => {
+pgCase('Node cache resource callbacks preserve the real max=1 relation pool JIT setting', async (database, report) => {
   for (const original of ['on', 'off']) {
     const links = new PostgresLinkedChildrenStore({ database });
     await links.initialize();
-    const relations = links.relationDatabase, graph = links.resourceGraph;
-    const baseline = await links.withSession(setting), query = database.client.query;
-    const marks = [], callbacks = [];
+    const graph = links.resourceGraph;
+    const baseline = await links.withSession(setting), callbacks = [];
     let owner;
     try {
       await links.withSession(session => set(session, original));
-      database.client.query = async (...args) => {
-        if (text(args[0]).startsWith('WITH RECURSIVE reachable')) {
-          const during = (await query("SELECT current_setting('jit') AS jit, pg_backend_pid() AS pid")).rows[0];
-          marks.push(during); report.observations.push({ original, during });
-        }
-        return query(...args);
-      };
+      const before = await links.withSession(setting);
+      assert.deepEqual(before, { jit: original, pid: baseline.pid });
+      report.observations.push({ original, phase: 'before graph callbacks', state: before });
       const entity = graph.entity({}); owner = entity.retain();
       const observe = async phase => {
         const state = await links.withSession(setting);
         assert.deepEqual(state, { jit: original, pid: baseline.pid }); callbacks.push(phase);
+        report.observations.push({ original, phase, state });
       };
       await graph.bind(entity, { prepare: () => observe('prepare'), detach() { callbacks.push('detach'); },
         release: () => observe('release') });
       await graph.collect(); assert.deepEqual(callbacks, ['prepare']);
       owner.release(); await graph.collect();
       assert.deepEqual(callbacks, ['prepare', 'detach', 'release']);
-      assert.ok(marks.length >= 2);
-      assert.ok(marks.every(state => state.jit === 'off' && state.pid === baseline.pid));
-      assert.deepEqual(await links.withSession(setting), { jit: original, pid: baseline.pid });
+      const after = await links.withSession(setting);
+      assert.deepEqual(after, { jit: original, pid: baseline.pid });
+      report.observations.push({ original, phase: 'after graph callbacks', state: after });
     } finally {
-      owner?.release(); database.client.query = query;
+      owner?.release();
       try { await graph.close(); }
       finally {
         try { await links.withSession(session => set(session, baseline.jit)); }
@@ -124,7 +121,15 @@ pgCase('page relationship graphs and folder counters restore their owned backend
   });
 });
 
-const errorInfo = error => ({ name: error?.name, message: error?.message, code: error?.code, stack: error?.stack });
+const errorInfo = error => {
+  if (error === undefined) return { undefined: true };
+  if (error === null || !['object', 'function'].includes(typeof error)) return error;
+  return Object.fromEntries(['name', 'message', 'code', 'status', 'statusCode', 'stack'].map(name => {
+    try { return [name, error[name]]; }
+    catch { return [name, { unreadableGetter: true }]; }
+  }));
+};
+const outcome = promise => promise.then(value => ({ failed: false, value }), reason => ({ failed: true, reason }));
 const failureFields = error => Object.fromEntries(['message', 'code', 'status', 'detail', 'schema', 'table', 'column', 'constraint']
   .map(key => [key, error?.[key]]));
 async function within(promise, label) {
@@ -145,23 +150,24 @@ function pgCase(name, operation) {
     assertValidationOutputChild(output); await mkdir(output, { recursive: true });
     const report = { schemaVersion: 1, name, actualPostgresExecuted: true, actualNativeExecuted: false,
       observations: [], cleanup: {}, phaseAcceptance: false, releaseAcceptance: false };
-    let database, failure;
+    let database, failure, failed = false;
     try {
       database = await createPostgresTestDatabase(null, 'visibility_jit', { max: 1 });
       await operation(database, report);
-    } catch (error) { failure = error; }
+    } catch (error) { failure = error; failed = true; }
     finally {
       try { await dropPostgresTestDatabase(database); report.cleanup.databaseAndOwnedSchemasClosed = true; }
       catch (error) {
         report.cleanup.databaseAndOwnedSchemasClosed = errorInfo(error);
-        failure = failure ? new AggregateError([failure, error], failure.message, { cause: failure }) : error;
+        failure = failed ? new AggregateError([failure, error], 'JIT fixture execution and cleanup failed.', { cause: failure }) : error;
+        failed = true;
       }
-      report.componentPassed = !failure; report.error = failure ? errorInfo(failure) : null;
+      report.componentPassed = !failed; report.error = failed ? errorInfo(failure) : null;
       let serialized = JSON.stringify(report, (_key, value) => typeof value === 'bigint' ? String(value) : value, 2);
       if (postgresTestConnectionString) serialized = serialized.replaceAll(postgresTestConnectionString, '[fixture-secret]');
       await writeFile(path.join(output, 'report.json'), serialized + '\n');
     }
-    if (failure) throw failure;
+    if (failed) throw failure;
   });
 }
 
@@ -377,13 +383,15 @@ pgCase('a real SQL restoration failure quarantines the backend, drains queued le
       previousPid = baseline.pid; originalDefault = baseline.jit;
       const primary = new Error('Controlled primary query callback failure.');
       const entered = Promise.withResolvers(), proceed = Promise.withResolvers();
-      let first, queued, queuedInvoked = false, aggregate;
+      let first, queued, queuedInvoked = false, observedFailure, restorationFailure;
       await set(session, 'on');
-      session.client.query = (...args) => text(args[0]).includes('native-query-jit:restore')
+      session.client.query = async (...args) => {
+        if (!text(args[0]).includes('native-query-jit:restore')) return originalQuery(...args);
         // Actual PostgreSQL rejects this unknown setting. This is a controlled
         // restore-path SQL fault, not a fabricated driver result or exception.
-        ? originalQuery('SELECT current_setting($1) AS jit', ['mediamanager_controlled_missing_jit_setting'])
-        : originalQuery(...args);
+        try { return await originalQuery('SELECT current_setting($1) AS jit', ['mediamanager_controlled_missing_jit_setting']); }
+        catch (error) { restorationFailure = error; throw error; }
+      };
       try {
         first = withPostgresNativeQueryJitOff(session, async owner => {
           assert.equal((await setting(owner)).jit, 'off'); entered.resolve(); await proceed.promise;
@@ -394,11 +402,11 @@ pgCase('a real SQL restoration failure quarantines the backend, drains queued le
         queued = withPostgresNativeQueryJitOff(session, async () => { queuedInvoked = true; }); void queued.catch(() => {});
         proceed.resolve();
         await assert.rejects(within(first, 'failed restoration quarantines physical client'), error => {
-          aggregate = error; assert.ok(Array.isArray(error.errors));
-          assert.equal(error.errors.length, failBusiness ? 2 : 1);
-          assert.equal(error.errors.at(-1).code, '42704');
-          assert.deepEqual(failureFields(error.cause), failureFields(failBusiness ? primary : error.errors[0]));
-          if (failBusiness) assert.deepEqual(failureFields(error.errors[0]), failureFields(primary));
+          observedFailure = error;
+          if (failBusiness) {
+            assert.deepEqual(error.errors, [primary, restorationFailure]); assert.deepEqual(error.cause, primary);
+          } else assert.deepEqual(error, restorationFailure);
+          assert.equal(restorationFailure.code, '42704');
           return true;
         });
         await assert.rejects(within(queued, 'queued lease rejects discarded backend'), /connection was discarded/u);
@@ -406,8 +414,8 @@ pgCase('a real SQL restoration failure quarantines the backend, drains queued le
         session.client.query = originalQuery;
         await assert.rejects(session.client.query('SELECT 1'), /connection was discarded/u);
         report.observations.push({ failBusiness, previousPid, primary: failBusiness ? errorInfo(primary) : null,
-          aggregate: { name: aggregate.name, causeIsPrimary: failBusiness && aggregate.cause === primary,
-            errors: aggregate.errors.map(errorInfo) }, queuedInvoked });
+          failure: failBusiness ? { name: observedFailure.name, causeIsPrimary: observedFailure.cause === primary,
+            errors: observedFailure.errors.map(errorInfo) } : errorInfo(observedFailure), queuedInvoked });
       } finally {
         proceed.resolve(); await Promise.allSettled([first, queued]); session.client.query = originalQuery;
       }
@@ -416,6 +424,105 @@ pgCase('a real SQL restoration failure quarantines the backend, drains queued le
     assert.notEqual(replacement.pid, previousPid, 'The poisoned physical backend must not return to the pool.');
     assert.equal(replacement.jit, originalDefault);
     report.observations.at(-1).replacement = replacement;
+  }
+});
+
+pgCase('every falsy rejection after an actual JIT restore SET preserves single and ordered dual failures, drains the queue and retains its committed prefix', async (database, report) => {
+  const markers = `${q(database.schemaName)}."jit_recovery_markers"`;
+  await database.client.query(`CREATE TABLE ${markers}(name text PRIMARY KEY, payload text NOT NULL)`);
+  const committed = [];
+  const falsy = [false, 0, '', null, undefined];
+  const scenarios = falsy.flatMap(restoration => ['success', 'error', 'falsy'].map(business => ({ restoration, business })));
+  scenarios.push({ restoration: false, business: 'hostile-getters' });
+  for (const [index, scenario] of scenarios.entries()) {
+    const name = String(index).padStart(4, '0') + '-' + scenario.business;
+    const primary = scenario.business === 'falsy' ? scenario.restoration : Object.assign(new Error('Controlled native query business rejection.'),
+      { code: 'jit-business-failed', status: 409, statusCode: 503 });
+    if (scenario.business === 'hostile-getters') Object.defineProperties(primary, {
+      message: { get() { throw new Error('Controlled primary message getter failure.'); }, configurable: true },
+      code: { get() { throw new Error('Controlled primary code getter failure.'); }, configurable: true },
+    });
+    let previousPid, originalDefault;
+    const observation = { name, business: scenario.business, restorationReason: errorInfo(scenario.restoration) };
+    report.observations.push(observation);
+    await database.withConnection(async session => {
+      const baseline = await setting(session), query = session.client.query;
+      previousPid = baseline.pid; originalDefault = baseline.jit;
+      const entered = Promise.withResolvers(), proceed = Promise.withResolvers();
+      let first, queued;
+      await set(session, 'on');
+      session.client.query = async (...args) => {
+        const actual = await query(...args);
+        if (text(args[0]).includes('native-query-jit:restore')) {
+          // The real SET has completed. Read the actual backend once more
+          // before injecting its caller-visible rejection, without replacing
+          // a PostgreSQL response or claiming server-side cancellation.
+          const restored = (await query("SELECT current_setting('jit') AS jit, pg_backend_pid() AS pid")).rows[0];
+          assert.equal(actual.rows[0].jit, 'on'); assert.deepEqual(restored, { jit: 'on', pid: baseline.pid });
+          observation.actualRestoredSetting = restored;
+          throw scenario.restoration;
+        }
+        return actual;
+      };
+      try {
+        first = outcome(withPostgresNativeQueryJitOff(session, async owner => {
+          assert.deepEqual(await setting(owner), { jit: 'off', pid: baseline.pid });
+          await owner.client.query(`INSERT INTO ${markers}(name,payload) VALUES($1,$2)`, [name, 'committed before restoration']);
+          committed.push({ name, payload: 'committed before restoration' });
+          entered.resolve(); await proceed.promise;
+          if (scenario.business !== 'success') throw primary;
+          return 'business completed';
+        }));
+        await Promise.race([entered.promise, first.then(result => {
+          throw new Error('The lease settled before its real committed SQL prefix.', { cause: result.reason });
+        })]);
+        queued = outcome(withPostgresNativeQueryJitOff(session, owner =>
+          owner.client.query(`INSERT INTO ${markers}(name,payload) VALUES($1,$2)`, ['queued-' + name, 'must not be committed'])));
+        proceed.resolve();
+        const result = await first;
+        assert.equal(result.failed, true);
+        if (scenario.business === 'success') assert.equal(result.reason, scenario.restoration);
+        else {
+          assert.ok(result.reason instanceof AggregateError);
+          assert.equal(result.reason.errors.length, 2);
+          assert.equal(result.reason.errors[1], scenario.restoration);
+          assert.ok(Object.hasOwn(result.reason, 'cause'));
+          if (scenario.business === 'hostile-getters') {
+            for (const error of [result.reason.cause, result.reason.errors[0]]) {
+              assert.equal(error.status, 409); assert.equal(error.statusCode, 503);
+              assert.throws(() => error.message, /Controlled primary message getter failure/u);
+              assert.throws(() => error.code, /Controlled primary code getter failure/u);
+            }
+          } else {
+            assert.deepEqual(result.reason.errors[0], primary); assert.deepEqual(result.reason.cause, primary);
+          }
+          if (scenario.business === 'error') {
+            assert.equal(result.reason.message, primary.message); assert.equal(result.reason.code, primary.code);
+            assert.equal(result.reason.status, 409); assert.equal(result.reason.statusCode, 503);
+          } else if (scenario.business === 'hostile-getters') {
+            assert.equal(result.reason.status, 409); assert.equal(result.reason.statusCode, 503);
+          }
+        }
+        const rejectedQueue = await queued;
+        assert.equal(rejectedQueue.failed, true); assert.match(rejectedQueue.reason.message, /connection was discarded/u);
+        session.client.query = query;
+        await assert.rejects(session.client.query('SELECT 1 AS unavailable'), /connection was discarded/u);
+        observation.returnedFailure = scenario.business === 'success' ? errorInfo(result.reason)
+          : { message: result.reason.message, code: result.reason.code, status: result.reason.status,
+            statusCode: result.reason.statusCode, cause: errorInfo(result.reason.cause), errors: result.reason.errors.map(errorInfo) };
+        observation.queuedFailure = errorInfo(rejectedQueue.reason);
+      } finally {
+        proceed.resolve(); await Promise.allSettled([first, queued]); session.client.query = query;
+      }
+    });
+    const recovered = await database.withConnection(async session => ({ setting: await setting(session),
+      committed: (await session.client.query(`SELECT name,payload FROM ${markers} ORDER BY name`)).rows,
+      query: (await session.client.query('SELECT 1 AS restored')).rows }));
+    assert.notEqual(recovered.setting.pid, previousPid, 'A discarded restoration owner cannot return to the pool.');
+    assert.equal(recovered.setting.jit, originalDefault);
+    assert.deepEqual(recovered.committed, committed);
+    assert.deepEqual(recovered.query, [{ restored: 1 }]);
+    observation.recovered = recovered;
   }
 });
 

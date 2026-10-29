@@ -24,6 +24,11 @@ import {
 const types = { getTypeParser(oid, format) { return oid === 20 ? (value) => BigInt(value) : pg.types.getTypeParser(oid, format); } };
 const hash = (value) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const textHash = (value) => createHash('sha256').update(value).digest('hex');
+const decodeRow = (row, columns, consumer = 'runtime') => {
+  const decoded = {};
+  for (const column of columns) decoded[column.name] = decodeValue(column, row[column.name], 'postgres', consumer);
+  return decoded;
+};
 export function postgresIdentifier(value) { return Buffer.byteLength(value) <= 63 ? value : `${value.slice(0, 46)}_${hash(value).slice(0, 16)}`; }
 const shortenDdl = (sql) => sql.replace(/(?:CONSTRAINT|INDEX) "([^"]+)"/g, (match, name) => match.replace(q(name), q(postgresIdentifier(name))));
 const modelHash = hash({ model: postgresStorageModel, nativeTextFunctionsSha256 });
@@ -107,6 +112,54 @@ function hasTransactionControl(sql) {
 const queryText = query => typeof query === 'string' ? query : query?.text ?? '';
 const closedClientMessage = 'Client was closed and is not queryable';
 const schemaCreationOwners = new WeakSet();
+const libraryStatementDefinitions = new WeakMap();
+const admittedLibraryQueries = new WeakMap();
+const libraryStatementLimit = 128;
+const libraryStatementByteLimit = 64 * 1024;
+
+/** Reuse definitions of stable, schema-qualified library queries. The facade
+ * and its hooks receive the original object; only the final physical dispatch
+ * receives a name. Every call still binds its current complete parameter list. */
+export async function queryPostgresLibraryStatement(database, query) {
+  const pool = database.pool;
+  const fields = Reflect.ownKeys(query);
+  const text = Object.getOwnPropertyDescriptor(query, 'text')?.value;
+  const values = Object.getOwnPropertyDescriptor(query, 'values')?.value;
+  if (!pool || typeof pool !== 'object' || Object.getPrototypeOf(query) !== Object.prototype
+    || fields.length !== 2 || !fields.includes('text') || !fields.includes('values')
+    || typeof text !== 'string' || !Array.isArray(values)
+    || Buffer.byteLength(text) > libraryStatementByteLimit) return database.client.query(query);
+  let definitions = libraryStatementDefinitions.get(pool);
+  if (!definitions) { definitions = new Map(); libraryStatementDefinitions.set(pool, definitions); }
+  const key = JSON.stringify([database.schemaName, text]);
+  let definition = definitions.get(key);
+  if (!definition) {
+    // Never evict/re-name entries: driver and server definitions live until
+    // their physical connection closes. New shapes beyond this pool's bound
+    // continue through the original unnamed dispatch.
+    if (definitions.size >= libraryStatementLimit) return database.client.query(query);
+    definition = { pool, text, name: 'mm_library_' + textHash(key).slice(0, 48) };
+    definitions.set(key, definition);
+  }
+  admittedLibraryQueries.set(query, definition);
+  try { return await database.client.query(query); }
+  finally { admittedLibraryQueries.delete(query); }
+}
+
+function dispatchLibraryStatement(root, client, args) {
+  const query = args[0];
+  const definition = query && typeof query === 'object' ? admittedLibraryQueries.get(query) : undefined;
+  if (args.length !== 1 || !definition || definition.pool !== root.pool
+    || Object.getPrototypeOf(query) !== Object.prototype) return client.query(...args);
+  const fields = Reflect.ownKeys(query);
+  const text = Object.getOwnPropertyDescriptor(query, 'text')?.value;
+  const values = Object.getOwnPropertyDescriptor(query, 'values')?.value;
+  // A hook may replace the text, add query options or forward a different
+  // object. Those calls keep their ordinary dispatch and error behavior.
+  if (fields.length !== 2 || !fields.includes('text') || !fields.includes('values')
+    || text !== definition.text || !Array.isArray(values)) return client.query(...args);
+  return client.query({ name: definition.name, text, values });
+}
 
 class PoolClientFacade {
   constructor(database) {
@@ -224,6 +277,18 @@ export class PostgresDatabase {
       this.closed = false;
       this.closePromise = null;
       this.connectionEnds = new Set();
+      this.connectionEndsByClient = new WeakMap();
+      const track = client => {
+        if (this.connectionEndsByClient.has(client)) return;
+        const ended = Promise.withResolvers();
+        this.connectionEndsByClient.set(client, ended.promise);
+        this.connectionEnds.add(ended.promise);
+        client.once('end', () => { this.connectionEnds.delete(ended.promise); ended.resolve(); });
+      };
+      // Relation owners construct this database directly instead of using open.
+      // Acquire also observes an existing pool client when this owner borrows it.
+      pool.on?.('connect', track);
+      pool.on?.('acquire', track);
     }
   }
 
@@ -250,11 +315,6 @@ export class PostgresDatabase {
     }
     const pool = new pg.Pool({ connectionString, types, max, connectionTimeoutMillis, idleTimeoutMillis });
     const database = new PostgresDatabase(pool, schema);
-    pool.on('connect', client => {
-      const ended = Promise.withResolvers();
-      database.connectionEnds.add(ended.promise);
-      client.once('end', () => { database.connectionEnds.delete(ended.promise); ended.resolve(); });
-    });
     try {
       if (create) {
         await database.initialize();
@@ -262,7 +322,7 @@ export class PostgresDatabase {
       }
       await database.preflight();
       if (!deferRuntimeSchemaInitialization) {
-        await database.initializeRuntimeSchema({ lockTimeoutMs: runtimeSchemaLockTimeoutMillis });
+        await database.#initializeRuntimeSchema({ lockTimeoutMs: runtimeSchemaLockTimeoutMillis, refreshStatistics: false });
       }
       return database;
     } catch (error) {
@@ -317,7 +377,8 @@ export class PostgresDatabase {
 
   discardConnection(error) {
     if (!this.connectionSession) throw new Error('Only a PostgreSQL operation session can discard its connection');
-    this.connectionReleaseError = error instanceof Error ? error : new Error(String(error));
+    this.connectionReleaseError ??= error instanceof Error ? error
+      : new Error('PostgreSQL operation connection cleanup failed', { cause: error });
     this.client.discardedError ??= new Error('PostgreSQL operation connection was discarded', {
       cause: this.connectionReleaseError,
     });
@@ -338,7 +399,7 @@ export class PostgresDatabase {
   dispatchOperationQuery(client, ...args) {
     const root = this.root;
     const hook = root.queryHook;
-    if (!hook || root.queryHookContext.getStore()) return client.query(...args);
+    if (!hook || root.queryHookContext.getStore()) return dispatchLibraryStatement(root, client, args);
     return root.queryHookContext.run(true, () => hook.call(root.client, ...args));
   }
 
@@ -366,20 +427,36 @@ export class PostgresDatabase {
     finally {
       const releaseError = setupFailed ? setupError instanceof Error ? setupError
         : new Error('PostgreSQL operation connection setup failed', { cause: setupError }) : session?.connectionReleaseError;
+      const cleanupErrors = [];
       if (releaseError) {
         // Pool release starts disposal but does not wait for the physical
         // connection to end. Finish this owner's disconnect before another
         // operation can observe its remaining temporary objects.
-        const cleanupErrors = [];
-        try { await client.end(); } catch (error) { cleanupErrors.push(error); }
+        try {
+          await client.end();
+          await this.root.connectionEndsByClient.get(client);
+        } catch (error) { cleanupErrors.push(error); }
         try { client.release(releaseError); } catch (error) { cleanupErrors.push(error); }
-        if (cleanupErrors.length) {
-          if (operationFailed) throw new AggregateError([operationError, ...cleanupErrors],
-            operationError?.message ?? 'PostgreSQL operation and connection cleanup failed', { cause: operationError });
-          if (cleanupErrors.length === 1) throw cleanupErrors[0];
-          throw new AggregateError(cleanupErrors, 'PostgreSQL connection cleanup failed', { cause: cleanupErrors[0] });
+      } else {
+        // A release rejection cannot replace the operation's original reason.
+        // Its dispatch may already have returned the client; do not replay it.
+        try { client.release(); } catch (error) { cleanupErrors.push(error); }
+      }
+      if (cleanupErrors.length) {
+        if (operationFailed) {
+          let message = 'PostgreSQL operation and connection cleanup failed';
+          try { const value = operationError?.message; if (typeof value === 'string') message = value; }
+          catch { /* Reading a diagnostic must not replace either failure. */ }
+          const aggregate = new AggregateError([operationError, ...cleanupErrors], message, { cause: operationError });
+          for (const name of ['code', 'status', 'statusCode']) {
+            try { const value = operationError?.[name]; if (value !== undefined) aggregate[name] = value; }
+            catch { /* The original reason remains in cause and errors. */ }
+          }
+          throw aggregate;
         }
-      } else client.release();
+        if (cleanupErrors.length === 1) throw cleanupErrors[0];
+        throw new AggregateError(cleanupErrors, 'PostgreSQL connection cleanup failed', { cause: cleanupErrors[0] });
+      }
     }
   }
 
@@ -402,13 +479,17 @@ export class PostgresDatabase {
       await this.client.query(`CREATE SCHEMA ${q(this.controlSchema)}`);
       await this.client.query(`SET LOCAL search_path TO ${q(this.schemaName)}, pg_catalog`);
       await this.client.query(nativeTextFunctionStatements(this.schemaName));
-      for (const table of dependencyOrder()) {
+      const statements = dependencyOrder().map(table => {
         const sql = createTableSql(table, 'postgres').replace(/ text(?= |,|\n|\))/g, ' text COLLATE "C"');
-        await this.client.query(shortenDdl(sql));
-      }
-      for (const table of nativeModel.tables) for (const index of table.indices) await this.client.query(shortenDdl(createIndexSql(table, index, 'postgres', { schema: this.schemaName })));
-      await this.client.query(`CREATE TABLE ${q(this.controlSchema)}.state (key text PRIMARY KEY, value text NOT NULL)`);
-      for (const sql of postgresRelationOrderStatements(this.schemaName, this.controlSchema)) await this.client.query(sql);
+        return shortenDdl(sql);
+      });
+      for (const table of nativeModel.tables) for (const index of table.indices) statements.push(shortenDdl(createIndexSql(table, index, 'postgres', { schema: this.schemaName })));
+      statements.push(`CREATE TABLE ${q(this.controlSchema)}.state (key text PRIMARY KEY, value text NOT NULL)`,
+        ...postgresRelationOrderStatements(this.schemaName, this.controlSchema));
+      // These trusted, parameter-free definitions have one transaction and no
+      // intermediate consumer. Send their original order in one simple query;
+      // PostgreSQL still stops at the first error and the owner rolls back.
+      await this.client.query(statements.join(';\n'));
       await this.setState('modelHash', modelHash);
       await this.setState('schemaFingerprint', hash(await this.inspectSchema()));
       await this.setState('controlSchemaFingerprint', hash(await this.inspectControlSchema()));
@@ -773,33 +854,47 @@ export class PostgresDatabase {
     }
     return true;
   }
+  /** Verify/install runtime definitions and refresh their planner statistics,
+   * including after a bulk load into an already initialized empty target. */
   async initializeRuntimeSchema({ lockTimeoutMs = 30_000 } = {}) {
+    return this.#initializeRuntimeSchema({ lockTimeoutMs, refreshStatistics: true });
+  }
+  async #initializeRuntimeSchema({ lockTimeoutMs, refreshStatistics }) {
     if (!Number.isSafeInteger(lockTimeoutMs) || lockTimeoutMs < 1) {
       throw new TypeError('lockTimeoutMs must be a positive integer');
     }
     if (!this.connectionSession) {
-      return this.withConnection(database => database.initializeRuntimeSchema({ lockTimeoutMs }));
+      return this.withConnection(database => database.#initializeRuntimeSchema({ lockTimeoutMs, refreshStatistics }));
     }
     return this.transaction(async database => {
       await database.client.query('SELECT pg_advisory_xact_lock(hashtextextended($1, 0))', [
         `mediamanager:postgres-runtime-schema:${database.schemaName}`
       ]);
       const storedFingerprint = await database.getState(postgresRuntimeSchemaFingerprintKey);
+      let fingerprint;
       if (storedFingerprint !== undefined) {
-        const actual = postgresRuntimeSchemaFingerprint(await database.inspectSchema());
-        if (storedFingerprint !== actual) {
+        fingerprint = postgresRuntimeSchemaFingerprint(await database.inspectSchema());
+        if (storedFingerprint !== fingerprint) {
           throw new Error('PostgreSQL runtime schema differs from its verified initialization state');
         }
-        return Object.freeze({ fingerprint: actual });
+      } else {
+        const statements = [
+          ...postgresRuntimeFunctions.map(definition => createPostgresRuntimeFunctionSql(database.schemaName, definition)),
+          ...postgresRuntimeIndexes.map(definition => createPostgresRuntimeIndexSql(database.schemaName, definition)),
+        ];
+        await database.client.query(statements.join(';\n'));
+        fingerprint = postgresRuntimeSchemaFingerprint(await database.inspectSchema());
+        await database.setState(postgresRuntimeSchemaFingerprintKey, fingerprint);
       }
-      for (const definition of postgresRuntimeFunctions) {
-        await database.client.query(createPostgresRuntimeFunctionSql(database.schemaName, definition));
+      // First installation and explicit bulk/startup initialization refresh
+      // every indexed table. A cold open only verifies the existing schema;
+      // its fingerprint describes definitions, never statistics freshness.
+      if (storedFingerprint === undefined || refreshStatistics) {
+        const indexedTables = [...new Set(postgresRuntimeIndexes.map(definition => definition.table))];
+        if (indexedTables.length) {
+          await database.client.query(`ANALYZE ${indexedTables.map(name => `${q(database.schemaName)}.${q(name)}`).join(', ')}`);
+        }
       }
-      for (const definition of postgresRuntimeIndexes) {
-        await database.client.query(createPostgresRuntimeIndexSql(database.schemaName, definition));
-      }
-      const fingerprint = postgresRuntimeSchemaFingerprint(await database.inspectSchema());
-      await database.setState(postgresRuntimeSchemaFingerprintKey, fingerprint);
       return Object.freeze({ fingerprint });
     }, { isolation: 'read-committed', lockTimeoutMs });
   }
@@ -842,6 +937,7 @@ export class PostgresDatabase {
         if (lockDeadline !== undefined && Date.now() >= lockDeadline) throw tableLockTimeout();
         let began = true;
         let locking = false;
+        let committing = false;
         try {
           await this.client.query(`BEGIN ISOLATION LEVEL ${isolationSql}${readOnly ? ' READ ONLY' : ''}`);
           if (lockDeadline !== undefined) {
@@ -853,19 +949,27 @@ export class PostgresDatabase {
             locking = false;
           }
           const result = await callback(this);
+          committing = true;
           await this.client.query('COMMIT');
           began = false;
           return result;
         } catch (error) {
+          if (committing) {
+            // COMMIT may have reached the server. Quarantine this session and
+            // let its connection owner finish the physical disconnect; neither
+            // a successful ROLLBACK nor replay can determine the commit outcome.
+            this.discardConnection(error);
+            throw error;
+          }
           if (began) {
             try { await this.client.query('ROLLBACK'); }
             catch (rollbackError) {
               this.discardConnection(rollbackError);
-              throw new AggregateError([error, rollbackError], error.message, { cause: error });
+              throw new AggregateError([error, rollbackError], error?.message ?? 'PostgreSQL transaction and rollback failed.', { cause: error });
             }
           }
-          signal?.throwIfAborted();
           if (locking && error?.code === '55P03') {
+            signal?.throwIfAborted();
             const remaining = lockDeadline === undefined ? lockRetryMs : lockDeadline - Date.now();
             if (remaining <= 0) throw tableLockTimeout(error);
             await delay(Math.min(lockRetryMs, remaining), undefined, { signal });
@@ -933,9 +1037,16 @@ export class PostgresDatabase {
       predicates.push(`ROW(${table.primaryKey.map(q).join(', ')}) > ROW(${placeholders.join(', ')})`);
     }
     const order = orderBy ?? table.primaryKey.map((column) => ({ column, direction: 'ASC' }));
-    let sql = `SELECT ${selected.map(column => q(column.name)).join(', ')} FROM ${q(name)}${predicates.length ? ` WHERE ${predicates.join(' AND ')}` : ''} ORDER BY ${order.map(({ column, direction = 'ASC' }) => { columnDefinition(table, column); if (!['ASC', 'DESC'].includes(direction)) throw new Error('Invalid sort direction'); return `${q(column)} ${direction} NULLS ${direction === 'ASC' ? 'FIRST' : 'LAST'}`; }).join(', ')}`;
+    const ordering = order.map(({ column, direction = 'ASC' }) => {
+      columnDefinition(table, column);
+      if (!['ASC', 'DESC'].includes(direction)) throw new Error('Invalid sort direction');
+      // Primary-key cells cannot be null. Use the primary index's default
+      // ordering; explicit sorts retain the cross-dialect null placement.
+      return `${q(column)} ${direction}${orderBy === undefined ? '' : ` NULLS ${direction === 'ASC' ? 'FIRST' : 'LAST'}`}`;
+    }).join(', ');
+    let sql = `SELECT ${selected.map(column => q(column.name)).join(', ')} FROM ${q(name)}${predicates.length ? ` WHERE ${predicates.join(' AND ')}` : ''} ORDER BY ${ordering}`;
     if (limit !== undefined) { if (!Number.isSafeInteger(limit) || limit < 0 || !Number.isSafeInteger(offset) || offset < 0) throw new Error('Invalid pagination'); args.push(limit, offset); sql += ` LIMIT $${args.length - 1} OFFSET $${args.length}`; }
-    return (await this.client.query(sql, args)).rows.map((row) => Object.fromEntries(selected.map((column) => [column.name, decodeValue(column, row[column.name], 'postgres', consumer)])));
+    return (await this.client.query(sql, args)).rows.map(row => decodeRow(row, selected, consumer));
   }
   async insert(name, values) {
     const table = tableDefinition(name);
@@ -943,7 +1054,7 @@ export class PostgresDatabase {
     for (const column of table.columns) if (!column.nullable && !column.generated && !names.includes(column.name)) throw new TypeError(`Missing ${name}.${column.name}`);
     const args = names.map((key) => encodeValue(columnDefinition(table, key), values[key], 'postgres'));
     const { rows } = await this.client.query(`INSERT INTO ${q(name)} (${names.map(q).join(', ')}) VALUES (${names.map((_, index) => `$${index + 1}`).join(', ')}) RETURNING *`, args);
-    return Object.fromEntries(table.columns.map((column) => [column.name, decodeValue(column, rows[0][column.name], 'postgres')]));
+    return decodeRow(rows[0], table.columns);
   }
   async insertBatch(name, values) {
     if (!this.connectionSession) return this.withConnection(database => database.insertBatch(name, values));
@@ -1001,7 +1112,7 @@ export class PostgresDatabase {
       ? changes.map(column => `${q(column.name)} = EXCLUDED.${q(column.name)}`).join(', ')
       : `${q(table.primaryKey[0])} = EXCLUDED.${q(table.primaryKey[0])}`;
     const { rows } = await this.client.query(`INSERT INTO ${q(name)} (${names.map(q).join(', ')}) VALUES (${names.map((_, index) => `$${index + 1}`).join(', ')}) ON CONFLICT (${table.primaryKey.map(q).join(', ')}) DO UPDATE SET ${assignments} RETURNING *`, args);
-    return Object.fromEntries(table.columns.map(column => [column.name, decodeValue(column, rows[0][column.name], 'postgres')]));
+    return decodeRow(rows[0], table.columns);
   }
   async update(name, keys, values, { rowVersion } = {}) {
     const table = tableDefinition(name);

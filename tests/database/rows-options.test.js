@@ -1,12 +1,93 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
-import { PostgresDatabase } from '../../src/database/postgres.js';
+import { PostgresDatabase, queryPostgresLibraryStatement } from '../../src/database/postgres.js';
 import { nativeModel, quoteIdentifier as q } from '../../src/database/model.js';
+import { NativeTextCell, nativeTextBytes } from '../../src/database/native-text.js';
+import { exchangePages, decodeExchangeRow } from '../../src/database/native-text-exchange.js';
+import { canonicalCell } from '../../src/database/values.js';
 import { transferDatabase } from '../../src/migration/database-transfer.js';
 import { fixtureIds, fixtureRow, seedAllTables } from './fixtures.js';
 
 const definition = name => nativeModel.tables.find(table => table.name === name);
+
+test('PostgreSQL library statements retain fresh parameters, pool namespaces, hooks and qualified reads after TEMP shadowing', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 60000,
+}, async t => {
+  const schema = `library_sql_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+  const peerSchema = schema + '_peer';
+  const database = await PostgresDatabase.open({
+    connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true, max: 1,
+  });
+  const peer = new PostgresDatabase(database.pool, peerSchema);
+  t.after(async () => {
+    database.queryHook = null; peer.queryHook = null;
+    try {
+      await database.client.query(`DROP SCHEMA IF EXISTS ${q(peerSchema)} CASCADE`);
+      await database.dropSchemasCreatedByThisOpen();
+    } finally { await database.close(); }
+  });
+  await database.client.query(`CREATE SCHEMA ${q(peerSchema)};
+    CREATE TABLE ${q(peerSchema)}."BaseItems" (LIKE ${q(schema)}."BaseItems" INCLUDING ALL)`);
+  const row = { ...fixtureRow(definition('BaseItems')), Name: 'first Ω', RunTimeTicks: 9007199254740993n };
+  await database.insert('BaseItems', row);
+  await peer.insert('BaseItems', { ...row, Name: 'peer', RunTimeTicks: 17n });
+  const query = (owner, id) => ({
+    text: `SELECT "Name","RunTimeTicks" FROM ${q(owner.schemaName)}."BaseItems" WHERE "Id"=$1 ORDER BY "Id"`,
+    values: [nativeTextBytes(id)],
+  });
+  const read = async (owner, id) => (await queryPostgresLibraryStatement(owner, query(owner, id))).rows
+    .map(value => ({ Name: value.Name.toString('utf8'), RunTimeTicks: value.RunTimeTicks }));
+  let firstBackend;
+  await database.withConnection(async session => {
+    firstBackend = (await session.client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid;
+    assert.deepEqual(await read(session, row.Id), [{ Name: 'first Ω', RunTimeTicks: 9007199254740993n }]);
+    assert.deepEqual(await read(session, fixtureIds.Users), []);
+    await session.client.query(`CREATE TEMP TABLE "BaseItems" (LIKE ${q(schema)}."BaseItems" INCLUDING ALL)`);
+    try {
+      await session.insert('BaseItems', { ...row, Name: 'temporary shadow', RunTimeTicks: 3n });
+      assert.equal((await session.rows('BaseItems'))[0].Name, 'temporary shadow');
+      assert.deepEqual(await read(session, row.Id), [{ Name: 'first Ω', RunTimeTicks: 9007199254740993n }]);
+    } finally { await session.client.query('DROP TABLE pg_temp."BaseItems"'); }
+  });
+  await peer.withConnection(async session => {
+    assert.equal((await session.client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid, firstBackend);
+    assert.deepEqual(await read(session, row.Id), [{ Name: 'peer', RunTimeTicks: 17n }]);
+    await session.upsert('BaseItems', { ...row, Name: 'peer changed', RunTimeTicks: 18n });
+    assert.deepEqual(await read(session, row.Id), [{ Name: 'peer changed', RunTimeTicks: 18n }]);
+  });
+  const rollback = new Error('Injected library statement transaction rollback');
+  await assert.rejects(database.transaction(async session => {
+    await session.upsert('BaseItems', { ...row, Name: 'rolled back' });
+    assert.equal((await read(session, row.Id))[0].Name, 'rolled back');
+    throw rollback;
+  }), reason => reason === rollback);
+  assert.equal((await read(database, row.Id))[0].Name, 'first Ω');
+  const acknowledgement = new Error('Injected library read acknowledgement failure');
+  const original = query(database, row.Id);
+  database.queryHook = async (...args) => {
+    const result = await database.client.query(...args);
+    if (args[0] === original) throw acknowledgement;
+    return result;
+  };
+  try { await assert.rejects(queryPostgresLibraryStatement(database, original), reason => reason === acknowledgement); }
+  finally { database.queryHook = null; }
+  await database.upsert('BaseItems', { ...row, Name: 'after acknowledgement', RunTimeTicks: 9007199254740995n });
+  assert.deepEqual(await read(database, row.Id), [{ Name: 'after acknowledgement', RunTimeTicks: 9007199254740995n }]);
+  const options = { text: 'SELECT $1::integer AS value', values: [23] };
+  database.queryHook = async (...args) => {
+    if (args[0] === options) options.rowMode = 'array';
+    return database.client.query(...args);
+  };
+  try { assert.deepEqual((await queryPostgresLibraryStatement(database, options)).rows, [[23]]); }
+  finally { database.queryHook = null; }
+  const divide = value => queryPostgresLibraryStatement(database, {
+    text: 'SELECT 12/$1::integer AS value', values: [value],
+  });
+  await assert.rejects(divide(0), { code: '22012' });
+  assert.deepEqual((await divide(3)).rows, [{ value: 4 }]);
+  assert.equal((await read(peer, row.Id))[0].Name, 'peer changed');
+});
 
 for (const dialect of ['sqlite', 'postgres']) test(`${dialect}: rows options project and filter with one cross-dialect contract`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
@@ -28,6 +109,17 @@ for (const dialect of ['sqlite', 'postgres']) test(`${dialect}: rows options pro
     }
 
     const baseItem = fixtureRow(definition('BaseItems'));
+    const [complete] = await database.rows('BaseItems');
+    assert.deepEqual(complete, baseItem, 'The complete typed projection retains every source field.');
+    assert.deepEqual(Object.keys(complete), definition('BaseItems').columns.map(column => column.name));
+    const [raw] = await database.rows('BaseItems', {
+      columns: ['Data', 'IsFolder', 'RunTimeTicks', 'OwnerId'], consumer: 'exchange',
+    });
+    assert.ok(raw.Data instanceof NativeTextCell);
+    assert.deepEqual(raw.Data.bytes(), Buffer.from(baseItem.Data));
+    assert.deepEqual({ ...raw, Data: raw.Data.string() }, {
+      Data: baseItem.Data, IsFolder: true, RunTimeTicks: baseItem.RunTimeTicks, OwnerId: null,
+    });
     const [projected] = await database.rows('BaseItems', {
       columns: ['RunTimeTicks', 'Id', 'IsFolder']
     });
@@ -78,6 +170,10 @@ for (const dialect of ['sqlite', 'postgres']) test(`${dialect}: rows options pro
       orderBy: [{ column: 'LastPlayedDate' }]
     }), [{ LastPlayedDate: null }, { LastPlayedDate: userData.LastPlayedDate }],
     'set predicates include explicit null and combine across columns');
+    assert.deepEqual(await database.rows('UserData', {
+      columns: ['LastPlayedDate'], orderBy: [{ column: 'LastPlayedDate', direction: 'DESC' }],
+    }), [{ LastPlayedDate: userData.LastPlayedDate }, { LastPlayedDate: null }],
+    'an explicit descending nullable sort keeps nulls last');
     assert.deepEqual(await database.rows('BaseItems', {
       columns: ['Id'], whereIn: { Id: [] }
     }), [], 'an empty identity set never turns into an unbounded query');
@@ -98,6 +194,22 @@ for (const dialect of ['sqlite', 'postgres']) test(`${dialect}: rows options pro
       .map(key => [key, orderedUserData[0][key]]));
     assert.deepEqual(await database.rows('UserData', { after: cursor }), orderedUserData.slice(1),
       'keyset pagination resumes strictly after a complete composite primary key');
+    const chapter = fixtureRow(definition('Chapters'));
+    const additionalChapters = [7, 3, 11, 2, 5, 0].map(ChapterIndex => ({ ...chapter, ChapterIndex,
+      Name: 'Chapter ' + ChapterIndex, StartPositionTicks: 9007199254740993n + BigInt(ChapterIndex) }));
+    await database.insertBatch('Chapters', additionalChapters);
+    const expectedChapters = [chapter, ...additionalChapters].toSorted((left, right) => left.ChapterIndex - right.ChapterIndex);
+    const pagedChapters = [];
+    let chapterCursor;
+    for (;;) {
+      const page = await database.rows('Chapters', { limit: 2, ...(chapterCursor === undefined ? {} : { after: chapterCursor }) });
+      assert.ok(page.length <= 2);
+      pagedChapters.push(...page);
+      if (page.length < 2) break;
+      chapterCursor = Object.fromEntries(definition('Chapters').primaryKey.map(key => [key, page.at(-1)[key]]));
+    }
+    assert.deepEqual(pagedChapters, expectedChapters,
+      'complete composite-key pages retain every typed field, including rows sharing the leading key and exact Int64 positions');
     const manyIds = Array.from({ length: 40000 }, (_, index) => `nonexistent-${index}`);
     manyIds.push(fixtureIds.BaseItems, "'); DROP TABLE BaseItems; --");
     assert.deepEqual(await database.rows('BaseItems', {
@@ -141,6 +253,69 @@ for (const dialect of ['sqlite', 'postgres']) test(`${dialect}: rows options pro
         try {
           await postgres.client.query(`DROP SCHEMA ${q(schema)}, ${q(`${schema}__mm`)} CASCADE`);
         } finally { await postgres.close(); }
+      }
+    } finally { source.close(); }
+  }
+});
+
+for (const dialect of ['sqlite', 'postgres']) test(`${dialect}: raw composite primary-key pages match the same SQLite BINARY source`, {
+  skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
+}, async () => {
+  const source = new SqliteDatabase(':memory:', { create: true });
+  const schema = `raw_rows_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+  let postgres;
+  try {
+    seedAllTables(source);
+    const table = definition('UserData'), template = fixtureRow(table);
+    source.deleteWhere(table.name, { ItemId: template.ItemId });
+    const keys = [Buffer.alloc(0), Buffer.from([0]), Buffer.from([0, 1]), Buffer.from([1]),
+      Buffer.from([97, 0, 97]), Buffer.from([97, 0, 122]), Buffer.from([0x80]), Buffer.from([0xff]),
+      Buffer.from([0xc3, 0x28]), ...['ASCII', 'ascii', 'café', 'cafe\u0301', '中文', '😀', '\ue000'].map(value => Buffer.from(value)),
+      ...Array.from({ length: 260 }, (_, index) => Buffer.from('page-' + String(index).padStart(3, '0')))];
+    source.insertBatch(table.name, keys.toReversed().map((bytes, index) => ({ ...template,
+      CustomDataKey: new NativeTextCell(bytes), PlaybackPositionTicks: 9007199254740993n + BigInt(index),
+      LastPlayedDate: index % 2 ? null : template.LastPlayedDate, Likes: index % 3 ? null : false })));
+    source.preflight();
+    // The reference names source columns explicitly and uses the native BINARY
+    // comparator. The projected raw-byte aliases cannot choose its ordering.
+    const selected = table.columns.map(column => column.type === 'TEXT'
+      ? `CAST(original.${q(column.name)} AS BLOB) AS ${q(column.name)}` : `original.${q(column.name)}`).join(', ');
+    const reference = order => {
+      const query = source.database.prepare(`SELECT ${selected} FROM ${q(table.name)} original ORDER BY ${order}`);
+      query.setReadBigInts(true);
+      return query.all().map(row => decodeExchangeRow(table, row, 'sqlite'));
+    };
+    const expected = reference(table.primaryKey.map(key => `original.${q(key)} COLLATE BINARY ASC`).join(', '));
+    assert.deepEqual(expected.map(row => nativeTextBytes(row.CustomDataKey)), keys.toSorted(Buffer.compare));
+    const cells = rows => rows.map(row => table.columns.map(column => canonicalCell(row[column.name])));
+    if (dialect === 'postgres') {
+      postgres = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,
+        schema, create: true, deferRuntimeSchemaInitialization: true });
+      await transferDatabase(source, postgres);
+    }
+    const database = postgres ?? source, actual = [];
+    let after;
+    for (;;) {
+      const page = await database.rows(table.name, { consumer: 'exchange', limit: 128, ...(after === undefined ? {} : { after }) });
+      assert.ok(page.length <= 128); actual.push(...page);
+      if (page.length < 128) break;
+      after = Object.fromEntries(table.primaryKey.map(key => [key, page.at(-1)[key]]));
+    }
+    assert.deepEqual(cells(actual), cells(expected));
+    const exchanged = [];
+    for await (const page of exchangePages(database, table, { pageSize: 128 })) {
+      assert.ok(page.length <= 128); exchanged.push(...page);
+    }
+    assert.deepEqual(cells(exchanged), cells(expected), 'the independent raw exchange plan retains every byte and complete key');
+    const explicit = await database.rows(table.name, { consumer: 'exchange', orderBy: [
+      { column: 'LastPlayedDate', direction: 'DESC' }, { column: 'CustomDataKey', direction: 'ASC' },
+    ] });
+    assert.deepEqual(cells(explicit), cells(reference('original."LastPlayedDate" COLLATE BINARY DESC, original."CustomDataKey" COLLATE BINARY ASC')));
+  } finally {
+    try {
+      if (postgres) {
+        try { await postgres.client.query(`DROP SCHEMA ${q(schema)}, ${q(`${schema}__mm`)} CASCADE`); }
+        finally { await postgres.close(); }
       }
     } finally { source.close(); }
   }

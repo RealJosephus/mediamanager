@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { createHash, randomUUID } from 'node:crypto';
 import { tableDefinition } from '../../src/database/model.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
-import { nativeTextBytes, decodeNativeTextBytes } from '../../src/database/native-text.js';
+import { nativeTextBytes, decodeNativeTextBytes, nativeTextProjection, nativeTextOrdinalKey } from '../../src/database/native-text.js';
 import { nativeTextSql } from '../../src/database/native-text-sql.js';
 import { buildPostgresItemPageQuery, queryPostgresItemPage } from '../../src/database/postgres-item-query.js';
 import { resolvePostgresSearchCollation } from '../../src/library/postgres-search-provider.js';
@@ -13,6 +13,60 @@ const fixtureRoot = new URL('../core/fixtures/native-text-sort-boundaries/', imp
 const referenceBytes = await readFile(new URL('native.json', fixtureRoot));
 const reference = JSON.parse(referenceBytes);
 const provenance = JSON.parse(await readFile(new URL('provenance.json', fixtureRoot), 'utf8'));
+
+test('actual PostgreSQL native TEXT projection preserves complete UTF8 bytes, escapes and invalid-input errors', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
+}, async t => {
+  const schema = 'native_text_projection_' + randomUUID().replaceAll('-', '').slice(0, 14);
+  const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
+  t.after(async () => { try { await database.dropSchemasCreatedByThisOpen(); } finally { await database.close(); } });
+  const values = [null, '', '87200000-0000-0000-0000-000000000027', 'MediaBrowser.Controller.Entities.Movies.Movie',
+    'ABCDEF01-2345-6789-ABCD-EF0123456789', 'abcdef0123456789ABCDEF0123456789',
+    Array.from({ length: 126 }, (_, index) => String.fromCharCode(index + 2)).join(''),
+    Array.from({ length: 128 }, (_, index) => String.fromCharCode(index)).join(''),
+    String.raw`C:\Library\Movie.mkv`, '/library/%25literal', 'Café 中文 😀', 'e\u0301', '\0', '\u0001', '\0\u0001',
+    '\u00010', '\u00011', '\u000110', '\u000111', '\u0001\u0001', '\u0001\0', '\0\u0001\0',
+    '0\u00010\u00011\u000110\u0001110', 'literal\u00010 and \u00011',
+    'before\0between\u0001after', 'Unknown traceId & opaque bytes\0中文'];
+  const raw = values.map(value => value === null ? null : nativeTextBytes(value));
+  const originals = raw.map(value => value === null ? null : Buffer.from(value));
+  const expected = values.map(value => value === null ? null : nativeTextProjection(value));
+  const result = await database.client.query({ text: `SELECT source.ordinal,source.value,
+      "${schema}".mm_bytes_text_projection(source.value) AS projected,
+      "${schema}".mm_native_guid_lower(source.value) AS guid_lower,
+      lower(source.expected) AS expected_guid_lower,
+      "${schema}".mm_text_utf8_key("${schema}".mm_bytes_text_projection(source.value)) AS restored,
+      "${schema}".mm_text_utf8_key(source.expected) AS encoded,
+      "${schema}".mm_text_utf16_key(source.value) AS ordinal_key,
+      "${schema}".mm_projected_utf16_key(source.expected) AS projected_ordinal_key
+    FROM unnest($1::bytea[],$2::text[]) WITH ORDINALITY source(value,expected,ordinal) ORDER BY source.ordinal`, values: [raw, expected] });
+  assert.deepEqual(result.rows.map(row => row.projected), expected);
+  assert.deepEqual(result.rows.map(row => row.guid_lower), result.rows.map(row => row.expected_guid_lower),
+    'The GUID query/index consumer retains its database-locale lower of the complete canonical projection.');
+  assert.deepEqual(result.rows.map(row => row.value), originals);
+  assert.deepEqual(result.rows.map(row => row.restored), originals);
+  assert.deepEqual(result.rows.map(row => row.encoded), originals);
+  const ordinalKeys = values.map(value => value === null ? null : nativeTextOrdinalKey(value));
+  assert.deepEqual(result.rows.map(row => row.ordinal_key), ordinalKeys);
+  assert.deepEqual(result.rows.map(row => row.projected_ordinal_key), ordinalKeys,
+    'ASCII, adjacent escaped NUL/SOH, literal escape suffixes and Unicode retain complete UTF16 code units.');
+  assert.deepEqual(raw, originals, 'SQL projection leaves every original byte buffer unchanged.');
+
+  for (const value of [Buffer.from([0x80]), Buffer.from([0xc0, 0xaf]), Buffer.from([0xed, 0xa0, 0x80]),
+    Buffer.from([0xf5, 0x80, 0x80, 0x80]), Buffer.from([0xe2, 0x82]), Buffer.from([0x00, 0x80]), Buffer.from([0xff, 0x00, 0x01])]) {
+    const original = Buffer.from(value);
+    await assert.rejects(database.client.query(`SELECT "${schema}".mm_bytes_text_projection($1::bytea)`, [value]), { code: '22021' });
+    await assert.rejects(database.client.query(`SELECT "${schema}".mm_native_guid_lower($1::bytea)`, [value]), { code: '22021' });
+    await assert.rejects(database.client.query(`SELECT "${schema}".mm_text_utf16_key($1::bytea)`, [value]), { code: '22021' });
+    assert.deepEqual(value, original);
+  }
+  for (const value of ['\u0001', '\u0001x', 'before\u0001after', '\u0001\u000101', '\u00010\u0001', '\u00011\u0001x']) {
+    await assert.rejects(database.client.query(`SELECT "${schema}".mm_text_utf8_key($1::text)`, [value]), { code: '22023' });
+    await assert.rejects(database.client.query(`SELECT "${schema}".mm_projected_utf16_key($1::text)`, [value]), { code: '22023' });
+  }
+  const subsequent = await database.client.query(`SELECT "${schema}".mm_bytes_text_projection($1::bytea) AS value`, [raw[2]]);
+  assert.equal(subsequent.rows[0].value, values[2]);
+});
 
 test('postgres: native path containment uses the correct Windows separator and a complete directory boundary', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,

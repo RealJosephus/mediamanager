@@ -180,6 +180,7 @@ export function buildPostgresItemPageQuery(database, query, {
   userId,
   includeOwnedItems = false,
   includeAlternateVersions = false,
+  includePlaceholderRows = false,
   groupByPresentationKey = false,
   includeOrdinal = false,
   nameAccessTypes = [],
@@ -229,6 +230,7 @@ export function buildPostgresItemPageQuery(database, query, {
     throw new TypeError('Unknown memory source order.');
   }
   if (typeof memoryFolderPlayback !== 'boolean') throw new TypeError('memoryFolderPlayback must be boolean.');
+  if (typeof includePlaceholderRows !== 'boolean') throw new TypeError('includePlaceholderRows must be boolean.');
   if (typeof memoryUserViewFilter !== 'boolean') throw new TypeError('memoryUserViewFilter must be boolean.');
   if (nativeItemsPlan !== null && (resumableMode !== 'memory' || typeof nativeItemsPlan?.text !== 'string'
     || !nativeItemsPlan.text.trim() || !Array.isArray(nativeItemsPlan.values))) {
@@ -322,9 +324,10 @@ export function buildPostgresItemPageQuery(database, query, {
   const bindOrdinalArray = value => `${bind(value.map(value => nativeTextOrdinalIgnoreCaseKey(String(value))))}::bytea[]`;
   const normalizedId = expression => `replace(${nativeTextSql(database.schemaName).guidLower(expression)}, '-', '')`;
   const bindIdArray = (value, name) => bindTextArray(validateStringArray(value, name).map(idKey), name);
-  const predicates = [`i."Type" <> 'PLACEHOLDER'`];
+  const predicates = [includePlaceholderRows ? 'TRUE' : `i."Type" <> 'PLACEHOLDER'`];
   const postCollapsePredicates = [];
   const relationalCtes = [];
+  let boundedBoxMembership;
   const baseItems = table(database, 'BaseItems');
   let primaryItems = baseItems;
   if (nativeItemsPlan !== null) {
@@ -1453,22 +1456,132 @@ export function buildPostgresItemPageQuery(database, query, {
           const expansion = visibility.boxSetPathExpansion ?? { appDataPath: '%AppDataPath%', metadataPath: '%MetadataPath%' };
           const pathExpansion = bind(JSON.stringify([pathKeyHex(expansion.appDataPath), pathKeyHex(expansion.metadataPath)]));
           const terminalPathKey = runtimeTextKey(postgresExpandedPathKeyFunctionName, `terminal."Path",${pathExpansion}::jsonb`);
-          // Keep each recursive edge lookup parameterized by its current node;
-          // flattening it scans the complete link relation for every candidate.
+          const candidateIds = query.ids?.length ? query.ids : scope.ids;
+          const projectedIds = new Set(nativeVisibilityProjections?.map(item => idKey(item.Id)));
+          // A complete typed projection may share this statement's membership
+          // graph only when an explicit identifier scope bounds every candidate.
+          // Other scopes retain their correlated lazy reads. Parental access
+          // must finish before a candidate can consume its membership graph.
+          if (nativeItemsPlan === null && candidateIds?.length && candidateIds.length <= 128
+            && candidateIds.every(id => projectedIds.has(idKey(id)))) {
+            boundedBoxMembership = {
+              ctes: scopedPredicates => [
+                `box_visibility_candidates("Id") AS MATERIALIZED (
+                  SELECT DISTINCT i."Id" FROM ${primaryItems} i
+                  ${sourceExpansion}
+                  JOIN native_visibility_input projected ON projected."Id"=${normalizedId('i."Id"')}
+                  WHERE CASE WHEN ${scopedPredicates.join(' AND ')} THEN
+                    CASE WHEN ${leafType('i')}='BoxSet' THEN
+                      CASE WHEN (${ownParentalPredicates.join(' AND ') || 'TRUE'}) THEN
+                        CASE WHEN projected."LibraryFolderIds" IS NULL THEN
+                          EXISTS (SELECT 1 FROM ${links} edge
+                            WHERE ${normalizedId('edge."ParentId"')}=${normalizedId('i."Id"')})
+                          ELSE FALSE END
+                        ELSE FALSE END
+                      ELSE FALSE END
+                    ELSE FALSE END
+                )`,
+                `box_visibility_nodes("BoxSetId","Id") AS (
+                  SELECT candidate."Id",candidate."Id" FROM box_visibility_candidates candidate UNION
+                  SELECT node."BoxSetId",nested."Id" FROM box_visibility_nodes node
+                  CROSS JOIN LATERAL (
+                    SELECT edge."ChildId" FROM ${links} edge
+                    WHERE ${normalizedId('edge."ParentId"')}=${normalizedId('node."Id"')} OFFSET 0
+                  ) nested_link
+                  CROSS JOIN LATERAL (
+                    SELECT nested."Id",nested."Type" FROM ${baseItems} nested
+                    WHERE ${normalizedId('nested."Id"')}=${normalizedId('nested_link."ChildId"')} OFFSET 0
+                  ) nested WHERE ${leafType('nested')}='BoxSet'
+                )`,
+                `box_visibility_media AS MATERIALIZED (
+                  SELECT DISTINCT node."BoxSetId",linked_item."Id",linked_item."ParentId",
+                    linked_item."OwnerId",linked_item."Path"
+                  FROM box_visibility_nodes node CROSS JOIN LATERAL (
+                    SELECT edge."ChildId" FROM ${links} edge
+                    WHERE ${normalizedId('edge."ParentId"')}=${normalizedId('node."Id"')} OFFSET 0
+                  ) media_link
+                  CROSS JOIN LATERAL (
+                    SELECT linked_item.* FROM ${baseItems} linked_item
+                    WHERE ${normalizedId('linked_item."Id"')}=${normalizedId('media_link."ChildId"')} OFFSET 0
+                  ) linked_item WHERE ${leafType('linked_item')} NOT IN ('BoxSet','PLACEHOLDER')
+                )`,
+                `box_visibility_root_walk("StartId","Id","ParentId","OwnerId","Path","Depth","Seen") AS (
+                  SELECT media."Id",media."Id",media."ParentId",media."OwnerId",media."Path",0,
+                    ARRAY[${normalizedId('media."Id"')}]
+                  FROM (SELECT DISTINCT "Id","ParentId","OwnerId","Path" FROM box_visibility_media) media UNION ALL
+                  SELECT walk."StartId",next_root."Id",next_root."ParentId",next_root."OwnerId",next_root."Path",
+                    walk."Depth"+1,walk."Seen" || ${normalizedId('next_root."Id"')}
+                  FROM box_visibility_root_walk walk JOIN LATERAL (
+                    SELECT parent.* FROM ${baseItems} parent
+                    WHERE ${normalizedId('parent."Id"')}=${normalizedId('walk."ParentId"')}
+                      AND ${leafType('parent')} NOT IN ('AggregateFolder','PLACEHOLDER')
+                    UNION ALL
+                    SELECT owner.* FROM ${baseItems} owner WHERE NOT EXISTS (
+                      SELECT 1 FROM ${baseItems} parent
+                      WHERE ${normalizedId('parent."Id"')}=${normalizedId('walk."ParentId"')}
+                        AND ${leafType('parent')}<>'PLACEHOLDER')
+                      AND ${normalizedId('owner."Id"')}=${normalizedId('walk."OwnerId"')}
+                      AND ${leafType('owner')}<>'PLACEHOLDER'
+                    LIMIT 1
+                  ) next_root ON TRUE
+                  WHERE NOT (${normalizedId('next_root."Id"')}=ANY(walk."Seen"))
+                )`,
+                `box_visibility_roots AS MATERIALIZED (
+                  SELECT DISTINCT ON ("StartId") "StartId","Path" FROM box_visibility_root_walk
+                  ORDER BY "StartId","Depth" DESC
+                )`,
+                // A typed empty membership, missing links or unresolved-only
+                // links must not consume the raw root-folder relation.
+                `box_visibility_folders AS MATERIALIZED (
+                  SELECT folder."Document" FROM (SELECT CASE
+                    WHEN EXISTS (SELECT 1 FROM box_visibility_media) THEN ${rootFolders}::jsonb
+                    ELSE '[]'::jsonb END AS "Folders" OFFSET 0) source
+                  CROSS JOIN LATERAL jsonb_array_elements(source."Folders") folder("Document")
+                )`,
+                // Finish every raw-folder comparison before testing user-root
+                // overlap. Shared media keep the original nullable/path errors.
+                `box_visibility_media_memberships AS MATERIALIZED (
+                  SELECT terminal."StartId" AS "Id",array_remove(array_agg(CASE WHEN
+                    ${runtimeTextKey(postgresCollectionFolderMatchFunctionName,
+                      `jsonb_build_array(encode(${terminalPathKey},'hex'),folder."Document"->'Path',folder."Document"->'PhysicalLocations')`)}
+                    THEN folder."Document"->>'Id' END),NULL) AS "Ids"
+                  FROM box_visibility_roots terminal CROSS JOIN box_visibility_folders folder
+                  GROUP BY terminal."StartId"
+                )`,
+                `box_visibility_memberships AS MATERIALIZED (
+                  SELECT media."BoxSetId" AS "Id",array_remove(array_agg(folder."Id"),NULL) AS "Ids"
+                  FROM box_visibility_media media
+                  LEFT JOIN box_visibility_media_memberships membership ON membership."Id"=media."Id"
+                  LEFT JOIN LATERAL unnest(membership."Ids") folder("Id") ON TRUE
+                  GROUP BY media."BoxSetId"
+                )`,
+              ],
+            };
+            return '(SELECT membership."Ids" FROM box_visibility_memberships membership WHERE membership."Id"=i."Id")';
+          }
+          // Keep edge and item lookups parameterized by their current identities.
+          // Filter the resolved item's type after the lookup so unrelated BoxSets
+          // cannot become the inner input of every candidate's recursive walk.
           return `(WITH RECURSIVE box_node("Id") AS (
           SELECT i."Id" UNION
           SELECT nested."Id" FROM box_node node CROSS JOIN LATERAL (
             SELECT edge."ChildId" FROM ${links} edge
             WHERE ${normalizedId('edge."ParentId"')}=${normalizedId('node."Id"')} OFFSET 0
           ) nested_link
-          JOIN ${baseItems} nested ON ${normalizedId('nested."Id"')}=${normalizedId('nested_link."ChildId"')}
+          CROSS JOIN LATERAL (
+            SELECT nested."Id",nested."Type" FROM ${baseItems} nested
+            WHERE ${normalizedId('nested."Id"')}=${normalizedId('nested_link."ChildId"')} OFFSET 0
+          ) nested
           WHERE ${leafType('nested')}='BoxSet'
         ), box_media AS (
           SELECT linked_item.* FROM box_node node CROSS JOIN LATERAL (
             SELECT edge."ChildId" FROM ${links} edge
             WHERE ${normalizedId('edge."ParentId"')}=${normalizedId('node."Id"')} OFFSET 0
           ) media_link
-          JOIN ${baseItems} linked_item ON ${normalizedId('linked_item."Id"')}=${normalizedId('media_link."ChildId"')}
+          CROSS JOIN LATERAL (
+            SELECT linked_item.* FROM ${baseItems} linked_item
+            WHERE ${normalizedId('linked_item."Id"')}=${normalizedId('media_link."ChildId"')} OFFSET 0
+          ) linked_item
           WHERE ${leafType('linked_item')} NOT IN ('BoxSet','PLACEHOLDER')
         ), box_root_walk("StartId","Id","ParentId","OwnerId","Path","Depth","Seen") AS (
           SELECT media."Id",media."Id",media."ParentId",media."OwnerId",media."Path",0,ARRAY[${normalizedId('media."Id"')}]
@@ -1719,6 +1832,7 @@ export function buildPostgresItemPageQuery(database, query, {
           : `CASE WHEN ${leafType('i')}='BoxSet' THEN TRUE ELSE (${predicate}) END`);
       predicates.push(`CASE WHEN ${parentalGate}
         THEN (${afterParentalGate.join(' AND ')}) ELSE FALSE END`);
+      if (boundedBoxMembership) boundedBoxMembership.visibilityPredicateIndex = predicates.length - 1;
     }
   }
 
@@ -2054,6 +2168,7 @@ export function buildPostgresItemPageQuery(database, query, {
 
   const ctes = [
     ...relationalCtes,
+    ...(boundedBoxMembership?.ctes(predicates.filter((_predicate, index) => index !== boundedBoxMembership.visibilityPredicateIndex)) ?? []),
     `filtered AS (\n  SELECT i.*${scope.sourceChildren != null ? ', source_child."Ordinal" AS "__source_ordinal", source_child."ParentOrdinal" AS "__source_parent_ordinal"' : ''}\n  FROM ${primaryItems} i\n  ${sourceExpansion}\n  WHERE ${predicates.join('\n    AND ')}\n)`,
   ];
   if (groupByPresentationKey) {
@@ -2094,9 +2209,15 @@ export function buildPostgresItemPageQuery(database, query, {
         item."SortName" ASC NULLS FIRST,item."Id") AS "__collapse_ordinal" FROM collapsed_source item)`);
     } else ctes.push(`collapsed AS (\n  SELECT item.*\n  FROM ${baseItems} item\n  JOIN collapsed_ids ON ${nativeTextSql(database.schemaName).guidLower("collapsed_ids.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("item.\"Id\"")}\n)`);
   } else ctes.push('collapsed AS (SELECT * FROM precollapsed)');
+  // Repository Count does not consume its ordering. Keep the live-item sort
+  // and adjacency paths intact: they can contribute comparison failures or
+  // change the counted set. Share ordinary eligibility between count and
+  // page so expensive native predicates are evaluated only once per item.
+  const countBeforeOrdering = resumableMode === 'repository' && !nativeItemsPlan && !useMemoryInsertion && !query.adjacentto;
+  const selectedMaterialization = countBeforeOrdering ? 'MATERIALIZED ' : '';
   ctes.push(postCollapsePredicates.length
-    ? `selected AS (SELECT i.* FROM collapsed i WHERE ${postCollapsePredicates.join('\n    AND ')})`
-    : 'selected AS (SELECT * FROM collapsed)');
+    ? `selected AS ${selectedMaterialization}(SELECT i.* FROM collapsed i WHERE ${postCollapsePredicates.join('\n    AND ')})`
+    : `selected AS ${selectedMaterialization}(SELECT * FROM collapsed)`);
   if (useMemoryInsertion) {
     ctes.push(`memory_sort_input AS (
       SELECT memory_source.*, row_number() OVER (ORDER BY ${memoryInsertionSourceOrder.join(', ')}) AS "__input_ordinal",
@@ -2141,8 +2262,10 @@ export function buildPostgresItemPageQuery(database, query, {
     ctes.push(`anchor AS (SELECT __ordinal FROM ordered_base WHERE replace(${nativeTextSql(database.schemaName).guidLower("\"Id\"")}, '-', '') = ${adjacentId} LIMIT 1)`);
     ctes.push('ordered AS (SELECT ordered_base.* FROM ordered_base CROSS JOIN anchor WHERE ordered_base.__ordinal BETWEEN greatest(anchor.__ordinal - 1, 1) AND anchor.__ordinal + 1)');
   } else ctes.push('ordered AS (SELECT * FROM ordered_base)');
-  ctes.push(`page AS (SELECT "Id"${nativeItemsPlan ? ', "__SlotKey"' : ''}, __ordinal FROM ordered ORDER BY __ordinal${pagination})`);
-  ctes.push('total AS (SELECT count(*)::bigint AS "TotalRecordCount" FROM ordered)');
+  ctes.push(`total AS (SELECT count(*)::bigint AS "TotalRecordCount" FROM ${countBeforeOrdering ? 'selected' : 'ordered'})`);
+  const pageGate = countBeforeOrdering && startIndex > 0
+    ? ` WHERE (SELECT "TotalRecordCount" FROM total) > ${bind(startIndex)}` : '';
+  ctes.push(`page AS (SELECT "Id"${nativeItemsPlan ? ', "__SlotKey"' : ''}, __ordinal FROM ordered${pageGate} ORDER BY __ordinal${pagination})`);
   const requestedPageOrder = !nativeItemsPlan && !searchScores?.length && query.ids?.length > 1 && !query.sortby?.length
     ? `array_position(${bindTextArray(query.ids.map(idKey), 'requested page ids')}, replace(${nativeTextSql(database.schemaName).guidLower("page.\"Id\"")}, '-', '')) NULLS LAST, `
     : '';

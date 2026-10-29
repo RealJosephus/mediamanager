@@ -8,6 +8,7 @@ import { idKey } from '../../src/library/records.js';
 import { ordinalIgnoreCaseKey } from '../../src/storage/ordinal-comparer.js';
 import { nativeTextBytes } from '../../src/database/native-text.js';
 import { quoteIdentifier } from '../../src/database/model.js';
+import { withPostgresNativeQueryJitOff } from '../../src/database/postgres-native-query-jit.js';
 import { postgresExpandedPathKeyFunctionName, postgresCollectionFolderMatchFunctionName,
   postgresNativeJsonGuidKeyFunctionName } from '../../src/database/postgres-runtime-schema.js';
 import { createPostgresTestDatabase, postgresTestConnectionString, postgresTestRow } from './postgres-fixture.js';
@@ -26,6 +27,7 @@ const base = (number, kind, values = {}) => postgresTestRow('BaseItems', {
   PresentationUniqueKey: id(number), IsFolder: kind !== 'Movie', OfficialRating: 'G', InheritedParentalRatingValue: 0,
   MediaType: kind === 'Movie' ? 'Video' : 'Unknown', Data: '{}', ...values,
 });
+
 const options = (values = {}) => ({
   userId: id(900), includeOwnedItems: true, includeAlternateVersions: true, resumableMode: 'repository',
   visibility: { itemMode: 'standalone', scopeTopParentAccess: false, boxSetStandalone: true,
@@ -145,10 +147,12 @@ test('real PostgreSQL BoxSet visibility preserves stored/live null, empty and ex
   const persistedRows = async () => (await database.rows('BaseItems', { whereIn: { Id: stored.map(([number]) => id(number)) } }))
     .sort((a, b) => idKey(a.Id).localeCompare(idKey(b.Id)));
   const before = await persistedRows();
-  const observe = async (name, numbers, expected, { live = null, visibility = {}, startIndex = 0, limit = 128 } = {}) => {
+  const observe = async (name, numbers, expected, { live = null, visibility = {}, startIndex = 0, limit = 128,
+    excludeItemIds = [] } = {}) => {
     const configuration = options(visibility);
     if (live !== null) configuration.nativeVisibilityProjections = live;
-    const result = await queryPostgresItemPage(database, { ids: numbers.map(id), startindex: startIndex, limit }, configuration);
+    const result = await queryPostgresItemPage(database, { ids: numbers.map(id), startindex: startIndex, limit,
+      excludeitemids: excludeItemIds }, configuration);
     const actual = result.rows.map(row => idKey(row.Id));
     observations.push({ name, numbers, expected: expected.map(idKey), actual, total: result.total, startIndex: result.startIndex,
       live, planSha256: createHash('sha256').update(result.plan.text).digest('hex') });
@@ -247,6 +251,102 @@ test('real PostgreSQL BoxSet visibility preserves stored/live null, empty and ex
     await observe('null inferred membership empty bypasses child rating', [107], [id(107)], { visibility: { maxRating: 5 } });
     await observe('live empty array supersedes stored null', [100], [id(100)], { live: [projection(id(100), { LibraryFolderIds: [] })] });
     await observe('live null restores derivation instead of falling back to stored explicit IDs', [103], [], { live: [projection(id(103))] });
+    const equalityOnlyFolders = [{ Id: id(10), Path: '/media/A', PhysicalLocations: null }];
+    await observe('complete typed null batch preserves filtered candidate scope before nullable raw-folder errors',
+      [100, 111], [id(100)], {
+        live: [projection(id(100)), projection(id(111))], excludeItemIds: [id(111)],
+        visibility: { boxSetUserRootIds: [id(10)], boxSetRootFolders: equalityOnlyFolders },
+      });
+    await observe('typed empty membership bypasses its mismatching shared raw-folder source', [100, 111], [id(100), id(111)], {
+      live: [projection(id(100)), projection(id(111), { LibraryFolderIds: [] })],
+      visibility: { boxSetUserRootIds: [id(10)], boxSetRootFolders: equalityOnlyFolders },
+    });
+    await observe('typed explicit membership bypasses derivation while retaining its actual root overlap', [100, 111], [id(100)], {
+      live: [projection(id(100)), projection(id(111), { LibraryFolderIds: [id(11)] })],
+      visibility: { boxSetUserRootIds: [id(10)], boxSetRootFolders: equalityOnlyFolders },
+    });
+    await observe('a partial typed projection cannot truncate the explicit candidate scope', [100, 101], [id(100), id(101)], {
+      live: [projection(id(101), { LibraryFolderIds: [] })], visibility: { boxSetUserRootIds: [id(10)] },
+    });
+    await assert.rejects(queryPostgresItemPage(database, { ids: [id(100), id(111)], limit: 128 }, {
+      ...options({ boxSetUserRootIds: [id(10)], boxSetRootFolders: equalityOnlyFolders }),
+      nativeVisibilityProjections: [projection(id(100)), projection(id(111))],
+    }), nullSourceFailure);
+    observations.push({ name: 'an included typed null member still consumes the real mismatching null raw source', failed: true, status: 400 });
+    // A real root-row expression fails only when its relation is consumed.
+    // This controlled PostgreSQL dependency fault is not Native evidence.
+    const failingRootPlan = {
+      text: `SELECT root."Id",1::bigint AS "Ordinal",
+        convert_to((1/(octet_length(root."Id")-octet_length(root."Id")))::text,'UTF8') AS "Path",
+        ARRAY[]::bytea[] AS "PhysicalLocations" FROM ${quoteIdentifier(database.schemaName)}."BaseItems" root
+        WHERE root."Id"=$1`, values: [nativeTextBytes(id(10))],
+    };
+    const failingRootVisibility = { boxSetRootFolders: undefined, boxSetRootFoldersPlan: failingRootPlan };
+    // The mismatching member reaches a real nullable root source only after
+    // its own policy allows it. A same-batch allowed member must remain usable.
+    const originalTags = new Map([100, 111].map(number => [number,
+      before.find(row => idKey(row.Id) === idKey(id(number))).Tags]));
+    try {
+      await database.update('BaseItems', { Id: id(100) }, { Tags: 'allowed' });
+      for (const policy of [
+        { name: 'maximum rating', visibility: { maxRating: 5 }, deniedRating: 'R' },
+        { name: 'blocked tags', visibility: { blockedTags: ['blocked'] }, deniedRating: 'G' },
+        { name: 'required tags', visibility: { allowedTags: ['allowed'] }, deniedRating: 'G' },
+        { name: 'blocked unrated Movie', visibility: { blockUnratedTypes: ['Movie'] }, deniedRating: null },
+      ]) {
+        await database.update('BaseItems', { Id: id(111) }, { Tags: 'blocked' });
+        const denied = projection(id(111), { OfficialRating: policy.deniedRating });
+        await observe(policy.name + ': own denial avoids a real failing root relation', [111], [], {
+          live: [denied], visibility: { ...policy.visibility, ...failingRootVisibility },
+        });
+        await observe(policy.name + ': an allowed same-batch member still resolves its equal nullable root',
+          [100, 111], [id(100)], {
+            live: [projection(id(100)), denied],
+            visibility: { ...policy.visibility, boxSetUserRootIds: [id(10)], boxSetRootFolders: equalityOnlyFolders },
+          });
+        await database.update('BaseItems', { Id: id(111) }, { Tags: 'allowed' });
+        const allowed = [projection(id(100)), projection(id(111))];
+        await observe(policy.name + ': excluded candidates precede membership and nullable root reads',
+          [100, 111], [id(100)], {
+            live: allowed, excludeItemIds: [id(111)],
+            visibility: { ...policy.visibility, boxSetUserRootIds: [id(10)], boxSetRootFolders: equalityOnlyFolders },
+          });
+        await assert.rejects(queryPostgresItemPage(database, { ids: [id(100), id(111)], limit: 128 }, {
+          ...options({ ...policy.visibility, boxSetUserRootIds: [id(10)], boxSetRootFolders: equalityOnlyFolders }),
+          nativeVisibilityProjections: allowed,
+        }), nullSourceFailure);
+        observations.push({ name: policy.name + ': an allowed mismatching member consumes the nullable root source', failed: true, status: 400 });
+        await assert.rejects(queryPostgresItemPage(database, { ids: [id(111)], limit: 128 }, {
+          ...options({ ...policy.visibility, ...failingRootVisibility }), nativeVisibilityProjections: [projection(id(111))],
+        }), { code: '22012' });
+        observations.push({ name: policy.name + ': allowing membership reaches the real row-dependent root failure', failed: true, errorCode: '22012' });
+        const recovered = await observe(policy.name + ': a later complete page still reads both real memberships',
+          [100, 111], [id(100), id(111)], {
+            live: allowed, visibility: { ...policy.visibility, boxSetUserRootIds: [id(10), id(11)] },
+          });
+        assert.equal(recovered.total, 2, policy.name + ': complete visible count after root failures');
+        const page = await observe(policy.name + ': stable SQL paging continues after root failures',
+          [100, 111], [id(111)], {
+            live: allowed, startIndex: 1, limit: 1,
+            visibility: { ...policy.visibility, boxSetUserRootIds: [id(10), id(11)] },
+          });
+        assert.equal(page.total, 2, policy.name + ': a bounded page retains the complete count');
+      }
+    } finally {
+      for (const [number, Tags] of originalTags) await database.update('BaseItems', { Id: id(number) }, { Tags });
+    }
+    await observe('typed empty, linkless and unresolved-only memberships do not consume a failing root relation',
+      [101, 109, 122], [id(101), id(109), id(122)], {
+        live: [projection(id(101), { LibraryFolderIds: [] }), projection(id(109)), projection(id(122))],
+        visibility: failingRootVisibility,
+      });
+    await observe('an excluded typed null candidate cannot consume a failing root relation', [100], [], {
+      live: [projection(id(100))], excludeItemIds: [id(100)], visibility: failingRootVisibility,
+    });
+    await assert.rejects(queryPostgresItemPage(database, { ids: [id(100)], limit: 128 }, {
+      ...options(failingRootVisibility), nativeVisibilityProjections: [projection(id(100))],
+    }), { code: '22012' });
+    observations.push({ name: 'a reachable typed null member consumes the actual root dependency fault', failed: true, errorCode: '22012' });
     await observe('stored unknown root identity does not use descendant membership', [110], []);
     const guidFormats = [idKey(id(11)).toUpperCase(), id(11).toUpperCase(), '{' + id(11) + '}', '(' + id(11) + ')', guidX(id(11))];
     for (const [index, spelling] of guidFormats.entries()) {
@@ -360,6 +460,92 @@ test('real PostgreSQL BoxSet visibility preserves stored/live null, empty and ex
     assert.equal(last.total, 131); assert.equal(last.rows.length, 3); assert.equal(zero.total, 131);
   } finally {
     const output = path.join(validationOutputRoot(), 'postgres-boxset-visibility'); assertValidationOutputChild(output);
+    await mkdir(output, { recursive: true }); await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
+  }
+});
+
+test('real PostgreSQL BoxSet membership work follows reachable edges as unrelated collections grow', {
+  skip: !postgresTestConnectionString, timeout: 180000,
+}, async t => {
+  const database = await createPostgresTestDatabase(t, 'boxset_edge_work');
+  const report = { observations: [], phaseAcceptance: false, releaseAcceptance: false };
+  const selected = Array.from({ length: 128 }, (_, index) => base(1000 + index, 'BoxSet'));
+  const insertPages = async (table, rows) => {
+    for (let offset = 0; offset < rows.length; offset += 128) await database.insertBatch(table, rows.slice(offset, offset + 128));
+  };
+  await insertPages('BaseItems', [base(1, 'AggregateFolder'), base(12, 'Folder', { ParentId: id(1), Path: '/media/A' }),
+    base(20, 'Movie', { ParentId: id(12), Path: '/media/A/movie.mkv' }), base(100, 'BoxSet'), base(200, 'BoxSet'),
+    base(999, 'Folder', { Type: 'PLACEHOLDER', IsFolder: false }), ...selected]);
+  await insertPages('LinkedChildren', [
+    ...selected.map(row => ({ ParentId: row.Id, ChildId: id(200), ChildType: 0, SortOrder: 0 })),
+    { ParentId: id(200), ChildId: id(100), ChildType: 0, SortOrder: 0 },
+    { ParentId: id(200), ChildId: id(100), ChildType: 0, SortOrder: 1 },
+    { ParentId: id(100), ChildId: id(200), ChildType: 0, SortOrder: 0 },
+    { ParentId: id(100), ChildId: id(20), ChildType: 0, SortOrder: 1 },
+    { ParentId: id(100), ChildId: id(999), ChildType: 0, SortOrder: 2 },
+  ]);
+  const query = { ids: selected.map(row => row.Id), limit: 128 };
+  const configuration = options({ boxSetUserRootIds: [id(10)], topParentIds: [id(12)],
+    boxSetRootFolders: [{ Id: id(10), Path: '/root/A', PhysicalLocations: ['/media/A'] },
+      { Id: id(11), Path: '/root/B', PhysicalLocations: ['/media/B'] }] });
+  configuration.nativeVisibilityProjections = selected.map(row => projection(row.Id));
+  const expected = selected.map(row => idKey(row.Id));
+  const addUnrelated = async (start, end) => {
+    const rows = Array.from({ length: end - start }, (_, index) => base(10000 + start + index, 'BoxSet'));
+    await insertPages('BaseItems', rows);
+    await insertPages('LinkedChildren', rows.map(row => ({ ParentId: row.Id, ChildId: id(20), ChildType: 0, SortOrder: 0 })));
+  };
+  const observe = async unrelated => {
+    const result = await queryPostgresItemPage(database, query, configuration);
+    assert.equal(result.total, 128);
+    assert.deepEqual(result.rows.map(row => idKey(row.Id)), expected);
+    const explained = await withPostgresNativeQueryJitOff(database, async session => {
+      const explanation = await session.client.query({ text: 'EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ' + result.plan.text,
+        values: result.plan.values });
+      return explanation.rows[0]['QUERY PLAN'][0];
+    });
+    let itemVisits = 0, repeatedItemVisits = 0;
+    const visit = node => {
+      if (node['Relation Name'] === 'BaseItems') {
+        const loops = node['Actual Loops'] ?? 0;
+        const visits = ((node['Actual Rows'] ?? 0) + (node['Rows Removed by Filter'] ?? 0)) * loops;
+        itemVisits += visits;
+        if (loops > 1) repeatedItemVisits += visits;
+      }
+      for (const child of node.Plans ?? []) visit(child);
+    };
+    visit(explained.Plan);
+    report.observations.push({ unrelated, actual: result.rows.map(row => idKey(row.Id)), total: result.total,
+      itemVisits, repeatedItemVisits, plan: explained });
+  };
+  try {
+    await addUnrelated(0, 64);
+    await observe(64);
+    await addUnrelated(64, 2048);
+    await observe(2048);
+    const scoped = await queryPostgresItemPage(database, { limit: 17, startindex: 111 }, {
+      ...configuration, scope: { ids: selected.map(row => row.Id) },
+    });
+    assert.equal(scoped.total, 128);
+    assert.deepEqual(scoped.rows.map(row => idKey(row.Id)), expected.slice(111));
+    report.observations.push({ name: 'explicit scope owns the complete count and ordered final page',
+      total: scoped.total, actual: scoped.rows.map(row => idKey(row.Id)), startIndex: scoped.startIndex });
+    await database.update('BaseItems', { Id: id(12) }, { Path: '/media/B' });
+    const movedRoot = (await database.rows('BaseItems', { where: { Id: id(12) } }))[0];
+    assert.equal(movedRoot.Path, '/media/B');
+    const moved = await queryPostgresItemPage(database, query, configuration);
+    assert.equal(moved.total, 0); assert.deepEqual(moved.rows, []);
+    report.observations.push({ name: 'the next visibility statement reads the committed shared root change',
+      persistedRoot: { Id: movedRoot.Id, Path: movedRoot.Path }, total: moved.total, actual: [] });
+    await database.update('BaseItems', { Id: id(12) }, { Path: '/media/A' });
+    const restored = await queryPostgresItemPage(database, query, configuration);
+    assert.equal(restored.total, 128); assert.deepEqual(restored.rows.map(row => idKey(row.Id)), expected);
+    const zero = await queryPostgresItemPage(database, { ...query, limit: 0 }, configuration);
+    assert.equal(zero.total, 128); assert.deepEqual(zero.rows, []);
+    report.observations.push({ name: 'restored shared root is read again without retaining the previous decision',
+      total: restored.total, actual: restored.rows.map(row => idKey(row.Id)), zeroPageTotal: zero.total, zeroPage: [] });
+  } finally {
+    const output = path.join(validationOutputRoot(), 'postgres-boxset-edge-work'); assertValidationOutputChild(output);
     await mkdir(output, { recursive: true }); await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
   }
 });

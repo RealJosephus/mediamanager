@@ -42,22 +42,95 @@ test('domain transactions serialize asynchronous writes and roll back without af
 }, async (t) => {
   const { store } = await postgresStoreFixture(t, 'domain_serial');
   const calls = [];
+  const entered = Promise.withResolvers(), resume = Promise.withResolvers();
   const failed = store.transaction(async (db) => {
     calls.push('first');
     await db.insert('ApiKeys', apiKey('rolled-back'));
-    await setTimeout(10);
-    assert.equal((await store.run((connection) => connection.rows('ApiKeys'))).length, 1);
+    entered.resolve(); await resume.promise;
+    assert.deepEqual((await store.run(connection => connection.rows('ApiKeys'))).map(row => row.Name), ['rolled-back']);
     throw new Error('Injected failure');
   });
-  const successful = store.transaction(async (db) => {
-    calls.push('second');
-    assert.equal((await db.rows('ApiKeys')).length, 0);
-    await db.insert('ApiKeys', apiKey('committed'));
+  const rejected = assert.rejects(failed, /Injected failure/); void rejected.catch(() => {});
+  let successful;
+  try {
+    // Establish the real first transaction before offering the second writer.
+    // Independent pool connections need not acquire a lock in invocation order.
+    await Promise.race([entered.promise, failed]);
+    successful = store.transaction(async db => {
+      calls.push('second');
+      assert.deepEqual(await db.rows('ApiKeys'), []);
+      await db.insert('ApiKeys', apiKey('committed'));
+    });
+    resume.resolve(); await rejected; await successful;
+    assert.deepEqual((await store.run(db => db.rows('ApiKeys'))).map(key => key.Name), ['committed']);
+    t.diagnostic(JSON.stringify({ calls }));
+  } finally { resume.resolve(); await Promise.allSettled([failed, successful]); }
+});
+
+for (const reason of [false, 0, '', null, undefined]) for (const failUnlock of [false, true]) test(
+  `PostgreSQL domain writes preserve ${typeof reason}:${String(reason)}${failUnlock ? ' with a real unlock-query failure' : ''}`, {
+    skip: !postgresTestConnectionString,
+  }, async t => {
+    const { database, store } = await postgresStoreFixture(t, 'domain_reason');
+    const original = database.client.query;
+    let armed = failUnlock, unlockFailure;
+    database.client.query = async (...args) => {
+      const text = typeof args[0] === 'string' ? args[0] : args[0].text;
+      const result = await original(...args);
+      if (armed && text.startsWith('SELECT pg_advisory_unlock(')) {
+        armed = false;
+        try { return await original('SELECT 1 / 0 AS actual_unlock_failure'); }
+        catch (error) { unlockFailure = error; throw error; }
+      }
+      return result;
+    };
+    try {
+      const observed = await store.transaction(async db => {
+        await db.insert('ApiKeys', apiKey('rolled-back-reason')); throw reason;
+      }).then(value => ({ fulfilled: true, value }), error => ({ fulfilled: false, error }));
+      assert.equal(observed.fulfilled, false);
+      if (failUnlock) {
+        assert.equal(unlockFailure.code, '22012');
+        assert.ok(Object.is(observed.error.cause, reason));
+        assert.equal(observed.error.errors.length, 2);
+        assert.ok(Object.is(observed.error.errors[0], reason));
+        assert.equal(observed.error.errors[1].code, unlockFailure.code);
+        assert.equal(observed.error.errors[1].message, unlockFailure.message);
+      } else assert.ok(Object.is(observed.error, reason));
+      assert.deepEqual(await database.rows('ApiKeys'), []);
+      await store.transaction(db => db.insert('ApiKeys', apiKey('committed-after-reason')));
+      assert.deepEqual((await database.rows('ApiKeys')).map(row => row.Name), ['committed-after-reason']);
+    } finally { database.client.query = original; }
   });
-  await assert.rejects(failed, /Injected failure/);
-  await successful;
-  assert.deepEqual(calls, ['first', 'second']);
-  assert.deepEqual((await store.run((db) => db.rows('ApiKeys'))).map((key) => key.Name), ['committed']);
+
+for (const reason of [null, undefined]) test(`PostgreSQL preserves ${String(reason)} before a real rollback failure`, {
+  skip: !postgresTestConnectionString,
+}, async t => {
+  const database = await createPostgresTestDatabase(t, 'rollback_reason', { max: 1 });
+  const original = database.client.query;
+  let armed = true, rollbackFailure;
+  database.client.query = async (...args) => {
+    const text = typeof args[0] === 'string' ? args[0] : args[0].text;
+    if (armed && text === 'ROLLBACK') {
+      armed = false;
+      try { return await original('SELECT 1 / 0 AS actual_rollback_failure'); }
+      catch (error) { rollbackFailure = error; throw error; }
+    }
+    return original(...args);
+  };
+  try {
+    const observed = await database.transaction(async db => {
+      await db.insert('ApiKeys', apiKey('rolled-back-connection')); throw reason;
+    }).then(value => ({ fulfilled: true, value }), error => ({ fulfilled: false, error }));
+    assert.equal(observed.fulfilled, false); assert.equal(rollbackFailure.code, '22012');
+    assert.ok(Object.is(observed.error.cause, reason));
+    assert.equal(observed.error.errors.length, 2); assert.ok(Object.is(observed.error.errors[0], reason));
+    assert.equal(observed.error.errors[1].code, rollbackFailure.code);
+    assert.equal(observed.error.errors[1].message, rollbackFailure.message);
+    assert.deepEqual(await database.rows('ApiKeys'), []);
+    await database.transaction(db => db.insert('ApiKeys', apiKey('committed-after-discard')));
+    assert.deepEqual((await database.rows('ApiKeys')).map(row => row.Name), ['committed-after-discard']);
+  } finally { database.client.query = original; }
 });
 
 test('enqueued background writes leave a reentrant request and wait for its rollback', {
@@ -230,6 +303,104 @@ class MockPostgresPool {
     this.ended = true;
   }
 }
+
+test('real PostgreSQL ordinary release failure remains raw after a successful callback and leaves committed data readable', {
+  skip: !postgresTestConnectionString,
+}, async t => {
+  const database = await createPostgresTestDatabase(t, 'release_success', { max: 1 });
+  const releaseFailure = 0, key = 'completed-before-release-failure';
+  let physical, releaseClient, bodyCompleted = false, actualReleaseFinished = false;
+  const capture = client => { physical = client; };
+  database.pool.once('acquire', capture);
+  try {
+    const observed = await database.withConnection(async session => {
+      releaseClient = physical.release;
+      physical.release = function (...args) {
+        releaseClient.apply(this, args); actualReleaseFinished = true; throw releaseFailure;
+      };
+      const stored = await session.insert('ApiKeys', apiKey(key));
+      assert.equal(stored.Name, key); bodyCompleted = true;
+      return stored.AccessToken;
+    }).then(value => ({ fulfilled: true, value }), error => ({ fulfilled: false, error }));
+    assert.equal(bodyCompleted, true); assert.equal(actualReleaseFinished, true);
+    assert.equal(observed.fulfilled, false); assert.ok(Object.is(observed.error, releaseFailure));
+  } finally {
+    database.pool.removeListener('acquire', capture);
+    if (physical && releaseClient) physical.release = releaseClient;
+  }
+  assert.deepEqual((await database.rows('ApiKeys')).map(row => row.Name), [key]);
+  assert.equal((await database.client.query('SELECT 1 AS usable')).rows[0].usable, 1);
+});
+
+test('real PostgreSQL callback and ordinary release failures preserve the original cause, public fields and cleanup order', {
+  skip: !postgresTestConnectionString,
+}, async t => {
+  const database = await createPostgresTestDatabase(t, 'release_reason', { max: 1 });
+  const diagnosticFailure = Object.assign(new Error('Original callback failure'), {
+    code: 'CALLBACK_RELEASE_CONTROL', status: 409, statusCode: 409,
+  });
+  Object.defineProperty(diagnosticFailure, 'message', {
+    get() { throw new Error('Reading a diagnostic must not replace the original callback failure'); },
+  });
+  const pairs = [[false, 0], [0, false], ['', null], [null, undefined], [undefined, ''], [diagnosticFailure, 0]];
+  const committed = [];
+  for (const [index, [callbackFailure, releaseFailure]] of pairs.entries()) {
+    const key = 'autocommit-before-release-callback-' + index;
+    let physical, releaseClient, bodyCompleted = false, actualReleaseFinished = false;
+    const capture = client => { physical = client; };
+    database.pool.once('acquire', capture);
+    try {
+      const observed = await database.withConnection(async session => {
+        releaseClient = physical.release;
+        physical.release = function (...args) {
+          releaseClient.apply(this, args); actualReleaseFinished = true; throw releaseFailure;
+        };
+        const stored = await session.insert('ApiKeys', apiKey(key));
+        assert.equal(stored.Name, key); bodyCompleted = true;
+        throw callbackFailure;
+      }).then(value => ({ fulfilled: true, value }), error => ({ fulfilled: false, error }));
+      assert.equal(bodyCompleted, true); assert.equal(actualReleaseFinished, true);
+      assert.equal(observed.fulfilled, false);
+      assert.ok(Array.isArray(observed.error?.errors));
+      assert.equal(observed.error.errors.length, 2);
+      assert.ok(Object.is(observed.error.cause, callbackFailure));
+      assert.ok(Object.is(observed.error.errors[0], callbackFailure));
+      assert.ok(Object.is(observed.error.errors[1], releaseFailure));
+      if (callbackFailure === diagnosticFailure) {
+        assert.equal(observed.error.code, diagnosticFailure.code);
+        assert.equal(observed.error.status, diagnosticFailure.status);
+        assert.equal(observed.error.statusCode, diagnosticFailure.statusCode);
+      }
+    } finally {
+      database.pool.removeListener('acquire', capture);
+      if (physical && releaseClient) physical.release = releaseClient;
+    }
+    committed.push(key);
+    assert.deepEqual((await database.rows('ApiKeys')).map(row => row.Name), committed,
+      'An ordinary connection callback must not fabricate transaction rollback after its autocommitted write.');
+    assert.equal((await database.client.query('SELECT 1 AS usable')).rows[0].usable, 1);
+  }
+});
+
+test('real PostgreSQL callback failure survives later cancellation after its write and rolls back before the next request', {
+  skip: !postgresTestConnectionString,
+}, async t => {
+  const database = await createPostgresTestDatabase(t, 'callback_abort', { max: 1 });
+  const controller = new AbortController(), cancellation = new Error('Cancelled after the callback SQL completed');
+  let bodyCompleted = false;
+  const observed = await database.transaction(async session => {
+    const stored = await session.insert('ApiKeys', apiKey('rolled-back-before-later-cancellation'));
+    assert.equal(stored.Name, 'rolled-back-before-later-cancellation'); bodyCompleted = true;
+    controller.abort(cancellation);
+    throw false;
+  }, { signal: controller.signal }).then(value => ({ fulfilled: true, value }), error => ({ fulfilled: false, error }));
+  assert.equal(bodyCompleted, true); assert.equal(controller.signal.reason, cancellation);
+  assert.equal(observed.fulfilled, false); assert.ok(Object.is(observed.error, false));
+  assert.deepEqual(await database.rows('ApiKeys'), []);
+  await database.transaction(session => session.insert('ApiKeys', apiKey('committed-after-callback-cancellation')));
+  assert.deepEqual((await database.rows('ApiKeys')).map(row => row.Name), ['committed-after-callback-cancellation']);
+  assert.equal((await database.client.query('SELECT 1 AS usable')).rows[0].usable, 1);
+});
 
 test('domain child admission rejects external callers and parents holding transactions or writer locks', async () => {
   const pool = new MockPostgresPool();

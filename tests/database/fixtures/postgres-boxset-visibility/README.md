@@ -76,3 +76,12 @@ across an odd boundary, and nullable/span string comparisons in the real SQL
 functions. Raw user-root linked-child resolution belongs to its production
 consumer and is not claimed as complete by this module.
 Verification runs in Actions only. Release acceptance stays false.
+
+The reachable-edge regression keeps the same 128 requested collections and a
+shared nested graph, including a cycle, duplicate link and placeholder, while
+unrelated linked collections grow from 64 to 2048. Complete
+IDs/count stay equal. Actual PostgreSQL EXPLAIN ANALYZE observations retain the
+plans and relation row visits; repeated BaseItems visits must remain bounded by
+the unchanged reachable graph rather than grow with unrelated collections. A
+single source scan and shared cached lookups remain valid plans. No index
+name, join-node spelling, wall-clock sample or fixed SQL count is required.

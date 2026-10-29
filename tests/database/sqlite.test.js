@@ -6,7 +6,8 @@ import path from 'node:path';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { nativeModel } from '../../src/database/model.js';
 import { seedAllTables, fixtureIds } from './fixtures.js';
-import { encodeValue } from '../../src/database/values.js';
+import { canonicalCell, encodeValue } from '../../src/database/values.js';
+import { NativeTextCell } from '../../src/database/native-text.js';
 
 test('all 31 native tables and 312 columns retain typed values and composite keys', () => {
   const database = new SqliteDatabase(':memory:', { create: true });
@@ -40,6 +41,37 @@ test('unknown schema, unsafe values, missing keys and optimistic conflicts fail 
   } finally { database.close(); }
 });
 
+test('SQLite batch exchange retains all native fields, raw TEXT bytes, explicit identities and insertion order', () => {
+  const source = new SqliteDatabase(':memory:', { create: true }), target = new SqliteDatabase(':memory:', { create: true });
+  try {
+    seedAllTables(source);
+    source.update('BaseItems', { Id: fixtureIds.BaseItems }, { Data: new NativeTextCell(Buffer.from([0, 255, 1, 97, 0])) });
+    target.transaction(() => {
+      target.database.exec('PRAGMA defer_foreign_keys = ON');
+      for (const table of nativeModel.tables) {
+        const rows = source.rows(table.name, { consumer: 'exchange' });
+        assert.equal(target.insertBatch(table.name, rows), BigInt(rows.length));
+      }
+    });
+    for (const table of nativeModel.tables) {
+      const values = database => database.rows(table.name, { consumer: 'exchange' })
+        .map(row => table.columns.map(column => canonicalCell(row[column.name])));
+      assert.deepEqual(values(target), values(source), table.name);
+    }
+    const order = [{ Kind: 7, RowVersion: 0n, UserId: fixtureIds.Users, Value: 0 },
+      { Value: 1, UserId: fixtureIds.Users, RowVersion: 0n, Kind: 8 }];
+    const before = target.database.prepare('SELECT seq FROM sqlite_sequence WHERE name=?').get('Permissions').seq;
+    assert.equal(target.insertBatch('Permissions', order), 2n);
+    const generated = target.database.prepare('SELECT Id, Kind, Value FROM Permissions WHERE Id > ? ORDER BY rowid').all(before);
+    assert.deepEqual(generated.map(row => [row.Kind, row.Value]), [[7, 0], [8, 1]]);
+    assert.equal(target.insertBatch('Permissions', []), 0n);
+    assert.throws(() => target.insertBatch('Permissions', [order[0], { ...order[1], Unexpected: true }]), /consistent Permissions row shape/u);
+    assert.throws(() => target.insertBatch('Permissions', [{ ...order[0], Value: undefined }]), /cannot be undefined/u);
+    assert.equal(target.database.prepare('SELECT count(*) AS count FROM Permissions WHERE Kind=7').get().count, 1);
+    assert.equal(target.database.prepare('SELECT seq FROM sqlite_sequence WHERE name=?').get('Permissions').seq, before + 2);
+  } finally { source.close(); target.close(); }
+});
+
 test('upsert supports native tables whose entire shape is the composite primary key', () => {
   const database = new SqliteDatabase(':memory:', { create: true });
   try {
@@ -49,6 +81,16 @@ test('upsert supports native tables whose entire shape is the composite primary 
     assert.deepEqual(database.upsert('ItemValuesMap', value), value);
     assert.deepEqual(database.upsert('ItemValuesMap', value), value);
     assert.deepEqual(database.rows('ItemValuesMap'), [value]);
+  } finally { database.close(); }
+});
+
+test('native TEXT preflight still rejects a BLOB storage class instead of coercing it', () => {
+  const database = new SqliteDatabase(':memory:', { create: true });
+  try {
+    seedAllTables(database);
+    database.database.prepare('UPDATE "UserData" SET "CustomDataKey" = ? WHERE "CustomDataKey" = ?')
+      .run(Buffer.from([0xff, 0, 1]), '');
+    assert.throws(() => database.preflight(), /UserData\.CustomDataKey: unexpected native TEXT storage class/u);
   } finally { database.close(); }
 });
 

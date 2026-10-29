@@ -1,12 +1,21 @@
 CREATE FUNCTION mm_bytes_text_projection(source bytea) RETURNS text
-LANGUAGE sql IMMUTABLE STRICT PARALLEL SAFE AS $$
-  SELECT convert_from(decode(COALESCE(string_agg(CASE byte[1]
-    WHEN '00' THEN '0130' WHEN '01' THEN '0131' ELSE byte[1] END, '' ORDER BY ordinal), ''), 'hex'), 'UTF8')
-  FROM regexp_matches(encode(source, 'hex'), '..', 'g') WITH ORDINALITY bytes(byte, ordinal)
-$$;
+LANGUAGE plpgsql IMMUTABLE STRICT PARALLEL SAFE AS $$
+BEGIN
+  -- Keep ordinary UTF8 outside the escaped-byte query and its SRF executor.
+  IF position(decode('00', 'hex') IN source) = 0
+      AND position(decode('01', 'hex') IN source) = 0 THEN
+    RETURN convert_from(source, 'UTF8');
+  END IF;
+  RETURN (
+      SELECT convert_from(decode(COALESCE(string_agg(CASE byte[1]
+        WHEN '00' THEN '0130' WHEN '01' THEN '0131' ELSE byte[1] END, '' ORDER BY ordinal), ''), 'hex'), 'UTF8')
+      FROM regexp_matches(encode(source, 'hex'), '..', 'g') WITH ORDINALITY bytes(byte, ordinal)
+  );
+END $$;
 
 CREATE FUNCTION mm_native_guid_lower(source bytea) RETURNS text
-LANGUAGE sql IMMUTABLE STRICT PARALLEL SAFE AS $$ SELECT lower(mm_bytes_text_projection(source)) $$;
+LANGUAGE plpgsql IMMUTABLE STRICT PARALLEL SAFE AS $$
+BEGIN RETURN lower(mm_bytes_text_projection(source)); END $$;
 
 CREATE FUNCTION mm_native_guid_lower(source text) RETURNS text
 LANGUAGE sql IMMUTABLE STRICT PARALLEL SAFE AS $$ SELECT lower(source) $$;
@@ -15,6 +24,7 @@ CREATE FUNCTION mm_text_utf8_key(source text) RETURNS bytea
 LANGUAGE plpgsql IMMUTABLE STRICT PARALLEL SAFE AS $$
 DECLARE result bytea := ''::bytea; position integer := 1; character text; escape text;
 BEGIN
+  IF position(chr(1) IN source) = 0 THEN RETURN convert_to(source, 'UTF8'); END IF;
   WHILE position <= char_length(source) LOOP
     character := substring(source FROM position FOR 1); position := position + 1;
     IF character = chr(1) THEN
@@ -30,7 +40,16 @@ END $$;
 CREATE FUNCTION mm_projected_utf16_key(source text) RETURNS bytea
 LANGUAGE plpgsql IMMUTABLE STRICT PARALLEL SAFE AS $$
 DECLARE result bytea := ''::bytea; position integer := 1; code integer; escape text; high integer; low integer;
+  source_utf8 bytea; utf16_hex text;
 BEGIN
+  source_utf8 := convert_to(source, 'UTF8');
+  IF octet_length(source_utf8) = char_length(source)
+      AND source !~ (chr(1) || '([^01]|$)') THEN
+    -- ASCII code units have zero high bytes. Restore canonical escapes only
+    -- once, NUL before SOH, so an escaped SOH followed by literal '0' survives.
+    utf16_hex := regexp_replace(encode(source_utf8, 'hex'), '(..)', E'00\\1', 'g');
+    RETURN decode(replace(replace(utf16_hex, '00010030', '0000'), '00010031', '0001'), 'hex');
+  END IF;
   WHILE position <= char_length(source) LOOP
     code := ascii(substring(source FROM position FOR 1)); position := position + 1;
     IF code = 1 THEN

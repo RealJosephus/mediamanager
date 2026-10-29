@@ -18,7 +18,7 @@ async function runLease(database, operation) {
   const original = read.rows[0]?.jit;
   if (original !== 'on' && original !== 'off') throw new Error('PostgreSQL returned an invalid JIT setting.');
   const local = Boolean(database.inTransaction);
-  let value, failure, failed = false, restorationFailure;
+  let value, failure, failed = false, restorationFailure, restorationFailed = false;
   try {
     // Setting writes can fail after reaching PostgreSQL. Always attempt cleanup
     // after dispatch, including when the disable query itself reports failure.
@@ -42,16 +42,28 @@ async function runLease(database, operation) {
       // SET LOCAL is automatically rolled back by the existing transaction
       // owner. A failed business statement leaves that transaction in 25P02;
       // do not replace its primary error with this expected cleanup response.
-      if (!(local && failed && error?.code === '25P02')) {
+      let abortedTransaction = false;
+      try { abortedTransaction = local && failed && error?.code === '25P02'; }
+      catch { /* A diagnostic getter cannot replace the actual restore failure. */ }
+      if (!abortedTransaction) {
+        restorationFailed = true;
         restorationFailure = error;
-        database.discardConnection(error);
+        database.discardConnection(error instanceof Error ? error
+          : new Error('PostgreSQL native query JIT restoration failed.', { cause: error }));
       }
     }
   }
-  if (restorationFailure) {
-    throw new AggregateError(failed ? [failure, restorationFailure] : [restorationFailure],
-      failed && typeof failure?.message === 'string' ? failure.message : 'PostgreSQL native query JIT restoration failed.',
-      { cause: failed ? failure : restorationFailure });
+  if (restorationFailed) {
+    if (!failed) throw restorationFailure;
+    let message = 'PostgreSQL native query JIT restoration failed.';
+    try { const value = failure?.message; if (typeof value === 'string') message = value; }
+    catch { /* Keep the original primary reason, including hostile getters. */ }
+    const aggregate = new AggregateError([failure, restorationFailure], message, { cause: failure });
+    for (const name of ['code', 'status', 'statusCode']) {
+      try { const value = failure?.[name]; if (value !== undefined) aggregate[name] = value; }
+      catch { /* The complete primary reason remains in cause and errors. */ }
+    }
+    throw aggregate;
   }
   if (failed) throw failure;
   return value;

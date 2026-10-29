@@ -78,5 +78,5 @@ export function rawSqliteRowPlan(table, { after, limit = 128 } = {}) {
     predicates.push(`(${table.primaryKey.map(q).join(', ')}) > (${placeholders.join(', ')})`);
   }
   values.push(limit);
-  return { text: `SELECT ${table.columns.map(column => sqliteCellProjection(column)).join(', ')} FROM ${q(table.name)}${predicates.length ? ' WHERE ' + predicates.join(' AND ') : ''} ORDER BY ${table.primaryKey.map(q).join(', ')} LIMIT ?`, values };
+  return { text: `SELECT ${table.columns.map(column => sqliteCellProjection(column)).join(', ')} FROM ${q(table.name)}${predicates.length ? ' WHERE ' + predicates.join(' AND ') : ''} ORDER BY ${table.primaryKey.map(key => `${q(table.name)}.${q(key)}`).join(', ')} LIMIT ?`, values };
 }

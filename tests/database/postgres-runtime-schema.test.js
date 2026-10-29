@@ -39,6 +39,7 @@ import { nativePathKey } from '../../src/library/native-path.js';
 import { cleanValue } from '../../src/library/records.js';
 import { upperInvariant } from '../../src/users/native.js';
 import { fixtureRow } from './fixtures.js';
+import { databaseDigest } from '../../src/migration/database-transfer.js';
 
 const table = name => nativeModel.tables.find(entry => entry.name === name);
 
@@ -216,6 +217,48 @@ function planIndexNames(value, result = new Set()) {
   return result;
 }
 
+test('a real PostgreSQL initialization failure rolls back every definition and permits a complete retry', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
+}, async () => {
+  const schema = `ddl_retry_${process.pid}_${Date.now().toString(36)}`;
+  const pool = new pg.Pool({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, max: 1 });
+  const database = new PostgresDatabase(pool, schema);
+  const query = database.client.query.bind(database.client);
+  let injected = false, injectedFailure, created = false, failed = false, primary;
+  database.client.query = async (statement, ...args) => {
+    if (!injected && typeof statement === 'string' && statement.startsWith('CREATE TABLE ')) {
+      injected = true;
+      try { return await query(statement + ';\nSELECT 1 / 0', ...args); }
+      catch (error) { injectedFailure = error; throw error; }
+    }
+    return query(statement, ...args);
+  };
+  try {
+    await assert.rejects(database.initialize(), error => error === injectedFailure && error.code === '22012');
+    assert.equal(injected, true);
+    database.client.query = query;
+    assert.deepEqual((await query('SELECT to_regnamespace($1)::text AS application, to_regnamespace($2)::text AS control',
+      [schema, `${schema}__mm`])).rows, [{ application: null, control: null }]);
+    await database.initialize(); created = true;
+    assert.equal(await database.preflight(), true);
+    assert.deepEqual([...new Set((await database.inspectSchema()).columns.map(column => column.table_name))].sort(),
+      nativeModel.tables.map(table => table.name).sort());
+  } catch (error) { failed = true; primary = error; }
+  finally {
+    database.client.query = query;
+    const errors = [];
+    try { if (created) await query(`DROP SCHEMA ${q(schema)}, ${q(`${schema}__mm`)} CASCADE`); }
+    catch (error) { errors.push(error); }
+    try { await database.close(); } catch (error) { errors.push(error); }
+    if (errors.length) {
+      if (!failed && errors.length === 1) throw errors[0];
+      throw new AggregateError([...(failed ? [primary] : []), ...errors],
+        'PostgreSQL initialization regression cleanup failed.', { cause: failed ? primary : errors[0] });
+    }
+  }
+  if (failed) throw primary;
+});
+
 test('deferred PostgreSQL open leaves runtime indexes untouched until explicit initialization', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
@@ -325,6 +368,87 @@ test('independent PostgreSQL pools serialize first runtime initialization and re
   assert.equal(await reopenedPeer.preflight(), true);
 });
 
+test('PostgreSQL explicit bulk initialization refreshes expression statistics and preserves complete cold reads', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
+}, async t => {
+  for (const deferred of [true, false]) {
+    const schema = `runtime_stats_${Date.now().toString(36)}_${Math.floor(Math.random() * 1e6).toString(36)}`;
+    const connectionString = process.env.MEDIAMANAGER_TEST_POSTGRES;
+    let database = await PostgresDatabase.open({ connectionString,
+      schema, create: true, deferRuntimeSchemaInitialization: deferred });
+    const owners = new Set([database]);
+    t.after(async () => {
+      const errors = [];
+      for (const owner of owners) { try { await owner.close(); } catch (error) { errors.push(error); } }
+      const cleanup = new pg.Pool({ connectionString });
+      try { await cleanup.query(`DROP SCHEMA ${q(schema)}, ${q(`${schema}__mm`)} CASCADE`); }
+      catch (error) { errors.push(error); }
+      finally { try { await cleanup.end(); } catch (error) { errors.push(error); } }
+      if (errors.length === 1) throw errors[0];
+      if (errors.length) throw new AggregateError(errors, 'Runtime statistics test cleanup failed', { cause: errors[0] });
+    });
+    const parentA = 'abd00000-0000-0000-0000-000000000001', parentB = 'abd00000-0000-0000-0000-000000000002';
+    const template = { ...fixtureRow(table('BaseItems')), OwnerId: null, ParentId: null, TopParentId: null,
+      PrimaryVersionId: null, Path: null, Data: '{}', ExtraType: null };
+    await database.insertBatch('BaseItems', [parentA, parentB].map(Id => ({ ...template, Id,
+      Type: 'MediaBrowser.Controller.Entities.Folder', Name: Id, CleanName: Id, SortName: Id, PresentationUniqueKey: Id })));
+    const children = Array.from({ length: 256 }, (_, index) => {
+      const Id = 'abd10000-0000-0000-0000-' + String(index + 1).padStart(12, '0');
+      return { ...template, Id, Type: 'MediaBrowser.Controller.Entities.Movies.Movie', Name: Id, CleanName: Id,
+        SortName: Id, PresentationUniqueKey: Id, ParentId: parentA, TopParentId: parentA };
+    });
+    for (let position = 0; position < children.length; position += 128) {
+      const batch = children.slice(position, position + 128);
+      await database.insertBatch('BaseItems', batch);
+      await database.insertBatch('AncestorIds', batch.map(row => ({ ItemId: row.Id, ParentItemId: parentA })));
+    }
+    const first = await database.initializeRuntimeSchema();
+    const indexName = 'mm_runtime_ancestor_parent_item_normalized_idx';
+    const statistics = async () => (await database.client.query(`SELECT attname, null_frac, n_distinct,
+      most_common_vals::text AS most_common_values, most_common_freqs AS frequencies
+      FROM pg_catalog.pg_stats WHERE schemaname = $1 AND tablename = $2 ORDER BY attname`, [schema, indexName])).rows;
+    const compact = value => value.replaceAll('-', '');
+    const before = await statistics();
+    assert.ok(before.some(row => row.most_common_values?.includes(compact(parentA)) && row.frequencies?.length),
+      'The initialized expression index has statistics from the actual imported parent keys.');
+    const predicate = `replace(${q(schema)}.mm_native_guid_lower("ParentItemId"), '-', '') = $1`;
+    const count = async parent => (await database.client.query(
+      `SELECT count(*)::integer AS total FROM ${q(schema)}."AncestorIds" WHERE ${predicate}`, [compact(parent)])).rows[0].total;
+    assert.equal(await count(parentA), children.length);
+    await database.client.query(`UPDATE ${q(schema)}."AncestorIds" SET "ParentItemId" = $1`, [bytes(parentB)]);
+    const second = await database.initializeRuntimeSchema();
+    assert.deepEqual(second, first, 'Planner statistics do not alter the complete runtime schema fingerprint.');
+    const after = await statistics();
+    assert.ok(after.some(row => row.most_common_values?.includes(compact(parentB)) && row.frequencies?.length),
+      'Verified existing initialization refreshes statistics after the next bulk load.');
+    assert.ok(after.every(row => !row.most_common_values?.includes(compact(parentA))));
+    assert.equal(await count(parentA), 0); assert.equal(await count(parentB), children.length);
+    const readPages = async () => {
+      const firstPage = await database.rows('AncestorIds', { where: { ParentItemId: parentB }, limit: 128 });
+      const cursor = row => Object.fromEntries(table('AncestorIds').primaryKey.map(key => [key, row[key]]));
+      const secondPage = await database.rows('AncestorIds', { where: { ParentItemId: parentB }, limit: 128,
+        after: cursor(firstPage.at(-1)) });
+      const emptyPage = await database.rows('AncestorIds', { where: { ParentItemId: parentB }, limit: 128,
+        after: cursor(secondPage.at(-1)) });
+      assert.deepEqual([firstPage.length, secondPage.length, emptyPage.length], [128, 128, 0]);
+      assert.deepEqual([...firstPage, ...secondPage].map(row => row.ItemId), children.map(row => row.Id));
+      return [firstPage, secondPage, emptyPage];
+    };
+    const beforeCold = { digest: await databaseDigest(database), pages: await readPages() };
+    const plan = (await database.client.query(`EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)
+      SELECT count(*)::integer FROM ${q(schema)}."AncestorIds" WHERE ${predicate}`, [compact(parentB)])).rows[0]['QUERY PLAN'];
+    await database.close();
+    database = await PostgresDatabase.open({ connectionString, schema }); owners.add(database);
+    assert.equal(await count(parentA), 0); assert.equal(await count(parentB), children.length);
+    assert.deepEqual(await databaseDigest(database), beforeCold.digest,
+      'A new pool preserves every table, field and original TEXT byte after explicit bulk initialization.');
+    assert.deepEqual(await readPages(), beforeCold.pages);
+    t.diagnostic(JSON.stringify({ deferredRuntimeInitialization: deferred, indexName, statisticsBefore: before,
+      statisticsAfter: after, statisticsAfterColdOpen: await statistics(), actualCount: children.length, plan }));
+    assert.equal(await database.preflight(), true);
+  }
+});
+
 test('PostgreSQL preflight reads concurrent runtime initialization from one catalog snapshot', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
@@ -383,7 +507,7 @@ test('PostgreSQL preflight reads concurrent runtime initialization from one cata
     'a later snapshot observes and validates the completed runtime schema');
 });
 
-test('real PostgreSQL initializes its runtime indexes once and keeps production predicates indexed', {
+test('real PostgreSQL preserves runtime definitions and production predicates across access paths', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
   const connectionString = process.env.MEDIAMANAGER_TEST_POSTGRES;
@@ -433,6 +557,9 @@ test('real PostgreSQL initializes its runtime indexes once and keeps production 
     '../a/../../b//',
     '/srv//media/draft/.././Movie//',
     'relative\\backslash/child',
+    'Q:/ASCII//library/draft/.././Movie\\',
+    '/ascii/\u0001' + '0/\u0001' + '1/\0end',
+    'Q:/ASCII/\u0001' + '0/\u0001' + '1/\0end',
     'Q:/MÉDIA//äcASE/draft/.././library///Movie\\\\',
     '//server/share///äUDIO/./draft/../Series\\',
     '\\\\?\\C:\\media\\draft\\..\\Movie\\',
@@ -580,13 +707,32 @@ test('real PostgreSQL initializes its runtime indexes once and keeps production 
       `the PostgreSQL CleanValue key matches JavaScript for ${JSON.stringify(sample)}`);
   }
 
-  const explain = sql => database.transaction(async session => {
+  const definitionSnapshot = await database.inspectSchema();
+  assert.equal(postgresRuntimeSchemaFingerprint(definitionSnapshot), await database.getState(postgresRuntimeSchemaFingerprintKey));
+  t.diagnostic(JSON.stringify({ runtimeIndexDefinitions: definitionSnapshot.indices.filter(entry => postgresRuntimeIndexNames.includes(entry.indexname)) }));
+  const rowKey = value => JSON.stringify(value, (_key, entry) => typeof entry === 'bigint' ? ['bigint', entry.toString()] : entry);
+  const rowBag = values => values.toSorted((left, right) => rowKey(left) < rowKey(right) ? -1 : rowKey(left) > rowKey(right) ? 1 : 0);
+  const assertRuntimePredicate = (sql, relatedIndexes, values = []) => database.transaction(async session => {
     await session.client.query('SET LOCAL enable_seqscan = off');
-    return (await session.client.query(`EXPLAIN (FORMAT JSON, COSTS OFF) ${sql}`)).rows[0]['QUERY PLAN'];
-  }, { readOnly: true, isolation: 'read-committed' });
-  const assertPlanUses = async (sql, name) => {
-    assert.ok(planIndexNames(await explain(sql)).has(name), `${name} must support its production predicate`);
-  };
+    await session.client.query('SET LOCAL enable_indexscan = on');
+    await session.client.query('SET LOCAL enable_indexonlyscan = on');
+    await session.client.query('SET LOCAL enable_bitmapscan = on');
+    const plan = (await session.client.query({ text: `EXPLAIN (FORMAT JSON, COSTS OFF) ${sql}`, values })).rows[0]['QUERY PLAN'];
+    const actual = (await session.client.query({ text: sql, values })).rows;
+    await session.client.query('SET LOCAL enable_seqscan = on');
+    await session.client.query('SET LOCAL enable_indexscan = off');
+    await session.client.query('SET LOCAL enable_indexonlyscan = off');
+    await session.client.query('SET LOCAL enable_bitmapscan = off');
+    const referencePlan = (await session.client.query({ text: `EXPLAIN (FORMAT JSON, COSTS OFF) ${sql}`, values })).rows[0]['QUERY PLAN'];
+    const reference = (await session.client.query({ text: sql, values })).rows;
+    const ordered = /\bORDER\s+BY\b/iu.test(sql);
+    assert.deepEqual(ordered ? actual : rowBag(actual), ordered ? reference : rowBag(reference),
+      'The complete production predicate result must agree across permitted index paths and the same-snapshot sequential baseline.');
+    t.diagnostic(JSON.stringify({ relatedRuntimeIndexes: relatedIndexes, sql, values,
+      chosenIndexes: [...planIndexNames(plan)], plan, actual, sequentialReferencePlan: referencePlan, sequentialReference: reference },
+    (_key, entry) => typeof entry === 'bigint' ? entry.toString() : entry));
+    return actual;
+  }, { readOnly: true, isolation: 'repeatable-read' });
   const parentKey = parent.Id.replaceAll('-', '').toLowerCase();
   const childKey = child.Id.replaceAll('-', '').toLowerCase();
   await database.insert('Peoples', {
@@ -594,144 +740,132 @@ test('real PostgreSQL initializes its runtime indexes once and keeps production 
     Name: '\u1E9EMITH',
     PersonType: 'Actor',
   });
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."Peoples"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."Peoples"
     WHERE ${q(schema)}.${q(postgresInvariantLowerFunctionName)}("Name") = decode('c39f6d697468','hex')
       AND "PersonType" IS NOT DISTINCT FROM 'Actor'`,
   'mm_runtime_people_name_type_invariant_idx');
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."BaseItems"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems"
     WHERE substring(${nativeTextSql(schema).projection('"Type"')} from '[^.]+$') = 'MusicArtist'
       AND ${q(schema)}.${q(postgresInvariantLowerFunctionName)}("Name") = '\u00DFmith'
     ORDER BY ("ParentId" IS NULL), "SortName" ASC NULLS FIRST, "Id" ASC`,
   'mm_runtime_baseitems_music_artist_name_invariant_idx');
-  assert.ok(planIndexNames(await explain(`SELECT "Id" FROM ${q(schema)}."BaseItems" WHERE ${nativeTextSql(schema).guidLower('"Id"')} = lower('${child.Id}')`))
-    .has('mm_runtime_baseitems_id_lower_idx'));
-  assert.ok(planIndexNames(await explain(`SELECT "Id" FROM ${q(schema)}."BaseItems" WHERE ${nativeTextSql(schema).guidLower('"ParentId"')} = lower('${parent.Id}') ORDER BY "SortName" ASC NULLS FIRST, "Id" ASC LIMIT 5`))
-    .has('mm_runtime_baseitems_parent_lower_sort_idx'));
-  const ancestorLookupIndexes = planIndexNames(await explain(`SELECT 1 FROM ${q(schema)}."AncestorIds" WHERE ${nativeTextSql(schema).guidLower('"ParentItemId"')} = lower('${parent.Id}') AND ${nativeTextSql(schema).guidLower('"ItemId"')} = lower('${child.Id}')`));
-  assert.ok(ancestorLookupIndexes.has('mm_runtime_ancestor_parent_item_lower_idx')
-    || ancestorLookupIndexes.has('mm_runtime_ancestor_item_parent_lower_idx'),
-  'a fully constrained ancestor lookup can use either covering expression index');
-  assert.ok(planIndexNames(await explain(`SELECT 1 FROM ${q(schema)}."AncestorIds" WHERE ${nativeTextSql(schema).guidLower('"ParentItemId"')} >= '' ORDER BY ${nativeTextSql(schema).guidLower('"ParentItemId"')}, ${nativeTextSql(schema).guidLower('"ItemId"')}`))
-    .has('mm_runtime_ancestor_parent_item_lower_idx'),
-  'the parent-leading ancestor expression index supports its distinct range/order access path');
-  assert.ok(planIndexNames(await explain(`SELECT 1 FROM ${q(schema)}."LinkedChildren" WHERE ${nativeTextSql(schema).guidLower('"ParentId"')} = lower('${parent.Id}') AND ${nativeTextSql(schema).guidLower('"ChildId"')} = lower('${child.Id}')`))
-    .has('mm_runtime_linked_children_parent_child_lower_idx'));
-  assert.ok(planIndexNames(await explain(`SELECT 1 FROM ${q(schema)}."LinkedChildren" WHERE ${nativeTextSql(schema).guidLower('"ChildId"')} = lower('${child.Id}') AND "ChildType" = 0`))
-    .has('mm_runtime_linked_children_child_parent_lower_idx'));
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."BaseItems"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems" WHERE ${nativeTextSql(schema).guidLower('"Id"')} = lower('${child.Id}')`, 'mm_runtime_baseitems_id_lower_idx');
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems" WHERE ${nativeTextSql(schema).guidLower('"ParentId"')} = lower('${parent.Id}') ORDER BY "SortName" ASC NULLS FIRST, "Id" ASC LIMIT 5`, 'mm_runtime_baseitems_parent_lower_sort_idx');
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."AncestorIds" WHERE ${nativeTextSql(schema).guidLower('"ParentItemId"')} = lower('${parent.Id}') AND ${nativeTextSql(schema).guidLower('"ItemId"')} = lower('${child.Id}')`,
+    ['mm_runtime_ancestor_parent_item_lower_idx', 'mm_runtime_ancestor_item_parent_lower_idx']);
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."AncestorIds" WHERE ${nativeTextSql(schema).guidLower('"ParentItemId"')} >= '' ORDER BY ${nativeTextSql(schema).guidLower('"ParentItemId"')}, ${nativeTextSql(schema).guidLower('"ItemId"')}`, 'mm_runtime_ancestor_parent_item_lower_idx');
+  const linkedByParent = await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."LinkedChildren" WHERE ${nativeTextSql(schema).guidLower('"ParentId"')} = lower('${parent.Id}') AND ${nativeTextSql(schema).guidLower('"ChildId"')} = lower('${child.Id}')`, 'mm_runtime_linked_children_parent_child_lower_idx');
+  const linkedByChild = await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."LinkedChildren" WHERE ${nativeTextSql(schema).guidLower('"ChildId"')} = lower('${child.Id}') AND "ChildType" = 0`, 'mm_runtime_linked_children_child_parent_lower_idx');
+  assert.deepEqual(linkedByParent.map(Object.values), [[1]]);
+  assert.deepEqual(linkedByChild.map(Object.values), [[1]]);
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems"
     WHERE ${nativeTextSql(schema).guidLower('"OwnerId"')} = lower('${parent.Id}')`,
   'mm_runtime_baseitems_owner_lower_idx');
   const familyRows = await database.client.query(`SELECT "Id" FROM ${q(schema)}."BaseItems"
     WHERE ${postgresVersionFamilyKey(schema, '"Id"', '"PrimaryVersionId"')} = '${childKey}' ORDER BY "Id"`);
   assert.deepEqual(familyRows.rows.map(row => row.Id.toString('utf8')), [child.Id, alternate.Id],
     'D-format Id and N-format PrimaryVersionId resolve to one runtime family key');
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."BaseItems"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems"
     WHERE ${postgresVersionFamilyKey(schema, '"Id"', '"PrimaryVersionId"')} = '${childKey}'`,
   'mm_runtime_baseitems_version_family_idx');
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."BaseItems"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems"
     WHERE ${nativeTextSql(schema).guidLower('COALESCE("SeasonId", "ParentId")')} = lower('${parent.Id}')`,
   'mm_runtime_baseitems_season_parent_lower_idx');
-  const itemValueLookupIndexes = planIndexNames(await explain(`SELECT 1 FROM ${q(schema)}."ItemValuesMap" WHERE ${nativeTextSql(schema).guidLower('"ItemId"')} = lower('${child.Id}') AND ${nativeTextSql(schema).guidLower('"ItemValueId"')} = lower('${parent.Id}')`));
-  assert.ok(itemValueLookupIndexes.has('mm_runtime_item_values_map_item_value_lower_idx')
-    || itemValueLookupIndexes.has('mm_runtime_item_values_map_value_item_lower_idx'));
-  await assertPlanUses(`SELECT "ItemId" FROM ${q(schema)}."ItemValuesMap"
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."ItemValuesMap" WHERE ${nativeTextSql(schema).guidLower('"ItemId"')} = lower('${child.Id}') AND ${nativeTextSql(schema).guidLower('"ItemValueId"')} = lower('${parent.Id}')`,
+    ['mm_runtime_item_values_map_item_value_lower_idx', 'mm_runtime_item_values_map_value_item_lower_idx']);
+  await assertRuntimePredicate(`SELECT "ItemId" FROM ${q(schema)}."ItemValuesMap"
     WHERE ${nativeTextSql(schema).guidLower('"ItemValueId"')} = lower('${parent.Id}')`,
   'mm_runtime_item_values_map_value_item_lower_idx');
-  await assertPlanUses(`SELECT "ItemId" FROM ${q(schema)}."ItemValuesMap"
+  await assertRuntimePredicate(`SELECT "ItemId" FROM ${q(schema)}."ItemValuesMap"
     WHERE "ItemValueId" = '${parent.Id}'`,
   'mm_runtime_item_values_map_value_item_raw_idx');
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."Peoples"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."Peoples"
     WHERE ${nativeTextSql(schema).guidLower('"Id"')} = lower('${parent.Id}')`,
   'mm_runtime_people_id_lower_idx');
-  await assertPlanUses(`SELECT "PeopleId" FROM ${q(schema)}."PeopleBaseItemMap"
+  await assertRuntimePredicate(`SELECT "PeopleId" FROM ${q(schema)}."PeopleBaseItemMap"
     WHERE ${nativeTextSql(schema).guidLower('"ItemId"')} = lower('${child.Id}')`,
   'mm_runtime_people_map_item_people_lower_idx');
-  await assertPlanUses(`SELECT "ItemId" FROM ${q(schema)}."PeopleBaseItemMap"
+  await assertRuntimePredicate(`SELECT "ItemId" FROM ${q(schema)}."PeopleBaseItemMap"
     WHERE ${nativeTextSql(schema).guidLower('"PeopleId"')} = lower('${parent.Id}')`,
   'mm_runtime_people_map_people_item_lower_idx');
-  await assertPlanUses(`SELECT "Path" FROM ${q(schema)}."BaseItemImageInfos"
+  await assertRuntimePredicate(`SELECT "Path" FROM ${q(schema)}."BaseItemImageInfos"
     WHERE ${nativeTextSql(schema).guidLower('"ItemId"')} = lower('${child.Id}') AND "ImageType" = 0`,
   'mm_runtime_image_infos_item_type_lower_idx');
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."BaseItems"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems"
     WHERE ${q(schema)}.${q(postgresNativePathKeyFunctionName)}("Path")
       = ANY(ARRAY[decode('${nativeTextPathKey('Q:/Runtime/Movie').toString('hex')}','hex')]::bytea[])`,
   'mm_runtime_baseitems_native_path_key_idx');
-  await assertPlanUses(`SELECT "ItemId" FROM ${q(schema)}."BaseItemProviders"
+  await assertRuntimePredicate(`SELECT "ItemId" FROM ${q(schema)}."BaseItemProviders"
     WHERE ${nativeTextSql(schema).guidLower('"ItemId"')} = lower('${child.Id}')
       AND ${q(schema)}.${q(postgresOrdinalIgnoreCaseKeyFunctionName)}("ProviderId")
         = ${q(schema)}.${q(postgresOrdinalIgnoreCaseKeyFunctionName)}('tmdb')`,
   'mm_runtime_providers_item_provider_ordinal_idx');
-  await assertPlanUses(`SELECT "ItemId" FROM ${q(schema)}."BaseItemProviders"
+  await assertRuntimePredicate(`SELECT "ItemId" FROM ${q(schema)}."BaseItemProviders"
     WHERE ${q(schema)}.${q(postgresOrdinalIgnoreCaseKeyFunctionName)}("ProviderId")
         = ${q(schema)}.${q(postgresOrdinalIgnoreCaseKeyFunctionName)}('tmdb')
       AND ${q(schema)}.${q(postgresOrdinalIgnoreCaseKeyFunctionName)}("ProviderValue")
         = ${q(schema)}.${q(postgresOrdinalIgnoreCaseKeyFunctionName)}('42')`,
   'mm_runtime_providers_provider_value_ordinal_idx');
-  assert.ok(planIndexNames(await explain(`SELECT 1 FROM ${q(schema)}."UserData" WHERE ${nativeTextSql(schema).guidLower('"ItemId"')} = lower('${child.Id}') AND ${nativeTextSql(schema).guidLower('"UserId"')} = lower('${parent.Id}')`))
-    .has('mm_runtime_user_data_item_user_rating_lower_idx'));
-  assert.ok(planIndexNames(await explain(`SELECT "ItemId" FROM ${q(schema)}."UserData" WHERE ${nativeTextSql(schema).guidLower('"UserId"')} = lower('${parent.Id}') AND "PlaybackPositionTicks" > 0`))
-    .has('mm_runtime_user_data_user_resume_item_lower_idx'));
-  assert.ok(planIndexNames(await explain(`SELECT "ItemId" FROM ${q(schema)}."UserData" WHERE ${nativeTextSql(schema).guidLower('"UserId"')} = lower('${parent.Id}') AND "Played" IS TRUE`))
-    .has('mm_runtime_user_data_user_played_item_lower_idx'));
-  assert.ok(planIndexNames(await explain(`SELECT 1 FROM ${q(schema)}."MediaStreamInfos" WHERE ${nativeTextSql(schema).guidLower('"ItemId"')} = lower('${child.Id}') AND "StreamType" = 1 AND "Language" = 'eng'`))
-    .has('mm_runtime_media_stream_item_type_language_lower_idx'));
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."UserData" WHERE ${nativeTextSql(schema).guidLower('"ItemId"')} = lower('${child.Id}') AND ${nativeTextSql(schema).guidLower('"UserId"')} = lower('${parent.Id}')`, 'mm_runtime_user_data_item_user_rating_lower_idx');
+  await assertRuntimePredicate(`SELECT "ItemId" FROM ${q(schema)}."UserData" WHERE ${nativeTextSql(schema).guidLower('"UserId"')} = lower('${parent.Id}') AND "PlaybackPositionTicks" > 0`, 'mm_runtime_user_data_user_resume_item_lower_idx');
+  await assertRuntimePredicate(`SELECT "ItemId" FROM ${q(schema)}."UserData" WHERE ${nativeTextSql(schema).guidLower('"UserId"')} = lower('${parent.Id}') AND "Played" IS TRUE`, 'mm_runtime_user_data_user_played_item_lower_idx');
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."MediaStreamInfos" WHERE ${nativeTextSql(schema).guidLower('"ItemId"')} = lower('${child.Id}') AND "StreamType" = 1 AND "Language" = 'eng'`, 'mm_runtime_media_stream_item_type_language_lower_idx');
 
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."BaseItems"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems"
     WHERE replace(${nativeTextSql(schema).guidLower('"Id"')}, '-', '') = ANY(ARRAY['${childKey}']::text[])`,
   'mm_runtime_baseitems_id_normalized_idx');
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."BaseItems"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems"
     WHERE replace(${nativeTextSql(schema).guidLower('"ParentId"')}, '-', '') = '${parentKey}'
     ORDER BY "SortName" ASC NULLS FIRST, "Id" ASC LIMIT 5`,
   'mm_runtime_baseitems_parent_normalized_sort_idx');
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."BaseItems"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems"
     WHERE replace(${nativeTextSql(schema).guidLower('"TopParentId"')}, '-', '') = ANY(ARRAY['${parentKey}']::text[])
     ORDER BY "SortName" ASC NULLS FIRST, "Id" ASC LIMIT 5`,
   'mm_runtime_baseitems_top_parent_normalized_sort_idx');
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."BaseItems"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems"
     WHERE replace(${nativeTextSql(schema).guidLower('"OwnerId"')}, '-', '') = ANY(ARRAY['${parentKey}']::text[])`,
   'mm_runtime_baseitems_owner_normalized_idx');
-  await assertPlanUses(`SELECT "Id" FROM ${q(schema)}."BaseItems"
+  await assertRuntimePredicate(`SELECT "Id" FROM ${q(schema)}."BaseItems"
     WHERE replace(${nativeTextSql(schema).guidLower('"PrimaryVersionId"')}, '-', '') = ANY(ARRAY['${childKey}']::text[])`,
   'mm_runtime_baseitems_primary_version_normalized_idx');
-  const normalizedAncestorIndexes = planIndexNames(await explain(`SELECT 1 FROM ${q(schema)}."AncestorIds"
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."AncestorIds"
     WHERE replace(${nativeTextSql(schema).guidLower('"ParentItemId"')}, '-', '') = '${parentKey}'
-      AND replace(${nativeTextSql(schema).guidLower('"ItemId"')}, '-', '') = '${childKey}'`));
-  assert.ok(normalizedAncestorIndexes.has('mm_runtime_ancestor_parent_item_normalized_idx')
-    || normalizedAncestorIndexes.has('mm_runtime_ancestor_item_parent_normalized_idx'));
-  await assertPlanUses(`SELECT 1 FROM ${q(schema)}."AncestorIds"
+      AND replace(${nativeTextSql(schema).guidLower('"ItemId"')}, '-', '') = '${childKey}'`,
+  ['mm_runtime_ancestor_parent_item_normalized_idx', 'mm_runtime_ancestor_item_parent_normalized_idx']);
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."AncestorIds"
     WHERE replace(${nativeTextSql(schema).guidLower('"ParentItemId"')}, '-', '') >= ''
     ORDER BY replace(${nativeTextSql(schema).guidLower('"ParentItemId"')}, '-', ''), replace(${nativeTextSql(schema).guidLower('"ItemId"')}, '-', '')`,
   'mm_runtime_ancestor_parent_item_normalized_idx');
-  await assertPlanUses(`SELECT 1 FROM ${q(schema)}."AncestorIds"
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."AncestorIds"
     WHERE replace(${nativeTextSql(schema).guidLower('"ItemId"')}, '-', '') >= ''
     ORDER BY replace(${nativeTextSql(schema).guidLower('"ItemId"')}, '-', ''), replace(${nativeTextSql(schema).guidLower('"ParentItemId"')}, '-', '')`,
   'mm_runtime_ancestor_item_parent_normalized_idx');
-  await assertPlanUses(`SELECT 1 FROM ${q(schema)}."LinkedChildren"
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."LinkedChildren"
     WHERE replace(${nativeTextSql(schema).guidLower('"ParentId"')}, '-', '') = '${parentKey}'
       AND replace(${nativeTextSql(schema).guidLower('"ChildId"')}, '-', '') = '${childKey}'`,
   'mm_runtime_linked_children_parent_child_normalized_idx');
-  await assertPlanUses(`SELECT 1 FROM ${q(schema)}."LinkedChildren"
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."LinkedChildren"
     WHERE replace(${nativeTextSql(schema).guidLower('"ChildId"')}, '-', '') = '${childKey}' AND "ChildType" = 0`,
   'mm_runtime_linked_children_child_parent_normalized_idx');
-  await assertPlanUses(`SELECT 1 FROM ${q(schema)}."ItemValuesMap"
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."ItemValuesMap"
     WHERE replace(${nativeTextSql(schema).guidLower('"ItemId"')}, '-', '') = '${childKey}'
       AND replace(${nativeTextSql(schema).guidLower('"ItemValueId"')}, '-', '') = '${parentKey}'`,
   'mm_runtime_item_values_map_item_value_normalized_idx');
-  await assertPlanUses(`SELECT 1 FROM ${q(schema)}."ItemValues"
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."ItemValues"
     WHERE "Type" = 4 AND "CleanValue" = 'runtime'
       AND replace(${nativeTextSql(schema).guidLower('"ItemValueId"')}, '-', '') = '${parentKey}'`,
   'mm_runtime_item_values_type_clean_id_normalized_idx');
-  await assertPlanUses(`SELECT 1 FROM ${q(schema)}."UserData"
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."UserData"
     WHERE replace(${nativeTextSql(schema).guidLower('"ItemId"')}, '-', '') = '${childKey}'
       AND replace(${nativeTextSql(schema).guidLower('"UserId"')}, '-', '') = '${parentKey}'`,
   'mm_runtime_user_data_item_user_rating_normalized_idx');
-  await assertPlanUses(`SELECT "ItemId" FROM ${q(schema)}."UserData"
+  await assertRuntimePredicate(`SELECT "ItemId" FROM ${q(schema)}."UserData"
     WHERE replace(${nativeTextSql(schema).guidLower('"UserId"')}, '-', '') = '${parentKey}' AND "PlaybackPositionTicks" > 0`,
   'mm_runtime_user_data_user_resume_item_normalized_idx');
-  await assertPlanUses(`SELECT "ItemId" FROM ${q(schema)}."UserData"
+  await assertRuntimePredicate(`SELECT "ItemId" FROM ${q(schema)}."UserData"
     WHERE replace(${nativeTextSql(schema).guidLower('"UserId"')}, '-', '') = '${parentKey}' AND "Played" IS TRUE`,
   'mm_runtime_user_data_user_played_item_normalized_idx');
-  await assertPlanUses(`SELECT 1 FROM ${q(schema)}."MediaStreamInfos"
+  await assertRuntimePredicate(`SELECT 1 FROM ${q(schema)}."MediaStreamInfos"
     WHERE replace(${nativeTextSql(schema).guidLower('"ItemId"')}, '-', '') = '${childKey}'
       AND "StreamType" = 1 AND "Language" = 'eng'`,
   'mm_runtime_media_stream_item_type_language_normalized_idx');
@@ -740,16 +874,7 @@ test('real PostgreSQL initializes its runtime indexes once and keeps production 
     sortorder: ['Ascending'],
     limit: 5,
   }, { scope: { parentId: parent.Id } });
-  const itemPagePlan = await database.transaction(async session => {
-    await session.client.query('SET LOCAL enable_seqscan = off');
-    return (await session.client.query({
-      text: `EXPLAIN (FORMAT JSON, COSTS OFF) ${itemPage.text}`,
-      values: itemPage.values,
-    })).rows[0]['QUERY PLAN'];
-  }, { readOnly: true, isolation: 'read-committed' });
-  const itemPageIndexes = planIndexNames(itemPagePlan);
-  assert.ok(itemPageIndexes.has('mm_runtime_baseitems_parent_normalized_sort_idx'),
-    'the real item-page SQL uses the normalized parent scope index');
+  await assertRuntimePredicate(itemPage.text, 'mm_runtime_baseitems_parent_normalized_sort_idx', itemPage.values);
 
   const identities = await database.client.query(`SELECT c.relname, c.oid::text AS oid FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = $1 AND c.relname = ANY($2::text[]) ORDER BY c.relname`, [schema, postgresRuntimeIndexNames]);
   await database.close();
