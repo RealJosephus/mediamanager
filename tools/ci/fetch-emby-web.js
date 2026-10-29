@@ -5,10 +5,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'acorn';
 
-const version = '26.0.37';
+const version = '26.0.38';
 const origin = 'https://app.emby.media/';
-const entryPin = '1837ef206fe9bae76e50953ef3ebb26925fd5d5e177e38d665658067aaf778c1';
-const workerPin = 'c5006626c1c01f414d20f185fde26867f2480f2f1610c9b969fe998ad5945f57';
+const entryPin = '0a8e33a507a7c91739e283f285dd825a1b9faca5a57c36dba2871cb894fde7c7';
+const workerPin = 'c5fc21a08bbc950e1d317018932a86a5d2ca003b88a435dd08e71d20c8aa4636';
 assert.equal(process.env.GITHUB_ACTIONS, 'true', 'Hosted Emby inputs must be frozen in GitHub Actions.');
 assert.ok(process.env.RUNNER_TEMP && process.env.GITHUB_ENV);
 const output = path.join(process.env.RUNNER_TEMP, 'mediamanager-emby-web');
@@ -78,7 +78,7 @@ try {
     }
   }
   visit(parse(worker.toString('utf8'), { ecmaVersion: 'latest' }));
-  assert.equal(catalog?.length, 858, 'The designated hosted resource catalog changed.');
+  assert.equal(catalog?.length, 865, 'The designated hosted resource catalog changed.');
   assert.equal(new Set(catalog.map(([relative]) => relative)).size, catalog.length);
   for (const [relative, md5] of catalog) {
     member(relative);

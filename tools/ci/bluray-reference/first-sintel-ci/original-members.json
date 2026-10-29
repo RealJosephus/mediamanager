@@ -1,0 +1,142 @@
+[
+  {
+    "path": "BDMV",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/AUXDATA",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/BACKUP",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/BACKUP/BDJO",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/BACKUP/CLIPINF",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/BACKUP/CLIPINF/00000.clpi",
+    "kind": "file",
+    "bytes": 6248
+  },
+  {
+    "path": "BDMV/BACKUP/CLIPINF/01900.clpi",
+    "kind": "file",
+    "bytes": 340
+  },
+  {
+    "path": "BDMV/BACKUP/index.bdmv",
+    "kind": "file",
+    "bytes": 120
+  },
+  {
+    "path": "BDMV/BACKUP/MovieObject.bdmv",
+    "kind": "file",
+    "bytes": 290
+  },
+  {
+    "path": "BDMV/BACKUP/PLAYLIST",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/BACKUP/PLAYLIST/00000.mpls",
+    "kind": "file",
+    "bytes": 428
+  },
+  {
+    "path": "BDMV/BACKUP/PLAYLIST/01900.mpls",
+    "kind": "file",
+    "bytes": 154
+  },
+  {
+    "path": "BDMV/BDJO",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/CLIPINF",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/CLIPINF/00000.clpi",
+    "kind": "file",
+    "bytes": 6248
+  },
+  {
+    "path": "BDMV/CLIPINF/01900.clpi",
+    "kind": "file",
+    "bytes": 340
+  },
+  {
+    "path": "BDMV/index.bdmv",
+    "kind": "file",
+    "bytes": 120
+  },
+  {
+    "path": "BDMV/JAR",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/META",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/MovieObject.bdmv",
+    "kind": "file",
+    "bytes": 290
+  },
+  {
+    "path": "BDMV/PLAYLIST",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/PLAYLIST/00000.mpls",
+    "kind": "file",
+    "bytes": 428
+  },
+  {
+    "path": "BDMV/PLAYLIST/01900.mpls",
+    "kind": "file",
+    "bytes": 154
+  },
+  {
+    "path": "BDMV/STREAM",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "BDMV/STREAM/00000.m2ts",
+    "kind": "file",
+    "bytes": 1592094720
+  },
+  {
+    "path": "BDMV/STREAM/01900.m2ts",
+    "kind": "file",
+    "bytes": 6144
+  },
+  {
+    "path": "CERTIFICATE",
+    "kind": "directory",
+    "bytes": 0
+  },
+  {
+    "path": "CERTIFICATE/BACKUP",
+    "kind": "directory",
+    "bytes": 0
+  }
+]

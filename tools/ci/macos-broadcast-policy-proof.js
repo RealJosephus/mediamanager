@@ -5,7 +5,9 @@ import { mkdir, readFile, realpath, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as delay } from 'node:timers/promises';
-import { command, failure, hash, identity, maybeJson, runPolicyTerminal, sameIdentity, save, terminalProgram } from './macos-broadcast-policy-terminal.js';
+import { command, failure, hash, maybeJson, runPolicyTerminal, save, terminalProgram } from './macos-broadcast-policy-terminal.js';
+import { darwinProcessInspector, sameProcessIdentity as sameIdentity } from './macos-process-identity.js';
+import { signalProcess } from './macos-process-signal.js';
 import { policyPackets, verifyPolicyPacketEvidence } from './macos-broadcast-policy-packets.js';
 
 // Separate pre-release experiment. The formal CI network path is unchanged.
@@ -14,6 +16,7 @@ import { policyPackets, verifyPolicyPacketEvidence } from './macos-broadcast-pol
 assert.equal(process.platform, 'darwin'); assert.equal(process.env.GITHUB_ACTIONS, 'true');
 assert.equal(process.argv.length, 2); assert.notEqual(process.getuid(), 0);
 const ownFile = fileURLToPath(import.meta.url), repository = await realpath(path.resolve(path.dirname(ownFile), '../..'));
+const inspector = await darwinProcessInspector(), identity = inspector.identity;
 assert.equal(await realpath(process.cwd()), repository);
 const requestedRoot = path.resolve(process.env.MEDIAMANAGER_POLICY_PROOF_ROOT ?? '');
 const temporaryRoot = await realpath(process.env.RUNNER_TEMP);
@@ -102,7 +105,7 @@ async function stopCapture() {
   if (!captureClosed) {
     record.captureForcedTermination = true;
     assert.ok(captureIdentity && sameIdentity(identity(captureIdentity.pid), captureIdentity), 'The live capture has no bound owner identity.');
-    sudo(['/bin/kill', '-TERM', String(captureIdentity.pid)]);
+    signalProcess(inspector, captureIdentity, 'SIGTERM');
     const forcedDeadline = Date.now() + 3000;
     while (!captureClosed && Date.now() < forcedDeadline) await delay(50);
   }
@@ -115,7 +118,8 @@ try {
   record.sources = [];
   for (const relative of ['tools/ci/macos-broadcast-policy-proof.js', 'tools/ci/macos-broadcast-policy-terminal.js',
     'tools/ci/macos-broadcast-policy-worker.js', 'tools/ci/macos-broadcast-policy-packets.js',
-    'tools/ci/macos-broadcast-policy-capture.c', '.github/workflows/macos-broadcast-policy-proof.yml']) {
+    'tools/ci/macos-broadcast-policy-capture.c', 'tools/ci/macos-process-identity.js', 'tools/ci/macos-process-signal.js',
+    '.github/workflows/macos-broadcast-policy-proof.yml']) {
     const bytes = await readFile(path.join(repository, relative)); record.sources.push({ path: relative, bytes: bytes.length, sha256: hash(bytes) });
   }
   record.platform = { uname: run('/usr/bin/uname', ['-a']), node: process.version, compiler: run('/usr/bin/clang', ['--version']) };
@@ -180,7 +184,7 @@ try {
     workerFile: path.join(repository, 'tools/ci/macos-broadcast-policy-worker.js'),
     workerSha256: record.sources.find(entry => entry.path.endsWith('policy-worker.js')).sha256,
     terminalHelperSha256: record.sources.find(entry => entry.path.endsWith('policy-terminal.js')).sha256,
-    terminalSha256: hash(await readFile(terminalProgram)), launchFloorEpochMs: Math.floor(Date.now() / 1000) * 1000,
+    terminalSha256: hash(await readFile(terminalProgram)),
     startedFile: path.join(root, 'worker-started.json'), admissionFile: path.join(root, 'worker-admitted.json'),
     aliveFile: path.join(root, 'worker-alive.json'), targetDestroyedFile: path.join(root, 'target-destroyed.json'),
     exitFile: path.join(root, 'worker-exit.json'), stdoutFile: path.join(root, 'worker-stdout.txt'), stderrFile: path.join(root, 'worker-stderr.txt'),

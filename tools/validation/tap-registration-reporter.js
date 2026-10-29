@@ -1,6 +1,7 @@
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { tap } from 'node:test/reporters';
+import { readTestSelection } from './test-selection.js';
 
 function logicalPath(filename, root) {
   return path.relative(root, filename).replaceAll('\\', '/');
@@ -38,8 +39,10 @@ export function testProgress(event, root, selected) {
 export default async function* registrationReporter(source) {
   const output = process.env.MEDIAMANAGER_TEST_REGISTRATION_OUTPUT;
   const root = process.env.MEDIAMANAGER_TEST_REGISTRATION_ROOT;
-  const selected = JSON.parse(process.env.MEDIAMANAGER_TEST_REGISTRATION_SELECTED || '[]');
-  if (!output || !root || !Array.isArray(selected)) throw new Error('Registration reporter environment is incomplete.');
+  if (!output || !root) throw new Error('Registration reporter environment is incomplete.');
+  const { files } = await readTestSelection(process.env.MEDIAMANAGER_TEST_SELECTION_FILE,
+    process.env.MEDIAMANAGER_TEST_SELECTION_SHA256);
+  const selected = files.map(filename => logicalPath(path.resolve(root, filename), root));
   const selectedSet = new Set(selected);
   const registrations = new Map(selected.map(filename => [filename, 0]));
   async function* observed() {

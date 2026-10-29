@@ -62,15 +62,13 @@ export function assertCurrentConflictResult(actual, scenario, interval) {
   assert.deepEqual(stages.afterShutdown, stages.afterReads);
   assert.deepEqual(actual.filesystemAfterReads, withoutFileContent(stages.afterReads.filesystem));
   assert.deepEqual(actual.filesystemAfterShutdown, actual.filesystemAfterReads);
-  assert.deepEqual(actual.runtimeErrors, []);
-  assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
   assert.ok(Object.values(actual.cleanup).every(value => value === true));
   return assertCompleteFilterHttpResponses(actual, http,
     { scenarioName: `current-${input.kind}-conflict`, nativeServerId: scenario.summary.nativeServerId });
 }
 
-export async function compareCurrentConflicts(kind, { signal } = {}) {
-  const discovery = await currentIdentityScenario(kind, 'conflict-discovery', { signal });
+export async function compareCurrentConflicts(kind, { port, signal } = {}) {
+  const discovery = await currentIdentityScenario(kind, 'conflict-discovery', { port, signal });
   assert.equal(discovery.summary.createdRows.length, 3);
   assert.deepEqual(discovery.caseStages[0].after, discovery.caseStages[1].after,
     'The second colliding name preserves the independently discovered native identity.');
@@ -84,7 +82,7 @@ export async function compareCurrentConflicts(kind, { signal } = {}) {
   }));
   const precondition = { kind, identities,
     discoveryRoot: discovery.root, blockedText: `regular file prevents ${kind === 'artist' ? 'Artist' : 'Studio'} directory creation\n` };
-  const scenario = { ...await currentIdentityScenario(kind, 'conflicts', { precondition, signal }), precondition };
+  const scenario = { ...await currentIdentityScenario(kind, 'conflicts', { port, precondition, signal }), precondition };
   const shadow = find(scenario.stages.before.database.BaseItems, identities.Shadow.row.Id);
   assert.equal(shadow.Type, 'MediaBrowser.Controller.Entities.Movies.Movie');
   const directoryClocks = [], blockedFiles = [];

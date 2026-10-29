@@ -5,9 +5,11 @@ import { recordedInput, recordedInputMapPath, repositoryRoot, validationPath } f
 import { collageFontFiles } from '../../src/images/font-collection.js';
 import { resolveCollageSystemFonts } from '../../src/images/system-fonts/index.js';
 import { alistBuildInputs } from './alist-inputs.js';
-import { nativeBuildInputs } from './native-build-inputs.js';
+import { nativeBuildInputs, verifyNativeBuild } from './native-build-inputs.js';
 import { nativeInstanceInputs } from './native-instance-inputs.js';
 import { currentNativeSqliteInputs } from './current-native-sqlite-inputs.js';
+import { dvdReferenceInputs } from './dvd-reference-inputs.js';
+import { blurayReferenceInputs } from './bluray-reference-inputs.js';
 import { jellyfinWebInputs } from './jellyfin-web-inputs.js';
 import { embyWebInputs } from './emby-web-inputs.js';
 import { browserInputs } from './browser-inputs.js';
@@ -541,8 +543,9 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     && closure.some(entry => entry.services?.includes('currentNativeSqlite'));
   const usesNativeInstance = environment.MEDIAMANAGER_CI_NATIVE_INSTANCE === 'true'
     && closure.some(entry => entry.services?.includes('nativeInstance'));
-  if (environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true'
-    && (usesCurrentNativeSqlite || usesNativeInstance || closure.some(entry => entry.services?.includes('jellyfinDll')))) {
+  const usesNativeReference = environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true'
+    && (usesCurrentNativeSqlite || usesNativeInstance || closure.some(entry => entry.services?.includes('jellyfinDll')));
+  if (usesNativeReference) {
     for (const input of (await nativeBuildInputs(environment)).inputs) {
       add(input.filename, `runtime:native-reference:${input.reason}`, true, input.sha256 ? [input.sha256] : []);
     }
@@ -554,6 +557,16 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   } else if (usesNativeInstance) {
     for (const input of (await nativeInstanceInputs(environment)).inputs) {
       add(input.filename, 'runtime:native-instance', true, [input.sha256]);
+    }
+  }
+  if (closure.some(entry => entry.services?.includes('dvdReference'))) {
+    for (const input of (await dvdReferenceInputs(environment)).inputs) {
+      add(input.filename, 'runtime:original-dvd', true, [input.sha256]);
+    }
+  }
+  if (closure.some(entry => entry.services?.includes('blurayReference'))) {
+    for (const input of (await blurayReferenceInputs(environment)).inputs) {
+      add(input.filename, 'runtime:original-bluray', true, [input.sha256]);
     }
   }
   if (environment.MEDIAMANAGER_CI_EMBY_WEB === 'true' && closure.some(entry => entry.services?.includes('embyWeb'))) {
@@ -614,6 +627,17 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   const tools = preflight.tools.map(({ name, executable, available, version, errorCode }) => ({
     name, executable, available, version, ...(errorCode ? { errorCode } : {}),
   }));
+  // Both strict captures retain the complete live source/toolchain check.
+  // Instance launches separately verify only their actual execution inputs.
+  // Preserve unavailable or digest-mismatched input receipts for diagnosis;
+  // they cannot admit test execution and must not claim a full verification.
+  if (usesNativeReference && currentEntriesReady(entries, preflight.ready)) {
+    const verified = await verifyNativeBuild(environment);
+    const source = verified.identityEntries.find(entry => entry.kind === 'designated-source-files');
+    const reason = 'runtime:native-reference:live-designated-source';
+    entries.push({ reasons: [reason], requiredReasons: [reason], required: true, ...source });
+    entries.sort((left, right) => left.filename.localeCompare(right.filename));
+  }
   const identity = { schemaVersion: currentInputSchemaVersion,
     scope: 'Current release inputs for selected tests: required transitive local src/test/tool imports, imported local data files, declared/local fixture inputs, dynamic fixture siblings, explicitly required transitive JSON descriptors, configured native/runtime dependencies, Node modules and tool executables, plus service availability/version. Optional historical provenance is excluded and reported separately. Required ownership is recorded per reason. Ordinary DTO paths are not interpreted as dependencies. Dynamic reads outside these inputs require separate evidence.',
     entries, services, tools, ...(systemFonts ? { systemFonts } : {}), preflightReady: preflight.ready,

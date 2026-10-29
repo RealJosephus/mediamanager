@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "title": "Big Buck Bunny",
+  "creator": "Blender Foundation",
+  "year": 2008,
+  "format": "DVD-Video",
+  "license": "CC-BY-3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+  "licenseSource": "https://peach.blender.org/about/",
+  "attribution": "(c) copyright 2008, Blender Foundation / www.bigbuckbunny.org",
+  "licenseScope": "The producer licenses the published DVD data under CC-BY-3.0. DVD cover art, disc print and trademarks are excluded. Extraction retains the original movie credits.",
+  "archiveIdentifier": "BigBuckBunny",
+  "metadataUrl": "https://archive.org/metadata/BigBuckBunny",
+  "videoDirectory": "VIDEO_TS",
+  "variants": {
+    "ntsc": {
+      "filename": "big-buck-bunny-NTSC.iso",
+      "url": "https://archive.org/download/BigBuckBunny/big-buck-bunny-NTSC.iso",
+      "bytes": 8294793216,
+      "sha1": "3fb91dc21a146590f1cae26afc6d2b3ba385f978",
+      "md5": "966758b02da2c5c183ab7de2e0a5e96b",
+      "sha256": "48dd35181c275d81788538c4d9e4846cd385e06edddd856fd6763e6d0ca22c96",
+      "videoTsBytes": 3190976512,
+      "videoTsEntries": 60,
+      "videoTsInventorySha256": "edcf454e49da53f2996a5f5f7d9ae9abf998e9d5ace4fee496257207984e9a44",
+      "sha256Observation": "https://github.com/RealJosephus/mediamanager/actions/runs/40494656261"
+    },
+    "pal": {
+      "filename": "big-buck-bunny-PAL.iso",
+      "url": "https://archive.org/download/BigBuckBunny/big-buck-bunny-PAL.iso",
+      "bytes": 8059486208,
+      "sha1": "1284f3ea7bec12de9daa79829506fa477fa85206",
+      "md5": "cb67e9bc8e97b9d625e7cd7ee0d85e08"
+    }
+  }
+}

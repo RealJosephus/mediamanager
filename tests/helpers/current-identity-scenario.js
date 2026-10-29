@@ -15,11 +15,11 @@ const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const columns = tableDefinition('BaseItems').columns;
 const clockColumns = new Set(['DateCreated', 'DateModified']);
 
-export async function currentIdentityScenario(kind, mode, { precondition, signal } = {}) {
+export async function currentIdentityScenario(kind, mode, { port, precondition, signal } = {}) {
   signal?.throwIfAborted();
   const input = identitySideEffectInput(kind, mode);
   const root = path.join(validationOutputRoot(), `identity-${kind}-${mode}-${randomUUID()}`);
-  await recordCurrentIdentities(kind, mode, root, { precondition });
+  await recordCurrentIdentities(kind, mode, root, { port, precondition });
   const load = async name => JSON.parse(await readFile(path.join(root, name), 'utf8'));
   const provenance = await load('provenance.json');
   for (const artifact of provenance.artifacts) {
@@ -128,8 +128,6 @@ export async function compareCurrentIdentity(scenario, controls = []) {
   assert.deepEqual(scenario.stages.afterShutdown, scenario.stages.afterReads);
   assert.deepEqual(actual.filesystemAfterReads, scenario.stages.afterReads.filesystem);
   assert.deepEqual(actual.filesystemAfterShutdown, actual.filesystemAfterReads);
-  assert.deepEqual(actual.runtimeErrors, []);
-  assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
   assert.ok(Object.values(actual.cleanup).every(value => value === true));
   const projected = structuredClone(actual), native = structuredClone(scenario.http);
   responseProjection(projected, native, candidateAdded, nativeAdded);

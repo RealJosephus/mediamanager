@@ -60,6 +60,33 @@ test('worker discovery rejects dynamic entries, forwarded constructors and execu
   }
 });
 
+test('the owned JPEG fault fixture admits only its public termination hook', () => {
+  const sourcePath = 'tests/images/jpeg-cancellation.test.js';
+  const prefix = "import { Worker as Thread } from 'node:worker_threads'; ";
+  const allowed = [
+    'const terminate = Thread.prototype.terminate;',
+    "const hook = t.mock.method(Thread.prototype, 'terminate', async function () {});",
+  ];
+  for (const expression of allowed) {
+    const analysis = analyzeJavaScriptDependencies(prefix + expression, { sourcePath });
+    assert.deepEqual(analysis.unresolvedImports, []); assert.deepEqual(analysis.unresolvedExecutables, []);
+    const other = analyzeJavaScriptDependencies(prefix + expression, { sourcePath: 'tests/other.test.js' });
+    assert.ok(other.unresolvedExecutables.some(value => value.reason === 'unsupported-worker-entry'));
+  }
+  for (const expression of [
+    'const launch = Thread;', 'const prototype = Thread.prototype;',
+    'const launch = Thread.prototype.constructor;', 'Thread.prototype.terminate = replacement;',
+    "t.mock.method(Thread.prototype, 'constructor', async function () {});",
+    't.mock.method(Thread.prototype, key, async function () {});',
+    "t.other.method(Thread.prototype, 'terminate', async function () {});",
+    "t.mock.method(Thread.prototype, 'terminate', function () {});",
+    "new Thread(new URL('./worker.js', import.meta.url), { eval: true });",
+  ]) {
+    const analysis = analyzeJavaScriptDependencies(prefix + expression, { sourcePath });
+    assert.ok(analysis.unresolvedImports.length || analysis.unresolvedExecutables.length, expression);
+  }
+});
+
 test('worker and WASM resolution rejects missing, external and linked input targets', async t => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'validation-workers-'));
   t.after(async () => {

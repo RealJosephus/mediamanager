@@ -1,0 +1,68 @@
+name: Acquire original Blu-ray BDMV reference
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: Complete original published disc source
+        type: choice
+        options:
+          - sintel
+          - avchdcoder
+        default: sintel
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bluray-reference-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  acquire:
+    name: Original ${{ inputs.source }} ISO and complete BDMV
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      ORIGINAL_DISC_SOURCE: ${{ inputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.16.0
+      - name: Install the selected source's real UDF and Blu-ray readers
+        run: |
+          set -euo pipefail
+          tool_evidence="$RUNNER_TEMP/mediamanager-bluray-tool-supply"
+          mkdir "$tool_evidence"
+          packages=(7zip-standalone libbluray-bin)
+          if [[ "$ORIGINAL_DISC_SOURCE" == avchdcoder ]]; then packages+=(aria2); fi
+          {
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends "${packages[@]}"
+          } 2>&1 | tee "$tool_evidence/package-install.txt"
+          dpkg-query --show "${packages[@]}" > "$tool_evidence/installed-packages.txt"
+          dpkg-query --listfiles "${packages[@]}" > "$tool_evidence/package-files.txt"
+      - name: Acquire and verify the complete author-published ISO
+        run: |
+          set -euo pipefail
+          arguments=(--source "$ORIGINAL_DISC_SOURCE"
+            --output "$RUNNER_TEMP/mediamanager-bluray-reference"
+            --archive-tool /usr/lib/7zip/7zz
+            --disc-tool /usr/bin/bd_info)
+          if [[ "$ORIGINAL_DISC_SOURCE" == avchdcoder ]]; then arguments+=(--torrent-tool /usr/bin/aria2c); fi
+          node tools/ci/bluray-reference/acquire.js "${arguments[@]}"
+      - name: Preserve small original-source and verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bluray-reference-original-${{ inputs.source }}
+          path: |
+            ${{ runner.temp }}/mediamanager-bluray-reference/evidence/
+            ${{ runner.temp }}/mediamanager-bluray-tool-supply/
+          if-no-files-found: error
+          retention-days: 14
+          include-hidden-files: true

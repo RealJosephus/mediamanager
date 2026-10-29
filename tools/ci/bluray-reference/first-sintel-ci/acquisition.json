@@ -1,0 +1,539 @@
+{
+  "startedAt": "2026-10-27T13:30:56.750Z",
+  "phase": "complete-original-ready-for-same-run-consumer",
+  "sourceId": "sintel",
+  "source": "Sintel official complete Blu-ray ISO",
+  "descriptorSha256": "e7a3795650117b51bcbbdec8a194fcb409598a1e7f999af47d4f84582d406ff3",
+  "sourceComplete": true,
+  "originalBdmvExtracted": true,
+  "passed": true,
+  "http": [
+    {
+      "purpose": "publisher",
+      "url": "https://download.blender.org/durian/movies/",
+      "status": 200,
+      "receivedAt": "2026-10-27T13:30:59.346Z",
+      "headers": {
+        "content-type": "text/html",
+        "last-modified": "Tue, 27 Oct 2026 13:30:59 GMT"
+      },
+      "filename": "metadata-publisher.body",
+      "bytes": 1426,
+      "sha256": "2c21c7720fbf076d401eac1684901ec70a3d4a0da6a203aa821e8d3d78573c41"
+    },
+    {
+      "purpose": "Sintel license",
+      "url": "https://durian.blender.org/about/",
+      "status": 200,
+      "receivedAt": "2026-10-27T13:31:00.149Z",
+      "headers": {
+        "content-type": "text/html",
+        "last-modified": "Tue, 30 Mar 2021 15:36:40 GMT"
+      },
+      "filename": "metadata-sintel-license.body",
+      "bytes": 29650,
+      "sha256": "de271345b765212634b96e683508f8bb5b117ea46db7c531002dc9c3c4b7d26f"
+    },
+    {
+      "purpose": "sharing terms",
+      "url": "https://durian.blender.org/sharing/",
+      "status": 200,
+      "receivedAt": "2026-10-27T13:31:00.387Z",
+      "headers": {
+        "content-type": "text/html",
+        "last-modified": "Tue, 30 Mar 2021 15:36:40 GMT"
+      },
+      "filename": "metadata-sharing-terms.body",
+      "bytes": 8463,
+      "sha256": "67f30f30c55022c6f7de66beb997f04117b24f7aca928a912286a53edaa4b627"
+    },
+    {
+      "purpose": "original ISO MD5",
+      "url": "https://download.blender.org/durian/movies/Sintel-Bluray.iso.md5",
+      "status": 200,
+      "receivedAt": "2026-10-27T13:31:00.590Z",
+      "headers": {
+        "content-type": "application/octet-stream",
+        "content-length": "59",
+        "last-modified": "Thu, 14 Jul 2011 14:32:30 GMT",
+        "etag": "\"4e1efdfe-3b\""
+      },
+      "filename": "metadata-original-iso-md5.body",
+      "bytes": 59,
+      "sha256": "ffa70a058c3325ccdf2bc7f48b4ad9c097efd46b04c7155b55c627554663a36f"
+    },
+    {
+      "purpose": "complete original ISO",
+      "url": "https://download.blender.org/durian/movies/Sintel-Bluray.iso",
+      "status": 200,
+      "receivedAt": "2026-10-27T13:31:00.785Z",
+      "headers": {
+        "content-type": "application/octet-stream",
+        "content-length": "1593180160",
+        "last-modified": "Wed, 13 Jul 2011 16:55:07 GMT",
+        "etag": "\"4e1dcdeb-5ef60000\""
+      }
+    }
+  ],
+  "processes": [
+    {
+      "label": "archive-linked-libraries",
+      "executable": "/usr/bin/ldd",
+      "args": [
+        "/usr/lib/7zip/7zz"
+      ],
+      "startedAt": "2026-10-27T13:30:56.770Z",
+      "timeoutMs": 120000,
+      "passed": true,
+      "code": 0,
+      "signal": null,
+      "pid": 2925,
+      "finishedAt": "2026-10-27T13:30:56.783Z",
+      "stdout": {
+        "bytes": 374,
+        "sha256": "0cc9ed979e3ac3eb8a6444bd32ace3bac79237d61740e2ec1c3b38864fa3d686"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "disc-linked-libraries",
+      "executable": "/usr/bin/ldd",
+      "args": [
+        "/usr/bin/bd_info"
+      ],
+      "startedAt": "2026-10-27T13:30:56.795Z",
+      "timeoutMs": 120000,
+      "passed": true,
+      "code": 0,
+      "signal": null,
+      "pid": 2935,
+      "finishedAt": "2026-10-27T13:30:56.807Z",
+      "stdout": {
+        "bytes": 1466,
+        "sha256": "8dafa57b17dcdd25389f9b3ae1365a838f44c2aea4d5e37254f2cac22b8ff57b"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "archive-formats",
+      "executable": "/usr/lib/7zip/7zz",
+      "args": [
+        "i"
+      ],
+      "startedAt": "2026-10-27T13:30:59.016Z",
+      "timeoutMs": 120000,
+      "passed": true,
+      "code": 0,
+      "signal": null,
+      "pid": 2945,
+      "finishedAt": "2026-10-27T13:30:59.022Z",
+      "stdout": {
+        "bytes": 5181,
+        "sha256": "10537b1a91ec87dffc3caa351489294fdfe8d66128a4894261a31a674a5d2b41"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "iso-members",
+      "executable": "/usr/lib/7zip/7zz",
+      "args": [
+        "l",
+        "-slt",
+        "/home/runner/work/_temp/mediamanager-bluray-reference/work/Sintel-Bluray.iso"
+      ],
+      "startedAt": "2026-10-27T13:31:18.727Z",
+      "timeoutMs": 120000,
+      "passed": true,
+      "code": 0,
+      "signal": null,
+      "pid": 2950,
+      "finishedAt": "2026-10-27T13:31:18.735Z",
+      "stdout": {
+        "bytes": 8135,
+        "sha256": "f7ee920124d5b68096e7361a546b6bd77f139e140529750694565e777e12d821"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "iso-test",
+      "executable": "/usr/lib/7zip/7zz",
+      "args": [
+        "t",
+        "-y",
+        "/home/runner/work/_temp/mediamanager-bluray-reference/work/Sintel-Bluray.iso"
+      ],
+      "startedAt": "2026-10-27T13:31:18.737Z",
+      "timeoutMs": 600000,
+      "passed": true,
+      "code": 0,
+      "signal": null,
+      "pid": 2951,
+      "finishedAt": "2026-10-27T13:31:19.346Z",
+      "stdout": {
+        "bytes": 1640,
+        "sha256": "26ac6d9291a20e2e62b06ab43462adb2fd1a228de005ae76ad14decd32d70333"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "iso-extract",
+      "executable": "/usr/lib/7zip/7zz",
+      "args": [
+        "x",
+        "-y",
+        "-o/home/runner/work/_temp/mediamanager-bluray-reference/media",
+        "/home/runner/work/_temp/mediamanager-bluray-reference/work/Sintel-Bluray.iso"
+      ],
+      "startedAt": "2026-10-27T13:31:19.346Z",
+      "timeoutMs": 600000,
+      "passed": true,
+      "code": 0,
+      "signal": null,
+      "pid": 2952,
+      "finishedAt": "2026-10-27T13:31:20.340Z",
+      "stdout": {
+        "bytes": 1643,
+        "sha256": "427b9852a889e1e488c142ec51d5cb9898ab577ade1e978a7fac9cd9badeb329"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "libbluray-disc-info",
+      "executable": "/usr/bin/bd_info",
+      "args": [
+        "/home/runner/work/_temp/mediamanager-bluray-reference/media"
+      ],
+      "startedAt": "2026-10-27T13:31:21.856Z",
+      "timeoutMs": 120000,
+      "passed": true,
+      "code": 0,
+      "signal": null,
+      "pid": 2953,
+      "finishedAt": "2026-10-27T13:31:21.864Z",
+      "stdout": {
+        "bytes": 550,
+        "sha256": "0db865d3332f836636cf8a6b8446b7ffcfe54472068e154c23d7b173ddd11626"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "tools": {
+    "archive": {
+      "requestedPath": "/usr/lib/7zip/7zz",
+      "available": true,
+      "filename": "/usr/lib/7zip/7zz",
+      "bytes": 2546200,
+      "sha256": "dbd2ddc8f76c44ca78122776d2651a7d5035eb033a66d76d479c3e01b03f4b64",
+      "magic": "7f454c46",
+      "dependencies": [
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "bytes": 2592224,
+          "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "bytes": 183024,
+          "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "bytes": 2129424,
+          "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "bytes": 952616,
+          "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "bytes": 236616,
+          "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+        }
+      ]
+    },
+    "disc": {
+      "requestedPath": "/usr/bin/bd_info",
+      "available": true,
+      "filename": "/usr/bin/bd_info",
+      "bytes": 14648,
+      "sha256": "30b73c6c84022a2a1485cae0d0678c384fe6f4f709c69426c5726a0820395f4c",
+      "magic": "7f454c46",
+      "dependencies": [
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libbluray.so.2.4.3",
+          "bytes": 355304,
+          "sha256": "d76b9963fbf40813e2f3428f57b407bfd931f9ed8b99e0812a923f40025bb62a"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "bytes": 2129424,
+          "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14",
+          "bytes": 1967424,
+          "sha256": "209e941be9eb2eb9ab36caaa0b81d1c6b36c8f5d7268c24f19e81039137e6485"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.12.1",
+          "bytes": 325712,
+          "sha256": "a94b4059b27766f563894c8f7e61762b6f6b2e25c59ef36b730164d4b75c6c98"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.1",
+          "bytes": 833608,
+          "sha256": "992dac80abe3a3854f3eb2668da4207c029664ceca5f122ddb46e2a8169e9499"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libudfread.so.0.1.0",
+          "bytes": 43000,
+          "sha256": "f3ef901a0971ad56255581b9d32906c4cd24d25318b2d91ed360e87eb6997479"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "bytes": 236616,
+          "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libicuuc.so.74.2",
+          "bytes": 2140336,
+          "sha256": "7560aadde38e5f4237a47a1ddd5891f9b36768a77a60faae30beee003ac01901"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+          "bytes": 113000,
+          "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+          "bytes": 202904,
+          "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "bytes": 952616,
+          "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+          "bytes": 186624,
+          "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+          "bytes": 78944,
+          "sha256": "cc08c9f50a8009ffd6391e0116a100369b11ca9238fa52392c019e6645b122a1"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libpng16.so.16.43.0",
+          "bytes": 223304,
+          "sha256": "89c0c6569a8c00480d451401ad4c0a74942e62dc57f229a970592fdc5adb29e8"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.1.0",
+          "bytes": 51512,
+          "sha256": "64d8a5019d4c294b89fde1193343ea324bbd8603652554e5545f0a01595fa2c5"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libicudata.so.74.2",
+          "bytes": 30795392,
+          "sha256": "ddbb3718b8bd9cbd780e5ab08b4503c30a6c4fa0706ebe5d074ed6b596c1714e"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "bytes": 2592224,
+          "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "bytes": 183024,
+          "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+        },
+        {
+          "filename": "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.1.0",
+          "bytes": 141640,
+          "sha256": "a91ead095d2c80520c55a89057bbe10b031a075340442e63f44b310f93883a1b"
+        }
+      ]
+    }
+  },
+  "errors": [],
+  "optionErrors": [],
+  "toolBindingErrors": [],
+  "fullInstanceVerified": false,
+  "completeLibraryVerified": false,
+  "productionScaleVerified": false,
+  "phaseAcceptance": false,
+  "releaseAcceptance": false,
+  "producer": {
+    "identity": {
+      "GITHUB_REPOSITORY": "RealJosephus/mediamanager",
+      "GITHUB_SHA": "bbf6a29a9a5c9513ab8c9886a1f74c028d22a967",
+      "GITHUB_RUN_ID": "40512414913",
+      "GITHUB_RUN_ATTEMPT": "1",
+      "GITHUB_WORKFLOW_REF": "RealJosephus/mediamanager/.github/workflows/bluray-reference.yml@refs/heads/main",
+      "GITHUB_WORKFLOW_SHA": "bbf6a29a9a5c9513ab8c9886a1f74c028d22a967",
+      "GITHUB_JOB": "acquire",
+      "RUNNER_OS": "Linux",
+      "RUNNER_ARCH": "X64"
+    },
+    "files": [
+      {
+        "path": "tools/ci/bluray-reference/acquire.js",
+        "bytes": 22989,
+        "sha256": "388c3ca815758eb53dc1d5757a96ee8630ff27240627c497fedc34f4b31af7ac"
+      },
+      {
+        "path": "tools/ci/bluray-reference/torrent.js",
+        "bytes": 5622,
+        "sha256": "850f6b92ad579e32ff62980396b43b59423145dd98f6526937264ce88ce9962e"
+      },
+      {
+        "path": "tools/ci/bluray-reference/http-source.js",
+        "bytes": 5473,
+        "sha256": "9be014d03e43a790b3cfb57b95d9d8db7c66f13cec408e6eaf2bbd91e40202b9"
+      },
+      {
+        "path": ".github/workflows/bluray-reference.yml",
+        "bytes": 2466,
+        "sha256": "4ac844307ca99d6f4ce07807adf544ce30ad50c7cb35ac95a3fd6c5387f3ce1a"
+      },
+      {
+        "path": "tools/ci/bluray-reference/sintel.json",
+        "bytes": 3512,
+        "sha256": "e7a3795650117b51bcbbdec8a194fcb409598a1e7f999af47d4f84582d406ff3"
+      },
+      {
+        "path": "tools/ci/bluray-reference/metadata/sintel-directory.html",
+        "bytes": 1787,
+        "sha256": "21aae3fa180ba812d4d1162b382313a74caae3d0938eef2c503ab9ab450c425d"
+      },
+      {
+        "path": "tools/ci/bluray-reference/metadata/Sintel-Bluray.iso.md5",
+        "bytes": 59,
+        "sha256": "ffa70a058c3325ccdf2bc7f48b4ad9c097efd46b04c7155b55c627554663a36f"
+      },
+      {
+        "path": "tools/ci/bluray-reference/metadata/sintel-about.html",
+        "bytes": 30011,
+        "sha256": "65000dc376b0d9b8d0ce66c23b289d85a935471828be613d36878b09e10eff74"
+      },
+      {
+        "path": "tools/ci/bluray-reference/metadata/sintel-sharing.html",
+        "bytes": 8824,
+        "sha256": "c1d6336bc71643d70ff05a6dd52c62b1e01663c5ee6bc86a9f34061597d5465c"
+      },
+      {
+        "path": "tools/ci/bluray-reference/metadata/sintel-sharing.http.json",
+        "bytes": 777,
+        "sha256": "5b18c4d6688ebc9414b557076f648af5c603b3fe7a909653b159099a537b9680"
+      },
+      {
+        "path": "tools/ci/bluray-reference/metadata/.gitattributes",
+        "bytes": 9,
+        "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+      }
+    ]
+  },
+  "originalSourceMetadata": [
+    {
+      "path": "metadata/sintel-directory.html",
+      "purpose": "Original official movie directory",
+      "url": "https://download.blender.org/durian/movies/",
+      "bytes": 1787,
+      "sha256": "21aae3fa180ba812d4d1162b382313a74caae3d0938eef2c503ab9ab450c425d"
+    },
+    {
+      "path": "metadata/Sintel-Bluray.iso.md5",
+      "purpose": "Original adjacent publisher MD5",
+      "url": "https://download.blender.org/durian/movies/Sintel-Bluray.iso.md5",
+      "bytes": 59,
+      "sha256": "ffa70a058c3325ccdf2bc7f48b4ad9c097efd46b04c7155b55c627554663a36f"
+    },
+    {
+      "path": "metadata/sintel-about.html",
+      "purpose": "Original official movie permission",
+      "url": "https://durian.blender.org/about/",
+      "bytes": 30011,
+      "sha256": "65000dc376b0d9b8d0ce66c23b289d85a935471828be613d36878b09e10eff74"
+    },
+    {
+      "path": "metadata/sintel-sharing.html",
+      "purpose": "Original official sharing and credits terms",
+      "url": "https://durian.blender.org/sharing/",
+      "bytes": 8824,
+      "sha256": "c1d6336bc71643d70ff05a6dd52c62b1e01663c5ee6bc86a9f34061597d5465c"
+    },
+    {
+      "path": "metadata/sintel-sharing.http.json",
+      "purpose": "Sharing page original HTTP receipt",
+      "url": "https://durian.blender.org/sharing/",
+      "bytes": 777,
+      "sha256": "5b18c4d6688ebc9414b557076f648af5c603b3fe7a909653b159099a537b9680"
+    }
+  ],
+  "availableBytes": "89949831168",
+  "isoDownload": {
+    "url": "https://download.blender.org/durian/movies/Sintel-Bluray.iso",
+    "filename": "Sintel-Bluray.iso",
+    "expectedBytes": 1593180160,
+    "expectedMd5": "edef70074bc275190a016f9eaeb478dd",
+    "startedAt": "2026-10-27T13:31:00.593Z",
+    "bytes": 1593180160,
+    "streamComplete": true,
+    "finalUrl": "https://download.blender.org/durian/movies/Sintel-Bluray.iso",
+    "sha256": "693ac48a9ecc53071d014ef485d7850f916abef624c8dafa1d5801d828158c69",
+    "md5": "edef70074bc275190a016f9eaeb478dd",
+    "finishedAt": "2026-10-27T13:31:15.110Z"
+  },
+  "originals": {
+    "transport": "official-https",
+    "files": [
+      {
+        "path": "Sintel-Bluray.iso",
+        "bytes": 1593180160,
+        "sha256": "693ac48a9ecc53071d014ef485d7850f916abef624c8dafa1d5801d828158c69",
+        "md5": "edef70074bc275190a016f9eaeb478dd"
+      }
+    ],
+    "totalBytes": 1593180160,
+    "publisherMd5Verified": true,
+    "independentDiskHashVerified": true,
+    "frozenSha256Verified": false,
+    "firstObservedSha256": true
+  },
+  "media": {
+    "originalIso": "/home/runner/work/_temp/mediamanager-bluray-reference/work/Sintel-Bluray.iso",
+    "discRoot": "/home/runner/work/_temp/mediamanager-bluray-reference/media",
+    "bdmvRoot": "/home/runner/work/_temp/mediamanager-bluray-reference/media/BDMV",
+    "completeFiles": 14,
+    "bdmvFiles": 14,
+    "bdmvBytes": 1592116024,
+    "format": "Official complete Sintel Blu-ray ISO; original UDF/BDMV disc image",
+    "scope": "Complete unchanged official open movie disc with all published members; no claim for commercial BD-ROM, encryption, BD-J/menu decoding, 3D or every Blu-ray profile."
+  },
+  "finishedAt": "2026-10-27T13:31:25.595Z"
+}

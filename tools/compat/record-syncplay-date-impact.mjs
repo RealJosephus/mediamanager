@@ -64,7 +64,8 @@ export async function recordCurrentSyncPlayDateImpact({ privateRoot, outputRoot 
     recorder: await describeFile(fileURLToPath(import.meta.url)),
     scenario: await describeFile(fileURLToPath(new URL('../../tests/sessions/syncplay-date-impact-scenario.js', import.meta.url))),
     nativeSources: await current.sourceBindings(['MediaBrowser.Controller/SyncPlay/GroupStates/WaitingGroupState.cs',
-      'Emby.Server.Implementations/SyncPlay/Group.cs', 'Jellyfin.Api/Controllers/SyncPlayController.cs']),
+      'Emby.Server.Implementations/SyncPlay/Group.cs', 'Jellyfin.Api/Controllers/SyncPlayController.cs',
+      'Emby.Server.Implementations/Session/SessionManager.cs', 'Emby.Server.Implementations/Session/WebSocketController.cs']),
     credentialsRecorded: false, historicalRecordingReused: false, phaseAcceptance: false };
   const snapshot = async callback => {
     const database = new SqliteDatabase(databasePath, { readOnly: true });

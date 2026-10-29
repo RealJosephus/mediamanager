@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { assertValidationOutputChild } from '../validation/paths.js';
 import { currentNativeReference } from './current-native-reference.js';
 import { createPrivateFilterOutput } from './filter-reference-output.js';
+import { observeExecutionPhase } from '../validation/execution-diagnostics.js';
 import { identitySideEffectInput, identitySideEffectRoute } from './identity-side-effect-input.js';
 
 const tables = ['BaseItems', 'AncestorIds', 'LinkedChildren', 'ItemValues', 'ItemValuesMap', 'UserData',
@@ -23,7 +24,7 @@ const available = port => new Promise(resolve => {
 });
 
 /** All identity observations come from the current native HTTP/SQLite process. */
-export async function recordCurrentIdentities(kind, mode, destination, { port = 19000, precondition } = {}) {
+export async function recordCurrentIdentities(kind, mode, destination, { port, precondition } = {}) {
   const input = identitySideEffectInput(kind, mode);
   destination = assertValidationOutputChild(path.resolve(destination));
   if (existsSync(destination)) throw new Error('Identity recording requires a new evidence directory.');
@@ -37,11 +38,12 @@ export async function recordCurrentIdentities(kind, mode, destination, { port = 
     const databasePath = path.join(referenceRoot, 'data/data/jellyfin.db');
     const metadataRoot = path.join(referenceRoot, 'data/metadata');
     await mkdir(root);
-    await cp(current.sourceRoot, referenceRoot, { recursive: true, filter: filename => {
+    await observeExecutionPhase('native.copy.instance', () => cp(current.sourceRoot, referenceRoot, { recursive: true, filter: filename => {
       const relative = path.relative(current.sourceRoot, filename).replaceAll('\\', '/');
       return !relative.startsWith('log/') && !/^data\/data\/jellyfin\.db(?:-wal|-shm)?$/u.test(relative);
-    } });
-    await cp(current.sourceDatabase, databasePath, { force: false, errorOnExist: true });
+    } }), { fixture: 'tools/compat/record-current-identities.js' });
+    await observeExecutionPhase('native.copy.database', () => cp(current.sourceDatabase, databasePath,
+      { force: false, errorOnExist: true }), { fixture: 'tools/compat/record-current-identities.js' });
     await mkdir(path.join(referenceRoot, 'log'), { recursive: true });
     await current.prepareClone(referenceRoot, port);
     if (mode === 'conflicts') {

@@ -6,7 +6,12 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
+#include <sys/ioctl.h>
 #include <net/if.h>
+#include <net/bpf.h>
+#include <pcap/dlt.h>
+// Use the SDK BPF types/ioctls without libpcap's cut-down redeclarations.
+#define PCAP_DONT_INCLUDE_PCAP_BPF_H
 #include <pcap/pcap.h>
 #include <err.h>
 #include <errno.h>
@@ -58,7 +63,8 @@ int main(int argc, char **argv) {
    * https://github.com/apple-oss-distributions/libpcap/blob/0a45d0c75e2a0677df572773bf31b733670acb80/libpcap/pcap-util.h#L198-L202
    */
   if (pcap_set_want_pktap(source, 1) || pcap_set_snaplen(source, 65535) ||
-      pcap_set_promisc(source, 0) || pcap_set_timeout(source, 100)) {
+      pcap_set_promisc(source, 0) || pcap_set_timeout(source, 100) ||
+      pcap_set_buffer_size(source, (int)byte_limit) || pcap_set_immediate_mode(source, 1)) {
     fprintf(stderr, "Configure read-only pktap capture: %s\n", pcap_geterr(source));
     pcap_close(source); return 2;
   }
@@ -81,27 +87,42 @@ int main(int argc, char **argv) {
   }
   const int descriptor = pcap_get_selectable_fd(source);
   if (descriptor < 0) { fprintf(stderr, "Capture has no pollable descriptor\n"); pcap_close(source); return 2; }
+  unsigned kernel_buffer_bytes = 0;
+  if (ioctl(descriptor, BIOCGBLEN, &kernel_buffer_bytes)) {
+    warn("Read actual capture buffer size"); pcap_close(source); return 2;
+  }
   const int file = open(argv[2], O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW, 0600);
   if (file < 0) { warn("Create original packet evidence"); pcap_close(source); return 2; }
   if (fchown(file, uid, gid)) { warn("Bind packet evidence to its ordinary owner"); close(file); pcap_close(source); return 2; }
   FILE *stream = fdopen(file, "wb");
   if (!stream) { warn("Open packet evidence stream"); close(file); pcap_close(source); return 2; }
+  char output_buffer[64u * 1024u];
+  if (setvbuf(stream, output_buffer, _IOFBF, sizeof(output_buffer))) {
+    warn("Buffer original packet evidence"); fclose(stream); pcap_close(source); return 2;
+  }
   pcap_dumper_t *output = pcap_dump_fopen(source, stream);
   if (!output) { fprintf(stderr, "Open original pcap: %s\n", pcap_geterr(source)); fclose(stream); pcap_close(source); return 2; }
   Capture capture = {.source = source, .output = output, .bytes = 24};
   const uint64_t started = milliseconds(), deadline = started + 120000u;
-  printf("{\"capturing\":true,\"pid\":%d,\"uid\":%u,\"datalink\":%d,\"pktapDatalink\":%d,\"activationStatus\":%d,\"byteLimit\":%zu,\"durationLimitMilliseconds\":120000,\"monotonicMilliseconds\":%llu}\n",
-    getpid(), (unsigned)getuid(), pcap_datalink(source), DLT_PKTAP, activation_status, byte_limit, (unsigned long long)started); fflush(stdout);
-  int stopping = 0, duration_limited = 0, capture_error = 0;
+  printf("{\"capturing\":true,\"pid\":%d,\"uid\":%u,\"datalink\":%d,\"pktapDatalink\":%d,\"activationStatus\":%d,\"byteLimit\":%zu,\"requestedBufferBytes\":%zu,\"actualKernelBufferBytes\":%u,\"immediateModeRequested\":true,\"outputBufferBytes\":%zu,\"durationLimitMilliseconds\":120000,\"monotonicMilliseconds\":%llu}\n",
+    getpid(), (unsigned)getuid(), pcap_datalink(source), DLT_PKTAP, activation_status, byte_limit, byte_limit,
+    kernel_buffer_bytes, sizeof(output_buffer), (unsigned long long)started); fflush(stdout);
+  int stopping = 0, pending = 0, duration_limited = 0, capture_error = 0;
   for (;;) {
     if (milliseconds() >= deadline) { duration_limited = 1; break; }
     struct pollfd descriptors[2] = {{.fd = STDIN_FILENO, .events = POLLIN}, {.fd = descriptor, .events = POLLIN}};
-    int polled = poll(descriptors, 2, stopping ? 0 : 100);
+    /* A bounded dispatch can leave packets in libpcap's user buffer after
+     * the BPF descriptor stops being readable. Drain another bounded batch
+     * before waiting, still checking stdin and the deadline on every pass.
+     * https://github.com/apple-oss-distributions/libpcap/blob/0a45d0c75e2a0677df572773bf31b733670acb80/libpcap/pcap-bpf.c
+     */
+    int polled = poll(descriptors, 2, stopping || pending ? 0 : 100);
     if (polled < 0) { if (errno == EINTR) continue; capture_error = errno; break; }
     if (descriptors[0].revents & (POLLIN | POLLHUP | POLLERR | POLLNVAL)) stopping = 1;
     int count = pcap_dispatch(source, 16, packet, (unsigned char *)&capture);
     if (count == PCAP_ERROR) { fprintf(stderr, "Read packet evidence: %s\n", pcap_geterr(source)); capture_error = EIO; break; }
     if (capture.limited || count == PCAP_ERROR_BREAK || (stopping && !count)) break;
+    pending = count > 0;
   }
   struct pcap_stat stats = {0}; const int stats_error = pcap_stats(source, &stats);
   if (stats_error) fprintf(stderr, "Read capture loss counters: %s\n", pcap_geterr(source));

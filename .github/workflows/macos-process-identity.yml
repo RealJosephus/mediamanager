@@ -1,0 +1,71 @@
+name: macOS process identity
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  process-identity:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.16.0'
+      - name: Install locked native dependencies
+        run: npm ci --ignore-scripts
+      - name: Preserve fixed candidate and actual source bytes
+        shell: bash
+        run: |
+          mkdir -p .test-output/macos-process-identity
+          node --input-type=module <<'NODE'
+          import { execFileSync } from 'node:child_process';
+          import { createHash } from 'node:crypto';
+          import { readFile, writeFile } from 'node:fs/promises';
+          const git = args => execFileSync('git', args);
+          const head = git(['rev-parse', 'HEAD']).toString().trim();
+          const tree = git(['rev-parse', 'HEAD^{tree}']).toString().trim();
+          const sources = [];
+          for (const path of ['tools/ci/macos-process-identity.js', 'tools/ci/macos-process-signal.js',
+            'tools/ci/macos-process-identity-proof.js', 'tools/ci/macos-network-context.js',
+            'tools/ci/macos-broadcast-policy-terminal.js', 'tools/ci/macos-broadcast-policy-proof.js',
+            'tools/ci/macos-broadcast-policy-worker.js', 'tools/ci/macos-broadcast.js',
+            'tests/validation/macos-process-identity.test.js', 'tests/helpers/macos-process-owner.js',
+            '.github/workflows/macos-process-identity.yml', 'package.json', 'package-lock.json']) {
+            const bytes = await readFile(path), committed = git(['show', head + ':' + path]);
+            if (!bytes.equals(committed)) throw new Error('A process identity source differs from its fixed candidate: ' + path);
+            sources.push({ path, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') });
+          }
+          await writeFile('.test-output/macos-process-identity/candidate.json', JSON.stringify({
+            candidate: { head, tree }, runId: process.env.GITHUB_RUN_ID, attempt: process.env.GITHUB_RUN_ATTEMPT,
+            event: process.env.GITHUB_EVENT_NAME, workflowRef: process.env.GITHUB_WORKFLOW_REF,
+            node: process.version, platform: process.platform, architecture: process.arch,
+            runnerUid: process.getuid(), runnerGid: process.getgid(), sources,
+            scope: 'Raw libproc contracts and actual process owners with original 30-second case limits, root/runner UID observations, exec, fresh signals, actual SIGTERM/SIGKILL exits and an unrelated live control. No full or release acceptance.',
+          }, null, 2) + '\n');
+          NODE
+      - name: Exercise real root and ordinary runner owners
+        shell: bash
+        run: |
+          set -o pipefail
+          peer_uid="$(id -u)"
+          peer_gid="$(id -g)"
+          node_path="$(command -v node)"
+          sudo -n env MEDIAMANAGER_TEST_PROCESS_PEER_UID="$peer_uid" MEDIAMANAGER_TEST_PROCESS_PEER_GID="$peer_gid" \
+            MEDIAMANAGER_TEST_PROCESS_EVIDENCE_ROOT="$PWD/.test-output/macos-process-identity" \
+            "$node_path" --test --test-reporter=tap --test-timeout=30000 \
+            tests/validation/macos-process-identity.test.js tools/ci/macos-process-identity-proof.js \
+            2>&1 | tee .test-output/macos-process-identity/original.tap
+      - name: Preserve original process component evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: macos-process-identity-${{ github.sha }}
+          path: .test-output/macos-process-identity
+          if-no-files-found: error
+          retention-days: 30

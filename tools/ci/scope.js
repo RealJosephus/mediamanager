@@ -6,7 +6,7 @@ import { repositoryRoot, validationPath } from '../validation/paths.js';
 import { releasePairEnabled } from './release-pair.js';
 
 export const provisionedServices = ['postgres', 'dotnet'];
-export const provisionedTools = ['dotnet', 'ffmpeg', 'ffprobe', 'git'];
+export const provisionedTools = ['dotnet', 'ffmpeg', 'ffprobe', 'git', 'tar'];
 
 export function ciTestConcurrency(environment) {
   const value = environment.MEDIAMANAGER_CI_TEST_CONCURRENCY ?? '1';
@@ -50,6 +50,12 @@ export const provisionedServicesFor = environment => {
   if (environment.MEDIAMANAGER_CI_NATIVE_SQLITE === 'true' && environment.MEDIAMANAGER_CI_NATIVE_INSTANCE !== 'true') {
     throw new Error('Current native SQLite provisioning requires native instance provisioning.');
   }
+  if (environment.MEDIAMANAGER_CI_DVD_REFERENCE === 'true' && environment.MEDIAMANAGER_CI_NATIVE_INSTANCE !== 'true') {
+    throw new Error('Original DVD provisioning requires native instance provisioning.');
+  }
+  if (environment.MEDIAMANAGER_CI_BLURAY_REFERENCE === 'true' && environment.MEDIAMANAGER_CI_NATIVE_INSTANCE !== 'true') {
+    throw new Error('Original Blu-ray provisioning requires native instance provisioning.');
+  }
   if (environment.MEDIAMANAGER_CI_NATIVE_INSTANCE === 'true' && environment.MEDIAMANAGER_CI_NATIVE_REFERENCE !== 'true') {
     throw new Error('Native instance provisioning requires native reference provisioning.');
   }
@@ -57,6 +63,8 @@ export const provisionedServicesFor = environment => {
     ...(environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true' ? ['jellyfinDll'] : []),
     ...(environment.MEDIAMANAGER_CI_NATIVE_INSTANCE === 'true' ? ['nativeInstance'] : []),
     ...(environment.MEDIAMANAGER_CI_NATIVE_SQLITE === 'true' ? ['currentNativeSqlite'] : []),
+    ...(environment.MEDIAMANAGER_CI_DVD_REFERENCE === 'true' ? ['dvdReference'] : []),
+    ...(environment.MEDIAMANAGER_CI_BLURAY_REFERENCE === 'true' ? ['blurayReference'] : []),
     ...(environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true' ? ['jellyfinWeb'] : []),
     ...(environment.MEDIAMANAGER_CI_EMBY_WEB === 'true' ? ['embyWeb'] : []),
     ...(environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true' || environment.MEDIAMANAGER_CI_EMBY_WEB === 'true' ? ['browser'] : []),

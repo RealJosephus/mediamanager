@@ -220,7 +220,8 @@ test('password reset PIN files use a tracked same-run Node-to-Native public-prov
 });
 
 for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', additionalInputs = [], oraclePath = 'current/'] of [
-  ['tests/http/startup.test.js', 'tests/http/fixtures/startup', ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-startup'],
+  ['tests/http/startup.test.js', 'tests/http/fixtures/startup', ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-startup',
+    'input.json', ['../../startup-current-observations.js']],
   ['tests/core/native-charset.test.js', 'tests/core/fixtures/native-charset', ['dotnet', 'jellyfinDll'], 'sealed-charset'],
   ['tests/core/native-json-encoder.test.js', 'tests/core/fixtures/native-json-encoder', ['dotnet', 'jellyfinDll'], 'sealed-json'],
   ['tests/library/collection-playlist-resolution.test.js', 'tests/library/fixtures/collection-playlist-resolution',
@@ -270,7 +271,7 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
   ['tests/http/library-structure.test.js', 'tests/http/fixtures/library-structure-current',
     ['dotnet', 'jellyfinDll'], null, 'input.json', ['observations.js'], ''],
   ['tests/http/password-reset.test.js', 'tests/http/fixtures/password-reset-http-current',
-    ['dotnet', 'jellyfinDll', 'postgres'], null, 'input.json', ['observations.js'], ''],
+    ['dotnet', 'jellyfinDll', 'postgres'], null, 'input.json', ['observations.js', '../../password-reset-current-observations.js'], ''],
   ['tests/http/quick-connect.test.js', 'tests/http/fixtures/quick-connect-current',
     ['dotnet', 'jellyfinDll'], null, 'input.json', ['Direct.cs'], ''],
   ['tests/http/quick-connect-runtime.test.js', 'tests/http/fixtures/quick-connect-current',

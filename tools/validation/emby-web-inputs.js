@@ -25,7 +25,7 @@ export async function embyWebInputs(environment = process.env) {
   await bind(receiptPath);
   const receipt = JSON.parse(await readFile(receiptPath, 'utf8'));
   if (receipt.schemaVersion !== 1 || receipt.kind !== 'emby-web' || receipt.status !== 'succeeded'
-    || receipt.version !== '26.0.37' || receipt.origin !== 'https://app.emby.media/' || receipt.catalogEntries !== 858
+    || receipt.version !== '26.0.38' || receipt.origin !== 'https://app.emby.media/' || receipt.catalogEntries !== 865
     || receipt.entryAndCatalogUnchanged !== true || receipt.clientInteractionValidated !== false) throw new Error('Emby Web capture is incomplete.');
   for (const [field, variable] of [['repository', 'GITHUB_REPOSITORY'], ['commit', 'GITHUB_SHA'], ['runId', 'GITHUB_RUN_ID'], ['runAttempt', 'GITHUB_RUN_ATTEMPT']]) {
     if (!environment[variable] || receipt[field] !== environment[variable]) throw new Error(`Emby Web evidence belongs to another run: ${field}`);
@@ -44,7 +44,7 @@ export async function embyWebInputs(environment = process.env) {
   const manifestPath = member(receipt.runtimeManifest?.path);
   await bind(manifestPath, receipt.runtimeManifest);
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
-  if (!Array.isArray(manifest.files) || manifest.files.length < 858
+  if (!Array.isArray(manifest.files) || manifest.files.length < 865
     || new Set(manifest.files.map(file => file.path)).size !== manifest.files.length) throw new Error('Emby Web resource membership is incomplete.');
   for (const required of ['index.html', 'serviceworker.js', 'apploader.js', 'app.js', 'manifest.json',
     'modules/emby-apiclient/apiclient.js', 'modules/emby-apiclient/connectionmanager.js', ...receipt.bootstrapModules.resources]) {

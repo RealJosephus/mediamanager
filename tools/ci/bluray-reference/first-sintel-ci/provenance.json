@@ -1,0 +1,35 @@
+{
+  "source": "Unmodified small evidence from the successful complete official ISO acquisition",
+  "repository": "RealJosephus/mediamanager",
+  "runId": "40512414913",
+  "jobId": "122217432361",
+  "candidate": "bbf6a29a9a5c9513ab8c9886a1f74c028d22a967",
+  "scope": "Complete source acquisition only; no probe, scan, exchange, complete-instance or release claim",
+  "files": [
+    {
+      "path": "acquisition.json",
+      "bytes": 18831,
+      "sha256": "f8f127edb7a210f78d52280047c2db78a1ce84ff72aa1f32eb31e3d301755fde"
+    },
+    {
+      "path": "bdmv-files.json",
+      "bytes": 2375,
+      "sha256": "88479378b7a1c6c98e73118b088e2c19dc83f5345a7d6ed9f9d5e99497230876"
+    },
+    {
+      "path": "complete-files.json",
+      "bytes": 3458,
+      "sha256": "00c054491ccc4aa68f1165f07ac12036a07a65912c17c6f23ca25b73c35358a9"
+    },
+    {
+      "path": "libbluray-disc-info.stdout.txt",
+      "bytes": 550,
+      "sha256": "0db865d3332f836636cf8a6b8446b7ffcfe54472068e154c23d7b173ddd11626"
+    },
+    {
+      "path": "original-members.json",
+      "bytes": 2310,
+      "sha256": "920ee898954a46162dcc5a882e62c6610bee8a2822d78c48f6c124c55df2f9b7"
+    }
+  ]
+}

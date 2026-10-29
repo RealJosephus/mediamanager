@@ -1,0 +1,77 @@
+name: Acquire original DVD reference
+
+on:
+  workflow_dispatch:
+    inputs:
+      variant:
+        description: Original DVD image to verify and extract in full
+        type: choice
+        required: true
+        default: ntsc
+        options: [ntsc, pal]
+      platform:
+        description: Platforms for the acquisition observation
+        type: choice
+        required: true
+        default: linux
+        options: [linux, windows, macos, all]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: disc-reference-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  acquire:
+    name: ${{ matrix.os }} / original ${{ inputs.variant }} DVD
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(inputs.platform == 'windows' && '[{"os":"windows-2025"}]' || inputs.platform == 'macos' && '[{"os":"macos-15"}]' || inputs.platform == 'all' && '[{"os":"ubuntu-24.04"},{"os":"windows-2025"},{"os":"macos-15"}]' || '[{"os":"ubuntu-24.04"}]') }}
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.16.0
+      - name: Install ISO-capable archive reader
+        if: runner.os == 'Linux'
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & sudo apt-get update
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot update the libarchive package index.' }
+          & sudo apt-get install --yes --no-install-recommends libarchive-tools
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot install the ISO-capable libarchive reader.' }
+      - name: Bind archive reader
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $archiveName = if ($IsLinux) { 'bsdtar' } elseif ($IsWindows) { 'tar.exe' } else { '/usr/bin/tar' }
+          $archiveCommand = Get-Command $archiveName -CommandType Application -ErrorAction Stop | Select-Object -First 1
+          $archivePath = [IO.Path]::GetFullPath($archiveCommand.Source)
+          if (-not [IO.File]::Exists($archivePath)) { throw 'The archive reader must resolve to an actual executable.' }
+          ('MEDIAMANAGER_DISC_ARCHIVE_TOOL=' + $archivePath) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Download, verify and extract complete original VIDEO_TS
+        env:
+          MEDIAMANAGER_DISC_VARIANT: ${{ inputs.variant }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $output = Join-Path $env:RUNNER_TEMP 'mediamanager-disc-reference'
+          & node tools/ci/disc-reference/acquire.js --variant $env:MEDIAMANAGER_DISC_VARIANT --output $output --archive-tool $env:MEDIAMANAGER_DISC_ARCHIVE_TOOL
+          if ($LASTEXITCODE -ne 0) { throw 'Original DVD acquisition failed; inspect the retained evidence.' }
+      - name: Preserve acquisition evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: disc-reference-${{ matrix.os }}-${{ inputs.variant }}
+          path: ${{ runner.temp }}/mediamanager-disc-reference/evidence/
+          if-no-files-found: error
+          retention-days: 14
+          include-hidden-files: true

@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import path from 'node:path';
-import { lstat, readdir, readFile } from 'node:fs/promises';
+import { lstat as statInput, readdir as listInput, readFile as readInput, open as openInput } from 'node:fs/promises';
+import { observeExecutionPhase } from './execution-diagnostics.js';
 import { designatedJellyfinContentDigest, designatedJellyfinHead, designatedJellyfinRepository,
   designatedJellyfinSourceFiles, verifyDesignatedJellyfinSourcePackage } from './designated-jellyfin-source.js';
 
@@ -27,6 +28,51 @@ const instant = value => typeof value === 'string'
 const timestamp = value => Number.isFinite(instant(value));
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 
+// Share one bound across roots, directories and simultaneous verifications.
+// A file retains its slot through close; directory recursion never holds one.
+const byteReadLimit = 4, byteReadWaiters = [];
+let activeByteReads = 0, nextByteReadWaiter = 0;
+async function withByteRead(operation) {
+  if (activeByteReads === byteReadLimit) await new Promise(resolve => byteReadWaiters.push(resolve));
+  else activeByteReads += 1;
+  try { return await operation(); }
+  finally {
+    if (nextByteReadWaiter < byteReadWaiters.length) {
+      const next = byteReadWaiters[nextByteReadWaiter];
+      byteReadWaiters[nextByteReadWaiter++] = undefined;
+      if (nextByteReadWaiter === byteReadWaiters.length) { byteReadWaiters.length = 0; nextByteReadWaiter = 0; }
+      next();
+    } else activeByteReads -= 1;
+  }
+}
+const lstat = (...args) => withByteRead(() => statInput(...args));
+const readdir = (...args) => withByteRead(() => listInput(...args));
+const readFile = (...args) => withByteRead(() => readInput(...args));
+
+async function fileBytes(filename) {
+  return withByteRead(async () => {
+    const file = await openInput(filename, 'r');
+    let failed = false, failure, result;
+    try {
+      const buffer = Buffer.allocUnsafe(256 * 1024), hash = createHash('sha256');
+      let bytes = 0;
+      for (;;) {
+        const { bytesRead } = await file.read(buffer, 0, buffer.length, null);
+        if (bytesRead === 0) break;
+        bytes += bytesRead; hash.update(buffer.subarray(0, bytesRead));
+      }
+      result = { bytes, sha256: hash.digest('hex') };
+    } catch (error) { failed = true; failure = error; }
+    try { await file.close(); }
+    catch (error) {
+      if (failed) throw new AggregateError([failure, error], 'Native input read and close failed.', { cause: failure });
+      throw error;
+    }
+    if (failed) throw failure;
+    return result;
+  });
+}
+
 // The native producer verifies receipts before npm dependencies are installed.
 // Keep this byte-tree reader on Node built-ins instead of importing inventory.js,
 // whose static analyzer intentionally depends on the development acorn package.
@@ -35,19 +81,23 @@ async function describeFile(filename) {
     const info = await lstat(filename);
     if (info.isSymbolicLink()) return { filename, available: false, kind: 'symbolic-link', errorCode: 'UNSUPPORTED_INPUT_LINK' };
     if (info.isDirectory()) {
-      const entries = [];
-      for (const name of (await readdir(filename)).sort()) {
+      const names = (await readdir(filename)).sort();
+      const settled = await Promise.allSettled(names.map(async name => {
         const { filename: ignored, ...description } = await describeFile(path.join(filename, name));
-        entries.push({ name, ...description });
-      }
+        return { name, ...description };
+      }));
+      // Drain every admitted descendant, then preserve the serial path's first
+      // failure, including arbitrary falsy reasons, in canonical name order.
+      const failed = settled.find(result => result.status === 'rejected');
+      if (failed) throw failed.reason;
+      const entries = settled.map(result => result.value);
       return { filename, available: entries.every(entry => entry.available), kind: 'directory', entries,
         entriesSha256: sha256(JSON.stringify(entries)) };
     }
     if (!info.isFile()) return { filename, available: false, kind: 'unsupported-input' };
-    const bytes = await readFile(filename);
-    return { filename, available: true, kind: 'file', bytes: bytes.length, sha256: sha256(bytes) };
+    return { filename, available: true, kind: 'file', ...await fileBytes(filename) };
   } catch (error) {
-    if (error.code !== 'ENOENT') throw error;
+    if (error?.code !== 'ENOENT') throw error;
     return { filename, available: false };
   }
 }
@@ -63,6 +113,11 @@ function sameDescriptor(actual, expected) {
 
 function sameBytes(actual, expected) {
   return actual?.bytes === expected?.bytes && actual?.sha256 === expected?.sha256;
+}
+
+function independentDirectories(left, right) {
+  const outside = relative => relative === '..' || relative.startsWith('..' + path.sep) || path.isAbsolute(relative);
+  return outside(path.relative(left, right)) && outside(path.relative(right, left));
 }
 
 function validateSourceSnapshot(snapshot, manifest) {
@@ -154,7 +209,7 @@ export async function nativeBuildInputs(environment = process.env) {
     || path.resolve(environment.MEDIAMANAGER_DOTNET) !== expectedDotnet) {
     throw new Error('Native reference consumers must use the same-run runtime and isolated .NET executable.');
   }
-  const designated = await verifyDesignatedJellyfinSourcePackage();
+  const designated = await withByteRead(() => verifyDesignatedJellyfinSourcePackage());
   const inputs = [];
   const add = (filename, reason, expected = {}) => inputs.push({ filename, reason, ...expected });
   for (const input of designated.inputs) add(input.filename, 'designated-source-package', { bytes: input.bytes, sha256: input.sha256 });
@@ -324,39 +379,94 @@ async function describeDesignatedSource(root, manifest) {
   try {
     const rootInfo = await lstat(root);
     if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink()) throw new Error('root is not a physical directory');
-    const files = [];
-    for (const expected of manifest.files) {
+    // Source members share the same I/O permits as every other live root.
+    // Drain them all and select failures in the sealed manifest's order.
+    const settled = await Promise.allSettled(manifest.files.map(async expected => {
       let filename = root;
+      let info;
       for (const part of expected.path.split('/')) {
         filename = path.join(filename, part);
-        if ((await lstat(filename)).isSymbolicLink()) throw new Error(`path traverses a symbolic link: ${expected.path}`);
+        info = await lstat(filename);
+        if (info.isSymbolicLink()) throw new Error(`path traverses a symbolic link: ${expected.path}`);
       }
-      const info = await lstat(filename);
-      if (!info.isFile()) throw new Error(`member is not an ordinary file: ${expected.path}`);
-      const bytes = await readFile(filename), actual = { path: expected.path, bytes: bytes.length, sha256: sha256(bytes) };
+      if (!info?.isFile()) throw new Error(`member is not an ordinary file: ${expected.path}`);
+      const actual = { path: expected.path, ...await fileBytes(filename) };
       if (actual.bytes !== expected.size || actual.sha256 !== expected.sha256) {
         throw new Error(`member bytes differ: ${expected.path}`);
       }
-      files.push(actual);
-    }
+      return actual;
+    }));
+    const failed = settled.find(result => result.status === 'rejected');
+    if (failed) throw failed.reason;
+    const files = settled.map(result => result.value);
     return { filename: root, available: true, kind: 'designated-source-files', files,
       entriesSha256: sha256(JSON.stringify(files)) };
   } catch (error) {
-    throw new Error(`Native designated source live byte tree differs from its sealed manifest: ${error.message}`, { cause: error });
+    let detail = '';
+    try { if (typeof error?.message === 'string') detail = `: ${error.message}`; }
+    catch { /* A diagnostic cannot replace the actual input failure. */ }
+    throw new Error(`Native designated source live byte tree differs from its sealed manifest${detail}`, { cause: error });
   }
 }
 
-/** Verify live same-run byte roots before launch. Uploaded manifests still omit the roots required for offline replay. */
+/** Verify the complete live build closure at producer and strict-run boundaries. */
 export async function verifyNativeBuild(environment = process.env) {
-  const build = await nativeBuildInputs(environment);
-  if (!build.receipt || !build.manifest) throw new Error('Native build receipt or runtime manifest is missing.');
+  return observeExecutionPhase('native.verify', () => verifyNativeBuildSnapshot(environment), { environment });
+}
+
+function runtimeInputs(build) {
+  return build.inputs.flatMap(input => input.filename === build.sdkRoot ? [
+    { filename: path.join(build.sdkRoot, path.basename(build.receipt.commands[0].executable)), reason: 'same-run-dotnet-executable' },
+    { filename: path.join(build.sdkRoot, 'host'), reason: 'same-run-dotnet-host' },
+    { filename: path.join(build.sdkRoot, 'shared'), reason: 'same-run-dotnet-shared-frameworks' },
+  ] : input.filename === build.nugetRoot ? [] : [input]);
+}
+
+async function describeNativeInputs(build, inputs, environment) {
   const descriptions = new Map();
-  for (const input of build.inputs) {
-    if (!descriptions.has(input.filename)) descriptions.set(input.filename, await describeFile(input.filename));
+  // One invocation owns one fresh byte snapshot per physical path. A complete
+  // tree read already supplied its children: use those exact descriptors for
+  // the separately declared members without reading the same files twice.
+  // Keep this index separate from the canonical, input-ordered descriptors.
+  const treeDescriptions = new Map();
+  const independentTreeReads = new Map();
+  const indexTree = (filename, entry) => {
+    if (entry.kind !== 'directory') return;
+    for (const { name, ...description } of entry.entries) {
+      const child = path.join(filename, name), value = { filename: child, ...description };
+      treeDescriptions.set(child, value);
+      indexTree(child, value);
+    }
+  };
+  const readInput = input => observeExecutionPhase('native.verify.input', () => describeFile(input.filename),
+    { environment, inputKind: input.reason });
+  for (const [index, input] of inputs.entries()) {
+    if (!descriptions.has(input.filename)) {
+      const next = inputs[index + 1];
+      if (input.filename === build.sdkRoot && next?.filename === build.nugetRoot
+        && input.reason === 'same-run-dotnet-sdk' && next.reason === 'same-run-nuget-packages'
+        && !treeDescriptions.has(input.filename) && !treeDescriptions.has(next.filename)
+        && independentDirectories(input.filename, next.filename)) {
+        // Both roots share the bounded file reader. Drain both admitted roots
+        // before selecting a failure; the canonical input order stays below.
+        const pair = [input, next], settled = await Promise.allSettled(pair.map(readInput));
+        for (const [position, result] of settled.entries()) independentTreeReads.set(pair[position].filename, result);
+      }
+      const completed = independentTreeReads.get(input.filename);
+      if (completed?.status === 'rejected') throw completed.reason;
+      const description = treeDescriptions.get(input.filename)
+        ?? completed?.value ?? await readInput(input);
+      descriptions.set(input.filename, description);
+      indexTree(input.filename, description);
+    }
     const actual = descriptions.get(input.filename);
     if (!actual.available || (input.sha256 && actual.sha256 !== input.sha256)
       || input.bytes != null && actual.bytes !== input.bytes) throw new Error(`Native build input is missing or changed: ${input.filename}`);
   }
+  return { descriptions, treeDescriptions };
+}
+
+function verifyMembership(build, descriptions) {
   const membership = (directory, expected, label) => {
     const files = flattenedDescriptors(descriptions.get(directory)).map(file => file.path).sort();
     if (!same(files, [...expected].sort())) throw new Error(`Native ${label} membership differs from its build manifest.`);
@@ -364,14 +474,58 @@ export async function verifyNativeBuild(environment = process.env) {
   membership(build.runtime, build.manifest.files.map(file => file.path), 'runtime');
   membership(build.receipts, build.receiptFiles, 'receipt');
   membership(build.sourceOfferRoot, build.sourceOfferFiles, 'source offer');
+}
+
+function runtimeIdentity(build, { descriptions, treeDescriptions }) {
+  const filenames = [...new Set(runtimeInputs(build).map(input => input.filename))];
+  const identityEntries = filenames.map(filename => descriptions.get(filename) ?? treeDescriptions.get(filename));
+  if (identityEntries.some(entry => !entry?.available)) throw new Error('Native execution byte descriptors are incomplete.');
+  const byFilename = new Map(identityEntries.map(entry => [entry.filename, entry]));
+  const dotnetName = path.basename(build.receipt.commands[0].executable);
+  const dotnet = byFilename.get(path.join(build.sdkRoot, dotnetName));
+  const host = byFilename.get(path.join(build.sdkRoot, 'host'));
+  const shared = byFilename.get(path.join(build.sdkRoot, 'shared'));
+  if (dotnet?.kind !== 'file' || host?.kind !== 'directory' || shared?.kind !== 'directory') {
+    throw new Error('Native execution requires the same-run physical .NET executable, host and shared frameworks.');
+  }
+  const sdkFiles = descriptorIndex(build.sdkAfter.files, 'SDK');
+  const expected = [...sdkFiles.values()].filter(file => file.path === dotnetName
+    || file.path.startsWith('host/') || file.path.startsWith('shared/'));
+  const current = [{ path: dotnetName, bytes: dotnet.bytes, sha256: dotnet.sha256 },
+    ...flattenedDescriptors(host, 'host'), ...flattenedDescriptors(shared, 'shared')];
+  if (!expected.some(file => file.path.startsWith('host/')) || !expected.some(file => file.path.startsWith('shared/'))
+    || !sameFileTree(current, expected)) {
+    throw new Error('Native .NET execution byte tree differs from its same-run SDK manifest.');
+  }
+  return { runtimeIdentitySha256: sha256(JSON.stringify(identityEntries)), runtimeIdentityEntries: identityEntries,
+    runtimeEntriesSha256: descriptions.get(build.runtime).entriesSha256 };
+}
+
+/** Fresh execution bytes and source/build receipts; this does not verify live SDK or NuGet build inputs. */
+export async function verifyNativeRuntime(environment = process.env) {
+  return observeExecutionPhase('native.runtime.verify', async () => {
+    const build = await nativeBuildInputs(environment);
+    if (!build.receipt || !build.manifest) throw new Error('Native build receipt or runtime manifest is missing.');
+    const snapshot = await describeNativeInputs(build, runtimeInputs(build), environment);
+    verifyMembership(build, snapshot.descriptions);
+    return { ...build, ...runtimeIdentity(build, snapshot) };
+  }, { environment });
+}
+
+async function verifyNativeBuildSnapshot(environment) {
+  const build = await nativeBuildInputs(environment);
+  if (!build.receipt || !build.manifest) throw new Error('Native build receipt or runtime manifest is missing.');
+  const snapshot = await describeNativeInputs(build, build.inputs, environment), { descriptions } = snapshot;
+  verifyMembership(build, descriptions);
   const currentSdk = flattenedDescriptors(descriptions.get(build.sdkRoot));
   const currentNuget = flattenedDescriptors(descriptions.get(build.nugetRoot));
   if (!sameFileTree(currentSdk, build.sdkAfter.files)) throw new Error('Native .NET SDK live byte tree differs from its same-run manifest.');
   if (!sameFileTree(currentNuget, build.nugetAfterBuild.files)) throw new Error('Native NuGet live byte tree differs from its same-run manifest.');
-  const currentSource = await describeDesignatedSource(build.sourceRoot, build.designated.manifest);
+  const currentSource = await observeExecutionPhase('native.verify.source',
+    () => describeDesignatedSource(build.sourceRoot, build.designated.manifest), { environment });
   const identityEntries = [...descriptions.values(), currentSource];
   return { ...build, identitySha256: sha256(JSON.stringify(identityEntries)), identityEntries,
-    runtimeEntriesSha256: descriptions.get(build.runtime).entriesSha256,
+    ...runtimeIdentity(build, snapshot),
     sourceEntriesSha256: currentSource.entriesSha256,
     sdkEntriesSha256: descriptions.get(build.sdkRoot).entriesSha256,
     nugetEntriesSha256: descriptions.get(build.nugetRoot).entriesSha256 };

@@ -1,0 +1,71 @@
+{
+  "title": "Sintel official complete Blu-ray ISO",
+  "publisher": "Blender Foundation / Durian Open Movie Project",
+  "publisherUrl": "https://download.blender.org/durian/movies/",
+  "sharingUrl": "https://durian.blender.org/sharing/",
+  "format": "Official complete Sintel Blu-ray ISO; original UDF/BDMV disc image",
+  "scope": "Complete unchanged official open movie disc with all published members; no claim for commercial BD-ROM, encryption, BD-J/menu decoding, 3D or every Blu-ray profile.",
+  "authorization": "The official movie and sharing pages license the Durian project results under Creative Commons Attribution 3.0 and require the entire credits scroll when distributing or showing the movie. The original ISO and all extracted members remain unchanged on the CI runner; logos and unrelated trademarks are excluded from the stated grant.",
+  "movies": [
+    {
+      "title": "Sintel",
+      "license": "CC-BY-3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "primarySource": "https://durian.blender.org/about/",
+      "primaryPageObservedSha256": "65000dc376b0d9b8d0ce66c23b289d85a935471828be613d36878b09e10eff74",
+      "sharingSource": "https://durian.blender.org/sharing/",
+      "attribution": "(c) copyright Blender Foundation | durian.blender.org / www.sintel.org; include the entire original credits scroll."
+    }
+  ],
+  "iso": {
+    "url": "https://download.blender.org/durian/movies/Sintel-Bluray.iso",
+    "filename": "Sintel-Bluray.iso",
+    "bytes": 1593180160,
+    "md5": "edef70074bc275190a016f9eaeb478dd",
+    "md5Url": "https://download.blender.org/durian/movies/Sintel-Bluray.iso.md5",
+    "sha256": "693ac48a9ecc53071d014ef485d7850f916abef624c8dafa1d5801d828158c69",
+    "sha256Status": "Frozen from the complete original ISO's stream and independent full disk reads in CI run 40512414913, candidate bbf6a29a9a5c9513ab8c9886a1f74c028d22a967; unmodified small evidence is retained in first-sintel-ci/.",
+    "allowedHosts": [
+      "download.blender.org"
+    ]
+  },
+  "metadata": [
+    {
+      "path": "metadata/sintel-directory.html",
+      "purpose": "Original official movie directory",
+      "url": "https://download.blender.org/durian/movies/",
+      "bytes": 1787,
+      "sha256": "21aae3fa180ba812d4d1162b382313a74caae3d0938eef2c503ab9ab450c425d"
+    },
+    {
+      "path": "metadata/Sintel-Bluray.iso.md5",
+      "purpose": "Original adjacent publisher MD5",
+      "url": "https://download.blender.org/durian/movies/Sintel-Bluray.iso.md5",
+      "bytes": 59,
+      "sha256": "ffa70a058c3325ccdf2bc7f48b4ad9c097efd46b04c7155b55c627554663a36f"
+    },
+    {
+      "path": "metadata/sintel-about.html",
+      "purpose": "Original official movie permission",
+      "url": "https://durian.blender.org/about/",
+      "bytes": 30011,
+      "sha256": "65000dc376b0d9b8d0ce66c23b289d85a935471828be613d36878b09e10eff74"
+    },
+    {
+      "path": "metadata/sintel-sharing.html",
+      "purpose": "Original official sharing and credits terms",
+      "url": "https://durian.blender.org/sharing/",
+      "bytes": 8824,
+      "sha256": "c1d6336bc71643d70ff05a6dd52c62b1e01663c5ee6bc86a9f34061597d5465c"
+    },
+    {
+      "path": "metadata/sintel-sharing.http.json",
+      "purpose": "Sharing page original HTTP receipt",
+      "url": "https://durian.blender.org/sharing/",
+      "bytes": 777,
+      "sha256": "5b18c4d6688ebc9414b557076f648af5c603b3fe7a909653b159099a537b9680"
+    }
+  ],
+  "downloadTimeoutMinutes": 45,
+  "availability": "Official HTTPS source identified by its complete 1593180160 byte size and adjacent original publisher MD5; CI acquisition and full UDF/BDMV verification remain required."
+}

@@ -4,6 +4,8 @@ import { tableDefinition } from '../../src/database/model.js';
 import { decodeValue } from '../../src/database/values.js';
 import { nativeTextBytes } from '../../src/database/native-text.js';
 import { idKey } from '../../src/library/records.js';
+import { projectItemBody } from './http-body-projection.js';
+import { projectFixtureGuid, projectItemDataIdentities } from './fixture-identity-projection.js';
 
 const guid = value => {
   const key = idKey(value);
@@ -11,14 +13,12 @@ const guid = value => {
   return `${key.slice(0, 8)}-${key.slice(8, 12)}-${key.slice(12, 16)}-${key.slice(16, 20)}-${key.slice(20)}`.toUpperCase();
 };
 const identifierFields = new Set(['Id', 'ParentId', 'TopParentId', 'DisplayPreferencesId', 'SeriesId', 'SeasonId', 'AlbumId']);
-export function projectIdentifiers(value, mappings, field) {
-  if (Array.isArray(value)) return value.map(entry => projectIdentifiers(entry, mappings, field));
-  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value)
-    .map(([key, entry]) => [key, projectIdentifiers(entry, mappings, key)]));
-  if (identifierFields.has(field) && typeof value === 'string' && mappings.has(idKey(value))) {
-    return idKey(mappings.get(idKey(value)));
-  }
-  return value;
+export function projectIdentifiers(value, mappings) {
+  return projectItemBody(value, { date: value => value, identity: (value, { field }) => {
+    if (!identifierFields.has(field)) return value;
+    const projected = projectFixtureGuid(value, mappings);
+    return projected === value ? value : idKey(projected);
+  } });
 }
 
 export function projectNativeByNameCandidateInput(input) {
@@ -44,13 +44,6 @@ export async function seedNativeByNameFilterInput({ database, fixture, programDa
         : path.join(programDataPath, 'library-content', item.key);
     pathMappings.set(source.Path, location);
   }
-  const projectValue = value => {
-    if (Array.isArray(value)) return value.map(projectValue);
-    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, projectValue(entry)]));
-    if (typeof value === 'string') return pathMappings.get(value)
-      ?? (scenario.identifiers.has(idKey(value)) ? idKey(scenario.identifiers.get(idKey(value))) : value);
-    return value;
-  };
   const columns = tableDefinition('BaseItems').columns;
   await database.transaction(async connection => {
     for (const item of fixture.items) {
@@ -63,7 +56,7 @@ export async function seedNativeByNameFilterInput({ database, fixture, programDa
         let value = source[column.name];
         if (value != null && column.clrType.replace('?', '') === 'Guid') value = guid(scenario.identifiers.get(idKey(value)) ?? value);
         else if (column.name === 'Path') value = pathMappings.get(value) ?? value;
-        else if (column.name === 'Data' && value != null) value = JSON.stringify(projectValue(JSON.parse(value)));
+        else if (column.name === 'Data' && value != null) value = projectItemDataIdentities(value, source.Type, scenario.identifiers, { paths: pathMappings });
         else value = decodeValue(column, column.type === 'TEXT' && value !== null ? nativeTextBytes(value) : value, 'postgres');
         return [column.name, value];
       }));

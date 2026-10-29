@@ -10,6 +10,7 @@ import { describeFile } from '../validation/inventory.js';
 import { validationExecutable } from '../validation/paths.js';
 import { prepareNativeApplicationData, resolveNativeTools, verifyNativeProcessInputs } from './native-process-inputs.js';
 import { stopNativeReference } from './native-shutdown.js';
+import { observeExecutionPhase } from '../validation/execution-diagnostics.js';
 
 /** A fresh clone of this workflow's stopped instance; no historical identity fallback. */
 export async function currentNativeReference({ fixtureUserId } = {}) {
@@ -48,7 +49,9 @@ export async function currentNativeReference({ fixtureUserId } = {}) {
     preparation: {
       kind: 'current-designated-source-http', initializedFromEmpty: true, stopped: true,
       nativeServerId: instance.initialization.serverId,
-      fixtureUserId, actualUserId: device.UserId, buildIdentitySha256: build.identitySha256,
+      fixtureUserId, actualUserId: device.UserId, buildIdentitySha256: instance.initialization.build.identitySha256,
+      buildIdentitySource: 'same-run-initialization-full-build-verification',
+      runtimeIdentitySha256: build.runtimeIdentitySha256,
       inputs: instance.inputs, historicalRecordingReused: false, credentialsRecorded: false,
     },
     async sourceBindings(sourcePaths) {
@@ -61,33 +64,35 @@ export async function currentNativeReference({ fixtureUserId } = {}) {
       }));
     },
     async prepareClone(referenceRoot, port) {
-      const rebase = value => value.replaceAll(sourceRoot.replaceAll('\\', '\\\\'), referenceRoot.replaceAll('\\', '\\\\'))
-        .replaceAll(sourceRoot.replaceAll('\\', '/'), referenceRoot.replaceAll('\\', '/')).replaceAll(sourceRoot, referenceRoot);
-      async function visit(directory) {
-        for (const entry of await readdir(directory, { withFileTypes: true })) {
-          const filename = path.join(directory, entry.name);
-          if (entry.isDirectory()) await visit(filename);
-          else if (/\.(?:xml|json)$/iu.test(entry.name)) {
-            let value = rebase(await readFile(filename, 'utf8'));
-            if (entry.name.toLowerCase() === 'network.xml') value = value
-              .replace(/<(InternalHttpPort|PublicHttpPort)>\d+<\/\1>/gu, (_, name) => `<${name}>${port}</${name}>`)
-              .replace(/<AutoDiscovery>true<\/AutoDiscovery>/gu, '<AutoDiscovery>false</AutoDiscovery>');
-            await writeFile(filename, value);
+      return observeExecutionPhase('native.prepare-clone', async () => {
+        const rebase = value => value.replaceAll(sourceRoot.replaceAll('\\', '\\\\'), referenceRoot.replaceAll('\\', '\\\\'))
+          .replaceAll(sourceRoot.replaceAll('\\', '/'), referenceRoot.replaceAll('\\', '/')).replaceAll(sourceRoot, referenceRoot);
+        async function visit(directory) {
+          for (const entry of await readdir(directory, { withFileTypes: true })) {
+            const filename = path.join(directory, entry.name);
+            if (entry.isDirectory()) await visit(filename);
+            else if (/\.(?:xml|json)$/iu.test(entry.name)) {
+              let value = rebase(await readFile(filename, 'utf8'));
+              if (entry.name.toLowerCase() === 'network.xml') value = value
+                .replace(/<(InternalHttpPort|PublicHttpPort)>\d+<\/\1>/gu, (_, name) => `<${name}>${port}</${name}>`)
+                .replace(/<AutoDiscovery>true<\/AutoDiscovery>/gu, '<AutoDiscovery>false</AutoDiscovery>');
+              await writeFile(filename, value);
+            }
           }
         }
-      }
-      await visit(path.join(referenceRoot, 'config'));
-      const clone = new DatabaseSync(path.join(referenceRoot, 'data', 'data', 'jellyfin.db'));
-      try {
-        // Relocate only existing instance paths; synthetic media identities stay literal.
-        for (const item of clone.prepare('SELECT "Id", "Path", "Data" FROM "BaseItems"').all()) {
-          const itemPath = item.Path == null ? null : rebase(item.Path);
-          const data = item.Data == null ? null : rebase(item.Data);
-          if (itemPath !== item.Path || data !== item.Data) clone.prepare('UPDATE "BaseItems" SET "Path" = ?, "Data" = ? WHERE "Id" = ?')
-            .run(itemPath, data, item.Id);
-        }
-      } finally { clone.close(); }
-      applicationData = await prepareNativeApplicationData(referenceRoot);
+        await visit(path.join(referenceRoot, 'config'));
+        const clone = new DatabaseSync(path.join(referenceRoot, 'data', 'data', 'jellyfin.db'));
+        try {
+          // Relocate only existing instance paths; synthetic media identities stay literal.
+          for (const item of clone.prepare('SELECT "Id", "Path", "Data" FROM "BaseItems"').all()) {
+            const itemPath = item.Path == null ? null : rebase(item.Path);
+            const data = item.Data == null ? null : rebase(item.Data);
+            if (itemPath !== item.Path || data !== item.Data) clone.prepare('UPDATE "BaseItems" SET "Path" = ?, "Data" = ? WHERE "Id" = ?')
+              .run(itemPath, data, item.Id);
+          }
+        } finally { clone.close(); }
+        applicationData = await prepareNativeApplicationData(referenceRoot);
+      });
     },
     start({ referenceRoot, outputRoot, label, origin }) {
       assert.ok(applicationData, 'Prepare the isolated clone before starting the reference.');
@@ -137,7 +142,8 @@ export async function currentNativeReference({ fixtureUserId } = {}) {
       await verifyNativeProcessInputs({ executables: tools.executables, ...applicationData });
       const after = await nativeInstanceInputs();
       assert.deepEqual(after.inputs, instance.inputs, 'The current stopped input instance is immutable.');
-      assert.equal(after.build.identitySha256, build.identitySha256);
+      assert.equal(after.initialization.build.identitySha256, instance.initialization.build.identitySha256);
+      assert.equal(after.build.runtimeIdentitySha256, build.runtimeIdentitySha256);
     },
   };
 }

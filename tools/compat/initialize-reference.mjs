@@ -124,6 +124,7 @@ try {
     report = { schemaVersion: 1, createdAt: new Date().toISOString(), root, port, base, initializedFromEmpty: true, credentialsRecorded: false,
       initializer, nativeProcessInputs, executables, runtimeEnvironment, subtitleEditDataDirectory,
       build: { root: build.root, identitySha256: build.identitySha256,
+        runtimeIdentitySha256: build.runtimeIdentitySha256,
         source: build.receipt.source, commit: build.receipt.commit, runId: build.receipt.runId, runAttempt: build.receipt.runAttempt,
         runtimeEntriesSha256: build.runtimeEntriesSha256, runtimeUnchanged: true },
       dotnet, dll, ffmpeg, serverId: info.Id, version: info.Version, observations,

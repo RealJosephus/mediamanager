@@ -1,14 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import fs from 'node:fs';
+import { mkdir, mkdtemp, readFile, rename, rm, stat, symlink, utimes, writeFile } from 'node:fs/promises';
+import { syncBuiltinESMExports } from 'node:module';
 import path from 'node:path';
 import { inflateRawSync } from 'node:zlib';
 import { applyInputIdentity, ciExecutionArguments, ciProfile, ciTestConcurrency, classify, provisionedServicesFor, restrictToRequested, skipGuards } from '../../tools/ci/scope.js';
 import { captureInputIdentity, executionManifestContract, executionManifestReferences, inputsUnchanged } from '../../tools/validation/inputs.js';
 import { designatedJellyfinRepository, verifyDesignatedJellyfinSourcePackage } from '../../tools/validation/designated-jellyfin-source.js';
 import { repositoryRoot, validationPath } from '../../tools/validation/paths.js';
-import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
+import { nativeBuildInputs, verifyNativeBuild, verifyNativeRuntime } from '../../tools/validation/native-build-inputs.js';
+import { describeFile } from '../../tools/validation/inventory.js';
 
 const ownPath = 'tests/validation/ci-scope.test.js';
 const otherPath = 'tests/core/password.test.js';
@@ -177,7 +180,7 @@ test('CI statically resolves platform and provisioned-service guards without exe
 
 test('CI selection retains provisioned dependencies when the current environment has no executable or service', async () => {
   const classification = await classify({ dependencies: { entries: [entry(ownPath, {
-    services: ['postgres', 'dotnet'], tools: ['dotnet', 'ffmpeg', 'ffprobe', 'git'],
+    services: ['postgres', 'dotnet'], tools: ['dotnet', 'ffmpeg', 'ffprobe', 'git', 'tar'],
   })] }, tracked: new Set([ownPath]), environment: {} });
   assert.equal(classification.records[0].selected, true);
   const errors = applyInputIdentity(classification, { entries: [{ filename: path.join(repositoryRoot, 'node_modules'),
@@ -245,6 +248,28 @@ test('CI AList provisioning requires an explicit API-host promise and cannot nar
   assert.equal(promised.records[0].selected, true, 'failed AList supply stays an infrastructure error');
   await assert.rejects(captureInputIdentity({ dependencies, selected: [ownPath], environment,
     preflight: { ready: true, services: [], tools: [] } }), /requires its build root and executable path/u);
+});
+
+test('CI original DVD supply remains selected when promised and requires a real native instance', async () => {
+  const dependencies = { entries: [entry(ownPath, { services: ['dvdReference'] })] }, tracked = new Set([ownPath]);
+  const disabled = await classify({ dependencies, tracked, environment: { MEDIAMANAGER_TEST_DVD_REFERENCE: '/arbitrary/receipt.json' } });
+  assert.equal(disabled.records[0].selected, false);
+  assert.throws(() => provisionedServicesFor({ MEDIAMANAGER_CI_DVD_REFERENCE: 'true' }), /requires native instance/u);
+  const environment = { MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true', MEDIAMANAGER_CI_NATIVE_INSTANCE: 'true', MEDIAMANAGER_CI_DVD_REFERENCE: 'true' };
+  assert.deepEqual(provisionedServicesFor(environment), ['postgres', 'dotnet', 'jellyfinDll', 'nativeInstance', 'dvdReference']);
+  const promised = await classify({ dependencies, tracked, environment });
+  assert.equal(promised.records[0].selected, true, 'a missing promised DVD must fail real input validation instead of excluding its consumer');
+});
+
+test('CI complete Blu-ray supply requires its explicit promise and current native instance', async () => {
+  const dependencies = { entries: [entry(ownPath, { services: ['blurayReference'] })] }, tracked = new Set([ownPath]);
+  const disabled = await classify({ dependencies, tracked, environment: { MEDIAMANAGER_TEST_BLURAY_REFERENCE: '/old/receipt.json' } });
+  assert.equal(disabled.records[0].selected, false);
+  assert.throws(() => provisionedServicesFor({ MEDIAMANAGER_CI_BLURAY_REFERENCE: 'true' }), /requires native instance/u);
+  const environment = { MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true', MEDIAMANAGER_CI_NATIVE_INSTANCE: 'true', MEDIAMANAGER_CI_BLURAY_REFERENCE: 'true' };
+  assert.deepEqual(provisionedServicesFor(environment), ['postgres', 'dotnet', 'jellyfinDll', 'nativeInstance', 'blurayReference']);
+  const promised = await classify({ dependencies, tracked, environment });
+  assert.equal(promised.records[0].selected, true, 'A promised missing disc stays an actual input failure instead of disappearing from scope.');
 });
 
 test('CI native instance supply is explicit, depends on the build and never supplies the historical SQLite fixture', async () => {
@@ -342,7 +367,8 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   const sourceRoot = path.join(root, 'source');
   await extractOrdinaryZip(designated.attachments.archive.filename, designated.package.prefix, sourceRoot);
   const runtimeFiles = [await write('runtime', 'jellyfin.dll', 'new same-run assembly'),
-    await write('runtime', 'MediaBrowser.Providers.dll', 'new same-run dependency')];
+    await write('runtime', 'MediaBrowser.Providers.dll', 'new same-run dependency'),
+    await write('runtime', 'runtimes/controlled/native/library.bin', 'new same-run nested dependency')];
   const runtimeManifestText = files => JSON.stringify({ files });
   const runtimeManifest = await write('receipts', 'runtime-manifest.json', runtimeManifestText(runtimeFiles));
   const snapshot = JSON.stringify({ files: designated.manifest.files.map(file => ({ path: file.path, bytes: file.size,
@@ -353,10 +379,18 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   const matrixOs = { win32: 'windows-2025', linux: 'ubuntu-24.04', darwin: 'macos-15' }[process.platform];
   const architecture = process.arch === 'arm64' ? 'ARM64' : 'X64';
   const dotnetName = process.platform === 'win32' ? 'dotnet.exe' : 'dotnet';
+  const chunkedBytes = Buffer.alloc(768 * 1024 + 19);
+  for (let index = 0; index < chunkedBytes.length; index += 1) chunkedBytes[index] = index % 251;
   const sdkFiles = [await write('sdk', dotnetName, 'controlled dotnet executable'),
-    await write('sdk', 'LICENSE.txt', 'controlled SDK license')].sort((left, right) => left.path.localeCompare(right.path));
+    await write('sdk', 'LICENSE.txt', 'controlled SDK license'),
+    await write('sdk', 'host/fxr/10.0.14/hostfxr.bin', 'controlled framework resolver'),
+    await write('sdk', 'shared/Microsoft.NETCore.App/10.0.14/hostpolicy.bin', 'controlled runtime host'),
+    await write('sdk', 'shared/Microsoft.AspNetCore.App/10.0.14/framework.dll', 'controlled shared framework'),
+    await write('sdk', 'sdk/10.0.401/managed-library.bin', chunkedBytes)]
+    .sort((left, right) => left.path.localeCompare(right.path));
   const nugetFiles = [await write('nuget-packages', 'controlled-package.1.0.0.nupkg', 'controlled NuGet package'),
-    await write('nuget-packages', 'controlled-package.1.0.0.nupkg.sha512', 'controlled NuGet digest')]
+    await write('nuget-packages', 'controlled-package.1.0.0.nupkg.sha512', 'controlled NuGet digest'),
+    await write('nuget-packages', 'controlled-package/1.0.0/lib/net10.0/library.dll', Buffer.from(chunkedBytes).reverse())]
     .sort((left, right) => left.path.localeCompare(right.path));
   const tree = (directory, kind, files) => JSON.stringify({ schemaVersion: 1, root: path.join(root, directory), kind,
     scope: 'same-run-byte-identity-only', files });
@@ -435,11 +469,273 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   assert.equal(nativeInputs(await capture([otherPath])).length, 0, 'unselected native consumers do not require native artifacts');
   const classification = await classify({ dependencies, tracked: new Set([ownPath, otherPath]), environment });
   const before = await capture([ownPath]), bound = nativeInputs(before);
-  assert.match((await verifyNativeBuild(environment)).identitySha256, /^[a-f0-9]{64}$/u);
+  const verified = await verifyNativeBuild(environment);
+  assert.match(verified.identitySha256, /^[a-f0-9]{64}$/u);
+  const runtime = await verifyNativeRuntime(environment);
+  assert.equal(runtime.runtimeIdentitySha256, verified.runtimeIdentitySha256,
+    'The producer and launch verifier bind the same actual execution bytes and source/build receipts.');
+  const serialRuntimeEntries = [];
+  for (const value of runtime.runtimeIdentityEntries) serialRuntimeEntries.push(await describeFile(value.filename));
+  assert.equal(JSON.stringify(runtime.runtimeIdentityEntries), JSON.stringify(serialRuntimeEntries));
+  assert.equal(runtime.runtimeIdentitySha256, digest(JSON.stringify(serialRuntimeEntries)));
+  const strictSource = before.entries.find(value => value.filename === sourceRoot);
+  assert.equal(strictSource.kind, 'designated-source-files');
+  assert.deepEqual(strictSource.files, designated.manifest.files.map(file => ({ path: file.path, bytes: file.size, sha256: file.sha256 })));
+  const build = await nativeBuildInputs(environment);
+  assert.deepEqual(verified.identityEntries.map(value => value.filename),
+    [...new Set(build.inputs.map(input => input.filename)), build.sourceRoot],
+    'Parallel tree reads retain the canonical declared-input order.');
+  const serialEntries = [];
+  for (const value of verified.identityEntries) serialEntries.push(value.kind === 'designated-source-files'
+    ? value : await describeFile(value.filename));
+  assert.equal(JSON.stringify(verified.identityEntries), JSON.stringify(serialEntries),
+    'The unchanged serial reader yields the same complete canonical descriptor bytes.');
+  assert.equal(verified.identitySha256, digest(JSON.stringify(serialEntries)));
+  const nested = runtimeFiles[2], nestedFilename = path.join(root, 'runtime', nested.path);
+  assert.equal(JSON.stringify(verified.identityEntries.find(value => value.filename === nestedFilename)),
+    JSON.stringify({ filename: nestedFilename, available: true, kind: 'file', bytes: nested.bytes, sha256: nested.sha256 }),
+    'A declared tree member retains the canonical descriptor bytes used by the native build identity.');
+  assert.equal((await verifyNativeBuild(environment)).identitySha256, verified.identitySha256);
+  const runtimeMember = path.join(root, 'runtime/MediaBrowser.Providers.dll');
+  const runtimeBytes = await readFile(runtimeMember), runtimeStat = await stat(runtimeMember);
+  const changedSameSize = Buffer.from(runtimeBytes); changedSameSize[0] ^= 1;
+  await writeFile(runtimeMember, changedSameSize); await utimes(runtimeMember, runtimeStat.atime, runtimeStat.mtime);
+  await assert.rejects(verifyNativeBuild(environment), /input is missing or changed/u,
+    'A later verification reads actual bytes even when a prior snapshot has the same size and timestamp.');
+  await assert.rejects(verifyNativeRuntime(environment), /input is missing or changed/u);
+  await writeFile(runtimeMember, runtimeBytes); await utimes(runtimeMember, runtimeStat.atime, runtimeStat.mtime);
+  assert.equal((await verifyNativeBuild(environment)).identitySha256, verified.identitySha256);
+  for (const filename of [dotnet, path.join(root, 'sdk/host/fxr/10.0.14/hostfxr.bin'),
+    path.join(root, 'sdk/shared/Microsoft.NETCore.App/10.0.14/hostpolicy.bin'),
+    path.join(root, 'sdk/shared/Microsoft.AspNetCore.App/10.0.14/framework.dll')]) {
+    const clock = new Date('2026-10-23T00:00:00.000Z'); await utimes(filename, clock, clock);
+    const original = await readFile(filename), info = await stat(filename), changed = Buffer.from(original);
+    changed[0] ^= 1;
+    try {
+      await writeFile(filename, changed); await utimes(filename, info.atime, info.mtime);
+      const mutated = await stat(filename);
+      assert.equal(mutated.size, info.size); assert.equal(mutated.mtimeMs, info.mtimeMs);
+      await assert.rejects(verifyNativeRuntime(environment), /execution byte tree differs/u,
+        'Every launch rechecks the actual host and shared framework bytes despite unchanged size and mtime.');
+    } finally { await writeFile(filename, original); await utimes(filename, info.atime, info.mtime); }
+    assert.equal((await verifyNativeRuntime(environment)).runtimeIdentitySha256, runtime.runtimeIdentitySha256);
+  }
+  const hostDirectory = path.join(root, 'sdk/host'), relocatedHost = path.join(root, 'controlled-host');
+  await rename(hostDirectory, relocatedHost);
+  try {
+    await symlink(relocatedHost, hostDirectory, process.platform === 'win32' ? 'junction' : 'dir');
+    await assert.rejects(verifyNativeRuntime(environment), /input is missing or changed/u,
+      'The launch verifier rejects an escaping host directory link instead of hashing its target.');
+  } finally {
+    await rm(hostDirectory, { force: true });
+    await rename(relocatedHost, hostDirectory);
+  }
+  assert.equal((await verifyNativeRuntime(environment)).runtimeIdentitySha256, runtime.runtimeIdentitySha256);
+  const unlistedHost = path.join(root, 'sdk/host/unlisted.bin');
+  await writeFile(unlistedHost, 'undeclared host dependency');
+  try { await assert.rejects(verifyNativeRuntime(environment), /execution byte tree differs/u); }
+  finally { await rm(unlistedHost); }
+  const sdkMember = path.join(root, 'sdk/LICENSE.txt');
+  const nugetMember = path.join(nugetRoot, 'controlled-package.1.0.0.nupkg');
+  const sdkBytes = await readFile(sdkMember), nugetBytes = await readFile(nugetMember);
+  for (const [filename, expected] of [[sdkMember, /SDK live byte tree differs/u], [nugetMember, /NuGet live byte tree differs/u],
+    [path.join(root, 'sdk/sdk/10.0.401/managed-library.bin'), /SDK live byte tree differs/u],
+    [path.join(nugetRoot, 'controlled-package/1.0.0/lib/net10.0/library.dll'), /NuGet live byte tree differs/u]]) {
+    const clock = new Date('2026-10-23T00:00:00.000Z'); await utimes(filename, clock, clock);
+    const original = await readFile(filename), info = await stat(filename), changed = Buffer.from(original);
+    changed[changed.length - 1] ^= 1;
+    await writeFile(filename, changed); await utimes(filename, info.atime, info.mtime);
+    const mutated = await stat(filename);
+    assert.equal(mutated.size, info.size); assert.equal(mutated.mtimeMs, info.mtimeMs);
+    await assert.rejects(verifyNativeBuild(environment), expected,
+      'Each independent tree reads every binary byte, including a multi-chunk tail, despite unchanged file size and timestamp.');
+    assert.equal((await verifyNativeRuntime(environment)).runtimeIdentitySha256, runtime.runtimeIdentitySha256,
+      'Build-only cache bytes are not inputs to an already built full-host execution.');
+    await assert.rejects(capture([ownPath]), expected,
+      'Strict before/after captures still verify the complete live SDK and NuGet build closure.');
+    await writeFile(filename, original); await utimes(filename, info.atime, info.mtime);
+    assert.equal((await verifyNativeBuild(environment)).identitySha256, verified.identitySha256);
+  }
+  const sdkFailure = Object.assign(new Error('Controlled SDK byte read failed.'), { code: 'EACCES', status: 503,
+    cause: false, errors: [{ code: 'SDK-LEAF', message: 'Controlled SDK cause.' }, 0, '', false, null, undefined] });
+  for (const [index, reason] of [sdkFailure, false, 0, '', null, undefined].entries()) {
+    const originalReadFile = fs.promises.readFile, originalOpen = fs.promises.open, originalLstat = fs.promises.lstat;
+    let releaseNuget, sdkReadFailed, finishNuget;
+    const nugetReleased = new Promise(resolve => { releaseNuget = resolve; });
+    const sdkFailed = new Promise(resolve => { sdkReadFailed = resolve; });
+    const nugetFinished = new Promise(resolve => { finishNuget = resolve; });
+    const completedFile = path.join(root, `drained-nuget-${index}.bin`);
+    let nugetAdmitted = false, verifierSettled = false, attempt, sdkHandle, nugetHandle;
+    fs.promises.lstat = (...args) => {
+      if (typeof args[0] === 'string' && path.resolve(args[0]) === nugetRoot) nugetAdmitted = true;
+      return originalLstat(...args);
+    };
+    fs.promises.open = async (...args) => {
+      const filename = typeof args[0] === 'string' ? path.resolve(args[0]) : null;
+      const handle = await originalOpen(...args);
+      if (filename === sdkMember || filename === nugetMember) {
+        const read = handle.read.bind(handle), close = handle.close.bind(handle), chunks = [];
+        if (filename === sdkMember) sdkHandle = handle;
+        else nugetHandle = handle;
+        handle.read = async (...readArgs) => {
+          if (filename === nugetMember) await nugetReleased;
+          const value = await read(...readArgs);
+          if (value.bytesRead === 0) {
+            if (filename === sdkMember) { sdkReadFailed(); throw reason; }
+            await writeFile(completedFile, Buffer.concat(chunks));
+            throw Object.assign(new Error('Controlled NuGet byte read failed.'), { code: 'EIO', status: 500, cause: 0 });
+          }
+          if (filename === nugetMember) chunks.push(Buffer.from(value.buffer.subarray(readArgs[1], readArgs[1] + value.bytesRead)));
+          return value;
+        };
+        if (filename === nugetMember) handle.close = async () => {
+          try { return await close(); }
+          finally { finishNuget(); }
+        };
+      }
+      return handle;
+    };
+    syncBuiltinESMExports();
+    try {
+      attempt = verifyNativeBuild(environment).then(value => {
+        verifierSettled = true; return { status: 'fulfilled', value };
+      }, error => { verifierSettled = true; return { status: 'rejected', reason: error }; });
+      await Promise.race([sdkFailed, attempt.then(result => {
+        throw new Error('The controlled SDK byte read was not reached.', { cause: result.reason });
+      })]);
+      await new Promise(resolve => setImmediate(resolve));
+      assert.equal(verifierSettled, false, 'The failed verifier still owns the admitted sibling byte read.');
+      releaseNuget();
+      const outcome = await attempt;
+      assert.equal(outcome.status, 'rejected');
+      assert.deepEqual(await originalReadFile(completedFile), nugetBytes,
+        'The sibling completed its real byte read and persisted receipt before verification rejected.');
+      for (const handle of [sdkHandle, nugetHandle]) await assert.rejects(handle.stat(), { code: 'EBADF' },
+        'The rejected verifier has already closed its real input file handles.');
+      if (index === 0) {
+        assert.deepEqual({ code: outcome.reason.code, status: outcome.reason.status, message: outcome.reason.message,
+          cause: outcome.reason.cause, errors: outcome.reason.errors },
+        { code: 'EACCES', status: 503, message: 'Controlled SDK byte read failed.', cause: false,
+          errors: [{ code: 'SDK-LEAF', message: 'Controlled SDK cause.' }, 0, '', false, null, undefined] });
+      } else assert.equal(outcome.reason, reason, 'Input-order failure selection preserves the original falsy reason.');
+    } finally {
+      releaseNuget();
+      if (attempt) await attempt;
+      if (nugetAdmitted) await nugetFinished;
+      fs.promises.open = originalOpen;
+      fs.promises.lstat = originalLstat;
+      syncBuiltinESMExports();
+    }
+    await rm(completedFile);
+    assert.deepEqual(await readFile(sdkMember), sdkBytes);
+    assert.deepEqual(await readFile(nugetMember), nugetBytes);
+    assert.equal((await verifyNativeBuild(environment)).identitySha256, verified.identitySha256);
+  }
+  {
+    const originalOpen = fs.promises.open;
+    let handle;
+    fs.promises.open = async (...args) => {
+      const file = await originalOpen(...args);
+      if (typeof args[0] === 'string' && path.resolve(args[0]) === sdkMember) {
+        handle = file;
+        const read = file.read.bind(file), close = file.close.bind(file);
+        file.read = async (...readArgs) => {
+          const value = await read(...readArgs);
+          if (value.bytesRead === 0) throw false;
+          return value;
+        };
+        file.close = async () => { await close(); throw 0; };
+      }
+      return file;
+    };
+    syncBuiltinESMExports();
+    try {
+      const outcome = await verifyNativeBuild(environment).then(value => ({ status: 'fulfilled', value }), reason => ({ status: 'rejected', reason }));
+      assert.equal(outcome.status, 'rejected');
+      assert.ok(outcome.reason instanceof AggregateError);
+      assert.deepEqual(outcome.reason.errors, [false, 0]);
+      assert.equal(outcome.reason.cause, false);
+      await assert.rejects(handle.stat(), { code: 'EBADF' }, 'A close failure remains a failure after the real descriptor closes.');
+    } finally { fs.promises.open = originalOpen; syncBuiltinESMExports(); }
+    assert.equal((await verifyNativeBuild(environment)).identitySha256, verified.identitySha256);
+  }
+  for (const files of [
+    [...runtimeFiles, runtimeFiles[0]],
+    [runtimeFiles[0], { ...runtimeFiles[1], path: '../MediaBrowser.Providers.dll' }],
+    [...runtimeFiles, { ...runtimeFiles[1], path: 'MEDIABROWSER.PROVIDERS.DLL' }],
+  ]) {
+    const invalidManifest = await write('receipts', 'runtime-manifest.json', runtimeManifestText(files));
+    await write('receipts', 'build-receipt.json', JSON.stringify({ ...receipt, runtimeManifest: invalidManifest }));
+    await assert.rejects(verifyNativeBuild(environment), /runtime byte manifest contains an invalid or case-folded duplicate file/u);
+    await assert.rejects(verifyNativeRuntime(environment), /runtime byte manifest contains an invalid or case-folded duplicate file/u);
+  }
+  await write('receipts', 'runtime-manifest.json', runtimeManifestText(runtimeFiles));
+  await write('receipts', 'build-receipt.json', JSON.stringify(receipt));
+  assert.equal((await verifyNativeBuild(environment)).identitySha256, verified.identitySha256);
   const sourceMember = designated.manifest.files[0], sourceFilename = path.join(sourceRoot, ...sourceMember.path.split('/'));
   const sourceBytes = await readFile(sourceFilename); await writeFile(sourceFilename, 'changed sealed source bytes');
   await assert.rejects(verifyNativeBuild(environment), /source live byte tree differs/u);
+  await assert.rejects(capture([ownPath]), /source live byte tree differs/u,
+    'Strict capture independently verifies the complete live designated source tree.');
+  assert.equal((await verifyNativeRuntime(environment)).runtimeIdentitySha256, runtime.runtimeIdentitySha256,
+    'An execution identity describes actual runtime bytes and the sealed source receipts, not a new source compilation.');
   await writeFile(sourceFilename, sourceBytes);
+  {
+    const sibling = path.join(sourceRoot, ...designated.manifest.files[1].path.split('/'));
+    const siblingBytes = await readFile(sibling), chunks = [], handles = new Map();
+    const originalOpen = fs.promises.open;
+    let releaseSibling, firstClosed, siblingEntered, settled = false, attempt;
+    const released = new Promise(resolve => { releaseSibling = resolve; });
+    const closed = new Promise(resolve => { firstClosed = resolve; });
+    const admitted = new Promise(resolve => { siblingEntered = resolve; });
+    fs.promises.open = async (...args) => {
+      const filename = typeof args[0] === 'string' ? path.resolve(args[0]) : null;
+      const handle = await originalOpen(...args);
+      if (filename === sourceFilename || filename === sibling) {
+        handles.set(filename, handle);
+        const read = handle.read.bind(handle), close = handle.close.bind(handle);
+        handle.read = async (...readArgs) => {
+          if (filename === sibling) { siblingEntered(); await released; }
+          const result = await read(...readArgs);
+          if (result.bytesRead === 0) {
+            if (filename === sourceFilename) throw false;
+            throw new Error('Controlled later source input failed.');
+          }
+          if (filename === sibling) chunks.push(Buffer.from(result.buffer.subarray(readArgs[1], readArgs[1] + result.bytesRead)));
+          return result;
+        };
+        if (filename === sourceFilename) handle.close = async () => { await close(); firstClosed(); throw 0; };
+      }
+      return handle;
+    };
+    syncBuiltinESMExports();
+    try {
+      attempt = verifyNativeBuild(environment).then(value => {
+        settled = true; return { status: 'fulfilled', value };
+      }, reason => { settled = true; return { status: 'rejected', reason }; });
+      await Promise.race([Promise.all([closed, admitted]), attempt.then(result => {
+        throw new Error('The controlled source byte read was not reached.', { cause: result.reason });
+      })]);
+      await new Promise(resolve => setImmediate(resolve));
+      assert.equal(settled, false, 'Source verification drains its admitted sibling before reporting failure.');
+      releaseSibling();
+      const outcome = await attempt;
+      assert.equal(outcome.status, 'rejected');
+      assert.match(outcome.reason.message, /source live byte tree differs/u);
+      assert.ok(outcome.reason.cause instanceof AggregateError);
+      assert.equal(outcome.reason.cause.cause, false);
+      assert.deepEqual(outcome.reason.cause.errors, [false, 0],
+        'The first source member retains its read and close failures in actual order.');
+      assert.deepEqual(Buffer.concat(chunks), siblingBytes);
+      for (const filename of [sourceFilename, sibling]) await assert.rejects(handles.get(filename).stat(), { code: 'EBADF' });
+    } finally {
+      releaseSibling();
+      if (attempt) await attempt;
+      fs.promises.open = originalOpen;
+      syncBuiltinESMExports();
+    }
+    assert.equal((await verifyNativeBuild(environment)).identitySha256, verified.identitySha256);
+  }
   await write('sdk', 'LICENSE.txt', 'changed SDK bytes');
   await assert.rejects(verifyNativeBuild(environment), /SDK live byte tree differs/u);
   await write('sdk', 'LICENSE.txt', 'controlled SDK license');
@@ -448,6 +744,7 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   await write('nuget-packages', 'controlled-package.1.0.0.nupkg', 'controlled NuGet package');
   await write('runtime', 'unlisted.dll', 'an unlisted runtime member');
   await assert.rejects(verifyNativeBuild(environment), /membership differs/u);
+  await assert.rejects(verifyNativeRuntime(environment), /membership differs/u);
   await rm(path.join(root, 'runtime/unlisted.dll'));
   await assert.rejects(verifyNativeBuild({ ...environment, NUGET_FALLBACK_PACKAGES: path.join(root, 'fallback') }),
     /restore isolation/u);

@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { lstat, mkdir, readFile, readdir, realpath, rename, rmdir, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
+import { executionObservation, diagnosticFixture } from '../../tools/validation/execution-diagnostics.js';
 
 const pollMilliseconds = 50;
 const publicationMilliseconds = 5000;
@@ -64,7 +65,10 @@ export async function acquireTestResource(key, {
     throw leaseError('test-resource-root-invalid', key, root, 'The test resource root must be a physical output directory.');
   }
   const directory = path.join(await realpath(root), key);
-  let unpublishedSince;
+  const diagnostic = executionObservation('test-resource', { resource: key,
+    fixture: diagnosticFixture(process.argv[1]) });
+  await diagnostic.record('requested');
+  let unpublishedSince, waitingOwner;
   for (;;) {
     signal?.throwIfAborted();
     let acquired = false;
@@ -79,6 +83,7 @@ export async function acquireTestResource(key, {
       // remains visible to the job audit; no contender may reclaim it.
       await writeFile(temporary, JSON.stringify(owner) + '\n', { flag: 'wx', mode: 0o600 });
       await rename(temporary, filename);
+      await diagnostic.record('acquired');
       let released = false, releasing;
       const release = async () => {
         if (released) return;
@@ -97,6 +102,7 @@ export async function acquireTestResource(key, {
           await unlink(filename);
           await rmdir(directory);
           released = true;
+          await diagnostic.record('released');
         })();
         try { await releasing; } finally { releasing = undefined; }
       };
@@ -121,6 +127,10 @@ export async function acquireTestResource(key, {
         if (current?.token !== owner.token || current.pid !== owner.pid) continue;
         throw leaseError('test-resource-owner-exited', key, directory,
           'The test resource owner exited without releasing its lease; its receipt was preserved.', owner);
+      }
+      if (waitingOwner !== owner.token) {
+        waitingOwner = owner.token;
+        await diagnostic.record('waiting', { ownerPid: owner.pid, ownerFixture: diagnosticFixture(owner.processEntry) });
       }
       await onWait?.({ ...owner });
     }

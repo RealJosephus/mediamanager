@@ -6,6 +6,7 @@ import { getNewItemId } from '../../src/core/identity.js';
 import { idKey } from '../../src/library/records.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { recordUserViewHttp } from '../../tools/compat/record-user-view-http.js';
+import { createFixtureIdentityProjector } from './fixture-identity-projection.js';
 export { filterEvidenceJson as userViewEvidenceJson } from '../../tools/compat/filter-reference-output.js';
 
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -44,26 +45,13 @@ export async function currentUserViewScenario(scenario, fixtureBytes, { signal }
     assert.equal(idKey(row.Id), namedViewId(user.actualId, data.ViewType));
     ids.set(idKey(row.Id), namedViewId(user.fixtureId, data.ViewType));
   }
-  const projectText = value => {
-    if (ids.has(idKey(value))) {
-      const mapped = ids.get(idKey(value));
-      const key = idKey(mapped);
-      if (value.includes('-')) return `${key.slice(0, 8)}-${key.slice(8, 12)}-${key.slice(12, 16)}-${key.slice(16, 20)}-${key.slice(20)}`
-        [value === value.toUpperCase() ? 'toUpperCase' : 'toLowerCase']();
-      return value === value.toUpperCase() ? key.toUpperCase() : key;
-    }
-    return value.replace(/views([\\/])([a-f0-9]{32})/giu,
-      (match, separator, id) => ids.has(idKey(id)) ? `views${separator}${idKey(ids.get(idKey(id)))}` : match);
-  };
-  const project = value => {
-    if (Array.isArray(value)) return value.map(project);
-    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, entry]) => {
-      if (key === 'Data' && typeof entry === 'string') return [key, JSON.stringify(project(JSON.parse(entry)))];
-      return [key, project(entry)];
-    }));
-    return typeof value === 'string' ? projectText(value) : value;
-  };
-  const http = project(await load('native-http.json'));
+  const project = createFixtureIdentityProjector({ identities: ids, viewRows: stages.afterReads.database.baseItems });
+  const originalHttp = await load('native-http.json');
+  const http = { ...originalHttp, records: originalHttp.records.map(record => ({ ...record,
+    ...(record.request ? { request: project.request(record.request, record.route) } : {}),
+    response: { ...record.response, ...(Object.hasOwn(record.response, 'bodyJson')
+      ? { bodyJson: project.body(record.response.bodyJson) } : {}) },
+  })) };
   // A projected parsed body and its text remain one HTTP observation.
   for (const record of http.records) {
     if (record.response.status === 401 && typeof record.response.bodyJson === 'string') {
@@ -72,7 +60,14 @@ export async function currentUserViewScenario(scenario, fixtureBytes, { signal }
     }
     if (record.response.bodyText !== '' && record.response.bodyJson !== undefined) record.response.bodyText = JSON.stringify(record.response.bodyJson);
   }
-  const result = { root, http, stages: project(stages), caseStages: project(await load('case-stages.json')), summary };
+  const projectedStages = Object.fromEntries(Object.entries(stages).map(([name, value]) => [name,
+    ['before', 'afterReads', 'afterShutdown'].includes(name) ? project.snapshot(value) : value]));
+  const caseStages = (await load('case-stages.json')).map(stage => ({ ...stage,
+    ...(stage.before ? { before: project.snapshot(stage.before) } : {}),
+    ...(stage.after ? { after: project.snapshot(stage.after) } : {}),
+  }));
+  const result = { root, http, stages: projectedStages, caseStages, summary,
+    nativeServerId: provenance.preparation.nativeServerId };
   const inputRoot = fixture.items.find(item => item.key === 'libraryA');
   assert.equal(fixture.rootId, inputRoot.id);
   assert.equal(result.stages.before.database.baseItems.some(row => idKey(row.Id) === idKey(inputRoot.id)), true);

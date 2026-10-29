@@ -6,7 +6,6 @@ import { repositoryRoot, validationPath } from '../validation/paths.js';
 
 // Policy names are not readFile inputs; keep them separate from input-path declarations.
 const documentation = new Set(['README.md']);
-const repositoryInspectors = new Set(['tools/validation/inventory.js', 'tools/validation/inputs.js']);
 const inventoryPath = filename => /^(?:src|tests|tools|plugins|packages)\//u.test(filename);
 const commitId = value => typeof value === 'string' && /^[a-f0-9]{40}(?:[a-f0-9]{24})?$/u.test(value) && !/^0+$/u.test(value);
 const gitPath = value => typeof value === 'string' && value.length > 0 && !/[\\\0\uFFFD]/u.test(value)
@@ -119,7 +118,7 @@ export function selectAffected({ dependencies, tracked, comparison, environment 
     for (const entry of closure) {
       if (entry.unresolvedExecutables?.length) fallback({ code: 'unresolved-execution-inputs', consumer: entry.path });
       own(entry.path, test.path, entry.path, 'source-closure');
-      if (repositoryInspectors.has(entry.path)) inspectors.add(test.path);
+      if (entry.repositoryInspections?.length) inspectors.add(test.path);
       for (const filename of entry.importedFiles ?? []) own(relativeInput(filename), test.path, entry.path, 'imported-file');
       for (const fixture of entry.fixtureReferences ?? []) {
         own(relativeInput(fixture.filename), test.path, entry.path, 'fixture-file');

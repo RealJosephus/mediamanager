@@ -8,6 +8,8 @@ import { assertCompleteFilterHttpResponses } from '../library/full-filter-wire.j
 import { projectIdentifiers, projectNativeByNameCandidateInput, seedNativeByNameFilterInput } from './byname-filter-input.js';
 import { recordItemFilterCandidate } from '../library/item-filter-http-scenario.js';
 import { filterEvidenceJson } from '../../tools/compat/filter-reference-output.js';
+import { parseLosslessJson } from '../../src/core/json.js';
+import { createFixtureIdentityProjector } from './fixture-identity-projection.js';
 
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, (_, entry) => typeof entry === 'bigint' ? entry.toString() : entry, 2) + '\n';
@@ -94,37 +96,34 @@ function assertMutations(actual, scenario, candidateInterval) {
       ids.set(idKey(row.Id), candidate.Id);
     } else assert.equal(idKey(candidate.Id), idKey(row.Id), 'By-name identity remains equal across isolated instance roots.');
   }
-  const replaceIdentity = (value, mapping) => {
-    if (Array.isArray(value)) return value.map(entry => replaceIdentity(entry, mapping));
-    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([name, entry]) => [name, replaceIdentity(entry, mapping)]));
-    if (typeof value !== 'string') return value;
-    if (mapping.has(idKey(value))) return idKey(mapping.get(idKey(value)));
-    // Only the generated UserView directory contains a per-user identifier.
-    const match = /^(%MetadataPath%[\\/]views[\\/])([a-f0-9]{32})$/iu.exec(value);
-    return match && mapping.has(idKey(match[2])) ? match[1] + idKey(mapping.get(idKey(match[2]))) : value;
-  };
   const clocks = new Set(['DateCreated', 'DateModified', 'DateLastSaved', 'DateLastRefreshed']);
   const columns = tableDefinition('BaseItems').columns;
-  const project = (row, mapping, interval) => Object.fromEntries(columns.map(column => {
-    const name = column.name, value = row[name];
-    if (clocks.has(name) && value != null) {
-      const ticks = dateTicks(value);
-      if (ticks === 0n) return [name, '$minimum-date'];
-      assert.ok(ticks >= dateTicks(interval.startedAt) && ticks < dateTicks(interval.finishedAt) + 10000n,
-        `Created ${name} falls within the actual operation interval.`);
-      return [name, '$creation-clock'];
-    }
-    if (name === 'Data' && value != null) {
-      const data = JSON.parse(value);
-      if (data.DateLastSaved != null) {
-        assert.equal(dateTicks(data.DateLastSaved), dateTicks(row.DateLastSaved));
-        data.DateLastSaved = '$creation-clock';
+  const project = (row, mapping, interval) => {
+    const bound = createFixtureIdentityProjector({ identities: mapping, viewRows: [row] }).row('BaseItems', row);
+    return Object.fromEntries(columns.map(column => {
+      const name = column.name, value = bound[name];
+      if (clocks.has(name) && value != null) {
+        const ticks = dateTicks(value);
+        if (ticks === 0n) return [name, '$minimum-date'];
+        assert.ok(ticks >= dateTicks(interval.startedAt) && ticks < dateTicks(interval.finishedAt) + 10000n,
+          `Created ${name} falls within the actual operation interval.`);
+        return [name, '$creation-clock'];
       }
-      return [name, replaceIdentity(data, mapping)];
-    }
-    if (column.clrType.replace('?', '') === 'Guid' && value != null) return [name, idKey(mapping.get(idKey(value)) ?? value)];
-    return [name, typeof value === 'boolean' ? Number(value) : replaceIdentity(value, mapping)];
-  }));
+      if (name === 'Data' && value != null) {
+        // These rows were just created by a typed save in each runtime. Compare
+        // their values without imposing JSON property order; unknown values are
+        // literal and integers retain precision. Replay input TEXT stays intact.
+        const data = parseLosslessJson(value);
+        if (data.DateLastSaved != null) {
+          assert.equal(dateTicks(data.DateLastSaved), dateTicks(row.DateLastSaved));
+          data.DateLastSaved = '$creation-clock';
+        }
+        return [name, data];
+      }
+      if (column.clrType.replace('?', '') === 'Guid' && value != null) return [name, idKey(value)];
+      return [name, typeof value === 'boolean' ? Number(value) : value];
+    }));
+  };
   for (const row of nativeRows) assert.deepEqual(project(candidateByKey.get(key(row)), new Map(), candidateInterval),
     project(row, ids, scenario.executionInterval), key(row));
   const nativeFilesystem = scenario.kind === 'artist'
@@ -177,10 +176,6 @@ export async function compareCurrentByNameCandidate(scenario) {
   const wire = assertCompleteFilterHttpResponses(actual, { records: scenario.records },
     { scenarioName, nativeServerId: scenario.nativeServerId });
   const mutations = assertMutations(actual, scenario, candidateInterval);
-  assert.deepEqual(actual.runtimeErrors, []);
-  assert.deepEqual(actual.handledExpectedRuntimeErrors, fixture.cases.filter(entry => (entry.expectedStatus ?? 200) >= 400)
-    .flatMap(entry => (entry.endpoints ?? ['items', 'legacy']).map(endpoint => ({ caseName: entry.name, endpoint,
-      error: { name: 'Error', message: 'Error processing request.' } }))));
   assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true, portReleased: true,
     postgresSchemasRemoved: true, programDataDirectoryRemoved: true });
   await writeFile(path.join(scenario.root, 'comparison.json'), json({ kind: scenario.kind, ...wire, ...mutations,

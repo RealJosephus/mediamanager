@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { createReadStream } from 'node:fs';
 import { lstat, readdir, readFile, readlink, realpath } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -18,6 +19,8 @@ export const dependencyVariables = Object.freeze({
   dotnet: 'MEDIAMANAGER_DOTNET',
   alist: 'MEDIAMANAGER_ALIST_EXECUTABLE',
   webdav: 'MEDIAMANAGER_WEBDAV_EXECUTABLE',
+  dvdReference: 'MEDIAMANAGER_TEST_DVD_REFERENCE',
+  blurayReference: 'MEDIAMANAGER_TEST_BLURAY_REFERENCE',
 });
 
 export async function filesIn(directory, traversal = null) {
@@ -47,6 +50,11 @@ export async function filesIn(directory, traversal = null) {
 }
 
 export function sha256(bytes) { return createHash('sha256').update(bytes).digest('hex'); }
+async function fileSha256(filename) {
+  const digest = createHash('sha256');
+  for await (const chunk of createReadStream(filename)) digest.update(chunk);
+  return digest.digest('hex');
+}
 
 function walkSyntax(node, visit, parent = null, ancestors = []) {
   if (!node || typeof node !== 'object') return;
@@ -108,8 +116,30 @@ function localSpecifier(specifier) {
 
 function referenceDeclarations(source, nodes) {
   const declarations = new Map();
-  const readsFiles = /\b(?:readFile|readFileSync|openSync|SqliteDatabase)\b/u.test(source);
   const callName = node => node.callee?.type === 'Identifier' ? node.callee.name : memberName(node.callee);
+  const readers = new Set(['readFile', 'readFileSync', 'openSync', 'SqliteDatabase']);
+  const reader = node => node?.type === 'Identifier' && readers.has(node.name)
+    || node?.type === 'MemberExpression' && (readers.has(memberName(node))
+      || ['call', 'apply'].includes(memberName(node)) && reader(node.object))
+    || node?.type === 'CallExpression' && node.callee?.type === 'MemberExpression'
+      && memberName(node.callee) === 'bind' && reader(node.callee.object);
+  for (let changed = true; changed;) {
+    changed = false;
+    const add = name => { if (!readers.has(name)) { readers.add(name); changed = true; } };
+    for (const { node } of nodes) {
+      if (node.type === 'ImportSpecifier' && readers.has(node.imported.name ?? node.imported.value)) add(node.local.name);
+      const target = node.type === 'VariableDeclarator' ? node.id
+        : node.type === 'AssignmentPattern' ? node.left : node.type === 'AssignmentExpression' ? node.left : null;
+      const value = node.type === 'VariableDeclarator' ? node.init
+        : ['AssignmentPattern', 'AssignmentExpression'].includes(node.type) ? node.right : null;
+      if (target?.type === 'Identifier' && reader(value)) add(target.name);
+      if (target?.type === 'ObjectPattern') for (const property of target.properties) {
+        if (readers.has(propertyKeyName(property)) && property.value?.type === 'Identifier') add(property.value.name);
+      }
+    }
+  }
+  const readsFiles = nodes.some(({ node }) => ['CallExpression', 'NewExpression'].includes(node.type) && reader(node.callee)
+    || node.type === 'CallExpression' && node.arguments.some(argument => reader(argument)));
   for (const { node, ancestors } of nodes) {
     const value = staticString(node) ?? (node.type === 'TemplateLiteral' ? source.slice(node.start + 1, node.end - 1) : null);
     if (value == null || !/^(?:\.\.\/)*\.test-input\//u.test(value)) continue;
@@ -127,6 +157,168 @@ function referenceDeclarations(source, nodes) {
   return [...declarations.values()];
 }
 
+function testRegistrationCalls(nodes, syntax) {
+  const exportedNames = new Set(['test', 'it', 'describe', 'suite']);
+  const candidates = new Set(exportedNames), bindings = new WeakMap();
+  const functions = new Set(['FunctionDeclaration', 'FunctionExpression', 'ArrowFunctionExpression']);
+  const scopeTypes = new Set(['Program', 'BlockStatement', 'StaticBlock', 'CatchClause',
+    'SwitchStatement', 'ForStatement', 'ForInStatement', 'ForOfStatement', ...functions]);
+  if (!nodes.some(({ node }) => node.type === 'ImportDeclaration' && node.source.value === 'node:test'
+    || node.type === 'CallExpression' && node.callee?.type === 'Identifier' && exportedNames.has(node.callee.name))) return [];
+  for (const { node } of nodes) if (node.type === 'ImportDeclaration' && node.source.value === 'node:test') {
+    for (const specifier of node.specifiers) candidates.add(specifier.local.name);
+  }
+  const bind = (scope, name, kind) => {
+    if (!scope || !candidates.has(name)) return;
+    if (!bindings.has(scope)) bindings.set(scope, new Map());
+    bindings.get(scope).set(name, kind);
+  };
+  const bindPattern = (scope, pattern) => {
+    for (const name of candidates) if (patternBinds(pattern, name)) bind(scope, name, 'ordinary');
+  };
+  for (const { node, parent, ancestors } of nodes) {
+    if (!['ImportDeclaration', 'VariableDeclarator', 'ClassDeclaration', 'CatchClause'].includes(node.type)
+      && !functions.has(node.type)) continue;
+    const scope = ancestors.findLast(ancestor => scopeTypes.has(ancestor.type));
+    if (node.type === 'ImportDeclaration') {
+      for (const specifier of node.specifiers) bind(syntax, specifier.local.name, node.source.value === 'node:test'
+        ? specifier.type === 'ImportNamespaceSpecifier' ? 'namespace'
+          : specifier.type === 'ImportDefaultSpecifier' || exportedNames.has(specifier.imported?.name) ? 'registrar' : 'ordinary'
+        : 'ordinary');
+    } else if (node.type === 'VariableDeclarator') {
+      bindPattern(parent?.kind === 'var' ? ancestors.findLast(ancestor => ancestor.type === 'Program' || functions.has(ancestor.type)) : scope, node.id);
+    } else if (functions.has(node.type)) {
+      if (node.type === 'FunctionDeclaration') bindPattern(scope, node.id);
+      bindPattern(node, node.id);
+      for (const parameter of node.params) bindPattern(node, parameter);
+    } else if (node.type === 'ClassDeclaration') bindPattern(scope, node.id);
+    else if (node.type === 'CatchClause') bindPattern(node, node.param);
+  }
+  const binding = (name, ancestors) => {
+    for (let index = ancestors.length - 1; index >= 0; index--) {
+      const scope = bindings.get(ancestors[index]);
+      if (scope?.has(name)) return scope.get(name);
+    }
+    return exportedNames.has(name) ? 'registrar' : null;
+  };
+  return nodes.filter(({ node, ancestors }) => {
+    if (node.type !== 'CallExpression') return false;
+    const callee = node.callee;
+    if (callee?.type === 'Identifier') return binding(callee.name, ancestors) === 'registrar';
+    if (callee?.type !== 'MemberExpression' || callee.object?.type !== 'Identifier') return false;
+    const kind = binding(callee.object.name, ancestors), member = memberName(callee);
+    return kind === 'namespace' && exportedNames.has(member)
+      || kind === 'registrar' && ['only', 'skip', 'todo'].includes(member);
+  });
+}
+
+// These modules expose both repository-scanning entrypoints and ordinary
+// helpers. Importing describeFile or parseTapSummary does not invoke a scanner.
+const repositoryInspectionEntrypoints = new Map([
+  ['tools/validation/inventory.js', new Set(['inventory'])],
+  ['tools/validation/inputs.js', new Set(['captureInputIdentity'])],
+  ['tools/validation/run.js', new Set(['main'])],
+  ['tools/ci/run.js', new Set(['main'])],
+]);
+
+function repositoryInspectionUses(nodes, syntax, sourcePath, requireNames) {
+  // Provider definitions belong to their named entrypoints. CLI callers bind
+  // the executed source separately below instead of inheriting every export.
+  if (!sourcePath || repositoryInspectionEntrypoints.has(sourcePath)) return [];
+  const provider = specifier => {
+    if (typeof specifier !== 'string' || !specifier.startsWith('.')) return null;
+    const filename = path.posix.normalize(path.posix.join(path.posix.dirname(sourcePath), specifier));
+    const entrypoints = repositoryInspectionEntrypoints.get(filename);
+    return entrypoints ? { filename, entrypoints } : null;
+  };
+  const imports = new Map(), uses = new Map();
+  const add = (origin, entrypoint) => {
+    for (const name of entrypoint == null ? origin.entrypoints : [entrypoint]) {
+      uses.set(origin.filename + ':' + name, { provider: origin.filename, entrypoint: name });
+    }
+  };
+  for (const { node } of nodes) {
+    if (node.type === 'ImportDeclaration') {
+      const origin = provider(node.source.value);
+      if (!origin) continue;
+      for (const specifier of node.specifiers) {
+        if (specifier.type === 'ImportNamespaceSpecifier') imports.set(specifier.local.name, { ...origin, namespace: true });
+        else if (specifier.type === 'ImportSpecifier' && origin.entrypoints.has(specifier.imported.name ?? specifier.imported.value)) {
+          imports.set(specifier.local.name, { ...origin, entrypoint: specifier.imported.name ?? specifier.imported.value });
+        }
+      }
+    } else if (node.type === 'ImportExpression' || node.type === 'CallExpression' && (
+      node.callee?.type === 'Identifier' && requireNames.has(node.callee.name)
+      || node.callee?.type === 'MemberExpression' && memberName(node.callee) === 'require')) {
+      const origin = provider(staticSpecifier(node.source ?? node.arguments[0]));
+      if (origin) add(origin);
+    } else if (['ExportNamedDeclaration', 'ExportAllDeclaration'].includes(node.type) && node.source) {
+      const origin = provider(node.source.value);
+      if (!origin) continue;
+      if (node.type === 'ExportAllDeclaration') add(origin);
+      else for (const specifier of node.specifiers) {
+        const name = specifier.local.name ?? specifier.local.value;
+        if (origin.entrypoints.has(name)) add(origin, name);
+      }
+    }
+  }
+  const result = () => [...uses.values()].sort((left, right) => left.provider.localeCompare(right.provider) || left.entrypoint.localeCompare(right.entrypoint));
+  if (!imports.size) return result();
+  const functions = new Set(['FunctionDeclaration', 'FunctionExpression', 'ArrowFunctionExpression']);
+  const scopeTypes = new Set(['Program', 'BlockStatement', 'StaticBlock', 'CatchClause',
+    'SwitchStatement', 'ForStatement', 'ForInStatement', 'ForOfStatement', ...functions]);
+  const bindings = new WeakMap();
+  const bind = (scope, name, value = null) => {
+    if (!scope || !imports.has(name)) return;
+    if (!bindings.has(scope)) bindings.set(scope, new Map());
+    bindings.get(scope).set(name, value);
+  };
+  const bindPattern = (scope, pattern) => {
+    for (const name of imports.keys()) if (patternBinds(pattern, name)) bind(scope, name);
+  };
+  for (const { node, parent, ancestors } of nodes) {
+    const scope = ancestors.findLast(ancestor => scopeTypes.has(ancestor.type));
+    if (node.type === 'ImportDeclaration') {
+      for (const specifier of node.specifiers) bind(syntax, specifier.local.name, imports.get(specifier.local.name));
+    } else if (node.type === 'VariableDeclarator') {
+      bindPattern(parent?.kind === 'var' ? ancestors.findLast(ancestor => ancestor.type === 'Program' || functions.has(ancestor.type)) : scope, node.id);
+    } else if (functions.has(node.type)) {
+      if (node.type === 'FunctionDeclaration') bindPattern(scope, node.id);
+      bindPattern(node, node.id);
+      for (const parameter of node.params) bindPattern(node, parameter);
+    } else if (node.type === 'ClassDeclaration') bindPattern(scope, node.id);
+    else if (node.type === 'CatchClause') bindPattern(node, node.param);
+  }
+  const binding = (name, ancestors) => {
+    for (let index = ancestors.length - 1; index >= 0; index--) {
+      const scope = bindings.get(ancestors[index]);
+      if (scope?.has(name)) return scope.get(name);
+    }
+    return null;
+  };
+  for (const { node, parent, ancestors } of nodes) {
+    // An explicitly forwarded or dynamic namespace retains its scanning
+    // capability. Pure static members do not acquire unrelated entrypoints.
+    if (node.type !== 'Identifier' || !imports.has(node.name)
+      || ['ImportSpecifier', 'ImportNamespaceSpecifier'].includes(parent?.type)
+      || parent?.type === 'Property' && parent.key === node && parent.value !== node && !parent.computed
+      || parent?.type === 'MemberExpression' && parent.property === node && !parent.computed) continue;
+    const origin = binding(node.name, ancestors);
+    if (!origin) continue;
+    if (!origin.namespace) { add(origin, origin.entrypoint); continue; }
+    if (parent?.type === 'MemberExpression' && parent.object === node) {
+      const name = memberName(parent);
+      if (name === null || origin.entrypoints.has(name)) add(origin, name);
+    } else if (parent?.type === 'VariableDeclarator' && parent.init === node && parent.id.type === 'ObjectPattern') {
+      for (const property of parent.id.properties) {
+        const name = propertyKeyName(property);
+        if (name === null || origin.entrypoints.has(name)) add(origin, name);
+      }
+    } else add(origin);
+  }
+  return result();
+}
+
 export function analyzeJavaScriptDependencies(source, { sourcePath } = {}) {
   let syntax;
   try {
@@ -134,12 +326,13 @@ export function analyzeJavaScriptDependencies(source, { sourcePath } = {}) {
   } catch (error) {
     return { importSpecifiers: [], unresolvedImports: [{ kind: 'parse', reason: error.message }],
       unresolvedExecutables: [], tools: [], environmentVariables: [], testRegistrations: 0,
-      conditionalRegistration: true, referenceDeclarations: [], fixtureSpecifiers: [] };
+      conditionalRegistration: true, referenceDeclarations: [], fixtureSpecifiers: [], executionSources: [], repositoryInspections: [] };
   }
   const imports = new Map();
   const fixtureSpecifiers = new Set();
   const unresolved = new Map();
   const unresolvedExecutables = new Map();
+  const executionSources = new Set();
   const tools = new Set();
   const environmentVariables = new Set();
   const nodes = [];
@@ -455,7 +648,20 @@ export function analyzeJavaScriptDependencies(source, { sourcePath } = {}) {
         || parent?.type === 'MemberExpression' && parent.property === node && !parent.computed;
       const binding = parent?.type === 'ImportSpecifier' || parent?.type === 'VariableDeclarator' && parent.id === node;
       const construction = workerNames.has(node.name) && parent?.type === 'NewExpression' && parent.callee === node;
-      if (!propertyKey && !binding && !construction) unresolvedExecutables.set(`worker:${node.start}:${node.end}`,
+      // This owned fixture wraps the public termination method and injects its
+      // fault after the real worker exits. Constructor forwarding, entry changes
+      // and other prototype access retain their normal execution rejection.
+      const use = ancestors.at(-2), owner = ancestors.at(-3);
+      const terminationPrototype = sourcePath === 'tests/images/jpeg-cancellation.test.js' && workerNames.has(node.name)
+        && parent?.type === 'MemberExpression' && parent.object === node && memberName(parent) === 'prototype';
+      const terminationRead = terminationPrototype && use?.type === 'MemberExpression' && use.object === parent
+        && memberName(use) === 'terminate' && owner?.type === 'VariableDeclarator' && owner.init === use;
+      const terminationMock = terminationPrototype && use?.type === 'CallExpression' && use.arguments[0] === parent
+        && use.arguments.length === 3 && staticString(use.arguments[1]) === 'terminate'
+        && use.arguments[2]?.type === 'FunctionExpression' && use.arguments[2].async
+        && use.callee?.type === 'MemberExpression' && memberName(use.callee) === 'method'
+        && use.callee.object?.type === 'MemberExpression' && memberName(use.callee.object) === 'mock';
+      if (!propertyKey && !binding && !construction && !terminationRead && !terminationMock) unresolvedExecutables.set(`worker:${node.start}:${node.end}`,
         { reason: 'unsupported-worker-entry', start: node.start, end: node.end });
     }
     if (node.type === 'Identifier' && requireNames.has(node.name)) {
@@ -557,6 +763,65 @@ export function analyzeJavaScriptDependencies(source, { sourcePath } = {}) {
     }
     return { resolved: false, tools: [] };
   };
+  const constantExpression = (node, seen = new Set()) => {
+    if (node?.type !== 'Identifier' || seen.has(node.name)) return node;
+    const declarations = declarationLists.get(node.name);
+    if (declarations?.length !== 1) return node;
+    seen.add(node.name);
+    return constantExpression(declarations[0].init, seen);
+  };
+  const staticScriptPath = (node, seen = new Set()) => {
+    node = constantExpression(node);
+    if (!node || seen.has(node)) return null;
+    const nested = new Set(seen).add(node);
+    if (node.type === 'AwaitExpression') return staticScriptPath(node.argument, nested);
+    if (node?.type === 'Identifier' && node.name === 'repositoryRoot') return repositoryRoot;
+    if (sourcePath && node.type === 'MemberExpression' && memberName(node) === 'url'
+      && node.object?.type === 'MetaProperty' && node.object.meta?.name === 'import' && node.object.property?.name === 'meta') {
+      return path.join(repositoryRoot, ...sourcePath.split('/'));
+    }
+    const literal = staticString(node);
+    if (literal !== null) return literal;
+    // The owned CLI canonicalizes its static repository directory before it
+    // launches Node. resolveLocalImport still checks the actual canonical file.
+    if (node?.type === 'CallExpression' && (node.callee?.type === 'Identifier' && ['fileURLToPath', 'realpath'].includes(node.callee.name)
+      || node.callee?.type === 'MemberExpression' && ['fileURLToPath', 'realpath'].includes(memberName(node.callee)))) return staticScriptPath(node.arguments[0], nested);
+    if (!shadowedUrl && node?.type === 'NewExpression' && node.callee?.name === 'URL' && node.arguments.length === 2) {
+      const specifier = staticString(node.arguments[0]), base = node.arguments[1];
+      if (sourcePath && specifier && base?.type === 'MemberExpression' && memberName(base) === 'url'
+        && base.object?.type === 'MetaProperty' && base.object.meta?.name === 'import' && base.object.property?.name === 'meta') {
+        return path.resolve(repositoryRoot, path.posix.dirname(sourcePath), specifier);
+      }
+    }
+    if (node?.type === 'CallExpression' && node.callee?.type === 'MemberExpression'
+      && node.callee.object?.name === 'path' && ['join', 'resolve', 'dirname'].includes(memberName(node.callee))) {
+      const segments = node.arguments.map(argument => staticScriptPath(argument, nested));
+      if (segments.length && segments.every(value => value !== null)) {
+        if (memberName(node.callee) === 'dirname') return segments.length === 1 ? path.dirname(segments[0]) : null;
+        return memberName(node.callee) === 'join' ? path.join(...segments) : path.resolve(repositoryRoot, ...segments);
+      }
+    }
+    return null;
+  };
+  const nodeExecutionSource = node => {
+    const executable = constantExpression(node.arguments[0]);
+    if (executable?.type !== 'MemberExpression' || !isProcessNamespace(executable.object) || memberName(executable) !== 'execPath') return;
+    const args = constantExpression(node.arguments[1]);
+    if (args?.type !== 'ArrayExpression') return;
+    // A script argv entry executes the provider's main guard. Syntax checks,
+    // eval source and ordinary later arguments do not execute that CLI entry.
+    const first = staticString(constantExpression(args.elements[0]));
+    const script = staticScriptPath(args.elements[first === '--' ? 1 : 0]);
+    if (script === null) return;
+    const options = constantExpression(node.arguments[2]);
+    const cwd = options?.type === 'ObjectExpression' ? options.properties.find(property => propertyKeyName(property) === 'cwd') : null;
+    const directory = cwd ? staticScriptPath(cwd.value) : repositoryRoot;
+    if (directory === null && !path.isAbsolute(script)) return;
+    const source = path.relative(repositoryRoot, path.resolve(repositoryRoot, directory ?? repositoryRoot, script)).replaceAll('\\', '/');
+    if (!/^(?:src|tests|tools|plugins|packages)\/.*\.(?:js|mjs|cjs)$/u.test(source)) return;
+    executionSources.add(source);
+    imports.set(`execution-source:${source}`, { kind: 'execution-source', specifier: path.join(repositoryRoot, ...source.split('/')) });
+  };
   for (const { node, ancestors } of nodes) {
     if (node.type === 'NewExpression' && node.callee?.type === 'Identifier' && node.callee.name === 'URL'
       && node.arguments.length === 2) {
@@ -638,13 +903,13 @@ export function analyzeJavaScriptDependencies(source, { sourcePath } = {}) {
         && ['spawn', 'spawnSync', 'execFile', 'execFileSync'].includes(memberName(node.callee)));
     if (launcherCall) {
       const resolution = resolveExecutable(node.arguments[0]);
+      nodeExecutionSource(node);
       for (const tool of resolution.tools) tools.add(tool);
       if (!resolution.resolved) unresolvedExecutables.set(`${node.start}:${node.end}`,
         { reason: 'non-static-executable', start: node.start, end: node.end });
     }
   }
-  const registrations = nodes.filter(({ node }) => node.type === 'CallExpression'
-    && node.callee?.type === 'Identifier' && ['test', 'it', 'describe', 'suite'].includes(node.callee.name));
+  const registrations = testRegistrationCalls(nodes, syntax);
   const conditionalRegistration = registrations.some(({ ancestors }) => ancestors.some(ancestor =>
     ['IfStatement', 'ConditionalExpression', 'LogicalExpression', 'SwitchCase', 'WhileStatement', 'DoWhileStatement']
       .includes(ancestor.type)));
@@ -656,11 +921,17 @@ export function analyzeJavaScriptDependencies(source, { sourcePath } = {}) {
     }
     declaredServices.push(...node.init.elements.map(staticString));
   }
+  const repositoryInspections = repositoryInspectionUses(nodes, syntax, sourcePath, requireNames);
+  for (const provider of executionSources) if (repositoryInspectionEntrypoints.get(provider)?.has('main')
+    && !repositoryInspections.some(value => value.provider === provider && value.entrypoint === 'main')) {
+    repositoryInspections.push({ provider, entrypoint: 'main' });
+  }
   return { declaredServices, importSpecifiers: [...imports.values()].sort((left, right) =>
     left.specifier.localeCompare(right.specifier) || left.kind.localeCompare(right.kind)),
   unresolvedImports: [...unresolved.values()], unresolvedExecutables: [...unresolvedExecutables.values()],
   tools: [...tools].sort(), environmentVariables: [...environmentVariables].sort(), testRegistrations: registrations.length,
-  conditionalRegistration, referenceDeclarations: referenceDeclarations(source, nodes), fixtureSpecifiers: [...fixtureSpecifiers].sort() };
+  conditionalRegistration, referenceDeclarations: referenceDeclarations(source, nodes), fixtureSpecifiers: [...fixtureSpecifiers].sort(),
+  executionSources: [...executionSources].sort(), repositoryInspections };
 }
 
 export function caseFoldedEntryMap(paths) {
@@ -804,7 +1075,7 @@ export async function describeFile(filename, { recursive = true, workspaceLinks 
         entriesSha256: sha256(JSON.stringify(entries)) };
     }
     return { filename, available: true, kind: info.isDirectory() ? 'directory' : 'file',
-      ...(info.isFile() ? { bytes: info.size, sha256: sha256(await readFile(filename)) } : {}) };
+      ...(info.isFile() ? { bytes: info.size, sha256: await fileSha256(filename) } : {}) };
   } catch (error) {
     if (error.code !== 'ENOENT') throw error;
     return { filename, available: false };
@@ -856,6 +1127,8 @@ export async function inventory(environment = process.env) {
         services: [...new Set([...Object.entries(dependencyVariables).filter(([, variable]) => variables.includes(variable)).map(([name]) => name),
           ...(analysis.declaredServices ?? [])])].sort(),
         tools: analysis.tools,
+        repositoryInspections: analysis.repositoryInspections ?? [],
+        executionSources: analysis.executionSources ?? [],
         testRegistrations: analysis.testRegistrations,
         conditionalRegistration: testFile && (analysis.testRegistrations === 0 || analysis.conditionalRegistration),
         declaredReferences, fixtureReferences,
@@ -869,13 +1142,24 @@ export async function inventory(environment = process.env) {
   for (const entry of entries) {
     const imports = new Set();
     const importedFiles = new Set();
+    const executionSources = new Set();
     for (const dependency of entry.importSpecifiers) {
       const resolved = await resolveLocalImport(entry.filename, dependency, { rootRealPath, knownEntries: known });
-      if (resolved.imported) imports.add(resolved.imported);
+      if (resolved.imported) {
+        imports.add(resolved.imported);
+        if (dependency.kind === 'execution-source') {
+          executionSources.add(resolved.imported);
+          if (repositoryInspectionEntrypoints.get(resolved.imported)?.has('main')
+            && !entry.repositoryInspections.some(value => value.provider === resolved.imported && value.entrypoint === 'main')) {
+            entry.repositoryInspections.push({ provider: resolved.imported, entrypoint: 'main' });
+          }
+        }
+      }
       else if (resolved.importedFile) importedFiles.add(resolved.importedFile);
       else entry.unresolvedImports.push({ kind: dependency.kind, specifier: dependency.specifier, reason: resolved.error });
     }
     entry.imports = [...imports].sort();
+    entry.executionSources = [...executionSources].sort();
     entry.importedFiles = [...importedFiles].sort();
     delete entry.importSpecifiers;
     delete entry.filename;

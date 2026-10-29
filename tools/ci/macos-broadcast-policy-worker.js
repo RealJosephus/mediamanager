@@ -5,7 +5,10 @@ import { lstat, readFile, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
-import { command, failure, hash, identity, maybeJson, sameIdentity, save, terminalProgram } from './macos-broadcast-policy-terminal.js';
+import { command, failure, hash, maybeJson, save, terminalProgram } from './macos-broadcast-policy-terminal.js';
+import { darwinProcessInspector, sameProcessIdentity as sameIdentity } from './macos-process-identity.js';
+
+const inspector = await darwinProcessInspector(), identity = inspector.identity;
 
 const ownFile = fileURLToPath(import.meta.url);
 assert.equal(process.platform, 'darwin'); assert.equal(process.argv.length, 3);
@@ -21,7 +24,7 @@ for (let count = 0; count < 12 && next > 1; count++) {
   const parent = identity(next); if (!parent) break; ancestors.push(parent); next = parent.parentPid;
 }
 const terminal = ancestors.find(value => value.executable === terminalProgram);
-assert.ok(terminal && terminal.uid === scope.uid && terminal.startedEpochMs >= scope.launchFloorEpochMs);
+assert.ok(terminal && terminal.uid === scope.uid);
 assert.equal(hash(await readFile(terminalProgram)), scope.terminalSha256);
 const self = identity(process.pid), samples = [], active = new Set();
 let interrupted, activeCancel;

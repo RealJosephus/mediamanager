@@ -14,6 +14,8 @@ import { tableDefinition } from '../../src/database/model.js';
 import { assertValidationOutputChild } from '../validation/paths.js';
 import { currentNativeReference } from './current-native-reference.js';
 import { createPrivateFilterOutput } from './filter-reference-output.js';
+import { observeExecutionPhase } from '../validation/execution-diagnostics.js';
+import { bindFixtureInput, bindFixtureRequestBody, bindFixtureUserQuery } from '../../tests/helpers/fixture-input-binding.js';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const scenarios = {
@@ -84,6 +86,30 @@ const scenarios = {
     fixture: 'tests/library/fixtures/named-item-lifecycle-http/input.json',
     expectedCases: 26,
     namedLifecycle: true,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
+  'year-detail-http': {
+    fixture: 'tests/library/fixtures/year-detail-http/input.json',
+    expectedCases: 21,
+    namedLifecycle: true,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
+  'year-list-http': {
+    fixture: 'tests/library/fixtures/year-list-http/input.json',
+    expectedCases: 66,
+    namedLifecycle: true,
+    yearListLifecycle: true,
+    namedMetadataPaths: true,
+    includeAllItems: true,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
+  'suggestions-http': {
+    fixture: 'tests/library/fixtures/suggestions-http/input.json',
+    expectedCases: 45,
+    includeAllItems: true,
     libraryTypeMarkers: true,
     menuLifecycle: false,
   },
@@ -161,6 +187,7 @@ const fixturePath = path.join(repoRoot, scenario.fixture);
 const origin = `http://127.0.0.1:${port}`;
 const recorderPath = fileURLToPath(import.meta.url);
 const recorderBytes = await readFile(recorderPath);
+const inputBindingBytes = await readFile(new URL('../../tests/helpers/fixture-input-binding.js', import.meta.url));
 const sourceFixtureBytes = await readFile(fixturePath);
 const recordedFixtureBytes = sourceFixtureBytes;
 let fixture = JSON.parse(sourceFixtureBytes.toString('utf8'));
@@ -226,6 +253,10 @@ const nativeTypes = {
   Series: 'MediaBrowser.Controller.Entities.TV.Series',
   UserRootFolder: 'MediaBrowser.Controller.Entities.UserRootFolder',
   UserView: 'MediaBrowser.Controller.Entities.UserView',
+  ...(scenario.yearListLifecycle ? {
+    BoxSet: 'MediaBrowser.Controller.Entities.Movies.BoxSet',
+    Playlist: 'MediaBrowser.Controller.Playlists.Playlist',
+  } : {}),
 };
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, (_key, item) => typeof item === 'bigint' ? item.toString() : item, 2) + '\n';
@@ -323,12 +354,13 @@ function databaseSnapshot() {
   database.exec('PRAGMA busy_timeout=5000');
   try {
     const allBaseItems = database.prepare('SELECT * FROM "BaseItems"').all();
-    const baseItems = scenario.menuLifecycle || scenario.namedLifecycle
+    const baseItems = scenario.menuLifecycle || scenario.namedLifecycle || scenario.includeAllItems
       ? allBaseItems
       : allBaseItems.filter(row => visibleFixtureItemIds.has(idKey(row.Id)) || dynamicUserView(row)
         || scenario.includeAggregateSnapshot && row.Type === nativeTypes.AggregateFolder);
     const dynamicIds = new Set(baseItems.filter(dynamicUserView).map(row => idKey(row.Id)));
-    const targetIds = new Set([...fixtureItemIds, ...dynamicIds]);
+    const targetIds = new Set([...fixtureItemIds, ...dynamicIds,
+      ...(scenario.includeAllItems ? baseItems.map(row => idKey(row.Id)) : [])]);
     const targetRows = table => sortedRows(database.prepare(`SELECT * FROM ${quote(table)}`).all().filter(row => {
       if (table === 'AncestorIds') return targetIds.has(idKey(row.ItemId));
       if (table === 'LinkedChildren') return targetIds.has(idKey(row.ParentId)) || targetIds.has(idKey(row.ChildId));
@@ -344,7 +376,7 @@ function databaseSnapshot() {
       ancestorIds: targetRows('AncestorIds'),
       linkedChildren: targetRows('LinkedChildren'),
       itemValues: sortedRows(database.prepare('SELECT * FROM "ItemValues"').all()
-        .filter(row => fixtureValueIds.has(idKey(row.ItemValueId)))),
+        .filter(row => scenario.includeAllItems || fixtureValueIds.has(idKey(row.ItemValueId)))),
       itemValueLinks: targetRows('ItemValuesMap'),
       userData: sortedRows(database.prepare('SELECT * FROM "UserData"').all()
         .filter(row => targetIds.has(idKey(row.ItemId)) && idKey(row.UserId) === idKey(fixture.userId))),
@@ -567,19 +599,21 @@ function seedDatabase() {
 async function prepareReference() {
   await mkdir(outputRoot);
   await writeFile(path.join(runRoot, 'input.json'), recordedFixtureBytes, { flag: 'wx' });
-  await cp(sourceDatabase, bundledSourceDatabase, { force: false, errorOnExist: true });
+  await observeExecutionPhase('native.copy.database', () => cp(sourceDatabase, bundledSourceDatabase,
+    { force: false, errorOnExist: true }), { fixture: 'tools/compat/record-user-view-http.js' });
   const bundledSourceDatabaseSha256 = sha256(await readFile(bundledSourceDatabase));
   assert.equal(bundledSourceDatabaseSha256, inputHashes.sourceDatabaseSha256,
     'The bundled source database must be an exact copy of the stopped source database.');
-  await cp(sourceRoot, referenceRoot, {
+  await observeExecutionPhase('native.copy.instance', () => cp(sourceRoot, referenceRoot, {
     recursive: true,
     filter(source) {
       const relative = path.relative(sourceRoot, source).replaceAll('\\', '/');
       return !relative.startsWith('log/') && !/^data\/data\/jellyfin\.db(?:-wal|-shm)?$/u.test(relative);
     },
-  });
+  }), { fixture: 'tools/compat/record-user-view-http.js' });
   await mkdir(path.join(referenceRoot, 'log'), { recursive: true });
-  await cp(bundledSourceDatabase, databasePath, { force: false, errorOnExist: true });
+  await observeExecutionPhase('native.copy.database', () => cp(bundledSourceDatabase, databasePath,
+    { force: false, errorOnExist: true }), { fixture: 'tools/compat/record-user-view-http.js' });
   const databaseBeforeSeedSha256 = sha256(await readFile(databasePath));
   assert.equal(databaseBeforeSeedSha256, inputHashes.sourceDatabaseSha256,
     'The working database must begin as an exact source-database copy.');
@@ -624,15 +658,8 @@ async function prepareReference() {
     { kind: 'AggregateFolder', fixtureId: fixture.items.find(item => item.type === 'AggregateFolder').id, actualId: aggregate.Id },
     { kind: 'UserRootFolder', fixtureId: fixture.items.find(item => item.type === 'UserRootFolder').id, actualId: upperId(rootResponse.bodyJson.Id) },
   ];
-  const replaceIdentity = value => {
-    if (Array.isArray(value)) return value.map(replaceIdentity);
-    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, child]) => [key, replaceIdentity(child)]));
-    if (typeof value !== 'string') return value;
-    for (const binding of [...bindings, ...(liveTvView ? [liveTvView] : [])]) value = value.replaceAll(binding.fixtureId, binding.actualId);
-    return value;
-  };
   const rootId = fixture.rootId;
-  fixture = replaceIdentity(fixture);
+  fixture = bindFixtureInput(fixture, { user: bindings[0], items: [...bindings.slice(1), ...(liveTvView ? [liveTvView] : [])] });
   assert.equal(fixture.rootId, rootId, 'Library A remains the query root; only actual instance identities are rebound.');
   indexFixture();
   for (const directory of Object.values(paths)) await mkdir(directory, { recursive: true });
@@ -691,6 +718,16 @@ async function prepareReference() {
   const result = { ...current.preparation, copyBindings, bindings, ...(seedClock ? { seedClock } : {}),
     ...(scenario.liveTvState ? { liveTvDocuments } : {}),
     ...(liveTvView ? { liveTvViewDiscovery: liveTvView } : {}),
+    ...(scenario.yearListLifecycle ? { yearListSources: await current.sourceBindings([
+      'Jellyfin.Api/Controllers/YearsController.cs', 'Jellyfin.Api/Controllers/ItemsController.cs',
+      'Emby.Server.Implementations/Library/LibraryManager.cs',
+      'MediaBrowser.Controller/Entities/BaseItem.cs', 'MediaBrowser.Controller/Entities/Folder.cs',
+      'MediaBrowser.Controller/Entities/UserView.cs', 'MediaBrowser.Controller/Entities/UserViewBuilder.cs',
+      'MediaBrowser.Controller/Entities/CollectionFolder.cs', 'MediaBrowser.Controller/Entities/Audio/MusicAlbum.cs',
+      'MediaBrowser.Controller/Entities/Movies/BoxSet.cs', 'MediaBrowser.Controller/Playlists/Playlist.cs',
+      'MediaBrowser.Controller/Entities/TV/Series.cs', 'MediaBrowser.Controller/Entities/TV/Season.cs',
+      'Emby.Server.Implementations/Collections/CollectionManager.cs',
+    ]) } : {}),
     userRootDiscovery: { route: '/Items/Root', response: rootResponse, process: discoveryOutcome } };
   await writeFile(path.join(runRoot, 'reference-preparation.json'), json(result), { flag: 'wx' });
   return result;
@@ -736,19 +773,22 @@ async function stopReference(instance, token) {
     pidGone: result.pidGone, portAvailable: result.portAvailable };
 }
 function routeFor(endpoint, testCase, userId) {
-  if (testCase.action === 'live-tv-recommended') return '/LiveTv/Programs/Recommended?' + testCase.query.replaceAll(fixture.userId, userId);
-  if (testCase.action === 'live-tv-programs') return '/LiveTv/Programs?' + testCase.query.replaceAll(fixture.userId, userId);
-  if (testCase.action === 'live-tv-program') return `/LiveTv/Programs/${encodeURIComponent(testCase.programId)}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'live-tv-channels') return '/LiveTv/Channels?' + testCase.query.replaceAll(fixture.userId, userId);
-  if (testCase.action === 'live-tv-channel') return `/LiveTv/Channels/${encodeURIComponent(testCase.channelId)}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'shows-episodes') return `/Shows/${encodeURIComponent(testCase.seriesId)}/Episodes?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'playback-info') return `/Items/${itemByKey.get(testCase.detailKey).id}/PlaybackInfo?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? itemByKey.get(testCase.detailKey).id}/Intros?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? itemByKey.get(testCase.detailKey).id}/${testCase.themeRoute}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'dto-detail') return `${endpoint === 'legacy' ? '/Users/' + userId : ''}/Items/${itemByKey.get(testCase.detailKey).id}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'named-list' || testCase.action === 'named-detail') return `/${testCase.namedRoute}${testCase.action === 'named-detail' ? '/' + encodeURIComponent(testCase.itemName) : ''}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (['filters', 'filters2'].includes(testCase.action)) return `/Items/${testCase.action === 'filters' ? 'Filters' : 'Filters2'}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'studio-name') return `/Studios/${encodeURIComponent(testCase.studioName)}?${testCase.query}`;
+  const query = bindFixtureUserQuery(testCase.query, { fixtureId: fixture.userId, actualId: userId });
+  if (testCase.action === 'suggestions') return `${endpoint === 'legacy'
+    ? '/Users/' + (testCase.suggestionUserId ?? userId) + '/Suggestions' : '/Items/Suggestions'}?${query}`;
+  if (testCase.action === 'live-tv-recommended') return '/LiveTv/Programs/Recommended?' + query;
+  if (testCase.action === 'live-tv-programs') return '/LiveTv/Programs?' + query;
+  if (testCase.action === 'live-tv-program') return `/LiveTv/Programs/${encodeURIComponent(testCase.programId)}?${query}`;
+  if (testCase.action === 'live-tv-channels') return '/LiveTv/Channels?' + query;
+  if (testCase.action === 'live-tv-channel') return `/LiveTv/Channels/${encodeURIComponent(testCase.channelId)}?${query}`;
+  if (testCase.action === 'shows-episodes') return `/Shows/${encodeURIComponent(testCase.seriesId)}/Episodes?${query}`;
+  if (testCase.action === 'playback-info') return `/Items/${itemByKey.get(testCase.detailKey).id}/PlaybackInfo?${query}`;
+  if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? itemByKey.get(testCase.detailKey).id}/Intros?${query}`;
+  if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? itemByKey.get(testCase.detailKey).id}/${testCase.themeRoute}?${query}`;
+  if (testCase.action === 'dto-detail') return `${endpoint === 'legacy' ? '/Users/' + userId : ''}/Items/${itemByKey.get(testCase.detailKey).id}?${query}`;
+  if (testCase.action === 'named-list' || testCase.action === 'named-detail') return `/${testCase.namedRoute}${testCase.action === 'named-detail' ? '/' + encodeURIComponent(testCase.itemName) : ''}?${query}`;
+  if (['filters', 'filters2'].includes(testCase.action)) return `/Items/${testCase.action === 'filters' ? 'Filters' : 'Filters2'}?${query}`;
+  if (testCase.action === 'studio-name') return `/Studios/${encodeURIComponent(testCase.studioName)}?${query}`;
   if (endpoint === 'detail') return `/Items/${itemByKey.get(testCase.detailKey).id}`;
   const common = [];
   const omitParentId = testCase.omitScope === true || testCase.omitParentId === true;
@@ -764,7 +804,7 @@ function routeFor(endpoint, testCase, userId) {
   if (!testCase.omitSortBy) common.push(`SortBy=${encodeURIComponent(testCase.sortBy ?? 'SortName')}`);
   common.push(`Fields=${encodeURIComponent(testCase.fields ?? 'SortName')}`, 'EnableImages=false',
     `EnableUserData=${testCase.enableUserData === true ? 'true' : 'false'}`,
-    testCase.query.replaceAll(fixture.userId, userId));
+    query);
   const prefix = (testCase.action === 'studios' ? '/Studios' : endpoint === 'items' ? '/Items' : `/Users/${userId}/Items`)
     + (testCase.action === 'latest' ? '/Latest' : '');
   return `${prefix}?${common.join('&')}`;
@@ -871,7 +911,7 @@ function responseContractFailures(records) {
         || !body || typeof body !== 'object' || Array.isArray(body)
         || stable(Object.keys(body).sort()) !== stable(['Items', 'StartIndex', 'TotalRecordCount'].sort())
         || !Array.isArray(body.Items) || !Number.isInteger(body.StartIndex)
-        || body.StartIndex < 0 && !['studios-http', 'named-items-http', 'live-tv-programs-http', 'live-tv-channels-http'].includes(scenarioName)
+        || body.StartIndex < 0 && !['studios-http', 'named-items-http', 'live-tv-programs-http', 'live-tv-channels-http', 'suggestions-http', 'year-list-http'].includes(scenarioName)
         || !Number.isInteger(body.TotalRecordCount) || body.TotalRecordCount < 0) {
         failures.push(`${label} successful list JSON shape is invalid`);
       }
@@ -881,6 +921,9 @@ function responseContractFailures(records) {
       }
     } else if (expectedStatus === 403 && testCase.action.startsWith('live-tv-')) {
       if (response.bodyText !== '' || response.contentType != null) failures.push(`${label} forbidden response is not empty`);
+    } else if (expectedStatus === 403 && ['year-detail-http', 'suggestions-http', 'year-list-http'].includes(scenarioName)) {
+      if (response.contentType !== 'text/plain' || Object.hasOwn(response, 'bodyJson')
+        || response.bodyText !== 'Error processing request.') failures.push(`${label} forbidden response is invalid`);
     } else if (expectedStatus === 401) {
       if (response.contentType !== 'application/json; charset=utf-8'
         || typeof response.bodyJson !== 'string' || response.bodyJson.length === 0) {
@@ -963,12 +1006,13 @@ function captureContract(records, setupRecords, caseStages, stages) {
       && allSnapshotStates.every(statePreservesContract);
   }
   let namedLifecycleValid = !scenario.namedLifecycle;
-  if (scenario.namedLifecycle && stageStructureValid && caseStagesComplete && caseStages.length > 0) {
+  if (scenario.namedLifecycle && !scenario.yearListLifecycle && stageStructureValid && caseStagesComplete && caseStages.length > 0) {
     const original = stages.before.database.baseItems;
     const originalIds = new Set(original.map(row => idKey(row.Id)));
     const names = new Set(fixture.cases.filter(value => !value.bindingError).map(value => value.itemName));
-    const types = new Set(['MediaBrowser.Controller.Entities.Genre', 'MediaBrowser.Controller.Entities.Studio',
-      'MediaBrowser.Controller.Entities.Audio.MusicGenre', 'MediaBrowser.Controller.Entities.Audio.MusicArtist']);
+    const types = new Set(scenarioName === 'year-detail-http' ? ['MediaBrowser.Controller.Entities.Year']
+      : ['MediaBrowser.Controller.Entities.Genre', 'MediaBrowser.Controller.Entities.Studio',
+        'MediaBrowser.Controller.Entities.Audio.MusicGenre', 'MediaBrowser.Controller.Entities.Audio.MusicArtist']);
     const returned = new Set(records.filter(record => record.response.status === 200)
       .map(record => idKey(record.response.bodyJson?.Id)).filter(id => id && !/^0{32}$/u.test(id)));
     namedLifecycleValid = stable(caseStages[0].before) === stable(stages.before)
@@ -979,6 +1023,29 @@ function captureContract(records, setupRecords, caseStages, stages) {
           && rows.filter(row => !originalIds.has(idKey(row.Id)))
             .every(row => types.has(row.Type) && names.has(row.Name) && returned.has(idKey(row.Id)));
       })
+      && stages.afterReads.database.baseItems.some(row => !originalIds.has(idKey(row.Id)));
+  }
+  if (scenario.yearListLifecycle && stageStructureValid && caseStagesComplete && caseStages.length > 0) {
+    const original = stages.before.database.baseItems;
+    const originalIds = new Set(original.map(row => idKey(row.Id)));
+    const mutableViews = new Set(fixture.yearListMutableViewKeys.map(key => idKey(itemByKey.get(key).id)));
+    for (const row of original) if (dynamicUserView(row)
+      && idKey(JSON.parse(row.Data).UserId) === idKey(fixture.userId)) mutableViews.add(idKey(row.Id));
+    const possibleYears = new Set([...fixture.items.filter(item => item.productionYear > 0).map(item => String(item.productionYear)),
+      ...original.filter(row => row.ProductionYear > 0).map(row => String(row.ProductionYear))]);
+    const beforeInert = original.filter(row => !mutableViews.has(idKey(row.Id)));
+    // The list can create years that a zero/negative result window never
+    // returns. Bind new rows to the explicit positive fixture inputs, and keep
+    // the declared warm view rows observable rather than treating all reads
+    // as immutable. The consumer comparison still checks every stored value.
+    namedLifecycleValid = stable(caseStages[0].before) === stable(stages.before)
+      && stable(caseStages.at(-1).after) === stable(stages.afterReads)
+      && allSnapshotStates.every(state => stable(state.database.baseItems
+        .filter(row => originalIds.has(idKey(row.Id)) && !mutableViews.has(idKey(row.Id)))) === stable(beforeInert)
+        && state.database.baseItems.filter(row => mutableViews.has(idKey(row.Id))).length === mutableViews.size
+        && state.database.baseItems.filter(row => mutableViews.has(idKey(row.Id))).every(row => row.Type === nativeTypes.UserView)
+        && state.database.baseItems.filter(row => !originalIds.has(idKey(row.Id)))
+          .every(row => row.Type === nativeTypes.Year && possibleYears.has(row.Name)))
       && stages.afterReads.database.baseItems.some(row => !originalIds.has(idKey(row.Id)));
   }
   return {
@@ -998,6 +1065,7 @@ function captureContract(records, setupRecords, caseStages, stages) {
 assert.equal(await portAvailable(), true, 'Loopback port is occupied.');
 const inputHashes = {
   recorderSha256: sha256(recorderBytes),
+  inputBindingSha256: sha256(inputBindingBytes),
   fixtureSha256: sha256(recordedFixtureBytes),
   sourceDatabaseSha256: sha256(await readFile(sourceDatabase)),
   dllSha256: sha256(await readFile(jellyfinDll)),
@@ -1016,6 +1084,7 @@ try {
   await waitForReady(instance);
   const login = await request('/Users/Me', { token: userToken });
   assert.equal(login.status, 200, login.bodyText);
+  preparation.initialPolicy = login.bodyJson.Policy;
   preparation.actualUserName = login.bodyJson.Name;
   const userId = login.bodyJson.Id;
   assert.equal(idKey(userId), idKey(fixture.userId));
@@ -1083,7 +1152,7 @@ try {
       const before = scenario.menuLifecycle || scenario.namedLifecycle ? { database: databaseSnapshot(), filesystem: await filesystemSnapshot() } : null;
       const route = routeFor(endpoint, testCase, userId);
       const requestDescription = { method: testCase.method ?? 'GET', ...(Object.hasOwn(testCase, 'body')
-        ? { body: JSON.parse(JSON.stringify(testCase.body).replaceAll(fixture.userId, userId)) } : {}) };
+        ? { body: bindFixtureRequestBody(testCase, { user: { fixtureId: fixture.userId, actualId: userId } }) } : {}) };
       const response = await request(route, { token: testCase.auth === 'apiKey' ? apiKey : userToken, ...requestDescription });
       records.push({ name: testCase.name, query: testCase.query, scope: testCase.scope, endpoint, route, response,
         ...(testCase.action?.startsWith('live-tv-program') || testCase.action?.startsWith('live-tv-channel') || testCase.action === 'shows-episodes'

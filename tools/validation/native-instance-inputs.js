@@ -2,10 +2,15 @@ import path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { describeFile } from './inventory.js';
-import { verifyNativeBuild } from './native-build-inputs.js';
+import { verifyNativeRuntime } from './native-build-inputs.js';
+import { observeExecutionPhase } from './execution-diagnostics.js';
 
 /** This is a freshly initialized controlled instance, never a historical query database. */
 export async function nativeInstanceInputs(environment = process.env) {
+  return observeExecutionPhase('native.instance.verify', () => collectNativeInstanceInputs(environment), { environment });
+}
+
+async function collectNativeInstanceInputs(environment) {
   if (environment.MEDIAMANAGER_CI_NATIVE_REFERENCE !== 'true') throw new Error('Native instance provisioning requires native reference provisioning.');
   if (!environment.MEDIAMANAGER_NATIVE_INSTANCE_ROOT || !environment.MEDIAMANAGER_TEST_NATIVE_INSTANCE) {
     throw new Error('Native instance provisioning requires its evidence root and seeded instance path.');
@@ -15,7 +20,7 @@ export async function nativeInstanceInputs(environment = process.env) {
   if (path.resolve(environment.MEDIAMANAGER_TEST_NATIVE_INSTANCE) !== path.join(seeded, 'instance')) {
     throw new Error('Native instance consumers must use the same-run controlled seeded instance.');
   }
-  const build = await verifyNativeBuild(environment);
+  const build = await verifyNativeRuntime(environment);
   const inputs = [], bind = async (filename, expectedSha256) => {
     const value = await describeFile(filename);
     if (!value.available || expectedSha256 && (value.sha256 ?? value.entriesSha256) !== expectedSha256) {
@@ -31,7 +36,9 @@ export async function nativeInstanceInputs(environment = process.env) {
   const seed = JSON.parse(await readFile(seedFile, 'utf8'));
   if (initialization.schemaVersion !== 1 || !initialization.initializedFromEmpty
     || initialization.process?.stopped !== true || initialization.process.exitCode !== 0 || initialization.process.signalCode !== null
-    || initialization.root !== path.join(empty, 'instance') || initialization.build?.identitySha256 !== build.identitySha256
+    || initialization.root !== path.join(empty, 'instance')
+    || !/^[a-f0-9]{64}$/u.test(initialization.build?.identitySha256 ?? '')
+    || initialization.build?.runtimeIdentitySha256 !== build.runtimeIdentitySha256
     || seed.schemaVersion !== 1 || seed.source !== initialization.root || seed.destination !== path.join(seeded, 'instance')
     || seed.sourceUnchanged !== true || seed.seededItems !== 2 || seed.nativeMigrationHistoryRetained !== true
     || seed.originalDatabaseSha256 !== initialization.database?.sha256 || seed.initialization?.filename !== initializationFile) {

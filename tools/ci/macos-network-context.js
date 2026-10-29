@@ -6,15 +6,18 @@ import { once } from 'node:events';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as delay } from 'node:timers/promises';
+import { darwinProcessInspector, sameProcessBirth, sameProcessIdentity as sameIdentity } from './macos-process-identity.js';
+import { signalProcess } from './macos-process-signal.js';
 
 // TN3179 explicitly permits command-line tools run from Terminal, including
 // children. Observe that actual ancestry and UID; open(1) returning zero alone
 // proves neither execution nor permission. Ordinary-UID 255 nonce/reply and
-// actual native discovery remain mandatory. No policy changes or root business
-// process substitute for them. Earlier failed SSH/daemon evidence is retained.
+// actual native discovery remain mandatory. PF owns only the private broadcast
+// path; business processes retain the ordinary UID and actual Terminal ancestry.
 // https://developer.apple.com/documentation/technotes/tn3179-understanding-local-network-privacy
 // https://support.apple.com/guide/terminal/execute-commands-and-run-tools-apdb66b5242-0d18-49fc-9c47-a2498b7c91d5/mac
 assert.equal(process.platform, 'darwin');
+const inspector = await darwinProcessInspector(), processIdentity = inspector.identity;
 const thisFile = fileURLToPath(import.meta.url), repository = path.resolve(path.dirname(thisFile), '../..');
 const terminalBundle = '/System/Applications/Utilities/Terminal.app', terminalProgram = terminalBundle + '/Contents/MacOS/Terminal';
 const sha = value => createHash('sha256').update(value).digest('hex');
@@ -25,36 +28,10 @@ const command = (file, args) => execFileSync(file, args, { encoding: 'utf8', tim
   env: { ...process.env, LC_ALL: 'C', LANG: 'C', TZ: 'UTC' }, stdio: ['ignore', 'pipe', 'pipe'] });
 const operations = {
   setup: [path.join(repository, 'tools/ci/macos-broadcast.js'), 'setup'],
-  strict: [path.join(repository, 'tools/ci/run.js')],
+  strict: [path.join(repository, 'tools/ci/macos-broadcast.js'), 'strict'],
 };
-function parseIdentity(text) {
-  const match = /^(\d+)\s+(\d+)\s+(\d+)\s+(\w+\s+\w+\s+\d+\s+\d\d:\d\d:\d\d\s+\d{4})\s+(.+)$/u.exec(text.trim());
-  assert.ok(match, 'Unable to decode actual process identity.');
-  const startedEpochMs = Date.parse(match[4] + ' UTC'); assert.ok(Number.isFinite(startedEpochMs));
-  return { pid: Number(match[1]), parentPid: Number(match[2]), uid: Number(match[3]), startedUtc: match[4], startedEpochMs, executable: match[5] };
-}
-function processIdentity(pid) {
-  try { return parseIdentity(command('/bin/ps', ['-ww', '-p', String(pid), '-o', 'pid=,ppid=,uid=,lstart=,comm='])); }
-  catch (error) { if (error.status === 1 && !error.stdout?.toString().trim()) return null; throw error; }
-}
-const sameIdentity = (left, right) => left && right && left.pid === right.pid && left.uid === right.uid
-  && left.startedUtc === right.startedUtc && left.executable === right.executable;
 function terminalPids() {
-  try { const text = command('/usr/bin/pgrep', ['-x', 'Terminal']).trim(); return text ? text.split(/\s+/u).map(Number) : []; }
-  catch (error) { if (error.status === 1 && !error.stdout?.toString().trim()) return []; throw error; }
-}
-function descendantIdentities(rootPid) {
-  // Identify the owned tree from numeric links first. Unrelated kernel/zombie
-  // command formatting must not prevent cleanup of this Terminal's descendants.
-  const all = command('/bin/ps', ['-axo', 'pid=,ppid=']).trim().split('\n').map(line => {
-    const match = /^(\d+)\s+(\d+)$/u.exec(line.trim()); assert.ok(match); return { pid: Number(match[1]), parentPid: Number(match[2]) };
-  });
-  const selected = [], parents = new Set([rootPid]); let changed = true;
-  while (changed) { changed = false; for (const value of all) if (parents.has(value.parentPid) && !parents.has(value.pid)) {
-    const identity = processIdentity(value.pid);
-    if (identity && identity.parentPid === value.parentPid) { parents.add(value.pid); selected.push(identity); changed = true; }
-  } }
-  return selected; // Never serialize the unrelated process inventory.
+  return inspector.namedProcesses('Terminal', process.getuid()).map(value => value.pid);
 }
 async function readJson(filename) {
   try { const text = await readFile(filename, 'utf8'); try { return JSON.parse(text); } catch { return null; } }
@@ -79,7 +56,6 @@ async function terminalWorker(filename) {
   const terminal = ancestors.find(value => path.basename(value.executable) === 'Terminal');
   assert.ok(terminal, 'The fixed command has no actual Terminal.app ancestor.'); assert.equal(terminal.uid, owner.uid);
   assert.equal(await realpath(terminal.executable), await realpath(terminalProgram));
-  assert.ok(terminal.startedEpochMs >= owner.launchFloorEpochMs, 'The observed Terminal predates this operation.');
   assert.equal(sha(await readFile(terminalProgram)), owner.terminalProgramSha256);
   const nodeSha256 = sha(await readFile(process.execPath)); assert.equal(nodeSha256, owner.nodeSha256);
   // Replace only real application/session metadata. Configuration, tools,
@@ -87,9 +63,11 @@ async function terminalWorker(filename) {
   const contextKeys = ['__CFBundleIdentifier', 'TERM_PROGRAM', 'TERM_PROGRAM_VERSION', 'TERM_SESSION_ID', 'TERM', 'XPC_SERVICE_NAME', 'SSH_CLIENT', 'SSH_CONNECTION'];
   const environment = { ...owner.environment };
   for (const key of contextKeys) { delete environment[key]; if (process.env[key] !== undefined) environment[key] = process.env[key]; }
-  let child, interrupted;
+  let child, childIdentity, interrupted, interruptionFailure;
   const handlers = new Map(['SIGINT', 'SIGTERM', 'SIGHUP'].map(signal => [signal, () => {
-    interrupted = signal; if (child?.pid) child.kill(signal === 'SIGHUP' ? 'SIGTERM' : signal);
+    interrupted = signal;
+    if (childIdentity) try { signalProcess(inspector, childIdentity, signal === 'SIGHUP' ? 'SIGTERM' : signal); }
+    catch (reason) { interruptionFailure = reason; }
   }]));
   for (const [signal, handler] of handlers) process.on(signal, handler);
   const started = { schemaVersion: 3, context: 'actual-terminal-session', operation: owner.operation,
@@ -115,7 +93,10 @@ async function terminalWorker(filename) {
         child.once('spawn', () => {
           childBirth = (async () => {
             const identity = processIdentity(child.pid); assert.ok(identity, 'The actual child has no process identity.');
+            childIdentity = identity;
             assert.equal(identity.parentPid, process.pid); assert.equal(identity.uid, owner.uid);
+            assert.equal(identity.parentUniqueId, started.identity.uniqueId);
+            if (interrupted) signalProcess(inspector, identity, interrupted === 'SIGHUP' ? 'SIGTERM' : interrupted);
             assert.equal(await realpath(identity.executable), owner.nodeExecutable);
             await save(owner.childStartedFile + '.pending', { identity, worker: started.identity, head, nodeSha256, observedAt: new Date().toISOString() });
             await rename(owner.childStartedFile + '.pending', owner.childStartedFile);
@@ -126,6 +107,7 @@ async function terminalWorker(filename) {
         child.once('close', (code, signal) => resolve({ code, signal, childPid: child.pid ?? null, error: spawnError }));
       });
       await childBirth;
+      if (interruptionFailure) throw interruptionFailure;
     } catch (error) { result = { code: 2, signal: null, childPid: child?.pid ?? null, actualChildExit: result ?? null, error: failureRecord(error) }; }
     await save(owner.exitFile, { ...started, ...result, awaitingOwnerAdmission: false, interrupted: interrupted ?? null,
       finishedAt: new Date().toISOString(), phaseAcceptance: false, releaseAcceptance: false });
@@ -156,13 +138,10 @@ if (process.argv[2] === '--terminal') {
     environmentWrittenToArtifact: false, originalEnvironmentPreservedExceptActualSessionContext: true,
     createdAt: new Date().toISOString(), phaseAcceptance: false, releaseAcceptance: false };
   const routeObservation = record.routeObservation = { schemaVersion: 1, diagnosticOnly: true, candidateHead: head,
-    byteLimit: 8 * 1024 * 1024, durationLimitMilliseconds: 2 * 60 * 60 * 1000,
-    framing: 'uint32le messageBytes, uint64le epochMilliseconds, uint64le monotonicMilliseconds, raw PF_ROUTE message',
-    coverage: 'This owner operation only; the interval between separate setup and strict operations is not continuously observed.',
+    coverage: 'Read-only boundary snapshots; ordinary-UID broadcast isolation uses an owned PF filter child-anchor and never writes the global route.',
     snapshots: [], errors: [] };
   const publish = async () => { await writeFile(recordFile + '.pending', JSON.stringify(record, null, 2) + '\n', { mode: 0o600 }); await rename(recordFile + '.pending', recordFile); };
   let privateDirectory, descriptorFile, commandFile, admissionFile, interrupted, failure, completed, stdoutOffset = 0, stderrOffset = 0, ownedTreeReleased = false;
-  let routeObserver;
   const ownedProcesses = new Map();
   const handlers = new Map(['SIGINT', 'SIGTERM'].map(signal => [signal, () => { interrupted = signal; }]));
   for (const [signal, handler] of handlers) process.on(signal, handler);
@@ -181,8 +160,7 @@ if (process.argv[2] === '--terminal') {
   }
   async function bindOwnedTerminal() {
     if (!record.launchInvoked || record.terminal) return record.terminal;
-    const candidates = terminalPids().map(processIdentity).filter(value => value && value.uid === uid && path.basename(value.executable) === 'Terminal'
-      && value.startedEpochMs >= record.launchFloorEpochMs);
+    const candidates = inspector.namedProcesses('Terminal', uid).filter(value => value.executable === terminalProgram);
     assert.ok(candidates.length <= 1, 'Multiple new Terminal instances make ownership ambiguous.');
     if (candidates.length) {
       assert.equal(await realpath(candidates[0].executable), await realpath(terminalProgram)); record.terminal = candidates[0];
@@ -194,7 +172,8 @@ if (process.argv[2] === '--terminal') {
     assert.ok(record.admissionPublished, 'A child birth receipt has no verified worker admission.');
     assert.deepEqual(receipt.worker, record.workerIdentity); assert.equal(receipt.head, head); assert.equal(receipt.nodeSha256, record.nodeSha256);
     assert.equal(receipt.identity.parentPid, receipt.worker.pid); assert.equal(receipt.identity.uid, uid);
-    assert.ok(receipt.identity.startedEpochMs >= receipt.worker.startedEpochMs);
+    assert.equal(receipt.identity.parentUniqueId, receipt.worker.uniqueId);
+    assert.equal(receipt.identity.originalParentPidVersion, receipt.worker.pidVersion);
     const current = processIdentity(receipt.identity.pid);
     if (sameIdentity(current, receipt.identity)) {
       assert.equal(await realpath(current.executable), nodeExecutable); ownedProcesses.set(current.pid, current);
@@ -204,7 +183,7 @@ if (process.argv[2] === '--terminal') {
   function observeOwnedTree() {
     for (const [pid, identity] of ownedProcesses) {
       const current = processIdentity(pid);
-      if (!sameIdentity(current, identity)) ownedProcesses.delete(pid); else ownedProcesses.set(pid, current);
+      if (!sameProcessBirth(current, identity)) ownedProcesses.delete(pid); else ownedProcesses.set(pid, current);
     }
     const terminal = record.terminal;
     if (terminal && sameIdentity(processIdentity(terminal.pid), terminal)) ownedProcesses.set(terminal.pid, terminal);
@@ -212,8 +191,8 @@ if (process.argv[2] === '--terminal') {
     // owned merely because an old owned PID has been reused.
     const roots = [...ownedProcesses.values()].filter(value => !ownedProcesses.has(value.parentPid));
     for (const root of roots) {
-      const descendants = descendantIdentities(root.pid);
-      if (!sameIdentity(processIdentity(root.pid), root)) continue;
+      const descendants = inspector.descendants(root);
+      if (!sameProcessBirth(processIdentity(root.pid), root)) continue;
       for (const value of descendants) ownedProcesses.set(value.pid, value);
     }
     record.ownedProcesses = [...ownedProcesses.values()];
@@ -221,17 +200,9 @@ if (process.argv[2] === '--terminal') {
   }
   function signalOwned(identity, signal) {
     if (!identity) return;
-    if (!sameIdentity(processIdentity(identity.pid), identity)) return;
     assert.ok(identity.pid > 1 && ownedProcesses.get(identity.pid) === identity, 'Refusing to signal an unbound process.');
     record.cleanupSignals.push({ identity, signal, requestedAt: new Date().toISOString() });
-    try {
-      if (identity.uid === uid) process.kill(identity.pid, signal);
-      else {
-        assert.equal(identity.uid, 0, 'The owned tree contains an unexpected account.');
-        execFileSync('/usr/bin/sudo', ['-n', '/bin/kill', '-' + signal.slice(3), String(identity.pid)], { timeout: 15000,
-          env: { PATH: '/usr/bin:/bin:/usr/sbin:/sbin', LANG: 'C', LC_ALL: 'C' }, stdio: ['ignore', 'pipe', 'pipe'] });
-      }
-    } catch (error) { if (sameIdentity(processIdentity(identity.pid), identity)) throw error; }
+    return signalProcess(inspector, identity, signal);
   }
   async function reclaimFailedTree() {
     ownedTreeReleased = false; record.forcedCleanup = true; record.cleanupSignals = []; record.cleanupSignalErrors = []; await publish();
@@ -245,10 +216,10 @@ if (process.argv[2] === '--terminal') {
       do {
         remaining = descendants();
         for (const identity of remaining.toReversed()) {
-          const key = identity.pid + ':' + identity.uid + ':' + identity.startedUtc + ':' + identity.executable;
+          const key = JSON.stringify([identity.uniqueId, identity.pidVersion, identity.uid, identity.gid, identity.executableUuid, identity.executable]);
           if (!signalled.has(key)) {
-            try { signalOwned(identity, signal); } catch (error) { record.cleanupSignalErrors.push(failureRecord(error)); }
-            signalled.add(key);
+            try { if (signalOwned(identity, signal)) signalled.add(key); }
+            catch (error) { record.cleanupSignalErrors.push(failureRecord(error)); }
           }
         }
         if (!remaining.length) break; await delay(100);
@@ -260,10 +231,10 @@ if (process.argv[2] === '--terminal') {
     // receipt stays an error even if this fallback successfully reclaims it.
     for (const signal of ['SIGTERM', 'SIGKILL']) {
       const terminal = record.terminal; observeOwnedTree();
-      if (!terminal || !sameIdentity(processIdentity(terminal.pid), terminal)) break;
+      if (!terminal || !sameProcessBirth(processIdentity(terminal.pid), terminal)) break;
       try { signalOwned(ownedProcesses.get(terminal.pid), signal); } catch (error) { record.cleanupSignalErrors.push(failureRecord(error)); }
       const deadline = Date.now() + 5000;
-      while (Date.now() < deadline && sameIdentity(processIdentity(terminal.pid), terminal)) await delay(100);
+      while (Date.now() < deadline && sameProcessBirth(processIdentity(terminal.pid), terminal)) await delay(100);
     }
     record.forcedCleanupAfter = observeOwnedTree(); assert.deepEqual(record.forcedCleanupAfter, [], 'Bound processes survived failed-owner recovery.');
     ownedTreeReleased = true; record.forcedCleanupReclaimed = true;
@@ -278,7 +249,7 @@ if (process.argv[2] === '--terminal') {
       assert.equal(worker.uid, uid); assert.equal(path.basename(worker.executable), path.basename(nodeExecutable));
       assert.ok(sameIdentity(ownedProcesses.get(worker.pid), worker), 'The actual worker is not bound to this Terminal tree.');
     }
-    if (originalWorkerAlive && !existingExit) { process.kill(worker.pid, 'SIGTERM'); record.workerTerminationRequested = true; }
+    if (originalWorkerAlive && !existingExit) { signalProcess(inspector, worker, 'SIGTERM'); record.workerTerminationRequested = true; }
     const deadline = Date.now() + 25000;
     while (Date.now() < deadline && sameIdentity(processIdentity(started.pid), started.identity)) { observeOwnedTree(); await forward(); await delay(100); }
     record.workerAfterDrain = processIdentity(started.pid); record.exitBeforeTerminalClose = await readJson(exitFile);
@@ -295,20 +266,21 @@ if (process.argv[2] === '--terminal') {
     const current = processIdentity(owned.pid);
     if (!current) { record.terminalAlreadyExited = true; return; }
     assert.ok(sameIdentity(current, owned), 'Refusing to signal a reused Terminal PID.');
-    const descendants = descendantIdentities(owned.pid); record.terminalDescendantsBeforeClose = descendants;
-    process.kill(owned.pid, 'SIGTERM'); record.terminalTerminationRequested = true;
+    const descendants = inspector.descendants(owned); record.terminalDescendantsBeforeClose = descendants;
+    for (const child of descendants) ownedProcesses.set(child.pid, child);
+    signalProcess(inspector, owned, 'SIGTERM'); record.terminalTerminationRequested = true;
     const deadline = Date.now() + 5000;
-    while (Date.now() < deadline && sameIdentity(processIdentity(owned.pid), owned)) await delay(100);
-    if (sameIdentity(processIdentity(owned.pid), owned)) {
+    while (Date.now() < deadline && sameProcessBirth(processIdentity(owned.pid), owned)) await delay(100);
+    if (sameProcessBirth(processIdentity(owned.pid), owned)) {
       // Force is cleanup of a failed owner, never a successful receipt.
-      process.kill(owned.pid, 'SIGKILL'); record.forcedTerminalTermination = true;
+      signalProcess(inspector, owned, 'SIGKILL'); record.forcedTerminalTermination = true;
       const forcedDeadline = Date.now() + 5000;
-      while (Date.now() < forcedDeadline && sameIdentity(processIdentity(owned.pid), owned)) await delay(100);
+      while (Date.now() < forcedDeadline && sameProcessBirth(processIdentity(owned.pid), owned)) await delay(100);
     }
     record.terminalAfterClose = processIdentity(owned.pid);
-    assert.ok(!sameIdentity(record.terminalAfterClose, owned), 'The owned Terminal process survived termination.');
+    assert.ok(!sameProcessBirth(record.terminalAfterClose, owned), 'The owned Terminal process survived termination.');
     const childDeadline = Date.now() + 5000; let remaining;
-    do { remaining = descendants.filter(value => sameIdentity(processIdentity(value.pid), value)); if (!remaining.length) break; await delay(100); } while (Date.now() < childDeadline);
+    do { remaining = descendants.filter(value => sameProcessBirth(processIdentity(value.pid), value)); if (!remaining.length) break; await delay(100); } while (Date.now() < childDeadline);
     record.terminalDescendantsAfterClose = remaining; assert.deepEqual(remaining, [], 'Owned Terminal descendants remained alive.');
     if (record.forcedTerminalTermination) throw new Error('The owned Terminal required forced termination.');
   }
@@ -332,94 +304,8 @@ if (process.argv[2] === '--terminal') {
     } catch (error) { routeObservation.errors.push({ stage: 'snapshot-' + stage + '-' + name, error: failureRecord(error) }); }
     snapshot.finishedAt = new Date().toISOString();
   }
-  async function startRouteObservation() {
-    if (routeObservation.attemptedAt) return;
-    const broadcastOwnerFile = path.join(outputRoot, 'provisioning', 'broadcast-route.json');
-    let broadcastOwner;
-    try { broadcastOwner = await readJson(broadcastOwnerFile); }
-    catch (error) {
-      routeObservation.attemptedAt = new Date().toISOString();
-      routeObservation.errors.push({ stage: 'read-broadcast-owner', error: failureRecord(error) }); return;
-    }
-    // Setup compiles the helper inside its admitted child. Wait for its actual
-    // published hash; strict can observe from before its Terminal is launched.
-    if (!broadcastOwner?.helperSha256) return;
-    routeObservation.attemptedAt = new Date().toISOString();
-    const helper = path.join(outputRoot, 'provisioning', 'broadcast-route-owner');
-    const source = helper + '.c', binary = path.join(evidence, 'route-notifications.bin');
-    const observerStdout = path.join(evidence, 'route-observer-stdout.txt'), observerStderr = path.join(evidence, 'route-observer-stderr.txt');
-    let stdoutHandle, stderrHandle;
-    try {
-      assert.equal(broadcastOwner.candidateHead, head);
-      for (const [filename, digest] of [[helper, broadcastOwner.helperSha256], [source, broadcastOwner.helperSourceSha256]]) {
-        const stat = await lstat(filename); assert.ok(stat.isFile() && !stat.isSymbolicLink()); assert.equal(stat.uid, uid);
-        assert.equal(sha(await readFile(filename)), digest);
-      }
-      routeObservation.broadcastOwner = { path: broadcastOwnerFile, candidateHead: broadcastOwner.candidateHead,
-        helperSha256: broadcastOwner.helperSha256, helperSourceSha256: broadcastOwner.helperSourceSha256,
-        interface: broadcastOwner.interface, peer: broadcastOwner.peer, installationIdentity: broadcastOwner.installationIdentity ?? null };
-      routeObservation.ownerIdentity = processIdentity(process.pid);
-      routeObservation.helper = helper; routeObservation.source = source;
-      routeObservation.files = { binary, stdout: observerStdout, stderr: observerStderr };
-      stdoutHandle = await open(observerStdout, 'wx', 0o600); stderrHandle = await open(observerStderr, 'wx', 0o600);
-      const child = spawn(helper, ['observe', binary], { cwd: workingDirectory,
-        env: { ...process.env, LC_ALL: 'C', LANG: 'C', TZ: 'UTC' }, stdio: ['pipe', stdoutHandle.fd, stderrHandle.fd] });
-      routeObserver = { child, closed: false };
-      child.stdin.on('error', error => { routeObservation.errors.push({ stage: 'observer-stdin', error: failureRecord(error) }); });
-      child.once('error', error => { routeObservation.errors.push({ stage: 'observer-process', error: failureRecord(error) }); });
-      child.once('close', (code, signal) => {
-        routeObserver.closed = true; routeObservation.exit = { code, signal, closedAt: new Date().toISOString() };
-      });
-      await once(child, 'spawn');
-      const identity = processIdentity(child.pid);
-      assert.ok(identity && identity.uid === uid && identity.parentPid === process.pid, 'The observer has no actual owned birth identity.');
-      routeObserver.identity = identity; ownedProcesses.set(identity.pid, identity); routeObservation.identity = identity;
-      assert.equal(await realpath(identity.executable), await realpath(helper));
-      routeObservation.spawnedAt = new Date().toISOString();
-      const receipt = path.join(evidence, 'route-observer-started.json');
-      await save(receipt, { schemaVersion: 1, diagnosticOnly: true, operation, candidateHead: head,
-        ownerIdentity: routeObservation.ownerIdentity, identity, wrapperSha256: record.wrapperSha256,
-        helperSha256: broadcastOwner.helperSha256, helperSourceSha256: broadcastOwner.helperSourceSha256,
-        spawnedAt: routeObservation.spawnedAt, byteLimit: routeObservation.byteLimit,
-        durationLimitMilliseconds: routeObservation.durationLimitMilliseconds, files: routeObservation.files });
-      routeObservation.birthReceipt = { path: receipt, sha256: sha(await readFile(receipt)) };
-      await publish();
-    } catch (error) { routeObservation.errors.push({ stage: 'start-observer', error: failureRecord(error) }); }
-    finally {
-      for (const handle of [stdoutHandle, stderrHandle].filter(Boolean)) try { await handle.close(); }
-      catch (error) { routeObservation.errors.push({ stage: 'close-observer-output-handle', error: failureRecord(error) }); }
-    }
-  }
-  async function stopRouteObservation() {
-    routeObservation.stopRequestedAt = new Date().toISOString();
-    if (routeObserver) {
-      const { child, identity } = routeObserver;
-      // EOF requests a final read of pending notifications, fsync and actual
-      // close. Observation failures are diagnostic; a leaked owned process is
-      // still subject to the existing process-release contract.
-      if (!routeObserver.closed && !child.stdin.destroyed) child.stdin.end();
-      let deadline = Date.now() + 5000;
-      while (!routeObserver.closed && Date.now() < deadline) await delay(100);
-      for (const signal of ['SIGTERM', 'SIGKILL']) {
-        if (routeObserver.closed) break;
-        observeOwnedTree(); const current = identity && ownedProcesses.get(identity.pid);
-        if (sameIdentity(current, identity)) {
-          record.cleanupSignals ??= []; signalOwned(current, signal); routeObservation.forcedTermination = true;
-        }
-        deadline = Date.now() + 1500;
-        while (!routeObserver.closed && Date.now() < deadline) await delay(100);
-      }
-      assert.ok(routeObserver.closed, 'The owned route observer did not close.');
-      if (identity && sameIdentity(ownedProcesses.get(identity.pid), identity)) ownedProcesses.delete(identity.pid);
-    } else routeObservation.notStartedReason = routeObservation.attemptedAt ? 'Helper admission or spawn failed; inspect diagnostic errors.' : 'No compiled helper was published during the operation.';
-    routeObservation.retainedFiles = [];
-    for (const [name, filename] of Object.entries(routeObservation.files ?? {})) try {
-      const bytes = await readFile(filename); routeObservation.retainedFiles.push({ name, path: filename, bytes: bytes.length, sha256: sha(bytes) });
-    } catch (error) { routeObservation.errors.push({ stage: 'retain-observer-' + name, error: failureRecord(error) }); }
-    routeObservation.finishedAt = new Date().toISOString();
-  }
   try {
-    await snapshotRoute('before-operation'); await startRouteObservation();
+    await snapshotRoute('before-operation');
     record.terminalBefore = terminalPids(); assert.deepEqual(record.terminalBefore, [], 'An existing Terminal instance prevents isolated ownership.');
     record.consoleOwner = command('/usr/bin/stat', ['-f', '%Su:%u', '/dev/console']).trim();
     assert.equal(Number(record.consoleOwner.split(':').at(-1)), uid, 'No GUI console session belongs to the ordinary runner.');
@@ -431,9 +317,9 @@ if (process.argv[2] === '--terminal') {
     assert.ok(relative === '..' || relative.startsWith('..' + path.sep), 'Private environment files must remain outside uploaded evidence.');
     descriptorFile = path.join(privateDirectory, 'operation.json'); commandFile = path.join(privateDirectory, 'operation.command'); admissionFile = path.join(privateDirectory, 'admitted.json');
     await writeFile(stdoutFile, '', { flag: 'wx', mode: 0o600 }); await writeFile(stderrFile, '', { flag: 'wx', mode: 0o600 });
-    record.openRequestedAt = new Date().toISOString(); record.launchFloorEpochMs = Math.floor(Date.now() / 1000) * 1000;
+    record.openRequestedAt = new Date().toISOString();
     await save(descriptorFile, { operation, arguments: operations[operation], uid, gid, head, nodeExecutable, nodeSha256: record.nodeSha256,
-      terminalProgramSha256: record.terminalProgramSha256, workingDirectory, launchFloorEpochMs: record.launchFloorEpochMs,
+      terminalProgramSha256: record.terminalProgramSha256, workingDirectory,
       environment: { ...process.env }, startedFile, childStartedFile, exitFile, admissionFile });
     const source = '#!/bin/sh\ncd ' + shellQuote(workingDirectory) + ' || exit 2\nexec ' + [nodeExecutable, thisFile, '--terminal', descriptorFile].map(shellQuote).join(' ')
       + ' >' + shellQuote(stdoutFile) + ' 2>' + shellQuote(stderrFile) + '\n';
@@ -444,12 +330,13 @@ if (process.argv[2] === '--terminal') {
     const deadline = Date.now() + 60000; let lastHeartbeat = 0;
     while (!(completed = await readJson(exitFile))) {
       if (interrupted) throw new Error('Terminal operation interrupted by ' + interrupted);
-      await bindOwnedTerminal(); await bindChildReceipt(); observeOwnedTree(); await startRouteObservation(); const started = await readJson(startedFile);
+      await bindOwnedTerminal(); await bindChildReceipt(); observeOwnedTree(); const started = await readJson(startedFile);
       if (started && !record.admissionPublished) {
         assert.ok(record.terminal); assert.equal(started.uid, uid); assert.equal(started.gid, gid); assert.equal(started.head, head);
         assert.equal(started.nodeSha256, record.nodeSha256); assert.ok(sameIdentity(started.terminal, record.terminal));
         const worker = processIdentity(started.pid); assert.equal(worker?.uid, uid); assert.equal(path.basename(worker.executable), path.basename(nodeExecutable));
         assert.ok(sameIdentity(worker, started.identity));
+        assert.ok(inspector.descendants(record.terminal).some(value => sameIdentity(value, worker)), 'The admitted worker must belong to this actual Terminal birth.');
         record.workerIdentity = worker;
         await save(admissionFile, { workerPid: started.pid, terminal: record.terminal, head }); record.admissionPublished = true; await publish();
       }
@@ -480,7 +367,6 @@ if (process.argv[2] === '--terminal') {
     await snapshotRoute('after-child-drain');
     try { await closeOwnedTerminal(); } catch (error) { errors.push(error); }
     await snapshotRoute('after-terminal-close-attempt');
-    try { await stopRouteObservation(); } catch (error) { errors.push(error); }
     try {
       assert.ok(!record.launchInvoked || record.terminal || terminalPids().length === 0, 'An unbound Terminal remains after launch.');
       assert.deepEqual(observeOwnedTree(), [], 'Bound processes remained after normal cleanup.'); ownedTreeReleased = true;

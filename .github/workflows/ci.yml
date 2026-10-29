@@ -29,6 +29,11 @@ on:
         type: string
         required: false
         default: ''
+      query_timings:
+        description: Observe candidate SQL timings during diagnosis; does not change test selection or acceptance
+        type: boolean
+        required: false
+        default: false
       test_concurrency:
         description: Number of isolated test file processes; shared fixtures retain exclusive resource ownership
         type: choice
@@ -47,6 +52,16 @@ on:
         default: false
       native_sqlite:
         description: Supply a separate current stopped-instance SQLite input, never historical recordings (requires native_instance)
+        type: boolean
+        required: false
+        default: false
+      dvd_reference:
+        description: Download and verify the complete original NTSC DVD VIDEO_TS input (requires native_instance)
+        type: boolean
+        required: false
+        default: false
+      bluray_reference:
+        description: Supply the complete frozen official Sintel Blu-ray ISO and every UDF/BDMV member (requires native_instance)
         type: boolean
         required: false
         default: false
@@ -89,7 +104,9 @@ jobs:
   validate:
     name: ${{ matrix.os }} / shard ${{ matrix.shard }} / Node 24 / PostgreSQL 17
     runs-on: ${{ matrix.os }}
-    timeout-minutes: ${{ inputs.release_pair && 360 || 120 }}
+    # Provisioning and large evidence uploads have their own outer budget.
+    # The strict runner retains its independent 100-minute execution limit.
+    timeout-minutes: ${{ inputs.release_pair && 360 || 180 }}
     strategy:
       fail-fast: false
       matrix:
@@ -100,6 +117,7 @@ jobs:
       MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
       MEDIAMANAGER_CI_TEST_FILES: ${{ inputs.test_files || '' }}
       MEDIAMANAGER_CI_TIMEOUT_MS: ${{ inputs.diagnostic_timeout_ms || '' }}
+      MEDIAMANAGER_TEST_QUERY_TIMINGS: ${{ inputs.query_timings && 'true' || 'false' }}
       MEDIAMANAGER_CI_TEST_CONCURRENCY: ${{ inputs.test_concurrency || '1' }}
       MEDIAMANAGER_CI_PROFILE: ${{ inputs.release_pair && 'full' || inputs.validation_profile || 'available' }}
       MEDIAMANAGER_CI_RELEASE_PAIR: ${{ inputs.release_pair && 'true' || 'false' }}
@@ -110,6 +128,8 @@ jobs:
       MEDIAMANAGER_CI_NATIVE_REFERENCE: ${{ inputs.native_reference && 'true' || 'false' }}
       MEDIAMANAGER_CI_NATIVE_INSTANCE: ${{ inputs.native_instance && 'true' || 'false' }}
       MEDIAMANAGER_CI_NATIVE_SQLITE: ${{ inputs.native_sqlite && 'true' || 'false' }}
+      MEDIAMANAGER_CI_DVD_REFERENCE: ${{ inputs.dvd_reference && 'true' || 'false' }}
+      MEDIAMANAGER_CI_BLURAY_REFERENCE: ${{ inputs.bluray_reference && 'true' || 'false' }}
       MEDIAMANAGER_CI_WEB_CLIENTS: ${{ inputs.web_clients && 'true' || 'false' }}
       MEDIAMANAGER_CI_EMBY_WEB: ${{ inputs.emby_web && 'true' || 'false' }}
       MEDIAMANAGER_CI_ALIST_REFERENCE: ${{ inputs.alist_reference && 'true' || 'false' }}
@@ -164,6 +184,12 @@ jobs:
           if ($env:MEDIAMANAGER_CI_NATIVE_SQLITE -eq 'true' -and $env:MEDIAMANAGER_CI_NATIVE_INSTANCE -ne 'true') {
             throw 'native_sqlite requires native_instance.'
           }
+          if ($env:MEDIAMANAGER_CI_DVD_REFERENCE -eq 'true' -and $env:MEDIAMANAGER_CI_NATIVE_INSTANCE -ne 'true') {
+            throw 'dvd_reference requires native_instance.'
+          }
+          if ($env:MEDIAMANAGER_CI_BLURAY_REFERENCE -eq 'true' -and $env:MEDIAMANAGER_CI_NATIVE_INSTANCE -ne 'true') {
+            throw 'bluray_reference requires native_instance.'
+          }
           if (($env:MEDIAMANAGER_CI_WEB_CLIENTS -eq 'true' -or $env:MEDIAMANAGER_CI_EMBY_WEB -eq 'true') -and $env:MEDIAMANAGER_CI_NATIVE_SQLITE -ne 'true') {
             throw 'Web client validation requires native_sqlite.'
           }
@@ -197,6 +223,8 @@ jobs:
         with:
           node-version: 24.16.0
           cache: npm
+      - name: Install locked dependencies
+        run: npm ci --bin-links=false
       - name: Provision fixed WebDAV executable
         shell: pwsh
         timeout-minutes: 5
@@ -243,7 +271,7 @@ jobs:
             await Promise.all(servers.filter(server => server.listening).map(server => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()))));
           }
           NODE
-      - name: Prepare and verify macOS limited broadcast routing
+      - name: Prepare and verify owned macOS limited broadcast policy
         if: runner.os == 'macOS'
         run: node tools/ci/macos-network-context.js setup
       - name: Set up .NET oracle runtime
@@ -272,8 +300,54 @@ jobs:
         shell: pwsh
         timeout-minutes: 5
         run: ./tools/ci/setup-media.ps1
-      - name: Install locked dependencies
-        run: npm ci --bin-links=false
+      - name: Provision complete original DVD reference
+        if: inputs.dvd_reference == true
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ($IsLinux) {
+            & sudo apt-get update
+            if ($LASTEXITCODE -ne 0) { throw 'Cannot update the libarchive package index.' }
+            & sudo apt-get install --yes --no-install-recommends libarchive-tools
+            if ($LASTEXITCODE -ne 0) { throw 'Cannot install the ISO-capable libarchive reader.' }
+          }
+          $archiveName = if ($IsLinux) { 'bsdtar' } elseif ($IsWindows) { 'tar.exe' } else { '/usr/bin/tar' }
+          $archiveCommand = Get-Command $archiveName -CommandType Application -ErrorAction Stop | Select-Object -First 1
+          $archivePath = [IO.Path]::GetFullPath($archiveCommand.Source)
+          if (-not [IO.File]::Exists($archivePath)) { throw 'The archive reader must resolve to an actual executable.' }
+          $output = Join-Path $env:RUNNER_TEMP 'mediamanager-disc-reference'
+          & node tools/ci/disc-reference/acquire.js --variant ntsc --output $output --archive-tool $archivePath
+          if ($LASTEXITCODE -ne 0) { throw 'Complete original DVD provisioning failed; no substitute input is permitted.' }
+          ('MEDIAMANAGER_TEST_DVD_REFERENCE=' + (Join-Path $output 'evidence/receipt.json')) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Provision complete original Sintel Blu-ray reference
+        if: inputs.bluray_reference == true
+        shell: pwsh
+        timeout-minutes: 60
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $toolEvidence = Join-Path $env:RUNNER_TEMP 'mediamanager-bluray-tool-supply'
+          New-Item -ItemType Directory -Path $toolEvidence -ErrorAction Stop | Out-Null
+          if ($IsLinux) {
+            & sudo apt-get update 2>&1 | Tee-Object -FilePath (Join-Path $toolEvidence 'package-index.txt')
+            if ($LASTEXITCODE -ne 0) { throw 'Cannot update the real UDF reader package index.' }
+            & sudo apt-get install --yes --no-install-recommends 7zip-standalone 2>&1 | Tee-Object -FilePath (Join-Path $toolEvidence 'package-install.txt')
+            if ($LASTEXITCODE -ne 0) { throw 'Cannot install the actual standalone UDF reader.' }
+            & dpkg-query --show 7zip-standalone | Out-File -FilePath (Join-Path $toolEvidence 'installed-package.txt') -Encoding utf8
+            $archiveName = '/usr/lib/7zip/7zz'
+          } elseif ($IsMacOS) {
+            $env:HOMEBREW_NO_AUTO_UPDATE = '1'
+            & brew install sevenzip 2>&1 | Tee-Object -FilePath (Join-Path $toolEvidence 'package-install.txt')
+            if ($LASTEXITCODE -ne 0) { throw 'Cannot supply the actual macOS UDF reader.' }
+            & brew list --versions sevenzip | Out-File -FilePath (Join-Path $toolEvidence 'installed-package.txt') -Encoding utf8
+            $archiveName = '7zz'
+          } else {
+            $archiveName = Join-Path $env:ProgramFiles '7-Zip/7z.exe'
+          }
+          $archiveCommand = Get-Command $archiveName -CommandType Application -ErrorAction Stop | Select-Object -First 1
+          $archivePath = [IO.Path]::GetFullPath($archiveCommand.Source)
+          Get-Item -LiteralPath $archivePath | Select-Object FullName, Length, VersionInfo | ConvertTo-Json -Depth 4 | Out-File -FilePath (Join-Path $toolEvidence 'reader-file.json') -Encoding utf8
+          & node tools/ci/bluray-reference/provision.js --output (Join-Path $env:RUNNER_TEMP 'mediamanager-bluray-reference') --archive-tool $archivePath
+          if ($LASTEXITCODE -ne 0) { throw 'Complete original Blu-ray provisioning failed; no substitute input is permitted.' }
       - name: Initialize isolated native instance and controlled media seed
         if: inputs.native_instance == true
         shell: pwsh
@@ -326,7 +400,42 @@ jobs:
           $env:PLAYWRIGHT_BROWSERS_PATH = $browserRoot
           "PLAYWRIGHT_BROWSERS_PATH=$browserRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           $log = Join-Path $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT 'provisioning/browser-install.log'
-          node node_modules/playwright/cli.js install --with-deps --no-shell chromium *> $log
+          $node = (Get-Command node -CommandType Application | Select-Object -First 1).Source
+          $commands = [Collections.Generic.List[object]]::new()
+          $browserArguments = @('node_modules/playwright/cli.js', 'install', '--with-deps', '--no-shell', 'chromium')
+          if ($IsLinux) {
+            $aptConfig = Join-Path $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT 'provisioning/browser-apt.conf'
+            if (Test-Path -LiteralPath $aptConfig) { throw 'Browser APT configuration requires a new evidence file.' }
+            # APT_CONFIG is read before system fragments. The apt-get binary
+            # scope applies these three values after those fragments, preserving
+            # the runner's repositories, proxies and remaining APT settings.
+            @'
+          Binary::apt-get::Acquire::http::Timeout "20";
+          Binary::apt-get::Acquire::https::Timeout "20";
+          Binary::apt-get::Acquire::Retries "1";
+          '@ | Set-Content -LiteralPath $aptConfig -Encoding utf8
+            $sudo = (Get-Command sudo -CommandType Application | Select-Object -First 1).Source
+            $envProgram = (Get-Command env -CommandType Application | Select-Object -First 1).Source
+            $aptReadback = Join-Path $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT 'provisioning/browser-apt-config.txt'
+            # Playwright 1.64.0 uses plain sudo, which drops APT_CONFIG. Start
+            # only its dependency CLI as root with an explicit env assignment;
+            # its root path then invokes sh without another sudo boundary.
+            & $sudo -n -- $envProgram "APT_CONFIG=$aptConfig" apt-config shell HTTP_TIMEOUT Binary::apt-get::Acquire::http::Timeout/i HTTPS_TIMEOUT Binary::apt-get::Acquire::https::Timeout/i RETRIES Binary::apt-get::Acquire::Retries/i *> $aptReadback
+            if ($LASTEXITCODE -ne 0) { throw 'Cannot read browser APT settings through the actual sudo/env boundary.' }
+            $readback = Get-Content -LiteralPath $aptReadback -Raw
+            foreach ($setting in @(@('HTTP_TIMEOUT', '20'), @('HTTPS_TIMEOUT', '20'), @('RETRIES', '1'))) {
+              if ($readback -notmatch ("(?m)^" + $setting[0] + "='" + $setting[1] + "'\r?$")) { throw 'Browser APT settings did not reach the elevated process.' }
+            }
+            $dependencyArguments = @('-n', '--', $envProgram, "APT_CONFIG=$aptConfig", $node, 'node_modules/playwright/cli.js', 'install-deps', 'chromium')
+            $commands.Add(@($sudo) + $dependencyArguments)
+            & $sudo @dependencyArguments *> $log
+            if ($LASTEXITCODE -ne 0) { throw 'The complete fixed Chromium system dependency installation failed; see browser-install.log.' }
+            # Chromium and tools use the same dependency groups in install-deps
+            # chromium and the original --with-deps --no-shell installation.
+            $browserArguments = @('node_modules/playwright/cli.js', 'install', '--no-shell', 'chromium')
+          }
+          $commands.Add(@($node) + $browserArguments)
+          & $node @browserArguments *>> $log
           if ($LASTEXITCODE -ne 0) { throw 'The fixed Chromium installation failed; see browser-install.log.' }
           @'
           import { appendFile, writeFile } from 'node:fs/promises';
@@ -337,10 +446,10 @@ jobs:
           await writeFile(path.join(process.env.MEDIAMANAGER_VALIDATION_OUTPUT_ROOT, 'provisioning/browser-install.json'),
             JSON.stringify({ candidate: process.env.GITHUB_SHA, runId: process.env.GITHUB_RUN_ID,
               runAttempt: process.env.GITHUB_RUN_ATTEMPT, node: process.execPath,
-              command: ['node_modules/playwright/cli.js', 'install', '--with-deps', '--no-shell', 'chromium'],
+              commands: JSON.parse(process.argv[2]),
               exitCode: 0, root: process.env.PLAYWRIGHT_BROWSERS_PATH, executable,
               webInteractionValidated: false }, null, 2) + '\n', { flag: 'wx' });
-          '@ | node --input-type=module
+          '@ | node --input-type=module - (ConvertTo-Json -InputObject $commands -Depth 3 -Compress)
           if ($LASTEXITCODE -ne 0) { throw 'Browser installation receipt failed.' }
       - name: Capture the unmodified designated hosted Emby Web client
         if: inputs.emby_web == true
@@ -365,7 +474,7 @@ jobs:
       - name: Audit database resources
         if: always() && steps.environment.outcome == 'success'
         run: node tools/ci/environment.js audit
-      - name: Remove owned macOS limited broadcast route
+      - name: Remove owned macOS limited broadcast policy
         if: always() && runner.os == 'macOS'
         run: node tools/ci/macos-broadcast.js cleanup
       - name: Remove created macOS loopback alias
@@ -387,6 +496,24 @@ jobs:
           path: ${{ runner.temp }}/mediamanager-results
           if-no-files-found: warn
           include-hidden-files: true
+          retention-days: 14
+      - name: Preserve complete original DVD acquisition evidence
+        if: always() && inputs.dvd_reference == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dvd-reference-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-disc-reference/evidence
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve complete original Blu-ray acquisition evidence
+        if: always() && inputs.bluray_reference == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: bluray-reference-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-bluray-reference/evidence
+            ${{ runner.temp }}/mediamanager-bluray-tool-supply
+          if-no-files-found: error
           retention-days: 14
       - name: Preserve same-run native reference and build evidence
         if: always() && inputs.native_reference == true

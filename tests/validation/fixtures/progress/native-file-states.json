@@ -1,0 +1,11 @@
+{
+  "role": "Synthetic Node.js native test:complete event data, not node:test declarations or options. These states must never produce a selected-file-failed annotation.",
+  "states": [
+    { "skip": true },
+    { "todo": true },
+    { "skip": "expected" },
+    { "todo": "expected" },
+    { "skip": "" },
+    { "todo": "" }
+  ]
+}

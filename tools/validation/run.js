@@ -1,16 +1,20 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { createWriteStream } from 'node:fs';
-import { lstat, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, readFile, readdir, realpath, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { StringDecoder } from 'node:string_decoder';
 import { fileURLToPath } from 'node:url';
 import { dependencyClosure, dependencyVariables, describeFile, filesIn, inventory, sha256 } from './inventory.js';
 import { captureInputIdentity, inputsUnchanged } from './inputs.js';
+import { dvdReferenceInputs } from './dvd-reference-inputs.js';
+import { blurayReferenceInputs } from './bluray-reference-inputs.js';
 import { assertIsolatedOutput, repositoryRoot, validationExecutable, validationOutputRoot } from './paths.js';
 import registrationReporter, { progressLineLimit, progressPrefix, progressRecord } from './tap-registration-reporter.js';
+import { launchSelectedTests } from './test-launcher.js';
 
 void registrationReporter;
-const registrationReporterUrl = new URL('./tap-registration-reporter.js', import.meta.url).href;
+void launchSelectedTests;
+const testLauncher = fileURLToPath(new URL('./test-launcher.js', import.meta.url));
 
 export async function validationPhase(label, operation, { environment = process.env, write = text => process.stderr.write(text) } = {}) {
   if (environment.GITHUB_ACTIONS !== 'true') return operation();
@@ -26,7 +30,13 @@ export async function validationPhase(label, operation, { environment = process.
 
 export function progressForwarder({ environment = process.env, selected, write = text => process.stderr.write(text) }) {
   if (environment.GITHUB_ACTIONS !== 'true') return () => {};
-  const selectedSet = new Set(selected), decoder = new StringDecoder('utf8');
+  const selectedSet = new Set(selected), annotated = new Set(), decoder = new StringDecoder('utf8');
+  const report = text => { try { write(text); } catch { /* CI diagnostics cannot change the native result. */ } };
+  const annotationPath = filename => filename.length > 0 && !/[\u0000-\u001f\u007f-\u009f\u2028\u2029\\]/u.test(filename)
+    && !path.posix.isAbsolute(filename) && !path.win32.parse(filename).root
+    && filename.split('/').every(part => part !== '' && part !== '.' && part !== '..');
+  const escapeProperty = value => value.replaceAll('%', '%25').replaceAll('\r', '%0D').replaceAll('\n', '%0A')
+    .replaceAll(':', '%3A').replaceAll(',', '%2C');
   let pending = '', dropping = false;
   return chunk => {
     const text = decoder.write(chunk);
@@ -42,7 +52,16 @@ export function progressForwarder({ environment = process.env, selected, write =
         let value;
         try { value = JSON.parse(pending.slice(progressPrefix.length)); } catch { /* Keep malformed output only in stderr.txt. */ }
         const record = progressRecord(value, selectedSet);
-        if (record) write(progressPrefix + JSON.stringify(record) + '\n');
+        if (record) {
+          report(progressPrefix + JSON.stringify(record) + '\n');
+          // A reporter's failed progress alone is insufficient: require the
+          // immediate observer's explicit native completion confirmation.
+          if (value.passed === false && record.kind === 'file' && record.event === 'failed'
+            && record.line === 1 && record.column === 1 && annotationPath(record.file) && !annotated.has(record.file)) {
+            annotated.add(record.file);
+            report(`::error file=${escapeProperty(record.file)}::Selected test file failed (selected-file-failed).\n`);
+          }
+        }
       }
       pending = ''; dropping = false; offset = newline + 1;
     }
@@ -150,7 +169,7 @@ async function readConfig(filename) {
   return config.environment;
 }
 
-async function preflight(testPaths, dependencies, environment, { fullProfile = false } = {}) {
+export async function preflight(testPaths, dependencies, environment, { fullProfile = false } = {}) {
   const selected = dependencyClosure(dependencies, testPaths);
   const requiredServices = [...new Set(selected.flatMap(entry => entry.services))].sort();
   const services = [];
@@ -170,6 +189,18 @@ async function preflight(testPaths, dependencies, environment, { fullProfile = f
         result.identity = response.rows[0];
       } catch (error) { result.errorCode = error.code || error.name; }
       finally { await client.end().catch(() => {}); }
+    } else if (value && name === 'dvdReference') {
+      try {
+        const supplied = await dvdReferenceInputs(environment);
+        result = { ...result, ...await describeFile(supplied.filename), mediaRoot: supplied.mediaRoot,
+          sourceSha256: supplied.receipt.download.sha256, completeOriginalDvd: true };
+      } catch (error) { result.errorCode = error.code || error.name; result.error = error.message; }
+    } else if (value && name === 'blurayReference') {
+      try {
+        const supplied = await blurayReferenceInputs(environment);
+        result = { ...result, ...await describeFile(supplied.filename), mediaRoot: supplied.mediaRoot,
+          sourceSha256: supplied.receipt.download.sha256, completeOriginalBluray: true };
+      } catch (error) { result.errorCode = error.code || error.name; result.error = error.message; }
     } else if (value) {
       const description = await describeFile(path.resolve(repositoryRoot, value), { recursive: false });
       result = { ...result, ...description };
@@ -179,7 +210,11 @@ async function preflight(testPaths, dependencies, environment, { fullProfile = f
   const tools = [];
   const names = [...new Set(selected.flatMap(entry => entry.tools))].sort();
   for (const name of names) {
-    const executable = validationExecutable(name, environment);
+    let executable = validationExecutable(name, environment);
+    // Executable aliases follow the OS loader. Bind the actual program on each
+    // capture; ordinary source and recorded inputs still reject links.
+    try { executable = await realpath(executable); }
+    catch (error) { if (!['ENOENT', 'ENOTDIR'].includes(error?.code)) throw error; }
     const description = await describeFile(executable, { recursive: false });
     const args = toolVersionArguments(name);
     const spawnOptions = { cwd: repositoryRoot, env: environment, windowsHide: true, encoding: 'utf8', timeout: 10000 };
@@ -245,6 +280,22 @@ async function candidateIdentity() {
     entriesSha256: sha256(JSON.stringify(entries)) };
 }
 
+export async function prepareTestExecutionEnvironment(environment, output, selectionSha256) {
+  // Fixed fixture names must belong to this execution, including each pair
+  // round. Keep the provisioned inputs and the job's outer receipts unchanged.
+  const testOutput = path.join(output, 'test-output');
+  assertIsolatedOutput(testOutput, environment);
+  await mkdir(testOutput);
+  return { ...environment, MEDIAMANAGER_VALIDATION_OUTPUT_ROOT: testOutput,
+    MEDIAMANAGER_TEST_REGISTRATION_OUTPUT: path.join(output, 'test-registrations.json'),
+    MEDIAMANAGER_TEST_REGISTRATION_ROOT: repositoryRoot,
+    MEDIAMANAGER_TEST_SELECTION_FILE: path.join(output, 'test-selection.json'),
+    MEDIAMANAGER_TEST_SELECTION_SHA256: selectionSha256,
+    MEDIAMANAGER_TEST_RESOURCE_ROOT: path.join(output, 'test-resource-leases'),
+    MEDIAMANAGER_TEST_FILE_DIAGNOSTICS_ROOT: path.join(output, 'test-files'),
+    MEDIAMANAGER_TEST_DIAGNOSTICS_ROOT: path.join(output, 'execution-diagnostics') };
+}
+
 export async function main(argv = process.argv.slice(2)) {
   const options = argumentsFor(argv);
   const environment = { ...process.env, ...await readConfig(options.config) };
@@ -289,14 +340,15 @@ export async function main(argv = process.argv.slice(2)) {
   if (!options.preflightOnly && inputIdentity.currentReleaseInputReady && scopeComplete) {
     const registrationOutput = path.join(output, 'test-registrations.json');
     const testResourceRoot = path.join(output, 'test-resource-leases');
-    const args = ['--test', `--test-reporter=${registrationReporterUrl}`, `--test-concurrency=${options.concurrency}`, ...selected];
-    record.command = { executable: process.execPath, args };
+    const selectionFile = path.join(output, 'test-selection.json');
+    const selectionBytes = JSON.stringify({ files: selected, concurrency: options.concurrency }, null, 2) + '\n';
+    const selectionSha256 = sha256(selectionBytes);
+    await writeFile(selectionFile, selectionBytes, { flag: 'wx' });
+    const args = [testLauncher, selectionFile, selectionSha256];
+    record.command = { executable: process.execPath, args, selectionFile, selectionSha256 };
     const raw = createWriteStream(path.join(output, 'test.tap'), { flags: 'wx' });
     const errors = createWriteStream(path.join(output, 'stderr.txt'), { flags: 'wx' });
-    const childEnvironment = { ...environment, MEDIAMANAGER_TEST_REGISTRATION_OUTPUT: registrationOutput,
-      MEDIAMANAGER_TEST_REGISTRATION_ROOT: repositoryRoot,
-      MEDIAMANAGER_TEST_REGISTRATION_SELECTED: JSON.stringify(selected),
-      MEDIAMANAGER_TEST_RESOURCE_ROOT: testResourceRoot };
+    const childEnvironment = await prepareTestExecutionEnvironment(environment, output, selectionSha256);
     const code = await phase(`execute ${selected.length} test files`, async () => {
       const child = spawn(process.execPath, args, { cwd: repositoryRoot, env: childEnvironment,
         windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });

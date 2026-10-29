@@ -4,6 +4,10 @@ import { createHash } from 'node:crypto';
 import { chmod, lstat, mkdtemp, readFile, readdir, rmdir, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
+import { darwinProcessInspector, sameProcessBirth, sameProcessIdentity as sameIdentity } from './macos-process-identity.js';
+import { signalProcess } from './macos-process-signal.js';
+
+const inspector = await darwinProcessInspector(), identity = inspector.identity;
 
 // The proof keeps the existing actual Terminal/ordinary UID admission boundary.
 // It does not add a mode or alter the formal network-context/CI runner.
@@ -23,41 +27,13 @@ export async function maybeJson(filename) {
   try { return JSON.parse(await readFile(filename, 'utf8')); }
   catch (error) { if (error.code === 'ENOENT') return null; throw error; }
 }
-export function identity(pid) {
-  let text;
-  try { text = command('/bin/ps', ['-ww', '-p', String(pid), '-o', 'pid=,ppid=,uid=,lstart=,comm=']).trim(); }
-  catch (error) { if (error.status === 1 && !error.stdout?.toString().trim()) return null; throw error; }
-  const match = /^(\d+)\s+(\d+)\s+(\d+)\s+(\w+\s+\w+\s+\d+\s+\d\d:\d\d:\d\d\s+\d{4})\s+(.+)$/u.exec(text);
-  assert.ok(match, 'An actual process identity is required.');
-  return { pid: Number(match[1]), parentPid: Number(match[2]), uid: Number(match[3]), startedUtc: match[4],
-    startedEpochMs: Date.parse(match[4] + ' UTC'), executable: match[5] };
-}
-export const sameIdentity = (left, right) => Boolean(left && right && left.pid === right.pid && left.uid === right.uid
-  && left.startedUtc === right.startedUtc && left.executable === right.executable);
 function terminals() {
-  try { return command('/usr/bin/pgrep', ['-x', 'Terminal']).trim().split(/\s+/u).filter(Boolean).map(Number); }
-  catch (error) { if (error.status === 1 && !error.stdout?.toString().trim()) return []; throw error; }
-}
-function descendants(root) {
-  const links = command('/bin/ps', ['-axo', 'pid=,ppid=']).trim().split('\n').map(text => {
-    const match = /^(\d+)\s+(\d+)$/u.exec(text.trim()); assert.ok(match);
-    return { pid: Number(match[1]), parentPid: Number(match[2]) };
-  });
-  const parents = new Set([root.pid]), found = []; let changed = true;
-  while (changed) {
-    changed = false;
-    for (const link of links) if (parents.has(link.parentPid) && !parents.has(link.pid)) {
-      const current = identity(link.pid);
-      if (current && current.parentPid === link.parentPid) { parents.add(current.pid); found.push(current); changed = true; }
-    }
-  }
-  assert.ok(sameIdentity(identity(root.pid), root), 'The observed tree root changed during inspection.');
-  return found;
+  return inspector.namedProcesses('Terminal', process.getuid()).map(value => value.pid);
 }
 async function waitGone(value, milliseconds) {
   const deadline = Date.now() + milliseconds;
-  while (sameIdentity(identity(value.pid), value) && Date.now() < deadline) await delay(100);
-  return !sameIdentity(identity(value.pid), value);
+  while (sameProcessBirth(identity(value.pid), value) && Date.now() < deadline) await delay(100);
+  return !sameProcessBirth(identity(value.pid), value);
 }
 export async function runPolicyTerminal(scope, scopeFile, onAlive, signal) {
   assert.equal(process.getuid(), scope.uid); assert.notEqual(scope.uid, 0);
@@ -84,12 +60,27 @@ export async function runPolicyTerminal(scope, scopeFile, onAlive, signal) {
     wrapperSha256: scope.terminalHelperSha256, commandSha256: hash(Buffer.from(script)), consoleOwner,
     environmentWrittenToArtifact: false, cleanupCompleted: false, cleanupErrors: [], createdAt: new Date().toISOString() };
   let launched = false, terminal, worker, complete, actualClose, problem, phaseAdmitted = false;
+  const owned = new Map();
+  const observeOwned = () => {
+    for (const [pid, original] of owned) {
+      const current = identity(pid);
+      if (sameProcessBirth(current, original)) owned.set(pid, current); else owned.delete(pid);
+    }
+    for (const root of [...owned.values()].filter(value => !owned.has(value.parentPid))) {
+      for (const child of inspector.descendants(root)) owned.set(child.pid, child);
+    }
+    record.ownedProcesses = [...owned.values()]; return record.ownedProcesses;
+  };
+  const signalOwned = (expected, requested) => {
+    observeOwned(); const current = owned.get(expected.pid);
+    if (!sameProcessBirth(current, expected)) return false;
+    return signalProcess(inspector, current, requested);
+  };
   const bindTerminal = () => {
     if (terminal) return;
-    const candidates = terminals().map(identity).filter(value => value && value.uid === scope.uid
-      && value.startedEpochMs >= scope.launchFloorEpochMs && value.executable === terminalProgram);
+    const candidates = inspector.namedProcesses('Terminal', scope.uid).filter(value => value.executable === terminalProgram);
     assert.ok(candidates.length <= 1, 'New Terminal ownership is ambiguous.');
-    if (candidates.length) record.terminal = terminal = candidates[0];
+    if (candidates.length) { record.terminal = terminal = candidates[0]; owned.set(terminal.pid, terminal); }
   };
   try {
     signal?.throwIfAborted();
@@ -98,13 +89,15 @@ export async function runPolicyTerminal(scope, scopeFile, onAlive, signal) {
     while (!(complete = await maybeJson(scope.exitFile)) || !(actualClose = await maybeJson(scope.actualCloseFile))) {
       signal?.throwIfAborted(); assert.ok(Date.now() < deadline, 'The bounded policy proof did not complete.');
       bindTerminal();
+      observeOwned();
       const started = await maybeJson(scope.startedFile);
       if (started && !worker) {
         assert.equal(started.nonce, scope.nonce); assert.equal(started.head, scope.head); assert.equal(started.uid, scope.uid);
         assert.ok(sameIdentity(terminal, started.terminal));
         assert.equal(hash(await readFile(started.terminal.executable)), scope.terminalSha256);
         assert.ok(sameIdentity(identity(started.identity.pid), started.identity));
-        assert.ok(descendants(terminal).some(value => sameIdentity(value, started.identity)));
+        assert.ok(inspector.descendants(terminal).some(value => sameIdentity(value, started.identity)));
+        owned.set(started.identity.pid, started.identity);
         record.worker = worker = started.identity; record.startedReceipt = started;
         await save(scope.admissionFile, { nonce: scope.nonce, head: scope.head, worker, terminal });
         record.admittedAt = new Date().toISOString();
@@ -131,27 +124,41 @@ export async function runPolicyTerminal(scope, scopeFile, onAlive, signal) {
         while (!terminal && Date.now() < bindDeadline) { bindTerminal(); if (!terminal) await delay(100); }
         assert.ok(terminal, 'The launched Terminal has no bound identity; its cleanup cannot be certified.');
       }
-      if (worker && sameIdentity(identity(worker.pid), worker)) {
-        if (problem) process.kill(worker.pid, 'SIGTERM');
+    } catch (error) { errors.push(error); }
+    try {
+      if (worker && sameProcessBirth(identity(worker.pid), worker)) {
+        if (problem) signalOwned(worker, 'SIGTERM');
         if (!(await waitGone(worker, 10000))) {
-          process.kill(worker.pid, 'SIGKILL'); await waitGone(worker, 3000);
+          signalOwned(worker, 'SIGKILL'); await waitGone(worker, 3000);
           throw new Error('The proof worker required forced termination.');
         }
       }
-      if (terminal && sameIdentity(identity(terminal.pid), terminal)) {
-        const children = descendants(terminal); record.descendantsBeforeClose = children;
-        process.kill(terminal.pid, 'SIGTERM');
+    } catch (error) { errors.push(error); }
+    try {
+      if (terminal && sameProcessBirth(identity(terminal.pid), terminal)) {
+        const children = observeOwned().filter(value => value.pid !== terminal.pid); record.descendantsBeforeClose = children;
+        signalOwned(terminal, 'SIGTERM');
         if (!(await waitGone(terminal, 5000))) {
-          process.kill(terminal.pid, 'SIGKILL'); await waitGone(terminal, 3000);
+          signalOwned(terminal, 'SIGKILL'); await waitGone(terminal, 3000);
           throw new Error('The proof Terminal required forced termination.');
         }
         for (const value of children) assert.ok(await waitGone(value, 3000), 'An owned Terminal descendant survived.');
       }
+    } catch (error) { errors.push(error); }
+    try {
+      for (const child of observeOwned().toReversed()) {
+        signalOwned(child, 'SIGTERM');
+        if (!(await waitGone(child, 3000))) {
+          signalOwned(child, 'SIGKILL'); await waitGone(child, 3000);
+          errors.push(new Error('An owned proof descendant required forced termination.'));
+        }
+      }
       assert.ok(!launched || terminal || terminals().length === 0, 'The launched Terminal could not be bound.');
       record.workerAfterClose = worker ? identity(worker.pid) : null;
       record.terminalAfterClose = terminal ? identity(terminal.pid) : null;
-      assert.ok(!worker || !sameIdentity(record.workerAfterClose, worker));
-      assert.ok(!terminal || !sameIdentity(record.terminalAfterClose, terminal));
+      assert.ok(!worker || !sameProcessBirth(record.workerAfterClose, worker));
+      assert.ok(!terminal || !sameProcessBirth(record.terminalAfterClose, terminal));
+      assert.deepEqual(observeOwned(), [], 'Bound proof processes remained after cleanup.');
       await unlink(executable); assert.deepEqual(await readdir(privateRoot), []); await rmdir(privateRoot);
       await assert.rejects(lstat(privateRoot), { code: 'ENOENT' }); record.privateDirectoryRemoved = true;
     } catch (error) { errors.push(error); }

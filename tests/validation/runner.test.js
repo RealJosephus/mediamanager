@@ -1,18 +1,69 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { mkdir, mkdtemp, readFile, realpath, rm, symlink, writeFile } from 'node:fs/promises';
+import { appendFile, copyFile, mkdir, mkdtemp, readFile, realpath, rm, symlink, unlink, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { argumentsFor, auditTestResourceLeases, fullProfileNarrowingEnvironment, fullProfileRuntimeInjection,
-  inventoryCandidateDifferences, parseTapSummary, resultOutcome, successfulRun, toolVersionArguments } from '../../tools/validation/run.js';
+  inventoryCandidateDifferences, parseTapSummary, preflight, resultOutcome, successfulRun, toolVersionArguments } from '../../tools/validation/run.js';
 import { analyzeJavaScriptDependencies, caseFoldedEntryMap, dependencyClosure, filesIn, inventory,
   resolveLocalImport } from '../../tools/validation/inventory.js';
-import { assertIsolatedOutput, assertValidationOutputChild, repositoryRoot, validationFileUrl, validationPath } from '../../tools/validation/paths.js';
+import { assertIsolatedOutput, assertValidationOutputChild, repositoryRoot, validationExecutable, validationFileUrl, validationPath } from '../../tools/validation/paths.js';
+import { captureInputIdentity, inputsUnchanged } from '../../tools/validation/inputs.js';
+import { describeFile } from '../../tools/validation/inventory.js';
 
 const complete = '# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n';
+
+test('archive tool aliases bind the actual executable and detect changed or missing targets', { timeout: 30000 }, async t => {
+  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'validation-tool-alias-')));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const executable = await realpath(validationExecutable('tar'));
+  const selected = ['tests/validation/runner.test.js'];
+  const dependencies = { entries: [{ path: selected[0], imports: [], importedFiles: [], test: true,
+    services: [], tools: ['tar'], declaredReferences: [], fixtureReferences: [] }] };
+  const alias = path.join(root, 'alias');
+  const link = async target => {
+    if (process.platform === 'win32') {
+      await symlink(path.dirname(target), alias, 'junction');
+      return path.join(alias, path.basename(target));
+    }
+    await symlink(target, alias, 'file');
+    return alias;
+  };
+  const logical = await link(executable);
+  const environment = { MEDIAMANAGER_TAR: logical };
+  const capture = async () => {
+    const inputs = await preflight(selected, dependencies, environment);
+    return { inputs, identity: await captureInputIdentity({ selected, dependencies, preflight: inputs, environment }) };
+  };
+  const first = await capture();
+  assert.equal(first.inputs.ready, true);
+  assert.equal(first.inputs.tools[0].executable, executable);
+  assert.equal(first.identity.currentReleaseInputReady, true);
+  assert.equal(first.identity.entries.find(entry => entry.reasons.includes('tool:tar')).sha256, (await describeFile(executable)).sha256);
+  assert.equal((await describeFile(alias)).available, false, 'Executable resolution does not change the source-input link contract.');
+  const version = spawnSync('tar', ['--version'], { windowsHide: true, encoding: 'utf8', timeout: 10000 });
+  assert.equal(version.status, 0, version.stderr);
+  assert.ok(version.stdout.length > 0);
+  const changed = path.join(root, path.basename(executable));
+  await copyFile(executable, changed);
+  await appendFile(changed, Buffer.from('\0changed executable bytes'));
+  await unlink(alias);
+  assert.equal(await link(changed), logical);
+  const redirected = await capture();
+  assert.equal(redirected.identity.currentReleaseInputReady, true);
+  assert.equal(inputsUnchanged(first.identity, redirected.identity), false);
+  await appendFile(changed, Buffer.from('\0another change'));
+  const altered = await capture();
+  assert.equal(inputsUnchanged(redirected.identity, altered.identity), false);
+  await unlink(changed);
+  const missing = await capture();
+  assert.equal(missing.inputs.ready, false);
+  assert.equal(missing.identity.currentReleaseInputReady, false);
+});
 
 test('validation cannot report success for missing, duplicate, failing or incomplete TAP summaries', () => {
   const counts = parseTapSummary(complete);
@@ -81,6 +132,24 @@ test('validation dependency closure follows transitive local helper imports with
   assert.throws(() => dependencyClosure({ entries: [
     { path: 'tests/example.test.js', imports: ['tests/missing-helper.js'] },
   ] }, ['tests/example.test.js']), /does not contain/u);
+});
+
+test('conditional registration follows actual test bindings while ordinary diagnostic helpers remain ordinary', () => {
+  const cases = [
+    { source: "import test from 'node:test'; const describe = reason => String(reason); test('case', () => { if (true) describe(false); });", count: 1, conditional: false },
+    { source: "import { describe } from 'node:test'; function diagnostic(describe) { if (true) describe(false); } describe('suite', () => {});", count: 1, conditional: false },
+    { source: "import { test as register } from 'node:test'; if (enabled) register('case', () => {});", count: 1, conditional: true },
+    { source: "import * as checks from 'node:test'; if (enabled) checks.describe('suite', () => {});", count: 1, conditional: true },
+    { source: "import test from 'node:test'; if (enabled) test.skip('case', () => {});", count: 1, conditional: true },
+    { source: "import { describe } from 'node:test'; try {} catch (describe) { if (true) describe(false); } describe('suite', () => {});", count: 1, conditional: false },
+    { source: "if (enabled) test('global registration', () => {});", count: 1, conditional: true },
+    { source: "import nodeTest from 'node:test'; const test = (name, options, run) => { const callbackOnly = typeof options === 'function'; return nodeTest(name, { skip: !available }, callbackOnly ? options : run); }; test('case', () => {});", count: 1, conditional: false },
+  ];
+  for (const entry of cases) {
+    const actual = analyzeJavaScriptDependencies(entry.source);
+    assert.equal(actual.testRegistrations, entry.count, entry.source);
+    assert.equal(actual.conditionalRegistration, entry.conditional, entry.source);
+  }
 });
 
 test('dependency parser covers compact modules, static dynamic imports, CommonJS and ignores comments', () => {
@@ -494,6 +563,41 @@ test('validation output rejects reference and native input descendants without c
   assert.doesNotThrow(() => assertIsolatedOutput(protectedRoot + '-results', environment));
 });
 
+test('validation output protects the complete Blu-ray supply and allows a real sibling output directory', async t => {
+  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'mediamanager-validation-bluray-output-')));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const input = path.join(root, 'mediamanager-bluray-reference'), evidence = path.join(input, 'evidence');
+  const media = path.join(input, 'media', 'BDMV', 'STREAM'), work = path.join(input, 'work');
+  const sibling = path.join(root, 'mediamanager-bluray-reference-results');
+  for (const directory of [evidence, media, work, sibling]) await mkdir(directory, { recursive: true });
+  const receipt = path.join(evidence, 'receipt.json'), image = path.join(work, 'Sintel-Bluray.iso');
+  await writeFile(receipt, '{}\n'); await writeFile(image, 'filesystem isolation source');
+  await writeFile(path.join(media, '00000.m2ts'), 'filesystem isolation media');
+  const environment = { MEDIAMANAGER_TEST_BLURAY_REFERENCE: receipt };
+  for (const filename of [root, input, evidence, media, work, receipt, image, path.join(media, 'new-result')]) {
+    assert.throws(() => assertIsolatedOutput(filename, environment), /outside reference/u);
+  }
+  assert.doesNotThrow(() => assertIsolatedOutput(sibling, environment));
+  assert.doesNotThrow(() => assertIsolatedOutput(path.join(sibling, 'capture'), environment));
+  assert.equal(existsSync(path.join(media, 'new-result')), false);
+});
+
+test('Blu-ray input and output aliases retain the actual protected filesystem root', async t => {
+  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'mediamanager-validation-bluray-alias-')));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const input = path.join(root, 'mediamanager-bluray-reference'), evidence = path.join(input, 'evidence');
+  const media = path.join(input, 'media'), output = path.join(root, 'results'), alias = path.join(root, 'disc-alias');
+  await mkdir(evidence, { recursive: true }); await mkdir(media); await mkdir(output);
+  const receipt = path.join(evidence, 'receipt.json'); await writeFile(receipt, '{}\n');
+  await symlink(input, alias, process.platform === 'win32' ? 'junction' : 'dir');
+  const environment = { MEDIAMANAGER_TEST_BLURAY_REFERENCE: receipt };
+  assert.throws(() => assertIsolatedOutput(path.join(alias, 'media', 'new-result'), environment), /outside reference/u);
+  const aliasEnvironment = { MEDIAMANAGER_TEST_BLURAY_REFERENCE: path.join(alias, 'evidence', 'receipt.json') };
+  assert.throws(() => assertIsolatedOutput(path.join(media, 'new-result'), aliasEnvironment), /outside reference/u);
+  assert.doesNotThrow(() => assertIsolatedOutput(output, aliasEnvironment));
+  assert.equal(existsSync(path.join(media, 'new-result')), false);
+});
+
 test('validation recorder outputs reject junction and symlink escapes below the configured root', async t => {
   const temporary = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-validation-output-'));
   t.after(async () => { await rm(temporary, { recursive: true, force: true }); });
@@ -532,9 +636,13 @@ test('registration reporter does not count Node synthetic wrappers as test regis
   await writeFile(empty, '// intentionally empty\n');
   const selected = path.relative(repositoryRoot, empty).replaceAll('\\', '/');
   const reporter = pathToFileURL(path.join(repositoryRoot, 'tools/validation/tap-registration-reporter.js')).href;
+  const selectionFile = path.join(temporary, 'test-selection.json');
+  const selectionBytes = JSON.stringify({ files: [selected], concurrency: 1 });
+  const selectionSha256 = createHash('sha256').update(selectionBytes).digest('hex');
+  await writeFile(selectionFile, selectionBytes);
   const childEnvironment = { ...process.env, MEDIAMANAGER_TEST_REGISTRATION_OUTPUT: output,
     MEDIAMANAGER_TEST_REGISTRATION_ROOT: repositoryRoot,
-    MEDIAMANAGER_TEST_REGISTRATION_SELECTED: JSON.stringify([selected]) };
+    MEDIAMANAGER_TEST_SELECTION_FILE: selectionFile, MEDIAMANAGER_TEST_SELECTION_SHA256: selectionSha256 };
   delete childEnvironment.NODE_TEST_CONTEXT;
   const result = spawnSync(process.execPath, ['--test', `--test-reporter=${reporter}`, empty], { cwd: repositoryRoot,
     env: childEnvironment, encoding: 'utf8' });

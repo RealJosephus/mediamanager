@@ -3,11 +3,16 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { affectedUnavailable, applyAffectedSelection, changedFilesForEvent, parseGitChanges, selectAffected } from '../../tools/ci/affected.js';
 import { repositoryRoot } from '../../tools/validation/paths.js';
+import { analyzeJavaScriptDependencies, caseFoldedEntryMap, inventory, resolveLocalImport } from '../../tools/validation/inventory.js';
 
 const first = 'tests/core/first.test.js', second = 'tests/core/second.test.js', unrelated = 'tests/core/unrelated.test.js';
 const base = '1'.repeat(40), head = '2'.repeat(40), branch = '3'.repeat(40);
 const entry = (filename, overrides = {}) => ({ path: filename, test: filename.endsWith('.test.js'), imports: [],
-  importedFiles: [], fixtureReferences: [], declaredReferences: [], unresolvedImports: [], unresolvedExecutables: [], ...overrides });
+  importedFiles: [], fixtureReferences: [], declaredReferences: [], unresolvedImports: [], unresolvedExecutables: [], repositoryInspections: [], ...overrides });
+const inspectedEntry = (filename, source, overrides = {}) => {
+  const analysis = analyzeJavaScriptDependencies(source, { sourcePath: filename });
+  return entry(filename, { repositoryInspections: analysis.repositoryInspections, executionSources: analysis.executionSources, ...overrides });
+};
 const change = (filename, status = 'M') => ({ status, path: filename });
 const comparison = changes => ({ event: 'push', baseSha: base, headSha: head, changes, fallbackReasons: [] });
 const plan = (entries, changes, overrides = {}) => selectAffected({ dependencies: { entries },
@@ -92,13 +97,177 @@ test('untrusted comparisons fall back explicitly without selecting a guessed bas
 test('an edited test selects itself, transitive importing tests and repository inspection tests', () => {
   const inspector = 'tests/validation/inspector.test.js', helper = 'tests/helpers/shared.js';
   const entries = [entry(first), entry(second, { imports: [helper] }), entry(helper, { imports: [first] }), entry(unrelated),
-    entry(inspector, { imports: ['tools/validation/inventory.js'] }), entry('tools/validation/inventory.js')];
+    inspectedEntry(inspector, "import { inventory as scan } from '../../tools/validation/inventory.js'; await scan();",
+      { imports: ['tools/validation/inventory.js'] }), entry('tools/validation/inventory.js')];
   const result = plan(entries, [change(first)]);
   assert.equal(result.mode, 'affected');
   assert.deepEqual(result.affected, [first, second, inspector].sort());
   assert.ok(result.matches.some(match => match.test === second && match.consumer === first && match.kind === 'source-closure'));
   assert.ok(result.matches.some(match => match.test === inspector && match.kind === 'repository-inspection'));
   assert.ok(!result.affected.includes(unrelated));
+});
+
+test('repository inspection follows scanner bindings while ordinary provider exports remain ordinary helpers', () => {
+  const filename = 'tests/validation/inspection.test.js';
+  const inspections = source => analyzeJavaScriptDependencies(source, { sourcePath: filename }).repositoryInspections;
+  for (const source of [
+    "import { inventory } from '../../tools/validation/inventory.js';",
+    "import { describeFile as describe, sha256 } from '../../tools/validation/inventory.js'; describe('one file'); sha256(bytes);",
+    "import * as evidence from '../../tools/validation/inventory.js'; evidence.describeFile('one file'); evidence['sha256'](bytes);",
+    "import * as evidence from '../../tools/validation/inventory.js'; const { describeFile } = evidence; describeFile('one file');",
+    "import { inputsUnchanged } from '../../tools/validation/inputs.js'; inputsUnchanged(before, after);",
+    "import { parseTapSummary } from '../../tools/validation/run.js'; parseTapSummary(tap);",
+    "import { inventory as scan } from '../../tools/validation/inventory.js'; function ordinary(scan) { return scan(); } ordinary(local);",
+    "import * as evidence from '../../tools/validation/inventory.js'; { const evidence = local; evidence.inventory(); }",
+    "const inventory = local; inventory(); // import { inventory } from '../../tools/validation/inventory.js';",
+    "const text = `import { inventory } from '../../tools/validation/inventory.js'; inventory();`;",
+  ]) assert.deepEqual(inspections(source), [], source);
+  const inventoryUse = [{ provider: 'tools/validation/inventory.js', entrypoint: 'inventory' }];
+  for (const source of [
+    "import { inventory as scan } from '../../tools/validation/inventory.js'; await scan();",
+    "import { inventory } from '../../tools/validation/inventory.js'; const scan = inventory; await scan();",
+    "import { inventory } from '../../tools/validation/inventory.js'; consume(inventory);",
+    "import * as evidence from '../../tools/validation/inventory.js'; await evidence.inventory();",
+    "import * as evidence from '../../tools/validation/inventory.js'; await evidence['inventory']();",
+    "import * as evidence from '../../tools/validation/inventory.js'; const { inventory: scan } = evidence; await scan();",
+    "import * as evidence from '../../tools/validation/inventory.js'; evidence[selected]();",
+    "import * as evidence from '../../tools/validation/inventory.js'; consume(evidence);",
+    "const evidence = await import('../../tools/validation/inventory.js'); consume(evidence);",
+    "const { inventory: scan } = require('../../tools/validation/inventory.js'); scan();",
+    "import { createRequire } from 'node:module'; const load = createRequire(import.meta.url); const evidence = load('../../tools/validation/inventory.js'); evidence.inventory();",
+    "export { inventory as scan } from '../../tools/validation/inventory.js';",
+    "export * from '../../tools/validation/inventory.js';",
+  ]) assert.deepEqual(inspections(source), inventoryUse, source);
+  assert.deepEqual(inspections("import { captureInputIdentity as capture } from '../../tools/validation/inputs.js'; await capture(options);"),
+    [{ provider: 'tools/validation/inputs.js', entrypoint: 'captureInputIdentity' }]);
+  for (const provider of ['tools/validation/run.js', 'tools/ci/run.js']) {
+    assert.deepEqual(inspections(`import { main as run } from '../../${provider}'; await run();`),
+      [{ provider, entrypoint: 'main' }]);
+  }
+});
+
+test('ordinary oracle descriptors do not expand an edited test to unrelated Native consumers, while scanner helpers retain repository ownership', () => {
+  const oracle = 'tests/helpers/oracle.js', scanner = 'tests/helpers/scanner.js', inspector = 'tests/validation/inspection.test.js';
+  const entries = [entry(first),
+    entry(unrelated, { imports: [oracle] }),
+    inspectedEntry(oracle, "import { describeFile } from '../../tools/validation/inventory.js'; export const describe = file => describeFile(file);",
+      { imports: ['tools/validation/inventory.js'] }),
+    entry(inspector, { imports: [scanner] }),
+    inspectedEntry(scanner, "import { captureInputIdentity as capture } from '../../tools/validation/inputs.js'; export const scan = options => capture(options);",
+      { imports: ['tools/validation/inputs.js'] }),
+    entry('tools/validation/inventory.js'), entry('tools/validation/inputs.js')];
+  const result = plan(entries, [change(first)]);
+  assert.equal(result.mode, 'affected');
+  assert.deepEqual(result.affected, [first, inspector].sort());
+  assert.ok(result.matches.some(match => match.test === inspector && match.kind === 'repository-inspection'));
+  assert.ok(!result.matches.some(match => match.test === unrelated));
+});
+
+test('actual Node scanner CLI entries retain source closure and repository ownership without treating file paths as execution', async () => {
+  const filename = 'tests/validation/inspection.test.js';
+  const prefix = "import { execFile as launch } from 'node:child_process'; import { fileURLToPath } from 'node:url'; import path from 'node:path'; import { repositoryRoot } from '../../tools/validation/paths.js';\n";
+  const cases = [
+    ["launch(process.execPath, ['tools/validation/run.js', '--profile', 'full']);", 'tools/validation/run.js'],
+    ["const executable = process.execPath; const args = ['tools/ci/run.js']; launch(executable, args);", 'tools/ci/run.js'],
+    ["const script = fileURLToPath(new URL('../../tools/validation/run.js', import.meta.url)); launch(process.execPath, [script]);", 'tools/validation/run.js'],
+    ["launch(process.execPath, [path.join(repositoryRoot, 'tools', 'ci', 'run.js')]);", 'tools/ci/run.js'],
+    ["const repository = fileURLToPath(new URL('../../', import.meta.url)); launch(process.execPath, [path.join(repository, 'tools/ci/run.js')], { cwd: repository });", 'tools/ci/run.js'],
+    ["import { realpath } from 'node:fs/promises'; const repository = await realpath(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')); launch(process.execPath, [path.join(repository, 'tools/ci/run.js')], { cwd: repository });", 'tools/ci/run.js'],
+    ["import * as child from 'node:child_process'; child.spawnSync(process.execPath, ['tools/validation/run.js']);", 'tools/validation/run.js'],
+    ["launch(process.execPath, ['--', path.resolve('tools/validation/run.js')]);", 'tools/validation/run.js'],
+  ];
+  for (const [body, provider] of cases) {
+    const analysis = analyzeJavaScriptDependencies(prefix + body, { sourcePath: filename });
+    assert.deepEqual(analysis.executionSources, [provider], body);
+    assert.deepEqual(analysis.repositoryInspections, [{ provider, entrypoint: 'main' }], body);
+    const dependency = analysis.importSpecifiers.find(value => value.kind === 'execution-source');
+    assert.ok(dependency, body);
+    const resolved = await resolveLocalImport(path.join(repositoryRoot, filename), dependency,
+      { knownEntries: caseFoldedEntryMap([provider]) });
+    assert.deepEqual(resolved, { imported: provider }, body);
+    const entries = [entry(first), entry(second),
+      inspectedEntry(filename, prefix + body, { imports: [resolved.imported] }), entry(provider)];
+    for (const changed of [first, second]) {
+      const result = plan(entries, [change(changed)]);
+      assert.equal(result.mode, 'affected');
+      assert.deepEqual(result.affected, [changed, filename].sort(), body);
+    }
+  }
+  for (const body of [
+    "readFile('tools/validation/run.js');",
+    "const source = fileURLToPath(new URL('../../tools/ci/run.js', import.meta.url)); readFile(source);",
+    "launch(process.execPath, ['--check', 'tools/validation/run.js']);",
+    "launch(process.execPath, ['-e', 'void 0', 'tools/validation/run.js']);",
+    "launch(process.execPath, ['another-script.js', 'tools/validation/run.js']);",
+    "launch(process.execPath, ['tools/validation/run.js'], { cwd: path.join(repositoryRoot, 'unrelated') });",
+    "import { realpath } from 'node:fs/promises'; const repository = await realpath(selectedDirectory); launch(process.execPath, [path.join(repository, 'tools/ci/run.js')], { cwd: repository });",
+    "launch('ffmpeg', ['tools/validation/run.js']);",
+  ]) {
+    const analysis = analyzeJavaScriptDependencies(prefix + body, { sourcePath: filename });
+    assert.deepEqual(analysis.executionSources, [], body);
+    assert.deepEqual(analysis.repositoryInspections, [], body);
+    assert.ok(!analysis.importSpecifiers.some(value => value.kind === 'execution-source'), body);
+  }
+  const providerOnly = analyzeJavaScriptDependencies(prefix + "launch(process.execPath, ['tools/validation/inventory.js']);", { sourcePath: filename });
+  assert.deepEqual(providerOnly.executionSources, ['tools/validation/inventory.js']);
+  assert.deepEqual(providerOnly.repositoryInspections, [], 'Executing definitions alone does not call the exported inventory function.');
+});
+
+test('file-reference admission requires an AST read capability instead of reader words inside diagnostic source text', () => {
+  const input = '.test-input/fixtures/actual-input.json';
+  const references = body => analyzeJavaScriptDependencies(`const input = '${input}';\n${body}`,
+    { sourcePath: 'tests/validation/inspection.test.js' }).referenceDeclarations;
+  for (const body of [
+    "const example = \"readFile('tools/validation/run.js')\";",
+    "// readFile(input);\nconst example = `readFileSync(input)`;",
+    "const example = \"new SqliteDatabase(input)\";",
+    "import { readFile as read } from 'node:fs/promises'; const unused = true;",
+  ]) assert.deepEqual(references(body), [{ logicalPath: input, dynamic: false, required: false }], body);
+  for (const body of [
+    'await readFile(input);', 'readFileSync(input);', 'fs.readFile(input);', "fs['openSync'](input);", 'new SqliteDatabase(input);',
+    "import { readFile as read } from 'node:fs/promises'; await read(input);",
+    "import { readFileSync as read } from 'node:fs'; read(input);",
+    'const read = fs.readFile; await read(input);', 'const { readFile: read } = fs; await read(input);',
+    'const read = readFile.bind(fs); await read(input);', 'readFile.call(fs, input);',
+    'async function consume(read = readFile) { return read(input); } await consume();',
+    'await Promise.resolve(input).then(readFile);',
+  ]) assert.deepEqual(references(body), [{ logicalPath: input, dynamic: false, required: true }], body);
+});
+
+test('actual BookPhoto edits retain their Native consumers and real repository scanners without inheriting every oracle descriptor user', async () => {
+  const dependencies = await inventory();
+  const changed = ['tests/library/book-photo-global-runtime.test.js', 'tests/library/book-photo-global.test.js'];
+  const result = selectAffected({ dependencies, tracked: new Set(dependencies.entries.map(value => value.path)),
+    comparison: comparison(changed.map(filename => change(filename))) });
+  assert.equal(result.mode, 'affected');
+  assert.deepEqual(result.fallbackReasons, []);
+  for (const filename of [...changed, 'tests/validation/fixture-urls.test.js', 'tests/validation/runner.test.js',
+    'tests/validation/recorded-inputs.test.js', 'tests/validation/sealed-input-contracts.test.js',
+    'tests/validation/input-identity.test.js', 'tests/validation/ci-scope.test.js']) {
+    assert.ok(result.affected.includes(filename), filename);
+  }
+  for (const filename of ['tests/core/configuration-file.test.js', 'tests/http/display-preferences.test.js',
+    'tests/metadata/photo-provider.test.js']) assert.ok(!result.affected.includes(filename), filename);
+  const classification = { records: result.affected.map(filename => ({ path: filename, selected: !changed.includes(filename),
+    reasons: changed.includes(filename) ? [{ code: 'service-not-provisioned', service: 'jellyfinDll' }] : [] })) };
+  applyAffectedSelection(classification, result);
+  assert.deepEqual(affectedUnavailable(classification, result).map(value => value.filename).sort(), [...changed].sort());
+  assert.ok(changed.every(filename => result.affected.includes(filename)), 'Missing supply must not erase an actual changed consumer.');
+  const broadcast = dependencies.entries.find(value => value.path === 'tools/ci/macos-broadcast.js');
+  assert.ok(broadcast.executionSources.includes('tools/ci/run.js'), 'The actual owned macOS strict CLI retains its executed source.');
+  const caller = 'tests/validation/inspection-cli.test.js';
+  const source = "import { execFile } from 'node:child_process'; execFile(process.execPath, ['tools/ci/execute.js', scopeFile, output]);";
+  const analysis = analyzeJavaScriptDependencies(source, { sourcePath: caller });
+  const dependency = analysis.importSpecifiers.find(value => value.kind === 'execution-source');
+  const resolved = await resolveLocalImport(path.join(repositoryRoot, caller), dependency,
+    { knownEntries: caseFoldedEntryMap(dependencies.entries.map(value => value.path)) });
+  assert.deepEqual(resolved, { imported: 'tools/ci/execute.js' });
+  const cliDependencies = { entries: [...dependencies.entries,
+    inspectedEntry(caller, source, { imports: [resolved.imported] })] };
+  const withCli = selectAffected({ dependencies: cliDependencies, tracked: new Set(cliDependencies.entries.map(value => value.path)),
+    comparison: comparison(changed.map(filename => change(filename))) });
+  assert.equal(withCli.mode, 'affected');
+  assert.ok(withCli.affected.includes(caller), 'A real execution source that invokes main retains repository inspection ownership.');
 });
 
 test('test sources used as explicit file or fixture-directory data retain every consumer', () => {

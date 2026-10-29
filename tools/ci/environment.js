@@ -29,7 +29,7 @@ try {
       image: process.env.ImageOS ?? null, imageVersion: process.env.ImageVersion ?? null,
       commit: process.env.GITHUB_SHA ?? null, runId: process.env.GITHUB_RUN_ID ?? null, attempt: process.env.GITHUB_RUN_ATTEMPT ?? null };
     record.tools = [];
-    for (const name of ['git', 'dotnet', 'ffmpeg', 'ffprobe']) {
+    for (const name of ['git', 'dotnet', 'ffmpeg', 'ffprobe', 'tar']) {
       const executable = validationExecutable(name);
       const result = spawnSync(executable, [name.startsWith('ff') ? '-version' : '--version'],
         { encoding: 'utf8', windowsHide: true, timeout: 30000 });

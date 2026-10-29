@@ -31,9 +31,11 @@ sidecar and mapper evidence, not an actual native SaveItems transaction.
 `fixtures/date-roundtrip` captures real HTTP POST/GET, PostgreSQL rows, a complete
 32-table SQLite transfer, native takeover and continuing writes, and reimport.
 The native host used Taipei; Node Taipei matches, while Node Shanghai saves a
-different value for the 1900 input. The raw `compatible:false` remains a
-measurement result. These observations compare different requested timezones and do not establish
-a same-timezone conversion difference.
+different value for the 1900 unspecified local input. These are different
+requested timezones, so the raw `compatible:false` is a diagnostic measurement,
+not evidence of a same-timezone conversion difference. The current date exchange
+records actual Native and requested/resolved Node timezones and verifies that
+persisted UTC values survive subsequent reads and transfers.
 
 Fresh HTTP delivery evidence comes from `tests/images/http.test.js`,
 `tests/playback/http-native.test.js`, and `tests/playback/hls-http.test.js`.

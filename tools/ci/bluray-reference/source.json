@@ -1,0 +1,41 @@
+{
+  "title": "AVCHDCoder - Big Buck Bunny - Elephants Dream (AVCHD)",
+  "publisher": "Twan Wintjes / AVCHDCoder",
+  "publisherUrl": "https://tools.twanwintjes.nl/index.php?page=test-disc-movie",
+  "format": "Author-published AVCHD ISO for DVD media; BDMV layout",
+  "scope": "Complete original published test disc; not a BD-ROM or full Blu-ray profile claim.",
+  "authorization": "The author publishes the complete ISO for download and requests torrent sharing. The movie licenses below do not relicense unrelated trademarks, standalone soundtracks or the author's added intro/menu.",
+  "movies": [
+    {
+      "title": "Big Buck Bunny",
+      "license": "CC-BY-3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "primarySource": "https://peach.blender.org/about/",
+      "primaryPageObservedSha256": "d7f47e9ac1ee22b928ee4e80a4c903a5cff1a73949c748d4c48e45ee42253b29",
+      "attribution": "(c) copyright 2008, Blender Foundation / www.bigbuckbunny.org"
+    },
+    {
+      "title": "Elephants Dream",
+      "license": "CC-BY-2.5",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.5/",
+      "primarySource": "https://orange.blender.org/press/",
+      "primaryPageObservedSha256": "90589b0e74946e1486c0c7695022d35e29822a22bb43e5418ad2bc6be17ce19f",
+      "attribution": "(c) copyright 2006, Blender Foundation / Netherlands Media Art Institute / www.elephantsdream.org"
+    }
+  ],
+  "torrent": {
+    "url": "https://www.avchdcoder.com/downloads/AVCHDCoder%20-%20Big%20Buck%20Bunny%20-%20Elephants%20Dream%20%28AVCHD%29.torrent",
+    "bytes": 13594,
+    "sha256": "9fbc604ff968883c206fa2ba7cd0952e520c1f98b06a90dca4738be3318ef3cf",
+    "infoHash": "c4bbb0d008370214b27e6337c6a8b1324b75b3f3",
+    "pieceLength": 2097152,
+    "piecesCount": 657,
+    "piecesSha256": "f8c6e7a61930235fb528f4f5c6b9bbaee461a6a3fdbe1bb34e6d1917ddf4057b",
+    "files": [
+      { "path": "AVCHDCoder.iso", "bytes": 1375731712 },
+      { "path": "AVCHDCoder.mds", "bytes": 4314 }
+    ]
+  },
+  "downloadTimeoutMinutes": 45,
+  "availability": "Unknown until a complete CI download verifies every original piece. Original metadata has only an old openbittorrent tracker and no webseed."
+}
