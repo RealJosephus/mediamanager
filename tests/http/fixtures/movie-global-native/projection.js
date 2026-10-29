@@ -5,6 +5,8 @@ import { nativeModel } from '../../../../src/database/model.js';
 import { parseLosslessJson } from '../../../../src/core/json.js';
 import { readXml } from '../../../../src/core/xml.js';
 import { dateTicks } from '../../../../src/library/records.js';
+import { nativeItemJsonContract, nativeItemJsonValidationManifest } from '../../../../src/library/native-item-data.js';
+import { tokenizeJson } from '../../../../src/core/json-tokens.js';
 
 const slash = value => value.replaceAll('\\', '/');
 const key = value => String(value).replaceAll('-', '').toLowerCase();
@@ -17,6 +19,79 @@ const taskRoles = { SplashscreenPostScanTask: 'Splashscreen', ArtistsPostScanTas
   CollectionPosterVerifyPostScanTask: 'CollectionPosterVerify', CollectionPostScanTask: 'Collections',
   GenresPostScanTask: 'Genres', MusicGenresPostScanTask: 'MusicGenres', StudiosPostScanTask: 'Studios',
   CleanDatabaseScheduledTask: 'CleanDatabase', CleanDatabasePostScanTask: 'CleanDatabase' };
+const dataManifest = nativeItemJsonValidationManifest();
+// VirtualChildren is serialized through the declared BaseItem element type;
+// Folder's contract adds only IsRoot to those common fields.
+const baseDataContract = nativeItemJsonContract('MediaBrowser.Controller.Entities.Folder').filter(field => field.name !== 'IsRoot');
+const dataPaths = new Set(['ShortcutPath', 'AdditionalParts', 'LocalAlternateVersions', 'SubtitleFiles', 'AudioFiles', 'LyricFiles', 'PhysicalLocationsList']);
+
+/** New typed saves may differ in JSON layout. Unknown source tokens remain
+ * literal, rather than becoming identities merely because they resemble one. */
+export function projectMovieData(text, type, { logical, phase, identity, rooted, clock }) {
+  const value = parseLosslessJson(text);
+  if (!Object.hasOwn(dataManifest.contracts, type)) return { value, raw: text };
+  const unknown = [];
+  const visit = (node, contract, owner, role, path = []) => {
+    if (!node.properties) return parseLosslessJson(text.slice(node.start, node.end));
+    const fields = new Map(contract.map(field => [field.name, field]));
+    const output = {};
+    for (const [name, child] of node.properties) {
+      const field = fields.get(name);
+      if (!field) {
+        unknown.push({ path: [...path, name], raw: text.slice(child.start, child.end) });
+        output[name] = parseLosslessJson(text.slice(child.start, child.end)); continue;
+      }
+      const element = (entry, index) => {
+        const kind = field.kind.replace(/\[\]$/u, '');
+        const source = parseLosslessJson(text.slice(entry.start, entry.end));
+        const childOwner = index === undefined ? owner : owner + '|' + name + '[' + index + ']';
+        if (source == null) return source;
+        if (kind === 'guid') return identity(source);
+        if (kind === 'date') return clock(source, owner, name, phase);
+        if (kind === 'entity') return visit(entry, baseDataContract, childOwner, 'BaseItem', [...path, name, index]);
+        if (dataManifest.nested[kind]) return visit(entry,
+          Object.entries(dataManifest.nested[kind]).map(([name, field]) => ({ name, ...field })), childOwner, kind, [...path, name]);
+        if (dataPaths.has(name) || role === 'LinkedChild' && name === 'Path') return rooted(source);
+        return source;
+      };
+      const projected = field.kind.endsWith('[]') && child.items ? child.items.map(element) : element(child);
+      output[name] = name === 'PhysicalLocationsList' && type === 'MediaBrowser.Controller.Entities.AggregateFolder'
+        && role === type && Array.isArray(projected) ? normalizeAggregatePhysicalLocations(projected, owner) : projected;
+    }
+    return output;
+  };
+  return { value: visit(tokenizeJson(text), nativeItemJsonContract(type), logical, type), unknown };
+}
+
+const movieContainers = new Set(['movie', 'movie/fileinfo', 'movie/fileinfo/streamdetails',
+  'movie/fileinfo/streamdetails/video', 'movie/fileinfo/streamdetails/audio', 'movie/fileinfo/streamdetails/subtitle', 'movie/actor', 'movie/fanart']);
+const boxSetContainers = new Set(['Item', 'Item/Genres', 'Item/Studios', 'Item/Tags', 'Item/Persons',
+  'Item/Persons/Person', 'Item/CollectionItems', 'Item/CollectionItems/CollectionItem']);
+export function projectMovieXml(node, { type, rooted, dateadded, added, framerate }) {
+  const visit = (node, parents = [], schemaNamespace = true) => {
+    const location = [...parents, node.name], path = location.join('/');
+    const namespace = node.name.includes(':') ? node.namespaces['xmlns:' + node.name.split(':')[0]] : node.namespaces.xmlns ?? '';
+    const schema = schemaNamespace && namespace === '';
+    const movie = type === 'MediaBrowser.Controller.Entities.Movies.Movie';
+    const boxSet = type === 'MediaBrowser.Controller.Entities.Movies.BoxSet';
+    let body = node.text;
+    if (schema && !node.children.length) {
+      if (movie && path === 'movie/dateadded') body = dateadded(body);
+      else if (boxSet && path === 'Item/Added') body = added(body);
+      else if (movie && path === 'movie/fileinfo/streamdetails/video/framerate') body = framerate(body);
+      else if (movie && path === 'movie/path' || boxSet && path === 'Item/CollectionItems/CollectionItem/Path') body = rooted(body);
+    }
+    const attributes = Object.fromEntries(Object.entries(node.attributes).filter(([name]) => name !== 'xmlns' && !name.startsWith('xmlns:')).sort(([a], [b]) => compare(a, b)));
+    const attributeNamespaces = Object.fromEntries(Object.keys(attributes).filter(name => name.includes(':'))
+      .map(name => [name, node.namespaces['xmlns:' + name.split(':')[0]] ?? null]));
+    const layout = schema && (movie ? movieContainers : boxSet ? boxSetContainers : new Set()).has(path);
+    const content = node.content.map(entry => typeof entry === 'string' ? entry : visit(entry, location, schema))
+      .filter(entry => !(layout && node.children.length && typeof entry === 'string' && !entry.trim()));
+    return { name: node.name, namespace, attributes, attributeNamespaces,
+      text: node.children.length ? null : body, content: node.children.length ? content : [] };
+  };
+  return visit(node);
+}
 
 /** AggregateFolder always places its own Path first. The remaining locations
  * come from recursive operating-system enumeration, whose order is not a
@@ -43,15 +118,42 @@ export function isConcurrentBoxSetMetadataEditEvent(value) {
     && value.type === 'MediaBrowser.Controller.Entities.Movies.BoxSet' && Number(value.updateReason) === 16;
 }
 
-/** One observed native MetadataEdit callback races the BoxSet refresh. Its
- * mutable collections and clocks can reflect either side of the refresh; later
- * events and SQL/XML retain the complete state while all static fields remain
- * exact here. Do not bind its clocks before projecting them away. */
-export function stabilizeMovieEventProjection(value) {
+/** These samples are evidence of observed states, not an exhaustive model of
+ * every legal race. An unseen value retains its original for explicit review. */
+export function movieConcurrentEventPolicy(records) {
+  const result = {};
+  for (const [recordIndex, record] of records.entries()) for (const entry of record.trace ?? []) {
+    const item = entry.detail?.item;
+    if (entry.phase !== 'created' || item?.type !== 'MediaBrowser.Controller.Entities.Movies.BoxSet') continue;
+    const root = slash(record.root), location = slash(item.path);
+    const logical = item.type + '|' + (location === root ? '$CASE' : location.startsWith(root + '/') ? '$CASE/' + location.slice(root.length + 1) : item.path);
+    const policy = result[logical] ??= { Genres: [], Studios: [] };
+    for (const field of ['Genres', 'Studios']) {
+      if (!Array.isArray(item[field]) || !item[field].every(value => typeof value === 'string')) continue;
+      let variant = policy[field].find(value => isDeepStrictEqual(value.value, item[field]));
+      if (!variant) { variant = { value: structuredClone(item[field]), observed: [] }; policy[field].push(variant); }
+      variant.observed.push({ recordIndex, ordinal: entry.ordinal, action: entry.action, metadataId: entry.metadataId ?? null, requestId: entry.requestId ?? null });
+    }
+  }
+  return result;
+}
+
+export function stabilizeMovieEventProjection(value, { policy, validateDate } = {}) {
   if (!isConcurrentBoxSetMetadataEditEvent(value)) return value;
-  const { Genres: ignoredGenres, Studios: ignoredStudios, DateCreated: ignoredDateCreated,
-    DateModified: ignoredDateModified, DateLastSaved: ignoredDateLastSaved,
-    DateLastRefreshed: ignoredDateLastRefreshed, ...projected } = value;
+  const projected = { ...value };
+  for (const field of ['Genres', 'Studios']) {
+    assert.ok(Array.isArray(value[field]) && value[field].every(entry => typeof entry === 'string'), 'The actual callback must retain typed ' + field + '.');
+    if (!policy?.[field]?.some(variant => isDeepStrictEqual(variant.value, value[field]))) {
+      const error = new Error('A concurrent BoxSet ' + field + ' value needs review against the current Native originals.');
+      error.code = 'MOVIE_OBSERVATION_REVIEW_REQUIRED'; error.observation = { field, value: value[field], id: value.id }; throw error;
+    }
+    projected[field] = '$native-concurrent-' + field;
+  }
+  for (const field of ['DateCreated', 'DateModified', 'DateLastSaved', 'DateLastRefreshed']) {
+    assert.ok(Object.hasOwn(value, field) && typeof value[field] === 'string', 'The actual callback must retain its DateTime ' + field + '.');
+    validateDate(value[field], field);
+    projected[field] = '$native-concurrent-' + field;
+  }
   return projected;
 }
 
@@ -60,7 +162,7 @@ const concurrentBoxSetRefreshReasons = [16, 2, 19];
 /** Native dispatches this exact created-phase BoxSet callback cohort from
  * concurrent continuations. Canonicalize only those three contiguous callbacks;
  * added, image-update and every other event retain their observed order. */
-export function stabilizeConcurrentBoxSetEventOrder(values) {
+export function stabilizeConcurrentBoxSetEventOrder(values, { before = [] } = {}) {
   const indices = values.map((value, index) => ({ value, index })).filter(({ value }) =>
     value.phase === 'created' && value.action === 'updated'
     && value.type === 'MediaBrowser.Controller.Entities.Movies.BoxSet'
@@ -75,14 +177,58 @@ export function stabilizeConcurrentBoxSetEventOrder(values) {
     'The concurrent BoxSet callback cohort must contain each reason exactly once.');
   for (const reason of concurrentBoxSetRefreshReasons) assert.ok(byReason.has(reason),
     'The concurrent BoxSet callback cohort is missing update reason ' + reason + '.');
+  for (const [left, right] of before) assert.ok(values.indexOf(byReason.get(left)) < values.indexOf(byReason.get(right)),
+    'A real metadata worker causal edge must retain callback order: ' + left + ' before ' + right + '.');
   const result = [...values];
   concurrentBoxSetRefreshReasons.forEach((reason, offset) => { result[indices[0] + offset] = byReason.get(reason); });
   return result;
 }
 
+export function assertMovieEventCausality(trace) {
+  const edges = new Map();
+  const operations = new Map(trace.filter(entry => entry.action === 'metadata-begin' && entry.metadataId != null).map(entry => [Number(entry.metadataId), entry]));
+  for (const entry of trace.filter(entry => ['added', 'updated', 'removed'].includes(entry.action))) {
+    const begin = operations.get(Number(entry.metadataId));
+    const own = begin && key(begin.detail.item?.id ?? begin.detail.reference) === key(entry.detail.item.id);
+    const cohort = entry.phase === 'created' && entry.action === 'updated'
+      && entry.detail.item.type === 'MediaBrowser.Controller.Entities.Movies.BoxSet' && [2, 19].includes(Number(entry.detail.updateReason));
+    if (cohort && !own) {
+      const error = new Error('The raced BoxSet refresh callback needs an actual owning metadata operation in the original trace.');
+      error.code = 'MOVIE_OBSERVATION_REVIEW_REQUIRED'; error.observation = entry; throw error;
+    }
+    if (!own) continue;
+    const completed = trace.find(value => value.action === 'metadata-completed' && value.metadataId === begin.metadataId);
+    assert.ok(completed && Number(begin.ordinal) < Number(entry.ordinal) && Number(entry.ordinal) < Number(completed.ordinal),
+      'An owned Item callback must occur inside its actual metadata operation.');
+    if (entry.requestId != null) {
+      const started = trace.find(value => value.action === 'queue-metadata-start' && Number(value.detail.requestId) === Number(entry.requestId));
+      const finished = trace.find(value => value.action === 'queue-metadata-completed' && Number(value.detail.requestId) === Number(entry.requestId));
+      // Folder validation can refresh other children after the queued target's
+      // metadata callback. Those descendants retain their own operation span.
+      if (started && key(started.detail.itemId) === key(entry.detail.item.id)) assert.ok(finished
+        && Number(started.ordinal) < Number(entry.ordinal) && Number(entry.ordinal) < Number(finished.ordinal),
+      'A queued target callback must occur inside its actual request metadata span.');
+    }
+    if (!cohort || Number(entry.detail.updateReason) !== 19) continue;
+    const early = trace.find(value => value.action === 'updated' && value.metadataId === begin.metadataId
+      && key(value.detail.item.id) === key(entry.detail.item.id) && Number(value.detail.updateReason) === 2);
+    if (early) {
+      assert.ok(Number(early.ordinal) < Number(entry.ordinal), 'The same refresh must publish its first save before its final save.');
+      edges.set(key(entry.detail.item.id), [[2, 19]]);
+    }
+  }
+  for (const admitted of trace.filter(entry => entry.phase === 'created' && entry.action === 'queue-admission-begin' && entry.detail.options?.ForceSave === true)) {
+    const edit = trace.find(entry => entry.phase === admitted.phase && entry.action === 'updated'
+      && key(entry.detail.item.id) === key(admitted.detail.itemId) && Number(entry.detail.updateReason) === 16
+      && Number(entry.ordinal) < Number(admitted.ordinal));
+    assert.ok(edit, 'Collection membership MetadataEdit must complete before its actual ForceSave queue admission.');
+  }
+  return edges;
+}
+
 /** Full raw snapshots stay intact. These bindings are independently checked in
  * each run and reused across its three stages, including deleted identities. */
-export function projectMovieRun(record, specification) {
+export function projectMovieRun(record, specification, eventPolicy) {
   const root = slash(record.root), native = record.actualExecution === true;
   const logicalById = new Map(), idByLogical = new Map(), valueById = new Map(), idByValue = new Map();
   const clockByTicks = new Map(), ticksByClock = new Map(), previousByField = new Map(), clockBindings = [];
@@ -173,22 +319,7 @@ export function projectMovieRun(record, specification) {
     }
     return clockByTicks.get(clockKey);
   };
-  const text = (value, logical, field, phase) => {
-    if (value == null) return value;
-    if (clockFields.has(field)) return clock(value, logical, field, phase);
-    if (typeof value === 'string' && /^[a-f\d]{8}(?:-?[a-f\d]{4}){3}-?[a-f\d]{12}$/iu.test(value)) return identity(value);
-    return rooted(value);
-  };
-  const data = (value, logical, phase, field) => {
-    if (Array.isArray(value)) {
-      const projected = value.map((entry, index) => data(entry,
-        logical + '|' + field + '[' + index + ']', phase, field));
-      return field === 'PhysicalLocationsList' ? normalizeAggregatePhysicalLocations(projected, logical) : projected;
-    }
-    if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort()
-      .map(name => [name, data(value[name], logical, phase, name)]));
-    return text(value, logical, field, phase);
-  };
+  const pathColumns = new Set(['BaseItems.Path', 'LinkedChildren.Path', 'MediaStreamInfos.Path', 'BaseItemImageInfos.Path', 'ImageInfos.Path']);
   const observations = record.observations.filter(value => value.boundary === 'metadata-drained');
   assert.deepEqual(observations.map(value => value.phase), specification.phases);
   const scanOutcomes = record.observations.map(observation => {
@@ -211,11 +342,15 @@ export function projectMovieRun(record, specification) {
           const value = row[column.name];
           if (value == null) return [column.name, value];
           if (column.type === 'INTEGER') return [column.name, BigInt(value).toString()];
-          if (column.name === 'Data' && table.name === 'BaseItems') return [column.name, data(parseLosslessJson(value), logical, observation.phase)];
+          if (column.name === 'Data' && table.name === 'BaseItems') return [column.name,
+            projectMovieData(value, row.Type, { logical, phase: observation.phase, identity, rooted, clock })];
           if (column.clrType.replace('?', '') === 'Guid') return [column.name, identity(value)];
           if (column.clrType.replace('?', '') === 'DateTime') return [column.name,
             table.name === 'BaseItems' && clockFields.has(column.name) ? clock(value, logical, column.name, observation.phase) : exactDate(value)];
-          return [column.name, text(value, logical, column.name, observation.phase)];
+          if (pathColumns.has(table.name + '.' + column.name)) return [column.name, rooted(value)];
+          if (table.name === 'BaseItems' && column.name === 'PresentationUniqueKey' && key(value) === key(row.Id)) return [column.name, identity(value)];
+          if (table.name === 'UserData' && column.name === 'CustomDataKey' && key(value) === key(row.ItemId)) return [column.name, identity(value)];
+          return [column.name, value];
         }));
       });
       // Every order-bearing column remains present, including LinkedChildren's
@@ -223,7 +358,7 @@ export function projectMovieRun(record, specification) {
       sql[table.name] = rows.sort((a, b) => compare(stable(a), stable(b)));
     }
     for (const name of ['__EFMigrationsHistory', '__EFMigrationsLock'])
-      sql[name] = observation.snapshot.sql[name].map(row => data(row, name, observation.phase)).sort((a, b) => compare(stable(a), stable(b)));
+      sql[name] = observation.snapshot.sql[name].map(row => structuredClone(row)).sort((a, b) => compare(stable(a), stable(b)));
     const xml = observation.snapshot.files.map(file => {
       const absolute = root + '/' + file.path;
       const row = items.find(item => {
@@ -261,6 +396,7 @@ export function projectMovieRun(record, specification) {
   let concurrentBoxSetEditEvents = 0;
   const events = {};
   const rawTrace = record.trace ?? [];
+  const causalEdges = assertMovieEventCausality(rawTrace);
   assert.deepEqual(rawTrace.map(entry => Number(entry.ordinal)), Array.from({ length: rawTrace.length }, (_, index) => index + 1),
     'The raw trace must be cumulative, contiguous and complete.');
   for (const entry of rawTrace.filter(entry => specification.phases.includes(entry.phase) && ['added', 'updated', 'removed'].includes(entry.action))) {
@@ -276,14 +412,24 @@ export function projectMovieRun(record, specification) {
     if (concurrentEdit) assert.equal(++concurrentBoxSetEditEvents, 1,
       'Only the single observed created-phase BoxSet MetadataEdit callback may stabilize raced fields.');
     for (const field of ['DateCreated', 'DateModified', 'DateLastSaved', 'DateLastRefreshed']) {
-      if (concurrentEdit) continue;
-      event[field] = eventDate(item[field], logical, field, entry.phase);
+      event[field] = concurrentEdit ? item[field] : eventDate(item[field], logical, field, entry.phase);
     }
-    (events[logical] ??= []).push(stabilizeMovieEventProjection(event));
+    (events[logical] ??= []).push(stabilizeMovieEventProjection(event, { policy: eventPolicy?.[logical], validateDate(value, field) {
+      const ticks = dateTicks(value);
+      if (field === 'DateCreated') {
+        const created = xmlCreated.get(logical); assert.ok(created, 'The callback must identify the real collection creation.');
+        if (ticks !== created.seed) {
+          xmlCreatedClock(ticks, logical, field, entry.phase);
+          assert.ok(rawTrace.some(value => value.action === 'local-reader-completed' && Number(value.ordinal) < Number(entry.ordinal)
+            && value.detail.provider.endsWith('BoxSetXmlProvider') && value.detail.HasMetadata
+            && rooted(value.detail.Path) === logical.slice(logical.indexOf('|') + 1) && dateTicks(value.detail.DateCreated) === ticks),
+          'The concurrent callback must follow the actual XML reader that made its shifted creation reachable.');
+        }
+      } else assert.ok(ticks === 0n || ticks >= started && ticks <= ended, 'The concurrent callback DateTime must be minimum or inside its real run window.');
+    } }));
   }
   const traceActions = rawTrace.map(entry => entry.action);
-  assert.equal(record.registration.externalDataManager, native
-    ? 'Emby.Server.Implementations.Library.ExternalDataManager' : 'ExternalDataManager');
+  if (native) assert.equal(record.registration.externalDataManager, 'Emby.Server.Implementations.Library.ExternalDataManager');
   if (native) assert.deepEqual(record.registration.externalDataDependencies, [
     'Emby.Server.Implementations.Library.KeyframeManager',
     'Jellyfin.Server.Implementations.MediaSegments.MediaSegmentManager',
@@ -420,7 +566,7 @@ export function projectMovieRun(record, specification) {
   assert.ok(BigInt(record.updateInput.elapsedTicks) > BigInt(record.updateInput.toleranceTicks));
   return { stages, scanOutcomes, queued, registrationOrder,
     events: Object.fromEntries(Object.entries(events).sort(([a], [b]) => compare(a, b))
-      .map(([logical, values]) => [logical, stabilizeConcurrentBoxSetEventOrder(values)])),
+      .map(([logical, values]) => [logical, stabilizeConcurrentBoxSetEventOrder(values, { before: causalEdges.get(key(idByLogical.get(logical))) ?? [] })])),
     bindings: { items: Object.fromEntries(logicalById), itemValues: Object.fromEntries(valueById), clocks: clockBindings,
       actualExternalCleanup: { calls: cleanups.length, completed: cleanups.length, failures: 0,
         observation: 'Each actual service invocation retains before/after extracted path existence, real file bytes/SHA and the complete four affected SQL tables in the unmodified raw trace. No nonexistent-path premise bypasses the service.' },
@@ -513,21 +659,18 @@ export function projectMovieRun(record, specification) {
     }
   }
 
-  function xmlNode(node, row, phase, parents = []) {
+  function xmlNode(node, row, phase) {
     const logical = identity(row.Id);
-    const location = [...parents, node.name];
-    const namespace = node.name.includes(':') ? node.namespaces['xmlns:' + node.name.split(':')[0]] : node.namespaces.xmlns ?? '';
-    let body = node.text;
-    if (node.name === 'dateadded') {
+    return projectMovieXml(node, { type: row.Type, rooted, dateadded(body) {
       const expected = new Date(Number((dateTicks(row.DateCreated) - 621355968000000000n) / 10000n)).toISOString().slice(0, 19).replace('T', ' ');
       assert.equal(body, expected, 'NFO dateadded must agree with the real persisted DateCreated to its own second precision.');
-      body = clock(row.DateCreated, logical, 'DateCreated', phase);
-    } else if (node.name === 'Added') {
+      return clock(row.DateCreated, logical, 'DateCreated', phase);
+    }, added(body) {
       const instant = new Date(Number((dateTicks(row.DateCreated) - 621355968000000000n) / 10000n)), pad = value => String(value).padStart(2, '0');
       const expected = `${pad(instant.getMonth() + 1)}/${pad(instant.getDate())}/${instant.getFullYear()} ${pad(instant.getHours())}:${pad(instant.getMinutes())}:${pad(instant.getSeconds())}`;
       assert.equal(body, expected, 'Collection XML Added must agree with its real persisted local DateCreated.');
-      body = clock(row.DateCreated, logical, 'DateCreated', phase);
-    } else if (namespace === '' && location.join('/') === 'movie/fileinfo/streamdetails/video/framerate' && !node.children.length) {
+      return clock(row.DateCreated, logical, 'DateCreated', phase);
+    }, framerate(body) {
       const streams = observations.find(value => value.phase === phase).snapshot.sql.MediaStreamInfos
         .filter(stream => key(stream.ItemId) === key(row.Id) && Number(stream.StreamType) === 1);
       assert.equal(streams.length, 1, 'This original input has one video stream.');
@@ -538,14 +681,8 @@ export function projectMovieRun(record, specification) {
       // field; retain its value without imposing one decimal spelling.
       body = Math.fround(Number(body));
       assert.equal(body, Math.fround(Number(rate)), 'NFO framerate must retain its actual persisted video rate.');
-    } else body = text(body, logical, node.name, phase);
-    const attributes = Object.fromEntries(Object.entries(node.attributes).filter(([name]) => name !== 'xmlns' && !name.startsWith('xmlns:')).sort(([a], [b]) => compare(a, b)));
-    // Layout-only indentation between child elements is reader-insignificant.
-    // Leaf and mixed content, unknown elements and real attributes survive.
-    const content = node.content.map(entry => typeof entry === 'string' ? text(entry, logical, node.name, phase) : xmlNode(entry, row, phase, location))
-      .filter(entry => !(node.children.length && typeof entry === 'string' && !entry.trim()));
-    return { name: node.name, namespace, attributes, text: node.children.length ? null : body,
-      content: node.children.length ? content : [] };
+      return body;
+    } });
   }
 }
 

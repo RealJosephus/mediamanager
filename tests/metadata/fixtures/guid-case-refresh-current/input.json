@@ -1,0 +1,19 @@
+{
+  "stage": "guid-storage-premise",
+  "scope": "Same-run migrated Native SQLite, actual native item saving, one explicitly controlled lowercase-D Guid representation, cold and warm public item reads, formal PostgreSQL transfer and exact SQLite export back to a fresh Native reader. Metadata refresh and external-data invalidation are not executed in this first stage.",
+  "itemId": "D9ACBEEF-12AB-34CD-56EF-012345ABCDEF",
+  "otherId": "D9ACBEEF-12AB-34CD-56EF-012345ABCDE0",
+  "name": "Guid storage control",
+  "warmName": "Unsaved actual warm item",
+  "data": "{ \"UnknownProvider\" : [9223372036854775807,\"中文\"], \"traceId\":\"D9ACBEEF-12AB-34CD-56EF-012345ABCDEF\", \"dup\":1, \"dup\":2, \"null\":null }",
+  "opaqueProvider": "literal:D9ACBEEF-12AB-34CD-56EF-012345ABCDEF",
+  "date": "2026-10-20T01:02:03.1234567Z",
+  "ticks": "9007199254740993",
+  "recordings": { "activeRecordingPaths": [] },
+  "rootInitialization": { "metadataProviders": [], "metadataSavers": [], "imageProviders": [] },
+  "asset": {
+    "path": "tests/fixtures/frozen-av/source.m2ts",
+    "bytes": 110592,
+    "sha256": "719919ca910fdaf4b035d2dac56cdbb4c95efe7c5a465f93303901e8b747f027"
+  }
+}

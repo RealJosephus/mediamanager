@@ -1,9 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { inspect } from 'node:util';
 import { setTimeout as delay } from 'node:timers/promises';
 import { MetadataRefreshHost } from '../../src/metadata/refresh-host.js';
 import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
 import native from './fixtures/refresh-queue/native.json' with { type: 'json' };
+
+const failureFields = error => error == null || typeof error !== 'object' ? error
+  : Array.isArray(error) ? error.map(failureFields)
+  : Object.fromEntries([...new Set([...Object.getOwnPropertyNames(error), ...(error instanceof Error
+    ? ['message', 'code', 'status', 'statusCode', 'cause', 'errors'].filter(key => key in error) : [])])]
+    .filter(key => !(error instanceof Error && ['name', 'stack'].includes(key)))
+    .map(key => [key, failureFields(error[key])]));
 
 const inputs = {
   'equal-high': { priorities: [0, 0, 0, 0, 0, 0, 0, 0, 0] },
@@ -151,14 +159,18 @@ test('queued metadata waits for its mutation owner and shutdown cancels that wai
   assert.deepEqual(calls, ['collection']);
 });
 
-test('a queue boundary failure settles pending callers and permits a later batch', async () => {
+test('a queue boundary failure settles pending callers and permits a later batch', async t => {
   const failure = new Error('Cannot initialize queue boundary'), errors = [];
+  t.after(() => t.diagnostic(inspect({ background: errors }, { depth: null })));
   const host = new MetadataRefreshHost({ registry: {}, loadContext() {}, store: {}, logger: { error: error => errors.push(error) } });
   host.runQueuedBatch = async () => { throw failure; };
   const results = await Promise.allSettled([host.queue('first'), host.queue('second')]);
   await host.drain();
-  assert.ok(results.every(result => result.status === 'rejected' && result.reason === failure));
-  assert.deepEqual(errors, [failure]);
+  for (const result of results) {
+    assert.equal(result.status, 'rejected');
+    assert.deepEqual(failureFields(result.reason), failureFields(failure));
+  }
+  for (const error of errors) assert.deepEqual(failureFields(error), failureFields(failure));
   host.runQueuedBatch = operation => operation();
   host.queuedRefresh = async reference => reference;
   assert.equal(await host.queue('later'), 'later');

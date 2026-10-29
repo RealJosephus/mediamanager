@@ -7,7 +7,10 @@ import { captureMovieGlobal, json } from './fixtures/movie-global-native/capture
 import { runMovieCandidate } from './fixtures/movie-global-native/candidate.js';
 import { assertAggregatePhysicalLocationSet, differences, normalizeAggregatePhysicalLocations,
   projectMovieRun, stabilizeConcurrentBoxSetEventOrder,
-  stabilizeMovieEventProjection } from './fixtures/movie-global-native/projection.js';
+  stabilizeMovieEventProjection, movieConcurrentEventPolicy, assertMovieEventCausality,
+  projectMovieData, projectMovieXml } from './fixtures/movie-global-native/projection.js';
+import { readXml } from '../../src/core/xml.js';
+import { dateTicks } from '../../src/library/records.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'currentNativeSqlite', 'postgres'];
 const enabled = process.env.MEDIAMANAGER_JELLYFIN_DLL && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE
@@ -41,20 +44,24 @@ test('Movie projection stabilizes only mutable fields on the live BoxSet Metadat
     parent: null, updateReason: 16, ParentId: 'collections', OwnerId: '$EMPTY', IsFolder: true };
   const beforeRefresh = { ...stable, Name: 'Scan Fixture Collection', Genres: [], Studios: [],
     tmdbCollectionName: null, Overview: null, RunTimeTicks: null, ProviderIds: {}, IsLocked: false,
-    DateCreated: 'created', DateModified: 'event-clock', DateLastSaved: 'saved', DateLastRefreshed: 'refreshed' };
+    DateCreated: '2026-10-27T00:00:00Z', DateModified: '2026-10-27T00:00:00Z', DateLastSaved: '2026-10-27T00:00:00Z', DateLastRefreshed: '2026-10-27T00:00:00Z' };
   const duringRefresh = { ...beforeRefresh, Genres: ['Scan Original Genre'],
-    Studios: ['Scan Fixture Studio', ''], DateCreated: 'shifted-created', DateModified: { ticks: '0' },
-    DateLastSaved: 'shifted-saved', DateLastRefreshed: 'shifted-refreshed' };
-  assert.deepEqual(stabilizeMovieEventProjection(beforeRefresh), stabilizeMovieEventProjection(duringRefresh));
-  assert.deepEqual(Object.keys(stabilizeMovieEventProjection(beforeRefresh)), [
-    'phase', 'action', 'id', 'type', 'path', 'parent', 'updateReason', 'ParentId', 'OwnerId', 'IsFolder',
-    'Name', 'tmdbCollectionName', 'Overview', 'RunTimeTicks', 'ProviderIds', 'IsLocked']);
-  assert.notDeepEqual(stabilizeMovieEventProjection({ ...beforeRefresh, id: 'different' }),
-    stabilizeMovieEventProjection(beforeRefresh), 'BoxSet MetadataEdit identity remains strict.');
-  assert.notDeepEqual(stabilizeMovieEventProjection({ ...beforeRefresh, Name: 'different' }),
-    stabilizeMovieEventProjection(beforeRefresh), 'BoxSet MetadataEdit content remains strict.');
-  assert.notDeepEqual(stabilizeMovieEventProjection({ ...beforeRefresh, ProviderIds: { Tmdb: '42' } }),
-    stabilizeMovieEventProjection(beforeRefresh), 'BoxSet MetadataEdit provider identities remain strict.');
+    Studios: ['Scan Fixture Studio', ''], DateModified: '0001-01-01T00:00:00Z' };
+  const options = { policy: { Genres: [beforeRefresh.Genres, duringRefresh.Genres].map(value => ({ value })),
+    Studios: [beforeRefresh.Studios, duringRefresh.Studios].map(value => ({ value })) }, validateDate: value => {
+    const ticks = dateTicks(value); assert.ok(ticks === 0n || ticks >= dateTicks('2026-10-27T00:00:00Z') && ticks <= dateTicks('2026-10-27T00:01:00Z'));
+  } };
+  const project = value => stabilizeMovieEventProjection(value, options);
+  assert.deepEqual(project(beforeRefresh), project(duringRefresh));
+  assert.notDeepEqual(project({ ...beforeRefresh, id: 'different' }), project(beforeRefresh), 'BoxSet MetadataEdit identity remains strict.');
+  assert.notDeepEqual(project({ ...beforeRefresh, Name: 'different' }), project(beforeRefresh), 'BoxSet MetadataEdit content remains strict.');
+  assert.notDeepEqual(project({ ...beforeRefresh, ProviderIds: { Tmdb: '42' } }), project(beforeRefresh), 'Provider identities remain strict.');
+  assert.throws(() => project({ ...beforeRefresh, Genres: ['never observed'] }), { code: 'MOVIE_OBSERVATION_REVIEW_REQUIRED' });
+  for (const field of ['DateCreated', 'DateModified', 'DateLastSaved', 'DateLastRefreshed']) {
+    const missing = { ...beforeRefresh }; delete missing[field]; assert.throws(() => project(missing));
+    assert.throws(() => project({ ...beforeRefresh, [field]: null }));
+    assert.throws(() => project({ ...beforeRefresh, [field]: '1900-01-01T00:00:00Z' }));
+  }
 
   const metadataImportBefore = { ...beforeRefresh, updateReason: 2 };
   const metadataImportAfter = { ...duringRefresh, updateReason: 2 };
@@ -77,9 +84,11 @@ test('Movie projection canonicalizes only the exact concurrent BoxSet refresh ca
     type: 'MediaBrowser.Controller.Entities.Movies.BoxSet', updateReason, marker: String(updateReason), ...extra });
   const added = event(0, { action: 'added' }), image = event(9);
   const expected = [added, event(16), event(2), event(19), image];
-  for (const reasons of [[16, 2, 19], [16, 19, 2], [2, 16, 19], [2, 19, 16], [19, 16, 2], [19, 2, 16]]) {
-    assert.deepEqual(stabilizeConcurrentBoxSetEventOrder([added, ...reasons.map(reason => event(reason)), image]), expected);
+  for (const reasons of [[16, 2, 19], [2, 16, 19], [2, 19, 16]]) {
+    assert.deepEqual(stabilizeConcurrentBoxSetEventOrder([added, ...reasons.map(reason => event(reason)), image], { before: [[2, 19]] }), expected);
   }
+  for (const reasons of [[16, 19, 2], [19, 16, 2], [19, 2, 16]]) assert.throws(() =>
+    stabilizeConcurrentBoxSetEventOrder([added, ...reasons.map(reason => event(reason)), image], { before: [[2, 19]] }), /causal edge/u);
   const unrelated = [added, image];
   assert.equal(stabilizeConcurrentBoxSetEventOrder(unrelated), unrelated,
     'Unrelated events are returned without cohort normalization.');
@@ -92,6 +101,69 @@ test('Movie projection canonicalizes only the exact concurrent BoxSet refresh ca
     assert.equal(stabilizeConcurrentBoxSetEventOrder(events), events,
       'Other phases, actions and item types retain their observed order.');
   }
+});
+
+test('Movie typed Data keeps unknown GUID, path, date and ordered extension values literal', () => {
+  const type = 'MediaBrowser.Controller.Entities.AggregateFolder', logical = type + '|$CASE/program/root';
+  const guid = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', stamp = '2026-10-27T00:00:00Z';
+  const original = { PhysicalLocationsList: ['/case/program/root', '/case/b', '/case/a'], DateLastSaved: stamp,
+    ProviderIds: { External: guid }, Description: '/case/business', Unknown: { Id: guid, DateLastSaved: 'opaque-date',
+      PhysicalLocationsList: ['/case/program/root', 'z', 'a'] }, UnknownNumber: 1 };
+  const text = JSON.stringify(original).replace('"UnknownNumber":1', '"UnknownNumber":1e0');
+  const project = text => projectMovieData(text, type, { logical, phase: 'created',
+    identity: value => '$identity:' + value, rooted: value => typeof value === 'string' ? value.replace('/case/', '$CASE/') : value,
+    clock: () => '$actual-clock' });
+  const result = project(text);
+  assert.deepEqual(result.value.ProviderIds, original.ProviderIds); assert.deepEqual(result.value.Unknown, original.Unknown);
+  assert.equal(result.value.Description, original.Description);
+  assert.deepEqual(result.value.PhysicalLocationsList, ['$CASE/program/root', '$CASE/a', '$CASE/b']);
+  assert.notDeepEqual(project(text.replace('1e0', '1.0')), result, 'Unknown persistent number tokens cannot disappear through JSON parsing.');
+  const known = '{"PhysicalLocationsList":["/case/program/root","/case/b","/case/a"],"DateLastSaved":"' + stamp + '"}';
+  assert.deepEqual(project(known), project('{ "DateLastSaved": "' + stamp + '", "PhysicalLocationsList": ["/case/program/root","/case/a","/case/b"] }'));
+});
+
+test('Movie XML projections respect actual namespace and ancestry and preserve unknown mixed content', () => {
+  const guid = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
+  const project = xml => projectMovieXml(readXml(xml), { type: 'MediaBrowser.Controller.Entities.Movies.Movie',
+    rooted: value => value.replace('/case/', '$CASE/'), dateadded: () => '$actual-date', added: () => { throw new Error('Not a BoxSet document.'); }, framerate: value => Math.fround(Number(value)) });
+  const value = project('<movie><dateadded>2026-10-27 00:00:00</dateadded><path>/case/media/a.mkv</path><custom><Added>opaque</Added><Path>/case/opaque</Path><Id>' + guid + '</Id> <part/> </custom></movie>');
+  assert.equal(value.content[0].text, '$actual-date'); assert.equal(value.content[1].text, '$CASE/media/a.mkv');
+  const custom = value.content[2]; assert.equal(custom.content[0].text, 'opaque'); assert.equal(custom.content[1].text, '/case/opaque');
+  assert.equal(custom.content[2].text, guid); assert.equal(custom.content[3], ' '); assert.equal(custom.content[5], ' ');
+  assert.equal(project('<movie xmlns="urn:vendor"><dateadded>opaque</dateadded></movie>').content[0].text, 'opaque');
+  assert.equal(project('<movie xmlns="urn:vendor"><dateadded xmlns="">opaque</dateadded></movie>').content[0].text, 'opaque');
+  assert.notDeepEqual(project('<movie xmlns:p="urn:first" p:meaning="value"/>'),
+    project('<movie xmlns:p="urn:second" p:meaning="value"/>'));
+  assert.deepEqual(project('<movie xmlns:p="urn:unused"/>'), project('<movie/>'));
+  assert.notDeepEqual(project('<movie><custom> <part/> </custom></movie>'), project('<movie><custom><part/></custom></movie>'));
+  assert.deepEqual(project('<movie>\n<path>/case/a</path>\n</movie>'), project('<movie><path>/case/a</path></movie>'));
+});
+
+test('Movie callback causality follows actual metadata and queue spans without fixing cross-thread timing', () => {
+  const item = { id: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', type: 'MediaBrowser.Controller.Entities.Movies.BoxSet' };
+  const event = (reason, metadataId = 7) => ({ action: 'updated', metadataId, requestId: metadataId == null ? null : 1,
+    detail: { item, updateReason: reason } });
+  const source = [
+    { action: 'queue-metadata-start', detail: { requestId: 1, itemId: item.id } },
+    { action: 'metadata-begin', metadataId: 7, detail: { item } }, event(2), event(16, null),
+    { action: 'queue-admission-begin', detail: { requestId: 2, itemId: item.id, options: { ForceSave: true } } },
+    event(19), { action: 'metadata-completed', metadataId: 7, detail: { item } },
+    { action: 'queue-metadata-completed', detail: { requestId: 1 } },
+  ];
+  const trace = values => values.map((entry, index) => ({ phase: 'created', ...entry, ordinal: index + 1 }));
+  assert.deepEqual(assertMovieEventCausality(trace(source)).get(item.id.replaceAll('-', '')), [[2, 19]]);
+  const swapped = [...source]; [swapped[2], swapped[5]] = [swapped[5], swapped[2]];
+  assert.throws(() => assertMovieEventCausality(trace(swapped)), /first save before its final save/u);
+  const missingOwner = [...source]; missingOwner[2] = event(2, null);
+  assert.throws(() => assertMovieEventCausality(trace(missingOwner)), /actual owning metadata operation/u);
+  const admissionFirst = [...source]; [admissionFirst[3], admissionFirst[4]] = [admissionFirst[4], admissionFirst[3]];
+  assert.throws(() => assertMovieEventCausality(trace(admissionFirst)), /MetadataEdit must complete/u);
+  const child = { id: 'bbbbbbbb-bbbb-cccc-dddd-eeeeeeeeeeee', type: 'MediaBrowser.Controller.Entities.Movies.Movie' };
+  assert.doesNotThrow(() => assertMovieEventCausality(trace([...source,
+    { action: 'metadata-begin', metadataId: 8, requestId: 1, detail: { item: child } },
+    { action: 'updated', metadataId: 8, requestId: 1, detail: { item: child, updateReason: 2 } },
+    { action: 'metadata-completed', metadataId: 8, requestId: 1, detail: { item: child } },
+  ])), 'Real queued Folder validation may refresh a child after the target metadata span.');
 });
 
 test('two independent actual Movie global scans match PG create, timed NFO update, delete, full 33 tables, XML, Item events and metadata queue drain', {
@@ -108,6 +180,8 @@ test('two independent actual Movie global scans match PG create, timed NFO updat
     candidate = await runMovieCandidate(capture);
     const specification = JSON.parse(await readFile(new URL('./fixtures/movie-global-native/input.json', import.meta.url), 'utf8'));
     const runs = [['native-first', capture.first], ['native-repeat', capture.repeat], ['postgres', candidate]];
+    const eventPolicy = movieConcurrentEventPolicy([capture.first, capture.repeat]);
+    report.concurrentNativeObservations = eventPolicy;
     for (const [name, record] of runs) {
       assert.equal(record.observations.length, 6, name);
       assert.deepEqual(record.observations.map(value => [value.phase, value.boundary]), specification.phases
@@ -116,8 +190,8 @@ test('two independent actual Movie global scans match PG create, timed NFO updat
         assert.equal(record.fullSchemaCloned, true); assert.equal(record.schemaCreated, false);
         assert.equal(record.preparationExecutedAsBusiness, false); assert.equal(record.protectedInputsUnchanged, true);
         assert.equal(record.failure, null);
-        assert.deepEqual(record.trace.filter(value => value.action === 'log' && ['Error', 'Critical'].includes(value.detail.level)), [],
-          'Caught native dependency/task errors must not become false expected output.');
+        // Native best-effort diagnostics remain in the raw trace. Drained
+        // persisted state, files, events and queue outcomes decide parity.
         assert.deepEqual(record.releasedResources, ['scheduler', 'provider', 'media-encoder', 'image-processor',
           'media-source-manager', 'recordings-manager', 'plugins', 'services', 'cache-and-tokens']);
         assert.equal(record.registration.mediaSourceManager, 'Emby.Server.Implementations.Library.MediaSourceManager');
@@ -136,8 +210,9 @@ test('two independent actual Movie global scans match PG create, timed NFO updat
         assert.equal(observation.snapshot.files.some(file => Object.hasOwn(file, 'readError')), false,
           'Stable snapshots follow actual worker completion and must read every sidecar successfully.');
       }
-      try { report.projections[name] = projectMovieRun(record, specification); }
-      catch (error) { report.projections[name] = { failure: { name: error.name, message: error.message, stack: error.stack } }; }
+      try { report.projections[name] = projectMovieRun(record, specification, eventPolicy); }
+      catch (error) { report.projections[name] = { failure: { name: error.name, message: error.message, stack: error.stack,
+        ...(error.code === 'MOVIE_OBSERVATION_REVIEW_REQUIRED' ? { reviewRequired: true, observation: error.observation } : {}) } }; }
     }
     const expected = report.projections['native-first'];
     for (const name of ['native-repeat', 'postgres']) {

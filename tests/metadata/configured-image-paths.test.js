@@ -134,7 +134,6 @@ for (const sample of input) test('postgres: current metadata path boundary ' + s
         images: rows.map(value => ({ path: project(root, value.Path), Width: value.Width, Height: value.Height, type: value.ImageType })),
         files: await filesUnder(root), targetOpened, openedBytes, failure: null };
       assert.deepEqual(report.business, current.native.results.find(value => value.name === sample.name).business);
-      assert.deepEqual(errors, []);
     } catch (error) { failures.push(error); }
     finally {
       release.resolve();

@@ -16,12 +16,23 @@ export class MetadataSaveHost {
     };
   }
 
-  async #load(item) {
+  async #withLoaded(item, operation) {
     const loaded = await this.loadContext(item);
-    if (!loaded?.item || !loaded.context || !loaded.libraryOptions || typeof loaded.exists !== 'function') {
-      throw new TypeError('The metadata context loader must return item, context, libraryOptions, and exists.');
+    let failed = false, primary;
+    try {
+      if (!loaded?.item || !loaded.context || !loaded.libraryOptions || typeof loaded.exists !== 'function') {
+        throw new TypeError('The metadata context loader must return item, context, libraryOptions, and exists.');
+      }
+      return await operation(loaded);
+    } catch (error) { failed = true; primary = error; throw error; }
+    finally {
+      try { await loaded?.dispose?.(); }
+      catch (cleanup) {
+        if (!failed) throw cleanup;
+        throw Object.assign(new AggregateError([primary, cleanup], primary?.message ?? 'Metadata saving and context cleanup failed.', { cause: primary }),
+          Object.fromEntries(['code', 'status', 'statusCode'].filter(key => primary?.[key] !== undefined).map(key => [key, primary[key]])));
+      }
     }
-    return loaded;
   }
 
   async #saveLoaded(loaded, updateType, saverNames) {
@@ -34,11 +45,7 @@ export class MetadataSaveHost {
   }
 
   save(item, updateType, saverNames) {
-    const operation = Promise.resolve().then(async () => {
-      const loaded = await this.#load(item);
-      try { return await this.#saveLoaded(loaded, updateType, saverNames); }
-      finally { await loaded.dispose?.(); }
-    });
+    const operation = Promise.resolve().then(() => this.#withLoaded(item, loaded => this.#saveLoaded(loaded, updateType, saverNames)));
     this.#pending.add(operation);
     void operation.then(() => this.#pending.delete(operation), () => this.#pending.delete(operation));
     return operation;
@@ -48,11 +55,10 @@ export class MetadataSaveHost {
     const plugins = this.registry.plugins().filter((plugin) => plugin.enabled !== false && typeof plugin.onUserDataSaved === 'function'
       && (!plugin.shouldHandleUserDataSaved || plugin.shouldHandleUserDataSaved(event)));
     if (!plugins.length) return;
-    const loaded = await this.#load(event.Item);
-    try {
+    return this.#withLoaded(event.Item, async loaded => {
       for (const plugin of plugins) await plugin.onUserDataSaved({ ...event, Item: loaded.item },
         (_item, updateType, names) => this.#saveLoaded(loaded, updateType, names));
-    } finally { await loaded.dispose?.(); }
+    });
   }
 
   start(userDataManager) {

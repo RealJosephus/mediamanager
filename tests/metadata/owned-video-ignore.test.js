@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { inspect } from 'node:util';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { guid } from '../../src/library/records.js';
 import { OwnedItemMetadataLifecycleHost } from '../../src/metadata/owned-item-lifecycle.js';
@@ -61,8 +62,9 @@ for (const dialect of ['postgres']) for (const sample of input) test(`${dialect}
   catch (error) { exception = error; }
   assert.equal(signal.aborted, sample.cancelled === true);
   if (sample.cancelled) {
-    assert.equal(signal.reason.name, 'AbortError');
-    assert.equal(exception?.name, 'AbortError');
+    assert.deepEqual({ message: exception?.message, code: exception?.code, cause: exception?.cause },
+      { message: signal.reason.message, code: signal.reason.code, cause: signal.reason.cause });
+    t.diagnostic(inspect({ cancellation: exception }, { depth: null }));
   }
   assert.deepEqual(outcome(await project(value, sample, exception)), outcome(native.results.find(result => result.name === sample.name)));
 });

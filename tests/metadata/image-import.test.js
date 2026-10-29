@@ -112,7 +112,9 @@ test('original image downloads honor cancellation without writing an asset', asy
   const controller = new AbortController(); let writes = 0;
   const service = new MetadataImages({ fetch: async (_, { signal }) => new Promise((resolve, reject) => { signal.addEventListener('abort', () => reject(signal.reason), { once: true }); }) });
   const pending = service.saveRemote({ item: {}, imageAssets: { write: () => { writes++; } } }, [], { Url: 'https://fixture/slow', Type: 'Primary' }, { signal: controller.signal });
-  controller.abort(); await assert.rejects(pending, error => error.name === 'AbortError'); assert.equal(writes, 0);
+  controller.abort(); await assert.rejects(pending, error => {
+    assert.equal(error?.message, controller.signal.reason.message); assert.equal(error?.code, controller.signal.reason.code); return true;
+  }); assert.equal(writes, 0);
 });
 
 test('unmapped image identities keep their associations and item bindings resolve sibling assets', async t => {

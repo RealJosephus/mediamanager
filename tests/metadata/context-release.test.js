@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { setImmediate } from 'node:timers/promises';
 import { createMetadataContextLoader } from '../../src/library/metadata-context.js';
+import { createNativeItemCohort } from '../../src/library/native-item-cohort.js';
 import { setupChildrenFixture } from './children-fixture.js';
 import { testFileSystem } from '../storage/plugin-files.js';
 
@@ -87,26 +88,37 @@ test('postgres: context cleanup attempts both state and relation release and ret
   }), { code: 'relation-release', status: 503 });
   const load = fixture.library.load.bind(fixture.library);
   const flush = fixture.linkedChildren.flushReleases.bind(fixture.linkedChildren);
-  let releasedState = false;
+  let releasedState = false, backgroundCohort;
   fixture.library.load = async (...args) => {
     const state = await load(...args), dispose = state.dispose.bind(state);
-    state.dispose = async settings => { await dispose(settings); releasedState = true; throw stateFailure; };
+    state.dispose = async settings => {
+      await dispose(settings);
+      releasedState = true;
+      if (backgroundCohort) await fixture.linkedChildren.queueOwnedRelease(() => backgroundCohort.release());
+      throw stateFailure;
+    };
     return state;
   };
   fixture.linkedChildren.flushReleases = async settings => {
     await flush(settings);
-    if (releasedState) throw relationFailure;
+    // Fail this context's direct flush. Independently owned cohorts drain on
+    // their admitted SQL session and must retain their ordinary cleanup path.
+    if (releasedState && settings === undefined) throw relationFailure;
   };
   const loaded = await fixture.loadContext(ownerId);
   try {
+    backgroundCohort = await createNativeItemCohort({ linkedChildren: fixture.linkedChildren });
+    await backgroundCohort.capture(loaded.item, { ordinal: 1n });
     for (let attempt = 0; attempt < 2; attempt++) await assert.rejects(loaded.dispose(), error => {
       assert.deepEqual(failureValue(error), aggregateValue(stateFailure, [stateFailure, relationFailure]));
       return true;
     });
+    await fixture.linkedChildren.flushOwnedReleases();
     assert.deepEqual(await fixture.database.rows('BaseItems'), before);
   } finally {
     fixture.library.load = load;
     fixture.linkedChildren.flushReleases = flush;
+    await backgroundCohort?.release();
   }
   await fixture.loadContext.withContext(ownerId, {}, current => assert.equal(current.item.Name, 'Owner'));
 });

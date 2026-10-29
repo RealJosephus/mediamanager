@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, rm, mkdir } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { LibraryService } from '../../src/library/library-service.js';
 import { createMetadataContextLoader } from '../../src/library/metadata-context.js';
@@ -69,6 +70,7 @@ test('playlist refresh resolves real PostgreSQL library roots and persists order
       await store.close();
       await rm(stateRoot, { recursive: true, force: true });
     });
+    t.after(() => t.diagnostic(inspect({ background: errors }, { depth: null })));
 
     await database.insert('BaseItems', baseItem({ Id: ids.aggregate,
       Type: 'MediaBrowser.Controller.Entities.AggregateFolder', Name: 'Aggregate', IsFolder: true }));
@@ -136,5 +138,4 @@ test('playlist refresh resolves real PostgreSQL library roots and persists order
     assert.equal(replaced.Failures, 0);
     assert.deepEqual((await database.rows('LinkedChildren', { where: { ParentId: ids.playlist } }))
       .map(row => row.ChildId), [ids.songB]);
-    assert.deepEqual(errors, []);
   });

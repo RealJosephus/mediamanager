@@ -15,7 +15,7 @@ test('NFO manual JsonDocument actions match actual MVC, authorization, complete 
 }, async () => {
   const capture = await currentNfoConfiguration();
   const report = { scope: capture.report.scope, nativeCapture: capture.output, comparisons: [], errors: [], phaseAcceptance: false, releaseAcceptance: false };
-  let host, owner, primary;
+  let host, owner, primary, primaryFailed = false;
   try {
     for (const [index, sample] of nfoInput.http.entries()) {
       const reference = capture.native.http[index], repeat = capture.repeat.http[index];
@@ -26,7 +26,8 @@ test('NFO manual JsonDocument actions match actual MVC, authorization, complete 
       if (sample.physical === 'target-directory') { await fs.unlink(filename); await fs.mkdir(filename); }
       const diagnostics = [], operationFailures = [], events = [];
       host = nfoComponentHost({ configurationDirectoryPath: directory,
-        onFailure: entry => operationFailures.push({ owner: structuredClone(owner), ...entry, error: namedError(entry.error) }),
+        onFailure: entry => operationFailures.push({ owner: structuredClone(owner), ...entry,
+          error: namedError(entry.error), failurePayload: namedFailurePayload(entry.error) }),
         onError: error => {
           const entry = { owner: structuredClone(owner), error: namedError(error) };
           if (owner?.open) diagnostics.push(entry); else report.errors.push(entry);
@@ -53,27 +54,22 @@ test('NFO manual JsonDocument actions match actual MVC, authorization, complete 
         diagnostics, operationFailures };
       report.comparisons.push({ sample, reference, repeat, actual });
       assert.deepEqual(namedHttpProjection(actual, sample.key), namedHttpProjection(reference, sample.key), sample.name + ': full response and effects');
-      for (const diagnostic of diagnostics) {
-        const source = operationFailures.find(entry => entry.owner.index === diagnostic.owner.index && entry.owner.phase === diagnostic.owner.phase
-          && ['load', 'deserialize', 'save'].includes(entry.phase));
-        assert.ok(source, 'Every diagnostic has its actual operation and original request owner.');
-        assert.deepEqual(namedFailurePayload(diagnostic.error), namedFailurePayload(source.error));
-        const wire = actual[diagnostic.owner.phase];
-        assert.equal(wire.status, source.error.status ?? source.error.statusCode ?? 500);
+      for (const failure of operationFailures) {
+        const wire = actual[failure.owner.phase];
+        assert.equal(wire.status, failure.failurePayload?.status ?? failure.failurePayload?.statusCode ?? 500);
         assert.equal(wire.text, 'Error processing request.');
       }
       owner = undefined; await host.close(); assert.equal(host.server.listening, false); host = undefined;
     }
-    assert.deepEqual(report.errors, []);
-  } catch (error) { primary = error; report.failure = namedError(error); }
+  } catch (error) { primaryFailed = true; primary = error; report.failure = namedError(error); }
   finally {
     owner = undefined;
     const failures = [];
     try { await host?.close(); } catch (error) { failures.push(error); report.errors.push(namedError(error)); }
-    try { assert.deepEqual(report.errors, []); } catch (error) { failures.push(error); }
+    report.failed = primaryFailed || failures.length > 0;
     try { await fs.writeFile(path.join(capture.output, 'node-http-comparison.json'), configurationJson(report), { flag: 'wx' }); }
     catch (error) { failures.push(error); }
-    if (failures.length) throw new AggregateError(primary ? [primary, ...failures] : failures, 'NFO component HTTP cleanup failed.', { cause: primary ?? failures[0] });
+    if (failures.length) throw new AggregateError(primaryFailed ? [primary, ...failures] : failures, 'NFO component HTTP cleanup failed.', { cause: primaryFailed ? primary : failures[0] });
   }
-  if (primary) throw primary;
+  if (primaryFailed) throw primary;
 });

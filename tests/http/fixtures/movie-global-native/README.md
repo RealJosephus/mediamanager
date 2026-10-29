@@ -6,6 +6,12 @@ frozen preparation with two independent Native runs and the PostgreSQL
 consumer. The real Movie, BoxSet, NFO, XML, probe and post-scan operations keep
 their complete persisted rows, files, events and queue boundaries.
 
+Saver observations record completion without opening the sidecar again. The
+global-returned boundary retains SQL and media observations while sidecar
+`files` is null; full sidecar bytes are read after the metadata queue drains.
+Native best-effort diagnostics remain in the raw trace. Actual scan outcomes,
+complete drained state, XML, events and queue completion determine parity.
+
 The media input is a new Matroska container containing only the unchanged
 first MPEG-2 video stream from `tests/fixtures/frozen-av/source.m2ts`.
 `tests/helpers/frozen-av.js` records original and copied ffprobe observations,

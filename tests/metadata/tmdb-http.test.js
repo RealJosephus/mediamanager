@@ -1,6 +1,7 @@
 import { openConfiguredPluginHost } from '../plugins/configuration-host.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { inspect } from 'node:util';
 import { createTestApplication } from '../helpers/application.js';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
@@ -69,8 +70,9 @@ test('TMDB client configuration requires default authentication and returns only
   } finally { await fixture.close(); }
 });
 
-test('TMDB client configuration preserves native null and maps provider failures to 500', async () => {
-  const successfulErrors = [];
+test('TMDB client configuration preserves native null and maps provider failures to 500', async t => {
+  const successfulErrors = [], errors = [];
+  t.after(() => t.diagnostic(inspect({ successfulErrors, errors }, { depth: null })));
   const nullFixture = await applicationFixture({ async getClientConfiguration() { return { images: null }; } },
     error => successfulErrors.push(error));
   try {
@@ -78,10 +80,8 @@ test('TMDB client configuration preserves native null and maps provider failures
     assert.equal(response.status, 200);
     assert.equal(await response.text(), 'null');
   } finally { await nullFixture.close(); }
-  assert.deepEqual(successfulErrors, []);
 
   const upstream = Object.assign(new Error('Synthetic TMDB throttling response.'), { status: 429 });
-  const errors = [];
   const failedFixture = await applicationFixture({ async getClientConfiguration() { throw upstream; } }, error => errors.push(error));
   try {
     const response = await fetch(`${failedFixture.origin}/Tmdb/ClientConfiguration`, { headers: { 'X-Emby-Token': 'fixture-token' } });

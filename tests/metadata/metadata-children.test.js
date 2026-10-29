@@ -6,6 +6,8 @@ import { setupChildrenFixture } from './children-fixture.js';
 import { createMetadataChildren } from '../../src/library/metadata-children.js';
 import { idKey } from '../../src/library/records.js';
 import { setFolderChildren } from '../../src/library/folder-cache.js';
+import { EMPTY_NATIVE_LINKS } from '../../src/library/postgres-linked-children.js';
+import { publishNativeItemLinks } from '../../src/library/native-item-entity.js';
 
 const root = new URL('./fixtures/metadata-children/', import.meta.url);
 const input = JSON.parse(await readFile(new URL('input.json', root), 'utf8'));
@@ -67,24 +69,61 @@ test('postgres: physical metadata child publication retains an existing BoxSet m
     { key: 'second', type: 'Movie', Id: ids.second, Path: 'Z:\\ChildSelection\\Second.mkv' },
   ] });
   const before = await fixture.database.rows('LinkedChildren');
+  const beforeTemp = await fixture.store.run(tempRelations);
   const parent = await fixture.library.itemCreation.getItemById(ids.root);
   const source = createMetadataChildren(fixture), physical = await source.physical(parent);
+  let primary, failed = false;
   try {
     let boxes = 0;
     for await (const page of physical.pages()) for (const child of page) {
       assert.equal(idKey(child.Id), idKey(ids.box)); boxes++;
       fixture.library.itemCreation.registerItem(child);
       const cached = await fixture.library.itemCreation.getItemById(ids.box);
-      const members = await source.children(cached);
-      try {
-        const actual = [];
-        for await (const values of members.pages()) for (const member of values) actual.push(idKey(member.Id));
-        assert.deepEqual(actual, [idKey(ids.first), idKey(ids.second)]);
-      } finally { await members.close(); }
+      const collect = async () => {
+        const members = await source.children(cached);
+        let primary, failed = false;
+        try {
+          const actual = [];
+          for await (const values of members.pages()) for (const member of values) actual.push({
+            id: idKey(member.Id), name: member.Name, path: member.Path, type: member.NativeType,
+          });
+          return actual;
+        } catch (reason) { primary = reason; failed = true; throw reason; }
+        finally {
+          try { await members.close(); }
+          catch (cleanup) {
+            if (failed) throw new AggregateError([primary, cleanup], 'Metadata member read and cleanup failed.', { cause: primary });
+            throw cleanup;
+          }
+        }
+      };
+      const expected = [
+        { id: idKey(ids.first), name: 'first', path: 'Z:\\ChildSelection\\First.mkv', type: 'MediaBrowser.Controller.Entities.Movies.Movie' },
+        { id: idKey(ids.second), name: 'second', path: 'Z:\\ChildSelection\\Second.mkv', type: 'MediaBrowser.Controller.Entities.Movies.Movie' },
+      ];
+      assert.deepEqual(await collect(), expected);
+      publishNativeItemLinks(cached, EMPTY_NATIVE_LINKS);
+      assert.deepEqual(await collect(), []);
+      publishNativeItemLinks(cached, null);
+      await assert.rejects(collect(), reason => { assert.equal(reason.status, 500); return true; });
+      publishNativeItemLinks(cached, EMPTY_NATIVE_LINKS);
+      assert.deepEqual(await collect(), []);
+      await fixture.store.run(async session => {
+        publishNativeItemLinks(cached, await fixture.linkedChildren.load(session, cached.Id));
+      });
+      assert.deepEqual(await collect(), expected);
     }
     assert.equal(boxes, 1);
-  } finally { await physical.close(); }
+  } catch (reason) { primary = reason; failed = true; throw reason; }
+  finally {
+    try { await physical.close(); }
+    catch (cleanup) {
+      if (failed) throw new AggregateError([primary, cleanup], 'Physical metadata read and cleanup failed.', { cause: primary });
+      throw cleanup;
+    }
+  }
   assert.deepEqual(await fixture.database.rows('LinkedChildren'), before);
+  assert.deepEqual(await fixture.store.run(tempRelations), beforeTemp);
 });
 
 test('postgres: explicit Playlist Children overrides its empty cold loader and an empty cache excludes stored rows', async t => {

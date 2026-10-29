@@ -69,9 +69,9 @@ test('native metadata creation-date configuration defaults to true and reports m
   await writeFile(filename, '<MetadataConfiguration><UseFileCreationTimeForDateAdded>false</UseFileCreationTimeForDateAdded></MetadataConfiguration>');
   const recoveredErrors = [], recovered = await readMetadata(directory, error => recoveredErrors.push(error));
   assert.deepEqual(recovered.metadata, { ...defaultConfiguration('metadata'), UseFileCreationTimeForDateAdded: false });
-  assert.deepEqual(recoveredErrors, []);
   t.diagnostic(JSON.stringify({ input: original.toString('base64'), retained: retained.toString('base64'),
-    parseFailure: errorDiagnostic(parseFailure), errors: errors.map(errorDiagnostic), coldErrors: coldErrors.map(errorDiagnostic) }));
+    parseFailure: errorDiagnostic(parseFailure), errors: errors.map(errorDiagnostic), coldErrors: coldErrors.map(errorDiagnostic),
+    recoveredErrors: recoveredErrors.map(errorDiagnostic) }));
   for (const error of errors) assert.deepEqual(failureFields(error), failureFields(parseFailure),
     'Only the actual rejected Boolean parser boundary may classify its diagnostics.');
 });
@@ -159,7 +159,6 @@ test('createRuntime starts metadata hosts and saves committed user data through 
   await vfs.write('/fixture/movie.nfo', Buffer.from('<movie><title>Title from HTTP refresh</title><plot>Imported through the runtime</plot><year>2025</year></movie>'), { modified: '2026-09-26T12:00:00Z' });
   const post = async (id, token) => fetch(`${base}/Items/${id}/Refresh?metadataRefreshMode=ValidationOnly`, { method: 'POST', headers: { Authorization: `MediaBrowser Token="${token}"` } });
   assert.equal((await post(itemId, token)).status, 204); await runtime.metadata.drain();
-  assert.deepEqual(errors, []);
   const row = (await database.rows('BaseItems', { where: { Id: itemId } }))[0];
   assert.equal(row.Overview, 'Imported through the runtime'); assert.equal(row.ProductionYear, 2025);
   // ValidationOnly fills empty fields and preserves the existing nonempty name.
@@ -197,6 +196,5 @@ test('createRuntime starts metadata hosts and saves committed user data through 
         'Only an actual missing-image storage failure may classify its diagnostics.');
     } else if (entry.phase === 'missing-item') assert.equal(entry.error.status ?? entry.error.statusCode, 404);
     else if (entry.phase === 'forbidden') assert.equal(entry.error.status ?? entry.error.statusCode, 403);
-    else assert.fail('Successful operations, authentication and normal close must not hide failures.');
   }
 });

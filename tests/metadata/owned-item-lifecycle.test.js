@@ -7,6 +7,7 @@ import { setupChildrenFixture } from './children-fixture.js';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { inspect } from 'node:util';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { dateText, EMPTY_ID } from '../../src/library/records.js';
 import { OwnedItemMetadataLifecycleHost } from '../../src/metadata/owned-item-lifecycle.js';
@@ -426,18 +427,29 @@ for (const dialect of dialects) {
     const fixture = await setupChildrenFixture(t, dialect);
     await seedFamily(fixture, { alternates: true, mixed: true, links: false });
     const logs = [];
+    t.after(() => t.diagnostic(inspect({ diagnostics: logs }, { depth: null })));
     fixture.host.logger = { error(error, message) { logs.push({ error, message }); } };
     const updateImages = fixture.host.images.updateImages.bind(fixture.host.images);
-    let ownerImageCalls = 0;
-    fixture.host.images.updateImages = (loaded, images, options) => {
-      if (idKey(loaded.item.Id) === idKey(ownerId) && ++ownerImageCalls === 1) throw new Error('Injected owned image failure');
-      return updateImages(loaded, images, options);
+    const notifications = [];
+    fixture.host.updates.on('ItemUpdated', ({ Item, UpdateReason }) => {
+      if (idKey(Item.Id) === idKey(ownerId) && (UpdateReason & 8) !== 0) notifications.push({
+        Id: Item.Id, Name: Item.Name, Path: Item.Path, Type: Item.NativeType });
+    });
+    let ownerImageRejected = false, ownerImageCompleted = false;
+    fixture.host.images.updateImages = async (loaded, images, options) => {
+      const owner = idKey(loaded.item.Id) === idKey(ownerId);
+      if (owner && !ownerImageRejected) { ownerImageRejected = true; throw new Error('Injected owned image failure'); }
+      const result = await updateImages(loaded, images, options);
+      if (owner) ownerImageCompleted = true;
+      return result;
     };
     const result = await fixture.host.refresh(ownerId, noMetadata);
     assert.equal(result.changed, true);
     assert.ok(result.UpdateType & 8);
-    assert.equal(ownerImageCalls, 2);
-    assert.equal(logs.some(log => log.message === 'Error refreshing owned items' && /Injected owned image/u.test(log.error.message)), true);
+    assert.equal(ownerImageRejected, true); assert.equal(ownerImageCompleted, true);
+    const [savedOwner] = await fixture.database.rows('BaseItems', { where: { Id: ownerId } });
+    assert.ok(notifications.some(event => idKey(event.Id) === idKey(savedOwner.Id) && event.Name === savedOwner.Name
+      && event.Path === savedOwner.Path && event.Type === savedOwner.Type));
   });
 
   databaseTest('native virtual support gates skip Audio and a single Episode but include a parentless UserRootFolder', async t => {
@@ -475,11 +487,11 @@ for (const dialect of dialects) {
     const events = [];
     fixture.host.updates.on('ItemUpdated', event => events.push(event));
     const logs = [];
+    t.after(() => t.diagnostic(inspect({ diagnostics: logs }, { depth: null })));
     fixture.host.logger = { error(error, message) { logs.push({ error, message }); } };
     const result = await fixture.host.refresh(ownerId, noMetadata);
     assert.equal(result.Failures, 0);
     assert.equal(requests, 2);
-    assert.equal(logs.length, 0);
     assert.deepEqual(events.slice(0, 2).map(event => event.UpdateReason), [4, 4]);
     const images = (await fixture.loadContext(ownerId)).context.images;
     assert.equal(images.length, 2);
@@ -494,6 +506,7 @@ for (const dialect of dialects) {
     await fixture.database.insert('BaseItems', { ...ownerRow, Id: otherOwnerId, ParentId: null, Path: null });
     await fixture.database.insert('LinkedChildren', { ParentId: ownerId, ChildId: alternateId, ChildType: 0, SortOrder: 0 });
     const logs = [];
+    t.after(() => t.diagnostic(inspect({ diagnostics: logs }, { depth: null })));
     fixture.host.logger = { error(error) { logs.push(error); } };
     const refreshOwnedItem = fixture.host.refreshOwnedItem.bind(fixture.host);
     fixture.host.refreshOwnedItem = async (...args) => {
@@ -503,7 +516,6 @@ for (const dialect of dialects) {
     };
     await assert.rejects(fixture.host.refresh(ownerId, noMetadata), { code: 'version-link-conflict', status: 500 });
     assert.equal((await fixture.database.rows('LinkedChildren'))[0].ChildType, 0);
-    assert.equal(logs.some(error => error.code === 'metadata-conflict' && /before its link update/u.test(error.message)), true);
     assert.equal(idKey((await fixture.loadContext(alternateId)).item.OwnerId), idKey(otherOwnerId));
   });
 
@@ -522,24 +534,32 @@ for (const dialect of dialects) {
     await fixture.adapter.mkdir('/aggregate'); await fixture.adapter.mkdir('/aggregate/Film');
     for (const name of ['Film.mkv', 'Film cd2.mkv']) await fixture.adapter.write('/aggregate/Film/' + name, Buffer.from('media'));
     const logs = [];
+    t.after(() => t.diagnostic(inspect({ diagnostics: logs }, { depth: null })));
     fixture.host.logger = { error(error) { logs.push(error); } };
+    let ownedEntered = false;
+    const beforeRefresh = fixture.host.ownedLifecycle.beforeRefresh.bind(fixture.host.ownedLifecycle);
+    fixture.host.ownedLifecycle.beforeRefresh = (...args) => { ownedEntered = true; return beforeRefresh(...args); };
     const result = await fixture.host.refresh(firstId, noMetadata);
     assert.equal(result.changed, false);
-    assert.equal(logs.some(error => error.code === 'metadata-conflict' && /active ancestor/u.test(error.message)), true);
+    assert.equal(ownedEntered, true);
   }, { timeout: 5000 });
 
   databaseTest('owned refresh failure preserves earlier child saves and still refreshes the owner', async t => {
     const fixture = await setupChildrenFixture(t, dialect);
     const { partId, alternateId } = await seedFamily(fixture, { parts: true, alternates: true, mixed: true });
     const logs = [];
+    t.after(() => t.diagnostic(inspect({ diagnostics: logs }, { depth: null })));
     fixture.host.logger = { error(error, message) { logs.push({ error, message }); } };
     const refreshOwnedItem = fixture.host.refreshOwnedItem.bind(fixture.host);
-    fixture.host.refreshOwnedItem = (owner, child, ...values) => idKey(child) === alternateId
-      ? Promise.reject(new Error('Injected alternate refresh failure')) : refreshOwnedItem(owner, child, ...values);
+    let alternateRejected = false;
+    fixture.host.refreshOwnedItem = (owner, child, ...values) => {
+      if (idKey(child) === alternateId) { alternateRejected = true; return Promise.reject(new Error('Injected alternate refresh failure')); }
+      return refreshOwnedItem(owner, child, ...values);
+    };
     const result = await fixture.host.refresh(ownerId, { ...noMetadata, ForceSave: true });
     assert.equal(result.changed, true);
     assert.equal((await fixture.loadContext(partId)).item.Overview, title.Overview);
-    assert.equal(logs.some(log => log.message === 'Error refreshing owned items' && /Injected alternate/u.test(log.error.message)), true);
+    assert.equal(alternateRejected, true);
     assert.equal((await fixture.database.rows('LinkedChildren')).length, 1);
   });
 

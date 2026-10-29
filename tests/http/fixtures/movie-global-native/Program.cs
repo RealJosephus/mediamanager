@@ -148,7 +148,7 @@ async Task Scan(string phase)
     var scan = await host.RunAsync();
     observations.Add(new { phase, boundary = "global-returned", startedAt = before, endedAt = DateTime.UtcNow,
         status = scan.Exception is null ? "completed" : "failed", scanRunning = scan.ScanRunning,
-        scan.Exception, scan.ExceptionMessage, queue = host.QueueState(), snapshot = Snapshot(host, true) });
+        scan.Exception, scan.ExceptionMessage, queue = host.QueueState(), snapshot = Snapshot(host, includeSidecars: false) });
     await host.DrainMetadataQueueAsync();
     if (phase == "created" && scan.Exception is null)
     {
@@ -173,7 +173,7 @@ string Nfo(string title, string genre, bool locked) => "<movie><title>" + title 
     + "</studio><custom keep=\"true\">retained</custom></movie>";
 static Movie[] Movies(NativeScanHost value) => value.Manager.GetItemList(new InternalItemsQuery
     { IncludeItemTypes = [BaseItemKind.Movie], Recursive = true }).OfType<Movie>().ToArray();
-object Snapshot(NativeScanHost value, bool concurrentWriters = false)
+object Snapshot(NativeScanHost value, bool includeSidecars = true)
 {
     var sql = JsonSerializer.SerializeToElement(value.SnapshotSql());
     var actual = sql.GetProperty("tables").EnumerateArray().Select(entry => entry.GetString()!).ToArray();
@@ -187,26 +187,17 @@ object Snapshot(NativeScanHost value, bool concurrentWriters = false)
         .Select(filename => new { path = Path.GetRelativePath(value.CaseRoot, filename).Replace('\\', '/'),
             bytes = new FileInfo(filename).Length, sha256 = Hash(File.ReadAllBytes(filename)) }).ToArray();
     return new { sql = sql.GetProperty("result"), tables = actual, sqliteSequence = sequence,
-        files = Files(value, concurrentWriters), mediaFiles, concurrentWriters };
+        files = includeSidecars ? Files(value) : null, mediaFiles };
 }
-static object[] Files(NativeScanHost value, bool concurrentWriters = false) => Directory.EnumerateFiles(value.CaseRoot, "*", SearchOption.AllDirectories)
+static object[] Files(NativeScanHost value) => Directory.EnumerateFiles(value.CaseRoot, "*", SearchOption.AllDirectories)
     .Where(filename => filename.EndsWith(".nfo", StringComparison.OrdinalIgnoreCase)
         || filename.EndsWith("collection.xml", StringComparison.OrdinalIgnoreCase))
     .Order(StringComparer.Ordinal).Select(filename =>
     {
         var relative = Path.GetRelativePath(value.CaseRoot, filename).Replace('\\', '/');
-        try
-        {
-            var bytes = File.ReadAllBytes(filename);
-            return (object)new { path = relative, filename, bytes = bytes.Length, sha256 = Hash(bytes),
-                text = Encoding.UTF8.GetString(bytes), lastWriteTimeUtc = File.GetLastWriteTimeUtc(filename) };
-        }
-        catch (IOException error) when (concurrentWriters)
-        {
-            // The global-returned boundary can overlap an actual queued saver.
-            // Preserve this raw diagnostic; never retry or call it drained.
-            return new { path = relative, filename, readError = error.ToString() };
-        }
+        var bytes = File.ReadAllBytes(filename);
+        return (object)new { path = relative, filename, bytes = bytes.Length, sha256 = Hash(bytes),
+            text = Encoding.UTF8.GetString(bytes), lastWriteTimeUtc = File.GetLastWriteTimeUtc(filename) };
     }).ToArray();
 static string Hash(byte[] bytes) => Convert.ToHexStringLower(SHA256.HashData(bytes));
 

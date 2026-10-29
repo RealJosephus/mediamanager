@@ -16,6 +16,7 @@ import { resolveSeriesAsync } from './series-reference.js';
 import { physicalPlan } from './postgres-folder-physical-plan.js';
 import { withPostgresCachedFolderChildren } from './postgres-cached-folder-children.js';
 import { hasPostgresFolderChildIds } from './postgres-folder-child-ids.js';
+import { EMPTY_NATIVE_LINKS } from './postgres-linked-children.js';
 
 const plan = (text, values = []) => Object.freeze({ text, values: Object.freeze(values) });
 const encoded = value => value == null ? null : nativeTextBytes(value);
@@ -143,6 +144,7 @@ export function createMetadataChildren(options) {
     const links = operation.handle;
     let resolution, captured, failure;
     try {
+      if (links === EMPTY_NATIVE_LINKS) return;
       resolution = await createPostgresLinkedResolutionWorkspace(session, { linksPlan: linkedChildren.plan(links) });
       captured = await createNativeItemCohort({ linkedChildren });
       await resolvePostgresLinkedChildren({ session, item, library, links, linkedChildren,

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { readFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { inspect } from 'node:util';
 import { setTimeout as delay } from 'node:timers/promises';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { dateText, EMPTY_ID, MIN_DATE, guid, idKey, mapRecord } from '../../src/library/records.js';
@@ -87,8 +88,9 @@ async function verifySample(t, sample, { delayedLookup = false } = {}) {
   catch (error) { exception = error; }
   assert.equal(signal.aborted, sample.cancelled === true);
   if (sample.cancelled) {
-    assert.equal(signal.reason.name, 'AbortError');
-    assert.equal(exception?.name, 'AbortError');
+    assert.deepEqual({ message: exception?.message, code: exception?.code, cause: exception?.cause },
+      { message: signal.reason.message, code: signal.reason.code, cause: signal.reason.cause });
+    t.diagnostic(inspect({ cancellation: exception }, { depth: null }));
   }
   assert.deepEqual(outcome(await project(value, sample, exception)), outcome(native.results.find(result => result.name === sample.name)));
 }

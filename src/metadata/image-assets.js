@@ -11,7 +11,7 @@ export function imageIdentityPath(value) {
   return fileURLToPath(url);
 }
 const contained = (root, value) => { const relative = path.relative(root, value); return relative === '' || !relative.startsWith(`..${path.sep}`) && relative !== '..' && !path.isAbsolute(relative); };
-const errorCode = error => { if (error.code === 'ENOENT') error.code = 'not-found'; else if (['EACCES', 'EPERM'].includes(error.code)) error.code = 'permission-denied'; return error; };
+const errorCode = error => { if (error?.code === 'ENOENT') error.code = 'not-found'; else if (['EACCES', 'EPERM'].includes(error?.code)) error.code = 'permission-denied'; return error; };
 const modifiedDate = value => {
   const fraction = (value.mtimeNs % 1000000000n + 1000000000n) % 1000000000n;
   const seconds = (value.mtimeNs - fraction) / 1000000000n;
@@ -61,7 +61,7 @@ export class MetadataImageAssets {
     if (this.source?.identity === identity) return { identity, accessPath: this.source.accessPath };
     const stateOwned = roots.some(root => root && contained(root, path.resolve(identity)));
     try { if (!stateOwned && this.identityMap) return { accessPath: this.identityMap.resolve({ identityPath: identity, style: imagePathApi(identity) === path.win32 ? 'windows' : 'posix' }), identity }; }
-    catch (error) { if (error.code !== 'not-found') throw error; }
+    catch (error) { if (error?.code !== 'not-found') throw error; }
     if (!stateOwned && this.scope) {
       const relative = this.scope.api.relative(this.scope.identity, identity);
       if (relative === '' || relative !== '..' && !relative.startsWith(`..${this.scope.api.sep}`) && !this.scope.api.isAbsolute(relative)) {
@@ -76,13 +76,13 @@ export class MetadataImageAssets {
     while (true) {
       try { const actual = await this.fileSystem.realpath(ancestor); if (!contained(stateRoot, actual)) throw Object.assign(new Error('Metadata image path escapes its state root.'), { code: 'permission-denied' }); break; }
       catch (error) {
-        if (error.code !== 'ENOENT') throw error;
+        if (error?.code !== 'ENOENT') throw error;
         // A dangling link exists even though realpath cannot resolve it. Do
         // not let a later mkdir or write follow it beyond the state root.
         try {
           await this.fileSystem.lstat(ancestor);
           throw Object.assign(new Error('Metadata image path traverses an unresolved link or reparse point.'), { code: 'permission-denied' });
-        } catch (linkError) { if (linkError.code !== 'ENOENT') throw linkError; }
+        } catch (linkError) { if (linkError?.code !== 'ENOENT') throw linkError; }
         const parent = path.dirname(ancestor);
         if (parent === ancestor || !contained(stateRoot, parent)) break;
         ancestor = parent;
@@ -109,9 +109,15 @@ export class MetadataImageAssets {
     return this.fileSystem.stat(location.localPath, { bigint: true });
   }
   async read(identity, options = {}) {
-    const handle = await this.openRead(identity, options);
-    try { const chunks = []; for await (const chunk of handle.stream) { options.signal?.throwIfAborted(); chunks.push(Buffer.from(chunk)); } return Buffer.concat(chunks); }
-    finally { await handle.close(); }
+    const handle = await this.openRead(identity, options), failures = [];
+    let bytes;
+    try { const chunks = []; for await (const chunk of handle.stream) { options.signal?.throwIfAborted(); chunks.push(Buffer.from(chunk)); } bytes = Buffer.concat(chunks); }
+    catch (error) { failures.push(error); }
+    try { await handle.close(); } catch (error) { failures.push(error); }
+    if (failures.length === 1) throw failures[0];
+    if (failures.length) throw Object.assign(new AggregateError(failures, failures[0]?.message ?? 'Image asset read failed.', { cause: failures[0] }),
+      Object.fromEntries(['code', 'status', 'statusCode'].filter(key => failures[0]?.[key] !== undefined).map(key => [key, failures[0][key]])));
+    return bytes;
   }
   async openRead(identity, options = {}) {
     try {
@@ -119,7 +125,7 @@ export class MetadataImageAssets {
       if (location.accessPath) return this.vfs.openRead(location.accessPath, options);
       try { return await this.fileSystem.openRead(location.localPath, options); }
       catch (error) {
-        if (error.code === 'is-directory') throw Object.assign(new Error('Image asset is not a file.'), { code: 'not-found' });
+        if (error?.code === 'is-directory') throw Object.assign(new Error('Image asset is not a file.'), { code: 'not-found' });
         throw error;
       }
     } catch (error) { throw errorCode(error); }
@@ -138,11 +144,11 @@ export class MetadataImageAssets {
             const info = await this.vfs.stat(directory, options);
             if (info.kind !== 'directory') throw Object.assign(new Error('Image parent is not a directory.'), { code: 'not-directory' });
           } catch (error) {
-            if (error.code !== 'not-found' || path.posix.dirname(directory) === directory) throw error;
+            if (error?.code !== 'not-found' || path.posix.dirname(directory) === directory) throw error;
             await createParent(path.posix.dirname(directory));
             try { await this.vfs.mkdir(directory, options); }
             catch (failure) {
-              if (failure.code !== 'already-exists') throw failure;
+              if (failure?.code !== 'already-exists') throw failure;
               if ((await this.vfs.stat(directory, options)).kind !== 'directory') throw failure;
             }
           }

@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
-import { recordOracle } from '../../tools/validation/oracle.js';
+import { compileOracle } from '../../tools/validation/oracle.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 import { configurationJson } from '../core/fixtures/configuration/observations.js';
 import { namedHash, namedError } from '../core/named-configuration-current.js';
@@ -57,9 +57,11 @@ async function capture() {
         assert.equal(assembly.sha256, (await describeFile(path.join(build.runtime, name + '.dll'))).sha256, name);
       }
     };
+    const oracle = await compileOracle({ project, output: path.join(output, 'build') });
+    report.oracleBuild = oracle.buildRecord;
     const captures = [];
     for (const label of ['initial', 'repeat']) {
-      const directory = path.join(output, label), record = await recordOracle({ project, output: directory, args: [inputFile, '{output}/native.json'] });
+      const directory = path.join(output, label), record = await oracle.record({ output: directory, args: [inputFile, '{output}/native.json'] });
       const filename = path.join(directory, 'native.json'), bytes = await readFile(filename), native = parseLosslessJson(bytes.toString());
       await verify(native, bytes, record, inputBytes);
       report.captures.push({ label, record, observation: await describeFile(filename) }); captures.push(native);
@@ -68,7 +70,7 @@ async function capture() {
     assert.equal(namedHash(await readFile(inputFile)), namedHash(inputBytes));
     return { input, native: captures[0], repeat: captures[1], output, report, async consume(rows, label) {
       const filename = path.join(output, label + '-input.json'), bytes = Buffer.from(configurationJson(rows)); await writeFile(filename, bytes, { flag: 'wx' });
-      const record = await recordOracle({ project, output: path.join(output, label), args: ['consume', filename, '{output}/native.json'] });
+      const record = await oracle.record({ output: path.join(output, label), args: ['consume', filename, '{output}/native.json'] });
       const resultFile = path.join(output, label, 'native.json'), resultBytes = await readFile(resultFile), native = parseLosslessJson(resultBytes.toString());
       await verify(native, resultBytes, record, bytes, true);
       return { input: await describeFile(filename), record, observation: await describeFile(resultFile), native };

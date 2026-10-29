@@ -277,10 +277,7 @@ public static class MovieProviders
             var filename = actual.GetSavePath(item);
             host.Add("local-saver-begin", new { saver = actual.GetType().FullName, itemId = item.Id, item.Path, filename });
             await actual.SaveAsync(item, token);
-            var bytes = File.ReadAllBytes(filename);
-            host.Add("local-saver-completed", new { saver = actual.GetType().FullName, itemId = item.Id, item.Path, filename,
-                bytes = bytes.Length, sha256 = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(bytes)),
-                text = System.Text.Encoding.UTF8.GetString(bytes) });
+            host.Add("local-saver-completed", new { saver = actual.GetType().FullName, itemId = item.Id, item.Path, filename });
         }
     }
 }

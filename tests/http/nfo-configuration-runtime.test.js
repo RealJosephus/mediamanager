@@ -21,7 +21,7 @@ import { applyNfoUserDataEntry } from '../../plugins/nfo/user-data-import.js';
 import { localStateStorage } from '../helpers/local-state-storage.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString, postgresTestRow } from '../database/postgres-fixture.js';
 import { currentNfoConfiguration } from '../metadata/nfo-configuration-current.js';
-import { namedNormalise, namedError } from '../core/named-configuration-current.js';
+import { namedNfoPhasesProjection, namedError } from '../core/named-configuration-current.js';
 import { configurationJson } from '../core/fixtures/configuration/observations.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 
@@ -38,7 +38,7 @@ const summary = bytes => {
     total: child(root, 'resume') ? textOf(child(root, 'resume'), 'total') ?? null : null,
     poster: child(root, 'art') ? textOf(child(root, 'art'), 'poster') ?? null : null };
 };
-const phasesProjection = (rows, root) => namedNormalise(rows.map(({ bytes, ...row }) => row), root);
+const phasesProjection = namedNfoPhasesProjection;
 const dateProjection = value => value?.replace(/\.0+Z$/u, 'Z') ?? null;
 
 test('postgres: canonical NFO HTTP and plugin management share live consumers, real user data, image files and cold state', {

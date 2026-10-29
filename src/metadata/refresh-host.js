@@ -46,6 +46,18 @@ const liveMetadataItem = Symbol('live metadata item');
 const snapshotFields = snapshot => ({ ...(itemRequiresJson(snapshot)
   ? typeof snapshot?.Data === 'string' ? parseLosslessJson(snapshot.Data) : snapshot?.Data : {}), ...snapshot });
 
+async function releaseRefreshResources(operations, priorErrors = []) {
+  const errors = [...priorErrors];
+  for (const operation of operations) {
+    try { await operation(); } catch (error) { errors.push(error); }
+  }
+  if (errors.length === priorErrors.length) return;
+  if (errors.length === 1) throw errors[0];
+  const primary = errors[0];
+  throw Object.assign(new AggregateError(errors, primary?.message ?? 'Metadata refresh and resource release failed.', { cause: primary }),
+    Object.fromEntries(['code', 'status', 'statusCode'].filter(key => primary?.[key] !== undefined).map(key => [key, primary[key]])));
+}
+
 function applySearchResult(lookup, itemType, result) {
   lookup.ProviderIds = {};
   if (itemType === 'Episode' || itemType === 'Season') {
@@ -266,8 +278,7 @@ export class MetadataRefreshHost {
     // Validate before joining the per-item queue: an invalid back-reference
     // must not wait on the owner's active refresh and deadlock it.
     const preflight=await this.#loadOwnedContext(ownerId,ownedId,extraContext,videoContext);
-    try { /* Relationship preflight completes before queue admission. */ }
-    finally {await preflight.owned.dispose();await preflight.owner.dispose();}
+    await releaseRefreshResources([() => preflight.owned?.dispose?.(), () => preflight.owner?.dispose?.()]);
     return this.refresh(reference, { ...options, [ownerMetadataRefresh]: { ownerId, copyTitleMetadata,
       extraContext, videoContext, ownerItem: typeof ownerReference === 'object' ? ownerReference : undefined } });
   }
@@ -310,20 +321,27 @@ export class MetadataRefreshHost {
     let validOwner = sameId(owned.item.OwnerId, owner.item.Id);
     if (!validOwner && owned.item.ExtraType != null && nonemptyId(owned.item.OwnerId)) {
       const version = await this.loadContext(owned.item.OwnerId);
+      const errors = [];
       try {validOwner = (await owner.getLocalAlternateVersionIds()).some(id => sameId(id, version.item.Id));}
-      finally {await version.dispose();}
+      catch (error) { errors.push(error); throw error; }
+      finally { await releaseRefreshResources([() => version?.dispose?.()], errors); }
     }
     if (!validOwner) throw Object.assign(new Error('The owned metadata relationship changed before refresh.'), { code: 'metadata-conflict', status: 409 });
     return { owner, owned };
-    }catch(error){await owned?.dispose();await owner?.dispose();throw error;}
+    } catch (error) {
+      await releaseRefreshResources([() => owned?.dispose?.(), () => owner?.dispose?.()], [error]);
+      throw error;
+    }
   }
   async #refresh(reference, options) {
     const ownership = { reportProbeCommit: null, contexts: new Set(), temporaryItems: new Map() };
+    const errors = [];
     try {
       if(!options[liveMetadataItem]&&!options[ownerMetadataRefresh]){const id=typeof reference==='string'?reference:reference.Id;
         const cached=this.updates.library?.itemCreation?.getCachedItemById(id);if(cached){ownership.temporaryItems.set(cached,acquireNativeItemLinkOwner(cached));options={...options,[liveMetadataItem]:cached};}}
       return await this.#runRefresh(reference,options,ownership);
     } catch(error) {
+      errors.push(error);
       const seen=new Set();let primary=error;
       while(primary && typeof primary==='object' && !seen.has(primary)) {
         seen.add(primary);
@@ -346,12 +364,19 @@ export class MetadataRefreshHost {
       ownership.reportProbeCommit = null;
       if (report) try { report(); }
       catch (error) { try { this.logger.error(error, 'Error reporting committed probe update'); } catch { /* A reporting failure cannot replace the refresh outcome. */ } }
-      for (const owner of ownership.temporaryItems.values()) owner.release();
-      for (const loaded of ownership.contexts) await loaded.dispose();
-      await this.linkedChildren.flushReleases();
+      await releaseRefreshResources([
+        ...[...ownership.temporaryItems.values()].map(owner => () => owner.release()),
+        ...[...ownership.contexts].map(loaded => () => loaded?.dispose?.()),
+        () => this.linkedChildren.flushReleases(),
+      ], errors);
     }
   }
   async #runRefresh(reference, options, ownership) {
+    const loadContext = async (...args) => {
+      const loaded = await this.loadContext(...args);
+      ownership.contexts.add(loaded);
+      return loaded;
+    };
     const { signal } = options;
     const mode = modes[options.MetadataRefreshMode ?? 'FullRefresh'];
     const imageMode = modes[options.ImageRefreshMode ?? 'None'];
@@ -364,9 +389,8 @@ export class MetadataRefreshHost {
       ownership.contexts.add(contexts.owner); ownership.contexts.add(contexts.owned);
       loaded = contexts.owned;
       options = prepareOwnedItemRefresh(inheritance.ownerItem ?? contexts.owner.item, loaded.item, options, inheritance);
-    } else loaded = applyLiveSeriesParent(await this.loadContext(reference,
+    } else loaded = applyLiveSeriesParent(await loadContext(reference,
       options[liveMetadataItem] ? { draft: options[liveMetadataItem] } : undefined), options[liveSeriesParent]);
-    ownership.contexts.add(loaded);
     this.validateRefresh(loaded.item, options);
     let collectionFolderRefresh = { updateType: ItemUpdateType.None, requiresSave: false };
     // D3: configured external writers must be available before image/probe or
@@ -379,8 +403,9 @@ export class MetadataRefreshHost {
       await this.ownedLifecycle.validateBeforeRefresh(loaded, options);
       // A new part commits independently before its first provider save. D3
       // must validate its external writers before any owned-wrapper effects.
-      for (const part of await loaded.previewOwnedPartContexts?.() ?? []) {
-        ownership.contexts.add(part);
+      const parts = await loaded.previewOwnedPartContexts?.() ?? [];
+      for (const part of parts) ownership.contexts.add(part);
+      for (const part of parts) {
         await validateMetadataSaves(part, ItemUpdateType.MetadataDownload, this.registry);
       }
       let requiresOwnedSave = false;
@@ -417,8 +442,7 @@ export class MetadataRefreshHost {
     signal?.throwIfAborted();
     if (loaded.item.Type === 'Series') {
       await beforeSeriesMetadataRefresh(loaded.item, options, this.seriesLifecycle);
-      loaded = applyLiveSeriesParent(await this.loadContext(reference), options[liveSeriesParent]);
-      ownership.contexts.add(loaded);
+      loaded = applyLiveSeriesParent(await loadContext(reference), options[liveSeriesParent]);
     }
     const initialItem = loaded.item;
     const firstRefresh = dateTicks(initialItem.DateLastRefreshed) === 0n;
@@ -525,8 +549,7 @@ export class MetadataRefreshHost {
         }); probeUpdate = result.UpdateType ?? ItemUpdateType.None;
         if (result.changed) {
           const previousLoaded = loaded;
-          loaded = applyLiveSeriesParent(await this.loadContext(reference), options[liveSeriesParent]);
-          ownership.contexts.add(loaded);
+          loaded = applyLiveSeriesParent(await loadContext(reference), options[liveSeriesParent]);
           loaded.context = { ...loaded.context, images: metadata.Images };
           item = metadata.Item = loaded.item;
           const previousSnapshot = snapshotFields(previousLoaded.snapshot), currentSnapshot = snapshotFields(loaded.snapshot);
@@ -553,8 +576,8 @@ export class MetadataRefreshHost {
           if (loaded.lookupFor) loaded.lookup = loaded.lookupFor(item);
         }
       } catch (error) {
-        if (signal?.aborted || error.name === 'AbortError') throw error;
-        probeFailures++; probeError = error.message; this.logger.error(error, 'Error in pre-refresh probe provider');
+        if (signal?.aborted || error?.name === 'AbortError') throw error;
+        probeFailures++; probeError = error?.message; this.logger.error(error, 'Error in pre-refresh probe provider');
       }
     }
     const runProviders = mode !== 0 && !item.IsLocked;
@@ -585,8 +608,8 @@ export class MetadataRefreshHost {
         await mergeMetadata(result, temp, { mergeMetadataSettings: true, dataPath: loaded.dataPath, linkedChildren: this.linkedChildren }); updateType |= ItemUpdateType.MetadataImport; providerUpdateType |= ItemUpdateType.MetadataImport;
         break;
       } catch (error) {
-        if (signal?.aborted || error.name === 'AbortError') throw error;
-        errorMessage = error.message; this.logger.error(error, 'Error in local metadata provider');
+        if (signal?.aborted || error?.name === 'AbortError') throw error;
+        errorMessage = error?.message; this.logger.error(error, 'Error in local metadata provider');
       }
     }
     const localLocked = temp.Item.IsLocked;
@@ -615,8 +638,8 @@ export class MetadataRefreshHost {
           }
           await mergeMetadata(result, temp, { linkedChildren: this.linkedChildren }); mergeLookupIds(); hasRemote = true; updateType |= ItemUpdateType.MetadataDownload; providerUpdateType |= ItemUpdateType.MetadataDownload;
         } catch (error) {
-          if (signal?.aborted || error.name === 'AbortError') throw error;
-          failures++; errorMessage = error.message; this.logger.error(error, 'Error in remote metadata provider');
+          if (signal?.aborted || error?.name === 'AbortError') throw error;
+          failures++; errorMessage = error?.message; this.logger.error(error, 'Error in remote metadata provider');
         }
       }
     }
@@ -632,8 +655,8 @@ export class MetadataRefreshHost {
         const result = await provider.fetch(item, { store: this.store, ...loaded.context, signal });
         updateType |= typeof result === 'number' ? result : result?.UpdateType ?? ItemUpdateType.None;
       } catch (error) {
-        if (signal?.aborted || error.name === 'AbortError') throw error;
-        failures++; errorMessage = error.message; this.logger.error(error, `Error in ${provider.name} custom metadata provider`);
+        if (signal?.aborted || error?.name === 'AbortError') throw error;
+        failures++; errorMessage = error?.message; this.logger.error(error, `Error in ${provider.name} custom metadata provider`);
       }
     }
     if (runImageProviders) {

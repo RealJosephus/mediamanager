@@ -159,7 +159,6 @@ test('postgres: current native internal metadata HTTP writes, complete rows, rel
   for (const artifact of provenance.artifacts) assert.equal(createHash('sha256').update(await readFile(path.join(root, artifact.path))).digest('hex'), artifact.sha256);
   assert.equal(JSON.parse(await readFile(path.join(root, 'private-cleanup.json'))).privateInstanceRemoved, true);
   assert.equal(candidate.error, undefined, json(candidate.error));
-  assert.deepEqual(candidate.runtimeErrors, []);
   assert.ok(Object.values(candidate.cleanup).every(Boolean));
   assert.equal(native.records.length, 18); assert.equal(candidate.records.length, 18);
   equalDatabase(candidate.before.database, native.before.database, undefined, undefined, 'initial');

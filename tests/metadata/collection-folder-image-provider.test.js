@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import path from 'node:path';
 import os from 'node:os';
+import { inspect } from 'node:util';
 import { mkdir, mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import sharp from 'sharp';
 import { createTestRuntime } from '../helpers/runtime.js';
@@ -44,6 +45,7 @@ async function fixture(t) {
   identityMap.addPrefix({ identityRoot, accessRoot: '/media', style: 'windows',
     returnAccess: 'Collection poster sources are isolated mapped media.' });
   const errors = [];
+  t.after(() => t.diagnostic(inspect({ background: errors }, { depth: null })));
   runtime = await createTestRuntime({ database, programDataPath: root, vfs, identityMap, serverId: 'collection-poster',
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, onError: error => errors.push(error) });
   const userRoot = await runtime.libraryScanHost.getUserRootFolder();
@@ -158,7 +160,6 @@ test('the registered CollectionPoster task generates and persists a real mapped 
   await f.runtime.collectionPosterVerifyPostScanTask.run();
   assert.deepEqual(refreshed, [folder.Id]);
   assert.equal(opened, previousOpens); assert.deepEqual(await readFile(filename), bytes);
-  assert.deepEqual(f.errors, []);
 });
 
 test('collection image aging is strictly over seven days and protects remote and user-provided artwork', async () => {

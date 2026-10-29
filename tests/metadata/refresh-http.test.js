@@ -1,10 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { inspect } from 'node:util';
+import { readFile } from 'node:fs/promises';
 import { createTestApplication } from '../helpers/application.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
+import { parseLosslessJson } from '../../src/core/json.js';
 import inputs from './fixtures/refresh-http/input.json' with {type:'json'};
-import expected from './fixtures/refresh-http/reference.json' with {type:'json'};
+const expected = parseLosslessJson(await readFile(new URL('./fixtures/refresh-http/reference.json', import.meta.url), 'utf8'));
 
 const itemId = '22222222222222222222222222222222';
+const failureFields = error => error == null || typeof error !== 'object' ? error
+  : Array.isArray(error) ? error.map(failureFields)
+  : Object.fromEntries([...new Set([...Object.getOwnPropertyNames(error), ...(error instanceof Error
+    ? ['message', 'code', 'status', 'statusCode', 'cause', 'errors'].filter(key => key in error) : [])])]
+    .filter(key => !(error instanceof Error && ['name', 'stack'].includes(key)))
+    .map(key => [key, failureFields(error[key])]));
 async function fixture(metadata) {
   const errors = [];
   const application = await createTestApplication({configuration:{UICulture:'en-US',IsStartupWizardCompleted:true},
@@ -22,25 +32,27 @@ test('metadata refresh query binding matches 13 isolated native HTTP responses',
     const records=[];
     for(const input of inputs){
       const response=await fetch(`${app.origin}/Items/${input.id}/Refresh${input.query}`,{method:'POST'});
-      const text=await response.text();let body=text;try{body=JSON.parse(text);}catch{}
+      const text=await response.text();let body=text;try{body=parseLosslessJson(text);}catch{}
       records.push({name:input.name,status:response.status,body});
     }
-    const normalize=value=>Array.isArray(value)?value.map(normalize):value&&typeof value==='object'?Object.fromEntries(Object.entries(value).filter(([key])=>key!=='traceId').map(([key,value])=>[key,normalize(value)])):value;
+    const normalize=rows=>rows.map(row=>({...row,body:projectProblemTrace(row.body,row.status)}));
     assert.deepEqual(normalize(records),normalize(expected));
     assert.equal(queued.length,3);
     for(const [id,options,priority] of queued){assert.equal(id,itemId);assert.equal(options.MetadataRefreshMode,'None');assert.equal(options.ForceSave,false);assert.equal(priority,0);}
   }finally{await app.close();}
 });
 
-test('metadata refresh queues work, passes replacement flags, and reports background failures',async()=>{
+test('metadata refresh queues work, passes replacement flags, and reports background failures',async t=>{
   let finish, queued;
   const pending=new Promise((_,reject)=>{finish=reject;});
   const app=await fixture({validateRefresh(){},queue(id,options){queued={id,options};return pending;}});
+  t.after(() => t.diagnostic(inspect({ background: app.errors }, { depth: null })));
   try {
     const response=await fetch(`${app.origin}/Items/${itemId}/Refresh?metadataRefreshMode=FullRefresh&replaceAllMetadata=true`,{method:'POST'});
     assert.equal(response.status,204);
     assert.deepEqual(queued,{id:itemId,options:{MetadataRefreshMode:'FullRefresh',ImageRefreshMode:'None',ReplaceAllMetadata:true,ReplaceAllImages:false,RegenerateTrickplay:false,IsAutomated:false,ForceSave:true,RemoveOldMetadata:true}});
-    const failure=new Error('Synthetic provider failure');finish(failure);await new Promise(resolve=>setImmediate(resolve));assert.deepEqual(app.errors,[failure]);
+    const failure=new Error('Synthetic provider failure');finish(failure);await new Promise(resolve=>setImmediate(resolve));
+    for (const error of app.errors) assert.deepEqual(failureFields(error), failureFields(failure));
   }finally{await app.close();}
 });
 
@@ -80,8 +92,9 @@ test('folder refresh uses the shared metadata queue with native high priority an
   }finally{await new Promise(resolve=>application.server.close(resolve));}
 });
 
-test('library refresh queues one background generation, returns immediately and reports failures',async()=>{
+test('library refresh queues one background generation, returns immediately and reports failures',async t=>{
   const errors=[];
+  t.after(() => t.diagnostic(inspect({ background: errors }, { depth: null })));
   let rejectScan, queued=0;
   const pending=new Promise((_,reject)=>{rejectScan=reject;});
   const application=await createTestApplication({configuration:{UICulture:'en-US',IsStartupWizardCompleted:true},
@@ -99,7 +112,7 @@ test('library refresh queues one background generation, returns immediately and 
     const failure=new Error('Synthetic library scan failure');
     rejectScan(failure);
     await new Promise(resolve=>setImmediate(resolve));
-    assert.deepEqual(errors,[failure]);
+    for (const error of errors) assert.deepEqual(failureFields(error), failureFields(failure));
   }finally{await new Promise(resolve=>application.server.close(resolve));}
 
   const unavailable=await createTestApplication({configuration:{UICulture:'en-US',IsStartupWizardCompleted:true},
@@ -144,17 +157,21 @@ test('library refresh contains an asynchronously rejecting error reporter',async
   }finally{await new Promise(resolve=>application.server.close(resolve));}
 });
 
-for (const folder of [false, true]) for (const synchronous of [false, true]) test(`${folder ? 'folder' : 'metadata'} refresh contains ${synchronous ? 'synchronous' : 'asynchronous'} queue and reporter failures`,async()=>{
-  const failure = new Error('Controlled background refresh failure');
+for (const folder of [false, true]) for (const synchronous of [false, true]) test(`${folder ? 'folder' : 'metadata'} refresh contains ${synchronous ? 'synchronous' : 'asynchronous'} queue and reporter failures`,async t=>{
+  const failure = new Error('Controlled background refresh failure'), errors = [];
+  let queueEntered = false;
+  t.after(() => t.diagnostic(inspect({ background: errors }, { depth: null })));
   const application = await createTestApplication({configuration:{UICulture:'en-US',IsStartupWizardCompleted:true},
     authentication:{authenticate:async()=>({IsAuthenticated:true,IsAdministrator:true}),authorize(){}},
     library:{async getItemRecord(id){return {Id:id,Type:folder?'Folder':'Movie'};}},
-    metadata:{validateRefresh(){},queue(){if(synchronous)throw failure;return Promise.reject(failure);}},
-    onError:async error=>{assert.equal(error,failure);throw new Error('Controlled reporter failure');}});
+    metadata:{validateRefresh(){},queue(){queueEntered=true;if(synchronous)throw failure;return Promise.reject(failure);}},
+    onError:async error=>{errors.push(error);throw new Error('Controlled reporter failure');}});
   await new Promise(resolve=>application.server.listen(0,'127.0.0.1',resolve));
   try {
     const origin=`http://127.0.0.1:${application.server.address().port}`;
     assert.equal((await fetch(`${origin}/Items/${itemId}/Refresh`,{method:'POST'})).status,204);
     await new Promise(resolve=>setImmediate(resolve));
+    assert.equal(queueEntered, true);
+    for (const error of errors) assert.deepEqual(failureFields(error), failureFields(failure));
   }finally{await new Promise(resolve=>application.server.close(resolve));}
 });

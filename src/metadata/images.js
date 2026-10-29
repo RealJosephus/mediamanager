@@ -13,7 +13,11 @@ const conversionFailureCodes = new Set(['version-link-conflict', 'invalid-nfo-te
   'not-found', 'not-directory', 'is-directory', 'permission-denied',
   'ENOENT', 'EACCES', 'EPERM', 'ENOTDIR', 'EISDIR', 'EIO', 'ENOSPC', 'EDQUOT', 'EBUSY', 'EROFS',
   'ENOTEMPTY', 'EMFILE', 'ENFILE', 'ENAMETOOLONG', 'ELOOP']);
-const conversionFailure = error => conversionFailureCodes.has(error.code);
+const conversionFailure = error => conversionFailureCodes.has(error?.code);
+const downloadFailure = (reason, code = reason?.code ?? 'http-error') => Object.assign(
+  new Error(reason?.message ?? 'The image download failed.', { cause: reason }),
+  Object.fromEntries(['status', 'statusCode', 'httpStatus', 'errors', 'details']
+    .filter(key => reason?.[key] !== undefined).map(key => [key, reason[key]])), { code });
 const extensions = ['.png', '.jpg', '.jpeg', '.webp', '.tbn', '.gif', '.svg'];
 const singular = ['Primary', 'Art', 'Banner', 'Box', 'BoxRear', 'Disc', 'Logo', 'Menu', 'Thumb'];
 const allImageTypes = [...singular, 'Backdrop', 'Screenshot', 'Chapter', 'Profile'];
@@ -121,7 +125,7 @@ export class MetadataImages {
               { signal, index, beforeWrite: markIrreversible });
             fetched = true; changed = true; break;
           }
-          catch (error) { if (signal?.aborted) throw error; if (error.code === 'http-error' && [403, 404].includes(error.status)) continue; unavailable = false; this.logger.error(error, 'Cannot fetch image'); break; }
+          catch (error) { if (signal?.aborted) throw error; if (error?.code === 'http-error' && [403, 404].includes(error.status)) continue; unavailable = false; this.logger.error(error, 'Cannot fetch image'); break; }
         }
         if (!fetched && unavailable) { images.splice(images.indexOf(image), 1); changed = true; }
         if (fetched || unavailable) {
@@ -172,7 +176,7 @@ export class MetadataImages {
     const api = imagePathApi(item.Path);
     const directory = api.join(containingImageFolder(item), 'metadata');
     try { await loaded.imageAssets.deleteEmptyDirectory(directory, { signal }); }
-    catch (error) { if (error.code !== 'not-found') throw error; }
+    catch (error) { if (error?.code !== 'not-found') throw error; }
   }
   async removeForRefresh(loaded, images, signal) {
     let changed = false;
@@ -183,7 +187,7 @@ export class MetadataImages {
       const removable = loaded.saveLocalMetadataEnabled || metadataKey && ordinalIgnoreCaseKey(image.Path).startsWith(metadataKey);
       if (!removable) continue;
       if (local) try { await loaded.imageAssets.delete(image.Path, { signal }); }
-      catch (error) { if (!['not-found', 'invalid-path', 'unmapped-path', 'permission-denied'].includes(error.code)) throw error; }
+      catch (error) { if (!['not-found', 'invalid-path', 'unmapped-path', 'permission-denied'].includes(error?.code)) throw error; }
       images.splice(images.indexOf(image), 1); changed = true;
     }
     await this.#cleanupEpisodeMetadataDirectory(loaded, signal);
@@ -234,7 +238,7 @@ export class MetadataImages {
         let available = [];
         try { available = await provider.getImages(item, { ...loaded.context, signal }) ?? []; }
         catch (error) {
-          if (signal?.aborted || error.name === 'AbortError') throw error;
+          if (signal?.aborted || error?.name === 'AbortError') throw error;
           // ProviderManager.GetAvailableRemoteImages logs provider query failures and returns an empty list.
           this.logger.error(error, `${provider.name} failed while listing remote images`);
         }
@@ -249,9 +253,9 @@ export class MetadataImages {
                 await this.saveRemote(loaded, images, image, { signal, index: 0, download: (url, activeSignal) => this.#downloadProvider(provider, url, activeSignal) });
                 changed = true;
               } catch (error) {
-                if (signal?.aborted || error.name === 'AbortError') throw error;
-                if (error.code === 'http-error' && [403, 404].includes(error.status)) continue;
-                if (error.code === 'http-error') break;
+                if (signal?.aborted || error?.name === 'AbortError') throw error;
+                if (error?.code === 'http-error' && [403, 404].includes(error.status)) continue;
+                if (error?.code === 'http-error') break;
                 throw error;
               }
             }
@@ -271,26 +275,26 @@ export class MetadataImages {
               let duplicate = false;
               for (const current of images.filter(value => value.Type === 'Backdrop' && !remote(value))) try {
                 if ((await loaded.imageAssets.stat(current.Path, { signal })).size === BigInt(source.contentLength)) { duplicate = true; break; }
-              } catch (error) { if (!['not-found', 'invalid-path', 'unmapped-path'].includes(error.code)) this.logger.error(error, 'Error examining images'); }
+              } catch (error) { if (!['not-found', 'invalid-path', 'unmapped-path'].includes(error?.code)) this.logger.error(error, 'Error examining images'); }
               if (duplicate) continue;
             }
             await this.saveRemote(loaded, images, image, { signal, download: async () => source }); changed = true;
           } catch (error) {
-            if (signal?.aborted || error.name === 'AbortError') throw error;
-            if (error.code === 'http-error' && [403, 404].includes(error.status)) continue;
-            if (error.code === 'http-error') break;
+            if (signal?.aborted || error?.name === 'AbortError') throw error;
+            if (error?.code === 'http-error' && [403, 404].includes(error.status)) continue;
+            if (error?.code === 'http-error') break;
             throw error;
           }
         }
       } catch (error) {
-        if (error.name === 'AbortError' || error === signal?.reason || provider.imageSource === 'remote' && signal?.aborted) throw error;
-        failures++; errorMessage = error.message; this.logger.error(error, `Error in ${provider.name} image provider`);
+        if (error?.name === 'AbortError' || signal?.aborted && (error === signal.reason || provider.imageSource === 'remote')) throw error;
+        failures++; errorMessage = error?.message; this.logger.error(error, `Error in ${provider.name} image provider`);
       }
     }
     if (oldBackdrops.length && oldBackdrops.length < images.filter(image => image.Type === 'Backdrop').length) {
       for (const image of oldBackdrops) {
         if (!remote(image)) try { await loaded.imageAssets.delete(image.Path, { signal }); }
-        catch (error) { if (!['not-found', 'invalid-path', 'unmapped-path', 'permission-denied'].includes(error.code)) this.logger.error(error, 'Unable to delete replaced image'); }
+        catch (error) { if (!['not-found', 'invalid-path', 'unmapped-path', 'permission-denied'].includes(error?.code)) this.logger.error(error, 'Unable to delete replaced image'); }
         const index = images.indexOf(image); if (index >= 0) images.splice(index, 1);
       }
       await this.#cleanupEpisodeMetadataDirectory(loaded, signal);
@@ -302,7 +306,7 @@ export class MetadataImages {
     let changed = false;
     for (const image of [...images]) if (!remote(image)) {
       try { if ((await assets.stat(image.Path, { signal })).kind === 'file') continue; }
-      catch (error) { if (!['not-found', 'invalid-path'].includes(error.code)) throw error; }
+      catch (error) { if (!['not-found', 'invalid-path'].includes(error?.code)) throw error; }
       images.splice(images.indexOf(image), 1); changed = true;
     }
     return changed;
@@ -342,7 +346,7 @@ export class MetadataImages {
     const task = (async () => {
       let response;
       try { response = await this.fetch(url, { signal }); }
-      catch (error) { if (signal?.aborted || error.name === 'AbortError') throw error; error.code = 'http-error'; throw error; }
+      catch (error) { if (signal?.aborted || error?.name === 'AbortError') throw error; throw downloadFailure(error, 'http-error'); }
       const value = await this.#readResponse(response, url, signal);
       const entry = { ...value, expires: this.now() + 10000 }; this.#cache.set(url, entry); this.#expireCache(); return entry;
     })();
@@ -367,7 +371,7 @@ export class MetadataImages {
   async #downloadProvider(provider, url, signal) {
     let response;
     try { response = await provider.getImageResponse(url, { signal }); }
-    catch (error) { if (signal?.aborted || error.name === 'AbortError') throw error; error.code ??= 'http-error'; throw error; }
+    catch (error) { if (signal?.aborted || error?.name === 'AbortError') throw error; throw downloadFailure(error); }
     return this.#readResponse(response, url, signal);
   }
   async saveRemote(loaded, images, image, { signal, index, download, beforeWrite } = {}) {
@@ -407,7 +411,7 @@ export class MetadataImages {
         }
       };
       try { file = await write(path); }
-      catch (error) { if (!['permission-denied', 'unavailable', 'not-supported'].includes(error.code) || paths.length !== retries.length || same(path, retries[i])) throw error; file = await write(retries[i]); }
+      catch (error) { if (!['permission-denied', 'unavailable', 'not-supported'].includes(error?.code) || paths.length !== retries.length || same(path, retries[i])) throw error; file = await write(retries[i]); }
       saved.push(file);
     }
     if (old) Object.assign(old, { Path: saved[0].Path, DateModified: modified(saved[0]), Width: 0, Height: 0 }); else images.push(row(saved[0], image.Type));
@@ -418,7 +422,7 @@ export class MetadataImages {
     }
     if (removeOld) {
       this.monitor?.reportFileSystemChangeBeginning(oldPath);
-      try { await assets.delete(oldPath, { signal }); } catch (error) { if (error.code !== 'not-found') throw error; }
+      try { await assets.delete(oldPath, { signal }); } catch (error) { if (error?.code !== 'not-found') throw error; }
       finally { this.monitor?.reportFileSystemChangeComplete(oldPath, false); }
     }
     return saved;
@@ -428,14 +432,14 @@ export class MetadataImages {
     for (const image of result.RemoteImages ?? []) {
       if (images.some(current => current.Type === image.Type) && !options.ReplaceAllImages && !options.ReplaceImages?.includes(image.Type)) continue;
       try { await this.saveRemote(loaded, images, image, options); changed = true; foundTypes.push(image.Type); }
-      catch (error) { if (error.code !== 'http-error') throw error; this.logger.error(error, 'Could not save NFO remote image'); }
+      catch (error) { if (error?.code !== 'http-error') throw error; this.logger.error(error, 'Could not save NFO remote image'); }
     }
     const files = [...result.Images ?? []];
     for (const image of result.LocalImageCandidates ?? []) {
       // DirectoryService.GetFile receives the literal NFO value; Windows FileInfo rejects file URIs.
       if (/^file:/i.test(image.Url)) continue;
       try { const file = await loaded.imageAssets.stat(imageIdentityPath(image.Url), options); if (file.kind === 'file' && !files.some(value => value.Type === image.Type)) files.push({ ...file, Type: image.Type }); }
-      catch (error) { if (error.code !== 'not-found') throw error; }
+      catch (error) { if (error?.code !== 'not-found') throw error; }
     }
     this.updateReplaceImages(options, foundTypes);
     return await this.merge(images, files, loaded, options.signal, options) || changed;

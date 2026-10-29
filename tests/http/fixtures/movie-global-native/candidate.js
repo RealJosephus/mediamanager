@@ -40,8 +40,10 @@ export async function runMovieCandidate(capture) {
   report.timeZone = { id: Intl.DateTimeFormat().resolvedOptions().timeZone, offsetMinutes: -new Date().getTimezoneOffset() };
   assert.equal(report.timeZone.offsetMinutes, specification.localTimezoneOffsetMinutes);
   let database, runtime, source, phase = 'initialization', ordinal = 0, activeQueued = 0, activeBatches = 0, cleanupSequence = 0, failure;
-  const queuedContext = new AsyncLocalStorage(), requests = [];
+  const queuedContext = new AsyncLocalStorage(), metadataContext = new AsyncLocalStorage(), requests = [];
+  let metadataSequence = 0;
   const trace = (action, detail) => report.trace.push({ ordinal: ++ordinal, phase, action, detail,
+    metadataId: metadataContext.getStore()?.id ?? null, requestId: queuedContext.getStore()?.id ?? null,
     scanRunning: runtime?.libraryScanLifecycle.isScanRunning ?? false });
   const queue = () => { const queued = [...runtime.metadata.getRefreshQueue()];
     return { queued, processing: activeQueued > 0 || activeBatches > 0 || queued.length > 0 }; };
@@ -192,9 +194,11 @@ export async function runMovieCandidate(capture) {
     };
     const refresh = runtime.metadata.refresh;
     runtime.metadata.refresh = async function (...args) {
-      trace('metadata-begin', { reference: typeof args[0] === 'string' ? args[0] : args[0]?.Id, options: refreshOptions(args[1]) });
-      const result = await refresh.apply(this, args);
-      trace('metadata-completed', { item: itemEvent(result?.Item), UpdateType: result?.UpdateType ?? null }); return result;
+      return metadataContext.run({ id: ++metadataSequence }, async () => {
+        trace('metadata-begin', { reference: typeof args[0] === 'string' ? args[0] : args[0]?.Id, options: refreshOptions(args[1]) });
+        const result = await refresh.apply(this, args);
+        trace('metadata-completed', { item: itemEvent(result?.Item), UpdateType: result?.UpdateType ?? null }); return result;
+      });
     };
     const probe = runtime.probe.probe;
     runtime.probe.probe = async function (...args) {
@@ -349,7 +353,7 @@ export async function runMovieCandidate(capture) {
     return { paths, tables };
   }
 
-  async function snapshot(label) {
+  async function snapshot(label, { includeSidecars = true } = {}) {
     const exported = path.join(output, 'candidate-' + label + '.db');
     const exportReceipt = await exportCurrentSqlite(database, exported);
     const native = new DatabaseSync(exported, { readOnly: true });
@@ -367,7 +371,8 @@ export async function runMovieCandidate(capture) {
       for (const name of (await readdir(media)).filter(name => name.endsWith('.mkv')).sort()) {
         const bytes = await readFile(path.join(media, name)); mediaFiles.push({ path: 'media/' + name, bytes: bytes.length, sha256: sha(bytes) });
       }
-      return { tables: actual, sql: all, sqliteSequence: sequence.all(), files: await files(root), mediaFiles, exportReceipt };
+      return { tables: actual, sql: all, sqliteSequence: sequence.all(),
+        files: includeSidecars ? await files(root) : null, mediaFiles, exportReceipt };
     } finally { native.close(); }
   }
   async function scan(name) {
@@ -380,7 +385,7 @@ export async function runMovieCandidate(capture) {
     report.observations.push({ phase, boundary: 'global-returned', startedAt, endedAt: new Date().toISOString(),
       status: scanFailure ? 'failed' : 'completed', scanRunning: runtime.libraryScanLifecycle.isScanRunning,
       Exception: scanFailure?.name ?? null, ExceptionMessage: scanFailure?.message ?? null, queue: queue(),
-      snapshot: await snapshot(name + '-global-returned') });
+      snapshot: await snapshot(name + '-global-returned', { includeSidecars: false }) });
     trace('queue-drain-begin', queue()); await runtime.metadata.drain();
     for (const request of requests.filter(value => !value.drained)) {
       assert.equal(request.workerStarted, 1); assert.equal(request.workerCompleted, 1); assert.equal(request.workerFailed, 0);

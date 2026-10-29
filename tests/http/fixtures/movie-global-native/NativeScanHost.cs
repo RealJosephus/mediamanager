@@ -129,6 +129,9 @@ public sealed class NativeScanHost : IAsyncDisposable
     private IResolverIgnoreRule[] _ignoreRules = [];
     private readonly List<(string Name, IDisposable Resource)> _ownedResources = [];
     private readonly ConcurrentQueue<QueueRequest> _queueRequests = new();
+    private readonly AsyncLocal<int?> _metadataObservation = new();
+    private readonly AsyncLocal<int?> _queueObservation = new();
+    private int _nextMetadataObservation;
     private int _nextQueueRequest;
     private int _sequence, _faultOccurrence;
     private bool _disposed;
@@ -445,12 +448,18 @@ public sealed class NativeScanHost : IAsyncDisposable
     private async Task<MediaBrowser.Controller.Library.ItemUpdateType> RefreshSingleItem(IMetadataService service,BaseItem item,
         MetadataRefreshOptions options,CancellationToken token)
     {
-        Add("metadata-begin",new { item=Item(item),options.MetadataRefreshMode,options.ImageRefreshMode,
-            options.IsAutomated,cancelled=token.IsCancellationRequested });
-        var result=await service.RefreshMetadata(item,options,token);
-        Add("metadata-completed",new { item=Item(item),updateType=result });
-        if(_observing)MaybeFault("metadata-after",item.Path);
-        return result;
+        var previous = _metadataObservation.Value;
+        _metadataObservation.Value = Interlocked.Increment(ref _nextMetadataObservation);
+        try
+        {
+            Add("metadata-begin",new { item=Item(item),options.MetadataRefreshMode,options.ImageRefreshMode,
+                options.IsAutomated,cancelled=token.IsCancellationRequested });
+            var result=await service.RefreshMetadata(item,options,token);
+            Add("metadata-completed",new { item=Item(item),updateType=result });
+            if(_observing)MaybeFault("metadata-after",item.Path);
+            return result;
+        }
+        finally { _metadataObservation.Value = previous; }
     }
 
     private void MaybeFault(string kind,string? filename)
@@ -522,6 +531,7 @@ public sealed class NativeScanHost : IAsyncDisposable
     internal void Add(string action,object? detail)
     {
         lock (_traceLock) _trace.Enqueue(new { ordinal=++_sequence,phase=_phase,action,detail,
+            metadataId = _metadataObservation.Value, requestId = _queueObservation.Value,
             scanRunning=Manager?.IsScanRunning??false });
     }
 
@@ -707,22 +717,28 @@ public sealed class NativeScanHost : IAsyncDisposable
         // retains DirectoryService, so correlation never mutates the request.
         var request = _queueRequests.FirstOrDefault(value => value.ItemId == item.Id
             && ReferenceEquals(value.Directory, options.DirectoryService) && value.Started == 0);
-        if (request is null) return await Provider.RefreshSingleItem(item, options, token);
-        request.Started++;
-        Add("queue-metadata-start", new { requestId = request.Id, itemId = item.Id, item = Item(item) });
+        var previous = _queueObservation.Value;
+        _queueObservation.Value = request?.Id;
         try
         {
-            var result = await Provider.RefreshSingleItem(item, options, token);
-            request.Completed++;
-            Add("queue-metadata-completed", new { requestId = request.Id, itemId = item.Id, updateType = (int)result, item = Item(item) });
-            return result;
+            if (request is null) return await Provider.RefreshSingleItem(item, options, token);
+            request.Started++;
+            Add("queue-metadata-start", new { requestId = request.Id, itemId = item.Id, item = Item(item) });
+            try
+            {
+                var result = await Provider.RefreshSingleItem(item, options, token);
+                request.Completed++;
+                Add("queue-metadata-completed", new { requestId = request.Id, itemId = item.Id, updateType = (int)result, item = Item(item) });
+                return result;
+            }
+            catch (Exception error)
+            {
+                request.Failed++;
+                Add("queue-metadata-failed", new { requestId = request.Id, itemId = item.Id, error = error.ToString() });
+                throw;
+            }
         }
-        catch (Exception error)
-        {
-            request.Failed++;
-            Add("queue-metadata-failed", new { requestId = request.Id, itemId = item.Id, error = error.ToString() });
-            throw;
-        }
+        finally { _queueObservation.Value = previous; }
     }
 
     // Reflection observes the real queue under its own lock; it does not replace

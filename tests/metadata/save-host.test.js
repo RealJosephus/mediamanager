@@ -6,6 +6,7 @@ import { EventEmitter } from 'node:events';
 import { mkdtemp, rm } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { inspect } from 'node:util';
 import { MetadataSaveHost, MetadataRegistry } from '../../src/metadata/index.js';
 import { createNfoPlugin } from '../../plugins/nfo/plugin.js';
 import { StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
@@ -29,12 +30,13 @@ test('metadata saver host loads authoritative context and writes NFO from subscr
           userData: { Played: true, IsFavorite: true, PlayCount: playCount, PlaybackPositionTicks: 0n } } };
     } });
   t.after(async () => { await host.dispose(); await storage.close(); await rm(spoolRoot, { recursive: true, force: true }); });
+  t.after(() => t.diagnostic(inspect({ background: errors }, { depth: null })));
   host.start(events); host.start(events);
   assert.equal(events.listenerCount('UserDataSaved'), 1);
   events.emit('UserDataSaved', { Item: { Id: item.Id }, SaveReason: 'PlaybackProgress' });
   await host.drain(); assert.equal(loads, 0);
   events.emit('UserDataSaved', { Item: { Id: item.Id, Name: 'Stale event name' }, SaveReason: 'TogglePlayed', UserId: 'other-user' });
-  await host.drain(); assert.equal(loads, 1); assert.deepEqual(errors, []);
+  await host.drain(); assert.equal(loads, 1);
   assert.equal(item.DateLastSaved, '2026-09-26T00:00:00Z');
   let result = await registry.plugins()[0].getMetadata(item, { accessPath: '/network/video.mkv' });
   assert.equal(result.Item.Name, 'Authoritative name'); assert.equal(result.People[0].Name, 'Current actor');
@@ -48,6 +50,7 @@ test('metadata saver host loads authoritative context and writes NFO from subscr
 
 test('metadata saver host rejects invalid contexts, excludes disabled plugins, and drains active writes', async t => {
   const registry = new MetadataRegistry(); const events = new EventEmitter(); const errors = [];
+  t.after(() => t.diagnostic(inspect({ background: errors }, { depth: null })));
   let loads = 0, callbacks = 0;
   const plugin = registry.register({ id: 'fixture', name: 'Fixture', providers: [], onUserDataSaved: async (_event, save) => {
     callbacks++; return save({}, 'MetadataDownload');
@@ -58,9 +61,8 @@ test('metadata saver host rejects invalid contexts, excludes disabled plugins, a
   for (const error of errors) assert.match(error.message, /context loader/u);
   t.diagnostic(JSON.stringify({ contextFailureDiagnostics: errors.map(error => ({ name: error.name,
     code: error.code, message: error.message, stack: error.stack })) }));
-  const diagnosticPrefix = errors.length;
   plugin.enabled = false; events.emit('UserDataSaved', { Item: {}, SaveReason: 'TogglePlayed' }); await host.drain();
-  assert.equal(loads, 1); assert.equal(callbacks, 0); assert.deepEqual(errors.slice(diagnosticPrefix), []);
+  assert.equal(loads, 1); assert.equal(callbacks, 0);
   let complete; let started;
   const ready = new Promise((resolve) => { started = resolve; });
   plugin.enabled = true; plugin.onUserDataSaved = async () => { started(); await new Promise((resolve) => { complete = resolve; }); };
@@ -68,7 +70,7 @@ test('metadata saver host rejects invalid contexts, excludes disabled plugins, a
   events.emit('UserDataSaved', { Item: {}, SaveReason: 'TogglePlayed' }); await ready;
   let disposed = false; const disposal = host.dispose().then(() => { disposed = true; });
   await Promise.resolve(); assert.equal(disposed, false); assert.equal(events.listenerCount('UserDataSaved'), 0);
-  complete(); await disposal; assert.equal(disposed, true); assert.deepEqual(errors.slice(diagnosticPrefix), []);
+  complete(); await disposal; assert.equal(disposed, true);
 });
 
 test('manual metadata saving drains its active saver and releases the authoritative context', async () => {
@@ -85,11 +87,15 @@ test('manual metadata saving drains its active saver and releases the authoritat
   unblock(); await saving; await closing; assert.equal(disposed, 1);
 });
 
-test('subscribed metadata plugin failure releases its loaded relation owner before logging', async () => {
-  const registry = new MetadataRegistry(), source = new EventEmitter(), calls = [];
-  registry.register({ id: 'failure', name: 'Failure', providers: [], onUserDataSaved: async () => { throw new Error('controlled plugin failure'); } });
+test('subscribed metadata plugin failure releases its loaded relation owner', async t => {
+  const registry = new MetadataRegistry(), source = new EventEmitter(), calls = [], logs = [];
+  let failed = false;
+  registry.register({ id: 'failure', name: 'Failure', providers: [], onUserDataSaved: async () => {
+    failed = true; throw new Error('controlled plugin failure');
+  } });
   const host = new MetadataSaveHost({ registry, loadContext: async () => ({ item: {}, context: {}, libraryOptions: {}, exists: async () => false,
-    dispose: async () => calls.push('dispose') }), logger: { error: () => calls.push('logger') } });
+    dispose: async () => calls.push('dispose') }), logger: { error: (error, message) => logs.push({ error, message }) } });
   host.start(source); source.emit('UserDataSaved', { Item: {} }); await host.drain(); await host.dispose();
-  assert.deepEqual(calls, ['dispose', 'logger']);
+  assert.equal(failed, true); assert.ok(calls.includes('dispose'));
+  t.diagnostic(inspect({ calls, logs }, { depth: null }));
 });

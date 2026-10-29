@@ -62,9 +62,12 @@ export async function setupChildrenFixture(t) {
     for (const loaded of [...contexts]) await attempt(() => loaded.dispose());
     for (const state of [...states]) await attempt(() => state.dispose());
     contexts.clear(); states.clear();
+    // Library owns its lazy UserView refresh host. Drain that producer before
+    // clearing the item cache: its admitted saver can still register an entity.
+    await attempt(() => library?.close());
     await attempt(() => itemCreation?.close());
     if (library?.itemCreation !== itemCreation) await attempt(() => library.itemCreation?.close());
-    await attempt(() => library?.close()); await attempt(() => linkedChildren?.flushReleases());
+    await attempt(() => linkedChildren?.flushReleases());
     await attempt(() => linkedChildren?.close()); await attempt(() => storage?.close());
     await attempt(() => database.client.query(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`));
     await attempt(() => database.client.query(`DROP SCHEMA IF EXISTS "${schema}__mm" CASCADE`));

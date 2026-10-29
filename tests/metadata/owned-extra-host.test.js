@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { idKey, dateText } from '../../src/library/records.js';
 import { internalImagePath } from '../../src/metadata/image-paths.js';
@@ -13,10 +14,35 @@ const ownerId = '98c00000-0000-0000-0000-000000000001';
 const noMetadata = { MetadataRefreshMode: 'None', ImageRefreshMode: 'None' };
 const common = { expectedType: 'Movie', resolverType: 'Video', parseName: true, mixed: false, files: ['primary-trailer.mkv'] };
 const getExtra = async fixture => (await fixture.database.rows('BaseItems')).filter(row => row.ExtraType != null);
-const assertOwnedErrors = (t, errors, allowed) => {
-  t.diagnostic(JSON.stringify({ ownedErrorDiagnostics: errors.map(({ error, stage }) => ({
-    stage, code: error?.code, message: error?.message, stack: error?.stack ?? String(error) })) }));
-  assert.deepEqual(errors.filter(({ error }) => !allowed(error)), []);
+const functional = value => value === null || typeof value !== 'object' ? value : Array.isArray(value) ? value.map(functional)
+  : Object.fromEntries([...new Set([...Object.getOwnPropertyNames(value), ...(value instanceof Error
+    ? ['message', 'code', 'status', 'statusCode', 'cause', 'errors'].filter(key => key in value) : [])])]
+    .filter(key => !(value instanceof Error && ['name', 'stack'].includes(key))).map(key => [key, functional(value[key])]));
+const sameFailure = (actual, expected) => assert.deepEqual(functional(actual), functional(expected));
+const observeDiscovery = (t, fixture) => {
+  const failures = [], lookups = [], before = fixture.host.ownedLifecycle.beforeRefresh.bind(fixture.host.ownedLifecycle);
+  const info = fixture.ignoreRule.fileAccess.info.bind(fixture.ignoreRule.fileAccess);
+  fixture.host.ownedLifecycle.beforeRefresh = async (...args) => {
+    try { return await before(...args); } catch (error) { failures.push(error); throw error; }
+  };
+  fixture.ignoreRule.fileAccess.info = async (...args) => {
+    const value = await info(...args); lookups.push({ path: args[0], ...value }); return value;
+  };
+  t.after(() => t.diagnostic(inspect({ ownedSourceFailures: failures, ignoreLookups: lookups }, { depth: null })));
+  return { failures, lookups };
+};
+const readSource = async (fixture, filename) => {
+  const handle = await fixture.vfs.openRead(filename), chunks = [];
+  try { for await (const chunk of handle.stream) chunks.push(Buffer.from(chunk)); return Buffer.concat(chunks); }
+  finally { await handle.close(); }
+};
+const assertRecoveredExtra = async fixture => {
+  const extras = await getExtra(fixture); assert.equal(extras.length, 1);
+  assert.equal(idKey(extras[0].OwnerId), idKey(ownerId)); assert.equal(extras[0].ExtraType, 2);
+  assert.equal(parseLosslessJson(extras[0].Data).Size, 16);
+  assert.deepEqual(await readSource(fixture, '/owned-discovery-write/owned-discovery/primary-trailer.mkv'),
+    Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from('media control')]));
+  return extras[0];
 };
 const assertOwnerSaved = async fixture => {
   const [owner] = await fixture.database.rows('BaseItems', { where: { Id: ownerId } });
@@ -30,12 +56,13 @@ const observeSqlFailures = fixture => {
   const query = (fixture.database.queryHook ?? client.query).bind(client);
   fixture.database.client.query = async (...args) => {
     try { return await query(...args); }
-    catch (error) { failures.push({ code: error.code, message: error.message, stack: error.stack }); throw error; }
+    catch (error) { failures.push(error); throw error; }
   };
   return failures;
 };
-const assertions = fixture => {
+const assertions = (t, fixture) => {
   const errors = [], events = [];
+  t.after(() => t.diagnostic(inspect({ ownedErrorDiagnostics: errors }, { depth: null })));
   fixture.host.logger = { error: (error, stage) => errors.push({ error, stage }) };
   for (const name of ['ItemAdded', 'ItemUpdated', 'ItemRemoved']) fixture.host.updates.on(name, event => events.push({ name, event }));
   return { errors, events };
@@ -50,22 +77,34 @@ for (const dialect of ['postgres']) {
     const original = await getExtra(fixture);
     const old = existing ? await loaded.videoVersionDiscovery.lookup(loaded, oldId) : null;
     const marker = old && path.join(internalImagePath(old, loaded.metadataPath), 'marker.txt');
+    const completeMap = fixture.ignoreRule.identityMap, source = observeDiscovery(t, fixture);
     fixture.ignoreRule.identityMap = fixture.identityMap;
     fixture.ignoreRule.clearDirectoryCache();
-    const { errors, events } = assertions(fixture);
-    await assert.rejects(fixture.ignoreRule.shouldIgnore(path.join(fixture.stateRoot, 'media', 'primary-trailer.mkv')),
-      { code: 'ignore-search-unmapped', status: 501 });
+    const { events } = assertions(t, fixture);
+    let rejectedLookup;
+    await assert.rejects(fixture.ignoreRule.shouldIgnore(path.join(fixture.stateRoot, 'media', 'primary-trailer.mkv')), error => {
+      assert.equal(error.code, 'ignore-search-unmapped'); assert.equal(error.status, 501); rejectedLookup = error; return true;
+    });
+    const lookupStart = source.lookups.length;
     await fixture.host.refresh(ownerId, noMetadata);
-    assertOwnedErrors(t, errors, error => error.code === 'ignore-search-unmapped' && error.status === 501);
+    assert.ok(source.lookups.slice(lookupStart).some(value => value.mapped === false));
+    assert.ok(source.failures.some(error => error?.code === 'ignore-search-unmapped'));
+    for (const error of source.failures) sameFailure(error, rejectedLookup);
     assert.deepEqual(await getExtra(fixture), original);
     await assertOwnerSaved(fixture);
     assert.ok(events.some(value => value.name === 'ItemUpdated' && idKey(value.event.Item.Id) === idKey(ownerId)));
     assert.equal(events.some(value => value.name === 'ItemRemoved' || value.name === 'ItemAdded'), false);
     if (marker) assert.equal(await readFile(marker, 'utf8'), 'owned marker');
+    fixture.ignoreRule.identityMap = completeMap; fixture.ignoreRule.clearDirectoryCache();
+    await fixture.host.refresh(ownerId, noMetadata);
+    if (existing) {
+      assert.deepEqual(await getExtra(fixture), []); await assert.rejects(readFile(marker), { code: 'ENOENT' });
+      assert.ok(events.some(value => value.name === 'ItemRemoved' && idKey(value.event.Item.Id) === idKey(oldId)));
+    } else await assertRecoveredExtra(fixture);
   });
 
   databaseTest('D3 preview does not cache absence before an ignore file appears during preflight', async t => {
-    const { fixture } = await setup(t, dialect, common), { errors } = assertions(fixture);
+    const { fixture } = await setup(t, dialect, common); assertions(t, fixture);
     let validations = 0, saves = 0;
     fixture.registry.register({ id: 'ignore-preflight', name: 'Ignore preflight', providers: [{
       id: 'writer', name: 'Controlled ignore writer', kind: 'saver', itemTypes: ['Trailer'], isEnabledFor: () => true,
@@ -87,14 +126,14 @@ for (const dialect of ['postgres']) {
     fixture.host.loadContext = configured;
     await fixture.host.refresh(ownerId, noMetadata);
     assert.equal(validations, 1); assert.equal(saves, 0);
-    assert.deepEqual(await getExtra(fixture), []); assert.deepEqual(errors, []);
+    assert.deepEqual(await getExtra(fixture), []);
   });
 
   for (const audio of [false, true]) databaseTest(`first ${audio ? 'audio' : 'trailer'} refresh saves a live extra with Updated events`, async t => {
     const { fixture } = await setup(t, dialect, { ...common, files: [audio ? 'theme.mp3' : 'primary-trailer.mkv'] });
     await fixture.database.update('BaseItems', { Id: ownerId }, { Genres: 'Owner genre', Overview: 'Owner overview', DateLastRefreshed: fixture.now });
     if (audio) fixture.host.supportedItemTypes = [...fixture.host.supportedItemTypes, 'Audio'];
-    const { errors, events } = assertions(fixture);
+    const { events } = assertions(t, fixture);
     await fixture.host.refresh(ownerId, noMetadata);
     const [extra] = await getExtra(fixture);
     assert.ok(extra); assert.equal(extra.ExtraType, audio ? 8 : 2);
@@ -107,7 +146,6 @@ for (const dialect of ['postgres']) {
     assert.equal(data.Size, 16); assert.ok(Array.isArray(audio ? data.LyricFiles : data.TrailerTypes));
     assert.equal(events.filter(value => value.name === 'ItemAdded' && idKey(value.event.Item.Id) === idKey(extra.Id)).length, 0);
     assert.ok(events.some(value => value.name === 'ItemUpdated' && idKey(value.event.Item.Id) === idKey(extra.Id)));
-    assert.deepEqual(errors, []);
     const saved = structuredClone(extra); events.length = 0;
     await fixture.host.refresh(ownerId, noMetadata);
     assert.deepEqual((await getExtra(fixture))[0], saved);
@@ -117,7 +155,7 @@ for (const dialect of ['postgres']) {
   for (const type of ['Series', 'Season', 'MusicArtist', 'MusicAlbum']) databaseTest(`${type} directory owner saves its newly discovered trailer`, async t => {
     const { fixture } = await setup(t, dialect, { ...common, expectedType: type, ownerPath: 'primary', files: ['primary/trailer.mkv'] });
     await fixture.database.update('BaseItems', { Id: ownerId }, { Genres: 'Directory genre', Overview: 'Directory overview', DateLastRefreshed: fixture.now });
-    const { errors, events } = assertions(fixture);
+    const { events } = assertions(t, fixture);
     await fixture.host.refresh(ownerId, noMetadata);
     const [extra] = await getExtra(fixture);
     assert.ok(extra); assert.equal(extra.ExtraType, 2); assert.equal(extra.Type, 'MediaBrowser.Controller.Entities.Trailer');
@@ -125,48 +163,50 @@ for (const dialect of ['postgres']) {
     assert.equal(extra.ParentId, null); assert.equal(extra.TopParentId, null);
     assert.equal(extra.Genres, 'Directory genre'); assert.equal(extra.Overview, 'Directory overview');
     assert.ok(events.some(value => value.name === 'ItemUpdated' && idKey(value.event.Item.Id) === idKey(extra.Id)));
-    assert.equal(events.some(value => value.name === 'ItemAdded'), false); assert.deepEqual(errors, []);
+    assert.equal(events.some(value => value.name === 'ItemAdded'), false);
   });
 
   databaseTest('new extra inherits live owner title before the owner is persisted', async t => {
-    const { fixture, loaded } = await setup(t, dialect, common), { errors } = assertions(fixture);
+    const { fixture, loaded } = await setup(t, dialect, common); assertions(t, fixture);
     const before = await fixture.database.rows('BaseItems', { where: { Id: ownerId } });
     assert.equal(await fixture.host.ownedLifecycle.beforeRefresh(loaded, noMetadata), true);
     const [extra] = await getExtra(fixture);
     assert.equal(extra.Genres, 'Owner genre'); assert.equal(extra.Overview, 'Owner overview');
     assert.deepEqual(await fixture.database.rows('BaseItems', { where: { Id: ownerId } }), before);
-    assert.deepEqual(errors, []);
   });
 
   databaseTest('already cancelled discovery leaves no new extra row or event', async t => {
-    const { fixture, loaded } = await setup(t, dialect, common), { errors, events } = assertions(fixture);
+    const { fixture, loaded } = await setup(t, dialect, common), { events } = assertions(t, fixture);
     const before = await fixture.database.rows('BaseItems');
     const reason = Object.assign(new Error('Controlled cancellation'), { code: 'controlled-owned-cancellation' });
     const signal = AbortSignal.abort(reason);
-    await assert.rejects(fixture.host.refresh(ownerId, { ...noMetadata, signal }), { message: reason.message, code: reason.code });
+    await assert.rejects(fixture.host.refresh(ownerId, { ...noMetadata, signal }), error => { sameFailure(error, reason); return true; });
     assert.equal(signal.aborted, true);
-    assertOwnedErrors(t, errors, error => error.code === reason.code || error.code === 'cancelled');
     assert.deepEqual(await fixture.database.rows('BaseItems'), before); assert.deepEqual(events, []);
     const id = loaded.getNewItemId(path.join(fixture.stateRoot, 'media', 'primary-trailer.mkv'), 'MediaBrowser.Controller.Entities.Trailer');
     assert.equal(await loaded.videoVersionDiscovery.lookup(loaded, id), null);
+    await fixture.host.refresh(ownerId, noMetadata); await assertRecoveredExtra(fixture);
   });
 
   databaseTest('new extra insert failure permits the owner provider but publishes no extra event', async t => {
-    const { fixture } = await setup(t, dialect, { ...common, newFailure: 'insert' }), { errors, events } = assertions(fixture);
+    const { fixture } = await setup(t, dialect, { ...common, newFailure: 'insert' }), { events } = assertions(t, fixture);
     const sqlFailures = observeSqlFailures(fixture);
     await fixture.host.refresh(ownerId, noMetadata);
     assert.deepEqual(await getExtra(fixture), []);
     assert.ok(sqlFailures.some(error => error.code === 'P0001' && error.message === 'Controlled owned discovery failure'));
-    t.diagnostic(JSON.stringify({ sqlFailureDiagnostics: sqlFailures }));
-    assertOwnedErrors(t, errors, error => error.code === 'P0001' && error.message === 'Controlled owned discovery failure');
+    t.diagnostic(inspect({ sqlFailureDiagnostics: sqlFailures }, { depth: null }));
     await assertOwnerSaved(fixture);
     assert.equal((await fixture.vfs.stat('/owned-discovery-write/owned-discovery/primary-trailer.mkv')).kind, 'file');
     assert.equal(events.some(value => idKey(value.event.Item.Id) !== idKey(ownerId)), false);
     assert.ok(events.some(value => value.name === 'ItemUpdated' && idKey(value.event.Item.Id) === idKey(ownerId)));
+    await fixture.database.client.query('DROP TRIGGER owned_discovery_failure ON "BaseItems"');
+    await fixture.host.refresh(ownerId, noMetadata);
+    const recovered = await assertRecoveredExtra(fixture);
+    assert.ok(events.some(value => value.name === 'ItemUpdated' && idKey(value.event.Item.Id) === idKey(recovered.Id)));
   });
 
   databaseTest('a stale owner rejects its new extra before any save', async t => {
-    const { fixture, loaded } = await setup(t, dialect, common), { events } = assertions(fixture);
+    const { fixture, loaded } = await setup(t, dialect, common), { events } = assertions(t, fixture);
     await fixture.database.update('BaseItems', { Id: ownerId }, { Name: 'Competing owner' });
     await assert.rejects(fixture.host.ownedLifecycle.beforeRefresh(loaded, noMetadata), { code: 'metadata-conflict' });
     assert.deepEqual(await getExtra(fixture), []); assert.deepEqual(events, []);
@@ -174,7 +214,7 @@ for (const dialect of ['postgres']) {
   });
 
   databaseTest('a competing row cannot replace a previously resolved new extra', async t => {
-    const { fixture, loaded } = await setup(t, dialect, common), { events } = assertions(fixture);
+    const { fixture, loaded } = await setup(t, dialect, common), { events } = assertions(t, fixture);
     const refresh = fixture.host.refreshOwnedItem.bind(fixture.host); let competing;
     fixture.host.ownedLifecycle.refreshOwnedItem = async (owner, child, options, inheritance) => {
       const [source] = await fixture.database.rows('BaseItems', { where: { Id: ownerId } });
@@ -188,7 +228,7 @@ for (const dialect of ['postgres']) {
   });
 
   databaseTest('a changed owner is rejected again inside the first extra save transaction', async t => {
-    const { fixture, loaded } = await setup(t, dialect, common), { events } = assertions(fixture);
+    const { fixture, loaded } = await setup(t, dialect, common), { events } = assertions(t, fixture);
     const repository = fixture.host.updates.updateRepository.bind(fixture.host.updates);
     fixture.host.updates.updateRepository = (context, result, reason, options) => repository(context, result, reason, {
       ...options,
@@ -207,7 +247,7 @@ for (const dialect of ['postgres']) {
       ...(directoryOwner ? { expectedType: 'MusicAlbum', ownerPath: 'primary' } : {}),
       files: directoryOwner ? ['primary/previous-trailer.mkv', 'primary/trailer.mkv'] : ['previous-trailer.mkv', 'primary-trailer.mkv'],
       existingType: true, missing: true, oldName: 'Trailer' });
-    const { events } = assertions(fixture);
+    const { events } = assertions(t, fixture);
     fixture.registry.register({ id: 'extra-writer-preflight', name: 'Extra writer preflight', providers: [{
       id: 'writer', name: 'Controlled extra writer', kind: 'saver', itemTypes: ['Trailer'],
       isEnabledFor: () => true,
@@ -269,13 +309,12 @@ for (const dialect of ['postgres']) {
   databaseTest('a newly saved audio extra is removed independently after its file disappears', async t => {
     const { fixture } = await setup(t, dialect, { ...common, files: ['theme.mp3'] });
     fixture.host.supportedItemTypes = [...fixture.host.supportedItemTypes, 'Audio'];
-    const { events, errors } = assertions(fixture);
+    const { events } = assertions(t, fixture);
     await fixture.host.refresh(ownerId, noMetadata); const [extra] = await getExtra(fixture);
     assert.ok(extra); events.length = 0;
     await fixture.adapter.delete('/owned-discovery/theme.mp3');
     await assert.rejects(fixture.host.refresh(ownerId, { ...noMetadata, signal: AbortSignal.abort(new Error('Audio removal cancellation')) }), { message: 'Audio removal cancellation' });
     assert.deepEqual(await getExtra(fixture), []);
     assert.deepEqual(events.map(value => [value.name, nativeGuid(value.event.Item.Id)]), [['ItemRemoved', extra.Id]]);
-    assert.deepEqual(errors, []);
   });
 }

@@ -22,15 +22,16 @@ export async function candidateNfoConfiguration(sample, root) {
   const store = new NamedConfigurationStore({ configurationDirectoryPath: directory, fileSystem: { ...fs, async readFile(name, ...args) {
     const attempt = { owner: active, filename: name, bytes: null, parserFailure: null, sourceFailure: null }; reads.push(attempt);
     if (mode === 'io') {
-      const cause = Object.assign(new Error('Original storage failure.'), { code: 'fixture-read-cause', status: 503, statusCode: 507 });
+      const cause = Object.assign(new Error('Original storage failure.', { cause: null }), { code: 'fixture-read-cause', status: 503, statusCode: 507,
+        details: { name: 'Storage business name', stack: 'Storage business stack' }, errors: [false, 0, '', null, undefined] });
       const failure = Object.assign(new Error('Controlled named read failure.', { cause }), { code: 'EIO', status: 500, statusCode: 500 });
-      attempt.sourceFailure = namedError(failure); throw failure;
+      attempt.sourceFailure = namedError(failure); attempt.sourceFailurePayload = namedFailurePayload(failure); throw failure;
     }
     try {
       const bytes = await fs.readFile(name, ...args); attempt.bytes = bytes.toString('base64');
       try { parseConfigurationXml(bytes, 'xbmcmetadata'); } catch (error) { attempt.parserFailure = namedError(error); }
       return bytes;
-    } catch (error) { attempt.sourceFailure = namedError(error); throw error; }
+    } catch (error) { attempt.sourceFailure = namedError(error); attempt.sourceFailurePayload = namedFailurePayload(error); throw error; }
   } }, onError: error => diagnostics.push({ owner: active, error: namedError(error) }) });
   const snapshot = () => structuredClone({ current: Object.fromEntries([...warm].map(key => [key, store.getCurrentConfiguration(key)])), retained,
     disk: disk(filename), linkedDisk: null, files: sync.readdirSync(directory).filter(name => name === 'xbmcmetadata.xml').sort() });
@@ -42,32 +43,29 @@ export async function candidateNfoConfiguration(sample, root) {
   try {
     const before = snapshot();
     for (const [index, step] of sample.steps.entries()) {
-      active = { index, action: step.action, key: step.key ?? sample.key }; let value = null, error = null;
+      active = { index, action: step.action, key: step.key ?? sample.key }; let value = null, error = null, failed = false, failurePayload;
       try {
         const key = active.key;
         if (step.action === 'get') { value = await store.getConfiguration(key); warm.add(key); if (step.retain) retained[step.retain] = value; }
-        else if (step.action === 'save') { const incoming = { ...defaultConfiguration('xbmcmetadata'), ...namedExpand(step.values, root) };
+        else if (step.action === 'save') { const incoming = { ...defaultConfiguration('xbmcmetadata'), ...namedExpand(step.values, root, key) };
           if (step.retain) retained[step.retain] = incoming; await store.saveConfiguration(key, incoming); }
         else if (step.action === 'saveRetained') await store.saveConfiguration(key, retained[step.retain]);
-        else if (step.action === 'mutate') Object.assign(retained[step.retain], namedExpand(step.values, root));
+        else if (step.action === 'mutate') Object.assign(retained[step.retain], namedExpand(step.values, root, key));
         else if (step.action === 'observer') observer = step.phase;
         else if (step.action === 'readMode') mode = step.mode;
         else if (step.action === 'physical' && step.mode === 'target-directory') { await fs.unlink(filename); await fs.mkdir(filename); }
         else if (step.action === 'physical' && step.mode === 'readonly') await fs.chmod(filename, 0o444);
         else if (step.action === 'physical' && step.mode === 'writable') await fs.chmod(filename, 0o666);
         else throw new Error('Unknown NFO configuration fixture operation.');
-      } catch (failure) { error = namedError(failure); }
-      steps.push(structuredClone({ step, accepted: error === null, result: value, error, state: snapshot() }));
-    }
-    for (const diagnostic of diagnostics) {
-      const source = reads.find(read => read.owner.index === diagnostic.owner.index && read.owner.key === diagnostic.owner.key
-        && read.parserFailure !== null && JSON.stringify(namedFailurePayload(read.parserFailure)) === JSON.stringify(namedFailurePayload(diagnostic.error)));
-      assert.ok(source, 'Every optional NFO load diagnostic belongs to the same actual read/decoder failure.');
+      } catch (failure) { failed = true; error = namedError(failure); failurePayload = namedFailurePayload(failure); }
+      steps.push(structuredClone({ step, accepted: !failed, result: value, error, failurePayload, state: snapshot() }));
     }
     if (sample.name === 'real-read-io-failure') {
       const source = reads.find(read => read.sourceFailure?.code === 'EIO'); assert.ok(source);
-      const delivered = steps.find(row => row.step.action === 'get').error;
-      assert.deepEqual(namedFailurePayload(delivered), namedFailurePayload(source.sourceFailure));
+      const delivered = steps.find(row => row.step.action === 'get' && !row.accepted).failurePayload;
+      assert.deepEqual(delivered, source.sourceFailurePayload);
+      assert.deepEqual(delivered.cause.details, { name: 'Storage business name', stack: 'Storage business stack' });
+      assert.deepEqual(delivered.cause.errors, [false, 0, '', null, undefined]);
     }
     result = { name: sample.name, key: sample.key, root, before, steps, events, after: snapshot(), diagnostics, reads, filename };
   } finally { await store.close(); }
