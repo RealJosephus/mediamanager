@@ -52,6 +52,7 @@ test('production PostgreSQL UserRoot DTO counts persisted sources instead of vir
   const save = () => writeFile(path.join(output, 'report.json'), stringifyNativeJson(report) + '\n');
   let database, store, library, failure;
   const owners = [], errors = [];
+  report.runtimeErrors = errors;
   try {
     database = await createPostgresTestDatabase(null, 'root_dto_count');
     await database.insertBatch('BaseItems', [
@@ -161,7 +162,6 @@ test('production PostgreSQL UserRoot DTO counts persisted sources instead of vir
     await count('a hidden virtual hierarchical child is excluded for this user', [[request.key, 2]]);
     await count('DisplayMissingEpisodes includes the virtual hierarchical child', [[request.key, 3]], access, [request], {});
     await count('a userless batch includes virtual hierarchy even with a caller missing-item hint', [[request.key, 3]], { userId: null });
-    assert.deepEqual(errors, []); report.runtimeErrors = errors;
   } catch (error) { failure = error; throw error; }
   finally {
     const failures = [];

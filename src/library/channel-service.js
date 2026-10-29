@@ -3,6 +3,7 @@ import { equalsIgnoreCase, nativeGuid } from '../users/native.js';
 import { EMPTY_ID, dtoId, libraryError, nonemptyId, sameId } from './records.js';
 import { ChannelItemCache } from './channel-item-cache.js';
 import { materializeChannelItem } from './channel-items.js';
+import { channelCatalogRange } from './postgres-channel-query.js';
 
 const deletionArgument = message => Object.assign(libraryError(400, message), { code: 'invalid-channel-argument' });
 const required = (value, name) => {
@@ -54,6 +55,10 @@ export class ChannelService {
       canDelete: item => call(() => this.#canDelete(item)),
       deleteItem: item => call(() => this.#deleteItem(item)),
       getChannelItems: query => itemCall(() => this.#getChannelItems(query, metadata, access)),
+      withChannelItems: (query, consume) => {
+        if (typeof consume !== 'function') return Promise.reject(new TypeError('Channel items require a selection consumer.'));
+        return itemCall(() => this.#getChannelItems(query, metadata, access, consume));
+      },
       getLatestChannelItems: query => itemCall(() => this.#getLatestChannelItems(query, metadata, access)),
       withLatestChannelItems: (query, consume) => itemCall(async () => {
         const prepared = await this.#prepareLatestChannelItems(query, metadata, access);
@@ -68,9 +73,9 @@ export class ChannelService {
     return access;
   }
 
-  async #read(method, value) {
+  async #read(method, ...values) {
     const reader = this.admitOperation();
-    try { return await reader[method](value); }
+    try { return await reader[method](...values); }
     finally { await reader.release(); }
   }
   getChannels(query = {}) { return this.#read('getChannels', query); }
@@ -80,6 +85,7 @@ export class ChannelService {
   canDelete(item) { return this.#read('canDelete', item); }
   deleteItem(item) { return this.#read('deleteItem', item); }
   getChannelItems(query = {}) { return this.#read('getChannelItems', query); }
+  withChannelItems(query, consume) { return this.#read('withChannelItems', query, consume); }
   getLatestChannelItems(query = {}) { return this.#read('getLatestChannelItems', query); }
 
   #providers() { return this.plugins.entries('channel'); }
@@ -158,7 +164,15 @@ export class ChannelService {
     return this.#catalog(query, await this.#user(query), metadata, true);
   }
   async #catalog(query, user, metadata, internal) {
-    const providers = await this.library.orderChannelProviders(this.#providers());
+    const installed = this.#providers();
+    // No installed provider can yield an entity. Native list filters never
+    // evaluate a user/root predicate for this empty source, while GetRange
+    // still validates its public paging boundary.
+    if (!installed.length) {
+      const { startIndex } = channelCatalogRange(query, 0);
+      return { Items: [], TotalRecordCount: 0, StartIndex: startIndex };
+    }
+    const providers = await this.library.orderChannelProviders(installed);
     return this.library.readChannelCatalog(query, { providers, user, internal,
       ensureEntity: provider => {
         const id = this.#identity(provider);
@@ -185,8 +199,9 @@ export class ChannelService {
     return this.#itemCache ??= new ChannelItemCache({ get cachePath() { return service.cachePath; }, fileSystem: this.library.options.fileSystem,
       getChannelId: provider => this.#identity(provider), onError: this.onError });
   }
-  async #getChannelItems(query = {}, metadata, channelAccess) {
-    return this.#items({ ...query, ChannelIds: [...(query.ChannelIds ?? [])] }, await this.#user(query), metadata, channelAccess);
+  async #getChannelItems(query = {}, metadata, channelAccess, consume) {
+    return this.#items({ ...query, ChannelIds: [...(query.ChannelIds ?? [])] }, await this.#user(query), metadata, channelAccess,
+      { project: consume ?? true });
   }
   async #items(query, user, metadata, channelAccess, { project = true } = {}) {
     return this.library.withChannelEntity(query.ChannelIds[0], async channel => {

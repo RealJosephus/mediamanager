@@ -4,10 +4,11 @@ import { createHash } from 'node:crypto';
 import { CollectionPosterVerifyPostScanTask } from '../../src/library/collection-poster-post-scan-task.js';
 import { LibraryScanHost } from '../../src/library/library-scan-host.js';
 import { LibraryService } from '../../src/library/library-service.js';
+import { ItemCreationService } from '../../src/library/item-creation-service.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { PostgresLinkedChildrenStore } from '../../src/library/postgres-linked-children.js';
 import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
-import { setFolderChildren } from '../../src/library/folder-cache.js';
+import { releaseCachedFolderChildren, setFolderChildren } from '../../src/library/folder-cache.js';
 import { idKey } from '../../src/library/records.js';
 import { StorageError } from '../../src/storage/errors.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
@@ -26,15 +27,16 @@ const item = (number, fields = {}) => Object.assign(newNativeItemEntity(collecti
   Id: id(number), Name: 'Library ' + number, ...fields
 });
 
-async function fixture(t, { stage = () => {}, observeSql = () => {} } = {}) {
+async function fixture(t, { stage = () => {}, observeSql = () => {}, formalItemManager = false } = {}) {
   stage('database-create:start');
   const database = await createPostgresTestDatabase(null, 'poster_snapshot', { max: 1 });
   stage('database-create:done'); observeSql(database, 'main-and-relations');
   const store = new DomainStore(database), links = new PostgresLinkedChildrenStore({ database });
-  let library, host;
+  let library, host, manager;
   t.after(async () => {
     const failures = [];
-    for (const [owner, close] of [['host', () => host?.close()], ['library', () => library?.close()], ['links', () => links.close()],
+    for (const [owner, close] of [['host', () => host?.close()], ['item-manager', () => manager?.close()],
+      ['library', () => library?.close()], ['links', () => links.close()],
       ['store', () => store.close()], ['database-drop', () => dropPostgresTestDatabase(database)]]) {
       stage('owner-close:start', { owner });
       try { await close(); stage('owner-close:done', { owner }); }
@@ -47,9 +49,11 @@ async function fixture(t, { stage = () => {}, observeSql = () => {} } = {}) {
   assert.equal(database.pool.options.max, 1);
   assert.equal(links.relationDatabase.pool.options.max, 1);
   library = new LibraryService({ store, linkedChildren: links, serverId: 'poster-snapshot' });
-  library.itemCreation = { linkedChildren: links };
+  if (formalItemManager) manager = new ItemCreationService({ store, library, linkedChildren: links,
+    loadContext: async () => { throw new Error('Metadata writes are outside this poster child-read scenario.'); } });
+  library.itemCreation = manager ?? { linkedChildren: links };
   host = new LibraryScanHost({ store, library, itemCreation: library.itemCreation, metadataScanner: {}, topLevelValidation: {} });
-  const root = Object.assign(newNativeItemEntity('MediaBrowser.Controller.Entities.UserRootFolder'), { Id: id(1) });
+  let root = Object.assign(newNativeItemEntity('MediaBrowser.Controller.Entities.UserRootFolder'), { Id: id(1) });
   host.getUserRootFolder = async () => root;
   const seed = (number, fields = {}) => database.insert('BaseItems', postgresTestRow('BaseItems', {
     Id: id(number), Type: collectionType, ParentId: root.Id, IsFolder: true, Data: '{}',
@@ -57,6 +61,7 @@ async function fixture(t, { stage = () => {}, observeSql = () => {} } = {}) {
     DateCreated: '2026-10-16 00:00:00.0000000', DateModified: '2026-10-16 00:00:00.0000000', ...fields
   }));
   await seed(1, { Type: root.NativeType, ParentId: null });
+  if (manager) root = await manager.getItemById(root.Id);
   const assertReleased = async () => {
     stage('release:start');
     await links.flushOwnedReleases();
@@ -69,7 +74,7 @@ async function fixture(t, { stage = () => {}, observeSql = () => {} } = {}) {
     stage('release:done');
   };
   const task = refreshLiveItem => new CollectionPosterVerifyPostScanTask({ host, metadataScanner: { refreshLiveItem } });
-  return { database, store, links, library, host, root, seed, assertReleased, task };
+  return { database, store, links, library, host, manager, root, seed, assertReleased, task };
 }
 
 test('postgres: poster captures more than two pages before refresh and keeps membership, order and values in SQL', pg, async t => {
@@ -242,13 +247,17 @@ test('postgres: poster fails late hydration before any callback, even before an 
 });
 
 test('postgres: poster completes an empty type selection despite cancellation and releases it on a final progress error', pg, async t => {
-  const f = await fixture(t);
+  const f = await fixture(t, { formalItemManager: true });
   await f.seed(2, { Type: folderType });
   const controller = new AbortController(); controller.abort();
   const progress = [], task = f.task(async () => assert.fail('An ordinary Folder is not a poster target.'));
   await task.run({ signal: controller.signal, reportProgress: value => progress.push(value) });
   assert.deepEqual(progress, [100]);
+  // The manager retains the actual SQL root while the populated Children value
+  // is withdrawn. The next run must replay its captured IDs through that owner.
+  releaseCachedFolderChildren(f.root);
   const failure = new Error('Controlled final progress failure');
   await assert.rejects(task.run({ reportProgress: () => { throw failure; } }), error => assertFailureValues(t, error, failure));
+  await f.manager.close();
   await f.assertReleased();
 });

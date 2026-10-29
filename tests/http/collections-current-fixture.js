@@ -13,6 +13,8 @@ import { databaseDigest } from '../../src/migration/database-transfer.js';
 import { idKey } from '../../src/library/records.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
 import { readTestLinks } from '../library/collection-test-consumers.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
+import { parseLosslessJson } from '../../src/core/json.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 const fixture = new URL('./fixtures/collections/', import.meta.url);
@@ -23,12 +25,11 @@ export const id = index => `ca1000000000000000000${String(index).padStart(11, '0
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, (_key, entry) => typeof entry === 'bigint' ? entry.toString() : entry, 2) + '\n';
 export const semantic = value => JSON.parse(json(value));
-export const noTrace = value => Array.isArray(value) ? value.map(noTrace) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'traceId').map(([key, entry]) => [key, noTrace(entry)])) : value;
+export const projectCollectionHttpBody = (value, status) => projectProblemTrace(value, status);
 export const collectionBindingObservation = calls => Object.fromEntries(['create', 'add', 'remove'].map(operation => [operation,
   calls.filter(call => call.phase === operation).map(({ phase: _phase, ...value }) => value)]));
 const observable = row => ({ name: row.name, status: row.status, contentType: row.contentType, allow: row.allow,
-  body: row.jsonBody == null ? row.body : null, jsonBody: noTrace(row.jsonBody),
+  body: row.jsonBody == null ? row.body : null, jsonBody: projectCollectionHttpBody(row.jsonBody, row.status),
   bindings: row.managerState ? undefined : collectionBindingObservation(row.calls),
   managerState: row.managerState && Object.fromEntries(Object.entries(row.managerState).filter(([key]) => key !== 'diagnosticPhases')) });
 
@@ -61,7 +62,7 @@ async function capture() {
       const nativeRoot = path.join(output, label);
       const record = await recordOracle({ project: fileURLToPath(new URL('current/Oracle.csproj', fixture)), output: nativeRoot,
         args: [fileURLToPath(inputFile), '{output}/native.json'] });
-      const filename = path.join(nativeRoot, 'native.json'), bytes = await fs.readFile(filename), native = JSON.parse(bytes);
+      const filename = path.join(nativeRoot, 'native.json'), bytes = await fs.readFile(filename), native = parseLosslessJson(bytes.toString('utf8'));
       const receipt = { label, record, observation: await describeFile(filename), assemblies: [] };
       report.captures.push(receipt);
       assert.equal(record.passed, true); assert.equal(record.build.status, 0); assert.equal(record.process.status, 0);

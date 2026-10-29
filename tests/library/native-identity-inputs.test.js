@@ -8,7 +8,7 @@ test('complete identity responses reject added fields, content types, counts and
   const names = ['parallel', 'followup'];
   const observations = names.map((name, index) => ({ name,
     body: { Items: [{ Id: `item-${index}`, Name: name }], TotalRecordCount: 1, StartIndex: 0 } }));
-  const candidate = { cases: observations.map(({ name, body }) => ({ name, endpoints: [{ endpoint: 'items',
+  const candidate = { serverId: 'synthetic-candidate', cases: observations.map(({ name, body }) => ({ name, endpoints: [{ endpoint: 'items',
     response: { status: 200, contentType: 'application/json', bodyText: JSON.stringify(body), body: structuredClone(body) },
   }] })) };
   const reference = { records: observations.map(({ name, body }) => ({ name, endpoint: 'items',

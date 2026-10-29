@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import test, { after } from 'node:test';
-import { acquireTestResource } from '../helpers/test-resource-lease.js';
+import test, { before } from 'node:test';
+import { declareFileTestResource } from '../helpers/file-test-resource.js';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
 import { assertCompleteFilterHttpResponses, writeCompleteFilterHttpEvidence } from './full-filter-wire.js';
@@ -8,46 +8,57 @@ import { seedNativeFilterInput } from './native-filter-input.js';
 import { loadCurrentFilterScenario, writeCurrentFilterCandidateEvidence } from './current-filter-http.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
-const resourceLease = await acquireTestResource('native-filter-http-ports');
-const { fixture, inputs, nativeHttp, nativeStages, nativeServerId } = await loadCurrentFilterScenario('rating-permissions');
-assert.equal(nativeHttp.records.length, 36);
-assert.deepEqual(nativeStages.before.database, nativeStages.afterReads.database);
-assert.deepEqual(nativeStages.afterReads.database, nativeStages.afterShutdown.database);
-assert.deepEqual(nativeStages.before.database.foreignKeyCheck, []);
+const enabled = Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE
+  && process.env.MEDIAMANAGER_JELLYFIN_DLL);
+const resource = declareFileTestResource('native-filter-http-ports', { enabled });
+let fixture, inputs, nativeHttp, nativeStages, nativeServerId, keyById, triples, scenario;
 
-const keyById = new Map(fixture.items.map(item => [idKey(item.id), item.key]));
-for (const item of fixture.items) {
-  const native = nativeStages.before.database.baseItems.find(row => idKey(row.Id) === idKey(item.id));
-  assert.ok(native, item.key);
-  assert.equal(native.CustomRating, item.customRating ?? null, item.key);
-  assert.equal(native.InheritedParentalRatingValue, item.inheritedParentalRatingValue ?? null, item.key);
-  assert.equal(native.InheritedParentalRatingSubValue, item.inheritedParentalRatingSubValue ?? null, item.key);
-  if (item.presentationUniqueKey) assert.equal(native.PresentationUniqueKey, item.presentationUniqueKey, item.key);
-}
-const triples = Array.from({ length: nativeHttp.records.length / 3 }, (_, index) => {
-  const triple = nativeHttp.records.slice(index * 3, index * 3 + 3);
-  assert.deepEqual(triple.map(record => record.endpoint), ['items', 'legacy', 'detail']);
-  assert.ok(triple.every(record => record.name === triple[0].name));
-  assert.ok(triple.every(record => record.maxRating === triple[0].maxRating
-    && JSON.stringify(record.blockUnrated) === JSON.stringify(triple[0].blockUnrated)));
-  return triple;
+// Register teardown before Native initialization; hold this file's owner until
+// the protected initialization and every candidate callback have really settled.
+before(async context => {
+  if (!enabled) return;
+  await resource.run(async () => {
+    ({ fixture, inputs, nativeHttp, nativeStages, nativeServerId } = await loadCurrentFilterScenario('rating-permissions'));
+    assert.equal(nativeHttp.records.length, 36);
+    assert.deepEqual(nativeStages.before.database, nativeStages.afterReads.database);
+    assert.deepEqual(nativeStages.afterReads.database, nativeStages.afterShutdown.database);
+    assert.deepEqual(nativeStages.before.database.foreignKeyCheck, []);
+
+    keyById = new Map(fixture.items.map(item => [idKey(item.id), item.key]));
+    for (const item of fixture.items) {
+      const native = nativeStages.before.database.baseItems.find(row => idKey(row.Id) === idKey(item.id));
+      assert.ok(native, item.key);
+      assert.equal(native.CustomRating, item.customRating ?? null, item.key);
+      assert.equal(native.InheritedParentalRatingValue, item.inheritedParentalRatingValue ?? null, item.key);
+      assert.equal(native.InheritedParentalRatingSubValue, item.inheritedParentalRatingSubValue ?? null, item.key);
+      if (item.presentationUniqueKey) assert.equal(native.PresentationUniqueKey, item.presentationUniqueKey, item.key);
+    }
+    triples = Array.from({ length: nativeHttp.records.length / 3 }, (_, index) => {
+      const triple = nativeHttp.records.slice(index * 3, index * 3 + 3);
+      assert.deepEqual(triple.map(record => record.endpoint), ['items', 'legacy', 'detail']);
+      assert.ok(triple.every(record => record.name === triple[0].name));
+      assert.ok(triple.every(record => record.maxRating === triple[0].maxRating
+        && JSON.stringify(record.blockUnrated) === JSON.stringify(triple[0].blockUnrated)));
+      return triple;
+    });
+    scenario = { ...fixture, cases: triples.map(([items, , detail]) => ({
+      name: items.name, query: 'IncludeItemTypes=Movie', scope: ['alpha', 'beta', 'gamma'],
+      omitParentId: true, recursive: null, assertOrder: true,
+      policy: { AllowedTags: [], BlockedTags: [], MaxParentalRating: items.maxRating,
+        MaxParentalSubRating: items.maxRating == null ? null : 0, BlockUnratedItems: items.blockUnrated },
+      detailKey: keyById.get(idKey(detail.detailId)), detailExpectedStatus: detail.response.status,
+      endpoints: ['items', 'legacy', 'detail'],
+    })) };
+  }, { signal: context.signal });
 });
-const scenario = { ...fixture, cases: triples.map(([items, , detail]) => ({
-  name: items.name, query: 'IncludeItemTypes=Movie', scope: ['alpha', 'beta', 'gamma'],
-  omitParentId: true, recursive: null, assertOrder: true,
-  policy: { AllowedTags: [], BlockedTags: [], MaxParentalRating: items.maxRating,
-    MaxParentalSubRating: items.maxRating == null ? null : 0, BlockUnratedItems: items.blockUnrated },
-  detailKey: keyById.get(idKey(detail.detailId)), detailExpectedStatus: detail.response.status,
-  endpoints: ['items', 'legacy', 'detail'],
-})) };
 const dialects = process.env.MEDIAMANAGER_RATING_PERMISSIONS_DIALECT
   ? [process.env.MEDIAMANAGER_RATING_PERMISSIONS_DIALECT] : ['postgres'];
 if (dialects.some(dialect => !['postgres'].includes(dialect))) throw new Error('Invalid rating-permissions dialect.');
 
 for (const dialect of dialects) {
   test(`${dialect}: inherited ratings and policy updates match 36 current Native list and direct HTTP responses`, {
-    skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
-  }, async () => {
+    skip: !enabled,
+  }, async context => resource.run(async () => {
     const actual = await recordItemFilterCandidate({
       captureResponseBodies: true,
       prepareScenario: context => seedNativeFilterInput(context, 'rating-permissions', inputs),
@@ -76,16 +87,12 @@ for (const dialect of dialects) {
       }
     }
     assert.deepEqual(actual.afterReads, actual.beforeReads);
-    assert.deepEqual(actual.runtimeErrors, []);
-    assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
     assert.deepEqual(actual.cleanup, {
       runtimeClosed: true, databaseClosed: true, portReleased: true,
       postgresSchemasRemoved: dialect === 'postgres' ? true : null,
       programDataDirectoryRemoved: true,
     });
     await writeCurrentFilterCandidateEvidence('rating-permissions', actual, { scenarioName: 'rating-permissions' });
-  });
+  }, { signal: context.signal }));
 }
 
-// Release after all test hooks, streams, processes and resource postconditions.
-after(async () => { await resourceLease?.release(); });

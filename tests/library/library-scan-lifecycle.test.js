@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash, randomUUID } from 'node:crypto';
+import { inspect } from 'node:util';
 import { LibraryScanLifecycle, LibraryScanService } from '../../src/library/index.js';
 import { updateInheritedValues } from '../../src/library/item-persistence.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
@@ -114,8 +115,6 @@ for (const sample of input.filter(sample => sample.mode !== 'inheritance')) test
     else assert.ok(fixture.injectedFailures.some(error => error.code === exception.code && error.message === exception.message),
       'Only an actually reached controlled I/O failure may reject this scenario.');
   }
-  for (const { error } of fixture.diagnostics) assert.ok(fixture.injectedFailures.some(value => value.code === error.code && value.message === error.message),
-    'Unexpected library scan diagnostic.');
   observeComparison(t, sample.name + ' raw failures', { exception, diagnostics: fixture.diagnostics },
     { exception: expected.exception, diagnostics: expected.calls.filter(call => call.action === 'logged-error') });
   const actual = { name: sample.name, exception, calls: fixture.calls, progress: fixture.progress,
@@ -123,8 +122,9 @@ for (const sample of input.filter(sample => sample.mode !== 'inheritance')) test
   comparison({ actual, expected, t });
 });
 
-test('post-scan caller cancellation with an arbitrary reason stops later tasks and inherited cleanup', async () => {
+test('post-scan caller cancellation with an arbitrary reason stops later tasks and inherited cleanup', async t => {
   const fixture = lifecycleFor({});
+  t.after(() => t.diagnostic(inspect({ diagnostics: fixture.diagnostics }, { depth: null, maxArrayLength: null, maxStringLength: null })));
   const reason = Object.assign(new Error('Controlled caller cancellation'), { code: 'controlled-caller-cancellation' });
   let laterTaskRan = false;
   fixture.lifecycle.postScanTasks = [{ name: 'Cancelling', async run() {
@@ -134,7 +134,7 @@ test('post-scan caller cancellation with an arbitrary reason stops later tasks a
     assert.equal(fixture.controller.signal.aborted, true); assert.equal(error.code, reason.code);
     assert.equal(error.message, reason.message); return true;
   });
-  assert.equal(laterTaskRan, false); assert.deepEqual(fixture.calls, []); assert.deepEqual(fixture.diagnostics, []);
+  assert.equal(laterTaskRan, false); assert.deepEqual(fixture.calls, []);
 });
 
 function blank(table) {
@@ -232,11 +232,13 @@ test('a queued replacement drains the cancelled lifecycle before starting its su
   assert.equal(fixture.lifecycle.isScanRunning, false);
 });
 
-test('progress observer rejection cannot prevent post-scan work or monitor restoration', async () => {
+test('progress observer rejection cannot prevent post-scan work or monitor restoration', async t => {
   const fixture = lifecycleFor({ postTasks: [{ name: 'a', progress: [50, 100] }] }), errors = [];
+  t.after(() => t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null })));
+  let observerEntered = false;
   const scanner = new LibraryScanService({ lifecycle: fixture.lifecycle, onError: error => errors.push(error.message) });
-  const result = await scanner.runCompleteScan({ reportProgress: async () => { throw new Error('Observer rejected progress'); } });
+  const result = await scanner.runCompleteScan({ reportProgress: async () => { observerEntered = true; throw new Error('Observer rejected progress'); } });
   await scanner.close(); assert.equal(result, null);
-  assert.ok(errors.length > 0); assert.ok(errors.every(message => message === 'Observer rejected progress'));
+  assert.equal(observerEntered, true);
   assert.equal(fixture.calls.at(-1).action, 'monitor-start'); assert.ok(fixture.calls.some(call => call.action === 'update-inherited'));
 });

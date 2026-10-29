@@ -32,6 +32,12 @@ checked against the current designated source bindings; an uninitialized rating
 dictionary cannot silently turn restricted collections into allowed unrated data.
 Actual ExceptionMiddleware log exceptions are retained by case/type/message/stack
 in native JSON; response status, body and all positive guards remain unchanged.
+The native recorder also flushes `native.progress.jsonl` at actual preparation,
+seeding, derived-column, HTTP request and shutdown boundaries, using UTC and a
+monotonic elapsed clock. A process timeout can therefore retain its last entered
+phase without a completed `native.json`. This diagnostic sidecar does not supply
+expected responses or replace a missing business result; the existing process
+and request deadlines still apply.
 
 Both captures must have the complete expected request set and real successful
 positive responses; an unbound dependency's 500 cannot become a matching oracle.
@@ -71,18 +77,28 @@ activity update from library reads during the long matrix. Devices and every
 column remain in the complete unchanged-table assertion. HTTP deadlines and
 monotonic SQL timings keep their real clocks. The complete fixture has a
 twenty-minute outer test budget for two independent native builds/captures,
-all 105 production HTTP requests and shutdown verification; each HTTP request
+all 105 production HTTP requests and shutdown verification. Each native capture
+has an explicit four-minute process budget recorded in its oracle receipt;
+the build budget remains two minutes. Each HTTP request
 still has its original thirty-second deadline. Request timings retain the actual
 case, route, deadline, elapsed time and any failure; visibility SQL input sizes
 and aggregate batch counts are
 diagnostics alongside the full functional comparison and bounded candidate/result
 pages. These observations distinguish repeated single-item work from bounded
-visibility pages without changing the request deadline. The raw Node
+visibility pages without changing the request deadline.
+
+Typed slot captures and reads now use bounded pages of at most 128. Captured
+aliases retain their own values and link owners; mutations observed between
+callbacks invalidate the earlier page snapshot before the next slot is read.
+The cohort regression compares one page with three larger pages by SQL growth,
+alongside actual values and release behavior, without a fixed total-query gate.
+The raw Node
 before/after/after-shutdown file lists remain in the report. The one diagnostic
-`plugins/node/host.lock` is read from the actual PluginHost directory, bound to
-the current process PID, a real UUIDv4 nonce,
-byte length and SHA-256, and reread with exact byte/identity assertions before
+`plugins/node/host.lock` is read from the actual PluginHost directory in the
+isolated runtime's private root. The runtime PID, original byte length and
+SHA-256 are recorded, and the file is reread with exact byte assertions before
 shutdown. Real runtime close must remove that exact file, verified with ENOENT.
+Its private JSON fields and nonce spelling are not part of this comparison.
 Only the post-shutdown persistent-file comparison projects out this proved
 transient filename; it excludes no directory or filename pattern. The live
 before/after comparison still includes the complete lock bytes/hash identity.

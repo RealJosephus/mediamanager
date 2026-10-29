@@ -700,14 +700,14 @@ export async function restoreEvictedNativeItemLinks(item, captured, { linkedChil
 function associateNativeItemResourceGraph(item, graph) {
   const state = folderStates.get(item);
   if (!state || state.graph === graph) return state;
-  if (state.base || state.graphRoot) throw new TypeError('An exact Folder cannot belong to two active SQL resource graphs.');
+  if (state.base || state.graphRoot) throw new TypeError('An exact Folder cannot belong to two active native resource graphs.');
   const entity = graph.entity(item);
   state.graph = graph; state.entity = entity;
   return state;
 }
 
 /** Register the exact object's basic state before registering host caches.
- * SQL drives pending direct-child preparation, including warm descendants
+ * The resource collector drives direct-child preparation, including warm descendants
  * which have never built a SQL Children or IDs resource. */
 export function attachNativeItemResourceGraph(item, graph) {
   const state = associateNativeItemResourceGraph(item, graph);
@@ -736,7 +736,7 @@ export function attachNativeItemResourceGraph(item, graph) {
       base.linked = linked;
       return resource.replaceLinks((function* () {
         // Only this object's direct members are read here. New child bindings
-        // are prepared later by the SQL reachable-pending query.
+        // are prepared later by the resource collector.
         for (const list of [children, extra]) for (const child of list ?? []) {
           if (folderStates.has(child)) yield attachNativeItemResourceGraph(child, graph);
         }
@@ -754,7 +754,7 @@ export function attachNativeItemResourceGraph(item, graph) {
     base.resource = resource;
     if (base.dirty) resource.refresh();
   }, () => {
-    // SQL failure is retained by the graph's mutation tail and surfaces from
+    // Registration failure is retained by the graph's mutation tail and surfaces from
     // flush/close. Remove only this failed registration's observers.
     assignment.release(); virtual.release();
     if (state.base === base) state.base = null;
@@ -806,10 +806,10 @@ export function setNativeItemResource(item, key, resource) {
     binding.ready.catch(() => {}); // Graph tail and the building caller retain the actual failure.
   } else binding.ready = Promise.resolve();
   return Object.freeze({ ready: binding.ready, unbind: () => unbindResourceBinding(state, key, binding), retain: () => {
-    if (!binding.graphResource) throw new Error('The SQL native resource binding is not ready.');
+    if (!binding.graphResource) throw new Error('The native resource binding is not ready.');
     return binding.graphResource.retain();
   }, link: (child, options) => {
-    if (!binding.graphResource) throw new Error('The SQL native resource binding is not ready.');
+    if (!binding.graphResource) throw new Error('The native resource binding is not ready.');
     const entity = attachNativeItemResourceGraph(child, state.graph);
     return entity ? binding.graphResource.link(entity, options) : null;
   } });

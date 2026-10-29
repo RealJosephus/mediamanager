@@ -152,8 +152,9 @@ released in finally before awaiting pending operations. All persisted native/PG
 tables and owned state-file bytes are compared before/after and after independent
 PG reopen. Complete raw before/after file maps remain in the report. Only the
 exact `plugins/node/host.lock` is excluded from the post-shutdown persistent
-comparison: actual PluginHost source, PID, UUID nonce and full bytes/hash are
-bound while open and rechecked before shutdown; real runtime close must remove
+comparison: the actual PluginHost directory, source, runtime PID and original
+bytes/hash bind it to this isolated process. Its bytes are rechecked before
+shutdown without imposing a private JSON field set or nonce spelling; real runtime close must remove
 that exact path (lstat ENOENT). No other file or lock is excluded, and ordinary
 read-before/read-after maps still compare that file completely. Actual loaded
 assemblies/RID SQLite are rehashed against supplied

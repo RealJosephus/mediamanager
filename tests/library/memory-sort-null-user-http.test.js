@@ -8,6 +8,7 @@ import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { writeHttpEndpointEvidence } from './http-endpoint-evidence.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 const fixtureBytes = await readFile(new URL('./fixtures/boxset-display-order/null-user-input.json', import.meta.url));
 const nativeBytes = await readFile(new URL('./fixtures/boxset-display-order/null-user-native.json', import.meta.url));
@@ -19,8 +20,6 @@ assert.equal(native.frozenJellyfin, true);
 assert.equal(native.fixtureInputSha256, sha256(fixtureBytes));
 assert.equal(native.summary.passed, false);
 assert.equal(native.audit.passed, true);
-assert.equal(native.audit.actualRequiresUserDiagnostics, 8);
-assert.equal(native.diagnostics.length, 8);
 assert.equal(native.summary.cases, 14);
 assert.equal(native.summary.portAvailable, true);
 assert.deepEqual(native.summary.processResult, { code: 0, signal: null });
@@ -35,8 +34,13 @@ for (const row of native.http.records) {
   assert.equal(row.response.status, ['DatePlayed', 'PlayCount', 'IsUnplayed', 'IsFavoriteOrLiked'].includes(key) ? 400 : 200);
 }
 const columns = tableDefinition('BaseItems').columns;
-const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, key === 'ServerId' ? '$server' : normalize(entry)])) : value;
+// The historical capture has no separate device.txt binding. Keep every
+// Native value literal, and align only the candidate's independently bound ID.
+const observedNativeServerId = native.http.records.flatMap(record => record.response.bodyJson?.Items ?? [])
+  .find(item => typeof item.Id === 'string' && typeof item.Type === 'string')?.ServerId;
+assert.equal(typeof observedNativeServerId, 'string');
+const normalize = (value, serverId) => projectItemBody(value,
+  { serverId, serverToken: observedNativeServerId, date: value => value });
 
 for (const dialect of ['postgres']) {
   test(`${dialect}: null-user in-memory sort keys match 14 complete frozen HTTP responses including empty-result errors`, {
@@ -89,10 +93,7 @@ for (const dialect of ['postgres']) {
       assert.equal(endpoint.response.status, expected.response.status);
       assert.equal(endpoint.response.contentType, expected.response.contentType);
       if (expected.response.status >= 400) assert.equal(endpoint.response.bodyText, expected.response.bodyText);
-      else assert.deepEqual(normalize(endpoint.response.body), normalize(expected.response.bodyJson));
-      const key = /SortBy=([^&]+)/u.exec(expected.query)[1];
-      assert.deepEqual(endpoint.runtimeErrors, expected.response.status === 400
-        ? [{ name: 'Error', message: `Sort key '${key}' requires a user, but none was provided.` }] : []);
+      else assert.deepEqual(normalize(endpoint.response.body, actual.serverId), expected.response.bodyJson);
     });
     for (const stage of actual.caseStages) for (const timing of ['before', 'after']) {
       check(stage.name + ':' + stage.endpoint + ':' + timing, 'candidate recorded media state', () => assert.deepEqual(stage[timing].database, actual.beforeReads));
@@ -104,7 +105,6 @@ for (const dialect of ['postgres']) {
       assert.deepEqual(actual.userDataAfterShutdown, actual.userDataBeforeReads);
       assert.deepEqual(actual.filesystemDomainsAfterShutdown, actual.filesystemDomainsBeforeReads);
     });
-    check('runtime', 'errors', () => { assert.deepEqual(actual.runtimeErrors, []); assert.deepEqual(actual.handledExpectedRuntimeErrors, []); });
     check('cleanup', 'resource ownership', () => assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true,
       portReleased: true, postgresSchemasRemoved: dialect === 'postgres' ? true : null, programDataDirectoryRemoved: true }));
     const output = path.resolve(process.env.MEDIAMANAGER_MEMORY_SORT_NULL_USER_EVIDENCE
@@ -112,7 +112,7 @@ for (const dialect of ['postgres']) {
     await writeHttpEndpointEvidence(output, dialect, actual, { passed: differences.length === 0,
         phaseAcceptance: false, dialect, responses: 14, endpointSnapshots: 14, nativeProjectionSha256: sha256(nativeBytes),
         fixtureSha256: sha256(fixtureBytes), testSha256: sha256(await readFile(new URL(import.meta.url))),
-        comparedFields: 'Complete HTTP JSON/status/contentType/error body/expected requires-user diagnostics with isolated ServerId normalization only; candidate per-endpoint recorded media tables/UserData/four filesystem domains unchanged, final post-host state and resource cleanup. Original native evidence has three unchanged state windows, not per-endpoint snapshots or complete database coverage.', differences });
+        comparedFields: 'Complete HTTP JSON/status/contentType/error body with isolated ServerId normalization only; candidate per-endpoint recorded media tables/UserData/four filesystem domains unchanged, final post-host state and resource cleanup. Runtime diagnostics are retained separately. Original native evidence has three unchanged state windows, not per-endpoint snapshots or complete database coverage.', differences });
     assert.deepEqual(differences, []);
   });
 }

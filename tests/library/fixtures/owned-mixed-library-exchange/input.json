@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "scope": "One owned five-library topology using unchanged existing media, a separate actual Native baseline from the saved empty instance, untyped and typed owned video contracts, actual scans, HTTP edits/deletion, cold PostgreSQL, complete SQLite exchange and actual Native continuation. No real disc or production-scale claim.",
+  "assets": {
+    "video": {
+      "filename": "tests/playback/fixtures/vobsub-delivery/source.mkv",
+      "bytes": 1896947,
+      "sha256": "4a9a6e3be221f0d08506ca6bbd6d3ad73819c82605871e9fd981b7bf14399a6c",
+      "contentType": "video/x-matroska"
+    },
+    "audio": {
+      "filename": "tests/playback/fixtures/flac-copy-current/assets/upstream/subset/60 - mono audio.flac",
+      "bytes": 47782,
+      "sha256": "20539fbbd6ae28cea2b2182a4c60c6c70cbb710a136199fc83200c4e5fa00b1c",
+      "contentType": "audio/flac"
+    },
+    "book": {
+      "filename": "tests/metadata/fixtures/book-opf-current/assets/main/epub/rich-both-separators.epub",
+      "bytes": 2236,
+      "sha256": "6546ac0441908023bbd7fbfb83c0252eef72a554271ff57d6fa686a90be82c22",
+      "contentType": "application/epub+zip"
+    },
+    "photo": {
+      "filename": "tests/metadata/fixtures/photo-provider/assets/plain.jpg",
+      "bytes": 268,
+      "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9",
+      "contentType": "image/jpeg"
+    }
+  },
+  "libraries": [
+    { "key": "mixed", "name": "Owned mixed exchange", "directory": "Mixed", "type": null },
+    { "key": "movies", "name": "Owned typed movies exchange", "directory": "Movies", "type": "movies" },
+    { "key": "music", "name": "Owned music exchange", "directory": "Music", "type": "music" },
+    { "key": "books", "name": "Owned books exchange", "directory": "Books", "type": "books" },
+    { "key": "photos", "name": "Owned photos exchange", "directory": "Photos", "type": "homevideos" }
+  ],
+  "libraryOptions": {
+    "Enabled": true,
+    "EnableRealtimeMonitor": false,
+    "EnableInternetProviders": false,
+    "SaveLocalMetadata": false,
+    "MetadataSavers": [],
+    "AutomaticRefreshIntervalDays": 0,
+    "EnablePhotos": true,
+    "EnableLUFSScan": false,
+    "EnableEmbeddedEpisodeInfos": false,
+    "EnableChapterImageExtraction": false,
+    "ExtractChapterImagesDuringLibraryScan": false,
+    "EnableTrickplayImageExtraction": false,
+    "ExtractTrickplayImagesDuringLibraryScan": false
+  },
+  "disabledRemoteTypes": ["Movie", "Video", "Trailer", "Series", "Season", "Episode", "MusicArtist", "MusicAlbum", "Audio", "Genre", "MusicGenre", "Studio", "Person", "Folder", "CollectionFolder"],
+  "directories": [
+    { "key": "series", "path": "Mixed/Frozen Show", "type": "Series", "name": "Frozen Show", "overview": "Frozen series & 中文" },
+    { "key": "season", "path": "Mixed/Frozen Show/Season 1", "type": "Season", "name": "Season 1", "parent": "series", "number": 1, "overview": "Frozen season" },
+    { "key": "artist", "path": "Music/Frozen Artist", "type": "MusicArtist", "name": "Frozen Artist", "overview": "Frozen artist" },
+    { "key": "album", "path": "Music/Frozen Artist/Frozen Album", "type": "MusicAlbum", "name": "Frozen Album", "parent": "artist", "overview": "Frozen album" },
+    { "key": "photoAlbum", "path": "Photos/Album", "type": "PhotoAlbum", "name": "Album" }
+  ],
+  "files": [
+    { "key": "director", "path": "Mixed/Film/Film - Director cd1.mkv", "asset": "video", "type": "Movie", "family": "film" },
+    { "key": "directorPart", "path": "Mixed/Film/Film - Director cd2.mkv", "asset": "video", "type": "Video", "owner": "director", "family": "film" },
+    { "key": "theatrical", "path": "Mixed/Film/Film - Theatrical cd1.mkv", "asset": "video", "type": "Movie", "owner": "director", "primaryVersion": "director", "family": "film" },
+    { "key": "theatricalPart", "path": "Mixed/Film/Film - Theatrical cd2.mkv", "asset": "video", "type": "Video", "owner": "theatrical", "family": "film", "untypedAlternatePart": true },
+    { "key": "trailer", "path": "Mixed/Film/trailers/Official.mkv", "asset": "video", "type": "Trailer", "ownedExtra": true, "family": "film" },
+    { "key": "theme", "path": "Mixed/Film/theme-music/Theme.flac", "asset": "audio", "type": "Audio", "ownedExtra": true, "family": "film" },
+    { "key": "typedDirector", "path": "Movies/Typed Film/Typed Film - Director cd1.mkv", "asset": "video", "type": "Movie", "family": "typed-film" },
+    { "key": "typedDirectorPart", "path": "Movies/Typed Film/Typed Film - Director cd2.mkv", "asset": "video", "type": "Video", "owner": "typedDirector", "family": "typed-film" },
+    { "key": "typedTheatrical", "path": "Movies/Typed Film/Typed Film - Theatrical cd1.mkv", "asset": "video", "type": "Movie", "owner": "typedDirector", "primaryVersion": "typedDirector", "family": "typed-film" },
+    { "key": "typedTheatricalPart", "path": "Movies/Typed Film/Typed Film - Theatrical cd2.mkv", "asset": "video", "type": "Video", "owner": "typedTheatrical", "family": "typed-film" },
+    { "key": "typedTrailer", "path": "Movies/Typed Film/trailers/Official.mkv", "asset": "video", "type": "Trailer", "ownedExtra": true, "family": "typed-film" },
+    { "key": "typedTheme", "path": "Movies/Typed Film/theme-music/Theme.flac", "asset": "audio", "type": "Audio", "ownedExtra": true, "family": "typed-film" },
+    { "key": "episode1", "path": "Mixed/Frozen Show/Season 1/Frozen Show S01E01.mkv", "asset": "video", "type": "Episode", "name": "Opening episode", "parent": "season", "number": 1, "overview": "Frozen opening" },
+    { "key": "episode2", "path": "Mixed/Frozen Show/Season 1/Frozen Show S01E02.mkv", "asset": "video", "type": "Episode", "name": "Second episode", "parent": "season", "number": 2, "overview": "Frozen second" },
+    { "key": "shortcut", "path": "Mixed/Linked/Linked.strm", "text": "http://127.0.0.1:5244/owned-joint-source.mkv\n", "type": "Movie", "shortcut": "shortcutSource", "contentType": "text/plain" },
+    { "key": "track1", "path": "Music/Frozen Artist/Frozen Album/01 - Opening.flac", "asset": "audio", "type": "Audio", "parent": "album" },
+    { "key": "removedTrack", "path": "Music/Frozen Artist/Frozen Album/02 - Removable.flac", "asset": "audio", "type": "Audio", "parent": "album" },
+    { "key": "retainedBook", "path": "Books/Retained.epub", "asset": "book", "type": "Book" },
+    { "key": "removedBook", "path": "Books/Removed.epub", "asset": "book", "type": "Book" },
+    { "key": "photo", "path": "Photos/Album/Retained.jpg", "asset": "photo", "type": "Photo", "parent": "photoAlbum" },
+    { "key": "nodeTrack", "path": "Music/Frozen Artist/Frozen Album/03 - Node Addition.flac", "asset": "audio", "type": "Audio", "parent": "album", "phase": "node" },
+    { "key": "episode3", "path": "Mixed/Frozen Show/Season 1/Frozen Show S01E03.mkv", "asset": "video", "type": "Episode", "name": "Native episode", "parent": "season", "number": 3, "overview": "Native joint continuation", "phase": "native" },
+    { "key": "nativeTrack", "path": "Music/Frozen Artist/Frozen Album/04 - Native Addition.flac", "asset": "audio", "type": "Audio", "parent": "album", "phase": "native" },
+    { "key": "nativePhoto", "path": "Photos/Album/Native.jpg", "asset": "photo", "type": "Photo", "parent": "photoAlbum", "phase": "native" },
+    { "key": "extended", "path": "Mixed/Film/Film - Extended cd1.mkv", "asset": "video", "type": "Movie", "owner": "director", "primaryVersion": "director", "family": "film", "phase": "native" },
+    { "key": "extendedPart", "path": "Mixed/Film/Film - Extended cd2.mkv", "asset": "video", "type": "Video", "owner": "extended", "family": "film", "phase": "native", "untypedAlternatePart": true },
+    { "key": "typedExtended", "path": "Movies/Typed Film/Typed Film - Extended cd1.mkv", "asset": "video", "type": "Movie", "owner": "typedDirector", "primaryVersion": "typedDirector", "family": "typed-film", "phase": "native" },
+    { "key": "typedExtendedPart", "path": "Movies/Typed Film/Typed Film - Extended cd2.mkv", "asset": "video", "type": "Video", "owner": "typedExtended", "family": "typed-film", "phase": "native" },
+    { "key": "shortcutSource", "path": "../sources/shortcut.mkv", "asset": "video", "aliases": ["/owned-joint-source.mkv"], "sourceOnly": true }
+  ],
+  "sidecars": [
+    { "path": "Mixed/Frozen Show/tvshow.nfo", "text": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<tvshow><title>Frozen Show</title><plot>Frozen series &amp; 中文</plot><uniqueid type=\"Tvdb\">990027</uniqueid><displayorder>aired</displayorder><jointExtension>Keep unknown XML &amp; 保留</jointExtension></tvshow>\n" },
+    { "path": "Mixed/Frozen Show/Season 1/season.nfo", "text": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<season><title>Season 1</title><seasonnumber>1</seasonnumber><plot>Frozen season</plot><jointExtension>Keep unknown XML &amp; 保留</jointExtension></season>\n" },
+    { "path": "Mixed/Frozen Show/Season 1/Frozen Show S01E01.nfo", "text": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<episodedetails><title>Opening episode</title><season>1</season><episode>1</episode><showtitle>Frozen Show</showtitle><plot>Frozen opening</plot><jointExtension>Keep unknown XML &amp; 保留</jointExtension></episodedetails>\n" },
+    { "path": "Mixed/Frozen Show/Season 1/Frozen Show S01E02.nfo", "text": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<episodedetails><title>Second episode</title><season>1</season><episode>2</episode><showtitle>Frozen Show</showtitle><plot>Frozen second</plot></episodedetails>\n" },
+    { "path": "Mixed/Frozen Show/Season 1/Frozen Show S01E03.nfo", "phase": "native", "text": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<episodedetails><title>Native episode</title><season>1</season><episode>3</episode><showtitle>Frozen Show</showtitle><plot>Native joint continuation</plot></episodedetails>\n" },
+    { "path": "Music/Frozen Artist/artist.nfo", "text": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<artist><name>Frozen Artist</name><biography>Frozen artist</biography><jointExtension>Keep unknown XML &amp; 保留</jointExtension></artist>\n" },
+    { "path": "Music/Frozen Artist/Frozen Album/album.nfo", "text": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<album><title>Frozen Album</title><review>Frozen album</review><jointExtension>Keep unknown XML &amp; 保留</jointExtension></album>\n" },
+    { "path": "Music/Frozen Artist/Frozen Album/unrelated.keep", "text": "This unknown album sibling survives individual audio deletion.\n" },
+    { "path": "Mixed/unrelated.keep", "text": "This unknown mixed-library sibling survives owned movie deletion.\n" },
+    { "path": "Movies/unrelated.keep", "text": "This unknown typed-library sibling survives owned movie deletion.\n" }
+  ],
+  "ownedFamilies": [
+    { "primary": "director", "trailer": "trailer", "theme": "theme" },
+    { "primary": "typedDirector", "trailer": "typedTrailer", "theme": "typedTheme" }
+  ],
+  "mutations": {
+    "nodeDelete": ["removedBook", "removedTrack"],
+    "nodeEpisode": { "Overview": "Episode edited by Node & 中文", "ProviderIds": { "Tvdb": "99002701", "JointUnknown": "preserve-provider-value" }, "Tags": ["Joint edit", "保留"] },
+    "nodeAlbum": { "Overview": "Album edited by Node & 中文", "ProviderIds": { "JointUnknown": "preserve-album-provider" }, "Tags": ["Joint album"] },
+    "nodeTrack": { "ArtistItems": [{ "Name": "Frozen Artist" }], "AlbumArtists": [{ "Name": "Frozen Artist" }], "Album": "Frozen Album", "Overview": "Original FLAC edited through metadata only" },
+    "nativeEpisode": { "Overview": "Episode continued by Native & 中文" },
+    "nativeDeletePrimaries": [{ "family": "film", "primary": "director" }, { "family": "typed-film", "primary": "typedDirector" }],
+    "favorite": "retainedBook",
+    "played": "episode1"
+  },
+  "bookCover": { "bytes": 95, "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d" },
+  "photoPixels": { "width": 8, "height": 6 },
+  "notCovered": ["real DVD or Blu-ray media/indices", "production library size", "arbitrary plugin entities", "transcoding or newly generated media"]
+}

@@ -15,9 +15,9 @@ import { PostgresDatabase } from '../../src/database/postgres.js';
 import { transferDatabase, exportCurrentSqlite } from '../../src/migration/database-transfer.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
-import { addTrack, albumNfoSnapshot, assertRemoved, assetSnapshot, completeSnapshot, createMedia, databaseFilename,
-  idKey, input, inputBytes, installStoppedExport, itemSnapshot, portAvailable,
-  removeSyntheticPreparation, sha, stoppedDatabase, unusedPort } from './fixtures/music-library-exchange/scenario.js';
+import { addTrack, albumNfoSnapshot, assetSnapshot, createMedia, input, inputBytes } from './fixtures/music-library-exchange/scenario.js';
+import { assertRemoved, completeSnapshot, databaseFilename, idKey, installStoppedExport, itemSnapshot, portAvailable,
+  removeSyntheticPreparation, sha, stoppedDatabase, unusedPort } from '../helpers/library-exchange-state.js';
 import { startMusicMediaProxy } from './fixtures/music-library-exchange/media-proxy.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];

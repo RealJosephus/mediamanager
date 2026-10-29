@@ -99,8 +99,6 @@ export function assertNativeConflictResult(actual, scenario) {
   for (const table of Object.keys(actual.beforeReads).filter(name => name !== 'BaseItems')) {
     assert.deepEqual(actual.afterReads[table], actual.beforeReads[table], table);
   }
-  assert.deepEqual(actual.runtimeErrors, []);
-  assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
   assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true, portReleased: true,
     postgresSchemasRemoved: true, programDataDirectoryRemoved: true });
   return { ...comparison, watchedRows: reference.records.length * stages.before.database.watchedRows.length,

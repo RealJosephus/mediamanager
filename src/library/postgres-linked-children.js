@@ -8,7 +8,7 @@ import { nativeTextBytes, decodeNativeTextBytes } from '../database/native-text.
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { nativeGuid } from '../users/native.js';
 import { clrTrim } from '../metadata/whitespace.js';
-import { createPostgresNativeResourceGraph } from './postgres-native-resource-graph.js';
+import { createNativeResourceGraph } from './native-resource-graph.js';
 import { mapRecord } from './records.js';
 
 const handles = new WeakSet();
@@ -141,10 +141,12 @@ export class PostgresLinkedChildrenStore {
         CREATE TABLE ${q(this.schemaName)}.item_cohorts (view_id uuid NOT NULL,"Ordinal" bigint NOT NULL,
           scope_id uuid NOT NULL,slot_id uuid NOT NULL,PRIMARY KEY(view_id,"Ordinal"));
         CREATE TABLE ${q(this.schemaName)}.folder_child_ids (scope_id uuid NOT NULL,"Ordinal" bigint NOT NULL,
-          "Id" bytea NOT NULL,PRIMARY KEY(scope_id,"Ordinal"));`);
+          "Id" bytea NOT NULL,PRIMARY KEY(scope_id,"Ordinal"));
+        CREATE INDEX ON ${this.pins}(set_id);
+        CREATE INDEX ON ${q(this.schemaName)}.item_cohorts(scope_id);`);
     });
     this.#initialized = true;
-    this.resourceGraph = await createPostgresNativeResourceGraph({ linkedChildren: this });
+    this.resourceGraph = await createNativeResourceGraph({ linkedChildren: this });
   }
   check(handle) {
     this.#active(true);
@@ -460,23 +462,36 @@ export class PostgresLinkedChildrenStore {
     if (handle === EMPTY_NATIVE_LINKS || handle === null || handle?.released) return;
     return this.#operationContext.run(this, async () => {
       this.check(handle);
-      if (!this.#requestRelease(handle)) return;
-      try { await this.#collect(handle.entry, session); }
-      catch (error) { this.#pendingReleases.add(handle.entry); throw error; }
+      // Register the complete cleanup before withdrawing its final reference.
+      // close() must not drop the schema while this admitted DELETE is pending.
+      const releaseOperation = this.#lease();
+      try {
+        if (!this.#requestRelease(handle)) return;
+        try { await this.#collect(handle.entry, session); }
+        catch (error) { this.#pendingReleases.add(handle.entry); throw error; }
+      } finally { releaseOperation(); }
     });
   }
   async flushReleases({ session } = {}) {
+    if (!this.#pendingReleases.size) return;
     return this.#operationContext.run(this, async () => {
-    const errors = [];
-    for (const entry of this.#pendingReleases) {
-      try { await this.#collect(entry, session); this.#pendingReleases.delete(entry); }
-      catch (error) { errors.push(error); }
-    }
-    if (errors.length) throw new AggregateError(errors, 'SQL link ownership release failed.');
+      const releaseOperation = this.#lease();
+      try {
+        const errors = [];
+        for (const entry of this.#pendingReleases) {
+          try { await this.#collect(entry, session); this.#pendingReleases.delete(entry); }
+          catch (error) { errors.push(error); }
+        }
+        if (errors.length) throw new AggregateError(errors, 'SQL link ownership release failed.');
+      } finally { releaseOperation(); }
     });
   }
   async releaseStateScope(scopeId, { session } = {}) {
     await this.#using(session?.inTransaction ? null : session,async db=>{
+      // The last scope owner has drained its writers. An actual empty SQL
+      // relation has nothing to unpin or collect, including non-Folder slots.
+      const pinned=(await db.client.query(`SELECT EXISTS(SELECT 1 FROM ${this.pins} WHERE scope_id=$1) AS present`,[scopeId])).rows[0].present;
+      if(!pinned)return;
       const candidates=q('mm_unpin_'+randomUUID().replaceAll('-','')),protectedSets=q('mm_active_'+randomUUID().replaceAll('-',''));
       try{
         await db.client.query(`CREATE TEMP TABLE ${candidates} AS SELECT DISTINCT set_id FROM ${this.pins} WHERE scope_id=$1`,[scopeId]);
@@ -545,19 +560,29 @@ export class PostgresLinkedChildrenStore {
     if (!item.LinkedChildrenLoaded) return;
     this.plan(item.LinkedChildren); // Preserve the native null sentinel failure.
     const captured=item.LinkedChildren===EMPTY_NATIVE_LINKS?EMPTY_NATIVE_LINKS:this.retain(item.LinkedChildren);
-    const source = this.plan(captured), temporary = q('mm_link_save_' + randomUUID().replaceAll('-', ''));
+    const source = this.plan(captured);
     try{
     const sql = nativeTextSql(session.schemaName), items = `${q(session.schemaName)}.${q('BaseItems')}`;
     const links = `${q(session.schemaName)}.${q('LinkedChildren')}`, order = `${q(session.controlSchema)}.item_order`;
-    await session.client.query(`CREATE TEMP TABLE ${temporary}("Ordinal" bigint PRIMARY KEY,"ItemId" bytea,"Type" integer,"Path" bytea,"LibraryItemId" bytea,"OriginalPath" bytea) ON COMMIT DROP`);
     // A relation published after this caller's REPEATABLE READ began is not
     // visible through that transaction. Read its pinned revision on the live
     // relation pool and copy bounded raw pages into the caller's SQL work set.
-    for(let after=0n;;){const rows=await this.#using(null,async database=>(await database.client.query({
+    const readPage = after => this.#using(null, async database => (await database.client.query({
       text:`SELECT * FROM (${source.text}) source WHERE "Ordinal">$${source.values.length+1} ORDER BY "Ordinal" LIMIT 128`,values:[...source.values,after]})).rows);
-      if(!rows.length)break;const values=[],tuples=rows.map(row=>'('+[row.Ordinal,row.ItemId,row.Type,row.Path,row.LibraryItemId,row.Path].map(value=>{values.push(value);return'$'+values.length;}).join(',')+')');
+    let rows = await readPage(0n);
+    // An actual empty raw revision has no path or resolution work. Its
+    // replacement still belongs to the caller transaction and can roll back.
+    if (!rows.length) {
+      await session.client.query(`DELETE FROM ${links} WHERE ${sql.guidKey('"ParentId"')}=${sql.guidKey('$1::bytea')}`, [encode(item.Id)]);
+      return;
+    }
+    const temporary = q('mm_link_save_' + randomUUID().replaceAll('-', ''));
+    await session.client.query(`CREATE TEMP TABLE ${temporary}("Ordinal" bigint PRIMARY KEY,"ItemId" bytea,"Type" integer,"Path" bytea,"LibraryItemId" bytea,"OriginalPath" bytea) ON COMMIT DROP`);
+    for (;;) {
+      const values=[],tuples=rows.map(row=>'('+[row.Ordinal,row.ItemId,row.Type,row.Path,row.LibraryItemId,row.Path].map(value=>{values.push(value);return'$'+values.length;}).join(',')+')');
       await session.client.query({text:`INSERT INTO ${temporary}("Ordinal","ItemId","Type","Path","LibraryItemId","OriginalPath") VALUES ${tuples.join(',')}`,values});
-      after=BigInt(rows.at(-1).Ordinal);
+      rows = await readPage(BigInt(rows.at(-1).Ordinal));
+      if (!rows.length) break;
     }
     // Path reversal is a declared Node runtime operation. Visit one bounded
     // raw page at a time; SQL retains every member and resolution projection.
@@ -623,6 +648,12 @@ export class PostgresLinkedChildrenStore {
       try { await this.flushOwnedReleases(); } catch (error) { failures.push(error); }
       if (this.#initialized) await this.#operationContext.run(this, async () => {
         try { await this.flushReleases(); } catch (error) { failures.push(error); }
+        // Explicit cleanup may have entered while the internal flush awaited
+        // SQL. Drain it, then withdraw admission before scheduling the DROP.
+        while (this.#operations.size || [...this.#entries.values()].some(entry => entry.references !== 0)) {
+          await new Promise(resolve => this.#drainWaiters.add(resolve));
+        }
+        this.#closed = true;
         try { await this.relationDatabase.withConnection(db => db.client.query(`DROP SCHEMA ${q(this.schemaName)} CASCADE`)); }
         catch (error) { failures.push(error); }
       });

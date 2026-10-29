@@ -17,6 +17,10 @@ export function makeInput() {
     sample('empty inventory positive offset validates count', { providers: [], seeds: [], query: { StartIndex: 1 }, catalogFail: 400 }),
     sample('empty inventory negative offset validates index', { providers: [], seeds: [], query: { StartIndex: -1, Limit: -9 }, catalogFail: 400 }),
     sample('empty inventory favorite has no user dereference', { providers: [], seeds: [], user: false, query: { IsFavorite: true } }),
+    sample('installed roots are created before markers remove every favorite candidate', {
+      providers: [structuredClone(providers[1])], seeds: [], user: false,
+      query: { SupportsLatestItems: true, IsFavorite: true },
+    }),
     sample('installed roots preserve live SortName and retained fields'),
     sample('unsaved warm name and image remain the actual catalog and Views entity', { seeds: seeds.map(seed => seed.providerName === 'Alpha' ? { ...seed, WarmName: 'Warm unsaved Alpha', WarmImage: true } : seed) }),
     sample('userless catalog does not invoke enablement', { user: false }),

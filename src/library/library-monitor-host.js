@@ -19,6 +19,9 @@ const pluginFolder = item => ['BasePluginFolder', 'PlaylistsFolder'].includes(it
 const optionsForChange = () => ({ MetadataRefreshMode: 'Default', ImageRefreshMode: 'Default', IsAutomated: true,
   ReplaceAllMetadata: false, ReplaceAllImages: false, ForceSave: false, RemoveOldMetadata: false, RefreshPaths: [] });
 const missing = error => ['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].includes(error?.code);
+const watchFailure = errors => errors.length === 1 ? errors[0]
+  : Object.assign(new AggregateError(errors, errors[0]?.message ?? 'Watch path enumeration and cleanup failed.', { cause: errors[0] }),
+    Object.fromEntries(['code', 'status', 'statusCode'].filter(key => errors[0]?.[key] !== undefined).map(key => [key, errors[0][key]])));
 
 /** Connect native monitor policy to the authoritative query, storage and
  * shared provider queue. Each lookup remains bounded and retains its entity
@@ -50,10 +53,10 @@ export class LibraryMonitorHost {
 
   async *getWatchPaths() {
     const first = Promise.withResolvers();
-    let closed = false;
+    let closed = false, cursor = first, workerFailed = false, workerFailure;
     const worker = this.store.run(async db => {
       const name = q('mm_monitor_paths_' + randomUUID().replaceAll('-', ''));
-      let cursor = first, collation, failure;
+      let collation, failure, failed = false;
       try {
         await db.client.query(`CREATE TEMP TABLE ${name}(ordinal bigint GENERATED ALWAYS AS IDENTITY, path bytea UNIQUE)`);
         const root = await this.scanHost.getAggregateFolder();
@@ -78,22 +81,39 @@ export class LibraryMonitorHost {
           cursor = next;
           after = BigInt(page.at(-1).position);
         }
-      } catch (error) { failure = error; }
+      } catch (error) { failed = true; failure = error; }
       finally {
-        try { await collation?.release(failure); await db.client.query(`DROP TABLE IF EXISTS ${name}`); }
-        catch (error) { failure ??= error; db.discardConnection?.(error); }
-        cursor.resolve(failure ? { error: failure } : null);
+        const cleanup = [];
+        try { await collation?.release(failure); } catch (error) { cleanup.push(error); }
+        if (!db.connectionReleaseError) {
+          try { await db.client.query(`DROP TABLE IF EXISTS ${name}`); }
+          catch (error) { cleanup.push(error); }
+        }
+        if (cleanup.length) {
+          db.discardConnection?.(cleanup[0]);
+          throw watchFailure(failed ? [failure, ...cleanup] : cleanup);
+        }
       }
-    }).catch(error => first.resolve({ error }));
-    let current = first.promise, chunk;
+      if (failed) throw failure;
+      // The terminal chunk belongs to the complete store operation, including
+      // its physical connection release, rather than just the SQL callback.
+    }).then(() => cursor.resolve(null), error => {
+      workerFailed = true; workerFailure = error; cursor.resolve({ error });
+    });
+    let current = first.promise, chunk, failed = false, failure, observedFailure = false;
     try {
       while ((chunk = await current)) {
-        if (chunk.error) throw chunk.error;
+        if (Object.hasOwn(chunk, 'error')) { observedFailure = true; throw chunk.error; }
         current = chunk.next;
-        try { yield* chunk.values; }
+        try { for (const identity of chunk.values) yield identity; }
         finally { chunk.acknowledged.resolve(); }
       }
-    } finally { closed = true; chunk?.acknowledged?.resolve(); await worker; }
+    } catch (error) { failed = true; failure = error; throw error; }
+    finally {
+      // Returning from a yielded page must unblock and drain the same owner.
+      closed = true; chunk?.acknowledged?.resolve(); await worker;
+      if (workerFailed && !observedFailure) throw watchFailure(failed ? [failure, workerFailure] : [workerFailure]);
+    }
   }
 
   async watchPath(identity, { signal, onChange, onError } = {}) {

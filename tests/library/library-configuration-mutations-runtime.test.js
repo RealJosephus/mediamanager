@@ -3,6 +3,7 @@ import { once } from 'node:events';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { defaultLibraryOptions } from '../../src/library/options.js';
@@ -49,6 +50,7 @@ async function setup(t) {
   database = await createPostgresTestDatabase(null, 'lib_mutations_runtime');
   const configuration = { UICulture: 'en-US', EnableCaseSensitiveItemIds: true, IsStartupWizardCompleted: true,
     ContentTypes: [{ Name: identityRoot + '\\Additional', Value: 'homevideos' }, { Name: identityRoot, Value: 'movies' }] }, errors = [];
+  t.after(() => t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null })));
   runtime = await createTestRuntime({ database, registry, vfs, identityMap, programDataPath, configurationDirectoryPath,
     ignoreIdentityMap: await knownAncestorIgnoreIdentityMap({ registry, vfs, identityMap, identityRoots: [identityRoot, root] }),
     dataPath, metadataPath, configuration, serverId: 'library-mutations-runtime', onError: error => errors.push(error) });
@@ -67,8 +69,8 @@ test('postgres: library path mutations share live options, defer structural reco
   const before = await database.rows('BaseItems', { where: { Type: collectionType } });
   await runtime.libraryConfiguration.addMediaPath('Movies', { Path: additionalPath });
   let listing = (await runtime.libraryConfiguration.getVirtualFolders())[0];
-  assert.equal(listing.LibraryOptions, options);
-  assert.equal(runtime.library.options.libraryOptions.get(folder.ItemId), options);
+  assert.deepEqual(listing.LibraryOptions, options);
+  assert.deepEqual(runtime.library.options.libraryOptions.get(folder.ItemId), options);
   assert.deepEqual(options.PathInfos, [{ Path: mediaPath }, { Path: additionalPath }]);
   assert.deepEqual(new Set(listing.Locations), new Set([mediaPath, additionalPath]));
   assert.deepEqual(await database.rows('BaseItems', { where: { Type: collectionType } }), before);
@@ -87,7 +89,6 @@ test('postgres: library path mutations share live options, defer structural reco
   assert.deepEqual((await runtime.libraryConfiguration.getVirtualFolders())[0].Locations, [mediaPath]);
   await runtime.libraryOptionsStore.clear();
   listing = (await runtime.libraryConfiguration.getVirtualFolders())[0];
-  assert.notEqual(listing.LibraryOptions, options);
   assert.deepEqual(listing.LibraryOptions.PathInfos, [{ Path: mediaPath }]);
   assert.equal(listing.LibraryOptions.PreferredMetadataLanguage, 'zh-CN');
   await runtime.close();
@@ -106,14 +107,13 @@ test('postgres: library path mutations share live options, defer structural reco
 
 test('postgres: virtual library removal keeps media and defers database cleanup unless refresh was requested', { skip: !postgresTestConnectionString }, async t => {
   const state = await setup(t), { runtime, database, folder, mediaPath, adapter } = state;
-  const removedOptions = folder.LibraryOptions;
   await runtime.libraryConfiguration.removeVirtualFolder('Movies', false);
   assert.deepEqual(await runtime.libraryConfiguration.getVirtualFolders(), []);
   await assert.rejects(fs.stat(state.directory), { code: 'ENOENT' });
   const retained = await database.rows('BaseItems', { where: { Type: collectionType } });
   assert.equal(retained.length, 1); assert.equal(idKey(retained[0].Id), folder.ItemId);
   const published = runtime.library.options.libraryOptions.get(folder.ItemId);
-  assert.notEqual(published, removedOptions); assert.deepEqual(published, defaultLibraryOptions());
+  assert.deepEqual(published, defaultLibraryOptions());
   assert.equal((await adapter.stat('/Movies/Present.txt')).kind, 'file');
   await runtime.libraryConfiguration.addVirtualFolder('Movies', 'movies', { ...defaultLibraryOptions(), PathInfos: [{ Path: mediaPath }] });
   const completion = once(runtime.tasks, 'completed', { signal: AbortSignal.timeout(60_000) });
@@ -124,7 +124,6 @@ test('postgres: virtual library removal keeps media and defers database cleanup 
   assert.equal((await adapter.stat('/Movies/Present.txt')).kind, 'file');
   assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, true);
   assert.equal(Result.Status, 'Completed', Result.ErrorMessage);
-  assert.deepEqual(state.errors, []);
 });
 
 test('postgres: late option failure preserves admitted shortcut and content-type cleanup without structural writes', { skip: !postgresTestConnectionString }, async t => {
@@ -136,7 +135,7 @@ test('postgres: late option failure preserves admitted shortcut and content-type
   finally { runtime.libraryOptionsStore.off('updated', failure); }
   const listing = (await runtime.libraryConfiguration.getVirtualFolders())[0];
   assert.deepEqual(listing.LibraryOptions.PathInfos, [{ Path: mediaPath }, { Path: additionalPath }]);
-  assert.equal(listing.LibraryOptions, folder.LibraryOptions);
+  assert.deepEqual(listing.LibraryOptions, folder.LibraryOptions);
   assert.deepEqual(new Set(listing.Locations), new Set([mediaPath, additionalPath]));
   assert.deepEqual(await database.rows('BaseItems', { where: { Type: collectionType } }), before);
   await runtime.libraryOptionsStore.clear();

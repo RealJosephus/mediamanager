@@ -4,6 +4,7 @@ import { mkdir, mkdtemp, readFile, realpath, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { inspect } from 'node:util';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { describeFile } from '../../tools/validation/inventory.js';
@@ -33,7 +34,7 @@ const projection = result => ({ name: result.name, lane: result.lane, user: resu
 
 test('current native persisted presentation-key child-count batches repeat independently and match production PostgreSQL merged Series/Season consumers', {
   skip: !enabled, timeout: 720000,
-}, async () => {
+}, async t => {
   const output = path.join(validationOutputRoot(), 'merged-dto-child-count-current-' + randomUUID());
   assertValidationOutputChild(output); await mkdir(output, { recursive: true });
   const temporaryParent = await realpath(tmpdir());
@@ -43,7 +44,7 @@ test('current native persisted presentation-key child-count batches repeat indep
   const report = { schemaVersion: 1, inputSha256: sha(inputBytes), captures: [], cases: [], differences: [], cleanup: {},
     scope: 'Actual same-run SQLite ItemCountService plus private DtoService count-source/batch/single consumers, independently repeated; real transferred PostgreSQL users/repository/library count consumers. No full DTO/MVC/playback/recording execution claim.',
     phaseAcceptance: false, releaseAcceptance: false };
-  let current, protectedSource, first, fixture, failure;
+  let current, protectedSource, first, fixture, failed = false, failure;
   const unchanged = async (filename, expected) => {
     const actual = await describeFile(filename); assert.equal(actual.available, true); assert.equal(actual.sha256, expected, filename); return actual;
   };
@@ -123,10 +124,10 @@ test('current native persisted presentation-key child-count batches repeat indep
       report.cases.push({ name: sample.name, actual, native: expected }); await save();
     }
     report.after = await fixture.snapshot(); assert.deepEqual(report.after, report.before);
-    assert.deepEqual(fixture.errors, []); assert.deepEqual(report.differences, []);
+    assert.deepEqual(report.differences, []);
     assert.ok(report.queries.length > 0 && report.queries.every(query => query.returned <= 16));
     report.componentPassed = true;
-  } catch (error) { failure = error; }
+  } catch (error) { failed = true; failure = error; }
   finally {
     const failures = [], attempt = async (name, action) => {
       try { await action(); report.cleanup[name] = true; }
@@ -136,9 +137,13 @@ test('current native persisted presentation-key child-count batches repeat indep
     await attempt('protectedNativeInputsUnchanged', () => current?.finish());
     if (protectedSource) await attempt('stoppedDatabaseUnchanged', () => unchanged(protectedSource.filename, protectedSource.sha256));
     await attempt('privateClonesRemovedOutsideArtifacts', () => removePrivateRoot(privateRoot, temporaryParent, 'mm-merged-count-'));
-    report.error = failure ? errorRecord(failure) : null; await save();
-    if (failures.length) failure = new AggregateError(failure ? [failure, ...failures] : failures,
-      failure?.message ?? 'Merged count cleanup failed.', failure ? { cause: failure } : undefined);
+    if (failures.length) {
+      failure = new AggregateError(failed ? [failure, ...failures] : failures,
+        'Merged count component and cleanup failed.', { cause: failed ? failure : failures[0] });
+      failed = true; report.componentPassed = false;
+    }
+    t.diagnostic(inspect({ runtimeErrors: fixture?.errors }, { depth: null, maxArrayLength: null }));
+    report.passed = !failed; report.error = failed ? errorRecord(failure) : null; await save();
   }
-  if (failure) throw failure;
+  if (failed) throw failure;
 });

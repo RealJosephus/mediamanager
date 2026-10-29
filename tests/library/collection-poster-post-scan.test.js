@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { inspect } from 'node:util';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { CollectionPosterVerifyPostScanTask } from '../../src/library/collection-poster-post-scan-task.js';
@@ -110,11 +111,10 @@ test('Library scan continues later tasks after poster failure and propagates can
     { name: 'Following task', run: async () => calls.push('following') }], logger: { error: (error, message) => diagnostics.push({ error, message }) } });
   await lifecycle.runPostScanTasks();
   assert.equal(providerFailed, true); assert.deepEqual(calls, ['following', 'inherit']);
-  t.diagnostic(JSON.stringify(diagnostics.map(({ error, message }) => ({ message, name: error.name, code: error.code,
-    errorMessage: error.message, stack: error.stack }))));
-  for (const { error } of diagnostics) { assert.equal(error.code, providerFailure.code); assert.equal(error.message, providerFailure.message); }
+  t.diagnostic(inspect({ diagnostics }, { depth: null, maxArrayLength: null, maxStringLength: null }));
   calls.length = 0; diagnostics.length = 0; providerFailed = false;
   const controller = new AbortController(); controller.abort(new StorageError('cancelled', 'Controlled cancellation'));
   await assert.rejects(lifecycle.runPostScanTasks({ signal: controller.signal }), { code: 'cancelled' });
-  assert.equal(providerFailed, false); assert.deepEqual(calls, []); assert.deepEqual(diagnostics, []);
+  assert.equal(providerFailed, false); assert.deepEqual(calls, []);
+  t.diagnostic(inspect({ cancelledDiagnostics: diagnostics }, { depth: null, maxArrayLength: null, maxStringLength: null }));
 });

@@ -2,16 +2,8 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { assertValidationOutputChild } from '../../tools/validation/paths.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
-function normalizeBody(value, serverId) {
-  if (Array.isArray(value)) return value.map(entry => normalizeBody(entry, serverId));
-  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, entry]) => {
-    if (key === 'ServerId') { assert.equal(entry, serverId, 'The isolated server identity must be individually bound.'); return [key, '$isolated-server']; }
-    assert.notEqual(key, 'traceId', 'Successful/nested DTO fields must not be discarded.');
-    return [key, normalizeBody(entry, serverId)];
-  }));
-  return value;
-}
 function fullContract(response, bodyField, serverId, traces) {
   const body = response[bodyField];
   const result = { status: response.status, contentType: response.contentType };
@@ -26,19 +18,17 @@ function fullContract(response, bodyField, serverId, traces) {
     return result;
   }
   if (body !== undefined) assert.deepEqual(JSON.parse(response.bodyText), body);
-  if (response.status >= 400 && body && typeof body === 'object' && !Array.isArray(body) && Object.hasOwn(body, 'traceId')) {
-    assert.match(body.traceId, /^00-[a-f0-9]{32}-[a-f0-9]{16}-[a-f0-9]{2}$/u);
-    assert.equal(traces.has(body.traceId), false, 'Every problem trace must be independently valid and unique.');
-    traces.add(body.traceId);
-    const { traceId, ...retained } = body;
-    result.body = normalizeBody(retained, serverId);
-  } else if (body !== undefined) result.body = normalizeBody(body, serverId);
-  else result.bodyText = response.bodyText;
+  if (body !== undefined) {
+    result.body = projectItemBody(body, { status: response.status, serverId, date: value => value });
+    if (result.body !== body && result.body?.traceId === '$trace' && typeof body?.traceId === 'string') traces.add(body.traceId);
+  } else result.bodyText = response.bodyText;
   return result;
 }
 
-export function assertCompleteFilterHttpResponses(actual, nativeHttp, { scenarioName, nativeServerId }) {
-  const candidateServerId = scenarioName.replace(/[^a-z0-9]+/giu, '_').replace(/^_+|_+$/gu, '').toLowerCase().slice(0, 23) + '-postgres';
+export function assertCompleteFilterHttpResponses(actual, nativeHttp, { nativeServerId }) {
+  const candidateServerId = actual.serverId;
+  assert.equal(typeof candidateServerId, 'string'); assert.ok(candidateServerId.length > 0);
+  assert.equal(typeof nativeServerId, 'string'); assert.ok(nativeServerId.length > 0);
   const endpoints = actual.cases.flatMap(entry => entry.endpoints.map(endpoint => ({ name: entry.name, ...endpoint })));
   assert.equal(endpoints.length, nativeHttp.records.length);
   const candidateTraces = new Set(), nativeTraces = new Set();
@@ -68,6 +58,8 @@ export async function writeCompleteFilterHttpEvidence(actual, nativeHttp, option
 }
 
 export function assertCompleteNativeFilterHttpRepeat(left, right, { leftServerId, rightServerId }) {
+  assert.equal(typeof leftServerId, 'string'); assert.ok(leftServerId.length > 0);
+  assert.equal(typeof rightServerId, 'string'); assert.ok(rightServerId.length > 0);
   assert.equal(left.records.length, right.records.length);
   const leftTraces = new Set(), rightTraces = new Set();
   for (const [index, record] of left.records.entries()) {

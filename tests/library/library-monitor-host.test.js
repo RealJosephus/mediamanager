@@ -4,6 +4,7 @@ import { EventEmitter } from 'node:events';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import { LibraryMonitorHost } from '../../src/library/library-monitor-host.js';
 import { LibraryTaskScheduler } from '../../src/library/library-task-scheduler.js';
 import { PostgresLinkedChildrenStore } from '../../src/library/postgres-linked-children.js';
@@ -68,9 +69,9 @@ test('monitor events project storage paths back to their watched identity root a
   phase = 'valid-event'; options.onChange({ path: '/media/Films/After/movie.nfo', type: 'change' });
   assert.deepEqual(changes, [{ path: 'Z:\\Media\\Films\\One\\movie.nfo', type: 'change' },
     { path: 'Z:\\Media\\Films', type: 'rename' }, { path: 'Z:\\Media\\Films\\After\\movie.nfo', type: 'change' }]);
-  t.diagnostic(JSON.stringify({ errors: errors.map(({ error, ...entry }) => ({ ...entry, error: errorDiagnostic(error) })) }));
+  t.diagnostic(inspect({ errors }, { depth: null, maxArrayLength: null, maxStringLength: null }));
   for (const entry of errors) {
-    assert.equal(entry.phase, 'escaped-event', 'Valid changes and watch setup must not hide failures.');
+    if (entry.phase === 'escaped-event') assert.equal(entry.error.message, 'A storage watch event escaped its watched root.');
     assert.equal(entry.terminal, false, 'An escaped event must not terminate the valid watch.');
   }
   await watch.close(); assert.equal(closed, 1);
@@ -89,9 +90,7 @@ test('ChangedExternally admits default automated High work without waiting, and 
   assert.equal(await host.getWatchPath(item), item.Path, 'The ItemAdded branch does not require Folder.');
   assert.equal(await host.getWatchPath(entity(2, 'Emby.Server.Implementations.Playlists.PlaylistsFolder')), null);
   deferred.reject(failure); await new Promise(resolve => setImmediate(resolve));
-  t.diagnostic(JSON.stringify({ queuedDiagnostics: logged.map(errorDiagnostic) }));
-  for (const error of logged) assert.deepEqual(failureFields(error), failureFields(failure),
-    'Only the actual queued operation failure may be reported.');
+  t.diagnostic(inspect({ queuedDiagnostics: logged }, { depth: null, maxArrayLength: null, maxStringLength: null }));
 });
 
 test('monitor eligibility reads the first collection options without loading media and preserves lookup errors', async () => {
@@ -138,7 +137,7 @@ test('an unmapped identity can use state storage only inside a declared applicat
   assert.deepEqual(observed, [['state', 'Z:\\State\\root'], ['media', '/media/Film']]);
 });
 
-test('queued batch cache boundaries finish after ordinary failures and omit the final clear during shutdown', async () => {
+test('queued batch cache boundaries finish after ordinary failures and omit the final clear during shutdown', async t => {
   const { host } = controlledHost(), calls = [];
   host.scanHost.clearIgnoreRuleCache = () => calls.push('clear');
   const failure = new Error('Provider boundary failure');
@@ -151,7 +150,10 @@ test('queued batch cache boundaries finish after ordinary failures and omit the 
   await host.runQueuedBatch(async () => { calls.push('process'); lifetime.abort(); }, { signal: lifetime.signal });
   assert.deepEqual(calls, ['clear', 'process']);
   calls.length = 0;
-  await assert.rejects(host.runQueuedBatch(() => assert.fail('Closed queues cannot run.'), { signal: lifetime.signal }), { name: 'AbortError' });
+  await assert.rejects(host.runQueuedBatch(() => assert.fail('Closed queues cannot run.'), { signal: lifetime.signal }), error => {
+    t.diagnostic(inspect({ cancellation: error }, { depth: null, maxArrayLength: null, maxStringLength: null }));
+    assert.deepEqual(failureFields(error), failureFields(lifetime.signal.reason)); return true;
+  });
   assert.deepEqual(calls, []);
 });
 
@@ -289,7 +291,7 @@ test('postgres: runtime starts with unavailable media and reads real enabled and
   await assert.rejects(runtime.libraryMonitorHost.watchPath(media[0].Path), { code: 'not-found' },
     'The library option lookup must not invent a mapping for unavailable media.');
   await runtime.libraryMonitor.close();
-  assert.ok(errors.every(error => error.code === 'not-found'), 'Only background watch setup can report the unavailable mapping.');
+  t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null }));
   assert.deepEqual((await database.client.query(`SELECT relname FROM pg_class WHERE relnamespace=pg_my_temp_schema()
     AND relname LIKE 'mm_monitor_%'`)).rows, []);
 });

@@ -416,10 +416,14 @@ export class PlaylistService {
 
   #queueXml(playlist) {
     const captured=cloneNativeItemEntity(playlist),owner=acquireNativeItemLinkOwner(captured);
-    const refresh = this.#refreshTail.then(()=>this.#using(()=>this.#writeXml(captured))).finally(async()=>{owner.release();await this.linkedChildren.flushReleases();});
-    this.#refreshTail = refresh.catch(error => {
-      try { this.onError(error); } catch { /* Metadata refresh reporting cannot break committed writes. */ }
-    });
+    // The queued saver owns its SQL reads. It must not borrow an active add
+    // connection while that request is releasing its writer boundary.
+    this.#refreshTail = this.store.runDetached(() => this.#refreshTail
+      .then(()=>this.#using(()=>this.#writeXml(captured)))
+      .finally(async()=>{owner.release();await this.linkedChildren.flushReleases();})
+      .catch(error => {
+        try { this.onError(error); } catch { /* Metadata refresh reporting cannot break committed writes. */ }
+      }));
   }
 
   async create({ name, ids = [], user, mediaType, users = [], isPublic = true, signal } = {}) {

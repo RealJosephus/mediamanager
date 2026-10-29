@@ -1,8 +1,9 @@
 import { nativeTextBytes, decodeNativeTextBytes } from '../../src/database/native-text.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
+import { createHash, randomUUID } from 'node:crypto';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { performance } from 'node:perf_hooks';
 import path from 'node:path';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { tableDefinition, quoteIdentifier as q } from '../../src/database/model.js';
@@ -19,6 +20,7 @@ import { nativeGuid } from '../../src/users/native.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
 import { fixturePathStyle } from './fixture-state-path.js';
+import { validationOutputRoot } from '../../tools/validation/paths.js';
 
 const fixture = new URL('./fixtures/artist-maintenance/', import.meta.url);
 const [nativeBytes, inputBytes, provenanceBytes] = await Promise.all(['native.json', 'input.json', 'provenance.json'].map(name => readFile(new URL(name, fixture))));
@@ -49,6 +51,61 @@ const expectedSelection = recording => recording.names.map(name => {
   const winner = candidates.find(item => !item.IsAccessedByName) ?? candidates[0];
   return { name, id: winner?.Id ?? null };
 });
+
+async function observeDagOrder(t, database, operation) {
+  if (process.env.MEDIAMANAGER_TEST_QUERY_TIMINGS !== 'true') return operation();
+  const output = path.join(validationOutputRoot(), 'native-item-order-dag-' + randomUUID());
+  const report = { schemaVersion: 1, scope: 'Diagnostic EXPLAIN without ANALYZE of the actual forty-item DAG ordering query. '
+    + 'The production query retains its original statement_timeout and executes once; plan shape, costs, JIT and elapsed time are not acceptance gates.' };
+  const query = database.client.query, actual = (...args) => query.apply(database.client, args);
+  const failure = error => ({ name: error?.name, message: error?.message, code: error?.code, where: error?.where, routine: error?.routine });
+  database.client.query = async function (statement, ...rest) {
+    if (!statement?.text?.startsWith('/* native-item-batch-order */')) return actual(statement, ...rest);
+    report.query = { text: statement.text, values: statement.values };
+    let result, executionFailure, executionFailed = false;
+    try {
+      // Execute first, so EXPLAIN cannot warm the production query's planning.
+      // Recover only this statement's failed transaction state for diagnosis;
+      // its original rejection still leaves through the normal outer rollback.
+      await actual('SAVEPOINT native_order_execution');
+      const started = performance.now();
+      try { result = await actual(statement, ...rest); report.execution = { completed: true, rows: result.rows }; }
+      catch (error) { executionFailure = error; executionFailed = true; report.execution = { completed: false, failure: failure(error) }; }
+      finally { report.executionWallMs = performance.now() - started; }
+      if (executionFailed) await actual('ROLLBACK TO SAVEPOINT native_order_execution');
+      await actual('RELEASE SAVEPOINT native_order_execution');
+      // A diagnostic planning error must not leave the real query in 25P02.
+      // This separate savepoint preserves a successful UPDATE if EXPLAIN fails.
+      await actual('SAVEPOINT native_order_explain');
+      let planningFailed = false;
+      try {
+        report.settings = (await actual(`SELECT current_setting('server_version_num') AS server_version_num,
+          current_setting('statement_timeout') AS statement_timeout,current_setting('jit') AS jit,
+          current_setting('jit_above_cost') AS jit_above_cost,current_setting('jit_inline_above_cost') AS jit_inline_above_cost,
+          current_setting('jit_optimize_above_cost') AS jit_optimize_above_cost,
+          current_setting('recursive_worktable_factor',true) AS recursive_worktable_factor`)).rows[0];
+        const started = performance.now();
+        try { report.explain = (await actual({ text: 'EXPLAIN (FORMAT JSON) ' + statement.text, values: statement.values })).rows[0]['QUERY PLAN']; }
+        finally { report.explainWallMs = performance.now() - started; }
+      } catch (error) { planningFailed = true; report.planningFailure = failure(error); }
+      finally {
+        if (planningFailed) await actual('ROLLBACK TO SAVEPOINT native_order_explain');
+        await actual('RELEASE SAVEPOINT native_order_explain');
+      }
+      if (executionFailed) throw executionFailure;
+      return result;
+    } catch (error) { report.failure = failure(error); throw executionFailed ? executionFailure : error; }
+    finally {
+      try {
+        await mkdir(output, { recursive: true });
+        await writeFile(path.join(output, 'report.json'), JSON.stringify(report,
+          (_key, value) => typeof value === 'bigint' ? JSON.rawJSON(value.toString()) : value, 2) + '\n');
+      } catch (error) { t.diagnostic('Native item order diagnostic could not be saved: ' + error.message); }
+    }
+  };
+  try { return await operation(); }
+  finally { database.client.query = query; }
+}
 
 test('native Artist observations bind raw insertion sequence to the actual batch lookup consumer', async () => {
   assert.equal(hash(nativeBytes), provenance.nativeSha256); assert.equal(hash(inputBytes), provenance.inputSha256);
@@ -179,7 +236,7 @@ test('postgres: item batch ordering bounds overlapping dependency paths and reje
       ...template, Id: identities[index], Name: 'Dependency ' + index,
       ParentId: index > 0 ? identities[index - 1] : null, OwnerId: index > 1 ? identities[index - 2] : null,
     });
-    await orderNativeItemBatch(db, identities);
+    await observeDagOrder(t, db, () => orderNativeItemBatch(db, identities));
   });
   assert.deepEqual(await readOrder(database), identities.map(guid));
   const before = await readOrder(database);

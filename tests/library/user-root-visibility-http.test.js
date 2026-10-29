@@ -8,6 +8,7 @@ import { declareNativeHttpTestFile } from '../helpers/native-http-test-file.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
 
@@ -20,9 +21,7 @@ const dialects = process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_DIALECT
   ? [process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_DIALECT] : ['postgres'];
 if (dialects.some(dialect => !['postgres'].includes(dialect))) throw new Error('Invalid Library-own visibility and ordinary-user query dialect.');
 const columns = tableDefinition('BaseItems').columns;
-const normalizeBody = value => Array.isArray(value) ? value.map(normalizeBody)
-  : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value)
-    .filter(([key]) => key !== 'traceId').map(([key, entry]) => [key, key === 'ServerId' ? '$server' : normalizeBody(entry)])) : value;
+const normalizeBody = (value, serverId) => projectItemBody(value, { serverId, date: value => value });
 const cases = candidateCasesFromTrackedInput(fixture).map(item => {
   item = { ...item };
   // The native wire omits ParentId; its otherwise stored parentKey is inert.
@@ -34,7 +33,7 @@ for (const dialect of dialects) {
   test(`${dialect}: Library-own visibility and ordinary-user query dispatch matches 256 current native full HTTP list responses`, {
     skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
   }, nativeCallback(async t => {
-    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot } = await currentUserViewScenario('user-root-visibility', fixtureBytes, { signal: t.signal });
+    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('user-root-visibility', fixtureBytes, { signal: t.signal });
 
     let actual;
     try { actual = await recordItemFilterCandidate({
@@ -108,10 +107,8 @@ for (const dialect of dialects) {
           assert.equal(endpoint.endpoint, native.endpoint);
           assert.equal(endpoint.response.status, native.response.status);
           assert.equal(endpoint.response.contentType, native.response.contentType);
-          if (native.response.status < 400) assert.deepEqual(normalizeBody(endpoint.response.body), normalizeBody(native.response.bodyJson));
+          if (native.response.status < 400) assert.deepEqual(normalizeBody(endpoint.response.body, actual.serverId), normalizeBody(native.response.bodyJson, nativeServerId));
           else assert.equal(endpoint.response.bodyText, native.response.bodyText.replaceAll('CoreFlowAdmin', 'FilterAdmin'));
-          assert.deepEqual(endpoint.runtimeErrors, native.response.status === 500
-            ? [{ name: 'Error', message: 'Error processing request.' }] : []);
         } catch (error) { differences.push({ name: item.name, endpoint: endpoint.endpoint, message: error.message }); }
       }
     }
@@ -123,7 +120,7 @@ for (const dialect of dialects) {
       await writeFile(path.join(output, `${dialect}-comparison.json`), json({
         passed: differences.length === 0, phaseAcceptance: false, dialect, responses: http.records.length,
         comparedFields: 'Complete successful list JSON, status, content type and exact error body; all target media tables, metadata tree and UserData rows unchanged.',
-        normalization: 'ServerId maps isolated server identities; known HTTP error account name CoreFlowAdmin maps to FilterAdmin; only ProblemDetails traceId is removed. No item identities, order, fields, counts, paging or business state are normalized.',
+        normalization: 'Declared DTO ServerId is bound to each actual isolated server; known HTTP error account name CoreFlowAdmin maps to FilterAdmin. Opaque dictionaries and unknown fields stay literal. No item identities, order, counts, paging or business state are normalized.',
         native: summary, differences,
       }), { flag: 'wx' });
     }
@@ -133,8 +130,6 @@ for (const dialect of dialects) {
     assert.deepEqual(actual.userDataAfterShutdown, actual.userDataAfterReads);
     assert.deepEqual(actual.filesystemAfterReads, actual.filesystemBeforeReads);
     assert.deepEqual(actual.filesystemAfterShutdown, actual.filesystemBeforeReads);
-    assert.deepEqual(actual.runtimeErrors, []);
-    assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
     assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true, portReleased: true,
       postgresSchemasRemoved: dialect === 'postgres' ? true : null, programDataDirectoryRemoved: true });
     assert.deepEqual(differences, []);

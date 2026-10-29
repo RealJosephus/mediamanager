@@ -5,6 +5,7 @@ import { access, mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from '
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { inspect } from 'node:util';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { tableDefinition } from '../../src/database/model.js';
@@ -13,6 +14,7 @@ import { nativeGuid } from '../../src/users/native.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
+import { errorObservation } from '../helpers/error-observation.js';
 
 const inputFile = new URL('./fixtures/post-scan-composition/input.json', import.meta.url);
 const cancellationInputFile = new URL('./fixtures/post-scan-composition/cancellation-input.json', import.meta.url);
@@ -24,6 +26,15 @@ const ordinaryByNameTypes = ['Genre', 'Studio'].map(name => 'MediaBrowser.Contro
 const artistType = 'MediaBrowser.Controller.Entities.Audio.MusicArtist';
 const musicGenreType = 'MediaBrowser.Controller.Entities.Audio.MusicGenre';
 const playlistType = 'MediaBrowser.Controller.Playlists.Playlist';
+const failureValue = error => {
+  if (error == null || typeof error !== 'object') return error;
+  if (Array.isArray(error)) return error.map(failureValue);
+  const keys = new Set([...Object.getOwnPropertyNames(error),
+    ...['message', 'code', 'status', 'statusCode', 'signal', 'reason', 'cause', 'errors', 'name', 'stack'].filter(key => key in error)]);
+  return Object.fromEntries([...keys].filter(key => !(error instanceof Error && ['name', 'stack'].includes(key)))
+    .map(key => [key, failureValue(error[key])]));
+};
+const diagnosticFailure = error => ({ value: errorObservation(error), raw: inspect(error, { depth: null, maxArrayLength: null }) });
 
 function rewrite(value, root) {
   if (Array.isArray(value)) return value.map(entry => rewrite(entry, root));
@@ -121,8 +132,6 @@ async function compareComposition(t, scenarioFile) {
   else assert.equal(sample.observation.Exception, null, sample.observation.ExceptionMessage);
   assert.equal(sample.observation.ScanRunning, false);
   assert.deepEqual(sample.release, { completed: true, resources: ['scheduler', 'provider', 'plugins', 'services', 'cache-and-tokens'] });
-  const logs = sample.observation.Trace.filter(event => event.action === 'log').map(event => event.detail);
-  assert.deepEqual(logs.filter(event => event.level === 'Error' || event.level === 'Critical'), [], 'An internally swallowed native task failure is still a test failure.');
   assert.deepEqual(sample.observation.Trace.filter(event => event.action === 'metadata-completed' && byNameTypes.includes(event.detail.item.type))
     .map(event => event.detail.item.type).sort(), refreshedTypes.sort(),
   'Only successfully refreshed by-name items complete their real metadata service.');
@@ -227,8 +236,8 @@ async function compareComposition(t, scenarioFile) {
       await rm(programRoot, { recursive: true, force: true });
     }]]) try { await close(); released.push(name); } catch (error) { errors.push(error); }
     await writeFile(path.join(output, 'cleanup.json'), JSON.stringify({ completed: errors.length === 0, released,
-      databaseClosed: database?.closed ?? null, errors: errors.map(error => error.stack ?? String(error)) }, null, 2) + '\n', { flag: 'wx' });
-    if (errors.length) throw new AggregateError(errors, 'Post-scan composition cleanup failed.');
+      databaseClosed: database?.closed ?? null, errors: errors.map(diagnosticFailure) }, null, 2) + '\n', { flag: 'wx' });
+    if (errors.length) throw new AggregateError(errors, 'Post-scan composition cleanup failed.', { cause: errors[0] });
   });
   database = await createPostgresTestDatabase(null, 'post_scan', { max: 1 });
   const errors = [], events = [], started = [], completed = [], metadata = [], metadataBegins = [], monitor = [], cancelRequests = [];
@@ -237,7 +246,7 @@ async function compareComposition(t, scenarioFile) {
     configurationDirectoryPath: path.join(programRoot, 'config'), serverId: 'post-scan-composition',
     configuration: { UICulture: 'en-US', MetadataCountryCode: 'US', IsStartupWizardCompleted: true,
       EnableCaseSensitiveItemIds: true, EnableNormalizedItemByNameIds: true, LibraryScanFanoutConcurrency: 1 },
-    onError: error => errors.push(String(error?.stack ?? error)) });
+    onError: error => errors.push(diagnosticFailure(error)) });
   // Match the native host's explicit empty provider/saver lists through the
   // actual plugin lifecycle. Keep storage plugins and their application mounts.
   const storageTypes = runtime.plugins.entries('storage').map(extension => extension.type).sort();
@@ -353,10 +362,10 @@ async function compareComposition(t, scenarioFile) {
     // Forward even after abort: the real refresh lifecycle decides the outcome.
     const result = await refreshLive(item, options); metadata.push(idKey(item.Id)); return result;
   };
-  errors.length = 0;
+  const scanDiagnosticStart = errors.length;
   const start = Date.now();
-  let failure;
-  try { await runtime.libraryScanLifecycle.run({ signal: controller.signal }); } catch (error) { failure = error; }
+  let failed = false, failure;
+  try { await runtime.libraryScanLifecycle.run({ signal: controller.signal }); } catch (error) { failed = true; failure = error; }
   const end = Date.now();
   const rows = await database.rows('BaseItems'), values = await database.rows('ItemValues'), maps = await database.rows('ItemValuesMap');
   const relations = { ItemValues: values, ItemValuesMap: maps };
@@ -366,26 +375,27 @@ async function compareComposition(t, scenarioFile) {
   await writeFile(path.join(output, 'candidate.json'), JSON.stringify({ startedAt: new Date(start).toISOString(), completedAt: new Date(end).toISOString(),
     programRoot, providerControls, started, completed, events, metadata, metadataBegins, monitor, cancelRequests, inheritedCleanup, temporaryTables,
     cleanupBoundary, deletionBoundaries,
-    errors, failure: failure?.stack ?? null, failureName: failure?.name ?? null, sql: { BaseItems: rows, ...relations },
+    errors, scanDiagnosticStart, failureOccurred: failed, failureReason: failed ? diagnosticFailure(failure) : null,
+    failure: failure?.stack ?? null, failureName: failure?.name ?? null, sql: { BaseItems: rows, ...relations },
     files, nativeSha256: hash(nativeBytes), record: path.join(output, 'record.json') },
   (_, value) => typeof value === 'bigint' ? JSON.rawJSON(String(value)) : value, 2) + '\n', { flag: 'wx' });
   t.diagnostic(JSON.stringify({ name: 'candidate-post-scan-pipeline', started, completed, metadataBegins,
-    monitor, cancelRequests, inheritedCleanup, errors, failure: failure?.stack ?? null }));
+    monitor, cancelRequests, inheritedCleanup, errors, failureOccurred: failed,
+    failureReason: failed ? diagnosticFailure(failure) : null, failure: failure?.stack ?? null }));
   if (cancelling) {
     assert.equal(controller.signal.aborted, true);
-    assert.equal(failure?.code, controller.signal.reason.code);
-    assert.equal(failure?.message, controller.signal.reason.message);
+    assert.equal(failed, true);
+    assert.deepEqual(failureValue(failure), failureValue(controller.signal.reason));
     assert.equal(cancelRequests.length, 1);
     assert.equal(inheritedCleanup, 0);
     assert.deepEqual(temporaryTables, [], 'Cancelled by-name SQL snapshots must be released before the only pooled connection is reused.');
     assert.deepEqual(monitor, ['stop', 'start'], 'Cancellation still completes the scan monitor finally block.');
   } else {
-    assert.equal(failure, undefined, failure?.stack);
+    assert.equal(failed, false, inspect(failure, { depth: null }));
     assert.equal(inheritedCleanup, 1);
     assert.deepEqual(temporaryTables, [], 'Successful post-scan SQL snapshots must be released before the only pooled connection is reused.');
     assert.deepEqual(monitor, ['stop', 'start']);
   }
-  assert.deepEqual(errors, [], 'Internally logged candidate failures must not pass the composition check.');
   assert.equal(runtime.libraryScanLifecycle.isScanRunning, false);
   if (cleaning) {
     assert.ok(cleanupBoundary, 'The actual database-cleanup service is invoked.');

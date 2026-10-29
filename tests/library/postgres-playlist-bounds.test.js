@@ -9,6 +9,7 @@ import path from 'node:path';
 import { inspect } from 'node:util';
 import pg from 'pg';
 import { PostgresDatabase } from '../../src/database/postgres.js';
+import { decodeNativeTextBytes } from '../../src/database/native-text.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { quoteIdentifier } from '../../src/database/model.js';
 import { DomainStore } from '../../src/database/domain-store.js';
@@ -167,17 +168,34 @@ test('postgres playlist operations never use unbounded BaseItems or LinkedChildr
     let largestBaseItemBatch = 0;
     const largeMemberIds = new Set();
     const hydratedLargeMemberIds = new Set();
+    const baseItemsTableId = Number((await database.client.query({
+      text: 'SELECT $1::regclass::oid AS "oid"',
+      values: [`${quoteIdentifier(schema)}."BaseItems"`],
+    })).rows[0].oid);
+    const observeHydration = async operation => {
+      const hook = database.queryHook;
+      database.queryHook = async (...args) => {
+        const result = await (hook ? hook.call(database.client, ...args) : database.client.query(...args));
+        const fields = result.command === 'SELECT'
+          ? result.fields.filter(field => field.tableID === baseItemsTableId) : [];
+        const idField = fields.find(field => field.name === 'Id');
+        if (idField && fields.some(field => field.name === 'Data')) {
+          largestBaseItemBatch = Math.max(largestBaseItemBatch, result.rows.length);
+          for (const row of result.rows) {
+            const key = idKey(decodeNativeTextBytes(row[idField.name]));
+            if (largeMemberIds.has(key)) hydratedLargeMemberIds.add(key);
+          }
+        }
+        return result;
+      };
+      try { return await operation(); }
+      finally { database.queryHook = hook; }
+    };
     database.rows = async (table, options) => {
       if (['BaseItems', 'LinkedChildren'].includes(table)) {
         guardedReads++;
         const bounded = options && (options.where || options.whereIn);
         if (!bounded) throw new Error(`unbounded ${table} read`);
-      }
-      if (table === 'BaseItems' && options?.whereIn?.Id) {
-        largestBaseItemBatch = Math.max(largestBaseItemBatch, options.whereIn.Id.length);
-        for (const value of options.whereIn.Id) if (largeMemberIds.has(idKey(value))) {
-          hydratedLargeMemberIds.add(idKey(value));
-        }
       }
       return originalRows(table, options);
     };
@@ -459,19 +477,19 @@ test('postgres playlist operations never use unbounded BaseItems or LinkedChildr
     });
     largestBaseItemBatch = 0;
     hydratedLargeMemberIds.clear();
-    const largePage = await playlists.getItems(large.Id, { user: owner, startIndex: 60, limit: 3,
-      dtoOptions: { EnableImages: false, EnableUserData: false } });
+    const largePage = await observeHydration(() => playlists.getItems(large.Id, { user: owner, startIndex: 60, limit: 3,
+      dtoOptions: { EnableImages: false, EnableUserData: false } }));
     assert.equal(largePage.TotalRecordCount, 128);
     assert.equal(largePage.Items.length, 3);
-    assert.ok(largestBaseItemBatch <= 24, `largest BaseItems hydration batch was ${largestBaseItemBatch}`);
+    assert.ok(largestBaseItemBatch <= 24, `largest complete BaseItems result batch was ${largestBaseItemBatch}`);
     assert.equal(hydratedLargeMemberIds.size, 3);
     largestBaseItemBatch = 0;
     hydratedLargeMemberIds.clear();
-    const genericPage = await library.queryItems({ ParentId: large.Id, StartIndex: 60, Limit: 3,
-      EnableImages: false, EnableUserData: false }, { user: owner });
+    const genericPage = await observeHydration(() => library.queryItems({ ParentId: large.Id, StartIndex: 60, Limit: 3,
+      EnableImages: false, EnableUserData: false }, { user: owner }));
     assert.equal(genericPage.TotalRecordCount, 128);
     assert.equal(genericPage.Items.length, 3);
-    assert.ok(largestBaseItemBatch <= 24, `generic playlist page hydrated a batch of ${largestBaseItemBatch}`);
+    assert.ok(largestBaseItemBatch <= 24, `generic playlist page returned a complete BaseItems batch of ${largestBaseItemBatch}`);
     assert.equal(hydratedLargeMemberIds.size, 3);
     await playlists.add(created.Id, [id(1)], { user: editor, position: 1 });
     await playlists.move(created.Id, id(2).replaceAll('-', '').toLowerCase(), 0, { user: editor });

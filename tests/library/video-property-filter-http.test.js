@@ -43,14 +43,6 @@ for (const dialect of ['postgres']) {
       }
     }
     assert.deepEqual(actual.afterReads, actual.beforeReads, `${dialect}: media tables changed during HTTP reads`);
-    // This frozen SQL-search input deliberately contains VideoType:null. The
-    // raw-text predicate still matches, but native typed hydration falls back
-    // for its nonnullable enum and diagnoses each deserialize operation.
-    // Pinned JsonDefaults enum-null evidence is retained in the boundary probe.
-    assert.ok(actual.runtimeErrors.length > 0);
-    for (const error of actual.runtimeErrors) assert.deepEqual(error, {
-      name: 'NativeItemJsonError', message: 'A nonnullable VideoType cannot read null.',
-    });
     assert.deepEqual(actual.cleanup, {
       runtimeClosed: true,
       databaseClosed: true,

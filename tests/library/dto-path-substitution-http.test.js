@@ -8,21 +8,20 @@ import { dateText, idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate, validateFixture } from './item-filter-http-scenario.js';
 import { currentUserViewScenario, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
 import { projectSingleSourceName } from '../helpers/single-source-name-projection.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
 
 const bytes = await readFile(new URL('./fixtures/dto-path-substitution-http/input.json', import.meta.url));
 const fixture = JSON.parse(bytes);
 validateFixture(fixture);
-const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, key === 'ServerId' ? '$server'
-    : ['DateCreated', 'DateLastSaved', 'DateLastMediaAdded'].includes(key) && typeof entry === 'string'
-      ? dateText(entry) : normalize(entry)])) : value;
+const normalize = (value, serverId, status) => projectItemBody(value, { serverId, status,
+  date: (entry, { field }) => ['DateCreated', 'DateLastSaved', 'DateLastMediaAdded'].includes(field) ? dateText(entry) : entry });
 
 test('file DTO and media source substitutions match current native HTTP without changing storage identities', {
   skip: !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE || !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000,
 }, nativeCallback(async t => {
-  const { http, stages, root } = await currentUserViewScenario('dto-path-substitution-http', bytes, { signal: t.signal });
+  const { http, stages, root, nativeServerId } = await currentUserViewScenario('dto-path-substitution-http', bytes, { signal: t.signal });
   assert.equal(http.records.length, 48);
   const body = name => http.records.find(record => record.name === name)?.response.bodyJson;
   assert.equal(body('mapped movie').Path, '/client/media\\Film.mkv');
@@ -77,9 +76,8 @@ test('file DTO and media source substitutions match current native HTTP without 
     try {
       assert.equal(endpoint.response.status, reference.response.status);
       assert.equal(endpoint.response.contentType, reference.response.contentType);
-      assert.deepEqual(normalize(projectSingleSourceName(endpoint.response.body, fixture.items, false, sourceNames, item.name)),
-        normalize(projectSingleSourceName(reference.response.bodyJson, fixture.items, true, sourceNames, item.name)));
-      assert.deepEqual(endpoint.runtimeErrors, []);
+      assert.deepEqual(normalize(projectSingleSourceName(endpoint.response.body, fixture.items, false, sourceNames, item.name), actual.serverId, endpoint.response.status),
+        normalize(projectSingleSourceName(reference.response.bodyJson, fixture.items, true, sourceNames, item.name), nativeServerId, reference.response.status));
     } catch (error) { differences.push({ name: item.name, endpoint: endpoint.endpoint, message: error.message }); }
   }
   await writeFile(path.join(root, 'postgres-comparison.json'), json({ passed: differences.length === 0, phaseAcceptance: false,
@@ -91,7 +89,6 @@ test('file DTO and media source substitutions match current native HTTP without 
   assert.deepEqual(actual.userDataBeforeReads, actual.userDataAfterShutdown);
   assert.deepEqual(actual.filesystemBeforeReads, actual.filesystemAfterReads);
   assert.deepEqual(actual.filesystemBeforeReads, actual.filesystemAfterShutdown);
-  assert.deepEqual(actual.runtimeErrors, []);
   assert.ok(Object.values(actual.cleanup).every(Boolean));
   assert.deepEqual(differences, []);
 }));

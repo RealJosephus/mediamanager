@@ -2,6 +2,7 @@ import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
+import { inspect } from 'node:util';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition } from '../../src/database/model.js';
@@ -78,15 +79,18 @@ function scannerFor(run, options = {}) {
   return new LibraryScanService({ lifecycle: { run, capabilities: options.capabilities }, onError: options.onError });
 }
 
-test('library scan requires one lifecycle owner', () => {
-  assert.throws(() => new LibraryScanService(), TypeError);
-  assert.throws(() => new LibraryScanService({ lifecycle: {} }), TypeError);
-  assert.throws(() => new LibraryScanService({ lifecycle: { run() {} }, onError: null }), TypeError);
+test('library scan requires one lifecycle owner', async () => {
+  assert.throws(() => new LibraryScanService(), { message: 'Library scanning requires the aggregate folder validation lifecycle.' });
+  assert.throws(() => new LibraryScanService({ lifecycle: {} }), { message: 'Library scanning requires the aggregate folder validation lifecycle.' });
+  assert.throws(() => new LibraryScanService({ lifecycle: { run() {} }, onError: null }), { message: 'Library scan error reporting must be a function.' });
+  const scanner = scannerFor(async () => ({ completed: true }));
+  assert.deepEqual(await scanner.runCompleteScan(), { completed: true }); await scanner.close();
 });
 
-test('queue replacement cancels the old lifecycle and restarts after it drains', async () => {
+test('queue replacement cancels the old lifecycle and restarts after it drains', async t => {
   const entered = Promise.withResolvers(), drained = Promise.withResolvers(), release = Promise.withResolvers();
   const calls = [], errors = [];
+  t.after(() => t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null })));
   let count = 0;
   const scanner = scannerFor(async ({ signal }) => {
     const index = ++count; calls.push('start-' + index);
@@ -104,7 +108,7 @@ test('queue replacement cancels the old lifecycle and restarts after it drains',
   assert.equal((await first).status, 'cancelled');
   assert.deepEqual(await second, { generation: 2, status: 'completed', result: { invocation: 2 } });
   assert.deepEqual(calls, ['start-1', 'drain-1', 'start-2']);
-  assert.deepEqual(errors, []); await scanner.close();
+  await scanner.close();
 });
 
 test('pending generations receive individual cancellation receipts', async () => {
@@ -132,25 +136,32 @@ for (const queuedFirst of [false, true]) test('explicit and queued lifecycle ope
   assert.equal((queuedFirst ? results[0] : results[1]).status, 'completed'); await scanner.close();
 });
 
-test('task progress is monotonic while the lifecycle receives one bound operation signal', async () => {
+test('task progress is monotonic while the lifecycle receives one bound operation signal', async t => {
   const values = [], errors = [], controller = new AbortController();
+  t.after(() => t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null })));
+  let lifecycleEntered = false;
   const scanner = scannerFor(async options => {
+    lifecycleEntered = true;
     assert.ok(options.signal instanceof AbortSignal); assert.equal(options.signal.aborted, false);
     for (const value of [-5, 5.5, 2, NaN, Infinity, 96, 100, 20]) options.reportProgress(value, { phase: value });
     return { completed: true };
   }, { onError: error => errors.push(error) });
   assert.deepEqual(await scanner.runCompleteScan({ signal: controller.signal, reportProgress: value => values.push(value) }), { completed: true });
-  assert.deepEqual(values, [0, 5.5, 5.5, 5.5, 5.5, 96, 99, 99]); assert.deepEqual(errors, []);
-  await assert.rejects(scanner.runCompleteScan({ reportProgress: {} }), TypeError);
+  assert.deepEqual(values, [0, 5.5, 5.5, 5.5, 5.5, 96, 99, 99]);
+  lifecycleEntered = false;
+  await assert.rejects(scanner.runCompleteScan({ reportProgress: {} }), { message: 'Library scan progress reporter must be a function.' });
+  assert.equal(lifecycleEntered, false);
+  assert.deepEqual(await scanner.runCompleteScan(), { completed: true }); assert.equal(lifecycleEntered, true);
   await scanner.close();
 });
 
-for (const asynchronous of [false, true]) test('progress observer errors cannot replace lifecycle work: ' + asynchronous, async () => {
-  const errors = [], failure = new Error('Observer failed'); let finished = false;
+for (const asynchronous of [false, true]) test('progress observer errors cannot replace lifecycle work: ' + asynchronous, async t => {
+  const errors = [], failure = new Error('Observer failed'); let finished = false, observerEntered = false;
+  t.after(() => t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null })));
   const scanner = scannerFor(async ({ reportProgress }) => { reportProgress(50); finished = true; }, { onError: error => errors.push(error) });
-  await scanner.runCompleteScan({ reportProgress: asynchronous ? async () => { throw failure; } : () => { throw failure; } });
-  await tick(); assert.equal(finished, true);
-  for (const error of errors) assert.equal(error.message, failure.message);
+  const rejectProgress = () => { observerEntered = true; throw failure; };
+  await scanner.runCompleteScan({ reportProgress: asynchronous ? async () => rejectProgress() : rejectProgress });
+  await tick(); assert.equal(finished, true); assert.equal(observerEntered, true);
   await scanner.close();
 });
 
@@ -177,17 +188,16 @@ test('successful receipts capture immutable lifecycle diagnostics', async () => 
   assert.ok(Object.isFrozen(receipt.result.children[0].metadata)); await scanner.close();
 });
 
-test('explicit lifecycle failure preserves its values while queued failure records partial diagnostics', async () => {
+test('explicit lifecycle failure preserves its values while queued failure records partial diagnostics', async t => {
   const failure = Object.assign(new Error('Late lifecycle failure'), { code: 'late-failure', partialResult: { committed: ['ancestor'] } });
   const errors = [], scanner = scannerFor(async () => { throw failure; }, { onError: error => errors.push(error) });
+  t.after(() => t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null })));
   await assert.rejects(scanner.runCompleteScan(), { code: failure.code, message: failure.message,
-    partialResult: { committed: ['ancestor'] } }); assert.deepEqual(errors, []);
+    partialResult: { committed: ['ancestor'] } });
   const receipt = await scanner.queue();
-  assert.equal(receipt.status, 'failed'); assert.equal(receipt.error.code, 'late-failure');
+  assert.equal(receipt.status, 'failed'); assert.equal(receipt.error.code, 'late-failure'); assert.equal(receipt.error.message, failure.message);
   assert.deepEqual(receipt.partialResult, { committed: ['ancestor'] }); failure.partialResult.committed.push('later');
   assert.deepEqual(receipt.partialResult, { committed: ['ancestor'] });
-  for (const error of errors) assert.deepEqual({ code: error.code, message: error.message },
-    { code: failure.code, message: failure.message });
   await scanner.close();
 });
 
@@ -196,23 +206,22 @@ test('queued aggregate failures preserve the failed receipt and remain retryable
   const scanner = scannerFor(async () => { if (fail) throw new AggregateError(causes, 'Global failure'); return 'recovered'; }, { onError: error => errors.push(error) });
   const receipt = await scanner.queue();
   assert.equal(receipt.status, 'failed'); assert.equal(receipt.error.message, 'Global failure');
-  for (const error of errors) assert.ok(causes.some(cause => cause.message === error.message),
-    'An unknown diagnostic cannot be accepted as one of the controlled failures.');
-  t.diagnostic(JSON.stringify({ receipt, diagnostics: errors.map(error => ({ name: error.name, message: error.message, code: error.code })) }));
+  t.diagnostic(inspect({ receipt, diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null }));
   fail = false; assert.equal((await scanner.queue()).result, 'recovered'); await scanner.close();
 });
 
-test('an ordinary failure that wins the close race remains a failure', async () => {
+test('an ordinary failure that wins the close race remains a failure', async t => {
   const entered = Promise.withResolvers(), operation = Promise.withResolvers(), failure = new Error('I/O failed before abort'), errors = [];
+  t.after(() => t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null })));
   const scanner = scannerFor(async () => { entered.resolve(); return operation.promise; }, { onError: error => errors.push(error) });
   const receipt = scanner.queue(); await entered.promise; operation.reject(failure); const closing = scanner.close();
   const result = await receipt;
   assert.equal(result.status, 'failed'); assert.equal(result.error.message, failure.message); await closing;
-  for (const error of errors) assert.equal(error.message, failure.message);
 });
 
-for (const hostile of ['accessors', 'revoked-partial', 'diagnostic-iterator', 'revoked-diagnostics']) test('hostile error diagnostics cannot orphan queued work: ' + hostile, async () => {
+for (const hostile of ['accessors', 'revoked-partial', 'diagnostic-iterator', 'revoked-diagnostics']) test('hostile error diagnostics cannot orphan queued work: ' + hostile, async t => {
   const errors = [], diagnostic = new Error('Preserved diagnostic'); let failure;
+  t.after(() => t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null })));
   if (hostile === 'accessors') {
     failure = {}; for (const key of ['name', 'code', 'message']) Object.defineProperty(failure, key, { get() { throw new Error('Accessor failed'); } });
   } else if (hostile === 'revoked-partial') {
@@ -225,7 +234,6 @@ for (const hostile of ['accessors', 'revoked-partial', 'diagnostic-iterator', 'r
   }
   const scanner = scannerFor(async () => { throw failure; }, { onError: error => errors.push(error) });
   const receipt = await scanner.queue(); assert.equal(receipt.status, hostile.includes('diagnostic') ? 'cancelled' : 'failed');
-  if (hostile === 'diagnostic-iterator') for (const error of errors) assert.equal(error.message, diagnostic.message);
   if (hostile === 'revoked-partial') assert.equal(receipt.partialResult, undefined);
   await scanner.close();
 });

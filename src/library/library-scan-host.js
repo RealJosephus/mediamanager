@@ -1,4 +1,4 @@
-import { setFolderChildren } from './folder-cache.js';
+import { clearFolderChildIds, setFolderChildren } from './folder-cache.js';
 import { updateInheritedValues } from './item-persistence.js';
 import { ItemDeletionScope } from './item-deletion-scope.js';
 import { createMetadataChildren } from './metadata-children.js';
@@ -12,26 +12,33 @@ import { quoteIdentifier as q } from '../database/model.js';
 import { nativeTextBytes } from '../database/native-text.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { randomUUID } from 'node:crypto';
-import { copyNativeItemRepositoryFrame, nativeItemTypes, nativeItemDescriptor } from './native-item-entity.js';
+import { copyNativeItemRepositoryFrame, nativeItemTypes, nativeItemDescriptor, newNativeItemEntity } from './native-item-entity.js';
 import { loadPostgresPageGraph, loadPostgresRowsByIds } from './postgres-library-query.js';
 import { withPostgresCachedFolderChildren } from './postgres-cached-folder-children.js';
+import { setResolverInitialValues } from './resolver-initial-values.js';
 
 const itemType = item => String(item?.NativeType ?? item?.Type ?? '').split('.').at(-1);
 const folderTypes = nativeItemTypes.filter(type => nativeItemDescriptor(type).family === 'folder').map(nativeTextBytes);
 
-async function releaseResources(primary, operations) {
+async function releaseResources(primary, operations, failed) {
   const errors = [];
   for (const operation of operations) {
     try { await operation(); } catch (error) { errors.push(error); }
   }
-  if (errors.length) throw new AggregateError(primary ? [primary, ...errors] : errors,
-    primary?.message ?? 'Library child cleanup failed.', primary ? { cause: primary } : undefined);
+  if (!errors.length) return;
+  if (!failed && errors.length === 1) throw errors[0];
+  const reasons = failed ? [primary, ...errors] : errors, cause = reasons[0];
+  throw Object.assign(new AggregateError(reasons, cause?.message ?? 'Library child cleanup failed.', { cause }),
+    Object.fromEntries(['code', 'status', 'statusCode'].filter(key => cause?.[key] !== undefined).map(key => [key, cause[key]])));
 }
 
 /** Concrete host for the native library-scan lifecycle. */
 export class LibraryScanHost {
   #roots = new Map();
+  #pendingRoots = new Map();
   #initializedRootItems = new Map();
+  #closing = false;
+  #closePromise;
   constructor({ store, library, itemCreation, metadataScanner, topLevelValidation, ignoreRule,
     rootInitialization, now = () => new Date().toISOString() } = {}) {
     if (!store || !library || !itemCreation || !metadataScanner || !topLevelValidation) {
@@ -78,33 +85,86 @@ export class LibraryScanHost {
   }
 
   async #root(type) {
+    if (this.#closing) throw new Error('The library root host has been closed.');
     if (this.#roots.has(type)) return this.#roots.get(type).item;
+    if (!this.#pendingRoots.has(type)) {
+      const pending = this.#initializeRoot(type).finally(() => this.#pendingRoots.delete(type));
+      this.#pendingRoots.set(type, pending);
+    }
+    return this.#pendingRoots.get(type);
+  }
+
+  async #initializeUserRoot() {
+    const { programDataPath, userRoot, userRootPath, fileSystem, configuration } = this.library.options;
+    const canonicalPath = userRootPath ?? (programDataPath ? path.join(path.resolve(programDataPath), 'root', 'default') : userRoot?.Path);
+    const canonicalId = userRoot?.Id ?? (canonicalPath && nativeGuid(getNewItemId(canonicalPath,
+      'MediaBrowser.Controller.Entities.UserRootFolder', {
+        programDataPath: programDataPath ? path.resolve(programDataPath) : undefined,
+        enableCaseSensitiveItemIds: configuration?.EnableCaseSensitiveItemIds,
+      })));
+    if (!canonicalPath || !canonicalId) throw Object.assign(new Error('UserRootFolder is not initialized.'), { status: 500 });
+    // GetUserRootFolder creates its real directory before the repository read.
+    // A service without ApplicationPaths may supply an existing root identity,
+    // but does not own a filesystem directory to initialize.
+    if (programDataPath) await fileSystem.mkdir(canonicalPath, { recursive: true });
+    let item;
+    try { item = await this.itemCreation.getItemById(canonicalId); }
+    catch (error) {
+      // The native root constructor logs a failed initial item lookup, then
+      // resolves a fresh root. Directory and subsequent save errors still fail.
+      try { this.library.options.logger.error?.(error, 'Error creating UserRootFolder'); } catch {}
+    }
+    const fresh = itemType(item) !== 'UserRootFolder';
+    if (fresh) {
+      item = newNativeItemEntity('MediaBrowser.Controller.Entities.UserRootFolder');
+      item.Id = canonicalId;
+      setResolverInitialValues(item, { identityPath: canonicalPath,
+        entry: { kind: 'directory', name: path.basename(canonicalPath) }, clock: this.library.clock });
+    }
+    // The singleton is separate from the bounded ID registry. A fresh root is
+    // neither registered nor saved here; metadata refresh owns that boundary.
+    item.Path = canonicalPath;
+    const resolved = { item, owner: this.itemCreation.retainItem(item) };
+    try {
+      if (fresh) {
+        // DeepCopy<Folder,UserRootFolder> reads Children on the freshly
+        // resolved source. Keep that complete snapshot in the existing SQL
+        // cohort; the copied destination has no copied private child-ID cache.
+        await this.store.run(session => withPostgresCachedFolderChildren({ session, library: this.library, item }, () => {}));
+        clearFolderChildIds(item);
+      }
+      this.#roots.set('UserRootFolder', resolved);
+      return item;
+    } catch (error) {
+      await releaseResources(error, [() => resolved.owner.release(),
+        () => this.itemCreation.linkedChildren.flushOwnedReleases(),
+        () => this.itemCreation.linkedChildren.flushReleases()], true);
+      throw error;
+    }
+  }
+
+  async #initializeRoot(type) {
+    if (type === 'UserRootFolder') return this.#initializeUserRoot();
     const resolved = await this.store.run(async db => {
       const programDataPath = this.library.options.programDataPath;
-      const canonicalPath = type === 'UserRootFolder'
-        ? this.library.options.userRoot?.Path ?? this.library.options.userRootPath
-          ?? (programDataPath ? path.join(path.resolve(programDataPath), 'root', 'default') : null)
-        : type === 'AggregateFolder' && programDataPath ? path.join(path.resolve(programDataPath), 'root') : null;
-      const canonicalId = type === 'UserRootFolder' ? this.library.options.userRoot?.Id
-        : canonicalPath && nativeGuid(getNewItemId(canonicalPath, 'MediaBrowser.Controller.Entities.AggregateFolder', {
+      const canonicalPath = programDataPath ? path.join(path.resolve(programDataPath), 'root') : null;
+      const canonicalId = canonicalPath && nativeGuid(getNewItemId(canonicalPath, 'MediaBrowser.Controller.Entities.AggregateFolder', {
           programDataPath: path.resolve(this.library.options.programDataPath),
           enableCaseSensitiveItemIds: this.library.options.configuration?.EnableCaseSensitiveItemIds,
         }));
       const baseRows = canonicalId ? await loadPostgresRowsByIds(db, [canonicalId])
-        : type === 'UserRootFolder' ? []
-          : (await queryPostgresItemPage(db, { includeitemtypes: [type], limit: 1 }, { groupByPresentationKey: false })).rows;
+        : (await queryPostgresItemPage(db, { includeitemtypes: [type], limit: 1 }, { groupByPresentationKey: false })).rows;
       const state = await this.library.load(db, null, { includeUserData: false, baseRows });
       try {
-      const selectedId = type === 'UserRootFolder' ? this.library.options.userRoot?.Id : canonicalId;
-      const stored = selectedId ? state.byId.get(idKey(selectedId))
+      const stored = canonicalId ? state.byId.get(idKey(canonicalId))
         : state.items.find(value => itemType(value) === type
           && (canonicalPath == null || sameNativePath(value.Path, canonicalPath)));
       const initialized = this.#initializedRootItems.get(type);
       const item = stored && initialized && sameId(initialized.Id, stored.Id)
         ? initialized : stored && await this.itemCreation.getItemById(stored.Id);
       if (!item) throw Object.assign(new Error(`${type} is not initialized.`), { status: 500 });
-      // LibraryManager.CreateRootFolder/GetUserRootFolder reset the registered
-      // root Path after moving program data. Reusing an existing row or an
+      // LibraryManager.CreateRootFolder resets the registered root Path after
+      // moving program data. Reusing an existing row or an
       // already parented playlists child does not suppress that live reset.
       if (canonicalPath && itemType(item) === type) item.Path = canonicalPath;
       const owner = this.itemCreation.retainItem(item);
@@ -145,6 +205,8 @@ export class LibraryScanHost {
   getAggregateFolder() { return this.#root('AggregateFolder'); }
 
   getUserRootFolder() { return this.#root('UserRootFolder'); }
+
+  get userRootFolder() { return this.#roots.get('UserRootFolder')?.item ?? null; }
 
   withCollectionFolder(id, operation) {
     if (!nonemptyId(id)) throw libraryError(400, 'A nonempty library ID is required.');
@@ -188,18 +250,18 @@ export class LibraryScanHost {
     const children = await createMetadataChildren({ store: this.store, library: this.library,
       linkedChildren: this.itemCreation.linkedChildren,
       configuration: this.library.options.configuration }).physical(parent, { preserveDuplicates: true, includeItemTypes });
-    let failure;
+    let failure, failed = false;
     try {
       return await operation(children);
-    } catch (error) { failure = error; throw error; }
-    finally { await releaseResources(failure, [() => children.close()]); }
+    } catch (error) { failed = true; failure = error; throw error; }
+    finally { await releaseResources(failure, [() => children.close()], failed); }
   }
 
   async withChildren(parent, operation) {
     return this.withChildSnapshot(parent, children => this.store.run(async db => {
       const pending = q('mm_scan_missing_' + randomUUID().replaceAll('-', ''));
       const deletion = new ItemDeletionScope({ store: this.store, database: db });
-      let active = true, deleted = false, callbackFailure;
+      let active = true, deleted = false, callbackFailure, callbackFailed = false;
       const assertActive = () => { if (!active) throw new Error('The library child scope has been released.'); };
       try {
         await db.client.query(`CREATE TEMP TABLE ${pending}("Key" text PRIMARY KEY)`);
@@ -225,7 +287,7 @@ export class LibraryScanHost {
             });
           }
         }));
-      } catch (error) { callbackFailure = error; throw error; }
+      } catch (error) { callbackFailed = true; callbackFailure = error; throw error; }
       finally {
         active = false;
         const cleanupSql = async operation => {
@@ -234,7 +296,7 @@ export class LibraryScanHost {
           catch (error) { db.discardConnection(error); throw error; }
         };
         await releaseResources(callbackFailure, [() => cleanupSql(() => deletion.close()),
-          () => cleanupSql(() => db.client.query(`DROP TABLE IF EXISTS ${pending}`))]);
+          () => cleanupSql(() => db.client.query(`DROP TABLE IF EXISTS ${pending}`))], callbackFailed);
       }
     }));
   }
@@ -274,13 +336,20 @@ export class LibraryScanHost {
   }
 
   updateInheritedValues() { return updateInheritedValues(this.store); }
-  async close() {
-    for (const root of this.#roots.values()) {
-      for (const owner of root.virtualOwners ?? []) owner.release();
-      root.owner.release();
-    }
-    this.#roots.clear();
-    this.#initializedRootItems.clear();
-    await this.itemCreation.linkedChildren.flushReleases();
+  close() {
+    if (this.#closePromise) return this.#closePromise;
+    this.#closing = true;
+    return this.#closePromise = (async () => {
+      await Promise.allSettled([...this.#pendingRoots.values()]);
+      const operations = [];
+      for (const root of this.#roots.values()) {
+        for (const owner of root.virtualOwners ?? []) operations.push(() => owner.release());
+        operations.push(() => root.owner.release());
+      }
+      this.#roots.clear(); this.#initializedRootItems.clear();
+      operations.push(() => this.itemCreation.linkedChildren.flushOwnedReleases(),
+        () => this.itemCreation.linkedChildren.flushReleases());
+      await releaseResources(undefined, operations, false);
+    })();
   }
 }

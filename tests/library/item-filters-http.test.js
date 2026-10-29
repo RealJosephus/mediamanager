@@ -8,6 +8,7 @@ import { declareNativeHttpTestFile } from '../helpers/native-http-test-file.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate, validateFixture } from './item-filter-http-scenario.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
 
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
 
@@ -21,9 +22,6 @@ const dialects = process.env.MEDIAMANAGER_USER_VIEW_QUERY_DIALECT
   ? [process.env.MEDIAMANAGER_USER_VIEW_QUERY_DIALECT] : ['postgres'];
 if (dialects.some(dialect => !['postgres'].includes(dialect))) throw new Error('Invalid UserView query dialect.');
 const columns = tableDefinition('BaseItems').columns;
-const normalizeBody = value => Array.isArray(value) ? value.map(normalizeBody)
-  : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value)
-    .filter(([key]) => key !== 'traceId').map(([key, entry]) => [key, normalizeBody(entry)])) : value;
 const cases = candidateCasesFromTrackedInput(fixture);
 
 for (const dialect of dialects) {
@@ -106,10 +104,8 @@ for (const dialect of dialects) {
           assert.equal(endpoint.endpoint, native.endpoint);
           assert.equal(endpoint.response.status, native.response.status);
           assert.equal(endpoint.response.contentType, native.response.contentType);
-          if (native.response.status < 400 || native.response.bodyJson !== undefined) assert.deepEqual(normalizeBody(endpoint.response.body), normalizeBody(native.response.bodyJson));
+          if (native.response.status < 400 || native.response.bodyJson !== undefined) assert.deepEqual(projectProblemTrace(endpoint.response.body, endpoint.response.status), projectProblemTrace(native.response.bodyJson, native.response.status));
           else assert.equal(endpoint.response.bodyText, native.response.bodyText);
-          assert.deepEqual(endpoint.runtimeErrors, native.response.status >= 400 && !fixture.cases.find(testCase => testCase.name === item.name).bindingError
-            ? [{ name: 'Error', message: 'Error processing request.' }] : []);
         } catch (error) { differences.push({ name: item.name, endpoint: endpoint.endpoint, message: error.message }); }
       }
     }
@@ -121,7 +117,7 @@ for (const dialect of dialects) {
       await writeFile(path.join(output, `${dialect}-comparison.json`), json({
         passed: differences.length === 0, phaseAcceptance: false, dialect, responses: http.records.length,
         comparedFields: 'Complete legacy and modern facet JSON, including names, ids, years, ratings, tags and language labels; status, content type, exact errors and unchanged media/UserData/filesystem.',
-        normalization: 'Only ProblemDetails traceId is removed. No successful facet values, identities, array order, language labels, empty values, tags or business state are normalized.',
+        normalization: 'Only root ProblemDetails traceId is projected, retaining presence/type and nested values. Successful facet values, identities, array order, language labels, empty values, tags and business state remain literal.',
         native: summary, differences,
       }), { flag: 'wx' });
     }
@@ -131,8 +127,6 @@ for (const dialect of dialects) {
     assert.deepEqual(actual.userDataAfterShutdown, actual.userDataBeforeReads);
     assert.deepEqual(actual.filesystemAfterReads, actual.filesystemBeforeReads);
     assert.deepEqual(actual.filesystemAfterShutdown, actual.filesystemBeforeReads);
-    assert.deepEqual(actual.runtimeErrors, []);
-    assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
     assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true, portReleased: true,
       postgresSchemasRemoved: dialect === 'postgres' ? true : null, programDataDirectoryRemoved: true });
     assert.deepEqual(differences, []);

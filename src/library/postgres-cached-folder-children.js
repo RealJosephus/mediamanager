@@ -72,7 +72,7 @@ async function build({ session, library, item, children }, entry) {
     cohort = await createNativeItemCohort({ linkedChildren: links,
       resolveLiveItem: (_id, slot) => materialized.peek(slot) ?? warm.get(slot)?.deref(),
       onMaterialize: (child, slot) => {
-        binding.link(child, { slot });
+        if (warm.get(slot)?.deref() !== child) binding.link(child, { slot });
         warm.set(slot, new WeakRef(child));
       },
       onRelease: () => {

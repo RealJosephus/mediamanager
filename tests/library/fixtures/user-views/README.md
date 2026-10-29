@@ -28,3 +28,15 @@ generator verifies every original byte SHA before reading the selected keys.
 Ordinary tests compare the complete selected key/value maps and the current
 provenance against this independent frozen projection; they do not require
 the ignored source tree or claim to rehash its bytes during offline tests.
+
+Runtime rebinding uses the preserved `before` snapshot's uniquely identified
+typed UserRootFolder and its Native `data/root/default` role. The manifest's
+evidence storage directory remains original provenance; it does not replace the
+root recorded inside the actual rows and HTTP responses. Native
+`ServerApplicationPaths.cs` lines 34–37 construct the user-view and default
+metadata roots from ProgramDataPath, and `LibraryManager.cs` lines 3003–3006,
+3066 and 3206 create UserView paths beneath InternalMetadataPath/views in the
+designated source package. The consumer independently checks the recorded
+`%MetadataPath%` UserView rows against those same items' actual HTTP Path values.
+Only known DTO/column/Data path roles are rebound. ProviderIds, unknown metadata,
+descriptions, original manifests and recorded source bytes remain unchanged.

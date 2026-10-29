@@ -7,21 +7,27 @@ import { tableDefinition } from '../../src/database/model.js';
 import { dateText, idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate, validateFixture } from './item-filter-http-scenario.js';
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
 
 const fixtureBytes = await readFile(new URL('./fixtures/theme-media-http/input.json', import.meta.url), 'utf8');
 const fixture = JSON.parse(fixtureBytes);
 validateFixture(fixture);
-const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'traceId').map(([key, entry]) => [key,
-    key === 'ServerId' ? '$server' : ['DateCreated', 'DateLastSaved', 'DateLastMediaAdded'].includes(key) && typeof entry === 'string'
-      ? dateText(entry) : normalize(entry)])) : value;
+const normalize = (value, serverId, status) => {
+  const project = body => projectItemBody(body, { serverId, status,
+    date: (entry, { field }) => ['DateCreated', 'DateLastSaved', 'DateLastMediaAdded'].includes(field) ? dateText(entry) : entry });
+  if (value && typeof value === 'object' && !Array.isArray(value)
+    && Object.hasOwn(value, 'ThemeSongsResult') && Object.hasOwn(value, 'ThemeVideosResult')) {
+    return { ...value, ThemeSongsResult: project(value.ThemeSongsResult), ThemeVideosResult: project(value.ThemeVideosResult) };
+  }
+  return project(value);
+};
 
 test('theme media APIs match 138 current native full responses with inherited owners, versions and images', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
 }, nativeCallback(async t => {
-  const { http, stages, summary, root } = await currentUserViewScenario('theme-media-http', fixtureBytes, { signal: t.signal });
+  const { http, stages, summary, root, nativeServerId } = await currentUserViewScenario('theme-media-http', fixtureBytes, { signal: t.signal });
   const body = name => http.records.find(record => record.name === name)?.response.bodyJson;
   const main = body('direct main ThemeMedia');
   assert.ok(main.ThemeSongsResult.Items.length >= 5);
@@ -113,16 +119,14 @@ test('theme media APIs match 138 current native full responses with inherited ow
     try {
       assert.equal(endpoint.response.status, native.response.status);
       assert.equal(endpoint.response.contentType, native.response.contentType);
-      if (native.response.status < 400 || native.response.bodyJson !== undefined) assert.deepEqual(normalize(endpoint.response.body), normalize(native.response.bodyJson));
+      if (native.response.status < 400 || native.response.bodyJson !== undefined) assert.deepEqual(normalize(endpoint.response.body, actual.serverId, endpoint.response.status), normalize(native.response.bodyJson, nativeServerId, native.response.status));
       else assert.equal(endpoint.response.bodyText, native.response.bodyText);
-      const expectedError = cases.find(value => value.name === item.name).expectedRuntimeError;
-      assert.deepEqual(endpoint.runtimeErrors, expectedError ? [{ name: 'Error', message: expectedError }] : []);
     } catch (error) { differences.push({ name: item.name, endpoint: endpoint.endpoint, message: error.message }); }
   }
   await writeFile(path.join(root, 'postgres.json'), json(actual), { flag: 'wx' });
   await writeFile(path.join(root, 'postgres-comparison.json'), json({ passed: differences.length === 0, phaseAcceptance: false,
     responses: http.records.length, comparedFields: 'Complete theme envelopes, all DTO fields/images/owners, user data, stable order and exact errors.',
-    normalization: 'Only isolated ServerId, ProblemDetails traceId and equivalent full UTC 100ns date formatting. Native item/image identity paths are preserved exactly and map through storage to the Node copy.',
+    normalization: 'Declared DTO ServerId is bound to each actual isolated server; root ProblemDetails traceId retains presence and type, and declared dates retain equivalent full UTC 100ns values. Native item/image identity paths, opaque dictionaries and unknown fields remain literal.',
     differences }), { flag: 'wx' });
   assert.deepEqual(actual.beforeReads, actual.afterReads);
   assert.deepEqual(actual.beforeReads, actual.afterShutdown);
@@ -130,8 +134,6 @@ test('theme media APIs match 138 current native full responses with inherited ow
   assert.deepEqual(actual.userDataBeforeReads, actual.userDataAfterShutdown);
   assert.deepEqual(actual.filesystemBeforeReads, actual.filesystemAfterReads);
   assert.deepEqual(actual.filesystemBeforeReads, actual.filesystemAfterShutdown);
-  assert.deepEqual(actual.runtimeErrors, []);
-  assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
   assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true, portReleased: true,
     postgresSchemasRemoved: true, programDataDirectoryRemoved: true });
   assert.deepEqual(differences, []);

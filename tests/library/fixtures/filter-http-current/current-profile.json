@@ -30,14 +30,23 @@
     "Emby.Server.Implementations/Dto/DtoService.cs",
     "Emby.Server.Implementations/Localization/LocalizationManager.cs",
     "Jellyfin.Server.Implementations/Users/UserManager.cs",
-    "src/Jellyfin.Extensions/StringExtensions.cs"
+    "src/Jellyfin.Extensions/StringExtensions.cs",
+    "Jellyfin.Server.Implementations/Security/AuthorizationContext.cs",
+    "Emby.Server.Implementations/Session/SessionManager.cs",
+    "Jellyfin.Server.Implementations/Devices/DeviceManager.cs"
   ],
   "inputs": [
     {
       "filename": "record-native.js",
-      "bytes": 50728,
-      "sha256": "f30de319df7e2dcb63d700a1750f3cab09702eb2cb29de6d77952b018820b453",
+      "bytes": 53316,
+      "sha256": "915c8ca352502015d40fd4148fc36b1ffb5510e3e1fccb351e9b63e0329813ca",
       "role": "currentNativeRecorder"
+    },
+    {
+      "filename": "read-diagnostics.js",
+      "bytes": 5111,
+      "sha256": "bddda659ee89cf6237767583405e24dc704679aa80e615a960792eb2dd9268d6",
+      "role": "completeReadFailureDiagnostics"
     },
     {
       "filename": "scenario.js",
@@ -54,13 +63,13 @@
     {
       "filename": "static-audio-binding.json",
       "bytes": 5180,
-      "sha256": "4fe4a50b22dcd7ee0b77b0928e00639efebf42c870fdd05df97148ebd97f3ccc",
+      "sha256": "047dfcdf580d45603d1028ab6b90b40edd3a9dd5aef8a8ce380b94ff9f6d919a",
       "role": "staticAudioInputBinding"
     },
     {
       "filename": "../../current-filter-http.js",
-      "bytes": 17422,
-      "sha256": "d9bb66a5eddee2efb15fd0fc65437868aeae5218d48aa7e0b25e2eda69dceaa3",
+      "bytes": 17849,
+      "sha256": "a89094e431305b8b0a803557239d66d1bf217cc53bad0893db586341c14cf97d",
       "role": "currentCaptureConsumer"
     },
     {

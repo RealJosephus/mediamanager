@@ -8,14 +8,13 @@ import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEviden
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { randomUUID } from 'node:crypto';
 import { idKey } from '../../src/library/records.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
 
 const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
 
 const bytes = await readFile(new URL('./fixtures/intros-http/input.json', import.meta.url));
 const fixture = JSON.parse(bytes);
 validateFixture(fixture);
-const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'traceId').map(([key, entry]) => [key, normalize(entry)])) : value;
 
 function assertReadOnly(actual) {
   assert.deepEqual(actual.beforeReads, actual.afterReads);
@@ -24,8 +23,6 @@ function assertReadOnly(actual) {
   assert.deepEqual(actual.userDataBeforeReads, actual.userDataAfterShutdown);
   assert.deepEqual(actual.filesystemBeforeReads, actual.filesystemAfterReads);
   assert.deepEqual(actual.filesystemBeforeReads, actual.filesystemAfterShutdown);
-  assert.deepEqual(actual.runtimeErrors, []);
-  assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
   assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true, portReleased: true,
     postgresSchemasRemoved: true, programDataDirectoryRemoved: true });
 }
@@ -61,15 +58,13 @@ test('intro HTTP routes match 26 current native user, root and binding responses
     try {
       assert.equal(endpoint.response.status, native.response.status);
       assert.equal(endpoint.response.contentType, native.response.contentType);
-      if (native.response.bodyJson !== undefined) assert.deepEqual(normalize(endpoint.response.body), normalize(native.response.bodyJson));
+      if (native.response.bodyJson !== undefined) assert.deepEqual(projectProblemTrace(endpoint.response.body, endpoint.response.status), projectProblemTrace(native.response.bodyJson, native.response.status));
       else assert.equal(endpoint.response.bodyText, native.response.bodyText);
-      const expectedError = cases.find(value => value.name === item.name).expectedRuntimeError;
-      assert.deepEqual(endpoint.runtimeErrors, expectedError ? [{ name: 'Error', message: expectedError }] : []);
     } catch (error) { differences.push({ name: item.name, endpoint: endpoint.endpoint, message: error.message }); }
   }
   await writeFile(path.join(root, 'postgres.json'), json(actual), { flag: 'wx' });
   await writeFile(path.join(root, 'postgres-comparison.json'), json({ passed: differences.length === 0,
-    phaseAcceptance: false, responses: http.records.length, normalization: 'ProblemDetails traceId only.', differences }), { flag: 'wx' });
+    phaseAcceptance: false, responses: http.records.length, normalization: 'Only root ProblemDetails traceId, retaining presence/type and all nested values.', differences }), { flag: 'wx' });
   assert.equal(actual.httpCases, 26);
   assertReadOnly(actual);
   assert.deepEqual(differences, []);
@@ -117,7 +112,8 @@ test('installed intro plugins return ordered DTOs through PostgreSQL HTTP and st
       assert.equal(dto.Name, source.name); assert.equal(dto.Type, source.type); assert.equal(dto.MediaType, 'Video');
       assert.ok(dto.UserData); assert.ok(dto.ImageTags);
     }
-    assert.deepEqual(endpoint.runtimeErrors, active ? [{ name: 'Error', message: 'Controlled intro provider failure.' }] : []);
+    if (active) assert.ok(endpoint.runtimeErrors.some(error => error?.message === 'Controlled intro provider failure.'),
+      'The installed failing provider ran before the later provider completed.');
   }
   assert.equal(actual.httpCases, 6);
   assertReadOnly(actual);

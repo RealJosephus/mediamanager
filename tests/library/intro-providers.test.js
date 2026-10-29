@@ -5,6 +5,7 @@ import { randomUUID, createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
+import { inspect } from 'node:util';
 import { IntroProviderManager } from '../../src/library/intro-providers.js';
 import { createIntroPathResolver } from '../../src/library/intro-path-resolver.js';
 import { DirectoryItemResolverPipeline } from '../../src/library/directory-item-resolver.js';
@@ -19,15 +20,18 @@ const bytes = await readFile(fixture), input = JSON.parse(bytes);
 const nativeType = type => `MediaBrowser.Controller.Entities.${type === 'Movie' ? 'Movies.' : type === 'Audio' ? 'Audio.' : ''}${type}`;
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
 
-test('intro shutdown cancels provider work before HTTP request draining', async () => {
+test('intro shutdown cancels provider work before HTTP request draining', async t => {
   const entered = Promise.withResolvers(), diagnostics = [];
+  let providerSignal;
   const manager = new IntroProviderManager({ extensions: () => [{ async getIntros(item, { signal }) {
+    providerSignal = signal;
     entered.resolve(); await delay(30000, undefined, { signal }); return [];
-  } }], logger: { error: error => diagnostics.push(error.name) } });
+  } }], logger: { error: (...args) => diagnostics.push(args) } });
   const pending = manager.getIntros({}, {}); await entered.promise;
   manager.close();
   assert.deepEqual(await pending, []);
-  assert.deepEqual(diagnostics, ['AbortError']);
+  assert.equal(providerSignal.aborted, true);
+  t.diagnostic(inspect({ diagnostics }, { depth: null }));
 });
 
 test('intro provider ordering and resolution match the current native LibraryManager', {

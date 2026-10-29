@@ -1,10 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
-import { tableDefinition } from '../../src/database/model.js';
+import { tableDefinition, quoteIdentifier as q } from '../../src/database/model.js';
+import { nativeTextBytes } from '../../src/database/native-text.js';
+import { fixtureRow } from '../database/fixtures.js';
 import { loadPostgresMetadataRows, loadPostgresNavigationRows,
-  loadPostgresPageGraph, loadPostgresItemGraph } from '../../src/library/postgres-library-query.js';
+  loadPostgresPageGraph, loadPostgresItemGraph, loadPostgresRowsByIds } from '../../src/library/postgres-library-query.js';
+import { withPostgresNativeQueryJitOff } from '../../src/database/postgres-native-query-jit.js';
+import { validationOutputRoot, assertValidationOutputChild } from '../../tools/validation/paths.js';
 
 const postgresOptions = { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES };
 const key = value => value.toLowerCase().replaceAll('-', '');
@@ -33,6 +39,58 @@ function item(Id, type, fields = {}) {
     ...fields,
   };
 }
+
+test('real PostgreSQL identifier hydration retains complete stored rows and raw identity ordering',
+  postgresOptions, async t => {
+    const database = await createPostgresTestDatabase(t, 'identifier_rows');
+    const table = tableDefinition('BaseItems');
+    const dashed = 'A7B8C9D0-E1F2-4A5B-8C6D-00AABBCCDDEE';
+    const spellings = [dashed, dashed.replaceAll('-', ''), dashed.toLowerCase(), key(dashed)];
+    const expected = spellings.map((Id, index) => ({
+      ...fixtureRow(table), Id,
+      Name: `\ufeff中文\0\u0001e\u0301😀 ${index}`,
+      DateModified: `2026-10-28 00:01:02.123456${index}`,
+      Data: index === 1 ? null : `{\r\n  "unknown-provider" : ["中文", "e\u0301", "😀"],\r\n  "large" : 9223372036854775807, "id" : "${Id}"\r\n}\r\n`,
+      IsFolder: index % 2 === 1,
+      RunTimeTicks: 9007199254740993n + BigInt(index),
+      Size: index === 2 ? null : 9223372036854775000n - BigInt(index),
+    }));
+    await database.insertBatch('BaseItems', expected.toReversed());
+
+    const empty = { ...fixtureRow(table), Id: '' };
+    const hyphen = { ...fixtureRow(table), Id: '-', Data: 'opaque provider text\0\u0001中文' };
+    await database.insertBatch('BaseItems', [empty, hyphen]);
+    const invalidText = Buffer.from([0xc3, 0x28]);
+    const setData = (id, bytes) => database.client.query({
+      text: `UPDATE ${q(database.schemaName)}."BaseItems" SET "Data"=$1 WHERE "Id"=$2`,
+      values: [bytes, nativeTextBytes(id)],
+    });
+    await setData('', invalidText);
+
+    const actual = await loadPostgresRowsByIds(database, [spellings[2], spellings[1], spellings[3],
+      spellings[0], spellings[2], null, '', '00000000-0000-0000-0000-000000000000']);
+    assert.deepEqual(actual, expected,
+      'All distinct stored N/D and upper/lowercase rows survive one normalized selector, in raw Id order.');
+    assert.deepEqual(actual, await database.rows('BaseItems', { whereIn: { Id: spellings } }),
+      'The complete typed rows match the raw adapter without JSON, date or Guid rewriting.');
+    for (const row of actual) assert.deepEqual(Object.keys(row).sort(), table.columns.map(column => column.name).sort());
+    assert.deepEqual(await loadPostgresRowsByIds(database, ['-']), [hyphen],
+      'An empty normalized lookup filters the stored empty Id before its malformed Data is decoded.');
+    assert.deepEqual(await loadPostgresRowsByIds(database,
+      [null, '', '00000000000000000000000000000000', '00000000-0000-0000-0000-000000000000']), []);
+
+    await setData(spellings[0], invalidText);
+    let adapterFailure;
+    await assert.rejects(() => database.rows('BaseItems', { where: { Id: spellings[0] } }), reason => {
+      adapterFailure = reason;
+      return true;
+    });
+    await assert.rejects(() => loadPostgresRowsByIds(database, [spellings[0]]), reason => {
+      assert.equal(reason.code, adapterFailure.code);
+      assert.equal(reason.message, adapterFailure.message);
+      return true;
+    }, 'Selected malformed TEXT retains the adapter decoder failure.');
+  });
 
 test('single-item loaders exclude unrelated user views and collection members', postgresOptions, async t => {
   const database = await createPostgresTestDatabase(t, 'unrelated_graph');
@@ -237,4 +295,94 @@ test('real PostgreSQL page graphs follow N-format PrimaryVersionId from a D-form
     const graph = await loadPostgresPageGraph(database, [primary]);
     assert.deepEqual(new Set(graph.map(row => key(row.Id))), new Set(Object.values(ids).map(key)),
       'the alternate is hydrated through the idKey-equivalent version reference');
+  });
+
+test('real PostgreSQL page references preserve their reachable frame as unrelated items grow',
+  postgresOptions, async t => {
+    const database = await createPostgresTestDatabase(t, 'page_references');
+    const ids = Object.fromEntries(['parent', 'ancestor', 'top', 'season', 'series', 'owner',
+      'primary', 'channel', 'channelRoot', 'explicitAncestor', 'alternate', 'automatic', 'manual', 'owned']
+      .map(name => [name, randomUUID().toUpperCase()]));
+    const context = [
+      item(ids.parent, 'Folder', { ParentId: ids.ancestor }),
+      item(ids.ancestor, 'Folder', { ParentId: ids.parent }),
+      item(ids.top, 'Folder'), item(ids.season, 'TV.Season'), item(ids.series, 'TV.Series'),
+      item(ids.owner, 'Movies.Movie'), item(ids.primary, 'Movies.Movie'),
+      item(ids.channel, 'Channel', { ChannelId: ids.channelRoot }),
+      item(ids.channelRoot, 'Channel'), item(ids.explicitAncestor, 'Folder'),
+    ];
+    const selected = Array.from({ length: 128 }, (_, index) => item(randomUUID().toUpperCase(), 'Movies.Movie',
+      index === 127 ? {} : { ParentId: ids.parent, TopParentId: ids.top, SeasonId: ids.season,
+        SeriesId: ids.series, OwnerId: ids.owner, PrimaryVersionId: ids.primary, ChannelId: ids.channel }));
+    const related = [
+      item(ids.alternate, 'Movies.Movie', { PrimaryVersionId: key(ids.primary) }),
+      item(ids.automatic, 'Movies.Movie', { PrimaryVersionId: selected[0].Id }),
+      item(ids.manual, 'Movies.Movie'), item(ids.owned, 'Movies.Movie', { OwnerId: selected[0].Id }),
+    ];
+    const insertPages = async (table, rows) => {
+      for (let offset = 0; offset < rows.length; offset += 128) await database.insertBatch(table, rows.slice(offset, offset + 128));
+    };
+    await insertPages('BaseItems', context);
+    await insertPages('BaseItems', selected);
+    await insertPages('BaseItems', related);
+    await database.insert('AncestorIds', { ...blank('AncestorIds'), ItemId: selected[0].Id, ParentItemId: ids.explicitAncestor });
+    await database.insertBatch('LinkedChildren', [
+      { ParentId: selected[0].Id, ChildId: ids.automatic, ChildType: 2, SortOrder: 0 },
+      { ParentId: selected[0].Id, ChildId: ids.manual, ChildType: 0, SortOrder: 1 },
+    ]);
+    const unrelated = Array.from({ length: 2048 }, () => item(randomUUID(), 'Movies.Movie', {
+      ParentId: ids.parent, OwnerId: ids.parent,
+    }));
+    const report = { scope: 'Actual PostgreSQL page references, context cycles, version/link/owned expansion and unrelated-data growth.',
+      planDiagnosticsOnly: true, observations: [] };
+    const expectedBase = [...selected.map(row => row.Id), ...Object.entries(ids)
+      .filter(([name]) => !['channelRoot', 'manual', 'owned'].includes(name)).map(([, value]) => value)].map(key).sort();
+    const observe = async (unrelatedItems, expand) => {
+      await database.withConnection(async session => {
+        const page = await loadPostgresRowsByIds(session, selected.map(row => row.Id));
+        const query = session.client.query;
+        let graphQuery;
+        session.client.query = async (...args) => {
+          const request = args[0];
+          if (request?.text?.startsWith('/* page-relationship-graph */')) graphQuery = request;
+          return query(...args);
+        };
+        let rows;
+        const started = performance.now();
+        try { rows = await loadPostgresPageGraph(session, page, [], { includeManualLinks: expand, includeOwnedItems: expand }); }
+        finally { session.client.query = query; }
+        const elapsedMs = performance.now() - started;
+        const actual = rows.map(row => key(row.Id)).sort();
+        const expected = expand ? [...expectedBase, key(ids.manual), key(ids.owned)].sort() : expectedBase;
+        assert.deepEqual(actual, expected,
+          'Only selected/version/link/owned members expand; parent and channel context cannot introduce unrelated members.');
+        let plan;
+        if (graphQuery) {
+          plan = await withPostgresNativeQueryJitOff(session, async current => {
+            const result = await current.client.query({ text: 'EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ' + graphQuery.text,
+              values: graphQuery.values });
+            return result.rows[0]['QUERY PLAN'][0];
+          });
+        }
+        let baseItemRowsVisited = 0;
+        const visit = node => {
+          if (node['Relation Name'] === 'BaseItems') baseItemRowsVisited += ((node['Actual Rows'] ?? 0)
+            + (node['Rows Removed by Filter'] ?? 0)) * (node['Actual Loops'] ?? 0);
+          for (const child of node.Plans ?? []) visit(child);
+        };
+        if (plan) visit(plan.Plan);
+        report.observations.push({ unrelatedItems, includeManualLinks: expand, includeOwnedItems: expand,
+          actual, elapsedMs, query: graphQuery, baseItemRowsVisited, plan });
+      });
+    };
+    try {
+      await insertPages('BaseItems', unrelated.slice(0, 64));
+      await database.insert('LinkedChildren', { ParentId: ids.parent, ChildId: unrelated[0].Id, ChildType: 2, SortOrder: 0 });
+      await observe(64, false); await observe(64, true);
+      await insertPages('BaseItems', unrelated.slice(64));
+      await observe(2048, false); await observe(2048, true);
+    } finally {
+      const output = path.join(validationOutputRoot(), 'postgres-page-reference-work'); assertValidationOutputChild(output);
+      await mkdir(output, { recursive: true }); await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
+    }
   });

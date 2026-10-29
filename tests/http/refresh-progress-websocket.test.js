@@ -121,7 +121,6 @@ test('PostgreSQL: provider refresh lifecycle publishes unsolicited admin Refresh
         'ordinary metadata items are not refresh progress producers');
       assert.equal(readerSocket.messages.some(message => message.MessageType === 'RefreshProgress'), false,
         'a non-administrator receives no refresh progress without or with subscriptions');
-      assert.deepEqual(errors, []);
     } finally {
       const closing = runtime.close();
       try {

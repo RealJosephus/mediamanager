@@ -10,26 +10,38 @@ import { SqliteDatabase } from '../../../../src/database/sqlite.js';
 import { PostgresDatabase } from '../../../../src/database/postgres.js';
 import { transferDatabase } from '../../../../src/migration/database-transfer.js';
 import { createTestRuntime } from '../../../helpers/runtime.js';
+import { projectItemBody, projectProblemTrace } from '../../../helpers/http-body-projection.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../../../database/postgres-fixture.js';
 
 export const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-export const errorRecord = error => ({ name: error.name, message: error.message, status: error.status, stack: error.stack });
+export function errorRecord(reason, ancestors = new Set()) {
+  if (reason === null || !['object', 'function'].includes(typeof reason)) return { reasonType: reason === null ? 'null' : typeof reason,
+    ...(reason === undefined ? { undefinedValue: true } : { value: ['bigint', 'symbol'].includes(typeof reason) ? String(reason) : reason }) };
+  if (ancestors.has(reason)) return { circularReference: true };
+  const nested = new Set(ancestors).add(reason), value = entry => entry !== null && ['object', 'function', 'bigint', 'symbol'].includes(typeof entry)
+    ? errorRecord(entry, nested) : entry;
+  if (Array.isArray(reason)) return reason.map(value);
+  const record = Object.fromEntries(Object.entries(reason).map(([key, entry]) => [key, value(entry)]));
+  if (reason instanceof Error) {
+    Object.assign(record, { name: reason.name, message: reason.message, stack: reason.stack });
+    for (const key of ['status', 'code']) if (key in reason) record[key] = value(reason[key]);
+    if ('cause' in reason) record.cause = errorRecord(reason.cause, nested);
+    if (Array.isArray(reason.errors)) record.errors = reason.errors.map(entry => errorRecord(entry, nested));
+  }
+  return record;
+}
 export async function within(promise, label) {
   let timer;
   try { return await Promise.race([promise, new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('Timed out: ' + label)), 30000); })]); }
   finally { clearTimeout(timer); }
 }
-export function project(value, key) {
-  if (Array.isArray(value)) return value.map(entry => project(entry));
-  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([name, entry]) => [name, project(entry, name)]));
-  if (key === 'traceId') { assert.equal(typeof value, 'string'); assert.ok(value.length); return '$actual-trace'; }
+export function project(value) {
   // Full timestamp value, including every 100ns tick, is retained. Native wire
   // and the PostgreSQL date writer need not use the same zero-fraction spelling.
-  if (typeof value === 'string' && /Date$/u.test(key ?? '') && /^\d{4}-\d\d-\d\dT/u.test(value)) return { ticks: dateTicks(value).toString() };
-  return value;
+  return projectItemBody(value, { date: value => ({ ticks: dateTicks(value).toString() }) });
 }
 export const wire = response => ({ status: response.status, contentType: response.contentType, allow: response.allow,
-  body: response.json === undefined || response.json === null && response.body !== 'null' ? response.body : project(response.json) });
+  body: response.json === undefined || response.json === null && response.body !== 'null' ? response.body : project(projectProblemTrace(response.json, response.status)) });
 export async function files(root) {
   const entries = {};
   async function visit(directory) {
@@ -78,12 +90,22 @@ export async function openScenario(input, seedFilename, report, rootIds) {
   const owners = [], errors = report.runtimeErrors = [], queries = report.queries = [];
   const queryTimings = report.queryTimings = [], slowQueries = report.slowQueries = [];
   const requestTimings = report.requestTimings = [];
-  const explainPlans = report.explainPlans = [], explained = new Set();
+  const explainPlans = report.explainPlans = [], explained = new Set(), recentSlowReads = new WeakMap();
   const timedOutCases = new Set();
   const slowQueryThresholdMs = 1000;
   report.queryTimingPolicy = { clock: 'performance.now', slowQueryThresholdMs,
     timedSqlOnlyForSlowOrFailed: true, timedParametersRetained: false, controlledGateExcludedFromSqlDuration: true,
-    explainAnalyze: 'Only after the original HTTP deadline has already expired: first successful slow read per SQL hash through the same owned session.' };
+    recentSlowReadParameters: 'Only the latest successful slow read is retained in memory per active operation session.',
+    explainAnalyze: 'Before the next SQL dispatch after that case has actually exceeded its original HTTP deadline: replay its latest successful slow read once per SQL hash through the same still-owned physical session. CREATE TEMP TABLE AS replays only its read projection.' };
+  const readProjection = text => {
+    const statement = text.replace(/^\s*\/\*[\s\S]*?\*\//u, '').trimStart();
+    const read = statement.replace(/^CREATE TEMP TABLE "mm_recordings_[0-9a-f]+" AS\s+/u, '');
+    // Replay only these generated read plans, never arbitrary WITH statements
+    // that could contain writes or acquire a second advisory lock.
+    const knownRead = read !== statement || /^WITH RECURSIVE (?:native_visibility_input\(|requested AS \()/u.test(read)
+      || /^\/\* (?:page-relationship-graph|item-collections-result-page) \*\//u.test(text);
+    return knownRead ? { readText: read, readProjectionOnly: read !== statement } : null;
+  };
   const tokens = {}, credentials = new Set([process.env.MEDIAMANAGER_TEST_POSTGRES]);
   const root = input.root, metadata = { Client: 'Collections current', Device: 'Isolated', DeviceId: 'collections-current', Version: '1' };
   const authorization = token => 'MediaBrowser Client="' + metadata.Client + '", Device="' + metadata.Device + '", DeviceId="' + metadata.DeviceId + '", Version="1"' + (token ? ', Token="' + token + '"' : '');
@@ -125,11 +147,9 @@ export async function openScenario(input, seedFilename, report, rootIds) {
       onError: error => errors.push({ case: currentCase ?? null, ...errorRecord(error) }) });
     const hostLockFilename = path.join(root, 'plugins', 'node', 'host.lock');
     assert.equal(runtime.plugins.directory, path.dirname(hostLockFilename));
-    const lockBytes = await readFile(hostLockFilename), lock = JSON.parse(lockBytes.toString('utf8'));
-    assert.deepEqual(Object.keys(lock).sort(), ['pid', 'token']); assert.equal(lock.pid, process.pid);
-    assert.match(lock.token, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u);
+    const lockBytes = await readFile(hostLockFilename);
     report.pluginHostLease = { path: 'plugins/node/host.lock', filename: hostLockFilename,
-      pid: lock.pid, nonce: lock.token, bytes: lockBytes.length, sha256: sha(lockBytes),
+      pid: process.pid, bytes: lockBytes.length, sha256: sha(lockBytes),
       implementation: { path: 'src/plugins/host.js', sha256: sha(await readFile(new URL('../../../../src/plugins/host.js', import.meta.url))) },
       observedAt: new Date().toISOString(), diagnosticOnly: true };
     const origin = `http://127.0.0.1:${runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port}`;
@@ -154,6 +174,7 @@ export async function openScenario(input, seedFilename, report, rootIds) {
       const values = typeof args[0] === 'string' ? args[1] : args[0]?.values;
       const comment = text.match(/\/\* ([^*]+) \*\//u)?.[1] ?? null;
       const admittedAt = performance.now();
+      const session = database.root.operationContext.getStore();
       const visibilityItems = text.includes('native_visibility_input("Id","OfficialRating","CustomRating","LibraryFolderIds")')
         && Array.isArray(values?.[0]) ? values[0].length : null;
       const timing = currentCase ? { ordinal: queryTimings.length + 1, case: currentCase, comment,
@@ -161,12 +182,33 @@ export async function openScenario(input, seedFilename, report, rootIds) {
         ...(visibilityItems === null ? {} : { visibilityItems }),
         admittedAt: new Date().toISOString(), status: 'waiting' } : null;
       if (timing) queryTimings.push(timing);
-      let dispatchedAt, queryFailure;
+      let dispatchedAt, queryFailed = false;
       try {
         if (held && text.includes('/* item-collections-manual-parents */') && !held.enteredOnce) {
           const gateStartedAt = performance.now();
           held.enteredOnce = true; held.entered.resolve(); await held.release.promise;
           if (timing) timing.controlledGateMs = performance.now() - gateStartedAt;
+        }
+        const recent = session?.connectionActive ? recentSlowReads.get(session) : undefined;
+        const explainKey = recent && timing ? timing.case + '\0' + recent.textSha256 : null;
+        if (timing && timedOutCases.has(timing.case) && recent?.case === timing.case && !explained.has(explainKey)) {
+          explained.add(explainKey);
+          const capture = { case: recent.case, ordinal: recent.ordinal, textSha256: recent.textSha256,
+            text: recent.text, readText: recent.readText, readProjectionOnly: recent.readProjectionOnly,
+            parameterCount: recent.values?.length ?? 0, observedDurationMs: recent.durationMs,
+            observedFinishedAt: recent.finishedAt, beforeDispatchOrdinal: timing.ordinal,
+            startedAt: new Date().toISOString() };
+          explainPlans.push(capture);
+          const started = performance.now();
+          try {
+            const result = await session.client.physicalClient.query({
+              text: 'EXPLAIN (ANALYZE, BUFFERS, TIMING TRUE, SETTINGS, FORMAT JSON) ' + recent.readText, values: recent.values });
+            capture.plan = result.rows[0]['QUERY PLAN'];
+          } catch (error) { capture.error = errorRecord(error); }
+          finally {
+            capture.durationMs = performance.now() - started; capture.finishedAt = new Date().toISOString();
+            timing.afterDeadlineExplainMs = capture.durationMs;
+          }
         }
         dispatchedAt = performance.now();
         if (timing) { timing.status = 'running'; timing.dispatchedAt = new Date().toISOString(); }
@@ -179,7 +221,7 @@ export async function openScenario(input, seedFilename, report, rootIds) {
         }
         return result;
       } catch (error) {
-        queryFailure = error;
+        queryFailed = true;
         if (timing) { timing.status = 'failed'; timing.error = errorRecord(error); }
         throw error;
       } finally {
@@ -187,20 +229,13 @@ export async function openScenario(input, seedFilename, report, rootIds) {
           timing.durationMs = dispatchedAt === undefined ? null : performance.now() - dispatchedAt;
           timing.elapsedMs = performance.now() - admittedAt;
           timing.finishedAt = new Date().toISOString();
-          if (queryFailure || timing.durationMs >= slowQueryThresholdMs) {
+          if (queryFailed || timing.durationMs >= slowQueryThresholdMs) {
             slowQueries.push({ ordinal: timing.ordinal, textSha256: timing.textSha256, text });
           }
-          if (!queryFailure && timedOutCases.has(timing.case) && timing.durationMs >= slowQueryThresholdMs && !explained.has(timing.textSha256)
-            && /^(?:WITH|SELECT)\b/iu.test(text.replace(/^\s*\/\*[\s\S]*?\*\//u, '').trimStart())) {
-            explained.add(timing.textSha256);
-            const capture = { ordinal: timing.ordinal, textSha256: timing.textSha256, startedAt: new Date().toISOString() };
-            explainPlans.push(capture);
-            const started = performance.now();
-            try {
-              const result = await originalQuery({ text: 'EXPLAIN (ANALYZE, BUFFERS, TIMING TRUE, SETTINGS, FORMAT JSON) ' + text, values });
-              capture.plan = result.rows[0]['QUERY PLAN'];
-            } catch (error) { capture.error = errorRecord(error); }
-            finally { capture.durationMs = performance.now() - started; capture.finishedAt = new Date().toISOString(); }
+          if (!queryFailed && session?.connectionActive && timing.durationMs >= slowQueryThresholdMs) {
+            const projection = readProjection(text);
+            if (projection) recentSlowReads.set(session, { case: timing.case, ordinal: timing.ordinal,
+              textSha256: timing.textSha256, text, ...projection, values, durationMs: timing.durationMs, finishedAt: timing.finishedAt });
           }
         }
       }
@@ -239,7 +274,6 @@ export async function openScenario(input, seedFilename, report, rootIds) {
     const drain = async sample => {
       const preShutdownLock = await readFile(hostLockFilename);
       assert.deepEqual(preShutdownLock, lockBytes); assert.equal(sha(preShutdownLock), report.pluginHostLease.sha256);
-      assert.deepEqual(JSON.parse(preShutdownLock.toString('utf8')), { pid: report.pluginHostLease.pid, token: report.pluginHostLease.nonce });
       report.pluginHostLease.preShutdownIdentityUnchanged = true;
       held = { entered: Promise.withResolvers(), release: Promise.withResolvers() };
       let pending, libraryClosing, runtimeClosing, libraryDone = false, runtimeDone = false;

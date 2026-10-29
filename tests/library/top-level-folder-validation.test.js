@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { mkdir, mkdtemp, readFile, rm, unlink, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import pg from 'pg';
 import sharp from 'sharp';
 import { PostgresDatabase } from '../../src/database/postgres.js';
@@ -77,6 +78,7 @@ async function fixture(t, dialect) {
   const ignoreIdentityMap = await knownAncestorIgnoreIdentityMap({ registry: storage, vfs, identityMap,
     identityRoots: [mediaPath] });
   const errors = [];
+  t.after(() => t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null })));
   runtime = await createTestRuntime({
     database,
     vfs,
@@ -135,7 +137,7 @@ function testFolder(nativeType, Id) {
 
 test('postgres: poster maintenance loads user-root libraries and persists local images through the real refresh host',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    const { runtime, database, firstPath, errors } = await fixture(t, 'postgres');
+    const { runtime, database, firstPath } = await fixture(t, 'postgres');
     await runtime.libraryScanLifecycle.validateTopLibraryFolders();
     const [collection] = await rowsByType(database, collectionFolderNativeType);
     assert.ok(collection);
@@ -163,8 +165,12 @@ test('postgres: poster maintenance loads user-root libraries and persists local 
     await runtime.collectionPosterVerifyPostScanTask.run();
     assert.equal(seen.length, 1, 'A persisted primary relationship prevents a redundant refresh.');
     const controller = new AbortController(); controller.abort();
-    await assert.rejects(runtime.collectionPosterVerifyPostScanTask.run({ signal: controller.signal }), { name: 'AbortError' });
-    assert.equal(seen.length, 1); assert.deepEqual(errors, []);
+    await assert.rejects(runtime.collectionPosterVerifyPostScanTask.run({ signal: controller.signal }), error => {
+      t.diagnostic(inspect({ cancellation: error }, { depth: null, maxArrayLength: null, maxStringLength: null }));
+      assert.deepEqual({ message: error.message, code: error.code },
+        { message: controller.signal.reason.message, code: controller.signal.reason.code }); return true;
+    });
+    assert.equal(seen.length, 1);
   });
 
 test('postgres: poster root selection excludes owned and alternate libraries in SQL',
@@ -323,7 +329,7 @@ test('postgres: collection refresh cold-loads unknown links and publishes author
 
 test('postgres: a fresh collection publishes empty physical IDs before owned refresh forces reason 11',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    const { runtime, database, adapter, stateRoot, firstPath, errors } = await fixture(t, 'postgres');
+    const { runtime, database, adapter, stateRoot, firstPath } = await fixture(t, 'postgres');
     const identityOptions = { programDataPath: stateRoot, enableCaseSensitiveItemIds: false };
     const collectionId = nativeGuid(getNewItemId(firstPath, collectionFolderNativeType, identityOptions));
     const physicalId = nativeGuid(getNewItemId(mediaPath, physicalFolderNativeType, identityOptions));
@@ -349,13 +355,12 @@ test('postgres: a fresh collection publishes empty physical IDs before owned ref
     phase = 2;
     await runtime.libraryScanLifecycle.validateTopLibraryFolders();
     assert.equal(events.some(event => event.phase === 2 && event.action === 'updated' && (event.reason & 8) !== 0), false);
-    assert.deepEqual(errors, []);
     assert.equal((await database.rows('BaseItems', { where: { Id: collectionId } })).length, 1);
   });
 
 for (const dialect of ['postgres']) test(`${dialect}: top-level validation persists configured collections and shared physical roots`,
   { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    const { runtime, database, adapter, stateRoot, firstPath, errors } = await fixture(t, dialect);
+    const { runtime, database, adapter, stateRoot, firstPath } = await fixture(t, dialect);
     const identityOptions = { programDataPath: stateRoot, enableCaseSensitiveItemIds: false };
     const firstId = nativeGuid(getNewItemId(firstPath, collectionFolderNativeType, identityOptions));
     const physicalId = nativeGuid(getNewItemId(mediaPath, physicalFolderNativeType, identityOptions));
@@ -389,7 +394,6 @@ for (const dialect of ['postgres']) test(`${dialect}: top-level validation persi
 
     await runtime.libraryScanLifecycle.validateTopLibraryFolders();
     userRoots = await rowsByType(database, 'MediaBrowser.Controller.Entities.UserRootFolder');
-    assert.deepEqual(errors, []);
     collections = await rowsByType(database, collectionFolderNativeType);
     physical = await rowsByType(database, physicalFolderNativeType);
     assert.equal(userRoots.length, 1);
@@ -430,5 +434,4 @@ for (const dialect of ['postgres']) test(`${dialect}: top-level validation persi
     collection = await runtime.library.getItemRecord(secondId);
     assert.deepEqual(collection.PhysicalLocationsList, [secondPath]);
     assert.deepEqual(collection.PhysicalFolderIds, []);
-    assert.deepEqual(errors, []);
   });

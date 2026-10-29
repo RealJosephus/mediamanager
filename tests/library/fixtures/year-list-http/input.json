@@ -1,0 +1,4272 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80200000-0000-0000-0000-000000000004",
+  "warmUserViews": {
+    "configuration": {
+      "GroupedFolders": [
+        "80200000-0000-0000-0000-000000000004",
+        "80200000-0000-0000-0000-000000000006",
+        "80200000-0000-0000-0000-000000000008",
+        "80200000-0000-0000-0000-000000000010",
+        "80200000-0000-0000-0000-000000000012"
+      ],
+      "LatestItemsExcludes": [],
+      "HidePlayedInLatest": false
+    },
+    "policy": {
+      "EnableAllFolders": true,
+      "EnabledFolders": [],
+      "BlockedMediaFolders": [],
+      "AllowedTags": [],
+      "BlockedTags": [],
+      "MaxParentalRating": null,
+      "MaxParentalSubRating": null,
+      "BlockUnratedItems": [],
+      "EnableContentDeletion": false,
+      "EnableContentDeletionFromFolders": [],
+      "IsAdministrator": false
+    }
+  },
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "aggregate"
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "physicalA",
+      "id": "80200000-0000-0000-0000-000000000003",
+      "type": "Folder",
+      "name": "Physical A",
+      "sortName": "physical a",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalA",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryA",
+      "id": "80200000-0000-0000-0000-000000000004",
+      "type": "CollectionFolder",
+      "name": "Library A",
+      "sortName": "library a",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryA",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000003"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000004",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "productionYear": 1971
+    },
+    {
+      "key": "physicalB",
+      "id": "80200000-0000-0000-0000-000000000005",
+      "type": "Folder",
+      "name": "Physical B",
+      "sortName": "physical b",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalB",
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryB",
+      "id": "80200000-0000-0000-0000-000000000006",
+      "type": "CollectionFolder",
+      "name": "Library B",
+      "sortName": "library b",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryB",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000005"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000006",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalT",
+      "id": "80200000-0000-0000-0000-000000000007",
+      "type": "Folder",
+      "name": "Physical T",
+      "sortName": "physical t",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalT",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryT",
+      "id": "80200000-0000-0000-0000-000000000008",
+      "type": "CollectionFolder",
+      "name": "Library T",
+      "sortName": "library t",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryT",
+      "data": {
+        "CollectionType": "tvshows",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000007"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000008",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalK",
+      "id": "80200000-0000-0000-0000-000000000009",
+      "type": "Folder",
+      "name": "Physical K",
+      "sortName": "physical k",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalK",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryK",
+      "id": "80200000-0000-0000-0000-000000000010",
+      "type": "CollectionFolder",
+      "name": "Library K",
+      "sortName": "library k",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryK",
+      "data": {
+        "CollectionType": "books",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000009"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000010",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalM",
+      "id": "80200000-0000-0000-0000-000000000011",
+      "type": "Folder",
+      "name": "Physical M",
+      "sortName": "physical m",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalM",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryM",
+      "id": "80200000-0000-0000-0000-000000000012",
+      "type": "CollectionFolder",
+      "name": "Library M",
+      "sortName": "library m",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryM",
+      "data": {
+        "CollectionType": "music",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000011"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000012",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "mediaType": "Video",
+      "name": "Year movie",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "id": "83400000-0000-0000-0000-000000000101",
+      "productionYear": 2026,
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "sortName": "year movie",
+      "type": "Movie",
+      "key": "year-movie",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "pathKind": "child",
+      "genresText": "Drama"
+    },
+    {
+      "mediaType": "Audio",
+      "name": "Year audio",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "id": "83400000-0000-0000-0000-000000000102",
+      "productionYear": 2026,
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "parentId": "80200000-0000-0000-0000-000000000011",
+      "sortName": "year audio",
+      "type": "Audio",
+      "key": "year-audio",
+      "data": {},
+      "pathKind": "child"
+    },
+    {
+      "key": "nested",
+      "id": "83800000-0000-0000-0000-000000000201",
+      "type": "Folder",
+      "name": "nested",
+      "sortName": "nested",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1984,
+      "data": {}
+    },
+    {
+      "key": "nested-movie",
+      "id": "83800000-0000-0000-0000-000000000202",
+      "type": "Movie",
+      "name": "nested-movie",
+      "sortName": "nested-movie",
+      "parentId": "83800000-0000-0000-0000-000000000201",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "83800000-0000-0000-0000-000000000201",
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2030,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "no-year",
+      "id": "83800000-0000-0000-0000-000000000203",
+      "type": "Movie",
+      "name": "no-year",
+      "sortName": "no-year",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": null,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "zero-year",
+      "id": "83800000-0000-0000-0000-000000000204",
+      "type": "Movie",
+      "name": "zero-year",
+      "sortName": "zero-year",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 0,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "negative-year",
+      "id": "83800000-0000-0000-0000-000000000205",
+      "type": "Movie",
+      "name": "negative-year",
+      "sortName": "negative-year",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": -10,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "disabled-movie",
+      "id": "83800000-0000-0000-0000-000000000206",
+      "type": "Movie",
+      "name": "disabled-movie",
+      "sortName": "disabled-movie",
+      "parentId": "80200000-0000-0000-0000-000000000005",
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000005",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2014,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "error-folder",
+      "id": "83800000-0000-0000-0000-000000000207",
+      "type": "Folder",
+      "name": "error-folder",
+      "sortName": "error-folder",
+      "parentId": "80200000-0000-0000-0000-000000000009",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000009",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": null,
+      "data": {}
+    },
+    {
+      "key": "error-year",
+      "id": "83800000-0000-0000-0000-000000000208",
+      "type": "Movie",
+      "name": "error-year",
+      "sortName": "error-year",
+      "parentId": "83800000-0000-0000-0000-000000000207",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "83800000-0000-0000-0000-000000000207",
+        "80200000-0000-0000-0000-000000000009",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2199,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "album",
+      "id": "83800000-0000-0000-0000-000000000209",
+      "type": "MusicAlbum",
+      "name": "album",
+      "sortName": "album",
+      "parentId": "80200000-0000-0000-0000-000000000011",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1980,
+      "data": {}
+    },
+    {
+      "key": "album-song",
+      "id": "83800000-0000-0000-0000-000000000210",
+      "type": "Audio",
+      "name": "album-song",
+      "sortName": "album-song",
+      "parentId": "83800000-0000-0000-0000-000000000209",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "83800000-0000-0000-0000-000000000209",
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1999,
+      "data": {},
+      "mediaType": "Audio"
+    },
+    {
+      "key": "album-book",
+      "id": "83800000-0000-0000-0000-000000000211",
+      "type": "Book",
+      "name": "album-book",
+      "sortName": "album-book",
+      "parentId": "83800000-0000-0000-0000-000000000209",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "83800000-0000-0000-0000-000000000209",
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1888,
+      "data": {}
+    },
+    {
+      "key": "series",
+      "id": "83800000-0000-0000-0000-000000000212",
+      "type": "Series",
+      "name": "series",
+      "sortName": "series",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2000,
+      "data": {},
+      "seriesPresentationUniqueKey": "year-series",
+      "presentationUniqueKey": "year-series"
+    },
+    {
+      "key": "season",
+      "id": "83800000-0000-0000-0000-000000000213",
+      "type": "Season",
+      "name": "season",
+      "sortName": "season",
+      "parentId": "83800000-0000-0000-0000-000000000212",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83800000-0000-0000-0000-000000000212",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2001,
+      "data": {},
+      "isFolder": true,
+      "presentationUniqueKey": "year-series-001",
+      "seriesPresentationUniqueKey": "year-series",
+      "seriesId": "83800000-0000-0000-0000-000000000212",
+      "indexNumber": 1
+    },
+    {
+      "key": "episode-1",
+      "id": "83800000-0000-0000-0000-000000000214",
+      "type": "Episode",
+      "name": "episode-1",
+      "sortName": "episode-1",
+      "parentId": "83800000-0000-0000-0000-000000000213",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83800000-0000-0000-0000-000000000213",
+        "83800000-0000-0000-0000-000000000212",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2001,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "seriesId": "83800000-0000-0000-0000-000000000212",
+      "indexNumber": 1,
+      "seriesPresentationUniqueKey": "year-series",
+      "mediaType": "Video",
+      "isFolder": false,
+      "parentIndexNumber": 1,
+      "seasonId": "83800000-0000-0000-0000-000000000213"
+    },
+    {
+      "key": "episode-2",
+      "id": "83800000-0000-0000-0000-000000000215",
+      "type": "Episode",
+      "name": "episode-2",
+      "sortName": "episode-2",
+      "parentId": "83800000-0000-0000-0000-000000000213",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83800000-0000-0000-0000-000000000213",
+        "83800000-0000-0000-0000-000000000212",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2002,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "seriesId": "83800000-0000-0000-0000-000000000212",
+      "indexNumber": 2,
+      "seriesPresentationUniqueKey": "year-series",
+      "mediaType": "Video",
+      "isFolder": false,
+      "parentIndexNumber": 1,
+      "seasonId": "83800000-0000-0000-0000-000000000213"
+    },
+    {
+      "key": "episode-3",
+      "id": "83800000-0000-0000-0000-000000000216",
+      "type": "Episode",
+      "name": "episode-3",
+      "sortName": "episode-3",
+      "parentId": "83800000-0000-0000-0000-000000000213",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83800000-0000-0000-0000-000000000213",
+        "83800000-0000-0000-0000-000000000212",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2003,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "seriesId": "83800000-0000-0000-0000-000000000212",
+      "indexNumber": 3,
+      "seriesPresentationUniqueKey": "year-series",
+      "mediaType": "Video",
+      "isFolder": false,
+      "parentIndexNumber": 1,
+      "seasonId": "83800000-0000-0000-0000-000000000213"
+    },
+    {
+      "key": "collectionsRoot",
+      "id": "83800000-0000-0000-0000-000000000300",
+      "type": "Folder",
+      "name": "Collections root",
+      "sortName": "collections root",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "83800000-0000-0000-0000-000000000300",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "collections",
+      "data": {}
+    },
+    {
+      "key": "collection",
+      "id": "83800000-0000-0000-0000-000000000217",
+      "type": "BoxSet",
+      "name": "collection",
+      "sortName": "collection",
+      "parentId": "83800000-0000-0000-0000-000000000300",
+      "topParentId": "83800000-0000-0000-0000-000000000300",
+      "ancestorIds": [
+        "83800000-0000-0000-0000-000000000300",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2181,
+      "data": {
+        "DisplayOrder": "SortName",
+        "LibraryFolderIds": []
+      }
+    },
+    {
+      "key": "playlist",
+      "id": "83800000-0000-0000-0000-000000000218",
+      "type": "Playlist",
+      "name": "playlist",
+      "sortName": "playlist",
+      "parentId": "80200000-0000-0000-0000-000000000011",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1982,
+      "data": {
+        "Shares": [],
+        "OwnerUserId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+        "OpenAccess": true
+      }
+    },
+    {
+      "key": "bulk-000",
+      "id": "83800000-0000-0000-0000-000000001000",
+      "type": "Movie",
+      "name": "bulk-000",
+      "sortName": "bulk-000",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1900,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-001",
+      "id": "83800000-0000-0000-0000-000000001001",
+      "type": "Movie",
+      "name": "bulk-001",
+      "sortName": "bulk-001",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1901,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-002",
+      "id": "83800000-0000-0000-0000-000000001002",
+      "type": "Movie",
+      "name": "bulk-002",
+      "sortName": "bulk-002",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1902,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-003",
+      "id": "83800000-0000-0000-0000-000000001003",
+      "type": "Movie",
+      "name": "bulk-003",
+      "sortName": "bulk-003",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1903,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-004",
+      "id": "83800000-0000-0000-0000-000000001004",
+      "type": "Movie",
+      "name": "bulk-004",
+      "sortName": "bulk-004",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1904,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-005",
+      "id": "83800000-0000-0000-0000-000000001005",
+      "type": "Movie",
+      "name": "bulk-005",
+      "sortName": "bulk-005",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1905,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-006",
+      "id": "83800000-0000-0000-0000-000000001006",
+      "type": "Movie",
+      "name": "bulk-006",
+      "sortName": "bulk-006",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1906,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-007",
+      "id": "83800000-0000-0000-0000-000000001007",
+      "type": "Movie",
+      "name": "bulk-007",
+      "sortName": "bulk-007",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1907,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-008",
+      "id": "83800000-0000-0000-0000-000000001008",
+      "type": "Movie",
+      "name": "bulk-008",
+      "sortName": "bulk-008",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1908,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-009",
+      "id": "83800000-0000-0000-0000-000000001009",
+      "type": "Movie",
+      "name": "bulk-009",
+      "sortName": "bulk-009",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1909,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-010",
+      "id": "83800000-0000-0000-0000-000000001010",
+      "type": "Movie",
+      "name": "bulk-010",
+      "sortName": "bulk-010",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1910,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-011",
+      "id": "83800000-0000-0000-0000-000000001011",
+      "type": "Movie",
+      "name": "bulk-011",
+      "sortName": "bulk-011",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1911,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-012",
+      "id": "83800000-0000-0000-0000-000000001012",
+      "type": "Movie",
+      "name": "bulk-012",
+      "sortName": "bulk-012",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1912,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-013",
+      "id": "83800000-0000-0000-0000-000000001013",
+      "type": "Movie",
+      "name": "bulk-013",
+      "sortName": "bulk-013",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1913,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-014",
+      "id": "83800000-0000-0000-0000-000000001014",
+      "type": "Movie",
+      "name": "bulk-014",
+      "sortName": "bulk-014",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1914,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-015",
+      "id": "83800000-0000-0000-0000-000000001015",
+      "type": "Movie",
+      "name": "bulk-015",
+      "sortName": "bulk-015",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1915,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-016",
+      "id": "83800000-0000-0000-0000-000000001016",
+      "type": "Movie",
+      "name": "bulk-016",
+      "sortName": "bulk-016",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1916,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-017",
+      "id": "83800000-0000-0000-0000-000000001017",
+      "type": "Movie",
+      "name": "bulk-017",
+      "sortName": "bulk-017",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1917,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-018",
+      "id": "83800000-0000-0000-0000-000000001018",
+      "type": "Movie",
+      "name": "bulk-018",
+      "sortName": "bulk-018",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1918,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-019",
+      "id": "83800000-0000-0000-0000-000000001019",
+      "type": "Movie",
+      "name": "bulk-019",
+      "sortName": "bulk-019",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1919,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-020",
+      "id": "83800000-0000-0000-0000-000000001020",
+      "type": "Movie",
+      "name": "bulk-020",
+      "sortName": "bulk-020",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1920,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-021",
+      "id": "83800000-0000-0000-0000-000000001021",
+      "type": "Movie",
+      "name": "bulk-021",
+      "sortName": "bulk-021",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1921,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-022",
+      "id": "83800000-0000-0000-0000-000000001022",
+      "type": "Movie",
+      "name": "bulk-022",
+      "sortName": "bulk-022",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1922,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-023",
+      "id": "83800000-0000-0000-0000-000000001023",
+      "type": "Movie",
+      "name": "bulk-023",
+      "sortName": "bulk-023",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1923,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-024",
+      "id": "83800000-0000-0000-0000-000000001024",
+      "type": "Movie",
+      "name": "bulk-024",
+      "sortName": "bulk-024",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1924,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-025",
+      "id": "83800000-0000-0000-0000-000000001025",
+      "type": "Movie",
+      "name": "bulk-025",
+      "sortName": "bulk-025",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1925,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-026",
+      "id": "83800000-0000-0000-0000-000000001026",
+      "type": "Movie",
+      "name": "bulk-026",
+      "sortName": "bulk-026",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1926,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-027",
+      "id": "83800000-0000-0000-0000-000000001027",
+      "type": "Movie",
+      "name": "bulk-027",
+      "sortName": "bulk-027",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1927,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-028",
+      "id": "83800000-0000-0000-0000-000000001028",
+      "type": "Movie",
+      "name": "bulk-028",
+      "sortName": "bulk-028",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1928,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-029",
+      "id": "83800000-0000-0000-0000-000000001029",
+      "type": "Movie",
+      "name": "bulk-029",
+      "sortName": "bulk-029",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1929,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-030",
+      "id": "83800000-0000-0000-0000-000000001030",
+      "type": "Movie",
+      "name": "bulk-030",
+      "sortName": "bulk-030",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1930,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-031",
+      "id": "83800000-0000-0000-0000-000000001031",
+      "type": "Movie",
+      "name": "bulk-031",
+      "sortName": "bulk-031",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1931,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-032",
+      "id": "83800000-0000-0000-0000-000000001032",
+      "type": "Movie",
+      "name": "bulk-032",
+      "sortName": "bulk-032",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1932,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-033",
+      "id": "83800000-0000-0000-0000-000000001033",
+      "type": "Movie",
+      "name": "bulk-033",
+      "sortName": "bulk-033",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1933,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-034",
+      "id": "83800000-0000-0000-0000-000000001034",
+      "type": "Movie",
+      "name": "bulk-034",
+      "sortName": "bulk-034",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1934,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-035",
+      "id": "83800000-0000-0000-0000-000000001035",
+      "type": "Movie",
+      "name": "bulk-035",
+      "sortName": "bulk-035",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1935,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-036",
+      "id": "83800000-0000-0000-0000-000000001036",
+      "type": "Movie",
+      "name": "bulk-036",
+      "sortName": "bulk-036",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1936,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-037",
+      "id": "83800000-0000-0000-0000-000000001037",
+      "type": "Movie",
+      "name": "bulk-037",
+      "sortName": "bulk-037",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1937,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-038",
+      "id": "83800000-0000-0000-0000-000000001038",
+      "type": "Movie",
+      "name": "bulk-038",
+      "sortName": "bulk-038",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1938,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-039",
+      "id": "83800000-0000-0000-0000-000000001039",
+      "type": "Movie",
+      "name": "bulk-039",
+      "sortName": "bulk-039",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1939,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-040",
+      "id": "83800000-0000-0000-0000-000000001040",
+      "type": "Movie",
+      "name": "bulk-040",
+      "sortName": "bulk-040",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1940,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-041",
+      "id": "83800000-0000-0000-0000-000000001041",
+      "type": "Movie",
+      "name": "bulk-041",
+      "sortName": "bulk-041",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1941,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-042",
+      "id": "83800000-0000-0000-0000-000000001042",
+      "type": "Movie",
+      "name": "bulk-042",
+      "sortName": "bulk-042",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1942,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-043",
+      "id": "83800000-0000-0000-0000-000000001043",
+      "type": "Movie",
+      "name": "bulk-043",
+      "sortName": "bulk-043",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1943,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-044",
+      "id": "83800000-0000-0000-0000-000000001044",
+      "type": "Movie",
+      "name": "bulk-044",
+      "sortName": "bulk-044",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1944,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-045",
+      "id": "83800000-0000-0000-0000-000000001045",
+      "type": "Movie",
+      "name": "bulk-045",
+      "sortName": "bulk-045",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1945,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-046",
+      "id": "83800000-0000-0000-0000-000000001046",
+      "type": "Movie",
+      "name": "bulk-046",
+      "sortName": "bulk-046",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1946,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-047",
+      "id": "83800000-0000-0000-0000-000000001047",
+      "type": "Movie",
+      "name": "bulk-047",
+      "sortName": "bulk-047",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1947,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-048",
+      "id": "83800000-0000-0000-0000-000000001048",
+      "type": "Movie",
+      "name": "bulk-048",
+      "sortName": "bulk-048",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1948,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-049",
+      "id": "83800000-0000-0000-0000-000000001049",
+      "type": "Movie",
+      "name": "bulk-049",
+      "sortName": "bulk-049",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1949,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-050",
+      "id": "83800000-0000-0000-0000-000000001050",
+      "type": "Movie",
+      "name": "bulk-050",
+      "sortName": "bulk-050",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1950,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-051",
+      "id": "83800000-0000-0000-0000-000000001051",
+      "type": "Movie",
+      "name": "bulk-051",
+      "sortName": "bulk-051",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1951,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-052",
+      "id": "83800000-0000-0000-0000-000000001052",
+      "type": "Movie",
+      "name": "bulk-052",
+      "sortName": "bulk-052",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1952,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-053",
+      "id": "83800000-0000-0000-0000-000000001053",
+      "type": "Movie",
+      "name": "bulk-053",
+      "sortName": "bulk-053",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1953,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-054",
+      "id": "83800000-0000-0000-0000-000000001054",
+      "type": "Movie",
+      "name": "bulk-054",
+      "sortName": "bulk-054",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1954,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-055",
+      "id": "83800000-0000-0000-0000-000000001055",
+      "type": "Movie",
+      "name": "bulk-055",
+      "sortName": "bulk-055",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1955,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-056",
+      "id": "83800000-0000-0000-0000-000000001056",
+      "type": "Movie",
+      "name": "bulk-056",
+      "sortName": "bulk-056",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1956,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-057",
+      "id": "83800000-0000-0000-0000-000000001057",
+      "type": "Movie",
+      "name": "bulk-057",
+      "sortName": "bulk-057",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1957,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-058",
+      "id": "83800000-0000-0000-0000-000000001058",
+      "type": "Movie",
+      "name": "bulk-058",
+      "sortName": "bulk-058",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1958,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-059",
+      "id": "83800000-0000-0000-0000-000000001059",
+      "type": "Movie",
+      "name": "bulk-059",
+      "sortName": "bulk-059",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1959,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-060",
+      "id": "83800000-0000-0000-0000-000000001060",
+      "type": "Movie",
+      "name": "bulk-060",
+      "sortName": "bulk-060",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1960,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-061",
+      "id": "83800000-0000-0000-0000-000000001061",
+      "type": "Movie",
+      "name": "bulk-061",
+      "sortName": "bulk-061",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1961,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-062",
+      "id": "83800000-0000-0000-0000-000000001062",
+      "type": "Movie",
+      "name": "bulk-062",
+      "sortName": "bulk-062",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1962,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-063",
+      "id": "83800000-0000-0000-0000-000000001063",
+      "type": "Movie",
+      "name": "bulk-063",
+      "sortName": "bulk-063",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1963,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-064",
+      "id": "83800000-0000-0000-0000-000000001064",
+      "type": "Movie",
+      "name": "bulk-064",
+      "sortName": "bulk-064",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1964,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-065",
+      "id": "83800000-0000-0000-0000-000000001065",
+      "type": "Movie",
+      "name": "bulk-065",
+      "sortName": "bulk-065",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1965,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-066",
+      "id": "83800000-0000-0000-0000-000000001066",
+      "type": "Movie",
+      "name": "bulk-066",
+      "sortName": "bulk-066",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1966,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-067",
+      "id": "83800000-0000-0000-0000-000000001067",
+      "type": "Movie",
+      "name": "bulk-067",
+      "sortName": "bulk-067",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1967,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-068",
+      "id": "83800000-0000-0000-0000-000000001068",
+      "type": "Movie",
+      "name": "bulk-068",
+      "sortName": "bulk-068",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1968,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-069",
+      "id": "83800000-0000-0000-0000-000000001069",
+      "type": "Movie",
+      "name": "bulk-069",
+      "sortName": "bulk-069",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1969,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-070",
+      "id": "83800000-0000-0000-0000-000000001070",
+      "type": "Movie",
+      "name": "bulk-070",
+      "sortName": "bulk-070",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1970,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-071",
+      "id": "83800000-0000-0000-0000-000000001071",
+      "type": "Movie",
+      "name": "bulk-071",
+      "sortName": "bulk-071",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1971,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-072",
+      "id": "83800000-0000-0000-0000-000000001072",
+      "type": "Movie",
+      "name": "bulk-072",
+      "sortName": "bulk-072",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1972,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-073",
+      "id": "83800000-0000-0000-0000-000000001073",
+      "type": "Movie",
+      "name": "bulk-073",
+      "sortName": "bulk-073",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1973,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-074",
+      "id": "83800000-0000-0000-0000-000000001074",
+      "type": "Movie",
+      "name": "bulk-074",
+      "sortName": "bulk-074",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1974,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-075",
+      "id": "83800000-0000-0000-0000-000000001075",
+      "type": "Movie",
+      "name": "bulk-075",
+      "sortName": "bulk-075",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1975,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-076",
+      "id": "83800000-0000-0000-0000-000000001076",
+      "type": "Movie",
+      "name": "bulk-076",
+      "sortName": "bulk-076",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1976,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-077",
+      "id": "83800000-0000-0000-0000-000000001077",
+      "type": "Movie",
+      "name": "bulk-077",
+      "sortName": "bulk-077",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1977,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-078",
+      "id": "83800000-0000-0000-0000-000000001078",
+      "type": "Movie",
+      "name": "bulk-078",
+      "sortName": "bulk-078",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1978,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-079",
+      "id": "83800000-0000-0000-0000-000000001079",
+      "type": "Movie",
+      "name": "bulk-079",
+      "sortName": "bulk-079",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1979,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-080",
+      "id": "83800000-0000-0000-0000-000000001080",
+      "type": "Movie",
+      "name": "bulk-080",
+      "sortName": "bulk-080",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1980,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-081",
+      "id": "83800000-0000-0000-0000-000000001081",
+      "type": "Movie",
+      "name": "bulk-081",
+      "sortName": "bulk-081",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1981,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-082",
+      "id": "83800000-0000-0000-0000-000000001082",
+      "type": "Movie",
+      "name": "bulk-082",
+      "sortName": "bulk-082",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1982,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-083",
+      "id": "83800000-0000-0000-0000-000000001083",
+      "type": "Movie",
+      "name": "bulk-083",
+      "sortName": "bulk-083",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1983,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-084",
+      "id": "83800000-0000-0000-0000-000000001084",
+      "type": "Movie",
+      "name": "bulk-084",
+      "sortName": "bulk-084",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1984,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-085",
+      "id": "83800000-0000-0000-0000-000000001085",
+      "type": "Movie",
+      "name": "bulk-085",
+      "sortName": "bulk-085",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1985,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-086",
+      "id": "83800000-0000-0000-0000-000000001086",
+      "type": "Movie",
+      "name": "bulk-086",
+      "sortName": "bulk-086",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1986,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-087",
+      "id": "83800000-0000-0000-0000-000000001087",
+      "type": "Movie",
+      "name": "bulk-087",
+      "sortName": "bulk-087",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1987,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-088",
+      "id": "83800000-0000-0000-0000-000000001088",
+      "type": "Movie",
+      "name": "bulk-088",
+      "sortName": "bulk-088",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1988,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-089",
+      "id": "83800000-0000-0000-0000-000000001089",
+      "type": "Movie",
+      "name": "bulk-089",
+      "sortName": "bulk-089",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1989,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-090",
+      "id": "83800000-0000-0000-0000-000000001090",
+      "type": "Movie",
+      "name": "bulk-090",
+      "sortName": "bulk-090",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1990,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-091",
+      "id": "83800000-0000-0000-0000-000000001091",
+      "type": "Movie",
+      "name": "bulk-091",
+      "sortName": "bulk-091",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1991,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-092",
+      "id": "83800000-0000-0000-0000-000000001092",
+      "type": "Movie",
+      "name": "bulk-092",
+      "sortName": "bulk-092",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1992,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-093",
+      "id": "83800000-0000-0000-0000-000000001093",
+      "type": "Movie",
+      "name": "bulk-093",
+      "sortName": "bulk-093",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1993,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-094",
+      "id": "83800000-0000-0000-0000-000000001094",
+      "type": "Movie",
+      "name": "bulk-094",
+      "sortName": "bulk-094",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1994,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-095",
+      "id": "83800000-0000-0000-0000-000000001095",
+      "type": "Movie",
+      "name": "bulk-095",
+      "sortName": "bulk-095",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1995,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-096",
+      "id": "83800000-0000-0000-0000-000000001096",
+      "type": "Movie",
+      "name": "bulk-096",
+      "sortName": "bulk-096",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1996,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-097",
+      "id": "83800000-0000-0000-0000-000000001097",
+      "type": "Movie",
+      "name": "bulk-097",
+      "sortName": "bulk-097",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1997,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-098",
+      "id": "83800000-0000-0000-0000-000000001098",
+      "type": "Movie",
+      "name": "bulk-098",
+      "sortName": "bulk-098",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1998,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-099",
+      "id": "83800000-0000-0000-0000-000000001099",
+      "type": "Movie",
+      "name": "bulk-099",
+      "sortName": "bulk-099",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 1999,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-100",
+      "id": "83800000-0000-0000-0000-000000001100",
+      "type": "Movie",
+      "name": "bulk-100",
+      "sortName": "bulk-100",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2000,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-101",
+      "id": "83800000-0000-0000-0000-000000001101",
+      "type": "Movie",
+      "name": "bulk-101",
+      "sortName": "bulk-101",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2001,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-102",
+      "id": "83800000-0000-0000-0000-000000001102",
+      "type": "Movie",
+      "name": "bulk-102",
+      "sortName": "bulk-102",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2002,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-103",
+      "id": "83800000-0000-0000-0000-000000001103",
+      "type": "Movie",
+      "name": "bulk-103",
+      "sortName": "bulk-103",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2003,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-104",
+      "id": "83800000-0000-0000-0000-000000001104",
+      "type": "Movie",
+      "name": "bulk-104",
+      "sortName": "bulk-104",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2004,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-105",
+      "id": "83800000-0000-0000-0000-000000001105",
+      "type": "Movie",
+      "name": "bulk-105",
+      "sortName": "bulk-105",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2005,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-106",
+      "id": "83800000-0000-0000-0000-000000001106",
+      "type": "Movie",
+      "name": "bulk-106",
+      "sortName": "bulk-106",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2006,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-107",
+      "id": "83800000-0000-0000-0000-000000001107",
+      "type": "Movie",
+      "name": "bulk-107",
+      "sortName": "bulk-107",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2007,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-108",
+      "id": "83800000-0000-0000-0000-000000001108",
+      "type": "Movie",
+      "name": "bulk-108",
+      "sortName": "bulk-108",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2008,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-109",
+      "id": "83800000-0000-0000-0000-000000001109",
+      "type": "Movie",
+      "name": "bulk-109",
+      "sortName": "bulk-109",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2009,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-110",
+      "id": "83800000-0000-0000-0000-000000001110",
+      "type": "Movie",
+      "name": "bulk-110",
+      "sortName": "bulk-110",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2010,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-111",
+      "id": "83800000-0000-0000-0000-000000001111",
+      "type": "Movie",
+      "name": "bulk-111",
+      "sortName": "bulk-111",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2011,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-112",
+      "id": "83800000-0000-0000-0000-000000001112",
+      "type": "Movie",
+      "name": "bulk-112",
+      "sortName": "bulk-112",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2012,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-113",
+      "id": "83800000-0000-0000-0000-000000001113",
+      "type": "Movie",
+      "name": "bulk-113",
+      "sortName": "bulk-113",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2013,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-114",
+      "id": "83800000-0000-0000-0000-000000001114",
+      "type": "Movie",
+      "name": "bulk-114",
+      "sortName": "bulk-114",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2014,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-115",
+      "id": "83800000-0000-0000-0000-000000001115",
+      "type": "Movie",
+      "name": "bulk-115",
+      "sortName": "bulk-115",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2015,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-116",
+      "id": "83800000-0000-0000-0000-000000001116",
+      "type": "Movie",
+      "name": "bulk-116",
+      "sortName": "bulk-116",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2016,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-117",
+      "id": "83800000-0000-0000-0000-000000001117",
+      "type": "Movie",
+      "name": "bulk-117",
+      "sortName": "bulk-117",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2017,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-118",
+      "id": "83800000-0000-0000-0000-000000001118",
+      "type": "Movie",
+      "name": "bulk-118",
+      "sortName": "bulk-118",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2018,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-119",
+      "id": "83800000-0000-0000-0000-000000001119",
+      "type": "Movie",
+      "name": "bulk-119",
+      "sortName": "bulk-119",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2019,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-120",
+      "id": "83800000-0000-0000-0000-000000001120",
+      "type": "Movie",
+      "name": "bulk-120",
+      "sortName": "bulk-120",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2020,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-121",
+      "id": "83800000-0000-0000-0000-000000001121",
+      "type": "Movie",
+      "name": "bulk-121",
+      "sortName": "bulk-121",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2021,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-122",
+      "id": "83800000-0000-0000-0000-000000001122",
+      "type": "Movie",
+      "name": "bulk-122",
+      "sortName": "bulk-122",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2022,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-123",
+      "id": "83800000-0000-0000-0000-000000001123",
+      "type": "Movie",
+      "name": "bulk-123",
+      "sortName": "bulk-123",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2023,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-124",
+      "id": "83800000-0000-0000-0000-000000001124",
+      "type": "Movie",
+      "name": "bulk-124",
+      "sortName": "bulk-124",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2024,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-125",
+      "id": "83800000-0000-0000-0000-000000001125",
+      "type": "Movie",
+      "name": "bulk-125",
+      "sortName": "bulk-125",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2025,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-126",
+      "id": "83800000-0000-0000-0000-000000001126",
+      "type": "Movie",
+      "name": "bulk-126",
+      "sortName": "bulk-126",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2026,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-127",
+      "id": "83800000-0000-0000-0000-000000001127",
+      "type": "Movie",
+      "name": "bulk-127",
+      "sortName": "bulk-127",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2027,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-128",
+      "id": "83800000-0000-0000-0000-000000001128",
+      "type": "Movie",
+      "name": "bulk-128",
+      "sortName": "bulk-128",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2028,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "bulk-129",
+      "id": "83800000-0000-0000-0000-000000001129",
+      "type": "Movie",
+      "name": "bulk-129",
+      "sortName": "bulk-129",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "productionYear": 2029,
+      "data": {
+        "VideoType": "VideoFile"
+      },
+      "mediaType": "Video"
+    },
+    {
+      "key": "view-movies",
+      "id": "83800000-0000-0000-0000-000000000662",
+      "type": "UserView",
+      "name": "view-movies",
+      "sortName": "view-movies",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2110,
+      "data": {
+        "IsRoot": false,
+        "ViewType": "movies",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000004"
+      },
+      "dateLastRefreshed": "$seed-clock"
+    },
+    {
+      "key": "view-moviegenres",
+      "id": "83800000-0000-0000-0000-000000000663",
+      "type": "UserView",
+      "name": "view-moviegenres",
+      "sortName": "view-moviegenres",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2110,
+      "data": {
+        "IsRoot": false,
+        "ViewType": "moviegenres",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000004"
+      },
+      "dateLastRefreshed": "$seed-clock"
+    },
+    {
+      "key": "view-folders",
+      "id": "83800000-0000-0000-0000-000000000664",
+      "type": "UserView",
+      "name": "view-folders",
+      "sortName": "view-folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2110,
+      "data": {
+        "IsRoot": false,
+        "ViewType": "folders",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000004"
+      },
+      "dateLastRefreshed": "$seed-clock"
+    },
+    {
+      "key": "view-unknown",
+      "id": "83800000-0000-0000-0000-000000000665",
+      "type": "UserView",
+      "name": "view-unknown",
+      "sortName": "view-unknown",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2110,
+      "data": {
+        "IsRoot": false,
+        "ViewType": "unknown",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000004"
+      },
+      "dateLastRefreshed": "$seed-clock"
+    },
+    {
+      "key": "view-tvnextup",
+      "id": "83800000-0000-0000-0000-000000000666",
+      "type": "UserView",
+      "name": "view-tvnextup",
+      "sortName": "view-tvnextup",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2110,
+      "data": {
+        "IsRoot": false,
+        "ViewType": "tvnextup",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000008"
+      },
+      "dateLastRefreshed": "$seed-clock"
+    },
+    {
+      "key": "warm-subview-movieresume",
+      "id": "ed524118-0b9a-b143-6c08-2fe7422d8b08",
+      "type": "UserView",
+      "name": "Continue Watching",
+      "sortName": "continue watching",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2050,
+      "dateLastRefreshed": "$seed-clock",
+      "data": {
+        "ViewType": "movieresume",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000004",
+        "ForcedSortName": "0"
+      }
+    },
+    {
+      "key": "warm-subview-movielatest",
+      "id": "b52d9583-6869-e07a-fc79-b7ae1562b79b",
+      "type": "UserView",
+      "name": "Latest",
+      "sortName": "latest",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2051,
+      "dateLastRefreshed": "$seed-clock",
+      "data": {
+        "ViewType": "movielatest",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000004",
+        "ForcedSortName": "1"
+      }
+    },
+    {
+      "key": "warm-subview-moviemovies",
+      "id": "0f388976-4b13-7315-bc62-06a7f4dbfe49",
+      "type": "UserView",
+      "name": "Movies",
+      "sortName": "movies",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2052,
+      "dateLastRefreshed": "$seed-clock",
+      "data": {
+        "ViewType": "moviemovies",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000004",
+        "ForcedSortName": "2"
+      }
+    },
+    {
+      "key": "warm-subview-moviecollection",
+      "id": "85732b09-e7fd-5e76-2111-f0f6609b1b56",
+      "type": "UserView",
+      "name": "Collections",
+      "sortName": "collections",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2053,
+      "dateLastRefreshed": "$seed-clock",
+      "data": {
+        "ViewType": "moviecollection",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000004",
+        "ForcedSortName": "3"
+      }
+    },
+    {
+      "key": "warm-subview-moviefavorites",
+      "id": "5b5fb119-a476-f640-23f4-1bce4842c8d9",
+      "type": "UserView",
+      "name": "Favorites",
+      "sortName": "favorites",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2054,
+      "dateLastRefreshed": "$seed-clock",
+      "data": {
+        "ViewType": "moviefavorites",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000004",
+        "ForcedSortName": "4"
+      }
+    },
+    {
+      "key": "warm-subview-moviegenres",
+      "id": "26be903e-9d13-f4c2-da9b-9e7a682f21fc",
+      "type": "UserView",
+      "name": "Genres",
+      "sortName": "genres",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2055,
+      "dateLastRefreshed": "$seed-clock",
+      "data": {
+        "ViewType": "moviegenres",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000004",
+        "ForcedSortName": "5"
+      }
+    },
+    {
+      "key": "warm-subview-moviegenre",
+      "id": "a7817cc3-729f-0660-5e48-e664dcbc864f",
+      "type": "UserView",
+      "name": "80200000000000000000000000000004",
+      "sortName": "80200000000000000000000000000004",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "productionYear": 2056,
+      "dateLastRefreshed": "$seed-clock",
+      "data": {
+        "ViewType": "moviegenre",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000004",
+        "ForcedSortName": "drama"
+      }
+    },
+    {
+      "key": "warm-genre-drama",
+      "id": "090eac6e-9de4-fe1f-bc19-4e5b96691277",
+      "type": "Genre",
+      "name": "Drama",
+      "sortName": "drama",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "named",
+      "isFolder": false,
+      "dateLastRefreshed": "$seed-clock",
+      "data": {}
+    },
+    {
+      "key": "warm-year-link",
+      "id": "d8fc7c8f-44e8-376e-9106-9699d59d98d3",
+      "type": "Year",
+      "name": "2099",
+      "sortName": "2099",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "named",
+      "isFolder": false,
+      "productionYear": 2077,
+      "data": {}
+    },
+    {
+      "key": "logical-library-child",
+      "id": "83800000-0000-0000-0000-000000000301",
+      "type": "Movie",
+      "name": "Logical child outside physical folders",
+      "sortName": "logical child",
+      "parentId": "80200000-0000-0000-0000-000000000004",
+      "topParentId": "80200000-0000-0000-0000-000000000004",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000004"
+      ],
+      "pathKind": "child",
+      "productionYear": 2200,
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile"
+      }
+    }
+  ],
+  "itemValues": [],
+  "itemValueLinks": [],
+  "links": [
+    {
+      "parentId": "80200000-0000-0000-0000-000000000004",
+      "childId": "83800000-0000-0000-0000-000000000206",
+      "sortOrder": 0,
+      "childType": 0
+    },
+    {
+      "childId": "83800000-0000-0000-0000-000000000202",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "sortOrder": 0,
+      "childType": 0
+    },
+    {
+      "childId": "83400000-0000-0000-0000-000000000101",
+      "parentId": "83800000-0000-0000-0000-000000000217",
+      "sortOrder": 0,
+      "childType": 0
+    },
+    {
+      "childId": "83800000-0000-0000-0000-000000000206",
+      "parentId": "83800000-0000-0000-0000-000000000217",
+      "sortOrder": 1,
+      "childType": 0
+    },
+    {
+      "childId": "83800000-0000-0000-0000-000000000210",
+      "parentId": "83800000-0000-0000-0000-000000000218",
+      "sortOrder": 0,
+      "childType": 0
+    },
+    {
+      "childId": "83800000-0000-0000-0000-000000000201",
+      "parentId": "83800000-0000-0000-0000-000000000218",
+      "sortOrder": 1,
+      "childType": 0
+    },
+    {
+      "parentId": "83800000-0000-0000-0000-000000000217",
+      "childId": "d8fc7c8f-44e8-376e-9106-9699d59d98d3",
+      "sortOrder": 2,
+      "childType": 0
+    }
+  ],
+  "userData": [
+    {
+      "positionTicks": "0",
+      "isFavorite": false,
+      "played": true,
+      "lastPlayedDate": "2026-10-01 00:00:00",
+      "itemKey": "episode-1"
+    }
+  ],
+  "cases": [
+    {
+      "name": "user sort rejects before creating years",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000207&SortBy=DatePlayed",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "expectAbsentYears": [
+        2199
+      ]
+    },
+    {
+      "name": "cold zero limit creates every positive year",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&Recursive=false&IncludeItemTypes=Movie&Limit=0&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "serverConfiguration": {
+        "EnableNormalizedItemByNameIds": true,
+        "EnableCaseSensitiveItemIds": true
+      },
+      "expectEmpty": true
+    },
+    {
+      "name": "user sort after random retains created prefix",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000207&SortBy=Random,DatePlayed",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "expectPresentYears": [
+        2199
+      ]
+    },
+    {
+      "name": "direct API movies all",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&Recursive=false&IncludeItemTypes=Movie&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "direct API movies page",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&Recursive=false&IncludeItemTypes=Movie&SortBy=Name&StartIndex=123&Limit=7",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "baseline": "direct API movies all"
+    },
+    {
+      "name": "negative take remains empty",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&Recursive=false&IncludeItemTypes=Movie&Limit=-1",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "expectEmpty": true
+    },
+    {
+      "name": "negative start keeps public offset",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&Recursive=false&IncludeItemTypes=Movie&SortBy=Name&StartIndex=-2&Limit=3",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "beyond last",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&IncludeItemTypes=Movie&StartIndex=1000&Limit=3",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "expectEmpty": true
+    },
+    {
+      "name": "recursive regular movies count occurrences",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&IncludeItemTypes=Movie&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "recursive API movies distinct count",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&IncludeItemTypes=Movie&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "direct regular movies",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&Recursive=false&IncludeItemTypes=Movie&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "exclude folder still descends",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&ExcludeItemTypes=Folder&IncludeItemTypes=Movie&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "audio media type",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000011&MediaTypes=Audio&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "leaf movie",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83400000-0000-0000-0000-000000000101&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "leaf mismatched type",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83400000-0000-0000-0000-000000000101&IncludeItemTypes=Audio",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "expectEmpty": true
+    },
+    {
+      "name": "album tracks selected",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000209&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "album API physical values",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000209&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "series direct seasons",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000212&Recursive=false&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "season direct episodes",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000213&Recursive=false&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "series recursive",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000212&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "collection user links",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000217&IncludeItemTypes=Movie&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "collection API links",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000217&IncludeItemTypes=Movie&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "named Year link keeps its stored production year",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000217&Recursive=false&IncludeItemTypes=Year&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "playlist playable user values",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000218&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "playlist user direct",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000218&Recursive=false&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "playlist userless links",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000218&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "explicit disabled parent retains child visibility",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000006&Recursive=false&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user",
+      "policy": {
+        "EnabledFolders": [
+          "80200000-0000-0000-0000-000000000004"
+        ],
+        "EnableAllFolders": false,
+        "IsAdministrator": false,
+        "AllowedTags": [],
+        "BlockedTags": []
+      }
+    },
+    {
+      "name": "user root follows visible folders",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "IncludeItemTypes=Movie&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "API root is aggregate",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "IncludeItemTypes=Movie&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "restore full folder policy",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&SortBy=Name&Limit=0",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user",
+      "policy": {
+        "EnabledFolders": [],
+        "EnableAllFolders": true,
+        "IsAdministrator": false,
+        "AllowedTags": [],
+        "BlockedTags": []
+      }
+    },
+    {
+      "name": "movies view recursive",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000662&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "movies view direct",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000662&Recursive=false&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "folders view recursive",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000664&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "folders view direct",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000664&Recursive=false&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "unknown view recursive",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000665&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "unknown view direct",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000665&Recursive=false&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "ordinary view source applies collection grouping",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000665&Recursive=false&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user",
+      "serverConfiguration": {
+        "EnableGroupingMoviesIntoCollections": true
+      }
+    },
+    {
+      "name": "ordinary view source restores ungrouped children",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000665&Recursive=false&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user",
+      "serverConfiguration": {
+        "EnableGroupingMoviesIntoCollections": false
+      }
+    },
+    {
+      "name": "moviegenres view recursive",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000663&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "moviegenres view direct",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000663&Recursive=false&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "tvnextup view recursive",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000666&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "tvnextup view direct",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-000000000666&Recursive=false&SortBy=Name",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "full DTO with item counts stays untagged",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&Recursive=false&IncludeItemTypes=Movie&SortBy=Name&Limit=1&Fields=Path,Etag,Overview,SortName,DateCreated,ItemCounts,CanDelete&EnableImages=false",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "no user data",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&Recursive=false&IncludeItemTypes=Movie&SortBy=Name&Limit=1&EnableUserData=false",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "descending name order",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&Recursive=false&IncludeItemTypes=Movie&SortBy=Name&SortOrder=Descending&Limit=5",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "random year window preserves complete members",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&Recursive=false&IncludeItemTypes=Movie&SortBy=Random&Limit=5",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "randomWindow": true,
+      "baseline": "direct API movies all"
+    },
+    {
+      "name": "unknown MVC parameters are ignored",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&Recursive=false&IncludeItemTypes=Movie&SortBy=Name&Limit=3&InternalOnlyUnknown=abc",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "missing parent",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83800000-0000-0000-0000-999999999999",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey"
+    },
+    {
+      "name": "empty parent",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=00000000-0000-0000-0000-000000000000",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey"
+    },
+    {
+      "name": "binding error",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "StartIndex=bad&Limit=bad&Recursive=nope",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "bindingError": true
+    },
+    {
+      "name": "invalid user binding",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "UserId=not-a-guid",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "bindingError": true
+    },
+    {
+      "name": "regular cannot select another user",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&UserId=83800000-0000-0000-0000-999999999998",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 403,
+      "auth": "user"
+    },
+    {
+      "name": "unknown API user leaf is still a leaf",
+      "action": "named-list",
+      "namedRoute": "Years",
+      "query": "ParentId=83400000-0000-0000-0000-000000000101&UserId=83800000-0000-0000-0000-999999999998",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "collection Items excludes logical parent rows",
+      "action": "items",
+      "query": "IncludeItemTypes=Movie&Years=2200",
+      "parentKey": "libraryA",
+      "recursive": false,
+      "omitIds": true,
+      "scope": [],
+      "endpoints": ["items", "legacy"],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "collection Items excludes physical folder links",
+      "action": "items",
+      "query": "IncludeItemTypes=Movie&Years=2030",
+      "parentKey": "libraryA",
+      "recursive": false,
+      "omitIds": true,
+      "scope": [],
+      "endpoints": ["items", "legacy"],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "collection Items keeps its physical child",
+      "action": "items",
+      "query": "IncludeItemTypes=Movie&Years=1900",
+      "fields": "Path,Etag,Overview,SortName,DateCreated,CanDelete",
+      "parentKey": "libraryA",
+      "recursive": false,
+      "omitIds": true,
+      "scope": [],
+      "endpoints": ["items", "legacy"],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "collection zero limit returns the full physical source",
+      "action": "items",
+      "query": "IncludeItemTypes=Movie&Years=1900&Limit=0",
+      "fields": "Path,Etag,Overview,SortName,DateCreated,CanDelete",
+      "parentKey": "libraryA",
+      "recursive": false,
+      "omitIds": true,
+      "scope": [],
+      "endpoints": ["items", "legacy"],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "collection Items includes its own link",
+      "action": "items",
+      "query": "IncludeItemTypes=Movie&Years=2014",
+      "fields": "Path,Etag,Overview,SortName,DateCreated,CanDelete",
+      "parentKey": "libraryA",
+      "recursive": false,
+      "omitIds": true,
+      "scope": [],
+      "endpoints": ["items", "legacy"],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "collection Items sorts and pages the combined source",
+      "action": "items",
+      "query": "IncludeItemTypes=Movie&Years=1900,1901,2014&StartIndex=1&Limit=2",
+      "fields": "Path,Etag,Overview,SortName,DateCreated,CanDelete",
+      "parentKey": "libraryA",
+      "recursive": false,
+      "omitIds": true,
+      "scope": [],
+      "endpoints": ["items", "legacy"],
+      "expectedStatus": 200,
+      "auth": "user"
+    },
+    {
+      "name": "userless collection Items does not consume its own link",
+      "action": "items",
+      "query": "IncludeItemTypes=Movie&Years=2014",
+      "parentKey": "libraryA",
+      "recursive": false,
+      "omitIds": true,
+      "scope": [],
+      "endpoints": ["items"],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    }
+  ],
+  "yearListMutableViewKeys": [
+    "view-movies",
+    "view-moviegenres",
+    "view-folders",
+    "view-unknown",
+    "view-tvnextup",
+    "warm-subview-movieresume",
+    "warm-subview-movielatest",
+    "warm-subview-moviemovies",
+    "warm-subview-moviecollection",
+    "warm-subview-moviefavorites",
+    "warm-subview-moviegenres",
+    "warm-subview-moviegenre"
+  ]
+}

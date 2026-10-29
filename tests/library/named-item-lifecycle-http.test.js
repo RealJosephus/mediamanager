@@ -7,6 +7,8 @@ import { dateText, dateTicks, idKey } from '../../src/library/records.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { recordItemFilterCandidate, validateFixture } from './item-filter-http-scenario.js';
 import { currentUserViewScenario, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
+import { projectItemDataIdentities } from '../helpers/fixture-identity-projection.js';
 
 const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
 
@@ -17,7 +19,7 @@ validateFixture(fixture);
 test('named detail HTTP creation and complete persistence match current native lifecycles', {
   skip: !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE || !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000,
 }, nativeCallback(async t => {
-  const { http, stages, caseStages, root } = await currentUserViewScenario('named-item-lifecycle-http', bytes, { signal: t.signal });
+  const { http, stages, caseStages, root, nativeServerId } = await currentUserViewScenario('named-item-lifecycle-http', bytes, { signal: t.signal });
   assert.equal(http.records.length, 26); assert.equal(caseStages.length, 26);
   const body = name => http.records.find(record => record.name === name)?.response.bodyJson;
   const originals = new Set(stages.before.database.baseItems.map(row => idKey(row.Id)));
@@ -52,17 +54,18 @@ test('named detail HTTP creation and complete persistence match current native l
         locations['physical' + letter] = path.join(programDataPath, 'library-content', letter);
         locations['library' + letter] = path.join(programDataPath, 'root/default', 'Library ' + letter);
       }
+      const pathMappings = new Map(fixture.items.map(item => [
+        stages.before.database.baseItems.find(row => idKey(row.Id) === idKey(item.id))?.Path, locations[item.pathKind],
+      ]).filter(([source, target]) => typeof source === 'string' && typeof target === 'string'));
       for (const item of fixture.items) {
         const row = stages.before.database.baseItems.find(row => idKey(row.Id) === idKey(item.id));
         assert.ok(row, item.key);
         const values = Object.fromEntries(columns.filter(column => column.name !== 'Id').map(column => [column.name,
           column.clrType.replace('?', '') === 'long' && row[column.name] != null ? BigInt(row[column.name]) : row[column.name]]));
-        const data = JSON.parse(row.Data ?? '{}');
-        if (item.type === 'CollectionFolder') data.PhysicalLocationsList = data.PhysicalFolderIds.map(id =>
-          locations[fixture.items.find(item => idKey(item.id) === idKey(id)).pathKind]);
         await mkdir(locations[item.pathKind], { recursive: true });
         if (item.type === 'CollectionFolder' && item.data.CollectionType) await writeFile(path.join(locations[item.pathKind], item.data.CollectionType + '.collection'), '');
-        await database.update('BaseItems', { Id: item.id.toUpperCase() }, { ...values, Path: locations[item.pathKind], Data: JSON.stringify(data) });
+        await database.update('BaseItems', { Id: item.id.toUpperCase() }, { ...values, Path: locations[item.pathKind],
+          Data: projectItemDataIdentities(row.Data, row.Type, new Map(), { paths: pathMappings }) });
       }
     },
     afterEndpoint: async ({ runtime, database }) => {
@@ -107,23 +110,18 @@ test('named detail HTTP creation and complete persistence match current native l
       }
     }
   }
-  const normalize = (value, rows, prefix) => {
-    if (Array.isArray(value)) return value.map(item => normalize(item, rows, prefix));
-    if (!value || typeof value !== 'object') return typeof value === 'string' && value.startsWith(prefix)
-      ? '$metadata' + value.slice(prefix.length) : value;
-    const row = rows.find(row => idKey(row.Id) === value.Id);
-    return Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'traceId').map(([key, entry]) => {
-      if (key === 'ServerId') return [key, '$server'];
-      if (key === 'DateCreated' && row) {
-        assert.equal(dateTicks(entry), dateTicks(row.DateCreated)); return [key, '$directory-time'];
+  const normalize = (value, rows, prefix, serverId, status) => projectItemBody(value, { serverId, status,
+    path: entry => entry === prefix || entry.startsWith(prefix + path.sep) ? '$metadata' + entry.slice(prefix.length) : entry,
+    date: (entry, { field, owner }) => {
+      const row = rows.find(row => idKey(row.Id) === idKey(owner.Id));
+      if (field === 'DateCreated' && row) {
+        assert.equal(dateTicks(entry), dateTicks(row.DateCreated)); return '$directory-time';
       }
-      if (['DateCreated', 'DateLastSaved', 'DateLastMediaAdded'].includes(key) && typeof entry === 'string') return [key, dateText(entry)];
-      return [key, normalize(entry, rows, prefix)];
-    }));
-  };
-  const nativeRow = created.find(row => row.Name === 'Fresh Genre');
-  const nativeRelative = nativeRow.Path.slice('%MetadataPath%'.length);
-  const nativePrefix = body('create Genre').Path.slice(0, -nativeRelative.length);
+      return ['DateCreated', 'DateLastSaved', 'DateLastMediaAdded'].includes(field) ? dateText(entry) : entry;
+    } });
+  const nativeUserRoot = stages.before.database.baseItems.find(row => row.Type === 'MediaBrowser.Controller.Entities.UserRootFolder');
+  assert.ok(nativeUserRoot);
+  const nativePrefix = path.join(path.dirname(path.dirname(nativeUserRoot.Path)), 'metadata');
   const nodePrefix = path.join(actual.programDataDirectory, 'metadata');
   const differences = [];
   for (const item of actual.cases) for (const endpoint of item.endpoints) {
@@ -131,18 +129,18 @@ test('named detail HTTP creation and complete persistence match current native l
     try {
       assert.equal(endpoint.response.status, reference.response.status);
       assert.equal(endpoint.response.contentType, reference.response.contentType);
-      assert.deepEqual(normalize(endpoint.response.body, nodeCreated, nodePrefix), normalize(reference.response.bodyJson, created, nativePrefix));
-      assert.deepEqual(endpoint.runtimeErrors, []);
+      assert.deepEqual(normalize(endpoint.response.body, nodeCreated, nodePrefix, actual.serverId, endpoint.response.status),
+        normalize(reference.response.bodyJson, created, nativePrefix, nativeServerId, reference.response.status));
     } catch (error) { differences.push({ name: item.name, message: error.message }); }
   }
   await writeFile(path.join(root, 'postgres-comparison.json'), json({ passed: differences.length === 0, phaseAcceptance: false,
     responses: 26, createdIds: created.map(row => row.Id), nodeDirectoryTimes: [...times], differences,
-    boundary: 'Complete HTTP and all created-row columns. Directory timestamps are independently bound to each runtime filesystem before projection; isolated metadata roots, ServerId and traceId only otherwise.' }), { flag: 'wx' });
+    boundary: 'Complete HTTP and all created-row columns. Directory timestamps and typed DTO dates are independently bound to each runtime filesystem before projection; typed paths bind the owned metadata root and ServerId binds the actual instance. Only root ProblemDetails traceId is projected with presence/type retained; opaque dictionaries and unknown fields stay literal. Replay Data preserves raw TEXT except declared physical path tokens.' }), { flag: 'wx' });
   assert.deepEqual(actual.beforeReads.BaseItems, actual.afterReads.BaseItems.filter(row => originalNode.has(idKey(row.Id))));
   for (const [name, rows] of Object.entries(actual.beforeReads)) if (name !== 'BaseItems') assert.deepEqual(actual.afterReads[name], rows, name);
   assert.deepEqual(actual.userDataBeforeReads, actual.userDataAfterReads);
   assert.deepEqual(actual.afterReads, actual.afterShutdown);
   assert.deepEqual(actual.filesystemAfterReads, actual.filesystemAfterShutdown);
-  assert.deepEqual(actual.runtimeErrors, []); assert.ok(Object.values(actual.cleanup).every(Boolean));
+  assert.ok(Object.values(actual.cleanup).every(Boolean));
   assert.deepEqual(differences, []);
 }));

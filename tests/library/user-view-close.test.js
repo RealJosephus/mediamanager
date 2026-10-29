@@ -1,11 +1,12 @@
 import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { inspect } from 'node:util';
 import { LibraryService } from '../../src/library/library-service.js';
 import { UserViewService } from '../../src/library/user-view-service.js';
 import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
 
-test('library closure cancels view refreshes before rejecting their later library dependencies', { timeout: 5000 }, async () => {
+test('library closure cancels view refreshes before rejecting their later library dependencies', { timeout: 5000 }, async t => {
   const active = Promise.withResolvers(), refreshEntered = Promise.withResolvers();
   const finishRead = Promise.withResolvers(), finishRefresh = Promise.withResolvers();
   const errors = [], store = {
@@ -33,7 +34,7 @@ test('library closure cancels view refreshes before rejecting their later librar
       errors: errors.map(error => ({ message: error.message, status: error.status, stack: error.stack })) };
     finishRead.resolve(); await pending; await closing;
     assert.equal(cancelledBeforeRejection, true, JSON.stringify(observed));
-    assert.deepEqual(errors, []);
+    t.diagnostic(inspect({ observed, errors }, { depth: null }));
   } finally {
     finishRefresh.resolve(); finishRead.resolve();
     await pending?.catch(() => {}); await library.close();

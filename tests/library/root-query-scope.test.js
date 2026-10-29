@@ -10,6 +10,7 @@ import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition, quoteIdentifier } from '../../src/database/model.js';
 import { LibraryService } from '../../src/library/library-service.js';
 import { stringifyNativeJson } from '../../src/core/json.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 const fixtureBytes = await readFile(new URL('./fixtures/root-query-scope/native.json', import.meta.url));
 assert.equal(createHash('sha256').update(fixtureBytes).digest('hex'), '4a9239771497057becedb6fb2c07edca9458d48085a5e69e68aba0f0ecd0b1c6');
@@ -40,8 +41,9 @@ const adapt = (table, row) => ({ ...empty(table), ...Object.fromEntries(columns(
     : column.clrType === 'long' || column.clrType === 'uint' ? BigInt(row[column.name]) : row[column.name]])) });
 const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object'
   ? Object.fromEntries(Object.entries(value).sort(([left], [right]) => left.localeCompare(right))
-    .map(([key, entry]) => [key, key === 'ServerId' ? '$server' : normalize(entry)])) : value;
+    .map(([key, entry]) => [key, normalize(entry)])) : value;
 const stable = value => JSON.stringify(normalize(value));
+const candidateServerId = 'candidate-search-audit';
 
 for (const dialect of ['postgres']) test(`${dialect}: 40 complete root and folder query DTO responses match native persisted scope`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
@@ -52,6 +54,9 @@ for (const dialect of ['postgres']) test(`${dialect}: 40 complete root and folde
   const seedReadback = {};
   try {
     for (const run of [fixture]) {
+      const observedNativeServerId = run.native.flatMap(record => record.response.bodyJson?.Items ?? [])
+        .find(item => typeof item.Id === 'string' && typeof item.Type === 'string')?.ServerId;
+      assert.equal(typeof observedNativeServerId, 'string');
       for (const table of ['PeopleBaseItemMap', 'Peoples', 'ItemValuesMap', 'ItemValues', 'AncestorIds', 'BaseItems', 'Users']) {
         await db.client.query('DELETE FROM ' + quoteIdentifier(table));
       }
@@ -66,7 +71,7 @@ for (const dialect of ['postgres']) test(`${dialect}: 40 complete root and folde
         for (const row of run.seed[table]) await db.insert(table, adapt(table, row));
       }
       for (const table of ['BaseItems', 'AncestorIds', 'ItemValues', 'ItemValuesMap', 'Peoples', 'PeopleBaseItemMap']) seedReadback[table] = await db.rows(table);
-      const library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(db), serverId: 'candidate-search-audit',
+      const library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(db), serverId: candidateServerId,
         configuration: { EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false } });
       await attachLibraryNavigation(library);
       try {
@@ -80,7 +85,9 @@ for (const dialect of ['postgres']) test(`${dialect}: 40 complete root and folde
         const wanted = { status: expected.response.status, body: expected.response.bodyJson };
         const row = { name: expected.name, endpoint: expected.endpoint, route: expected.route, actual, expected: wanted };
         cases.push(row);
-        if (stable(actual) !== stable(wanted)) differences.push(row);
+        const comparable = Object.hasOwn(actual, 'body') ? { ...actual, body: projectItemBody(actual.body,
+          { serverId: candidateServerId, serverToken: observedNativeServerId, date: value => value }) } : actual;
+        if (stable(comparable) !== stable(wanted)) differences.push(row);
       }
       } finally { await closeLibraryNavigation(library); }
     }

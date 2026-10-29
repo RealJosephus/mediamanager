@@ -4,11 +4,13 @@ import { decodeValue } from '../database/values.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { decodeNativeTextBytes } from '../database/native-text.js';
 import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
+import { withPostgresNativeQueryJitOff } from '../database/postgres-native-query-jit.js';
 import { idKey, nonemptyId } from './records.js';
 
 function request(query) {
   const names = { IsFolder: 'isfolder', IsPlayed: 'isplayed', IsFavorite: 'isfavorite', IsResumable: 'isresumable',
     IsLiked: 'likes', IsFavoriteOrLiked: 'favoriteorlikes', ChannelIds: 'channelids', IncludeItemTypes: 'includeitemtypes',
+    ExcludeItemTypes: 'excludeitemtypes', MediaTypes: 'mediatypes',
     EnableTotalRecordCount: 'enabletotalrecordcount' };
   const input = Object.fromEntries(Object.entries(names).filter(([name]) => query[name] != null).map(([name, key]) => [key, query[name]]));
   input.startindex = Math.max(0, query.StartIndex ?? 0);
@@ -23,7 +25,8 @@ export function buildPostgresChannelItemsQuery(database, query, { userId, visibi
   const presentationGrouping = !query.IncludeItemTypes?.length || query.IncludeItemTypes.some(type =>
     ['Episode', 'Video', 'Movie', 'MusicVideo', 'Series', 'Season'].includes(type));
   return buildPostgresItemPageQuery(database, request(query), { userId, visibility,
-    scope: { ...scope, ...(nonemptyId(query.ParentId) ? { parentId: query.ParentId } : {}) },
+    scope: { ...scope, ...(nonemptyId(query.ParentId) ? query.Recursive === true
+      ? { ancestorId: query.ParentId } : { parentId: query.ParentId } : {}) },
     groupByPresentationKey: Boolean(userId) && presentationGrouping && query.IsResumable !== true
       && query.GroupByPresentationUniqueKey !== false, includeOrdinal: true });
 }
@@ -61,9 +64,9 @@ async function capture(database, query, liveIds, { userId, visibility, scope = {
         (SELECT ${sql.guidKey('candidate."Id"')} FROM source candidate WHERE candidate."Id" IS NOT NULL
          EXCEPT SELECT unnest($${values.length}::text[]))`;
     }
-    await database.client.query({ text: `CREATE TEMP TABLE ${q(name)} AS WITH source AS (${source.text})
+    await withPostgresNativeQueryJitOff(database, session => session.client.query({ text: `CREATE TEMP TABLE ${q(name)} AS WITH source AS (${source.text})
       SELECT item.*, source."__ordinal", source."TotalRecordCount" AS "__native_count"
-      FROM source LEFT JOIN ${table} item ON item."Id" = source."Id" ${selected}`, values });
+      FROM source LEFT JOIN ${table} item ON item."Id" = source."Id" ${selected}`, values }));
     const counts = (await database.client.query(`SELECT count("Id")::bigint AS selected,
       COALESCE(max("__native_count"), 0)::bigint AS native FROM ${captured}`)).rows[0];
     const selectedCount = Number(counts.selected);
@@ -92,4 +95,8 @@ async function capture(database, query, liveIds, { userId, visibility, scope = {
 }
 
 export function createPostgresChannelItemsQuery(database, query, options) { return capture(database, query, undefined, options); }
-export function createPostgresStaleChannelItemQuery(database, query, liveIds, options) { return capture(database, query, liveIds, options); }
+export function createPostgresStaleChannelItemQuery(database, query, liveIds, options) {
+  // LibraryManager.GetItemIds keeps the supplied direct ParentId. Only the
+  // later GetItemsResult call expands Recursive into an ancestor scope.
+  return capture(database, { ...query, Recursive: false }, liveIds, options);
+}

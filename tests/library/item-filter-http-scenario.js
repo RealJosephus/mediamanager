@@ -1,18 +1,70 @@
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
 import { createServer } from 'node:net';
-import { appendFileSync } from 'node:fs';
-import { appendFile, mkdir, mkdtemp, readFile, readdir, rm, stat } from 'node:fs/promises';
+import { appendFileSync, mkdirSync } from 'node:fs';
+import { appendFile, mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import pg from 'pg';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { quoteIdentifier, tableDefinition } from '../../src/database/model.js';
 import { cleanValue, EMPTY_ID, idKey } from '../../src/library/records.js';
-import { clearFolderChildIds, releaseCachedFolderChildren } from '../../src/library/folder-cache.js';
-import { postgresFolderChildIds } from '../../src/library/postgres-folder-child-ids.js';
-import { createTestRuntime } from '../helpers/runtime.js';
+import { createUnstartedTestRuntime } from '../helpers/runtime.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
+import { observeExecutionPhase } from '../../tools/validation/execution-diagnostics.js';
+import { projectProblemSummary } from '../helpers/http-problem-summary.js';
+import { bindFixtureRequestBody, bindFixtureUserQuery } from '../helpers/fixture-input-binding.js';
+import { stableRows } from '../helpers/stable-rows.js';
+
+const observeCandidatePhase = (phase, operation) => observeExecutionPhase('postgres.consumer.' + phase, operation,
+  { fixture: 'tests/library/item-filter-http-scenario.js', ownerFixture: process.argv[1] });
+
+function observeCandidateQueries(database, scenarioName) {
+  if (process.env.MEDIAMANAGER_TEST_QUERY_TIMINGS !== 'true'
+    || !path.isAbsolute(process.env.MEDIAMANAGER_TEST_DIAGNOSTICS_ROOT ?? '')) return async () => {};
+  const execute = database.client.query.bind(database.client), statements = new Map();
+  database.client.query = async (...args) => {
+    let observation;
+    try {
+      // Parameter values never enter this diagnostic. Literal projection and
+      // truncation affect only its display, never the SQL sent to PostgreSQL.
+      const descriptor = args[0] !== null && typeof args[0] === 'object'
+        ? Object.getOwnPropertyDescriptor(args[0], 'text') : undefined;
+      const text = typeof args[0] === 'string' ? args[0] : typeof descriptor?.value === 'string' ? descriptor.value : '<query object>';
+      const shape = text.replaceAll(quoteIdentifier(database.schemaName), '"$candidate"')
+        .replace(/'(?:[^']|'')*'/gu, "'?'").replace(/\s+/gu, ' ').trim();
+      const key = createHash('sha256').update(shape).digest('hex');
+      observation = statements.get(key);
+      if (!observation) {
+        observation = { shapeSha256: key, firstSqlSha256: createHash('sha256').update(text).digest('hex'),
+          shape: shape.slice(0, 4096), caller: new Error('Candidate query observation').stack,
+          calls: 0, failed: 0, elapsedMilliseconds: 0, maximumMilliseconds: 0 };
+        statements.set(key, observation);
+      }
+    } catch { /* Query diagnostics cannot affect the real dispatch. */ }
+    const started = performance.now();
+    let failed = false;
+    try { return await execute(...args); }
+    catch (error) { failed = true; throw error; }
+    finally {
+      if (observation) {
+        const elapsed = performance.now() - started;
+        observation.calls++; observation.failed += Number(failed);
+        observation.elapsedMilliseconds += elapsed;
+        observation.maximumMilliseconds = Math.max(observation.maximumMilliseconds, elapsed);
+      }
+    }
+  };
+  return async () => {
+    try {
+      const filename = path.join(validationOutputRoot(), 'item-filter-sql-' + database.schemaName + '.json');
+      assertValidationOutputChild(filename);
+      await writeFile(filename, JSON.stringify({ scenarioName, schema: database.schemaName,
+        scope: 'Query-hook timing observations only; arguments omitted, display literals projected. Concurrent or nested work may overlap. Consumer hooks may replace this observer. No query-count, timing, stack or diagnostic acceptance condition.',
+        statements: [...statements.values()].sort((left, right) => right.elapsedMilliseconds - left.elapsedMilliseconds) }, null, 2) + '\n', { flag: 'wx' });
+    } catch { /* The original operation and cleanup decide acceptance. */ }
+  };
+}
 
 const typeNames = {
   Video: 'MediaBrowser.Controller.Entities.Video',
@@ -256,10 +308,6 @@ export function validateFixture(fixture) {
     }
     if (testCase.sortBy !== undefined && typeof testCase.sortBy !== 'string') {
       throw new TypeError(`cases[${index}].sortBy must be a string.`);
-    }
-    if (testCase.expectedRuntimeError !== undefined
-      && (typeof testCase.expectedRuntimeError !== 'string' || (testCase.expectedStatus ?? 200) < 400)) {
-      throw new TypeError(`cases[${index}].expectedRuntimeError requires an error status and a string message.`);
     }
     if (testCase.detailExpectedStatus !== undefined
       && (!Number.isInteger(testCase.detailExpectedStatus) || testCase.detailExpectedStatus < 100 || testCase.detailExpectedStatus > 599)) {
@@ -515,101 +563,61 @@ async function seed(database, fixture, scenarioName) {
 }
 
 async function prepareSeededRoots(runtime, database, programDataPath) {
-  const host = runtime.libraryScanHost, manager = runtime.itemCreation, links = runtime.linkedChildren;
-  const previousRoots = [await host.getUserRootFolder(), await host.getAggregateFolder()];
-  const virtualChildren = [...previousRoots[1].VirtualChildren];
-  const previousItems = new Map([...previousRoots, ...virtualChildren].map(item => [idKey(item.Id), item]));
-  const observations = { kind: 'seeded-catalogue-before-first-http', hostRebuilds: 0,
-    roots: [], unregistered: [], releases: [], virtualChildren: [] };
+  const host = runtime.libraryScanHost;
+  const before = await database.rows('BaseItems');
+  const observations = { kind: 'complete-seeded-catalogue-before-first-root-use-and-startup',
+    roots: [], virtualChildren: [] };
   const describe = item => ({ Id: item.Id, NativeType: item.NativeType,
     Path: item.Path, Name: item.Name, ParentId: item.ParentId, IsRoot: item.IsRoot,
-    Data: item.NativeData, repository: { ...item.NativeRepositoryColumns },
     physicalLocations: { present: item.PhysicalLocations !== undefined,
       value: item.PhysicalLocations == null ? item.PhysicalLocations : [...item.PhysicalLocations] },
     physicalLocationsList: { present: item.PhysicalLocationsList !== undefined,
       value: item.PhysicalLocationsList == null ? item.PhysicalLocationsList : [...item.PhysicalLocationsList] } });
-  for (const root of previousRoots) {
-    const ids = postgresFolderChildIds(root);
-    observations.roots.push({ before: describe(root),
-      childIdsBefore: { present: ids !== null, empty: ids ? await ids.empty() : null } });
-    clearFolderChildIds(root);
-    releaseCachedFolderChildren(root);
-  }
-  // Native records this input with its business process stopped, then starts a
-  // fresh manager. Release the startup caches after injecting the complete
-  // rows and paths, then verify their reread values before HTTP consumption.
-  await host.close();
-  observations.hostRebuilds++;
-  for (const [key, item] of previousItems) {
-    const registered = manager.getCachedItemById(item.Id);
-    manager.unregisterItem(item.Id);
-    observations.unregistered.push({ Id: item.Id, registered: registered !== null,
-      sameReceiver: registered === item, key });
-  }
-  await links.flushOwnedReleases();
-  observations.releases.push('flushOwnedReleases');
-  await links.flushReleases();
-  observations.releases.push('flushReleases');
+  // Native receives the complete controlled catalogue before first manager
+  // use. Seed the unstarted Node runtime first as well; close is a terminal
+  // owner operation, not a fixture-only cache reset.
   const roots = [await host.getUserRootFolder(), await host.getAggregateFolder()];
-  for (const [index, root] of roots.entries()) {
-    const previous = previousRoots[index];
-    assert.equal(idKey(root.Id), idKey(previous.Id));
-    assert.equal(root.NativeType, previous.NativeType);
+  for (const root of roots) {
     const rows = await database.rows('BaseItems', { where: { Id: root.Id.toUpperCase() } });
     assert.ok(rows.length <= 1);
     if (root.Type === 'AggregateFolder') assert.equal(rows.length, 1);
-    const repository = root.NativeRepositoryColumns;
-    if (rows.length) assert.deepEqual(repository, rows[0]);
-    assert.equal(root.NativeData, repository.Data);
+    const supplied = before.filter(row => idKey(row.Id) === idKey(root.Id));
+    assert.deepEqual(rows, supplied, 'First root acquisition preserves the complete supplied persistent row or its absence.');
+    assert.equal(root.NativeType, typeNames[root.Type]);
     const canonicalPath = root.Type === 'UserRootFolder'
       ? path.join(programDataPath, 'root', 'default') : path.join(programDataPath, 'root');
     assert.equal(root.Path, canonicalPath);
-    Object.assign(observations.roots[index], { after: describe(root),
-      freshReceiver: root !== previous, repositoryRowPresent: rows.length === 1,
-      repositoryReadback: rows[0] ?? null, childIdsAfter: { present: postgresFolderChildIds(root) !== null },
-      canonicalPath: { stored: repository.Path, actual: root.Path,
-        reset: repository.Path !== root.Path } });
+    observations.roots.push({ live: describe(root), suppliedRows: supplied, afterReadRows: rows,
+      canonicalPath: { stored: rows[0]?.Path ?? null, actual: root.Path } });
   }
   for (const item of roots[1].VirtualChildren) {
-    const previous = previousItems.get(idKey(item.Id));
     const rows = await database.rows('BaseItems', { where: { Id: item.Id.toUpperCase() } });
     assert.equal(rows.length, 1);
-    assert.deepEqual(item.NativeRepositoryColumns, rows[0]);
-    observations.virtualChildren.push({ ...describe(item), freshReceiver: previous ? item !== previous : null,
-      repositoryReadback: rows[0] });
+    const supplied = before.filter(row => idKey(row.Id) === idKey(item.Id));
+    assert.deepEqual(rows, supplied, 'The initialized virtual child retains every supplied persistent field.');
+    observations.virtualChildren.push({ ...describe(item), suppliedRows: supplied, afterReadRows: rows });
   }
-  assert.equal(observations.hostRebuilds, 1);
+  assert.deepEqual(await database.rows('BaseItems'), before, 'Root acquisition does not create or rewrite catalogue rows.');
   return observations;
 }
 
-function normalizeProblem(value) {
-  if (Array.isArray(value)) return value.map(normalizeProblem);
-  if (!value || typeof value !== 'object') return value;
-  return Object.fromEntries(Object.entries(value)
-    .filter(([key]) => key !== 'traceId')
-    .map(([key, item]) => [key, normalizeProblem(item)]));
-}
-
-function stableRows(rows) {
-  const text = value => JSON.stringify(value, (_key, item) => typeof item === 'bigint' ? item.toString() : item);
-  return [...rows].sort((left, right) => text(left).localeCompare(text(right), 'en'));
-}
-
 async function targetSnapshot(database) {
-  return {
-    ApiKeys: stableRows(await database.rows('ApiKeys')),
-    BaseItems: stableRows(await database.rows('BaseItems')),
-    AncestorIds: stableRows(await database.rows('AncestorIds')),
-    LinkedChildren: stableRows(await database.rows('LinkedChildren')),
-    MediaStreamInfos: stableRows(await database.rows('MediaStreamInfos')),
-    Peoples: stableRows(await database.rows('Peoples')),
-    PeopleBaseItemMap: stableRows(await database.rows('PeopleBaseItemMap')),
-    ItemValues: stableRows(await database.rows('ItemValues')),
-    ItemValuesMap: stableRows(await database.rows('ItemValuesMap')),
-    BaseItemImageInfos: stableRows(await database.rows('BaseItemImageInfos')),
-    BaseItemProviders: stableRows(await database.rows('BaseItemProviders')),
-    BaseItemMetadataFields: stableRows(await database.rows('BaseItemMetadataFields')),
-  };
+  // One observation reads every original table in order. Release its connection
+  // before HTTP or filesystem work without adding a transaction or state cache.
+  return observeCandidatePhase('snapshot.database', () => database.withConnection(async connection => ({
+    ApiKeys: stableRows(await connection.rows('ApiKeys')),
+    BaseItems: stableRows(await connection.rows('BaseItems')),
+    AncestorIds: stableRows(await connection.rows('AncestorIds')),
+    LinkedChildren: stableRows(await connection.rows('LinkedChildren')),
+    MediaStreamInfos: stableRows(await connection.rows('MediaStreamInfos')),
+    Peoples: stableRows(await connection.rows('Peoples')),
+    PeopleBaseItemMap: stableRows(await connection.rows('PeopleBaseItemMap')),
+    ItemValues: stableRows(await connection.rows('ItemValues')),
+    ItemValuesMap: stableRows(await connection.rows('ItemValuesMap')),
+    BaseItemImageInfos: stableRows(await connection.rows('BaseItemImageInfos')),
+    BaseItemProviders: stableRows(await connection.rows('BaseItemProviders')),
+    BaseItemMetadataFields: stableRows(await connection.rows('BaseItemMetadataFields')),
+  })));
 }
 
 async function metadataSnapshot(root, hashFiles = false) {
@@ -657,19 +665,22 @@ function authorization(token) {
 }
 
 function routeFor(endpoint, testCase, fixture, userId, fields) {
-  if (testCase.action === 'live-tv-recommended') return `/LiveTv/Programs/Recommended?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'live-tv-programs') return `/LiveTv/Programs?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'live-tv-program') return `/LiveTv/Programs/${encodeURIComponent(testCase.programId)}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'live-tv-channels') return `/LiveTv/Channels?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'live-tv-channel') return `/LiveTv/Channels/${encodeURIComponent(testCase.channelId)}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'shows-episodes') return `/Shows/${encodeURIComponent(testCase.seriesId)}/Episodes?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'playback-info') return `/Items/${fixture.items.find(item => item.key === testCase.detailKey).id}/PlaybackInfo?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/Intros?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/${testCase.themeRoute}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'dto-detail') return `${endpoint === 'legacy' ? '/Users/' + userId : ''}/Items/${fixture.items.find(item => item.key === testCase.detailKey).id}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'named-list' || testCase.action === 'named-detail') return `/${testCase.namedRoute}${testCase.action === 'named-detail' ? '/' + encodeURIComponent(testCase.itemName) : ''}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (['filters', 'filters2'].includes(testCase.action)) return `/Items/${testCase.action === 'filters' ? 'Filters' : 'Filters2'}?${testCase.query.replaceAll(fixture.userId, userId)}`;
-  if (testCase.action === 'studio-name') return `/Studios/${encodeURIComponent(testCase.studioName)}?${testCase.query}`;
+  const query = bindFixtureUserQuery(testCase.query, { fixtureId: fixture.userId, actualId: userId });
+  if (testCase.action === 'suggestions') return `${endpoint === 'legacy'
+    ? '/Users/' + (testCase.suggestionUserId ?? userId) + '/Suggestions' : '/Items/Suggestions'}?${query}`;
+  if (testCase.action === 'live-tv-recommended') return `/LiveTv/Programs/Recommended?${query}`;
+  if (testCase.action === 'live-tv-programs') return `/LiveTv/Programs?${query}`;
+  if (testCase.action === 'live-tv-program') return `/LiveTv/Programs/${encodeURIComponent(testCase.programId)}?${query}`;
+  if (testCase.action === 'live-tv-channels') return `/LiveTv/Channels?${query}`;
+  if (testCase.action === 'live-tv-channel') return `/LiveTv/Channels/${encodeURIComponent(testCase.channelId)}?${query}`;
+  if (testCase.action === 'shows-episodes') return `/Shows/${encodeURIComponent(testCase.seriesId)}/Episodes?${query}`;
+  if (testCase.action === 'playback-info') return `/Items/${fixture.items.find(item => item.key === testCase.detailKey).id}/PlaybackInfo?${query}`;
+  if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/Intros?${query}`;
+  if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/${testCase.themeRoute}?${query}`;
+  if (testCase.action === 'dto-detail') return `${endpoint === 'legacy' ? '/Users/' + userId : ''}/Items/${fixture.items.find(item => item.key === testCase.detailKey).id}?${query}`;
+  if (testCase.action === 'named-list' || testCase.action === 'named-detail') return `/${testCase.namedRoute}${testCase.action === 'named-detail' ? '/' + encodeURIComponent(testCase.itemName) : ''}?${query}`;
+  if (['filters', 'filters2'].includes(testCase.action)) return `/Items/${testCase.action === 'filters' ? 'Filters' : 'Filters2'}?${query}`;
+  if (testCase.action === 'studio-name') return `/Studios/${encodeURIComponent(testCase.studioName)}?${query}`;
   const itemByKey = new Map(fixture.items.map(item => [item.key, item]));
   if (endpoint === 'detail') return `/Items/${itemByKey.get(testCase.detailKey).id}`;
   const common = [];
@@ -688,13 +699,9 @@ function routeFor(endpoint, testCase, fixture, userId, fields) {
     common.push(`Ids=${encodeURIComponent(scopeIds)}`);
   }
   if (!testCase.omitSortBy) common.push(`SortBy=${encodeURIComponent(testCase.sortBy ?? 'SortName')}`);
-  common.push(`Fields=${encodeURIComponent(testCase.fields ?? fields)}`, 'EnableImages=false', `EnableUserData=${testCase.enableUserData === true ? 'true' : 'false'}`, testCase.query);
+  common.push(`Fields=${encodeURIComponent(testCase.fields ?? fields)}`, 'EnableImages=false', `EnableUserData=${testCase.enableUserData === true ? 'true' : 'false'}`, query);
   const prefix = (testCase.action === 'studios' ? '/Studios' : endpoint === 'items' ? '/Items' : `/Users/${userId}/Items`)
     + (testCase.action === 'latest' ? '/Latest' : '');
-  // Frozen fixtures refer to the reference account id. Candidate users are
-  // created afresh, so only substitute that runtime identity in the wire query.
-  const scenarioQuery = testCase.query.replaceAll(fixture.userId, userId);
-  common[common.length - 1] = scenarioQuery;
   return `${prefix}?${common.join('&')}`;
 }
 
@@ -752,7 +759,7 @@ function responseContract(response, keyById, {
     problem: response.status >= 400
       ? captureErrorText && !(response.body && typeof response.body === 'object')
         ? null
-        : normalizeProblem(response.body && typeof response.body === 'object' ? response.body : { rawBody: response.bodyText })
+        : projectProblemSummary(response.body && typeof response.body === 'object' ? response.body : { rawBody: response.bodyText }, response.status)
       : null,
   };
 }
@@ -790,7 +797,12 @@ async function dropAndVerifyPostgresSchemas(connectionString, schema) {
   }
 }
 
-export async function recordItemFilterCandidate({ dialect, fixture, connectionString, scenarioName, configuration = {},
+export async function recordItemFilterCandidate(options) {
+  return observeExecutionPhase('postgres.consumer', () => recordItemFilterCandidateObserved(options),
+    { fixture: 'tests/library/item-filter-http-scenario.js', ownerFixture: process.argv[1] });
+}
+
+async function recordItemFilterCandidateObserved({ dialect, fixture, connectionString, scenarioName, configuration = {},
   fields = 'Width,Height', captureOrder = false, captureItems = false, captureParentItems = false,
   captureStartIndex = false, captureTags = false, captureOfficialRatings = false, captureSortNames = false,
   captureErrorText = false, captureResponseBodies = false, captureCaseRuntimeErrors = false, trackUserData = false,
@@ -801,7 +813,8 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
   requestTimeoutMs = 15000 }) {
   if (!['postgres'].includes(dialect)) throw new Error(`Unknown database dialect: ${dialect}.`);
   if (!Array.isArray(captureStateKeys) || captureStateKeys.some(key => typeof key !== 'string' || !key)) throw new TypeError('State snapshot keys must be nonempty strings.');
-  const snapshotState = async db => Object.fromEntries(await Promise.all(captureStateKeys.map(async key => [key, await db.getState(key)])));
+  const snapshotState = db => observeCandidatePhase('snapshot.state', async () =>
+    Object.fromEntries(await Promise.all(captureStateKeys.map(async key => [key, await db.getState(key)]))));
   if (typeof fields !== 'string') throw new TypeError('fields must be a string.');
   if (typeof captureOrder !== 'boolean') throw new TypeError('captureOrder must be a boolean.');
   if (typeof captureItems !== 'boolean') throw new TypeError('captureItems must be a boolean.');
@@ -838,56 +851,90 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
   const slug = String(scenarioName).replace(/[^a-z0-9]+/giu, '_').replace(/^_+|_+$/gu, '').toLowerCase().slice(0, 23);
   if (!slug) throw new TypeError('scenarioName must contain an ASCII letter or digit.');
   const schema = `${slug}_${randomUUID().replaceAll('-', '').slice(0, 16)}`;
-  const database = await PostgresDatabase.open({ connectionString, schema, create: true });
+  const database = await observeCandidatePhase('setup.database', () => PostgresDatabase.open({ connectionString, schema, create: true }));
   const runtimeErrors = [];
-  const handledExpectedRuntimeErrors = [];
   let runtime;
   let port;
   let result;
   let scenarioError;
+  let scenarioFailed = false;
+  const cleanupErrors = [];
   let currentCase = null;
   const requestHistory = [];
   const failureFile = path.join(validationOutputRoot(), 'item-filter-failure-' + schema + '.jsonl');
+  const runtimeErrorFile = path.join(validationOutputRoot(), 'item-filter-runtime-' + schema + '.jsonl');
   assertValidationOutputChild(failureFile);
+  assertValidationOutputChild(runtimeErrorFile);
   const describeError = (error, seen = new Set()) => {
-    if (error == null || typeof error !== 'object') return { message: String(error) };
-    if (seen.has(error)) return { repeatedReference: true };
-    seen.add(error);
-    const redact = text => typeof text === 'string' && connectionString ? text.replaceAll(connectionString, '[fixture-secret]') : text;
-    return { name: error.name, code: error.code, message: redact(error.message), stack: redact(error.stack),
-      ...(error.cause === undefined ? {} : { cause: describeError(error.cause, seen) }),
-      ...(Array.isArray(error.errors) ? { errors: error.errors.map(value => describeError(value, seen)) } : {}) };
+    try {
+      if (typeof error === 'string') return connectionString ? error.replaceAll(connectionString, '[fixture-secret]') : error;
+      if (error === null || typeof error === 'boolean') return error;
+      if (typeof error === 'number') return Number.isFinite(error) ? error : { valueType: 'number', value: String(error) };
+      if (typeof error !== 'object') return { valueType: typeof error,
+        ...(typeof error === 'bigint' ? { value: error.toString() } : {}) };
+      if (seen.has(error)) return { circular: true };
+      seen.add(error);
+      try {
+        if (Array.isArray(error)) return Array.from(error, value => describeError(value, seen));
+        const keys = new Set(Object.getOwnPropertyNames(error));
+        if (error instanceof Error) for (const key of ['name', 'code', 'status', 'statusCode', 'message', 'stack', 'cause', 'errors']) {
+          if (key in error) keys.add(key);
+        }
+        return Object.fromEntries([...keys].map(key => {
+          try { return [key, describeError(error[key], seen)]; }
+          catch { return [key, { unavailable: true }]; }
+        }));
+      } finally { seen.delete(error); }
+    } catch { return { unavailable: true }; }
+  };
+  const recordRuntimeError = error => {
+    try {
+      const observation = describeError(error);
+      runtimeErrors.push(observation);
+      mkdirSync(path.dirname(runtimeErrorFile), { recursive: true });
+      appendFileSync(runtimeErrorFile, JSON.stringify({ scenarioName, schema, caseName: currentCase,
+        at: new Date().toISOString(), error: observation }) + '\n');
+    } catch { /* Diagnostic collection must not change the request or background operation. */ }
+  };
+  const retainCleanupFailure = error => {
+    cleanupErrors.push(error);
+    if (!scenarioFailed) { scenarioFailed = true; scenarioError = error; }
   };
   const preserveFailure = async phase => {
     try {
       await mkdir(path.dirname(failureFile), { recursive: true });
       await appendFile(failureFile, JSON.stringify({ phase, scenarioName, schema, currentCase, requestHistory,
-        error: describeError(scenarioError), cleanup, scope: 'Actual failure/cause chain and request progress only; no retry or changed expectation.' }) + '\n');
-    } catch (error) {
-      scenarioError = new AggregateError([scenarioError, error], 'Could not preserve the original HTTP scenario failure.');
-    }
+        error: describeError(scenarioError), cleanupErrors: cleanupErrors.map(error => describeError(error)), runtimeErrors,
+        cleanup, scope: 'Actual failure/cause chain, runtime diagnostics and request progress only; no retry or changed expectation.' }) + '\n');
+    } catch { /* Preserve the original business failure even when diagnostics cannot be written. */ }
   };
   let programDataDirectory;
   const cleanup = { runtimeClosed: false, databaseClosed: false, portReleased: false,
     postgresSchemasRemoved: false };
   let databaseClosed = false;
+  const saveQueryObservations = observeCandidateQueries(database, scenarioName);
   const closeDatabase = database.close.bind(database);
-  database.close = async () => { await closeDatabase(); databaseClosed = true; };
+  database.close = async () => { await observeCandidatePhase('close.database', () => closeDatabase()); databaseClosed = true; };
   try {
-    programDataDirectory = await mkdtemp(path.join(tmpdir(), 'mm-item-filter-'));
-    if (prepareInstance) await prepareInstance({ programDataPath: programDataDirectory, database });
-    runtime = await createTestRuntime({
+    programDataDirectory = await observeCandidatePhase('setup.directory', () => mkdtemp(path.join(tmpdir(), 'mm-item-filter-')));
+    if (prepareInstance) await observeCandidatePhase('setup.prepare-instance', () => prepareInstance({ programDataPath: programDataDirectory, database }));
+    runtime = await observeCandidatePhase('runtime-open', () => createUnstartedTestRuntime({
       database,
       configuration: { IsStartupWizardCompleted: true, UICulture: 'en-US', ...configuration },
       serverId: `${slug}-${dialect}`,
       serverName: 'Item Filter HTTP Test',
       programDataPath: programDataDirectory,
-      onError: error => runtimeErrors.push({ name: error.name, message: error.message }),
-    });
+      onError: recordRuntimeError,
+    }));
     const closeFile = path.join(validationOutputRoot(), 'item-filter-close-' + schema + '.jsonl');
-    assertValidationOutputChild(closeFile); await mkdir(path.dirname(closeFile), { recursive: true });
-    const recordClose = value => appendFileSync(closeFile, JSON.stringify({ ...value, time: new Date().toISOString(),
-      scope: 'Actual owner close entry and settlement only; no timeout, retry or forced release.' }) + '\n');
+    assertValidationOutputChild(closeFile);
+    try { await mkdir(path.dirname(closeFile), { recursive: true }); }
+    catch { /* Close observation is independent of the owned runtime resources. */ }
+    const recordClose = value => {
+      try { appendFileSync(closeFile, JSON.stringify({ ...value, time: new Date().toISOString(),
+        scope: 'Actual owner close entry and settlement only; no timeout, retry or forced release.' }) + '\n'); }
+      catch { /* Owner close results do not depend on diagnostic I/O. */ }
+    };
     const observedOwners = new Set(runtime.networkHost.listeners.map(entry => entry.server));
     for (const [name, owner] of [...Object.entries(runtime), ['resourceGraph', runtime.linkedChildren?.resourceGraph]]) {
       if (!owner || typeof owner !== 'object' || typeof owner.close !== 'function' || observedOwners.has(owner)) continue;
@@ -915,14 +962,17 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
         return closeStore();
       };
     }
-    const created = await runtime.users.createUser({ Name: 'FilterAdmin', Password: 'filter password' });
-    const current = await runtime.users.getUser(created.Id);
-    await runtime.users.updatePolicy(created.Id, { ...current.Policy, IsAdministrator: true, EnableAllFolders: true });
-    const user = await runtime.users.getUser(created.Id);
-    await seed(database, fixture, slug);
-    if (prepareScenario) await prepareScenario({ database, programDataPath: programDataDirectory, fixture, user, users: runtime.users,
-      storage: runtime.storage, plugins: runtime.plugins });
-    const rootPreparation = await prepareSeededRoots(runtime, database, programDataDirectory);
+    const user = await observeCandidatePhase('setup.user', async () => {
+      const created = await runtime.users.createUser({ Name: 'FilterAdmin', Password: 'filter password' });
+      const current = await runtime.users.getUser(created.Id);
+      await runtime.users.updatePolicy(created.Id, { ...current.Policy, IsAdministrator: true, EnableAllFolders: true });
+      return runtime.users.getUser(created.Id);
+    });
+    await observeCandidatePhase('setup.seed', () => seed(database, fixture, slug));
+    if (prepareScenario) await observeCandidatePhase('setup.prepare-scenario', () => prepareScenario({ database, programDataPath: programDataDirectory, fixture, user, users: runtime.users,
+      storage: runtime.storage, plugins: runtime.plugins }));
+    const rootPreparation = await observeCandidatePhase('setup.roots', () => prepareSeededRoots(runtime, database, programDataDirectory));
+    await observeCandidatePhase('runtime-start', () => runtime.start());
     port = runtime.networkHost.listeners.find(entry => entry.scheme === 'http' && entry.bound).port;
     const origin = `http://127.0.0.1:${port}`;
     const request = async (route, { method = 'GET', token, body } = {}) => {
@@ -931,7 +981,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
         description.searchParams.set(key, '[fixture-secret]');
       const observed = { case: currentCase, method, route: description.pathname + description.search, completed: false };
       requestHistory.push(observed);
-      const response = await fetch(origin + route, {
+      const response = await observeCandidatePhase('request.headers', () => fetch(origin + route, {
         method,
         signal: AbortSignal.timeout(requestTimeoutMs),
         headers: {
@@ -940,8 +990,8 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
           ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
         },
         body: body === undefined ? undefined : JSON.stringify(body),
-      });
-      const bodyText = await response.text();
+      }));
+      const bodyText = await observeCandidatePhase('request.body', () => response.text());
       observed.completed = true; observed.status = response.status;
       let parsed;
       try { parsed = bodyText === '' ? null : JSON.parse(bodyText); }
@@ -967,6 +1017,13 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
     if (listedKeys.status !== 200) throw new Error(`Candidate API-key listing failed with ${listedKeys.status}.`);
     const apiKey = listedKeys.body.Items.find(item => item.AppName === appName)?.AccessToken;
     if (!apiKey) throw new Error('Candidate API key was not returned by /Auth/Keys.');
+
+    let caseServerConfiguration;
+    if (fixture.cases.some(testCase => testCase.serverConfiguration)) {
+      const current = await request('/System/Configuration', { token: apiKey });
+      assert.equal(current.status, 200, current.bodyText);
+      caseServerConfiguration = current.body;
+    }
 
     let warmUserViews = null;
     if (fixture.warmUserViews) {
@@ -996,8 +1053,20 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
     for (const testCase of fixture.cases) {
       currentCase = testCase.name;
       const endpoints = testCase.endpoints ?? ['items', 'legacy'];
-      if (prepareCase) await prepareCase({ testCase, runtime, database, user });
+      if (prepareCase) await observeCandidatePhase('case.prepare', () => prepareCase({ testCase, runtime, database, user }));
       let policyReadback;
+      let serverConfigurationReadback;
+      if (testCase.serverConfiguration) {
+        const update = await request('/System/Configuration', { method: 'POST', token: apiKey,
+          body: { ...caseServerConfiguration, ...testCase.serverConfiguration } });
+        assert.equal(update.status, 204, testCase.name + ': ' + update.bodyText);
+        const effective = await request('/System/Configuration', { token: apiKey });
+        assert.equal(effective.status, 200, testCase.name + ': ' + effective.bodyText);
+        for (const [field, value] of Object.entries(testCase.serverConfiguration)) {
+          assert.deepEqual(effective.body[field], value, testCase.name + ': ' + field);
+        }
+        serverConfigurationReadback = effective.body;
+      }
       if (testCase.configuration) {
         const update = await request(`/Users/${user.Id}/Configuration`, { method: 'POST', token: apiKey,
           body: { ...user.Configuration, ...testCase.configuration } });
@@ -1024,10 +1093,10 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
         sideEffect.filesystemBefore = await metadataSnapshot(path.join(programDataDirectory, 'metadata'));
       }
       for (const endpoint of endpoints) {
-        const before = captureEndpointStages ? { database: await targetSnapshot(database),
+        const before = captureEndpointStages ? await observeCandidatePhase('snapshot.before-endpoint', async () => ({ database: await targetSnapshot(database),
           filesystem: await metadataSnapshot(path.join(programDataDirectory, 'metadata')),
           ...(trackUserData ? { userData: stableRows(await database.rows('UserData')) } : {}),
-          ...(captureFilesystemDomains ? { filesystemDomains: await instanceFilesystemSnapshot(programDataDirectory, extraFilesystemDomains) } : {}) } : null;
+          ...(captureFilesystemDomains ? { filesystemDomains: await instanceFilesystemSnapshot(programDataDirectory, extraFilesystemDomains) } : {}) })) : null;
         const token = testCase.auth === 'apiKey' ? apiKey : userToken;
         const runtimeErrorStart = runtimeErrors.length;
         const routes = testCase.parallelQueries
@@ -1035,30 +1104,20 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
           : Array.from({ length: testCase.parallelRequests ?? 1 },
             () => routeFor(endpoint, testCase, fixture, user.Id, fields));
         const requestDescription = { method: testCase.method ?? 'GET', ...(Object.hasOwn(testCase, 'body')
-          ? { body: JSON.parse(JSON.stringify(testCase.body).replaceAll(fixture.userId, user.Id)) } : {}) };
+          ? { body: bindFixtureRequestBody(testCase, { user: { fixtureId: fixture.userId, actualId: user.Id } }) } : {}) };
         const responses = await Promise.all(routes.map(route => request(route, { token, ...requestDescription })));
-        if (afterEndpoint) await afterEndpoint({ testCase, endpoint, responses, runtime, database, user });
+        if (afterEndpoint) await observeCandidatePhase('endpoint.after', () => afterEndpoint({ testCase, endpoint, responses, runtime, database, user }));
         for (const response of responses) {
           if (endpoint === 'detail' && testCase.detailExpectedStatus !== undefined
             && response.status !== testCase.detailExpectedStatus) {
             throw new Error(`${testCase.name}:detail returned ${response.status}, expected ${testCase.detailExpectedStatus}.`);
-          }
-          if (!captureCaseRuntimeErrors && endpoint !== 'detail' && (testCase.expectedStatus ?? 200) >= 400) {
-            const emitted = runtimeErrors.splice(runtimeErrorStart);
-            const expectedRuntimeError = testCase.expectRuntimeError === false
-              ? []
-              : [{ name: 'Error', message: testCase.expectedRuntimeError ?? 'Error processing request.' }];
-            if (JSON.stringify(emitted) !== JSON.stringify(expectedRuntimeError)) {
-              throw new Error(`${testCase.name}:${endpoint} emitted an unexpected runtime error sequence: ${JSON.stringify(emitted)}`);
-            }
-            if (emitted.length) handledExpectedRuntimeErrors.push({ caseName: testCase.name, endpoint, error: emitted[0] });
           }
           endpointContracts.push({
             endpoint,
             ...(testCase.action?.startsWith('live-tv-program') || testCase.action?.startsWith('live-tv-channel') || testCase.action === 'shows-episodes'
               ? { request: requestDescription } : {}),
             ...(captureResponseBodies ? { response } : {}),
-            ...(captureCaseRuntimeErrors ? { runtimeErrors: runtimeErrors.splice(runtimeErrorStart) } : {}),
+            ...(captureCaseRuntimeErrors ? { runtimeErrors: runtimeErrors.slice(runtimeErrorStart) } : {}),
             contract: responseContract(response, keyById, {
               assertOrder: testCase.assertOrder === true,
               captureOrder,
@@ -1081,13 +1140,14 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
           httpCases++;
         }
         if (captureEndpointStages) caseStages.push({ name: testCase.name, endpoint, before,
-          after: { database: await targetSnapshot(database),
+          after: await observeCandidatePhase('snapshot.after-endpoint', async () => ({ database: await targetSnapshot(database),
             filesystem: await metadataSnapshot(path.join(programDataDirectory, 'metadata')),
             ...(trackUserData ? { userData: stableRows(await database.rows('UserData')) } : {}),
-            ...(captureFilesystemDomains ? { filesystemDomains: await instanceFilesystemSnapshot(programDataDirectory, extraFilesystemDomains) } : {}) } });
+            ...(captureFilesystemDomains ? { filesystemDomains: await instanceFilesystemSnapshot(programDataDirectory, extraFilesystemDomains) } : {}) })) });
       }
       cases.push({ name: testCase.name, query: testCase.query, scope: testCase.scope,
         ...(policyReadback ? { policyReadback } : {}),
+        ...(serverConfigurationReadback ? { serverConfigurationReadback } : {}),
         ...(testCase.policy ? { policy: testCase.policy } : {}),
         ...(testCase.configuration ? { configuration: testCase.configuration } : {}),
         ...(testCase.serverConfiguration ? { serverConfiguration: testCase.serverConfiguration } : {}),
@@ -1115,30 +1175,34 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
       ? await metadataSnapshot(path.join(programDataDirectory, 'metadata')) : null;
     const filesystemDomainsAfterReads = captureFilesystemDomains ? await instanceFilesystemSnapshot(programDataDirectory, extraFilesystemDomains) : null;
     if (sideEffect && !sideEffect.afterFirst) throw new Error(`Side-effect case not run: ${trackSideEffectCase}.`);
-    result = { dialect, schema: dialect === 'postgres' ? schema : null, programDataDirectory, userId: user.Id, rootPreparation, cases, httpCases,
+    result = { dialect, schema: dialect === 'postgres' ? schema : null, programDataDirectory, userId: user.Id,
+      serverId: `${slug}-${dialect}`, rootPreparation, cases, httpCases,
       beforeReads, afterReads, filesystemBeforeReads, filesystemAfterReads,
       ...(captureStateKeys.length ? { stateBeforeReads, stateAfterReads } : {}),
       ...(warmUserViews ? { warmUserViews } : {}),
       ...(trackUserData ? { userDataBeforeReads, userDataAfterReads } : {}),
       ...(captureFilesystemDomains ? { filesystemDomainsBeforeReads, filesystemDomainsAfterReads } : {}),
-      sideEffect, caseStages, runtimeErrors, handledExpectedRuntimeErrors, cleanup };
+      sideEffect, caseStages, runtimeErrors, cleanup };
   } catch (error) {
-    scenarioError = error;
+    scenarioFailed = true; scenarioError = error;
     await preserveFailure('operation-failed');
   } finally {
     try {
-      if (runtime) await runtime.close();
+      if (runtime) await observeCandidatePhase('close.runtime', () => runtime.close());
       else if (!databaseClosed) await database.close();
       cleanup.runtimeClosed = runtime ? runtime.networkHost.listeners.every(entry => !entry.server.listening) : true;
     } catch (error) {
-      scenarioError ??= error;
+      retainCleanupFailure(error);
     }
-    try { cleanup.databaseClosed = await assertDatabaseClosed(database); }
-    catch (error) { scenarioError ??= error; }
-    if (port !== undefined) cleanup.portReleased = await portAvailable(port);
+    try { cleanup.databaseClosed = await observeCandidatePhase('close.verify-database', () => assertDatabaseClosed(database)); }
+    catch (error) { retainCleanupFailure(error); }
+    if (port !== undefined) {
+      try { cleanup.portReleased = await observeCandidatePhase('close.verify-port', () => portAvailable(port)); }
+      catch (error) { retainCleanupFailure(error); }
+    }
     if (dialect === 'postgres') {
-      try { cleanup.postgresSchemasRemoved = await dropAndVerifyPostgresSchemas(connectionString, schema); }
-      catch (error) { scenarioError ??= error; }
+      try { cleanup.postgresSchemasRemoved = await observeCandidatePhase('close.postgres-schema', () => dropAndVerifyPostgresSchemas(connectionString, schema)); }
+      catch (error) { retainCleanupFailure(error); }
     }
     if (programDataDirectory) {
       try {
@@ -1149,12 +1213,13 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
         if (!target.startsWith(parent + path.sep) || !path.basename(target).startsWith('mm-item-filter-')) {
           throw new Error('The isolated item-filter directory escaped the system temporary directory.');
         }
-        await rm(target, { recursive: true, force: false });
+        await observeCandidatePhase('close.program-data', () => rm(target, { recursive: true, force: false }));
         cleanup.programDataDirectoryRemoved = await stat(target).then(() => false, error => error.code === 'ENOENT');
-      } catch (error) { scenarioError ??= error; }
+      } catch (error) { retainCleanupFailure(error); }
     }
   }
-  if (scenarioError) { await preserveFailure('cleanup-finished'); throw scenarioError; }
+  await saveQueryObservations();
+  if (scenarioFailed) { await preserveFailure('cleanup-finished'); throw scenarioError; }
   return result;
 }
 

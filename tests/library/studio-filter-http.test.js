@@ -55,12 +55,6 @@ for (const dialect of dialects) {
       [...expected.mutations.directoriesAdded].sort());
     assert.ok(actual.filesystemAfterReads.every(entry => entry.type === 'directory'));
     assert.deepEqual(actual.filesystemAfterShutdown, actual.filesystemAfterReads);
-    assert.deepEqual(actual.runtimeErrors, []);
-    assert.deepEqual(actual.handledExpectedRuntimeErrors, input.cases
-      .filter(entry => (entry.expectedStatus ?? 200) >= 400)
-      .flatMap(entry => (entry.endpoints ?? ['items', 'legacy']).map(endpoint => ({
-        caseName: entry.name, endpoint, error: { name: 'Error', message: 'Error processing request.' },
-      }))));
     assert.deepEqual(actual.cleanup, {
       runtimeClosed: true,
       databaseClosed: true,

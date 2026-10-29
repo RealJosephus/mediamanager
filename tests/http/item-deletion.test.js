@@ -6,7 +6,7 @@ import { canDeleteItem } from '../../src/library/delete-permission.js';
 import { visibleItem } from '../../src/library/permissions.js';
 import { parentChainForItem } from '../../src/library/collection-membership.js';
 import { idKey, nonemptyId } from '../../src/library/records.js';
-import { normalizeDeletionRecording } from './fixtures/item-deletion/normalize.js';
+import { normalizeDeletionRecording } from './deletion-response-projection.js';
 import { assertProjectedEqual, publicJsonBody } from '../comparison-observations.js';
 import { input, recordCurrentItemDeletionOnce } from './item-deletion-fixture.js';
 import { fixtureId, entities, userFor, permissionOptions, stateFor, visibilityOptions } from './item-deletion-state.js';
@@ -92,10 +92,11 @@ for (const sample of input.cases) {
     });
     const body = await response.text(); let jsonBody = null;
     try { jsonBody = JSON.parse(body); } catch { /* The real native middleware uses text for exceptions. */ }
-    const actual = normalizeDeletionRecording({ results: [{ name: sample.name, requestPath: expected.requestPath,
+    const actual = { name: sample.name, requestPath: expected.requestPath,
       status: response.status, contentType: response.headers.get('content-type'), body, jsonBody,
-      calls, committed, remaining: [...items.keys()].sort() }] }).results[0];
+      calls, committed, remaining: [...items.keys()].sort() };
     const { errors, ...projection } = expected;
-    assertProjectedEqual(t, sample.name + ' public deletion response', actual, projection, publicJsonBody);
+    assertProjectedEqual(t, sample.name + ' public deletion response', actual, projection,
+      response => publicJsonBody(normalizeDeletionRecording({ results: [response] }).results[0]));
   });
 }

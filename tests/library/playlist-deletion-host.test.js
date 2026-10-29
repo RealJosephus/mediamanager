@@ -5,6 +5,7 @@ import { readFile, mkdir, symlink, mkdtemp, rm } from 'node:fs/promises';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { inspect } from 'node:util';
 import { PlaylistService } from '../../src/library/playlist-service.js';
 import { createTestApplication } from '../helpers/application.js';
 import { WebDavAdapter } from '../../plugins/webdav/adapter.js';
@@ -146,23 +147,56 @@ test('postgres: user cleanup keeps Playlist source and uses the explicit physica
   assert.deepEqual(readCachedFolderChildren(value.parent, null, () => null), [value.item]);
 });
 test('postgres: queued managed XML completes before batch HTTP Playlist deletion without a late recreation', options, async t => {
-  let release, entered;
-  const pending = new Promise(resolve => { release = resolve; }), starting = new Promise(resolve => { entered = resolve; });
+  let release, entered, failed, committed, releaseRequest, writerPid, saverPid, value;
+  const pending = new Promise(resolve => { release = resolve; });
+  const requestPending = new Promise(resolve => { releaseRequest = resolve; });
+  const requestCommitted = new Promise(resolve => { committed = resolve; });
+  const starting = new Promise((resolve, reject) => { entered = resolve; failed = reject; });
+  void starting.catch(() => {});
   const fileSystem = { ...fs, rename: async (...args) => {
-    if (String(args[1]).endsWith('playlist.xml')) { entered(); await pending; }
+    if (String(args[1]).endsWith('playlist.xml')) {
+      saverPid = await value.fixture.store.run(async db => (await db.client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid);
+      t.diagnostic(JSON.stringify({ phase: 'queued-playlist-xml-replacement', writerPid, saverPid }));
+      entered(); await pending;
+    }
     return fs.rename(...args);
   } };
-  const value = await setup(t, 'managed-directory', { fileSystem }), request = await app(t, value);
-  let timeout, deleting;
+  value = await setup(t, 'managed-directory', { fileSystem, onError: error => {
+    t.diagnostic('queued-playlist-xml-error ' + inspect(error, { depth: 8 })); failed(error);
+  } });
+  const request = await app(t, value), store = value.fixture.store;
+  const serializeWrites = store.serializeWrites;
+  // Keep the actual committed add connection admitted until the queued saver
+  // reaches its filesystem boundary. A background read must use its own owner.
+  store.serializeWrites = (operation, writeOptions) => serializeWrites.call(store, async db => {
+    writerPid = (await db.client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid;
+    const result = await operation(db);
+    committed();
+    await requestPending;
+    return result;
+  }, writeOptions);
+  let timeout, deleting, adding, addCompleted = false;
   try {
-    await value.playlists.add(id(1), [id(3)], { user: owner });
+    adding = value.playlists.add(id(1), [id(3)], { user: owner }).then(result => { addCompleted = true; return result; });
+    void adding.catch(failed);
+    await Promise.race([requestCommitted, starting]);
     await Promise.race([starting, new Promise((_, reject) => {
       timeout = setTimeout(() => reject(new Error('The queued XML did not reach the atomic replacement boundary.')), 5000);
     })]);
+    assert.equal(addCompleted, false, 'The add request still owns its admitted PostgreSQL connection.');
+    assert.notEqual(saverPid, writerPid, 'Queued XML must not reuse the active add connection.');
+    const backends = (await value.fixture.database.client.query('SELECT pid FROM pg_stat_activity WHERE pid = ANY($1::integer[])',
+      [[writerPid, saverPid]])).rows.map(row => row.pid).sort((a, b) => a - b);
+    assert.deepEqual(backends, [writerPid, saverPid].sort((a, b) => a - b), 'Both actual connection owners remain present.');
+    releaseRequest(); await adding;
+    store.serializeWrites = serializeWrites;
     let done = false;
     deleting = request([id(1)]).then(status => { assert.equal(status, 204); done = true; });
     await new Promise(resolve => setImmediate(resolve)); assert.equal(done, false);
-  } finally { clearTimeout(timeout); release(); }
+  } finally {
+    clearTimeout(timeout); releaseRequest(); release(); store.serializeWrites = serializeWrites;
+    await Promise.allSettled([adding, deleting]);
+  }
   await deleting;
   assert.equal((await value.state()).sourceExists, false); assert.equal(value.events.length, 1);
 });

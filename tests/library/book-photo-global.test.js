@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir, mkdtemp, rm, rename, stat } from 'node:fs/promises';
 import path from 'node:path';
@@ -7,9 +7,57 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { defaultLibraryOptions } from '../../src/library/options.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
-import { matrix, assetUrls, digest, slash, currentBookPhoto, allTables, fileEvidence, recordCandidate } from './book-photo-global-current-fixture.js';
+import { matrix, assetUrls, digest, slash, currentBookPhoto, allTables, fileEvidence, recordCandidate, createBookPhotoCostObserver } from './book-photo-global-current-fixture.js';
+import { executionObservation, observeExecutionPhase } from '../../tools/validation/execution-diagnostics.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
+const candidateFixture = 'tests/library/book-photo-global.test.js';
+const costs = createBookPhotoCostObserver(candidateFixture);
+after(() => costs.close());
+const diagnosticsEnabled = () => path.isAbsolute(process.env.MEDIAMANAGER_TEST_DIAGNOSTICS_ROOT ?? '');
+const observe = (phase, operation) => costs.observe(phase, () => diagnosticsEnabled()
+  ? observeExecutionPhase('book-photo.candidate.' + phase, operation, { fixture: candidateFixture, ownerFixture: candidateFixture }) : operation());
+
+function observeRuntimeMethods(runtime) {
+  if (!diagnosticsEnabled()) return;
+  // These async operations/delegates retain their receiver and arguments.
+  // Calls through earlier captured closures can bypass these properties;
+  // nested/concurrent observations overlap and never establish zero work.
+  for (const [owner, method, phase] of [
+    [runtime.libraryScanHost, 'validateChildren', 'pipeline.validate-children'],
+    [runtime.libraryScanHost, 'refreshMetadata', 'pipeline.refresh-metadata'],
+    [runtime.metadataScanner, 'refreshLiveItem', 'pipeline.refresh-live-item'],
+    [runtime.metadata, 'refresh', 'pipeline.metadata-refresh'],
+    [runtime.metadata?.images, 'validate', 'pipeline.images.validate'],
+    [runtime.metadata?.images, 'merge', 'pipeline.images.merge'],
+    [runtime.metadata?.images, 'importLocalResult', 'pipeline.images.import-local'],
+    [runtime.metadata?.images, 'refreshProviders', 'pipeline.images.refresh-providers'],
+    [runtime.images, 'load', 'pipeline.image-load'],
+  ]) try {
+    const original = owner?.[method];
+    if (typeof original === 'function') owner[method] = function (...args) {
+      if (!diagnosticsEnabled()) return Reflect.apply(original, this, args);
+      return costs.observe(phase, () => {
+        let observation;
+        try {
+          observation = executionObservation('book-photo.candidate.' + phase, { fixture: candidateFixture, ownerFixture: candidateFixture });
+          void observation.record('started').catch(() => {});
+        } catch { return Reflect.apply(original, this, args); }
+        let result;
+        try { result = Reflect.apply(original, this, args); }
+        catch (error) {
+          void observation.record('failed', { resultKind: 'threw' }).catch(() => {}); throw error;
+        }
+        // Preserve synchronous admission and forward the original value/rejection.
+        void Promise.resolve(result).then(
+          () => observation.record('completed', { resultKind: 'returned' }),
+          () => observation.record('failed', { resultKind: 'threw' }),
+        ).catch(() => {});
+        return result;
+      });
+    };
+  } catch { /* Optional observation cannot replace setup or scan behavior. */ }
+}
 
 test('Book/Photo current designated Native independently executes both complete fourteen-case sixty-one-step matrices', async () => {
   const { cases, report } = await currentBookPhoto();
@@ -133,48 +181,58 @@ for (const sample of matrix.cases) test('fresh actual Book/Photo global pipeline
   const { cases, repeatCases } = await currentBookPhoto();
   const expected = cases.find(value => value.name === sample.name);
   const repeated = repeatCases.find(value => value.name === sample.name);
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'book-photo-global-'));
+  const directory = await observe('setup.directory', () => mkdtemp(path.join(os.tmpdir(), 'book-photo-global-')));
   let database, runtime;
+  const queryObservers = [];
   const cleanup = { runtimeClosed: false, postgresDropped: false, directoryRemoved: false };
   t.after(async () => {
-    const failures = [];
-    try { await runtime?.close(); cleanup.runtimeClosed = true; } catch (error) { failures.push(error); }
-    try { if (database) await dropPostgresTestDatabase(database); cleanup.postgresDropped = true; } catch (error) { failures.push(error); }
     try {
-      assert.equal(path.dirname(path.resolve(directory)), path.resolve(os.tmpdir()));
-      assert.ok(path.basename(directory).startsWith('book-photo-global-'));
-      await rm(directory, { recursive: true }); cleanup.directoryRemoved = true;
-    } catch (error) { failures.push(error); }
-    await recordCandidate(sample.name + '-cleanup', { cleanup,
-      errors: failures.map(error => ({ name: error.name, message: error.message })) });
-    if (failures.length) throw new AggregateError(failures, 'Current Book/Photo cleanup failed.');
+      const failures = [];
+      try { if (runtime) await observe('close.runtime', () => runtime.close()); cleanup.runtimeClosed = true; } catch (error) { failures.push(error); }
+      try { if (database) await observe('close.database', () => dropPostgresTestDatabase(database)); cleanup.postgresDropped = true; } catch (error) { failures.push(error); }
+      try {
+        assert.equal(path.dirname(path.resolve(directory)), path.resolve(os.tmpdir()));
+        assert.ok(path.basename(directory).startsWith('book-photo-global-'));
+        await observe('close.directory', () => rm(directory, { recursive: true })); cleanup.directoryRemoved = true;
+      } catch (error) { failures.push(error); }
+      await observe('close.record', () => recordCandidate(sample.name + '-cleanup', { cleanup,
+        errors: failures.map(error => ({ name: error.name, message: error.message })) }));
+      if (failures.length) throw new AggregateError(failures, 'Current Book/Photo cleanup failed.');
+    } finally { for (const restore of queryObservers) restore(); }
   });
-  database = await createPostgresTestDatabase(null, 'book_photo_scan');
+  database = await observe('setup.database', () => createPostgresTestDatabase(null, 'book_photo_scan'));
+  queryObservers.push(costs.observePool(database, 'main'));
   const program = path.join(directory, 'program'), media = path.join(directory, 'original'), metadata = path.join(directory, 'sidecars');
-  await mkdir(path.join(media, 'Subjects'), { recursive: true });
-  await mkdir(path.join(metadata, 'Subjects'), { recursive: true });
-  await mkdir(path.join(directory, 'ancestors'));
+  await observe('setup.directories', async () => {
+    await mkdir(path.join(media, 'Subjects'), { recursive: true });
+    await mkdir(path.join(metadata, 'Subjects'), { recursive: true });
+    await mkdir(path.join(directory, 'ancestors'));
+  });
   const errors = [];
-  runtime = await createTestRuntime({ database, programDataPath: program, configurationDirectoryPath: path.join(directory, 'config'),
+  runtime = await observe('setup.runtime', () => createTestRuntime({ database, programDataPath: program, configurationDirectoryPath: path.join(directory, 'config'),
     storageConfiguration: path.join(directory, 'storage.json'), serverId: 'book-photo-global',
     configuration: { IsStartupWizardCompleted: true, UICulture: 'en-US', LibraryScanFanoutConcurrency: 1 },
-    onError: error => errors.push({ name: error.name, code: error.code, message: error.message }) });
+    onError: error => errors.push({ name: error.name, code: error.code, message: error.message }) }));
+  queryObservers.push(costs.observePool(runtime.linkedChildren.relationDatabase, 'relation'));
+  observeRuntimeMethods(runtime);
   const storage = runtime.storage, definition = storage.configuration(), identity = 'Z:\\FreshCompound';
   const capabilities = { create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true };
   definition.instances.push({ id: 'fresh-original', type: 'local', config: { root: media, writable: true } },
     { id: 'fresh-sidecar', type: 'local', config: { root: metadata, writable: true } },
     { id: 'fresh-ancestors', type: 'local', config: { root: path.join(directory, 'ancestors'), writable: true } });
-  await storage.configure(definition);
-  await storage.bindPath({ identityRoot: 'Z:\\', instanceId: 'fresh-ancestors', purpose: 'library', style: 'windows',
-    caseSensitive: false, returnAccess: 'Explicit isolated ancestor search; no host-drive fallback.', capabilities });
-  for (const [purpose, instanceId] of [['library', 'fresh-original'], ['metadata', 'fresh-sidecar']]) {
-    await storage.bindPath({ identityRoot: identity, instanceId, purpose, style: 'windows', caseSensitive: false,
-      returnAccess: 'Independent fresh compound ' + purpose + ' storage.', capabilities });
-  }
+  await observe('setup.storage', async () => {
+    await storage.configure(definition);
+    await storage.bindPath({ identityRoot: 'Z:\\', instanceId: 'fresh-ancestors', purpose: 'library', style: 'windows',
+      caseSensitive: false, returnAccess: 'Explicit isolated ancestor search; no host-drive fallback.', capabilities });
+    for (const [purpose, instanceId] of [['library', 'fresh-original'], ['metadata', 'fresh-sidecar']]) {
+      await storage.bindPath({ identityRoot: identity, instanceId, purpose, style: 'windows', caseSensitive: false,
+        returnAccess: 'Independent fresh compound ' + purpose + ' storage.', capabilities });
+    }
+  });
   assert.deepEqual((await database.rows('BaseItems')).filter(row => row.Path?.startsWith(identity)), []);
-  await runtime.libraryConfiguration.addVirtualFolder('Subjects', sample.collectionType,
+  await observe('setup.folder', () => runtime.libraryConfiguration.addVirtualFolder('Subjects', sample.collectionType,
     { ...defaultLibraryOptions(), SaveLocalMetadata: sample.saveLocalMetadata, EnablePhotos: sample.enablePhotos,
-      PathInfos: [{ Path: identity + '\\Subjects' }] }, false);
+      PathInfos: [{ Path: identity + '\\Subjects' }] }, false));
   // Preserve the old contract: default plugins, Windows logical identity and
   // actual write times. The independent runtime fixture owns its other inputs.
   for (const [index, step] of sample.steps.entries()) {
@@ -182,15 +240,15 @@ for (const sample of matrix.cases) test('fresh actual Book/Photo global pipeline
       const observation = { case: sample.name, step: step.name, startedAt: new Date().toISOString(),
         succeeded: false, compared: false, errors };
       try {
-        observation.mutations = await applyChanges(step.changes, { media, metadata });
-        observation.before = await snapshot(runtime, database, { identity, program, allowMissingImages: true });
-        observation.beforeFiles = await fileEvidence(directory);
+        observation.mutations = await observe('step.apply-changes', () => applyChanges(step.changes, { media, metadata }));
+        observation.before = await observe('step.snapshot.before', () => snapshot(runtime, database, { identity, program, allowMissingImages: true }));
+        observation.beforeFiles = await observe('step.files.before', () => fileEvidence(directory));
         observation.scanStartedAt = new Date().toISOString();
-        try { observation.result = await runtime.libraryScanner.runCompleteScan(); observation.succeeded = true; }
+        try { observation.result = await observe('step.scan', () => runtime.libraryScanner.runCompleteScan()); observation.succeeded = true; }
         catch (error) { observation.scanError = { name: error.name, code: error.code, message: error.message, stack: error.stack }; }
         observation.scanEndedAt = new Date().toISOString();
-        observation.after = await snapshot(runtime, database, { identity, program });
-        observation.afterFiles = await fileEvidence(directory);
+        observation.after = await observe('step.snapshot.after', () => snapshot(runtime, database, { identity, program }));
+        observation.afterFiles = await observe('step.files.after', () => fileEvidence(directory));
         assert.equal(expected.steps[index].succeeded, true, 'Original complete scan succeeds, including malformed-provider cases.');
         assert.equal(observation.succeeded, expected.steps[index].succeeded);
         assert.deepEqual(observation.after.items, expected.steps[index].items);
@@ -200,10 +258,10 @@ for (const sample of matrix.cases) test('fresh actual Book/Photo global pipeline
       } catch (error) {
         observation.failure = { name: error.name, message: error.message, stack: error.stack };
         // A failed image consumer or scan must still retain its SQL/file prefix.
-        if (!observation.after) observation.failedTables = await allTables(database);
-        if (!observation.afterFiles) observation.failedFiles = await fileEvidence(directory);
+        if (!observation.after) observation.failedTables = await observe('step.failed-tables', () => allTables(database));
+        if (!observation.afterFiles) observation.failedFiles = await observe('step.failed-files', () => fileEvidence(directory));
         throw error;
-      } finally { await recordCandidate(sample.name + '-' + index, observation); }
+      } finally { await observe('step.record', () => recordCandidate(sample.name + '-' + index, observation)); }
     });
   }
   assert.ok((await stat(media)).isDirectory());

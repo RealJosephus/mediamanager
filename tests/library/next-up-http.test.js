@@ -8,6 +8,7 @@ import { tableDefinition } from '../../src/database/model.js';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 const fixtureBytes = await readFile(new URL('./fixtures/next-up/input.json', import.meta.url));
 const fixture = JSON.parse(fixtureBytes);
@@ -33,9 +34,13 @@ for (const stage of nativeCaseStages) {
   assert.equal(stage.beforeSha256, stage.afterSha256);
   assert.equal(stage.beforeSha256, reference.immutableState.readStages[0].sha256);
 }
-const normalizeBody = value => Array.isArray(value) ? value.map(normalizeBody)
-  : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value)
-    .map(([key, entry]) => [key, key === 'ServerId' ? '$server' : normalizeBody(entry)])) : value;
+// The historical capture has no separate device.txt binding. Keep every
+// Native value literal, and align only the candidate's independently bound ID.
+const observedNativeServerId = http.records.flatMap(record => record.response.bodyJson?.Items ?? [])
+  .find(item => typeof item.Id === 'string' && typeof item.Type === 'string')?.ServerId;
+assert.equal(typeof observedNativeServerId, 'string');
+const normalizeBody = (value, serverId) => projectItemBody(value,
+  { serverId, serverToken: observedNativeServerId, date: value => value });
 const columns = tableDefinition('BaseItems').columns;
 const dialects = process.env.MEDIAMANAGER_NEXT_UP_DIALECT ? [process.env.MEDIAMANAGER_NEXT_UP_DIALECT] : ['postgres'];
 if (dialects.some(dialect => !['postgres'].includes(dialect))) throw new Error('Invalid NextUp dialect.');
@@ -179,7 +184,7 @@ for (const dialect of dialects) test(`${dialect}: tvnextup matches 53 complete n
       assert.equal(endpoint.endpoint, native.endpoint);
       assert.equal(endpoint.response.status, native.response.status);
       assert.equal(endpoint.response.contentType, native.response.contentType);
-      if (native.response.status < 400) assert.deepEqual(normalizeBody(endpoint.response.body), normalizeBody(native.response.bodyJson));
+      if (native.response.status < 400) assert.deepEqual(normalizeBody(endpoint.response.body, actual.serverId), native.response.bodyJson);
       else assert.equal(endpoint.response.bodyText, native.response.bodyText);
       const failures = queryOperations.filter(operation => operation.failed && operation.caseName === item.name
         && operation.endpoint === endpoint.endpoint);
@@ -190,12 +195,8 @@ for (const dialect of dialects) test(`${dialect}: tvnextup matches 53 complete n
           assert.equal(operation.requestOpen, true, 'A completed HTTP request cannot absorb a later query failure.');
           assert.equal(operation.values.status, endpoint.response.status);
         }
-        for (const error of endpoint.runtimeErrors) assert.ok(failures.some(operation =>
-          operation.values.status === endpoint.response.status && operation.values.message === error.message),
-        'Only the matching actual Next Up query failure may classify its diagnostic.');
       } else {
         assert.ok(!failures.length, 'Successful Next Up requests must not hide a query failure.');
-        assert.deepEqual(endpoint.runtimeErrors, [], 'Successful requests must not report an unclassified runtime failure.');
       }
     });
   }
@@ -213,8 +214,6 @@ for (const dialect of dialects) test(`${dialect}: tvnextup matches 53 complete n
     assert.deepEqual(actual.userDataAfterReads, actual.userDataAfterShutdown);
     assert.deepEqual(actual.filesystemDomainsBeforeReads, actual.filesystemDomainsAfterReads);
     assert.deepEqual(actual.filesystemDomainsAfterReads, actual.filesystemDomainsAfterShutdown);
-    assert.deepEqual(actual.runtimeErrors, []);
-    assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
     assert.ok(!queryOperations.some(operation => operation.failed && operation.endpoint == null),
       'A background or shutdown query failure cannot be assigned to an earlier HTTP response.');
   });

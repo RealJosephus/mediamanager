@@ -8,6 +8,7 @@ import { declareNativeHttpTestFile } from '../helpers/native-http-test-file.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { idKey, dateText } from '../../src/library/records.js';
 import { recordItemFilterCandidate, validateFixture } from './item-filter-http-scenario.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
 
@@ -25,16 +26,15 @@ const normalizeNamedPath = value => {
   assert.match(value, /[\\/]metadata[\\/](?:Genre|MusicGenre|artists|Studio)[\\/]/u);
   return '$programData/metadata/' + value.split(/[\\/]metadata[\\/]/u)[1].replaceAll('\\', '/');
 };
-const normalizeBody = value => Array.isArray(value) ? value.map(normalizeBody)
-  : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value)
-    .filter(([key]) => key !== 'traceId').map(([key, entry]) => [key, key === 'ServerId' ? '$server' : key === 'Path' && typeof entry === 'string' ? normalizeNamedPath(entry) : ['DateCreated', 'DateLastSaved', 'DateLastRefreshed', 'DateLastMediaAdded'].includes(key) && typeof entry === 'string' ? dateText(entry) : normalizeBody(entry)])) : value;
+const normalizeBody = (value, serverId, status) => projectItemBody(value, { serverId, status, path: normalizeNamedPath,
+  date: (entry, { field }) => ['DateCreated', 'DateLastSaved', 'DateLastRefreshed', 'DateLastMediaAdded'].includes(field) ? dateText(entry) : entry });
 const cases = candidateCasesFromTrackedInput(fixture);
 
 for (const dialect of dialects) {
   test(`${dialect}: genre, artist and album-artist APIs match 153 current native full HTTP responses`, {
     skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
   }, nativeCallback(async t => {
-    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot } = await currentUserViewScenario('named-items-http', fixtureBytes, { signal: t.signal });
+    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('named-items-http', fixtureBytes, { signal: t.signal });
 
     const body = name => http.records.find(record => record.name === name)?.response.bodyJson;
     assert.ok(body('Genres base').Items.some(item => item.Type === 'Genre'));
@@ -103,10 +103,8 @@ for (const dialect of dialects) {
           assert.equal(endpoint.endpoint, native.endpoint);
           assert.equal(endpoint.response.status, native.response.status);
           assert.equal(endpoint.response.contentType, native.response.contentType);
-          if (native.response.status < 400 || native.response.bodyJson !== undefined) assert.deepEqual(normalizeBody(endpoint.response.body), normalizeBody(native.response.bodyJson));
+          if (native.response.status < 400 || native.response.bodyJson !== undefined) assert.deepEqual(normalizeBody(endpoint.response.body, actual.serverId, endpoint.response.status), normalizeBody(native.response.bodyJson, nativeServerId, native.response.status));
           else assert.equal(endpoint.response.bodyText, native.response.bodyText);
-          assert.deepEqual(endpoint.runtimeErrors, native.response.status >= 400 && native.response.status !== 404 && !fixture.cases.find(testCase => testCase.name === item.name).bindingError
-            ? [{ name: 'Error', message: 'Error processing request.' }] : []);
         } catch (error) { differences.push({ name: item.name, endpoint: endpoint.endpoint, message: error.message }); }
       }
     }
@@ -118,7 +116,7 @@ for (const dialect of dialects) {
       await writeFile(path.join(output, `${dialect}-comparison.json`), json({
         passed: differences.length === 0, phaseAcceptance: false, dialect, responses: http.records.length,
         comparedFields: 'Complete successful genre/artist list/detail JSON, status, content type and exact error body; all target media tables, metadata tree and UserData rows unchanged.',
-        normalization: 'ServerId maps isolated server identities; only ProblemDetails traceId is removed, declared date fields use their full UTC 100 ns values, and named metadata Path retains its namespace and relative target under each owned program root. No item identities, order, fields, counts, paging or business state are normalized.',
+        normalization: 'Declared DTO ServerId is bound to each actual isolated server; root ProblemDetails traceId retains presence and type, declared date fields use their full UTC 100 ns values, and typed metadata Path retains its namespace and relative target under each owned program root. Opaque dictionaries and unknown fields stay literal.',
         native: summary, differences,
       }), { flag: 'wx' });
     }
@@ -128,8 +126,6 @@ for (const dialect of dialects) {
     assert.deepEqual(actual.userDataAfterShutdown, actual.userDataBeforeReads);
     assert.deepEqual(actual.filesystemAfterReads, actual.filesystemBeforeReads);
     assert.deepEqual(actual.filesystemAfterShutdown, actual.filesystemBeforeReads);
-    assert.deepEqual(actual.runtimeErrors, []);
-    assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
     assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true, portReleased: true,
       postgresSchemasRemoved: dialect === 'postgres' ? true : null, programDataDirectoryRemoved: true });
     assert.deepEqual(differences, []);

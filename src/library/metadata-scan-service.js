@@ -19,6 +19,20 @@ const copyRefreshOptions = options => ({ ...options, RefreshPaths: options.Refre
 const metadataContainer = item => ['Series', 'MusicAlbum'].includes(String(item?.Type ?? '').split('.').at(-1));
 const receipt = () => ({ attemptedCount: 0, updatedCount: 0, providerFailures: 0, errors: [], cancelled: false });
 
+async function withRelease(operation, cleanups, message) {
+  const failures = [];
+  let result;
+  try { result = await operation(); } catch (error) { failures.push(error); }
+  for (const cleanup of cleanups) try { await cleanup(); } catch (error) { failures.push(error); }
+  if (failures.length === 1) throw failures[0];
+  if (failures.length) {
+    const primary = failures[0], failure = new AggregateError(failures, primary?.message ?? message, { cause: primary });
+    for (const key of ['code', 'status', 'statusCode']) if (primary != null && key in Object(primary)) failure[key] = primary[key];
+    throw failure;
+  }
+  return result;
+}
+
 export class LibraryMetadataScanService {
   constructor({ library, metadata, now = () => new Date().toISOString(), logger = { error() {} },
     scheduler, stateLoader }) {
@@ -38,7 +52,7 @@ export class LibraryMetadataScanService {
   async #withState(reference, operation) {
     if (this.stateLoader) {
       const loaded = await this.stateLoader(reference);
-      try { return await operation(loaded); } finally { await loaded.close(); }
+      return withRelease(() => operation(loaded), [() => loaded.close()], 'Metadata state and cleanup failed.');
     }
     const referenceId = typeof reference === 'string' ? reference : reference.Id;
     return this.metadata.loadContext.withContext(referenceId, { includeChildren: false,
@@ -56,9 +70,9 @@ export class LibraryMetadataScanService {
     await this.#withState(reference, async loaded => {
       if (!loaded.item.IsFolder) throw libraryError(400, 'Metadata child traversal requires a folder.');
       const children = await loaded.children.physical(loaded.item);
-      try { await this.#runChildren(children, options, recursive, result,
-        new Set([idKey(loaded.item.Id)]), reportProgress, child => !sameId(child.Id, loaded.item.Id)); }
-      finally { await children.close(); }
+      await withRelease(() => this.#runChildren(children, options, recursive, result,
+        new Set([idKey(loaded.item.Id)]), reportProgress, child => !sameId(child.Id, loaded.item.Id)),
+      [() => children.close()], 'Metadata child traversal and cleanup failed.');
     });
     result.cancelled = options.signal?.aborted === true;
     return Object.freeze({ ...result, errors: Object.freeze(result.errors) });
@@ -70,8 +84,8 @@ export class LibraryMetadataScanService {
     }
     options = metadataScanOptions(options);
     const result = receipt();
-    try { await this.#runChildren(children, options, recursive, result, new Set(), reportProgress); }
-    finally { await children.close(); }
+    await withRelease(() => this.#runChildren(children, options, recursive, result, new Set(), reportProgress),
+      [() => children.close()], 'Accessible metadata traversal and cleanup failed.');
     result.cancelled = options.signal?.aborted === true;
     return Object.freeze({ ...result, errors: Object.freeze(result.errors) });
   }
@@ -109,9 +123,9 @@ export class LibraryMetadataScanService {
   async #children(parent, options, recursive, receipt, ancestors, reportProgress = () => {}) {
     await this.#withState(parent, async ({ children: factory, item }) => {
       const children = await factory.physical(item);
-      try { await this.#runChildren(children, options, recursive, receipt, ancestors, reportProgress,
-        child => !sameId(child.Id, parent.Id) && !ancestors.has(idKey(child.Id))); }
-      finally { await children.close(); }
+      await withRelease(() => this.#runChildren(children, options, recursive, receipt, ancestors, reportProgress,
+        child => !sameId(child.Id, parent.Id) && !ancestors.has(idKey(child.Id))),
+      [() => children.close()], 'Recursive metadata traversal and cleanup failed.');
     });
   }
 
@@ -123,7 +137,7 @@ export class LibraryMetadataScanService {
     }, { signal: options.signal, reportProgress: value => this.#progress(reportProgress, value), predicate,
       onError: (error, child) => {
         receipt.errors.push(Object.freeze({ itemId: child.Id, type: child.Type, name: child.Name,
-          code: error.code ?? error.name, message: error.message }));
+          code: error?.code, message: error?.message, reason: error }));
         this.#report(error);
       } });
   }
@@ -132,11 +146,12 @@ export class LibraryMetadataScanService {
     if (child.Type === 'Series') {
       await this.#refresh(child, options, receipt);
       setFolderChildren(child, null);
-      try {
+      await withRelease(async () => {
         await this.#withState(child, async ({ children: factory, item }) => {
-          const children = await factory.recursive(item), total = Number(await children.count());
-          let completed = 0;
-          try {
+          const children = await factory.recursive(item);
+          await withRelease(async () => {
+            const total = Number(await children.count());
+            let completed = 0;
             for await (const page of children.pages()) for (const entry of page) if (entry.Type === 'Season') {
               options.signal?.throwIfAborted();
               if (refreshItem(entry, options)) await this.#refresh(entry, options, receipt);
@@ -151,15 +166,16 @@ export class LibraryMetadataScanService {
               this.#progress(reportProgress, ++completed / total * 100);
             }
             await this.#refresh(item, copyRefreshOptions(options), receipt);
-          } finally { await children.close(); }
+          }, [() => children.close()], 'Series metadata traversal and cleanup failed.');
         });
-      } finally { releaseCachedFolderChildren(child); }
+      }, [() => releaseCachedFolderChildren(child)], 'Series metadata cache release failed.');
     } else if (child.Type === 'MusicAlbum') {
-      try {
+      await withRelease(async () => {
         await this.#withState(child, async ({ children: factory, item }) => {
-          const children = await factory.recursive(item), total = Number(await children.count());
-          let updateType = ItemUpdateType.None, completed = 0;
-          try {
+          const children = await factory.recursive(item);
+          await withRelease(async () => {
+            const total = Number(await children.count());
+            let updateType = ItemUpdateType.None, completed = 0;
             for await (const page of children.pages()) for (const entry of page) {
               options.signal?.throwIfAborted();
               updateType |= await this.#refresh(entry, options, receipt);
@@ -177,21 +193,21 @@ export class LibraryMetadataScanService {
                 const artist = await this.library.getArtist(name);
                 if (!artist) continue;
                 const owner = this.library.itemCreation.retainItem(artist);
-                try { if (!nonemptyId(artist.ParentId)) await this.#refresh(artist, options, receipt); }
-                finally { owner.release(); await this.metadata.loadContext.linkedChildren.flushReleases(); }
+                await withRelease(async () => { if (!nonemptyId(artist.ParentId)) await this.#refresh(artist, options, receipt); },
+                  [() => owner.release(), () => this.metadata.loadContext.linkedChildren.flushReleases()],
+                  'Album artist refresh and cleanup failed.');
               }
             });
-          } finally { await children.close(); }
+          }, [() => children.close()], 'Album metadata traversal and cleanup failed.');
         });
-      } finally { releaseCachedFolderChildren(child); }
+      }, [() => releaseCachedFolderChildren(child)], 'Album metadata cache release failed.');
     } else {
       if (refreshItem(child, options)) await this.#refresh(child, options, receipt);
       if (recursive) {
         const branch = new Set(ancestors).add(idKey(child.Id));
         setFolderChildren(child, null);
-        try {
-          await this.#children(child, options, true, receipt, branch, reportProgress);
-        } finally { releaseCachedFolderChildren(child); }
+        await withRelease(() => this.#children(child, options, true, receipt, branch, reportProgress),
+          [() => releaseCachedFolderChildren(child)], 'Folder metadata cache release failed.');
       }
     }
   }

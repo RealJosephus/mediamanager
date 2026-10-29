@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition, quoteIdentifier } from '../../src/database/model.js';
+import { decodeNativeTextBytes } from '../../src/database/native-text.js';
 import { loadLibrary, idKey, guid, MIN_DATE, VIDEO_TYPES } from '../../src/library/records.js';
 import { nativePersonIdentity } from '../../src/library/identity.js';
 import { dtoOptions, projectItem } from '../../src/library/dto.js';
@@ -151,17 +152,29 @@ test('real PostgreSQL People projection hydrates only the path-derived person id
       const state = await loadLibrary(session, options, { baseRows: movieRows });
       state.library = library;
       const hydrated = [];
-      const rows = session.rows.bind(session);
-      session.rows = (table, queryOptions) => {
-        if (table === 'BaseItems') hydrated.push([...(queryOptions?.whereIn?.Id ?? [])]);
-        return rows(table, queryOptions);
+      const baseItemsTableId = Number((await session.client.query({
+        text: 'SELECT $1::regclass::oid AS "oid"',
+        values: [`${quoteIdentifier(schema)}."BaseItems"`],
+      })).rows[0].oid);
+      const query = session.client.query;
+      session.client.query = async (...args) => {
+        const result = await query(...args);
+        const fields = result.command === 'SELECT'
+          ? result.fields.filter(field => field.tableID === baseItemsTableId) : [];
+        const idField = fields.find(field => field.name === 'Id');
+        if (idField && fields.some(field => field.name === 'Data')) {
+          hydrated.push(...result.rows.map(row => decodeNativeTextBytes(row[idField.name])));
+        }
+        return result;
       };
       try {
         const dto = await projectItem(state.byId.get(idKey(movieId)), state, null,
           dtoOptions({ fields: ['People'], enableuserdata: false }), options);
         assert.deepEqual(dto.People.map(person => person.Id), [identity.Id.replaceAll('-', '').toLowerCase()]);
-        assert.deepEqual(hydrated, [[identity.Id]]);
-      } finally { session.rows = rows; await state.dispose({ session }); }
+        assert.ok(hydrated.length > 0, 'The actual person row crosses the PostgreSQL driver boundary.');
+        assert.deepEqual([...new Set(hydrated)], [identity.Id],
+          'Only the path-derived person is hydrated; the other 128 same-name people remain outside the full-row reads.');
+      } finally { session.client.query = query; await state.dispose({ session }); }
     });
   } finally {
     await library.close();

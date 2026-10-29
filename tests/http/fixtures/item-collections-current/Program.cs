@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -69,11 +70,14 @@ NativeLibrary.SetDllImportResolver(typeof(SQLitePCL.SQLite3Provider_e_sqlite3).A
 SQLitePCL.Batteries_V2.Init();
 var inputBytes = File.ReadAllBytes(args[0]); using var document = JsonDocument.Parse(inputBytes); var input = document.RootElement;
 var output = Path.GetFullPath(args[1]); var privateRoot = Path.GetFullPath(args[2]); Directory.CreateDirectory(privateRoot);
+Progress.Open(output);
+Progress.Mark("database-preparation", "entered");
 var databaseFilename = Path.Combine(privateRoot, "native.db"); var sourceFilename = Path.GetFullPath(args[3]);
 var sourceHash = Evidence.Hash(sourceFilename); File.Copy(sourceFilename, databaseFilename, false);
 if (Evidence.Hash(databaseFilename) != sourceHash) throw new InvalidOperationException("The private stopped database clone must match.");
 var schemaBefore = Evidence.Schema(databaseFilename); Evidence.Clear(databaseFilename);
 if (Evidence.Schema(databaseFilename) != schemaBefore) throw new InvalidOperationException("Data setup changed the actual migrated schema/history.");
+Progress.Mark("database-preparation", "completed");
 var factory = new SqlFactory(databaseFilename);
 var root = input.GetProperty("root").GetString()!;
 string Map(string value) => value.Replace("{root}", root, StringComparison.Ordinal).Replace('/', Path.DirectorySeparatorChar);
@@ -92,7 +96,9 @@ var appHost = Stub.Make<IServerApplicationHost>((method, values) => method.Name 
 });
 var fileSystem = new ManagedFileSystem(NullLogger<ManagedFileSystem>.Instance, paths, []);
 var localization = new LocalizationManager(configuration, NullLogger<LocalizationManager>.Instance);
+Progress.Mark("localization", "entered");
 await localization.LoadAll();
+Progress.Mark("localization", "completed");
 var gRating = localization.GetRatingScore("G", "US"); var rRating = localization.GetRatingScore("R", "US");
 if (gRating is null || rRating is null || gRating.Score > 5 || rRating.Score <= 5)
     throw new InvalidOperationException("The actual loaded US parental ratings must distinguish the controlled max score 5.");
@@ -158,6 +164,7 @@ foreach (var source in input.GetProperty("items").EnumerateArray()) {
     }
     Add(item);
 }
+Progress.Mark("seed", "entered", new { items = entities.Count });
 using (var db = factory.CreateDbContext()) {
     foreach (var source in input.GetProperty("users").EnumerateArray()) {
         var user = new User(source.GetProperty("name").GetString()!, "Jellyfin.Server.Implementations.Users.DefaultAuthenticationProvider", "Jellyfin.Server.Implementations.Users.DefaultPasswordResetProvider") {
@@ -192,6 +199,7 @@ using (var db = factory.CreateDbContext()) {
     }
     db.SaveChanges();
 }
+Progress.Mark("seed", "completed");
 // Populate the repository's derived persistence columns from the actual typed
 // parent/rating consumers, rather than guessing their values in neutral input.
 // Rating localization itself can resolve collection folders. Bind the actual
@@ -199,6 +207,7 @@ using (var db = factory.CreateDbContext()) {
 // boundary does not run its filesystem/root-initialization constructor path.
 Set(library, "_rootFolder", library.GetItemById(rootIds["aggregate"])!);
 Set(library, "_userRootFolder", library.GetItemById(rootIds["user-root"])!);
+Progress.Mark("derived-columns", "entered");
 using (var db = factory.CreateDbContext()) {
     foreach (var entity in db.BaseItems.ToArray()) {
         var item = library.GetItemById(entity.Id)!;
@@ -209,13 +218,16 @@ using (var db = factory.CreateDbContext()) {
     }
     db.SaveChanges();
 }
+Progress.Mark("derived-columns", "completed");
 Set(library, "_cache", new FastConcurrentLru<Guid, BaseItem>(1024));
+Progress.Mark("user-data", "entered");
 foreach (var source in input.GetProperty("userData").EnumerateArray()) {
     var userId = Id(source.GetProperty("userId").GetString()!); var item = library.GetItemById(Id(source.GetProperty("itemId").GetString()!))!;
     using var db = factory.CreateDbContext(); var user = db.Users.Include(value => value.Permissions).Include(value => value.Preferences).Single(value => value.Id == userId);
     userData.SaveUserData(user, item, new UserItemData { Key = item.GetUserDataKeys().First(), PlayCount = source.GetProperty("playCount").GetInt32(),
         IsFavorite = source.GetProperty("favorite").GetBoolean(), LastPlayedDate = new DateTime(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc) }, UserDataSaveReason.UpdateUserRating, CancellationToken.None);
 }
+Progress.Mark("user-data", "completed");
 // Register the actual persisted roots; their Children/visibility still run the
 // actual Folder/EF paths. No root navigation result or visibility is mocked.
 Set(library, "_rootFolder", library.GetItemById(rootIds["aggregate"])!); Set(library, "_userRootFolder", library.GetItemById(rootIds["user-root"])!);
@@ -248,9 +260,14 @@ builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplica
 var app = builder.Build(); var results = new List<object>(); var before = Evidence.Tables(databaseFilename);
 using var client = new HttpClient();
 try {
+    Progress.Mark("http-host", "entered");
     app.UseMiddleware<ExceptionMiddleware>(); app.UseAuthentication(); app.UseAuthorization(); app.MapControllers(); await app.StartAsync();
+    Progress.Mark("http-host", "completed");
     var address = app.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses.Single();
     foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
+        var index = results.Count;
+        var caseName = sample.GetProperty("name").GetString();
+        Progress.Mark("request", "entered", new { index, name = caseName });
         capture.Sample = sample;
         if (sample.TryGetProperty("warm", out var warm)) {
             var retained = library.GetItemById<BoxSet>(Id(warm.GetProperty("id").GetString()!))!;
@@ -263,11 +280,17 @@ try {
         var route = sample.GetProperty("path").GetString()!.Replace("$user-root", rootIds["user-root"].ToString("N"), StringComparison.Ordinal);
         using var request = new HttpRequestMessage(HttpMethod.Get, address + route); request.Headers.TryAddWithoutValidation("Accept", "application/json");
         using var response = await client.SendAsync(request); var text = await response.Content.ReadAsStringAsync();
+        Progress.Mark("request", "completed", new { index, name = caseName, status = (int)response.StatusCode });
         JsonElement? json = null; try { json = JsonSerializer.Deserialize<JsonElement>(text); } catch (JsonException) { }
         results.Add(new { name = sample.GetProperty("name").GetString(), route, status = (int)response.StatusCode, contentType = response.Content.Headers.ContentType?.ToString(),
             allow = string.Join(",", response.Content.Headers.Allow), body = text, json });
     }
-} finally { try { await app.StopAsync(); } finally { await app.DisposeAsync(); } }
+} finally {
+    Progress.Mark("http-stop", "entered");
+    try { await app.StopAsync(); Progress.Mark("http-stop", "completed"); }
+    finally { Progress.Mark("http-dispose", "entered"); await app.DisposeAsync(); Progress.Mark("http-dispose", "completed"); }
+}
+Progress.Mark("final-state", "entered");
 var after = Evidence.Tables(databaseFilename);
 if (JsonSerializer.Serialize(before) != JsonSerializer.Serialize(after)) throw new InvalidOperationException("Read-only controller changed persisted database rows.");
 if (Evidence.Schema(databaseFilename) != schemaBefore || Evidence.Hash(sourceFilename) != sourceHash) throw new InvalidOperationException("The supplied database/schema changed.");
@@ -285,6 +308,20 @@ File.WriteAllText(output, JsonSerializer.Serialize(new { inputSha256 = Evidence.
     nativeLibraries = new[] { new { filename = nativeFilename, sha256 = Evidence.Hash(nativeFilename), rid = RuntimeInformation.RuntimeIdentifier, loadedByExplicitResolver = true } },
     databaseSha256 = Evidence.Hash(databaseFilename), phaseAcceptance = false, releaseAcceptance = false
 }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
+Progress.Mark("final-state", "completed", new { requests = results.Count });
+
+// This sidecar records actual phase entry/return even when the existing process
+// deadline prevents the final business result. It supplies no expected values.
+public static class Progress {
+    static readonly Stopwatch Clock = Stopwatch.StartNew();
+    static string Filename = null!;
+    public static void Open(string output) { Filename = Path.ChangeExtension(output, "progress.jsonl"); }
+    public static void Mark(string phase, string boundary, object? details = null) {
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(new { phase, boundary, details, utc = DateTime.UtcNow, elapsedMs = Clock.Elapsed.TotalMilliseconds });
+        using var stream = new FileStream(Filename, FileMode.Append, FileAccess.Write, FileShare.Read);
+        stream.Write(bytes); stream.WriteByte((byte)'\n'); stream.Flush(true);
+    }
+}
 
 public class Capture(JsonElement input) { public JsonElement Sample; public JsonElement Input = input; public System.Collections.Concurrent.ConcurrentQueue<object> Errors = new(); }
 public class FixtureErrors(Capture capture) : ILoggerProvider {

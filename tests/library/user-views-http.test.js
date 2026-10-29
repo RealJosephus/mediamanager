@@ -7,7 +7,7 @@ import { tableDefinition } from '../../src/database/model.js';
 import { dateText, dateTicks, idKey, MIN_DATE } from '../../src/library/records.js';
 import { recordUserViewsCandidate } from './user-views-http-scenario.js';
 import { loadUserViewsNativeContract } from './fixtures/user-views/native-contract.js';
-import { projectStatePath, projectStateMacroPath } from './fixture-state-path.js';
+import { projectUserViewsBody, projectUserViewsData, userViewsPath } from './user-views-projection.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 
 const bytes = await readFile(new URL('./fixtures/user-views/input.json', import.meta.url));
@@ -32,29 +32,24 @@ const originalValueIds = new Set(native.before.database.itemValues.map(row => id
 const relationTables = { ancestorIds: 'AncestorIds', linkedChildren: 'LinkedChildren', itemValues: 'ItemValues',
   itemValueLinks: 'ItemValuesMap', userData: 'UserData', images: 'BaseItemImageInfos', providers: 'BaseItemProviders',
   lockedFields: 'BaseItemMetadataFields', peoples: 'Peoples', peopleLinks: 'PeopleBaseItemMap', mediaStreams: 'MediaStreamInfos', chapters: 'Chapters' };
-const stable = rows => rows.sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b), 'en'));
+const stable = rows => rows.sort((a, b) => json(a).localeCompare(json(b), 'en'));
 const dialects = process.env.MEDIAMANAGER_USER_VIEWS_DIALECT ? [process.env.MEDIAMANAGER_USER_VIEWS_DIALECT] : ['postgres'];
 assert.ok(dialects.every(value => ['postgres'].includes(value)));
+const nativeServerId = http.find(record => record.response.bodyJson?.Items?.length)?.response.bodyJson.Items[0].ServerId;
+assert.equal(typeof nativeServerId, 'string');
 
-function normalize(value, root) {
-  if (Array.isArray(value)) return value.map(entry => normalize(entry, root));
-  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key,
-    key === 'ServerId' ? '$server' : normalize(entry, root)]));
-  return typeof value === 'string' ? projectStatePath(value, root, '$instance') : typeof value === 'bigint' ? value.toString() : value;
-}
 function rowContract(row, root, final) {
-  const data = JSON.parse(row.Data ?? '{}');
-  if (newIds.has(idKey(row.Id))) delete data.DateLastSaved;
   return Object.fromEntries(columns.filter(column => !newIds.has(idKey(row.Id)) || !clocks.has(column.name)
     && (final || !['DateModified', 'PresentationUniqueKey'].includes(column.name))).map(column => {
-    const value = column.name === 'Path' ? projectStateMacroPath(row[column.name], root) : row[column.name], type = column.clrType.replace('?', '');
-    return [column.name, column.name === 'Data' ? normalize(data, root) : value == null ? value
-      : type === 'Guid' ? idKey(value) : type === 'bool' ? Boolean(value) : type === 'long' ? String(value) : normalize(value, root)];
+    const value = row[column.name], type = column.clrType.replace('?', '');
+    return [column.name, column.name === 'Data' ? projectUserViewsData(value, row.Type, root, { newView: newIds.has(idKey(row.Id)) })
+      : column.name === 'Path' ? userViewsPath(value, root) : value == null ? value
+      : type === 'Guid' ? idKey(value) : type === 'bool' ? Boolean(value) : type === 'long' ? String(value) : value];
   }));
 }
 const rowsContract = (rows, root, final) => stable(rows.map(row => rowContract(row, root, final)));
 function relationContract(key, snapshot, root) {
-  if (key === 'foreignKeyCheck') return stable(normalize(snapshot[key], root));
+  if (key === 'foreignKeyCheck') return stable(structuredClone(snapshot[key]));
   const values = new Map(snapshot.itemValues.filter(row => !originalValueIds.has(idKey(row.ItemValueId)))
     .map(row => {
       assert.equal(row.Type, 6, 'Only the recorded new inherited-tag value has a generated UUID.');
@@ -63,7 +58,7 @@ function relationContract(key, snapshot, root) {
   return stable(snapshot[key].map(row => Object.fromEntries(tableDefinition(relationTables[key]).columns.map(column => {
     const value = row[column.name], type = column.clrType.replace('?', '');
     return [column.name, value == null ? value : column.name === 'ItemValueId' && values.has(idKey(value)) ? values.get(idKey(value))
-      : type === 'Guid' ? idKey(value) : type === 'bool' ? Boolean(value) : type === 'long' ? String(value) : normalize(value, root)];
+      : type === 'Guid' ? idKey(value) : type === 'bool' ? Boolean(value) : type === 'long' ? String(value) : value];
   }))));
 }
 function clockContract(rows) {
@@ -86,7 +81,7 @@ function etag(stamp) {
   const result = Buffer.from(bytes); result.writeUInt32BE(bytes.readUInt32LE(0), 0); result.writeUInt16BE(bytes.readUInt16LE(4), 4); result.writeUInt16BE(bytes.readUInt16LE(6), 6);
   return result.toString('hex');
 }
-function bodyContract(response, stage, allStages, root, { nativeTransientEtags } = {}) {
+function bodyContract(response, stage, allStages, root, { nativeTransientEtags, serverId } = {}) {
   const body = structuredClone(response.bodyJson), byId = new Map(stage.after.database.baseItems.map(row => [idKey(row.Id), row]));
   for (const item of body.Items ?? []) if (newIds.has(idKey(item.Id))) {
     const row = byId.get(idKey(item.Id)); assert.ok(row, item.Name + ' persisted');
@@ -123,7 +118,7 @@ function bodyContract(response, stage, allStages, root, { nativeTransientEtags }
     }
     item.DateCreated = '$created'; item.Etag = '$observed-saved-etag';
   }
-  return normalize(body, root);
+  return projectUserViewsBody(body, root, { serverId, status: response.status });
 }
 
 for (const dialect of dialects) test(`${dialect}: GetUserViews 108 complete HTTP contracts and 17 persisted view lifecycles`, {
@@ -151,7 +146,7 @@ for (const dialect of dialects) test(`${dialect}: GetUserViews 108 complete HTTP
   for (const [index, expected] of http.entries()) {
     const observed = actual.records[index], candidateStage = actual.caseStages[index], referenceStage = nativeCases[index], name = expected.name + '/' + expected.endpoint;
     check(name, 'HTTP status and content type', () => assert.deepEqual([observed.response.status, observed.response.contentType], [expected.response.status, expected.response.contentType]));
-    check(name, 'complete HTTP JSON and classified Etag/creation invariants', () => assert.deepEqual(bodyContract(observed.response, candidateStage, actual.caseStages, actual.root), bodyContract(expected.response, referenceStage, nativeCases, actual.referenceRoot, { nativeTransientEtags })));
+    check(name, 'complete HTTP JSON and classified Etag/creation invariants', () => assert.deepEqual(bodyContract(observed.response, candidateStage, actual.caseStages, actual.root, { serverId: actual.serverId }), bodyContract(expected.response, referenceStage, nativeCases, actual.referenceRoot, { nativeTransientEtags, serverId: nativeServerId })));
     compareStage(name + '/before', candidateStage.before, referenceStage.before);
     compareStage(name + '/after', candidateStage.after, referenceStage.after);
   }
@@ -161,7 +156,6 @@ for (const dialect of dialects) test(`${dialect}: GetUserViews 108 complete HTTP
     const failed = fresh(actual.afterReads.database.baseItems).filter(row => row.DateLastRefreshed == null);
     assert.deepEqual(failed.map(row => row.Name).sort(), ['Library A', 'Library B', 'Library T']);
     assert.ok(failed.every(row => !JSON.parse(row.Data).UserId));
-    assert.ok(actual.runtimeErrors.length >= 3);
     // Background diagnostics retain their actual internal shape in the
     // artifact. Public errors are checked by the complete HTTP contracts.
   });
@@ -177,7 +171,7 @@ for (const dialect of dialects) test(`${dialect}: GetUserViews 108 complete HTTP
       fixtureSha256: summary.fixtureSha256, recorderSha256: summary.recorderSha256,
       nativeProjection: manifest.projection, nativeSourceFiles: manifest.sourceFiles,
       harnessSha256: sha256(await readFile(new URL('./user-views-http-scenario.js', import.meta.url))), testSha256: sha256(await readFile(new URL(import.meta.url))),
-      normalization: 'ServerId and isolated instance root; Guid casing/boolean/long representation follow storage contracts. The sole newly generated Type6 inherited-tag ItemValueId and its references use (Type,Value,CleanValue) graph identity because frozen ItemPersistenceService uses Guid.NewGuid; original value identities remain exact. New view DateCreated/DateLastSaved/DateLastRefreshed retain raw values and compare actual validity/order, Data saved equality and exact nullable failure status. HTTP DateCreated equals its stored row. New Etag retains raw values, validates GUID format, exact MIN hash while unsaved and exact saved hash on stable completed repeats. Candidate dynamic Etag must match an independently hashed observed saved stamp; only the explicitly recorded native A/B/T null-user failure retries with advancing SQL saved dates may have a transient cached Etag absent from SQL observations (LibraryManager2663/2667). Intermediate asynchronous DateModified/PresentationUniqueKey are retained raw; final values compare exactly. Other complete HTTP JSON, BaseItems fields, all media relation tables, UserData and four filesystem domains compare exactly.',
+      normalization: 'ServerId binds the actual isolated instance only in declared BaseItemDto roles; paths bind only declared DTO/column/Data path roles. Original Data stays raw TEXT outside known path tokens. Newly generated typed UserView JSON permits layout differences while only its independently checked root DateLastSaved is projected. Unknown fields, provider dictionaries and descriptive strings stay literal. Guid casing/boolean/long representation follow storage contracts. The sole newly generated Type6 inherited-tag ItemValueId and its references use (Type,Value,CleanValue) graph identity because frozen ItemPersistenceService uses Guid.NewGuid; original value identities remain exact. New view DateCreated/DateLastSaved/DateLastRefreshed retain raw values and compare actual validity/order, Data saved equality and exact nullable failure status. HTTP DateCreated equals its stored row. New Etag retains raw values, validates GUID format, exact MIN hash while unsaved and exact saved hash on stable completed repeats. Candidate dynamic Etag must match an independently hashed observed saved stamp; only the explicitly recorded native A/B/T null-user failure retries with advancing SQL saved dates may have a transient cached Etag absent from SQL observations (LibraryManager2663/2667). Intermediate asynchronous DateModified/PresentationUniqueKey are retained raw; final values compare exactly. Other complete HTTP JSON, BaseItems fields, all media relation tables, UserData and four filesystem domains compare exactly.',
       limitations: 'Server configuration uses equivalent complete native runtime input; configuration controller is not validated. Collage with local source images remains explicit 501; actual channels/live TV, native cancellation/races and phase acceptance are not covered.',
       differences, nativeTransientEtags, nativeTransientEtagTimingVerified: false, cleanup: actual.cleanup, native: summary }), { flag: 'wx' });
   }

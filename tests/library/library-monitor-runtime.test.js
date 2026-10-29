@@ -15,11 +15,15 @@ const pg = { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 60000 };
 const identityRoot = 'Z:\\MonitorRuntime';
 const capabilities = { create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true };
 
-const failureFields = error => error == null || typeof error !== 'object' ? error : ({
-  ...Object.fromEntries(['message', 'code', 'status', 'errno', 'path', 'syscall'].map(key => [key, error[key]])),
-  ...(Array.isArray(error.errors) ? { errors: error.errors.map(failureFields) } : {}),
-  ...(error.cause !== undefined ? { cause: failureFields(error.cause) } : {})
-});
+function failureFields(error) {
+  if (error == null || typeof error !== 'object') return error;
+  if (Array.isArray(error)) return error.map(failureFields);
+  const keys = error instanceof Error ? [...new Set([
+    ...Object.getOwnPropertyNames(error).filter(key => !['name', 'stack'].includes(key)),
+    ...['message', 'code', 'status', 'statusCode', 'errno', 'path', 'syscall'].filter(key => key in error),
+  ])] : Object.keys(error);
+  return Object.fromEntries(keys.map(key => [key, failureFields(error[key])]));
+}
 const includesFailure = (error, expected) => Boolean(error && (error.code === expected.code && error.message === expected.message
   || Array.isArray(error.errors) && error.errors.some(value => includesFailure(value, expected))
   || error.cause && includesFailure(error.cause, expected)));
@@ -394,10 +398,18 @@ for (const cancel of [false, true]) test(`postgres: actual full scan ${cancel ? 
   const existingIdentity = identityRoot + '\\Existing';
   let providerReleased = false, providerEntered = false;
   const work = monitorWork(f), settled = { scan: { status: 'pending' }, watcher: { status: 'pending' } };
+  const existingReads = [{ stage: 'beforeScan', rows: await f.rows(existingIdentity) }], providerStages = [];
+  const observeProvider = (stage, item, signal, values = {}) => providerStages.push({ stage, observedAt: new Date().toISOString(),
+    item: { Id: item.Id, Path: item.Path, DateLastRefreshed: item.DateLastRefreshed },
+    signalAborted: signal.aborted, ...(signal.aborted ? { reason: diagnosticError(signal.reason) } : {}), ...values });
   f.runtime.metadata.registry.register({ id: 'monitor-scan-provider', name: 'Monitor scan provider', providers: [{
     id: 'monitor-scan', name: 'Monitor scan', kind: 'custom', itemTypes: ['Folder'],
     supports: item => item.Path === existingIdentity,
-    async fetch(_item, { signal }) {
+    // Default refresh may legitimately skip an unchanged custom provider on an
+    // already refreshed Folder. This provider owns the deliberate scan barrier.
+    hasChanged(item, { signal }) { observeProvider('hasChanged', item, signal, { changed: true }); return true; },
+    async fetch(item, { signal }) {
+      observeProvider('fetchEntered', item, signal);
       const aborted = Promise.withResolvers(), onAbort = () => aborted.resolve();
       signal.addEventListener('abort', onAbort, { once: true });
       if (signal.aborted) onAbort();
@@ -405,9 +417,14 @@ for (const cancel of [false, true]) test(`postgres: actual full scan ${cancel ? 
       try {
         await Promise.race([releaseProvider.promise, aborted.promise]);
         signal.throwIfAborted();
+        observeProvider('fetchReturned', item, signal);
+      } catch (error) {
+        observeProvider('fetchRejected', item, signal, { error: diagnosticError(error) });
+        throw error;
       } finally {
         signal.removeEventListener('abort', onAbort);
         providerReleased = true;
+        observeProvider('fetchReleased', item, signal);
       }
     }
   }] });
@@ -438,18 +455,21 @@ for (const cancel of [false, true]) test(`postgres: actual full scan ${cancel ? 
     assert.equal(f.runtime.libraryScanLifecycle.isScanRunning, false);
     if (cancel) {
       assert.equal(scanned.status, 'rejected');
-      assert.ok(scanned.reason?.name === 'AbortError' || scanned.reason?.code === 'cancelled',
-        `The actual scan must propagate cancellation: ${scanned.reason?.message}`);
-    } else {
-      if (scanned.status === 'rejected') throw scanned.reason;
-      const [existing] = await f.rows(existingIdentity);
-      assert.ok(existing?.DateLastRefreshed, 'The completed scan persists its child metadata refresh.');
-      assert.equal(progress.at(-1), 99, 'The scheduled scan observer retains its completion-progress contract.');
-    }
+      const reason = scanned.reason?.code === 'cancelled' && Object.hasOwn(scanned.reason, 'cause')
+        ? scanned.reason.cause : scanned.reason;
+      assert.deepEqual(failureFields(reason), failureFields(controller.signal.reason));
+      assert.equal(Object.hasOwn(reason ?? {}, 'cause'), Object.hasOwn(controller.signal.reason, 'cause'));
+    } else if (scanned.status === 'rejected') throw scanned.reason;
     // Cancellation released the first fetch through its aborted signal. The
     // provider remains registered for later real watcher refreshes, which must
     // not inherit the test-owned barrier from the cancelled scan.
     releaseProvider.resolve();
+    const existing = await f.rows(existingIdentity);
+    existingReads.push({ stage: 'afterScan', rows: existing });
+    if (!cancel) {
+      assert.ok(existing[0]?.DateLastRefreshed, 'The completed scan persists its child metadata refresh.');
+      assert.equal(progress.at(-1), 99, 'The scheduled scan observer retains its completion-progress contract.');
+    }
     assert.equal(f.runtime.library.listeners('ItemAdded').filter(listener => listener === f.runtime.libraryMonitor.onItemAdded).length, 1);
     await addDirectory(f, 'CreatedAfterFullScan');
     const [during] = await f.rows(identityRoot + '\\CreatedDuringFullScan');
@@ -458,6 +478,7 @@ for (const cancel of [false, true]) test(`postgres: actual full scan ${cancel ? 
     assert.equal(f.watches.filter(record => !record.closed && record.identity === identityRoot).length, 1);
   } finally {
     const beforeCleanup = { ...settled, providerEntered, providerReleased, signalAborted: controller.signal.aborted,
+      existingReads, providerStages: [...providerStages],
       scanRunning: f.runtime.libraryScanLifecycle.isScanRunning, progress: [...progress],
       queue: [...f.runtime.metadata.getRefreshQueue()], work: work.map(entry => ({ ...entry })), errors: f.errors.map(error => diagnosticError(error)),
       watches: f.watches.map(({ identity, closed, changes }) => ({ identity, closed, changes: [...changes] })) };
@@ -467,7 +488,8 @@ for (const cancel of [false, true]) test(`postgres: actual full scan ${cancel ? 
     controller.abort();
     await Promise.allSettled([scan]);
     t.diagnostic(JSON.stringify({ name: 'actual-full-scan-monitor-work', cancel, beforeCleanup,
-      afterCleanup: { ...settled, providerEntered, providerReleased, work, errors: f.errors.map(error => diagnosticError(error)) } },
+      afterCleanup: { ...settled, providerEntered, providerReleased, providerStages, work,
+        errors: f.errors.map(error => diagnosticError(error)) } },
       (_key, value) => typeof value === 'bigint' ? { int64: value.toString() } : value));
   }
 });

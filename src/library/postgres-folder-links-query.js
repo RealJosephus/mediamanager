@@ -4,14 +4,15 @@ import { nativeTextBytes } from '../database/native-text.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
 import { withPostgresNativeQueryJitOff } from '../database/postgres-native-query-jit.js';
-import { acquireNativeItemLinkOwner, publishNativeItemLinks } from './native-item-entity.js';
+import { acquireNativeItemLinkOwner, nativeItemDescriptor, publishNativeItemLinks } from './native-item-entity.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
 import { cachedFolderChildrenSnapshot } from './folder-cache.js';
 import { withPostgresCachedFolderChildren } from './postgres-cached-folder-children.js';
-import { idKey, libraryError } from './records.js';
+import { idKey, libraryError, nonemptyId } from './records.js';
 import { createPostgresNativeItemQueryProjection } from './postgres-native-item-query-projection.js';
 import { createPostgresLinkedResolutionWorkspace } from './postgres-linked-resolution-workspace.js';
 import { resolvePostgresLinkedChildren, findPostgresLinkedChildByPath } from './postgres-linked-child-resolution.js';
+import { EMPTY_NATIVE_LINKS } from './postgres-linked-children.js';
 
 /** Folder's user branch materializes physical Children and the complete linked
  * batch before visibility/name eligibility. SQL retains the first Guid position
@@ -21,20 +22,30 @@ import { resolvePostgresLinkedChildren, findPostgresLinkedChildByPath } from './
 export async function createPostgresFolderLinksQuery({ session, library, item, user }) {
   const { linkedChildren } = library.options, { itemCreation } = library;
   if (!linkedChildren || !itemCreation) throw new TypeError('Folder queries require the runtime entity and relation owners.');
-  const owner = acquireNativeItemLinkOwner(item), children = cachedFolderChildrenSnapshot(item);
-  const liveSources = new Map(), winners = q('mm_folder_winners_' + randomUUID().replaceAll('-', ''));
-  let scope, operation, resolution, cohort, projection, childSources, sourceTable, winnerTable = false, prepared, closing;
-  const close = primary => closing ??= (async () => {
+  // CollectionFolder.Children always delegates to its current physical folders;
+  // its own logical ParentId rows and physical folders' links are not Children.
+  const owner = acquireNativeItemLinkOwner(item), children = item.Type === 'CollectionFolder' ? undefined : cachedFolderChildrenSnapshot(item);
+  const liveSources = new Map(), childSources = new Map(), winners = q('mm_folder_winners_' + randomUUID().replaceAll('-', ''));
+  let scope, operation, resolution, cohort, projection, sourceTable, winnerTable = false, prepared, closing;
+  const close = (primary, { failed = primary !== undefined } = {}) => closing ??= (async () => {
     const failures = [];
     for (const release of [() => sourceTable && session.client.query(`DROP TABLE ${sourceTable}`),
       () => winnerTable && session.client.query(`DROP TABLE ${winners}`), () => projection?.close(),
-      () => resolution?.dispose(primary), () => cohort?.release(), () => childSources?.release(), () => operation?.release(),
+      () => resolution?.dispose(primary), () => cohort?.release(), ...[...childSources.values()].map(source => () => source.release()), () => operation?.release(),
       () => owner.release(), () => linkedChildren.flushReleases({ session }), () => scope?.release()]) {
       try { await release(); } catch (error) { failures.push(error); }
     }
-    liveSources.clear();
-    if (failures.length) throw new AggregateError(primary ? [primary, ...failures] : failures,
-      primary?.message ?? 'Folder query cleanup failed.', primary ? { cause: primary } : undefined);
+    liveSources.clear(); childSources.clear();
+    if (!failures.length) return;
+    const reasons = failed ? [primary, ...failures] : failures;
+    if (reasons.length === 1) throw reasons[0];
+    let message = 'Folder query cleanup failed.';
+    try { if (typeof reasons[0]?.message === 'string') message = reasons[0].message; } catch { /* Keep the original reason. */ }
+    const failure = new AggregateError(reasons, message, { cause: reasons[0] });
+    for (const key of ['code', 'status', 'statusCode']) {
+      try { if (reasons[0] != null && Object.hasOwn(reasons[0], key)) failure[key] = reasons[0][key]; } catch { /* Keep the original public failure. */ }
+    }
+    throw failure;
   })();
   try {
     scope = linkedChildren.admitScope();
@@ -42,9 +53,9 @@ export async function createPostgresFolderLinksQuery({ session, library, item, u
     cohort = await createNativeItemCohort({ linkedChildren,
       resolveLiveItem: (id, slot) => liveSources.get(slot)?.deref() ?? itemCreation.getCachedItemById(id),
       resolveSourceSlot: async slot => {
-        if (!childSources) return null;
-        const source = (await session.client.query(`SELECT source_slot FROM ${sourceTable} WHERE slot=$1`, [slot])).rows[0];
-        return source ? callback => childSources.withSlot(source.source_slot, callback) : null;
+        if (!sourceTable) return null;
+        const source = (await session.client.query(`SELECT source,source_slot FROM ${sourceTable} WHERE slot=$1`, [slot])).rows[0];
+        return source ? callback => childSources.get(source.source).withSlot(source.source_slot, callback) : null;
       } });
     let ordinal = 0n;
     if (children !== undefined) {
@@ -59,21 +70,31 @@ export async function createPostgresFolderLinksQuery({ session, library, item, u
       }
     } else {
       sourceTable = q('mm_folder_sources_' + randomUUID().replaceAll('-', ''));
-      await session.client.query(`CREATE TEMP TABLE ${sourceTable} (slot uuid PRIMARY KEY,source_slot uuid NOT NULL)`);
-      await withPostgresCachedFolderChildren({ session, library, item }, async source => {
-        childSources = source.retain();
+      await session.client.query(`CREATE TEMP TABLE ${sourceTable} (slot uuid PRIMARY KEY,source uuid NOT NULL,source_slot uuid NOT NULL)`);
+      const captureChildren = physical => withPostgresCachedFolderChildren({ session, library, item: physical }, async source => {
+        const key = randomUUID(); childSources.set(key, source.retain());
         for (let after = 0n;;) {
           const count = await source.withPage({ after }, async page => {
             for (const entry of page.entries) {
               const slot = await cohort.capture(entry.item, { ordinal: ++ordinal });
-              await session.client.query(`INSERT INTO ${sourceTable}(slot,source_slot) VALUES($1,$2)
-                ON CONFLICT(slot) DO UPDATE SET source_slot=EXCLUDED.source_slot`, [slot, entry.slot]);
+              await session.client.query(`INSERT INTO ${sourceTable}(slot,source,source_slot) VALUES($1,$2,$3)
+                ON CONFLICT(slot) DO UPDATE SET source=EXCLUDED.source,source_slot=EXCLUDED.source_slot`, [slot, key, entry.slot]);
             }
             after = page.after; return page.entries.length;
           });
           if (!count) break;
         }
       });
+      const captureActualChildren = async parent => {
+        if (parent.Type !== 'CollectionFolder') return captureChildren(parent);
+        if (parent.PhysicalFolderIds === null) throw libraryError(400, "Value cannot be null. (Parameter 'source')");
+        for (const id of parent.PhysicalFolderIds ?? []) {
+          if (!nonemptyId(id)) throw libraryError(400, "Guid can't be empty (Parameter 'id')");
+          await itemCreation.withItem(id, physical => physical && nativeItemDescriptor(physical.NativeType).family === 'folder'
+            ? captureActualChildren(physical) : undefined);
+        }
+      };
+      await captureActualChildren(item);
     }
     if (user && !operation) {
       const loaded = await linkedChildren.load(session, item.Id);
@@ -81,7 +102,7 @@ export async function createPostgresFolderLinksQuery({ session, library, item, u
       else await linkedChildren.release(loaded, { session });
       operation = linkedChildren.admitHandleOperation(item.LinkedChildren);
     }
-    if (user) {
+    if (user && operation.handle !== EMPTY_NATIVE_LINKS) {
       resolution = await createPostgresLinkedResolutionWorkspace(session,
         { linksPlan: linkedChildren.plan(operation.handle) });
       await resolvePostgresLinkedChildren({ session, library, item, links: operation.handle, linkedChildren,
@@ -132,5 +153,5 @@ export async function createPostgresFolderLinksQuery({ session, library, item, u
       repository: projection.plan().repository });
       return prepared;
     }, withSlot(slot, callback) { return cohort.withSlot(slot, callback); }, close });
-  } catch (error) { await close(error); throw error; }
+  } catch (error) { await close(error, { failed: true }); throw error; }
 }

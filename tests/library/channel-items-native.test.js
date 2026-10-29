@@ -8,7 +8,8 @@ import { currentNativeReference } from '../../tools/compat/current-native-refere
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { makeInput } from './fixtures/channel-items/input.js';
-import { cacheObservation, comparable, errorRecord, hash, normalize, openScenario, removeOwned, within } from './fixtures/channel-items/scenario.js';
+import { cacheObservation, comparable, errorRecord, hash, openScenario, removeOwned, within } from './fixtures/channel-items/scenario.js';
+import { projectChannelAction, projectChannelEntitySummaries } from '../helpers/channel-observation-projection.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const enabled = process.env.MEDIAMANAGER_JELLYFIN_DLL && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MEDIAMANAGER_TEST_POSTGRES;
@@ -54,11 +55,12 @@ test('actual Channel Items and Latest preserve cache, repository selection and s
             assert.equal(nativeStep.action.value.Items.length, 2); assert.ok(nativeStep.action.value.Items.some(item => item.Name === 'Retained ordinary media'));
           }
           const actual = await fixture.step(step);
-          compare(sample.name + ':' + stepIndex + ': actual action', normalize(comparable(actual.action), fixture.root), normalize(comparable(nativeStep.action), expected.root));
-          for (const field of ['persisted', 'warm', 'calls', 'queue']) compare(sample.name + ':' + stepIndex + ': ' + field,
-            normalize(actual[field], fixture.root), normalize(nativeStep[field], expected.root));
+          compare(sample.name + ':' + stepIndex + ': actual action', projectChannelAction(comparable(actual.action), fixture.root), projectChannelAction(comparable(nativeStep.action), expected.root));
+          for (const field of ['persisted', 'warm']) compare(sample.name + ':' + stepIndex + ': ' + field,
+            projectChannelEntitySummaries(actual[field], fixture.root), projectChannelEntitySummaries(nativeStep[field], expected.root));
+          for (const field of ['calls', 'queue']) compare(sample.name + ':' + stepIndex + ': ' + field, actual[field], nativeStep[field]);
           for (const field of ['cacheFiles', 'mediaFiles']) compare(sample.name + ':' + stepIndex + ': ' + field,
-            cacheObservation(actual[field], fixture.root), cacheObservation(nativeStep[field], expected.root));
+            cacheObservation(actual[field]), cacheObservation(nativeStep[field]));
           if (step.kind === 'items' || step.kind === 'latest') {
             assert.ok(actual.calls.filter(value => value.kind === 'items').every(value => value.SortBy === null && value.SortDescending === false && value.StartIndex === null && value.Limit === null));
           }

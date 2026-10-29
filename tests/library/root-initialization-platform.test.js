@@ -4,8 +4,9 @@ import { mkdtemp, realpath, rename, rm, stat } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { createTestRuntime } from '../helpers/runtime.js';
+import { createRuntime } from '../../src/runtime.js';
 import { initializeLibraryRoot } from '../../src/library/root-initialization.js';
-import { copyNativeItemRepositoryFrame } from '../../src/library/native-item-entity.js';
+import { copyNativeItemRepositoryFrame, observeNativeItemLinkOwnership } from '../../src/library/native-item-entity.js';
 import { createVirtualPathExpander } from '../../src/library/options.js';
 import { mapRecord, repositoryValue, sameId } from '../../src/library/records.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
@@ -51,7 +52,8 @@ for (const separateData of [false, true]) test(`postgres: initialized playlists 
       'Refreshing the live constructor value does not change its persisted representation.');
     const userRoot = await runtime.libraryScanHost.getUserRootFolder();
     assert.deepEqual(await database.rows('BaseItems', { where: { Id: userRoot.Id } }), [],
-      'Native GetUserRootFolder registers the singleton without saving it.');
+      'Native GetUserRootFolder retains its first singleton without saving it.');
+    assert.equal((await stat(userRoot.Path)).isDirectory(), true, 'The first root read creates its real directory.');
     await runtime.libraryConfiguration.getVirtualFolders();
     assert.deepEqual(await database.rows('BaseItems', { where: { Id: userRoot.Id } }), [],
       'Reading virtual folders must retain the absent repository baseline.');
@@ -149,5 +151,67 @@ for (const separateData of [false, true]) test(`postgres: initialized playlists 
     }]) try { await cleanup(); } catch (error) { if (error !== primary) errors.push(error); }
     if (errors.length) throw new AggregateError(primary ? [primary, ...errors] : errors,
       primary?.message ?? 'Platform root fixture cleanup failed.', primary ? { cause: primary } : undefined);
+  }
+});
+
+test('postgres: runtime shutdown drains an admitted first root lookup before releasing its real singleton and PostgreSQL owners', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 60000,
+}, async t => {
+  const temporary = await realpath(await mkdtemp(path.join(os.tmpdir(), 'mm-root-platform-')));
+  const programDataPath = path.join(temporary, 'state');
+  let database, runtime, rootLookup, closing, primary, stopObserver, count;
+  const entered = Promise.withResolvers(), release = Promise.withResolvers(), hostClosing = Promise.withResolvers();
+  const interrupted = Promise.withResolvers();
+  const abort = () => interrupted.reject(t.signal.reason);
+  t.signal.addEventListener('abort', abort, { once: true });
+  try {
+    database = await createPostgresTestDatabase(null, 'root_close');
+    runtime = await createRuntime({ database, programDataPath, configuration: { UICulture: 'en-US' }, serverId: 'root-close' });
+    const getItem = runtime.itemCreation.getItemById.bind(runtime.itemCreation);
+    let held = true;
+    runtime.itemCreation.getItemById = async (...args) => {
+      if (held) { held = false; entered.resolve(); await release.promise; }
+      return getItem(...args);
+    };
+    const retainItem = runtime.itemCreation.retainItem.bind(runtime.itemCreation);
+    runtime.itemCreation.retainItem = item => {
+      if (item.Type === 'UserRootFolder' && !stopObserver) stopObserver = observeNativeItemLinkOwnership(item, event => { count = event.count; });
+      return retainItem(item);
+    };
+    rootLookup = runtime.libraryScanHost.getUserRootFolder();
+    await Promise.race([entered.promise, interrupted.promise,
+      rootLookup.then(() => { throw new Error('The real first root read did not reach its held lookup.'); })]);
+    const closeHost = runtime.libraryScanHost.close.bind(runtime.libraryScanHost);
+    runtime.libraryScanHost.close = () => { hostClosing.resolve(); return closeHost(); };
+    let finished = false;
+    closing = runtime.close().then(() => { finished = true; });
+    await Promise.race([hostClosing.promise, interrupted.promise,
+      closing.then(() => { throw new Error('Runtime shutdown did not reach the root owner.'); })]);
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(finished, false, 'The actual runtime remains open while an admitted root read owns its pending lookup.');
+    assert.equal(database.closed, false);
+    await assert.rejects(runtime.libraryScanHost.getUserRootFolder(), 'Shutdown must reject a new root consumer.');
+    release.resolve();
+    const root = await rootLookup;
+    assert.equal(root.Type, 'UserRootFolder');
+    await closing;
+    assert.equal(finished, true); assert.equal(database.closed, true);
+    assert.equal(count, 0, 'Closing the runtime drains the singleton branch after its pending publication.');
+    database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema: database.schemaName });
+    assert.deepEqual(await database.rows('BaseItems', { where: { Id: root.Id } }), [], 'Closing a first lookup must not persist its transient root.');
+  } catch (error) { primary = error; throw error; }
+  finally {
+    release.resolve();
+    t.signal.removeEventListener('abort', abort);
+    const errors = [];
+    for (const cleanup of [() => rootLookup?.catch(() => {}), () => closing,
+      () => runtime?.close(), () => dropPostgresTestDatabase(database), async () => {
+        assert.equal(path.dirname(temporary), await realpath(os.tmpdir()));
+        assert.ok(path.basename(temporary).startsWith('mm-root-platform-'));
+        await rm(temporary, { recursive: true, force: true });
+      }]) try { await cleanup(); } catch (error) { if (error !== primary) errors.push(error); }
+    stopObserver?.release();
+    if (errors.length) throw new AggregateError(primary ? [primary, ...errors] : errors,
+      primary?.message ?? 'Pending root owner cleanup failed.', primary ? { cause: primary } : undefined);
   }
 });

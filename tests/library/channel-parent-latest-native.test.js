@@ -8,7 +8,8 @@ import { currentNativeReference } from '../../tools/compat/current-native-refere
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { makeInput } from './fixtures/channel-parent-latest/input.js';
-import { comparable, errorRecord, hash, normalize, openScenario, removeOwned } from './fixtures/channel-parent-latest/scenario.js';
+import { comparable, errorRecord, hash, openScenario, removeOwned } from './fixtures/channel-parent-latest/scenario.js';
+import { projectChannelAction, projectChannelEntitySummaries } from '../helpers/channel-observation-projection.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const enabled = process.env.MEDIAMANAGER_JELLYFIN_DLL && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MEDIAMANAGER_TEST_POSTGRES;
@@ -66,10 +67,10 @@ test('Channel parent Items/Latest matches current Native refresh, user filtering
           assert.equal(original.action.failure, undefined, 'The actual Native consumer must complete: ' + stringifyNativeJson(original.action));
           const actual = await fixture.step(step);
           observations.push(actual);
-          compare(sample.name + ':' + stepIndex + ': public result', normalize(comparable(actual.action), fixture.root),
-            normalize(comparable(original.action), expected.root));
-          compare(sample.name + ':' + stepIndex + ': persisted music/video/channel values', normalize(actual.persisted, fixture.root), normalize(original.persisted, expected.root));
-          compare(sample.name + ':' + stepIndex + ': provider reads', normalize(providerReads(actual.calls), fixture.root), normalize(providerReads(original.calls), expected.root));
+          compare(sample.name + ':' + stepIndex + ': public result', projectChannelAction(comparable(actual.action), fixture.root),
+            projectChannelAction(comparable(original.action), expected.root));
+          compare(sample.name + ':' + stepIndex + ': persisted music/video/channel values', projectChannelEntitySummaries(actual.persisted, fixture.root), projectChannelEntitySummaries(original.persisted, expected.root));
+          compare(sample.name + ':' + stepIndex + ': provider reads', providerReads(actual.calls), providerReads(original.calls));
           compare(sample.name + ':' + stepIndex + ': persisted user state', userData(actual.userData), userData(original.userData));
           if (step.kind === 'parent-latest') {
             assert.equal(actual.wire?.status, 200);

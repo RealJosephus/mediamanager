@@ -62,7 +62,7 @@ export class LibraryTaskScheduler {
     const deferred = Promise.withResolvers();
     const record = { sequence, worker: this.captureWorker(worker), signal, reportProgress, onError, predicate,
       ...deferred, total: null, dispatched: 0, completed: 0, sum: 0, active: 0,
-      iterator: null, page: [], index: 0, noMore: false, finishing: false, failure: null, sequentialRunning: false };
+      iterator: null, page: [], index: 0, noMore: false, finishing: false, failurePresent: false, failure: undefined, sequentialRunning: false };
     this.#records.add(record);
     if (this.#sequential()) {
       void this.#sequentialWork(record);
@@ -78,7 +78,13 @@ export class LibraryTaskScheduler {
     if (record.total != null) return;
     if (record.predicate) {
       let count = 0;
-      for await (const page of record.sequence.pages()) {
+      // Keep preparation ownership until completion so #finish can preserve
+      // both a predicate/page failure and an iterator return failure.
+      record.iterator = record.sequence.pages()[Symbol.asyncIterator]();
+      for (;;) {
+        const next = await record.iterator.next();
+        if (next.done) { record.iterator = null; break; }
+        const page = next.value;
         this.#checkPage(page);
         for (const item of page) if (record.predicate(item)) count++;
       }
@@ -153,7 +159,7 @@ export class LibraryTaskScheduler {
         await this.#process(record, next.item, false);
         if (record.dispatched === record.total) record.noMore = true;
       }
-    } catch (error) { record.failure = error; }
+    } catch (error) { record.failure = error; record.failurePresent = true; }
     finally { record.noMore = true; record.sequentialRunning = false; await this.#finish(record); }
   }
 
@@ -194,6 +200,7 @@ export class LibraryTaskScheduler {
         }).catch(error => this.#observe(this.onError, error));
       } catch (error) {
         record.failure = error;
+        record.failurePresent = true;
         record.noMore = true;
         if (this.#pending[0] === record) this.#pending.shift();
         await this.#finish(record);
@@ -210,12 +217,17 @@ export class LibraryTaskScheduler {
     record.finishing = true;
     try { await record.iterator?.return?.(); }
     catch (cleanup) {
-      record.failure = record.failure ? new AggregateError([record.failure, cleanup], record.failure.message, { cause: record.failure }) : cleanup;
+      if (record.failurePresent) {
+        const primary = record.failure;
+        record.failure = new AggregateError([primary, cleanup], primary?.message ?? 'Library traversal and cleanup failed.', { cause: primary });
+        for (const key of ['code', 'status', 'statusCode']) if (primary != null && key in Object(primary)) record.failure[key] = primary[key];
+      } else record.failure = cleanup;
+      record.failurePresent = true;
     }
     finally {
       record.page = [];
       this.#records.delete(record);
-      if (record.failure) record.reject(record.failure); else record.resolve();
+      if (record.failurePresent) record.reject(record.failure); else record.resolve();
     }
   }
 

@@ -7,7 +7,7 @@ import { idKey, nonemptyId } from '../../src/library/records.js';
 import { quoteIdentifier as q } from '../../src/database/model.js';
 import { postgresTestRow } from '../database/postgres-fixture.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
-import { normalizeDeletionRecording } from './fixtures/item-deletion/normalize.js';
+import { normalizeDeletionRecording } from './deletion-response-projection.js';
 import { assertProjectedEqual, publicJsonBody } from '../comparison-observations.js';
 import { input, recordCurrentItemDeletionOnce } from './item-deletion-fixture.js';
 import { fixtureId, entities, userFor } from './item-deletion-state.js';
@@ -77,11 +77,12 @@ test('postgres: Item DELETE controller matrix uses production bounded lookup and
     const body = await response.text(); let jsonBody = null;
     try { jsonBody = JSON.parse(body); } catch { /* Native production exception middleware emits plain text. */ }
     const remaining = (await fixture.database.rows('BaseItems', { columns: ['Id'] })).map(row => idKey(row.Id)).sort();
-    const actual = normalizeDeletionRecording({ results: [{ name: sample.name, requestPath: expected.requestPath,
+    const actual = { name: sample.name, requestPath: expected.requestPath,
       status: response.status, contentType: response.headers.get('content-type'), body, jsonBody,
-      calls, committed, remaining }] }).results[0];
+      calls, committed, remaining };
     const { errors, ...projection } = expected;
-    assertProjectedEqual(t, sample.name + ' public deletion response', actual, projection, publicJsonBody);
+    assertProjectedEqual(t, sample.name + ' public deletion response', actual, projection,
+      response => publicJsonBody(normalizeDeletionRecording({ results: [response] }).results[0]));
     assert.equal(fixture.database.inTransaction, false);
   });
 });

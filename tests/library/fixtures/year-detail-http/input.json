@@ -1,0 +1,607 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80200000-0000-0000-0000-000000000004",
+  "warmUserViews": {
+    "configuration": {
+      "GroupedFolders": [
+        "80200000-0000-0000-0000-000000000004",
+        "80200000-0000-0000-0000-000000000006",
+        "80200000-0000-0000-0000-000000000008",
+        "80200000-0000-0000-0000-000000000010",
+        "80200000-0000-0000-0000-000000000012"
+      ],
+      "LatestItemsExcludes": [],
+      "HidePlayedInLatest": false
+    },
+    "policy": {
+      "EnableAllFolders": true,
+      "EnabledFolders": [],
+      "BlockedMediaFolders": [],
+      "AllowedTags": [],
+      "BlockedTags": [],
+      "MaxParentalRating": null,
+      "MaxParentalSubRating": null,
+      "BlockUnratedItems": [],
+      "EnableContentDeletion": false,
+      "EnableContentDeletionFromFolders": [],
+      "IsAdministrator": false
+    }
+  },
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "aggregate"
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "physicalA",
+      "id": "80200000-0000-0000-0000-000000000003",
+      "type": "Folder",
+      "name": "Physical A",
+      "sortName": "physical a",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalA",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryA",
+      "id": "80200000-0000-0000-0000-000000000004",
+      "type": "CollectionFolder",
+      "name": "Library A",
+      "sortName": "library a",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryA",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000003"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000004",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalB",
+      "id": "80200000-0000-0000-0000-000000000005",
+      "type": "Folder",
+      "name": "Physical B",
+      "sortName": "physical b",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalB",
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryB",
+      "id": "80200000-0000-0000-0000-000000000006",
+      "type": "CollectionFolder",
+      "name": "Library B",
+      "sortName": "library b",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryB",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000005"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000006",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalT",
+      "id": "80200000-0000-0000-0000-000000000007",
+      "type": "Folder",
+      "name": "Physical T",
+      "sortName": "physical t",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalT",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryT",
+      "id": "80200000-0000-0000-0000-000000000008",
+      "type": "CollectionFolder",
+      "name": "Library T",
+      "sortName": "library t",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryT",
+      "data": {
+        "CollectionType": "tvshows",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000007"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000008",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalK",
+      "id": "80200000-0000-0000-0000-000000000009",
+      "type": "Folder",
+      "name": "Physical K",
+      "sortName": "physical k",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalK",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryK",
+      "id": "80200000-0000-0000-0000-000000000010",
+      "type": "CollectionFolder",
+      "name": "Library K",
+      "sortName": "library k",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryK",
+      "data": {
+        "CollectionType": "books",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000009"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000010",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalM",
+      "id": "80200000-0000-0000-0000-000000000011",
+      "type": "Folder",
+      "name": "Physical M",
+      "sortName": "physical m",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalM",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryM",
+      "id": "80200000-0000-0000-0000-000000000012",
+      "type": "CollectionFolder",
+      "name": "Library M",
+      "sortName": "library m",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryM",
+      "data": {
+        "CollectionType": "music",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000011"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000012",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "mediaType": "Video",
+      "name": "Year movie",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "id": "83400000-0000-0000-0000-000000000101",
+      "productionYear": 2026,
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "sortName": "year movie",
+      "type": "Movie",
+      "key": "year-movie",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "pathKind": "child"
+    },
+    {
+      "mediaType": "Audio",
+      "name": "Year audio",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "id": "83400000-0000-0000-0000-000000000102",
+      "productionYear": 2026,
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "parentId": "80200000-0000-0000-0000-000000000011",
+      "sortName": "year audio",
+      "type": "Audio",
+      "key": "year-audio",
+      "data": {},
+      "pathKind": "child"
+    }
+  ],
+  "itemValues": [],
+  "itemValueLinks": [],
+  "links": [],
+  "userData": [],
+  "cases": [
+    {
+      "name": "create Year",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "2026",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "itemType": "Year",
+      "serverConfiguration": {
+        "EnableCaseSensitiveItemIds": true,
+        "EnableNormalizedItemByNameIds": true
+      }
+    },
+    {
+      "name": "repeat Year",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "2026",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "leading zero Year",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "002026",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "signed Year",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "+2026",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "padded Year",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": " 2026 ",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "authenticated user Year",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "2026",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "user",
+      "itemType": "Year"
+    },
+    {
+      "name": "selected user Year",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "2026",
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "zero user Year",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "2026",
+      "query": "UserId=00000000-0000-0000-0000-000000000000",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "absent user Year",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "2026",
+      "query": "UserId=ffffffff-ffff-ffff-ffff-ffffffffffff",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "minimum positive Year",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "1",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "maximum positive Year",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "2147483647",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "zero Year rejected",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "0",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "negative Year rejected",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "-1",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "minimum int Year rejected",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "-2147483648",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "itemType": "Year"
+    },
+    {
+      "name": "positive overflow rejected",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "2147483648",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "itemType": "Year",
+      "bindingError": true
+    },
+    {
+      "name": "negative overflow rejected",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "-2147483649",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "itemType": "Year",
+      "bindingError": true
+    },
+    {
+      "name": "malformed Year rejected",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "not-a-year",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "itemType": "Year",
+      "bindingError": true
+    },
+    {
+      "name": "malformed user rejected",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "2026",
+      "query": "UserId=not-a-guid",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "itemType": "Year",
+      "bindingError": true
+    },
+    {
+      "name": "blank Year rejected",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": " ",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "itemType": "Year",
+      "bindingError": true
+    },
+    {
+      "name": "decimal Year rejected",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "2026.0",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "itemType": "Year",
+      "bindingError": true
+    },
+    {
+      "name": "cross user Year forbidden",
+      "action": "named-detail",
+      "namedRoute": "Years",
+      "itemName": "2099",
+      "query": "UserId=ffffffff-ffff-ffff-ffff-ffffffffffff",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 403,
+      "auth": "user",
+      "itemType": "Year"
+    }
+  ]
+}

@@ -2,6 +2,7 @@ import { nativeTextBytes, decodeNativeTextBytes, nativeTextOrdinalIgnoreCaseKey 
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { quoteIdentifier as q } from '../database/model.js';
 import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
+import { withPostgresNativeQueryJitOff } from '../database/postgres-native-query-jit.js';
 import { postgresAliasedVersionFamilyKey, postgresSignedPaddedInteger } from '../database/postgres-query-expressions.js';
 import {
   postgresInvariantCharUpperFunctionName,
@@ -13,6 +14,7 @@ import {
 import { ecmaWhitespaceCharacters } from '../metadata/whitespace.js';
 import { dateText, guid, idKey, MIN_DATE, nonemptyId } from './records.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
+import { randomUUID } from 'node:crypto';
 
 function qualified(database, name) {
   if (database?.dialect !== 'postgres') throw new TypeError('A PostgreSQL database is required.');
@@ -101,18 +103,25 @@ function afterLast(candidate, previous) {
 
 function seriesReference(database, alias, baseItems, ancestors) {
   const empty = '00000000000000000000000000000000';
-  return `(SELECT series."Id"
+  const type = `substring(${nativeTextSql(database.schemaName).projection('series."Type"')} from '[^.]+$') = 'Series'`;
+  const seriesId = nativeTextSql(database.schemaName).guidLower(`${alias}."SeriesId"`);
+  const itemId = nativeTextSql(database.schemaName).guidLower('series."Id"');
+  // Keep the explicit identity lookup independent of the parent/ancestor
+  // fallback so its existing expression index can serve a point lookup.
+  // COALESCE also preserves an actual empty-Guid row's former precedence.
+  return `COALESCE((SELECT series."Id" FROM ${baseItems} series
+    WHERE ${type} AND ${itemId} = ${seriesId}
+    ORDER BY series."Id" LIMIT 1),
+    CASE WHEN ${alias}."SeriesId" IS NULL OR replace(${seriesId}, '-', '') = '${empty}' THEN
+    (SELECT series."Id"
     FROM ${baseItems} series
-    WHERE substring(${nativeTextSql(database.schemaName).projection("series.\"Type\"")} from '[^.]+$') = 'Series'
-      AND (${nativeTextSql(database.schemaName).guidLower("series.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower(`${alias}."SeriesId"`)}
-        OR ((${alias}."SeriesId" IS NULL OR replace(${nativeTextSql(database.schemaName).guidLower(`${alias}."SeriesId"`)}, '-', '') = '${empty}')
-          AND (${nativeTextSql(database.schemaName).guidLower("series.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower(`${alias}."ParentId"`)} OR EXISTS (
+    WHERE ${type}
+      AND (${itemId} = ${nativeTextSql(database.schemaName).guidLower(`${alias}."ParentId"`)} OR EXISTS (
             SELECT 1 FROM ${ancestors} series_ancestor
             WHERE ${nativeTextSql(database.schemaName).guidLower("series_ancestor.\"ItemId\"")} = ${nativeTextSql(database.schemaName).guidLower(`${alias}."Id"`)}
-              AND ${nativeTextSql(database.schemaName).guidLower("series_ancestor.\"ParentItemId\"")} = ${nativeTextSql(database.schemaName).guidLower("series.\"Id\"")}
-          ))))
-    ORDER BY (${nativeTextSql(database.schemaName).guidLower("series.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower(`${alias}."SeriesId"`)}) DESC, series."Id"
-    LIMIT 1)`;
+              AND ${nativeTextSql(database.schemaName).guidLower("series_ancestor.\"ParentItemId\"")} = ${itemId}
+          ))
+    ORDER BY series."Id" LIMIT 1) END)`;
 }
 
 function preferredDataJoin(database, alias, joinAlias, user, baseItems, ancestors, providers, userData, ordinalKey) {
@@ -140,8 +149,8 @@ function preferredDataJoin(database, alias, joinAlias, user, baseItems, ancestor
   ) ${joinAlias} ON TRUE`;
 }
 
-/** Select/count/page Next Up in SQL; only the final page is hydrated. */
-export async function queryPostgresNextUpPage(database, {
+/** Select/count/page Next Up without materializing its selected entries. */
+export function buildPostgresNextUpPageQuery(database, {
   seriesKeys,
   seriesDiscovery,
   userId,
@@ -177,7 +186,7 @@ export async function queryPostgresNextUpPage(database, {
   const discoveryParents = seriesDiscovery === undefined ? []
     : [...new Set((seriesDiscovery.topParentIds ?? []).filter(nonemptyId).map(id => idKey(guid(id))))];
   if (!explicitKeys.length && !discoveryParents.length) {
-    return { rows: [], total: 0, startIndex, entries: [] };
+    return Object.freeze({ empty: true, startIndex, enableTotalRecordCount });
   }
 
   const eligiblePlan = buildPostgresItemPageQuery(database, { includeitemtypes: ['Episode'] }, {
@@ -253,8 +262,7 @@ export async function queryPostgresNextUpPage(database, {
   const rewatchDate = storedDateOrder(database, 'rewatch_data."LastPlayedDate"');
   const lastPreferredDate = storedDateOrder(database, 'last_preferred."LastPlayedDate"');
 
-  const result = await database.client.query({
-    text: `WITH series_order AS (
+  const text = `WITH series_order AS (
       ${seriesOrderSql}
     ), eligible_plan AS (
       ${eligiblePlan.text}
@@ -485,24 +493,109 @@ export async function queryPostgresNextUpPage(database, {
     )
     SELECT page."NextId", page."LastId", page."PlayedVersionId", page.__ordinal AS "Ordinal",
       total."TotalRecordCount"
-    FROM total LEFT JOIN page ON TRUE ORDER BY page.__ordinal NULLS LAST`,
-    values,
-  });
+    FROM total LEFT JOIN page ON TRUE ORDER BY page.__ordinal NULLS LAST`;
+  return Object.freeze({ text, values: Object.freeze(values), eligiblePlan, startIndex, enableTotalRecordCount });
+}
 
-  const entries = result.rows.filter(row => row.NextId !== null).map(row => ({
+function nextUpEntries(rows) {
+  return rows.filter(row => row.NextId !== null).map(row => ({
     nextId: decodeNativeTextBytes(row.NextId), lastId: row.LastId == null ? null : decodeNativeTextBytes(row.LastId), playedVersionId: row.PlayedVersionId == null ? null : decodeNativeTextBytes(row.PlayedVersionId),
     ordinal: safeNonnegativeInteger(row.Ordinal, 'Next Up ordinal'),
   }));
-  const total = enableTotalRecordCount && result.rows.length
-    ? safeNonnegativeInteger(result.rows[0].TotalRecordCount, 'Next Up count') : 0;
+}
+
+async function hydrateNextUpEntries(database, entries) {
   const preferredIds = await queryPostgresPreferredNextUpIds(database, entries);
   const rows = preferredIds.length ? await database.rows('BaseItems', { whereIn: { Id: preferredIds } }) : [];
   const byId = new Map(rows.map(row => [idKey(row.Id), row]));
+  return preferredIds.map(id => byId.get(idKey(id))).filter(Boolean);
+}
+
+/** Select/count/page Next Up in SQL; only the final page is hydrated. */
+export async function queryPostgresNextUpPage(database, input = {}) {
+  const plan = buildPostgresNextUpPageQuery(database, input), { startIndex, enableTotalRecordCount } = plan;
+  if (plan.empty) return { rows: [], total: 0, startIndex, entries: [] };
+  const result = await withPostgresNativeQueryJitOff(database, session => session.client.query({
+    text: `/* next-up-selection */ ${plan.text}`, values: plan.values,
+  }));
+  const entries = nextUpEntries(result.rows);
+  const total = enableTotalRecordCount && result.rows.length
+    ? safeNonnegativeInteger(result.rows[0].TotalRecordCount, 'Next Up count') : 0;
   return {
-    rows: preferredIds.map(id => byId.get(idKey(id))).filter(Boolean), entries,
+    rows: await hydrateNextUpEntries(database, entries), entries,
     total,
-    startIndex, plan: eligiblePlan,
+    startIndex, plan: plan.eligiblePlan,
   };
+}
+
+function nextUpFailures(primary, cleanup) {
+  let message = 'Next Up source cleanup failed.';
+  try { if (typeof primary?.message === 'string') message = primary.message; } catch { /* Keep the actual reason. */ }
+  const error = new AggregateError([primary, cleanup], message, { cause: primary });
+  for (const name of ['code', 'status', 'statusCode']) {
+    try { if (primary != null && Object.hasOwn(primary, name)) error[name] = primary[name]; } catch { /* Optional diagnostics. */ }
+  }
+  return error;
+}
+
+/** Own a single frozen Next Up selection through an awaited consumer. Public
+ * paging is applied once; bounded pages retain the final version preference. */
+export async function withPostgresNextUpPages(database, input, consume) {
+  if (database?.dialect !== 'postgres' || !database.connectionSession || database.inTransaction || typeof consume !== 'function') {
+    throw new TypeError('Next Up source pages require a nontransaction PostgreSQL session and consumer.');
+  }
+  const plan = buildPostgresNextUpPageQuery(database, input), { startIndex } = plan;
+  if (plan.empty) return consume({ total: 0, startIndex, pages: (async function* () {})() });
+  const source = q('mm_next_up_source_' + randomUUID().replaceAll('-', ''));
+  const pendingPages = new Set();
+  let iterator;
+  const trackPage = task => {
+    pendingPages.add(task);
+    void task.finally(() => pendingPages.delete(task)).catch(() => {});
+    return task;
+  };
+  let attempted = false, active = true, failed = false, primary;
+  try {
+    attempted = true;
+    await withPostgresNativeQueryJitOff(database, session => session.client.query({
+      text: `/* next-up-freeze */ CREATE TEMP TABLE ${source} AS ${plan.text}`, values: plan.values,
+    }));
+    await database.client.query(`CREATE UNIQUE INDEX ON ${source}("Ordinal")`);
+    const summary = (await database.client.query(`SELECT "TotalRecordCount" FROM ${source} LIMIT 1`)).rows[0];
+    const total = plan.enableTotalRecordCount ? safeNonnegativeInteger(summary?.TotalRecordCount ?? 0, 'Next Up count') : 0;
+    async function* pages() {
+      let after = 0;
+      for (;;) {
+        if (!active) throw new Error('The Next Up source consumer has completed.');
+        const raw = (await database.client.query(`/* next-up-page */ SELECT * FROM ${source} WHERE "Ordinal">$1 ORDER BY "Ordinal" LIMIT 128`, [after])).rows;
+        if (!raw.length) return;
+        const entries = nextUpEntries(raw), rows = await hydrateNextUpEntries(database, entries);
+        after = entries.at(-1).ordinal;
+        yield { rows, entries };
+      }
+    }
+    iterator = pages();
+    const ownedPages = {
+      [Symbol.asyncIterator]() { return this; },
+      next(value) {
+        if (!active) return Promise.reject(new Error('The Next Up source consumer has completed.'));
+        return trackPage(iterator.next(value));
+      },
+      return(value) { return trackPage(iterator.return(value)); },
+    };
+    return await consume({ total, startIndex, pages: ownedPages });
+  } catch (error) { failed = true; primary = error; throw error; }
+  finally {
+    active = false;
+    while (pendingPages.size) await Promise.allSettled([...pendingPages]);
+    await iterator?.return();
+    if (attempted) try { await database.client.query(`/* next-up-release */ DROP TABLE IF EXISTS ${source}`); }
+    catch (error) {
+      database.discardConnection(error);
+      if (failed) throw nextUpFailures(primary, error);
+      throw error;
+    }
+  }
 }
 
 async function queryPostgresPreferredNextUpIds(database, entries) {
@@ -534,8 +627,8 @@ async function queryPostgresPreferredNextUpIds(database, entries) {
           AND ${nativeEnum("source.__source_data -> 'IsoType'", 'IsoType')} = 'Dvd' THEN 'DVD'
       WHEN ${nativeEnum("source.__source_data -> 'VideoType'", 'VideoType')} = 'Iso'
         AND ${nativeEnum("source.__source_data -> 'IsoType'", 'IsoType')} IS NULL THEN 'ISO' END)`;
-  const result = await database.client.query({
-    text: `WITH requests AS (
+  const result = await withPostgresNativeQueryJitOff(database, session => session.client.query({
+    text: `/* next-up-preferred-versions */ WITH requests AS (
       SELECT * FROM unnest($1::bigint[], $2::bytea[], $3::bytea[], $4::bytea[])
         AS request(__ordinal, "NextId", "LastId", "PlayedVersionId")
     ), roots AS (
@@ -599,7 +692,7 @@ async function queryPostgresPreferredNextUpIds(database, entries) {
           WHERE first.__ordinal = tokenized_stems.__ordinal AND first.__role = tokenized_stems.__role
             AND first.__stem IS NOT NULL ORDER BY first.__source_order LIMIT 1) AS __first_stem_tokens
       FROM tokenized_stems GROUP BY __ordinal, __role
-    ), common_positions AS (
+    ), common_positions AS MATERIALIZED (
       SELECT summary.__ordinal, summary.__role, position
       FROM stem_summary summary
       CROSS JOIN LATERAL generate_series(0, COALESCE(summary.__minimum_length, 0)) position
@@ -664,6 +757,6 @@ async function queryPostgresPreferredNextUpIds(database, entries) {
     FROM requests request LEFT JOIN matching match
       ON match.__ordinal = request.__ordinal AND match.__match_rank = 1
     ORDER BY request.__ordinal`, values,
-  });
+  }));
   return result.rows.map(row => row.Id == null ? null : decodeNativeTextBytes(row.Id)).filter(nonemptyId);
 }

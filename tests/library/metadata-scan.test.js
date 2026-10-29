@@ -8,11 +8,16 @@ import { ItemUpdateType } from '../../src/metadata/save-manager.js';
 import { idKey } from '../../src/library/records.js';
 import { readCachedFolderChildren, setFolderChildren } from '../../src/library/folder-cache.js';
 import { observeComparison } from '../comparison-observations.js';
+import { errorObservation } from '../helpers/error-observation.js';
 
 const input = JSON.parse(await readFile(new URL('./fixtures/metadata-scan/input.json', import.meta.url), 'utf8'));
 const native = JSON.parse(await readFile(new URL('./fixtures/metadata-scan/native.json', import.meta.url), 'utf8'));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-const errorDetails = error => ({ name: error.name, message: error.message, stack: error.stack, ...error });
+const errorDetails = error => errorObservation(error);
+const failureValue = error => error == null || typeof error !== 'object' ? error : Array.isArray(error) ? error.map(failureValue)
+  : Object.fromEntries([...new Set([...Object.getOwnPropertyNames(error),
+    ...['message', 'code', 'status', 'statusCode', 'cause', 'errors', 'name', 'stack'].filter(key => key in error)])]
+    .filter(key => !(error instanceof Error && ['name', 'stack'].includes(key))).map(key => [key, failureValue(error[key])]));
 
 test('metadata traversal oracle seals native sources, callbacks, input and recorded output', async () => {
   const provenance = JSON.parse(await readFile(new URL('./fixtures/metadata-scan/provenance.json', import.meta.url), 'utf8'));
@@ -46,13 +51,16 @@ function fixture(scenario) {
     if (definition.byName === false) byId.get(Id).ParentId = root.Id;
   }
   const state = { items: [...byId.values()], byId, links, children: item => [...children.get(item.Id)] };
-  const calls = [], artistLookups = [], errors = [], controller = new AbortController();
+  const calls = [], artistLookups = [], errors = [], sourceFailures = [], controller = new AbortController();
   const metadata = { loadContext: { linkedChildren: { async flushReleases() {} } }, validateRefresh() {}, async refreshLiveItem(item, options) {
     options.signal?.throwIfAborted();
     calls.push({ name: item.Name, type: item.Type, metadataMode: options.MetadataRefreshMode, imageMode: options.ImageRefreshMode,
       automated: options.IsAutomated, replaceAllMetadata: options.ReplaceAllMetadata, forceSave: options.ForceSave,
       ...(options.RefreshPaths == null ? {} : { refreshPaths: options.RefreshPaths }) });
-    if (item.Name === scenario.fail) throw Object.assign(new Error('Injected refresh failure'), { code: 'io' });
+    if (item.Name === scenario.fail) {
+      const reason = Object.assign(new Error('Injected refresh failure'), { code: 'io' });
+      sourceFailures.push({ itemId: item.Id, reason }); throw reason;
+    }
     if (item.Name === scenario.cancelAfter) controller.abort(Object.assign(new Error('The operation was canceled.'), { code: 'cancelled' }));
     return { UpdateType: definitions.get(item.Id).updateType ?? ItemUpdateType.None };
   } };
@@ -79,7 +87,7 @@ function fixture(scenario) {
   const options = { MetadataRefreshMode: scenario.metadataMode ?? 'Default', ImageRefreshMode: scenario.imageMode ?? 'None',
     IsAutomated: scenario.automated ?? true, ReplaceAllMetadata: scenario.replaceAllMetadata ?? false,
     ForceSave: scenario.forceSave ?? false, RefreshPaths: scenario.refreshPaths ?? [], signal: controller.signal };
-  return { scanner, library, metadata, configuration, root, children, byName, controller, calls, artistLookups, errors, options };
+  return { scanner, library, metadata, configuration, root, children, byName, controller, calls, artistLookups, errors, sourceFailures, options };
 }
 
 function ownedSequence(items) {
@@ -89,7 +97,7 @@ function ownedSequence(items) {
 }
 
 for (const scenario of input) test(`native metadata scan traversal: ${scenario.name}`, async t => {
-  const { scanner, root, calls, artistLookups, errors, options, byName, controller } = fixture(scenario);
+  const { scanner, root, calls, artistLookups, errors, sourceFailures, options, byName, controller } = fixture(scenario);
   const receipt = await scanner.refreshChildren(root, options, { recursive: scenario.recursive ?? true });
   const expected = native.results.find(entry => entry.name === scenario.name);
   observeComparison(t, scenario.name + ' raw errors', { errors, receiptErrors: receipt.errors, signalAborted: controller.signal.aborted },
@@ -100,18 +108,16 @@ for (const scenario of input) test(`native metadata scan traversal: ${scenario.n
   assert.equal(receipt.errors.length, scenario.fail || scenario.cancelAfter ? 1 : 0);
   if (scenario.fail) {
     const item = byName.get(scenario.fail);
-    assert.deepEqual(receipt.errors, [{ itemId: item.Id, type: item.Type, name: item.Name, code: 'io', message: 'Injected refresh failure' }]);
+    assert.deepEqual(sourceFailures.map(entry => entry.itemId), [item.Id]);
+    const { reason, ...details } = receipt.errors[0];
+    assert.deepEqual(details, { itemId: item.Id, type: item.Type, name: item.Name, code: 'io', message: 'Injected refresh failure' });
+    assert.equal(Object.hasOwn(receipt.errors[0], 'reason'), true);
+    assert.deepEqual(failureValue(reason), failureValue(sourceFailures[0].reason));
   }
   if (scenario.cancelAfter) for (const error of receipt.errors) {
     assert.equal(error.code, 'cancelled'); assert.equal(error.message, controller.signal.reason.message);
-  }
-  for (const { error } of errors) {
-    if (error.code === 'cancelled') {
-      assert.equal(controller.signal.aborted, true); assert.equal(error.message, controller.signal.reason.message);
-    } else {
-      assert.ok(scenario.fail, 'Unexpected metadata scan diagnostic.');
-      assert.equal(error.code, 'io'); assert.equal(error.message, 'Injected refresh failure');
-    }
+    assert.equal(Object.hasOwn(error, 'reason'), true);
+    assert.deepEqual(failureValue(error.reason), failureValue(controller.signal.reason));
   }
   assert.equal(controller.signal.aborted, Boolean(scenario.cancelAfter));
   assert.equal(receipt.cancelled, Boolean(scenario.cancelAfter));

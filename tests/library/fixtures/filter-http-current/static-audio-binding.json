@@ -16,8 +16,8 @@
   },
   "nativeRecorder": {
     "filename": "record-native.js",
-    "bytes": 50728,
-    "sha256": "f30de319df7e2dcb63d700a1750f3cab09702eb2cb29de6d77952b018820b453",
+    "bytes": 53316,
+    "sha256": "915c8ca352502015d40fd4148fc36b1ffb5510e3e1fccb351e9b63e0329813ca",
     "role": "currentNativeRecorder"
   },
   "requestMatrix": {

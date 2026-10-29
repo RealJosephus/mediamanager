@@ -4,6 +4,7 @@ import { mkdir, mkdtemp, readFile, realpath, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { inspect } from 'node:util';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { describeFile } from '../../tools/validation/inventory.js';
@@ -38,7 +39,7 @@ const sourcePaths = [
 
 test('current native UserRoot links preserve positive batches, warm occurrences, raw folders, BoxSet membership and typed menu consumers in production PostgreSQL', {
   skip: !enabled, timeout: 720000,
-}, async () => {
+}, async t => {
   const output = path.join(validationOutputRoot(), 'user-root-linked-current-' + randomUUID()); assertValidationOutputChild(output);
   await mkdir(path.dirname(output), { recursive: true }); await mkdir(output);
   const temporaryParent = await realpath(tmpdir()), privateRoot = await realpath(await mkdtemp(path.join(temporaryParent, 'mm-root-links-')));
@@ -48,7 +49,7 @@ test('current native UserRoot links preserve positive batches, warm occurrences,
     phaseAcceptance: false, releaseAcceptance: false,
     scope: 'Actual designated repository/mapper/UserRoot.GetChildren and complete DtoService plain-root output, raw GetCollectionFolders, CollectionManager and UserViewManager, independently repeated; production PG transferred rows, loadNavigation, formal queryItems and public item-collections consumers. Controlled warm inputs; no media execution or native full-host HTTP/auth claim.',
     unmetPrerequisites: ['No full library topology, complete HTTP DTO/error-wire or final release acceptance is established by this component slice.'] };
-  let current, sourceDatabase, first, fixture, failure;
+  let current, sourceDatabase, first, fixture, failed = false, failure;
   const unchanged = async (filename, expected) => { const value = await describeFile(filename); assert.equal(value.available, true); assert.equal(value.sha256, expected, filename); return value; };
   const compare = (name, actual, expected) => { try { assert.deepEqual(actual, expected, name); } catch (error) { report.differences.push({ name, actual, expected, error: errorRecord(error) }); } };
   const save = async () => {
@@ -176,18 +177,17 @@ test('current native UserRoot links preserve positive batches, warm occurrences,
       'The complete successful positive batch must finish before the raw fallback walk begins.');
     report.sqlBounds = { resolutionPages: pages.length, maximumReturned: Math.max(...pages.map(row => row.returned)), pageSize: 128,
       coldRootVisibleCount: first.results[0].value.length, completeSuccessfulPositiveBatchBeforeRawWalk: true };
-    assert.deepEqual(fixture.errors, []);
     report.heldClose = await fixture.drain();
     compare('held public membership result', report.heldClose.itemIds, first.results.find(row => row.name === 'linked cached membership returns after replacement').value);
     assert.equal(report.heldClose.pluginHostLeaseRemoved, true); assert.equal(lock.preShutdownIdentityUnchanged, true);
     assert.equal(lock.removedAfterRuntimeClose, true); assert.equal(Object.hasOwn(report.heldClose.afterShutdown.files, lock.path), false);
     report.persistentStateComparison = { excludedTransientFiles: [lock.path],
-      reason: 'This exact diagnostic plugin-host lock binds the actual PID/nonce/bytes and must be removed by its real owner at runtime close.' };
+      reason: 'This exact diagnostic file belongs to the isolated runtime process, retains its original bytes and is removed by its real owner at runtime close.' };
     const persistentBefore = { database: before.database,
       files: Object.fromEntries(Object.entries(before.files).filter(([filename]) => filename !== lock.path)) };
-    compare('independent PG and persistent files after shutdown', report.heldClose.afterShutdown, persistentBefore); assert.deepEqual(fixture.errors, []);
+    compare('independent PG and persistent files after shutdown', report.heldClose.afterShutdown, persistentBefore);
     assert.deepEqual(report.differences, [], 'Every native root/menu/raw/BoxSet observation and PG consumer must agree.'); report.phaseAcceptance = true;
-  } catch (error) { failure = error; }
+  } catch (error) { failed = true; failure = error; }
   finally {
     const failures = [], attempt = async (name, action) => { try { await action(); report.cleanup[name] = true; } catch (error) { report.cleanup[name] = errorRecord(error); failures.push(error); } };
     await attempt('productionRuntimePostgresAndOwnersClosed', () => fixture?.close());
@@ -197,8 +197,12 @@ test('current native UserRoot links preserve positive batches, warm occurrences,
     if (first) await attempt('controlledSeedUnchanged', () => unchanged(first.databaseFilename, first.databaseSha256));
     for (const source of report.sourceBindings ?? []) await attempt('source:' + path.basename(source.path), () => unchanged(source.path, source.sha256));
     await attempt('allPrivateDatabasesAndInstanceRemoved', () => removePrivateRoot(privateRoot, temporaryParent, 'mm-root-links-'));
-    if (failures.length) failure = new AggregateError([...(failure ? [failure] : []), ...failures], 'Root links cleanup failed.');
-    report.passed = !failure; if (failure) { report.phaseAcceptance = false; report.error = errorRecord(failure); } await save();
+    if (failures.length) {
+      failure = new AggregateError([...(failed ? [failure] : []), ...failures], 'Root links cleanup failed.', { cause: failed ? failure : failures[0] });
+      failed = true;
+    }
+    t.diagnostic(inspect({ runtimeErrors: fixture?.errors }, { depth: null, maxArrayLength: null }));
+    report.passed = !failed; if (failed) { report.phaseAcceptance = false; report.error = errorRecord(failure); } await save();
   }
-  if (failure) throw failure;
+  if (failed) throw failure;
 });

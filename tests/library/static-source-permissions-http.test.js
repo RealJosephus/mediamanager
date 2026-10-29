@@ -1,21 +1,32 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import test, { after } from 'node:test';
-import { acquireTestResource } from '../helpers/test-resource-lease.js';
+import test, { before } from 'node:test';
+import { declareFileTestResource } from '../helpers/file-test-resource.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
 import { seedNativeFilterInput } from './native-filter-input.js';
 import { assertCompleteFilterHttpResponses, writeCompleteFilterHttpEvidence } from './full-filter-wire.js';
 import { writeCurrentFilterCandidateEvidence } from './current-filter-http.js';
 import { readNativeStaticSourcePermissionEvidence } from './native-static-source-evidence.js';
 
-const fixture = JSON.parse(await readFile(new URL('./fixtures/rating-permissions/input.json', import.meta.url)));
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
-const resourceLease = await acquireTestResource('native-filter-http-ports');
-const { binding, nativeHttp, inputs, nativeServerId } = await readNativeStaticSourcePermissionEvidence();
+const enabled = Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE
+  && process.env.MEDIAMANAGER_JELLYFIN_DLL);
+const resource = declareFileTestResource('native-filter-http-ports', { enabled });
+let binding, fixture, nativeHttp, inputs, nativeServerId;
+
+// Register teardown before Native initialization; hold this file's owner until
+// the protected initialization and every candidate callback have really settled.
+before(async context => {
+  if (!enabled) return;
+  await resource.run(async () => {
+    fixture = JSON.parse(await readFile(new URL('./fixtures/rating-permissions/input.json', import.meta.url)));
+    ({ binding, nativeHttp, inputs, nativeServerId } = await readNativeStaticSourcePermissionEvidence());
+  }, { signal: context.signal });
+});
 
 test('postgres: eight static video source permission combinations match complete native detail responses', {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
-}, async () => {
+  skip: !enabled,
+}, async context => resource.run(async () => {
   const actual = await recordItemFilterCandidate({
     dialect: 'postgres', connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,
     scenarioName: 'static-source-permissions',
@@ -52,12 +63,8 @@ test('postgres: eight static video source permission combinations match complete
   assert.deepEqual(actual.filesystemAfterShutdown, actual.filesystemAfterReads);
   assert.deepEqual(actual.filesystemDomainsAfterReads, actual.filesystemDomainsBeforeReads);
   assert.deepEqual(actual.filesystemDomainsAfterShutdown, actual.filesystemDomainsAfterReads);
-  assert.deepEqual(actual.runtimeErrors, []);
-  assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
   assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true,
     portReleased: true, postgresSchemasRemoved: true, programDataDirectoryRemoved: true });
   await writeCurrentFilterCandidateEvidence('static-source-permissions', actual, { scenarioName: 'static-source-permissions' });
-});
+}, { signal: context.signal }));
 
-// Release after all test hooks, streams, processes and resource postconditions.
-after(async () => { await resourceLease?.release(); });

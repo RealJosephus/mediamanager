@@ -12,14 +12,17 @@ import { readItemImageRows } from './image-order.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
 import { transliterateSortName } from './transliteration.js';
 import { mediaVersions, mediaSourceCount, versionChildren, commonVersionPrefix, isFileSource, sourceFileName, mediaSourceName, sortMediaSources } from './media-versions.js';
-import { dtoId, extraTypeCode, idKey, mapRecord, sameId, nonemptyId, NAME_TYPES, VIDEO_TYPES, dateText, dateTicks, MIN_DATE, cleanValue, repositoryCleanName, repositoryValue, unsupported } from './records.js';
+import { dtoId, idKey, mapRecord, sameId, nonemptyId, NAME_TYPES, VIDEO_TYPES, dateText, dateTicks, MIN_DATE, cleanValue, repositoryCleanName, repositoryValue, unsupported } from './records.js';
 import { collectionType } from './user-view-query.js';
 import { canDeleteItem, hasFileProtocol } from './delete-permission.js';
+import { canDownloadItem } from './download-permission.js';
 import { substitutePath } from './path-substitution.js';
 import { loadPostgresRowsByIds } from './postgres-library-query.js';
 import { addInheritedImages } from './dto-inherited-images.js';
 import { readChannelStaticMediaSources } from './channel-static-media-sources.js';
 import { nativeGuid } from '../users/native.js';
+import { resolveSeries } from './series-reference.js';
+import { ownedExtraCountKey, queryPostgresOwnedExtraCounts } from './postgres-owned-media-query.js';
 
 export const itemFields = ['CanDelete', 'CanDownload', 'Chapters', 'Trickplay', 'ChildCount', 'CumulativeRunTimeTicks',
   'CustomRating', 'DateCreated', 'DateLastMediaAdded', 'DisplayPreferencesId', 'Etag', 'ExternalUrls', 'Genres', 'ItemCounts',
@@ -185,6 +188,17 @@ function uniqueItems(items) {
   return [...new Map(items.filter(item => item?.Id).map(item => [idKey(item.Id), item])).values()];
 }
 
+async function prefetchOwnedExtraCounts(items, state) {
+  const counts = relationMap(state, 'dtoOwnedExtraCounts');
+  const selected = items.map(item => ({ Id: item.Id, NativeType: item.NativeType, PrimaryVersionId: item.PrimaryVersionId ?? null }));
+  const missing = [...new Map(selected.map(item => [ownedExtraCountKey(item), item])).values()]
+    .filter(item => !counts.has(ownedExtraCountKey(item)));
+  for (let offset = 0; offset < missing.length; offset += 128) {
+    for (const [id, value] of await queryPostgresOwnedExtraCounts(state.db, missing.slice(offset, offset + 128))) counts.set(id, value);
+  }
+  return counts;
+}
+
 async function prefetchRelationRows(state, name, table, ids, orderBy) {
   const rowsByItem = relationMap(state, name);
   const missing = [...new Map(ids.filter(nonemptyId).map(id => [idKey(id), id]))]
@@ -227,6 +241,7 @@ async function prefetchChannelNames(items, state) {
 export async function prefetchPostgresDtoRelations(items, state, user, selected, options) {
   if (!items.length) return;
   const projected = uniqueItems(items), fields = selected.fields;
+  if (fields.has('localtrailercount') || fields.has('specialfeaturecount')) await prefetchOwnedExtraCounts(items, state);
   await prefetchChannelNames(projected, state);
   const mediaOwners = projected.filter(item => VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook'].includes(item.Type));
   const sourceItems = uniqueItems(mediaOwners.flatMap(item => mediaVersions(item, state).map(entry => entry.item)));
@@ -567,7 +582,7 @@ export async function projectItem(item, state, user, selected, options) {
     dto.Number = item.Number; dto.ChannelNumber = item.Number; dto.ChannelType = item.ChannelType;
     if (selected.addCurrentProgram !== false) dto.CurrentProgram = state.dtoCurrentPrograms?.get(idKey(item.Id));
   }
-  if (item.IsFolder || VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'Photo', 'LiveTvChannel'].includes(item.Type)) dto.IsFolder = item.IsFolder;
+  if (item.IsFolder || VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'LiveTvChannel'].includes(item.Type)) dto.IsFolder = item.IsFolder;
   if (item.SourceType === 'Channel') dto.SourceType = item.SourceType;
   if (item.Audio != null) dto.Audio = ['Mono', 'Stereo', 'Dolby', 'DolbyDigital', 'Thx', 'Atmos'][item.Audio] ?? item.Audio;
   if (item.CommunityRating > 0) dto.CommunityRating = item.CommunityRating;
@@ -621,7 +636,7 @@ export async function projectItem(item, state, user, selected, options) {
   if (has('DisplayPreferencesId')) dto.DisplayPreferencesId = ['Folder', 'CollectionFolder'].includes(item.Type) ? dtoId(item.Id) : md5Guid(item.NativeType);
   if (has('Etag')) dto.Etag = md5Guid(String(dateTicks(item.DateLastSaved)));
   if (has('ExternalUrls')) dto.ExternalUrls = projectExternalUrls(item, state, options);
-  if (has('CanDownload')) dto.CanDownload = (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'Book', 'Photo'].includes(item.Type)) && item.LocationType === 'FileSystem' && !['Dvd', 'BluRay'].includes(item.VideoType) && (!user || user.Policy.EnableContentDownloading === true);
+  if (has('CanDownload')) dto.CanDownload = canDownloadItem(item, user);
   if (has('EnableMediaSourceDisplay')) dto.EnableMediaSourceDisplay = item.EnableMediaSourceDisplay ?? true;
   if (has('MediaSources') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'LiveTvChannel'].includes(item.Type))) {
     dto.MediaSources = await mediaSources(item, state, user, options, true);
@@ -642,6 +657,7 @@ export async function projectItem(item, state, user, selected, options) {
     } else dto.MediaStreams = dto.MediaSources?.find(source => sameId(source.Id, item.Id))?.MediaStreams ?? await projectedStreams(state, item, options);
   }
   if (VIDEO_TYPES.has(item.Type)) {
+    if (item.HasSubtitles) dto.HasSubtitles = true;
     Object.assign(dto, { VideoType: item.VideoType ?? 'VideoFile', Video3DFormat: item.Video3DFormat, IsoType: item.IsoType, ExtraType: extraType(item), AspectRatio: item.AspectRatio });
     if (item.AdditionalParts?.length) dto.PartCount = item.AdditionalParts.length + 1;
     if (has('MediaSourceCount')) {
@@ -660,8 +676,12 @@ export async function projectItem(item, state, user, selected, options) {
     }
   }
   if (has('Chapters')) dto.Chapters = (await relationRows(state, item, 'chapterRowsByItem', 'Chapters')).map(row => ({ StartPositionTicks: row.StartPositionTicks, Name: row.Name, ImagePath: row.ImagePath, ImageDateModified: dateText(row.ImageDateModified ?? MIN_DATE) }));
-  if (has('LocalTrailerCount')) dto.LocalTrailerCount = state.items.filter(extra => sameId(extra.OwnerId, item.Id) && extraTypeCode(extra.ExtraType) === 2).length;
-  if (has('SpecialFeatureCount')) dto.SpecialFeatureCount = state.items.filter(extra => sameId(extra.OwnerId, item.Id) && [1, 3, 4, 5, 6, 10, 11].includes(extraTypeCode(extra.ExtraType))).length;
+  if (has('LocalTrailerCount') || has('SpecialFeatureCount')) {
+    const owner = { Id: item.Id, NativeType: item.NativeType, PrimaryVersionId: item.PrimaryVersionId ?? null };
+    const counts = (await prefetchOwnedExtraCounts([owner], state)).get(ownedExtraCountKey(owner));
+    if (has('LocalTrailerCount')) dto.LocalTrailerCount = counts.LocalTrailerCount;
+    if (has('SpecialFeatureCount')) dto.SpecialFeatureCount = counts.SpecialFeatureCount;
+  }
   if (has('ProductionLocations') && (item.ProductionLocations.length > 0 || item.Type === 'Movie')) dto.ProductionLocations = item.ProductionLocations;
   if (has('Width') && item.Width > 0) dto.Width = item.Width;
   if (has('Height') && item.Height > 0) dto.Height = item.Height;
@@ -683,6 +703,10 @@ export async function projectItem(item, state, user, selected, options) {
       dto[key] = nonemptyId(item[key]) ? dtoId(item[key]) : null;
     }
     if (item.Type === 'Series') dto.AirDays = item.AirDays ?? [];
+    if (has('SeriesStudio') && ['Episode', 'Season'].includes(item.Type)) {
+      const series = resolveSeries(item, state.byId);
+      if (series) dto.SeriesStudio = series.Studios[0];
+    }
     if (has('SpecialEpisodeNumbers')) for (const key of ['AirsBeforeSeasonNumber', 'AirsAfterSeasonNumber', 'AirsBeforeEpisodeNumber']) dto[key] = item[key];
   }
   const rawCollectionType = item.Type === 'PlaylistsFolder' ? 'playlists' : item.CollectionType ?? (item.Type === 'UserView' ? item.ViewType : null);

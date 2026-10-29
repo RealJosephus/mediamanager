@@ -28,14 +28,22 @@ export async function createPostgresFolderCollectionCollapse({ session, library,
   const input = q(prefix + '_input'), result = q(prefix + '_result'), matches = q(prefix + '_matches');
   const tables = [], groupedTypes = options.collapseTypes.map(type => type === 'Movie' ? movie : series);
   let root, catalogue, cataloguePlan, closing;
-  const close = primary => closing ??= (async () => {
+  const close = (primary, { failed = primary !== undefined } = {}) => closing ??= (async () => {
     const failures = [];
-    for (const release of [() => catalogue?.close(primary), () => root?.close(primary),
+    for (const release of [() => catalogue?.close(primary, { failed: false }), () => root?.close(primary, { failed: false }),
       ...tables.toReversed().map(table => () => session.client.query(`DROP TABLE ${table}`))]) {
       try { await release(); } catch (error) { failures.push(error); }
     }
-    if (failures.length) throw new AggregateError(primary ? [primary, ...failures] : failures,
-      primary?.message ?? 'Collection collapse cleanup failed.', primary ? { cause: primary } : undefined);
+    if (!failures.length) return;
+    const reasons = failed ? [primary, ...failures] : failures;
+    if (reasons.length === 1) throw reasons[0];
+    let message = 'Collection collapse cleanup failed.';
+    try { if (typeof reasons[0]?.message === 'string') message = reasons[0].message; } catch { /* Keep the actual failure. */ }
+    const failure = new AggregateError(reasons, message, { cause: reasons[0] });
+    for (const key of ['code', 'status', 'statusCode']) {
+      try { if (reasons[0] != null && Object.hasOwn(reasons[0], key)) failure[key] = reasons[0][key]; } catch { /* Diagnostic reads cannot replace the reason. */ }
+    }
+    throw failure;
   })();
   try {
     const beforeCollapse = { ...query, sortby: [], startindex: 0 };
@@ -167,5 +175,5 @@ export async function createPostgresFolderCollectionCollapse({ session, library,
         WHERE "SlotKey"=$1 AND "Collection") AS present`, [slot])).rows[0].present;
       return (collection ? catalogue : source).withSlot(slot, callback);
     }, close });
-  } catch (error) { await close(error); throw error; }
+  } catch (error) { await close(error, { failed: true }); throw error; }
 }

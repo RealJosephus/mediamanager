@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
-import { recordOracle } from '../../tools/validation/oracle.js';
+import { compileOracle } from '../../tools/validation/oracle.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 import { projectStructureObservation } from './fixtures/library-structure-current/observations.js';
 
@@ -90,11 +90,13 @@ async function capture() {
     const inputBytes = await readFile(new URL('input.json', profileUrl)), inputFile = path.join(output, 'consumer-input.json');
     await writeFile(inputFile, inputBytes, { flag: 'wx' }); report.consumerInput = await describeFile(inputFile);
     const project = fileURLToPath(new URL(profile.inputs.find(entry => entry.role === 'oracleProject').filename, profileUrl));
+    const oracle = await compileOracle({ project, output: path.join(output, 'build') });
+    report.oracleBuild = oracle.buildRecord;
     const natives = [], projections = [];
     for (let iteration = 1; iteration <= 2; iteration++) {
       const directory = path.join(output, 'native-' + iteration);
       fileStateRoots.push(path.join(directory, 'states'));
-      const record = await recordOracle({ project, output: directory, args: [inputFile, '{output}/native.json'] });
+      const record = await oracle.record({ output: directory, args: [inputFile, '{output}/native.json'] });
       const filename = path.join(directory, 'native.json'), bytes = await readFile(filename), native = JSON.parse(bytes);
       const capture = { iteration, record, observation: await describeFile(filename), files: [] };
       report.captures.push(capture);
@@ -133,7 +135,7 @@ async function capture() {
     const continueOptions = async cases => {
       const continuation = { cases, changes: structureInput.optionsContinuation };
       const filename = path.join(output, 'options-consumer-input.json'); await writeFile(filename, json(continuation), { flag: 'wx' });
-      const record = await recordOracle({ project, output: path.join(output, 'options-native-continuation'),
+      const record = await oracle.record({ output: path.join(output, 'options-native-continuation'),
         args: ['consume-options', filename, '{output}/native.json'] });
       const resultFile = path.join(output, 'options-native-continuation/native.json'), bytes = await readFile(resultFile), native = JSON.parse(bytes);
       await writeFile(path.join(output, 'options-continuation-receipt.json'), json({ input: await describeFile(filename), record,

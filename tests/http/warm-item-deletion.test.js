@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { setupPlaylistDeletion, playlistDeletionId as id } from '../library/playlist-deletion-fixture.js';
 import { createTestApplication } from '../helpers/application.js';
 import { guid } from '../../src/library/records.js';
-import { normalizeDeletionRecording } from './fixtures/warm-item-deletion/normalize.js';
+import { normalizeDeletionRecording } from './deletion-response-projection.js';
+import { assertProjectedEqual } from '../comparison-observations.js';
 import { currentWarmFixture } from '../library/warm-fixture.js';
 const { input, current } = await currentWarmFixture(new URL('./fixtures/warm-item-deletion/', import.meta.url), 'http-warm-item-deletion');
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
@@ -20,7 +21,7 @@ test('current Native warm DELETE records every single/batch MVC and persistence 
 for (const sample of input) test('postgres: HTTP after persistence-only deletion matches current Native ' + sample.name, {
   ...enabled, skip: enabled.skip || !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const native = normalizeDeletionRecording(await current());
+  const native = await current();
   const expected = native.results.find(result => result.name === sample.name);
   const value = await setupPlaylistDeletion(t, sample, expected);
   await value.operation();
@@ -50,8 +51,9 @@ for (const sample of input) test('postgres: HTTP after persistence-only deletion
   const body = await response.text(); let jsonBody = null;
   try { jsonBody = JSON.parse(body); } catch {}
   assert.equal(response.status, expected.status); assert.equal(response.headers.get('content-type'), expected.contentType);
-  const actualBody = normalizeDeletionRecording({ results: [{ body, jsonBody }] }).results[0];
-  assert.deepEqual(actualBody, { body: expected.body, jsonBody: expected.jsonBody });
+  assertProjectedEqual(t, sample.name + ' public warm deletion response', { body, jsonBody },
+    { body: expected.body, jsonBody: expected.jsonBody },
+    response => normalizeDeletionRecording({ results: [response] }).results[0]);
   const final = await value.project(null);
   assert.deepEqual(final.rows, value.normalizeRows(expected.rows)); assert.deepEqual(final.files, expected.files);
   assert.deepEqual(final.links, expected.links); assert.deepEqual(final.calls, expected.calls);

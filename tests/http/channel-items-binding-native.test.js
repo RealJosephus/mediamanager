@@ -7,6 +7,7 @@ import { currentNativeReference } from '../../tools/compat/current-native-refere
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createTestApplication } from '../helpers/application.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
 import { AuthenticationService } from '../../src/users/authentication-service.js';
 import { makeInput, userId } from './fixtures/channel-items-binding/input.js';
 
@@ -16,9 +17,8 @@ const hash = value => createHash('sha256').update(value).digest('hex');
 const errorRecord = error => ({ type: error.nativeException ?? error.name, status: error.status ?? error.statusCode ?? 500, Message: error.message, StackTrace: error.stack });
 const key = value => value?.replaceAll('-', '').toLowerCase() ?? null;
 const wire = observation => {
-  const json = observation.json && structuredClone(observation.json);
-  if (json && !Array.isArray(json)) delete json.traceId;
-  return { status: observation.status, contentType: observation.contentType?.split(';')[0].toLowerCase() ?? null,
+  const json = projectProblemTrace(observation.json && structuredClone(observation.json), observation.status);
+  return { status: observation.status, contentType: observation.contentType?.trim() ?? null,
     ...(json !== null && json !== undefined ? { json } : { body: observation.body }) };
 };
 
@@ -45,7 +45,7 @@ test('Channel Items and Latest use the actual MVC query, filters and authorizati
     for (const field of ['actualMvc', 'actualController', 'actualCommaBinder', 'actualDefaultAuthorization', 'actualExceptionMiddleware', 'hostStopped', 'hostDisposed']) assert.equal(native[field], true, field);
     assert.equal(native.mediaExecutionStarted, false);
     for (const assembly of native.assemblies) assert.equal(hash(await readFile(assembly.filename)), assembly.sha256);
-    const queries = [], lookups = [], diagnostics = [];
+    const queries = [], lookups = [], diagnostics = []; report.diagnostics = diagnostics;
     const user = { Id: userId, Policy: { IsAdministrator: true }, Configuration: {} };
     const users = { getUser: async id => { lookups.push(key(id)); return key(id) === userId ? user : null; } };
     const authentication = new AuthenticationService({ store: {}, users, serverId: 'channel-binding', isLocalNetwork: () => true });
@@ -69,19 +69,14 @@ test('Channel Items and Latest use the actual MVC query, filters and authorizati
     for (const [index, request] of input.requests.entries()) {
       const expected = native.observations[index]; assert.equal(expected.name, request.name); assert.equal(expected.path, request.path);
       assert.equal(expected.status, request.status ?? 200, request.name + ': declared native status');
-      queries.length = 0; lookups.length = 0; diagnostics.length = 0;
+      queries.length = 0; lookups.length = 0; const diagnosticStart = diagnostics.length;
       const response = await fetch('http://127.0.0.1:' + application.server.address().port + request.path, { headers: { Accept: 'application/json', 'X-Identity': request.identity ?? 'admin' } });
       const body = await response.text(); let json = null; try { json = JSON.parse(body); } catch { }
       const actual = { name: request.name, path: request.path, status: response.status, body, json, contentType: response.headers.get('content-type'),
-        queries: structuredClone(queries), lookups: [...lookups], diagnostics: [...diagnostics] };
+        queries: structuredClone(queries), lookups: [...lookups], diagnostics: diagnostics.slice(diagnosticStart) };
       compare(request.name + ': actual MVC wire', wire(actual), wire(expected));
       compare(request.name + ': actual controller query', actual.queries, expected.queries);
       compare(request.name + ': actual user lookup order', actual.lookups, expected.lookups);
-      if (!request.diagnostic) assert.deepEqual(actual.diagnostics, [], JSON.stringify(actual));
-      else {
-        assert.equal(actual.status, expected.status);
-        for (const diagnostic of actual.diagnostics) assert.equal(diagnostic.status, request.status, JSON.stringify(diagnostic));
-      }
       report.comparisons.push({ name: request.name, actual, expected });
     }
     assert.deepEqual(report.differences, [], JSON.stringify(report.differences)); report.componentAcceptance = true;

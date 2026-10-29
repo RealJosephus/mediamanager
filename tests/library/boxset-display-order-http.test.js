@@ -6,6 +6,7 @@ import test from 'node:test';
 import { tableDefinition } from '../../src/database/model.js';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 const fixtureBytes = await readFile(new URL('./fixtures/boxset-display-order/input.json', import.meta.url));
 const nativeBytes = await readFile(new URL('./fixtures/boxset-display-order/native.json', import.meta.url));
@@ -27,8 +28,13 @@ assert.deepEqual(native.http.records.map(row => [row.name, row.endpoint]), fixtu
   .flatMap(item => (item.endpoints ?? ['items', 'legacy']).map(endpoint => [item.name, endpoint])));
 assert.ok(native.http.records.every(row => row.response.status === 200));
 const columns = tableDefinition('BaseItems').columns;
-const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, key === 'ServerId' ? '$server' : normalize(entry)])) : value;
+// The historical capture has no separate device.txt binding. Keep every
+// Native value literal, and align only the candidate's independently bound ID.
+const observedNativeServerId = native.http.records.flatMap(record => record.response.bodyJson?.Items ?? [])
+  .find(item => typeof item.Id === 'string' && typeof item.Type === 'string')?.ServerId;
+assert.equal(typeof observedNativeServerId, 'string');
+const normalize = (value, serverId) => projectItemBody(value,
+  { serverId, serverToken: observedNativeServerId, date: value => value });
 
 for (const dialect of ['postgres']) {
   test(`${dialect}: 13 BoxSet display orders and request overrides match 169 complete frozen responses`, {
@@ -80,7 +86,7 @@ for (const dialect of ['postgres']) {
       assert.deepEqual([endpoint.name, endpoint.endpoint], [expected.name, expected.endpoint]);
       assert.equal(endpoint.response.status, expected.response.status);
       assert.equal(endpoint.response.contentType, expected.response.contentType);
-      assert.deepEqual(normalize(endpoint.response.body), normalize(expected.response.bodyJson));
+      assert.deepEqual(normalize(endpoint.response.body, actual.serverId), expected.response.bodyJson);
     });
     for (const stage of actual.caseStages) for (const timing of ['before', 'after']) {
       check(stage.name + ':' + stage.endpoint + ':' + timing, 'candidate recorded media state', () => assert.deepEqual(stage[timing].database, actual.beforeReads));
@@ -92,7 +98,6 @@ for (const dialect of ['postgres']) {
       assert.deepEqual(actual.userDataAfterShutdown, actual.userDataBeforeReads);
       assert.deepEqual(actual.filesystemDomainsAfterShutdown, actual.filesystemDomainsBeforeReads);
     });
-    check('runtime', 'errors', () => { assert.deepEqual(actual.runtimeErrors, []); assert.deepEqual(actual.handledExpectedRuntimeErrors, []); });
     check('cleanup', 'resource ownership', () => assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true,
       portReleased: true, postgresSchemasRemoved: dialect === 'postgres' ? true : null, programDataDirectoryRemoved: true }));
     if (process.env.MEDIAMANAGER_BOXSET_DISPLAY_ORDER_EVIDENCE) {

@@ -16,13 +16,19 @@ const encode = value => value == null ? null : nativeTextBytes(value);
 const pathKey = value => value ? encode(ordinalIgnoreCaseKey(value)) : null;
 const type = item => item.NativeType?.split('.').at(-1);
 
-async function releaseResources(failure, operations) {
+async function releaseResources(failed, failure, operations) {
   const errors = [];
   for (const operation of operations) {
     try { await operation(); } catch (error) { errors.push(error); }
   }
-  if (errors.length) throw new AggregateError(failure ? [failure, ...errors] : errors,
-    failure?.message ?? 'Folder validation ownership cleanup failed.', failure ? { cause: failure } : undefined);
+  if (errors.length) {
+    const error = new AggregateError(failed ? [failure, ...errors] : errors,
+      failure?.message ?? 'Folder validation ownership cleanup failed.', failed ? { cause: failure } : undefined);
+    if (failed) for (const key of ['code', 'status', 'statusCode']) {
+      const value = failure?.[key]; if (value !== undefined) error[key] = value;
+    }
+    throw error;
+  }
 }
 
 /** One directory's initial repository membership and reconciliation sets stay
@@ -58,14 +64,14 @@ class FolderValidationScope {
     // directory. No request cancellation is observed until capture completes.
     const parentState = await this.library.load(this.session, null, { includeUserData: false,
       baseRows: await loadPostgresRowsByIds(this.session, [this.parent.Id]) });
-    let parentFailure;
+    let parentFailure, parentFailed = false;
     try {
       const persisted = parentState.byId.get(idKey(this.parent.Id));
       if (!persisted?.IsFolder || type(persisted) !== type(this.parent)) {
         throw Object.assign(new Error('Folder not found.'), { status: 404, statusCode: 404 });
       }
-    } catch (error) { parentFailure = error; throw error; }
-    finally { await releaseResources(parentFailure, [() => parentState.dispose({ session: this.session })]); }
+    } catch (error) { parentFailure = error; parentFailed = true; throw error; }
+    finally { await releaseResources(parentFailed, parentFailure, [() => parentState.dispose({ session: this.session })]); }
     const columns = tableDefinition('BaseItems').columns;
     for (let after = 0n; ;) {
       const rows = (await this.query(`SELECT * FROM ${t.source} WHERE "Ordinal">$1 ORDER BY "Ordinal" LIMIT 128`, [after])).rows;
@@ -73,7 +79,7 @@ class FolderValidationScope {
       const baseRows = rows.map(row => Object.fromEntries(columns.map(column =>
         [column.name, decodeValue(column, row[column.name], 'postgres')])));
       const state = await this.library.load(this.session, null, { includeUserData: false, baseRows });
-      let failure;
+      let failure, failed = false;
       try {
         for (const row of rows) {
           const item = state.byId.get(idKey(decodeNativeTextBytes(row.Id)));
@@ -83,8 +89,8 @@ class FolderValidationScope {
             await this.cohort.captureSlot(item), pathKey(item.Path), encode(nativePathKey(item.Path)), encode(item.NativeType),
             isFileProtocol(item) && item.CanDelete !== false && !item.IsRoot]);
         }
-      } catch (error) { failure = error; throw error; }
-      finally { await releaseResources(failure, [() => state.dispose({ session: this.session })]); }
+      } catch (error) { failure = error; failed = true; throw error; }
+      finally { await releaseResources(failed, failure, [() => state.dispose({ session: this.session })]); }
       after = BigInt(rows.at(-1).Ordinal);
     }
     // TryAdd keeps the first original path occupant. Removing it must never
@@ -175,20 +181,20 @@ class FolderValidationScope {
   async eachPage(source, operation) {
     const view = await this.cohort.view({ session: this.session, plan: {
       text: `SELECT "Ordinal","SlotKey" FROM (${source}) selection ORDER BY "Ordinal"`, values: [] } });
-    let failure;
+    let failure, failed = false;
     try {
       for (let after = 0n; ;) {
         const page = await view.page({ after, limit: 128 });
-        let pageFailure;
+        let pageFailure, pageFailed = false;
         try {
           if (!page.entries.length) break;
           await operation(page.entries.map(entry => entry.item));
           after = page.entries.at(-1).Ordinal;
-        } catch (error) { pageFailure = error; throw error; }
-        finally { await releaseResources(pageFailure, [() => page.release()]); }
+        } catch (error) { pageFailure = error; pageFailed = true; throw error; }
+        finally { await releaseResources(pageFailed, pageFailure, [() => page.release()]); }
       }
-    } catch (error) { failure = error; throw error; }
-    finally { await releaseResources(failure, [() => view.release()]); }
+    } catch (error) { failure = error; failed = true; throw error; }
+    finally { await releaseResources(failed, failure, [() => view.release()]); }
   }
 
   removalPlan() {
@@ -269,10 +275,10 @@ export async function withFolderValidationScope(options, operation) {
   const cohort = await createNativeItemCohort({ linkedChildren: options.linkedChildren,
     resolveLiveItem: id => options.library.itemCreation?.getCachedItemById?.(id) });
   const scope = new FolderValidationScope(options, cohort);
-  let failure;
+  let failure, failed = false;
   try { await scope.capture(); return await operation(scope); }
-  catch (error) { failure = error; throw error; }
+  catch (error) { failure = error; failed = true; throw error; }
   finally {
-    await releaseResources(failure, [() => scope.close(), () => cohort.release()]);
+    await releaseResources(failed, failure, [() => scope.close(), () => cohort.release()]);
   }
 }

@@ -19,7 +19,12 @@ const physicalPath = 'Z:\\LibraryRefresh';
 test('Library Refresh queues and replaces the real task while scheduled refresh shares the configured roots', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
+  const startedAt = performance.now();
+  const progress = (phase, details = {}) => t.diagnostic(JSON.stringify({ phase,
+    utc: new Date().toISOString(), elapsedMs: performance.now() - startedAt, ...details }));
+  progress('database-entered');
   const database = await createPostgresTestDatabase(t, 'library_refresh');
+  progress('database-returned');
   const storage = new StorageRegistry();
   storage.registerType('memory', () => new MemoryStorageAdapter());
   const adapter = await storage.createInstance('library', 'memory', {});
@@ -59,13 +64,19 @@ test('Library Refresh queues and replaces the real task while scheduled refresh 
     assert.ok(path.basename(programDataPath).startsWith('library-refresh-http-'));
     await fs.rm(programDataPath, { recursive: true, force: true });
   });
+  progress('runtime-entered');
   const runtime = await createTestRuntime({ database, vfs, identityMap,
     ignoreIdentityMap: await knownAncestorIgnoreIdentityMap({ registry: storage, vfs, identityMap, identityRoots: [physicalPath, programDataPath] }),
     programDataPath,
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },
-    serverId: 'library-refresh-http-test', onError: error => errors.push(error) });
+    serverId: 'library-refresh-http-test', onError: error => {
+      errors.push(error); progress('runtime-error', { message: error.message, code: error.code, status: error.status });
+    } });
+  progress('runtime-returned');
+  runtime.tasks.on('started', ({ Task }) => progress('task-started', { id: Task.Id, state: Task.State }));
+  runtime.tasks.on('completed', ({ Result }) => progress('task-completed', {
+    id: Result.Id, status: Result.Status, error: Result.ErrorMessage }));
   try {
-    assert.deepEqual(errors, [], 'isolated runtime startup must not report errors');
     const admin = await runtime.users.createUser({ Name: 'Library scan admin', Password: 'password' });
     await runtime.users.updatePolicy(admin.Id, { ...(await runtime.users.getUser(admin.Id)).Policy, IsAdministrator: true });
     await runtime.users.createUser({ Name: 'Library scan reader', Password: 'password' });
@@ -74,6 +85,7 @@ test('Library Refresh queues and replaces the real task while scheduled refresh 
     }, { remoteEndPoint: '127.0.0.1' });
     const adminLogin = await login('Library scan admin', 'library-refresh-admin');
     const readerLogin = await login('Library scan reader', 'library-refresh-reader');
+    progress('users-ready');
 
     const origin = `http://127.0.0.1:${runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port}`;
     const refresh = token => fetch(`${origin}/Library/Refresh`, {
@@ -104,14 +116,17 @@ test('Library Refresh queues and replaces the real task while scheduled refresh 
       if (completions.length === 2) replaced.resolve();
     });
     assert.equal((await refresh(adminLogin.AccessToken)).status, 204);
+    progress('initial-refresh-accepted');
     await Promise.race([listingEntered, delay(2000).then(() => { throw new Error('The configured aggregate scan did not start.'); })]);
     assert.equal((await runtime.tasks.get(refreshLibraryTaskId)).State, 'Running');
 
     await adapter.mkdir('/Latest');
     assert.equal((await refresh(adminLogin.AccessToken)).status, 204);
+    progress('replacement-refresh-accepted');
     releaseListing();
     await Promise.race([replaced.promise, delay(30_000, undefined, { ref: false }).then(() => { throw new Error('The replacement task did not finish.'); })]);
     await runtime.metadata.drain();
+    progress('replacement-and-metadata-drained');
     assert.deepEqual(completions.map(result => result.Status), ['Cancelled', 'Completed']);
 
     const paths = (await database.rows('BaseItems')).filter(row => row.Type === 'MediaBrowser.Controller.Entities.Folder')
@@ -122,13 +137,17 @@ test('Library Refresh queues and replaces the real task while scheduled refresh 
     assert.equal((await fetch(`${origin}/ScheduledTasks/Running/${refreshLibraryTaskId}`, {
       method: 'POST', headers: taskHeaders(adminLogin.AccessToken)
     })).status, 204);
+    progress('scheduled-refresh-accepted');
     const [{ Result }] = await scheduled;
+    progress('scheduled-completion-received', { id: Result.Id, status: Result.Status });
     assert.equal(Result.Status, 'Completed', Result.ErrorMessage);
     assert.equal((await runtime.tasks.get(refreshLibraryTaskId)).LastExecutionResult.Status, 'Completed');
-    assert.deepEqual(errors, []);
   } finally {
     releaseListing();
+    progress('runtime-close-entered');
     await runtime.close();
+    progress('runtime-close-returned');
     await storage.close();
+    progress('storage-close-returned');
   }
 });

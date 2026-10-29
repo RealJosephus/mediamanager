@@ -10,6 +10,30 @@ import { captureNativeItemState, restoreNativeItemState, restoreEvictedNativeIte
 import { EMPTY_NATIVE_LINKS, isLinkedChildrenHandle } from './postgres-linked-children.js';
 
 const encode = value => value == null ? null : nativeTextBytes(value);
+const aggregateType = 'MediaBrowser.Controller.Entities.AggregateFolder';
+const stateCacheLimit = 128;
+function cacheState(entry, slot, bytes) {
+  entry.stateCache.delete(slot);
+  entry.stateCache.set(slot, bytes);
+  if (entry.stateCache.size > stateCacheLimit) entry.stateCache.delete(entry.stateCache.keys().next().value);
+}
+async function readState(entry, session, slot) {
+  const cached = entry.stateCache.get(slot);
+  if (cached !== undefined) { cacheState(entry, slot, cached); return cached; }
+  const bytes = (await session.client.query({ name: entry.statementPrefix + '_read',
+    text: `SELECT state FROM ${entry.states} WHERE scope_id=$1 AND slot_id=$2`, values: [entry.id, slot] })).rows[0]?.state;
+  if (bytes !== undefined) cacheState(entry, slot, bytes);
+  return bytes;
+}
+function serializableState(state) {
+  if (state.values.NativeType !== aggregateType) return state;
+  // VirtualChildren is a host-owned entity graph. Its Folder members can own
+  // SQL handles, so it cannot be copied into a scalar slot snapshot. Consumers
+  // of that graph borrow the admitted Aggregate source through resolveSourceSlot.
+  const values = { ...state.values };
+  delete values.VirtualChildren;
+  return { ...state, values };
+}
 function plain(value, seen = new Map()) {
   if(value===null||typeof value!=='object')return value;
   if(seen.has(value))return seen.get(value);
@@ -26,10 +50,10 @@ function materialized(entry, item, slot) {
 }
 function enqueue(entry, operation) {
   const pending=entry.tail.then(()=>entry.scope.run(operation));
-  entry.tail=pending.catch(error=>{entry.error??=error;});return pending;
+  entry.tail=pending.catch(error=>{if(!entry.errorPresent){entry.error=error;entry.errorPresent=true;}});return pending;
 }
-async function flush(entry) { await entry.tail;if(entry.error)throw entry.error; }
-async function writeState(entry,session,slot,state) {
+async function flush(entry) { await entry.tail;if(entry.errorPresent)throw entry.error; }
+function stateValues(entry,slot,state) {
   // Null means the native All predicate would throw when it is evaluated.
   // Capture itself must not run a later Guide consumer's failure early.
   let allLocalOrSd = true;
@@ -42,27 +66,47 @@ async function writeState(entry,session,slot,state) {
   const type = state.values.NativeType.split('.').at(-1);
   const locations = ['AggregateFolder', 'CollectionFolder'].includes(type) ? state.values.PhysicalLocationsList
     : state.values.Path ? [state.values.Path] : [];
-  await session.client.query(`INSERT INTO ${entry.states}(scope_id,slot_id,state,"Id","OfficialRating","CustomRating","Name","EndDateTicks","AllImagesLocalOrSd","Path","NativeType","PhysicalLocations","PreferredCountry","Tags","FileSystemPathKey")
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) ON CONFLICT(scope_id,slot_id) DO UPDATE SET state=EXCLUDED.state,"Id"=EXCLUDED."Id",
+  return [entry.id,slot,serialize(plain(serializableState(state))),encode(state.values.Id),encode(state.values.OfficialRating),encode(state.values.CustomRating),encode(state.sorting.name),
+    state.values.EndDate == null ? null : dateTicks(state.values.EndDate), allLocalOrSd,encode(state.values.Path),encode(state.values.NativeType),
+    locations == null ? null : locations.map(encode), encode(state.values.PreferredMetadataCountryCode),
+    state.values.Tags == null ? null : state.values.Tags.map(encode), encode(nativeFileSystemPathKey(state.values.Path))];
+}
+async function writeStates(entry,session,rows) {
+  if (!rows.length) return;
+  const values = rows.flat(), placeholders = rows.map((row,index) => '(' + row.map((_value,field) => '$' + (index * row.length + field + 1)).join(',') + ')');
+  try { await session.client.query({ name: entry.statementPrefix + '_write_' + rows.length,
+    text: `INSERT INTO ${entry.states}(scope_id,slot_id,state,"Id","OfficialRating","CustomRating","Name","EndDateTicks","AllImagesLocalOrSd","Path","NativeType","PhysicalLocations","PreferredCountry","Tags","FileSystemPathKey")
+    VALUES ${placeholders.join(',')} ON CONFLICT(scope_id,slot_id) DO UPDATE SET state=EXCLUDED.state,"Id"=EXCLUDED."Id",
     "OfficialRating"=EXCLUDED."OfficialRating","CustomRating"=EXCLUDED."CustomRating","Name"=EXCLUDED."Name",
     "EndDateTicks"=EXCLUDED."EndDateTicks","AllImagesLocalOrSd"=EXCLUDED."AllImagesLocalOrSd","Path"=EXCLUDED."Path","NativeType"=EXCLUDED."NativeType",
     "PhysicalLocations"=EXCLUDED."PhysicalLocations","PreferredCountry"=EXCLUDED."PreferredCountry","Tags"=EXCLUDED."Tags","FileSystemPathKey"=EXCLUDED."FileSystemPathKey"`,
-    [entry.id,slot,serialize(plain(state)),encode(state.values.Id),encode(state.values.OfficialRating),encode(state.values.CustomRating),encode(state.sorting.name),
-      state.values.EndDate == null ? null : dateTicks(state.values.EndDate), allLocalOrSd,encode(state.values.Path),encode(state.values.NativeType),
-      locations == null ? null : locations.map(encode), encode(state.values.PreferredMetadataCountryCode),
-      state.values.Tags == null ? null : state.values.Tags.map(encode), encode(nativeFileSystemPathKey(state.values.Path))]);
+    values }); }
+  catch (error) {
+    // A rejected dispatch may already have reached PostgreSQL. The next
+    // queued mutation must read its actual row instead of an older receipt.
+    for (const row of rows) entry.stateCache.delete(row[1]);
+    throw error;
+  }
+  for (const row of rows) cacheState(entry, row[1], row[2]);
 }
 function observe(entry,item,slot) {
   const reference=new WeakRef(entry);
   observeNativeItemState(item,(_item,field,value,deleted)=>{
     const current=reference.deref();if(!current||current.references===0)return;
+    current.revision++;
+    // The source owner observes this live graph; serializing its SQL resource
+    // branches would re-enter the database driver through a nested Folder.
+    if (_item.NativeType === aggregateType && field === 'VirtualChildren') return;
     const link=field==='LinkedChildren'&&isLinkedChildrenHandle(value)?value.retain():null;
     const captured=field==='LinkedChildren'?value===null?null:value===EMPTY_NATIVE_LINKS?EMPTY_NATIVE_LINKS:link:plain(value);
     enqueue(current,async session=>{
       try {
-        const result=await session.client.query(`SELECT state FROM ${current.states} WHERE scope_id=$1 AND slot_id=$2`,[current.id,slot]);
-        if(!result.rows.length)return;
-        const state=deserialize(result.rows[0].state);
+        // This bounded cache contains only this serial queue's acknowledged
+        // SQL bytes. Complete slot storage and every candidate plan stay in
+        // PostgreSQL; eviction always falls back to its actual row.
+        const previous=await readState(current,session,slot);
+        if(previous===undefined)return;
+        const state=deserialize(previous);
         if(field==='LinkedChildren')state.folder={loaded:true,kind:captured===null?'null':captured===EMPTY_NATIVE_LINKS?'empty':'relation',
           token:link?await current.links.pinState(link,{session,scopeId:current.id,slotId:slot}):null};
         else if(['Name','ForcedSortName','SortName'].includes(field)) {
@@ -73,7 +117,8 @@ function observe(entry,item,slot) {
         else if(Object.hasOwn(state.hiddenValues,field))state.hiddenValues[field]=captured;
         else Object.defineProperty(state.values,field,{value:captured,enumerable:true,writable:true,configurable:true});
         if(field==='DateLastSaved')state.date={value:captured,json:null};
-        await writeState(current,session,slot,state);
+        const row=stateValues(current,slot,state);
+        if(!row[2].equals(previous))await writeStates(current,session,[row]);
       } finally { if(link)await current.links.release(link,{session}); }
     }).catch(()=>{});
   });
@@ -99,25 +144,54 @@ class NativeItemCohort {
     FROM ${this.entry.rows} cohort JOIN ${this.entry.states} state ON state.scope_id=cohort.scope_id AND state.slot_id=cohort.slot_id
     WHERE cohort.view_id=$1`,values:Object.freeze([this.id])});}
   async captureSlot(item) {
-    active(this);if(!isNativeItemEntity(item))throw new TypeError('An exact native item is required.');
-    const entry=this.entry;let slot=entry.slots.get(item);
-    const first=!slot;if(first){slot=randomUUID();entry.slots.set(item,slot);}
-    const owner=acquireNativeItemLinkOwner(item);
+    return (await this.captureSlots([item]))[0];
+  }
+  async captureSlots(items) {
+    active(this);
+    if (!Array.isArray(items) || items.length > 128) throw new TypeError('Typed capture pages require at most 128 items.');
+    const retained = this.retain(), entry = this.entry, owners = [], captured = [], slots = [];
+    let invalid, failure, failed=false;
     try {
-      await enqueue(entry,async session=>{
-        const state=await captureNativeItemState(item,{linkedChildren:entry.links,session,scopeId:entry.id,slotId:slot});
-        await writeState(entry,session,slot,state);
+      await enqueue(entry, async session => {
+        const rows = new Map();
+        let primary, primaryFailed=false;
+        try {
+          for (const item of items) {
+            if (!isNativeItemEntity(item)) { invalid = new TypeError('An exact native item is required.'); break; }
+            let slot = entry.slots.get(item);
+            const first = !slot;
+            if (first) { slot = randomUUID(); entry.slots.set(item,slot); }
+            owners.push(acquireNativeItemLinkOwner(item));
+            const state = await captureNativeItemState(item,{linkedChildren:entry.links,session,scopeId:entry.id,slotId:slot});
+            // Freeze each snapshot before the next item's asynchronous pin.
+            rows.set(slot,stateValues(entry,slot,state)); slots.push(slot); captured.push({item,slot});
+            if (first) observe(entry,item,slot);
+          }
+        } catch (error) { primary = error; primaryFailed=true; }
+        try { await writeStates(entry,session,[...rows.values()]); }
+        catch (error) { throw primaryFailed ? new AggregateError([primary,error],primary?.message??'Typed state capture failed.',{cause:primary}) : error; }
+        if (primaryFailed) throw primary;
       });
-      if(first)observe(entry,item,slot);materialized(entry,item,slot);return slot;
-    } finally {owner.release();await entry.links.flushReleases();}
+      for (const {item,slot} of captured) materialized(entry,item,slot);
+      if (invalid) throw invalid;
+      return slots;
+    } catch (error) { failure = error; failed=true; throw error; }
+    finally {
+      const errors = [];
+      for (const cleanup of [...owners.map(owner => () => owner.release()), () => entry.links.flushReleases(), () => retained.release()]) {
+        try { await cleanup(); } catch (error) { errors.push(error); }
+      }
+      if (errors.length) throw new AggregateError(failed ? [failure,...errors] : errors,
+        failure?.message ?? 'Typed capture ownership cleanup failed.',failed ? {cause:failure} : undefined);
+    }
   }
   async appendSlot(slot,{ordinal}={}) {
     active(this);if(typeof slot!=='string'||typeof ordinal!=='bigint'||ordinal<=0n)throw new TypeError('An owned slot and positive bigint ordinal are required.');
     const entry=this.entry;
     await enqueue(entry,async session=>{
-      const result=await session.client.query(`INSERT INTO ${entry.rows}(view_id,"Ordinal",scope_id,slot_id)
+      const result=await session.client.query({name:entry.statementPrefix+'_append',text:`INSERT INTO ${entry.rows}(view_id,"Ordinal",scope_id,slot_id)
         SELECT $1,$2,scope_id,slot_id FROM ${entry.states} WHERE scope_id=$3 AND slot_id=$4
-        ON CONFLICT(view_id,"Ordinal") DO UPDATE SET scope_id=EXCLUDED.scope_id,slot_id=EXCLUDED.slot_id`,[this.id,ordinal,entry.id,slot]);
+        ON CONFLICT(view_id,"Ordinal") DO UPDATE SET scope_id=EXCLUDED.scope_id,slot_id=EXCLUDED.slot_id`,values:[this.id,ordinal,entry.id,slot]});
       if(result.rowCount!==1)throw new TypeError('The slot belongs to a different or released cohort.');
     });
     return slot;
@@ -144,45 +218,113 @@ class NativeItemCohort {
     active(this);
     if (typeof slot !== 'string' || typeof operation !== 'function') throw new TypeError('An owned slot and callback are required.');
     const retained = this.retain(), entry = this.entry;
-    let owner, failure;
+    let owner, failure, failed=false;
     try {
       await flush(entry);
       const source = await entry.resolveSourceSlot?.(slot);
       if (source != null && typeof source !== 'function') throw new TypeError('A captured slot source must supply a borrowing callback.');
       if (source) return await source(async item => {
         const captured = entry.slots.get(item) === slot;
+        owner = acquireNativeItemLinkOwner(item);
         materialized(entry,item,slot);
-        owner = acquireNativeItemLinkOwner(item); entry.slots.set(item, slot);
+        entry.slots.set(item, slot);
         if (!captured) observe(entry, item, slot);
         return operation(item);
       });
       const item = await entry.scope.run(async session => {
-        const row = (await session.client.query(`SELECT state FROM ${entry.states} WHERE scope_id=$1 AND slot_id=$2`, [entry.id, slot])).rows[0];
+        const row = (await session.client.query({ name: entry.statementPrefix + '_read',
+          text: `SELECT state FROM ${entry.states} WHERE scope_id=$1 AND slot_id=$2`, values: [entry.id, slot] })).rows[0];
         if (!row) throw new TypeError('The slot belongs to a different or released cohort.');
         const state = deserialize(row.state), live = entry.resolveLiveItem?.(state.values.Id, slot);
         const reused = live && entry.slots.get(live) === slot;
         const value = reused ? live : await restoreNativeItemState(state, {}, { linkedChildren: entry.links, session });
         if (reused) await restoreEvictedNativeItemLinks(value, state, { linkedChildren: entry.links, session });
-        materialized(entry,value,slot);
         owner = acquireNativeItemLinkOwner(value);
+        materialized(entry,value,slot);
         entry.slots.set(value, slot);
         if (!reused) observe(entry, value, slot);
         return value;
       });
       return await operation(item);
-    } catch (error) { failure = error; throw error; }
+    } catch (error) { failure = error; failed=true; throw error; }
     finally {
       const errors = [];
       for (const cleanup of [() => owner?.release(), () => entry.links.flushReleases(), () => retained.release()]) {
         try { await cleanup(); } catch (error) { errors.push(error); }
       }
-      if (errors.length) throw new AggregateError(failure ? [failure, ...errors] : errors,
-        failure?.message ?? 'Typed slot ownership cleanup failed.', failure ? { cause: failure } : undefined);
+      if (errors.length) throw new AggregateError(failed ? [failure, ...errors] : errors,
+        failure?.message ?? 'Typed slot ownership cleanup failed.', failed ? { cause: failure } : undefined);
+    }
+  }
+  async withSlots(slots, operation) {
+    active(this);
+    if (!Array.isArray(slots) || slots.length > 128 || typeof operation !== 'function') throw new TypeError('Typed slot pages require at most 128 slots and a callback.');
+    const retained = this.retain(), entry = this.entry, owners = [];
+    let failure, failed=false;
+    try {
+      await flush(entry);
+      const revision = entry.revision;
+      const rows = slots.length ? await entry.scope.run(async session => (await session.client.query(
+        `SELECT slot_id,state FROM ${entry.states} WHERE scope_id=$1 AND slot_id::text=ANY($2::text[])`,
+        [entry.id,slots.filter(slot => typeof slot === 'string')])).rows) : [];
+      const states = new Map(rows.map(row => [row.slot_id,row.state])), results = [];
+      for (const slot of slots) {
+        if (typeof slot !== 'string') throw new TypeError('An owned slot and callback are required.');
+        await flush(entry);
+        const source = await entry.resolveSourceSlot?.(slot);
+        if (source != null && typeof source !== 'function') throw new TypeError('A captured slot source must supply a borrowing callback.');
+        if (source) {
+          results.push(await source(async item => {
+            const captured = entry.slots.get(item) === slot;
+            owners.push(acquireNativeItemLinkOwner(item));
+            materialized(entry,item,slot);
+            entry.slots.set(item,slot);
+            if (!captured) observe(entry,item,slot);
+            return operation(item,slot);
+          }));
+          continue;
+        }
+        const item = await entry.scope.run(async session => {
+          // A preceding callback may mutate this or another captured item.
+          // Read its current SQL state instead of an earlier page snapshot.
+          const bytes = entry.revision === revision && states.has(slot) ? states.get(slot)
+            : (await session.client.query(`SELECT state FROM ${entry.states} WHERE scope_id=$1 AND slot_id=$2`,[entry.id,slot])).rows[0]?.state;
+          if (!bytes) throw new TypeError('The slot belongs to a different or released cohort.');
+          const state = deserialize(bytes), live = entry.resolveLiveItem?.(state.values.Id,slot);
+          const reused = live && entry.slots.get(live) === slot;
+          const value = reused ? live : await restoreNativeItemState(state,{}, {linkedChildren:entry.links,session});
+          if (reused) await restoreEvictedNativeItemLinks(value,state,{linkedChildren:entry.links,session});
+          owners.push(acquireNativeItemLinkOwner(value));
+          materialized(entry,value,slot);
+          entry.slots.set(value,slot);
+          if (!reused) observe(entry,value,slot);
+          return value;
+        });
+        results.push(await operation(item,slot));
+      }
+      return results;
+    } catch (error) { failure = error; failed=true; throw error; }
+    finally {
+      const errors = [];
+      for (const cleanup of [...owners.map(owner => () => owner.release()), () => entry.links.flushReleases(), () => retained.release()]) {
+        try { await cleanup(); } catch (error) { errors.push(error); }
+      }
+      if (errors.length) throw new AggregateError(failed ? [failure,...errors] : errors,
+        failure?.message ?? 'Typed slot page ownership cleanup failed.',failed ? {cause:failure} : undefined);
     }
   }
   async page({after=0n,limit=128}={}) {
     active(this);if(typeof after!=='bigint'||after<0n||!Number.isInteger(limit)||limit<1||limit>128)throw new TypeError('Typed pages require a bigint cursor and limit from 1 to 128.');
     const retained=this.retain(),entry=this.entry,owners=[];
+    let releasing;
+    const release = (primary,failed=false) => releasing ??= (async()=>{
+      const errors=[];
+      for(const cleanup of [...owners.map(owner=>()=>owner.release()),()=>entry.links.flushReleases(),()=>retained.release()]){
+        try{await cleanup();}catch(error){errors.push(error);}
+      }
+      if(errors.length)throw new AggregateError(failed?[primary,...errors]:errors,
+        primary?.message??'Typed page ownership cleanup failed.',failed?{cause:primary}:undefined);
+    })();
     try {
       await flush(entry);
       const items=new Map(),entries=[];
@@ -197,8 +339,9 @@ class NativeItemCohort {
           if(source) {
             await source(value=>{
               const captured=entry.slots.get(value)===row.slot_id;
+              owners.push(acquireNativeItemLinkOwner(value));
               materialized(entry,value,row.slot_id);
-              owners.push(acquireNativeItemLinkOwner(value));item=value;
+              item=value;
               entry.slots.set(value,row.slot_id);if(!captured)observe(entry,value,row.slot_id);
             });
             items.set(row.slot_id,item);
@@ -211,16 +354,15 @@ class NativeItemCohort {
             if(reused)await restoreEvictedNativeItemLinks(value,state,{linkedChildren:entry.links,session});
             return value;
           });
+          owners.push(acquireNativeItemLinkOwner(item));
           materialized(entry,item,row.slot_id);
-          owners.push(acquireNativeItemLinkOwner(item));items.set(row.slot_id,item);entry.slots.set(item,row.slot_id);
+          items.set(row.slot_id,item);entry.slots.set(item,row.slot_id);
           if(!reused)observe(entry,item,row.slot_id);
         }
         entries.push({Ordinal:BigInt(row.Ordinal),item});
       }
-      let released=false;
-      return Object.freeze({entries,release:async()=>{if(released)return;released=true;for(const owner of owners)owner.release();
-        try{await entry.links.flushReleases();}finally{await retained.release();}}});
-    } catch(error){for(const owner of owners)owner.release();await retained.release();throw error;}
+      return Object.freeze({entries,release:()=>release()});
+    } catch(error){await release(error,true);throw error;}
   }
   async release(){
     if(this.released)return;this.released=true;
@@ -236,7 +378,7 @@ class NativeItemCohort {
         ()=>entry.links.releaseStateScope(entry.id,{session}),()=>entry.links.flushReleases({session})]){
         try{await release();}catch(error){failures.push(error);}
       }
-    });}catch(error){failures.push(error);}finally{try{entry.scope.release();}catch(error){failures.push(error);}}
+    });}catch(error){failures.push(error);}finally{entry.stateCache.clear();try{entry.scope.release();}catch(error){failures.push(error);}}
     if(failures.length)throw new AggregateError(failures,'Typed cohort release failed.');
   }
 }
@@ -245,7 +387,11 @@ export async function createNativeItemCohort({linkedChildren,resolveLiveItem,res
   if(onRelease!==undefined&&typeof onRelease!=='function')throw new TypeError('A cohort release hook must be a function.');
   if(resolveSourceSlot!==undefined&&typeof resolveSourceSlot!=='function')throw new TypeError('A captured slot source resolver must be a function.');
   if(onMaterialize!==undefined&&typeof onMaterialize!=='function')throw new TypeError('A synchronous materialization hook is required.');
-  const entry={id:randomUUID(),links:linkedChildren,resolveLiveItem,resolveSourceSlot,onRelease,onMaterialize,scope:linkedChildren.admitScope(),slots:new WeakMap(),tail:Promise.resolve(),references:0,error:null,
+  // Reuse only the SQL definition on each physical connection. The runtime
+  // table identity prevents collisions across repositories; write arity keeps
+  // every bounded VALUES shape distinct. All executions bind their live values.
+  const entry={id:randomUUID(),links:linkedChildren,resolveLiveItem,resolveSourceSlot,onRelease,onMaterialize,scope:linkedChildren.admitScope(),slots:new WeakMap(),stateCache:new Map(),tail:Promise.resolve(),references:0,error:null,errorPresent:false,revision:0,
+    statementPrefix:'mm_cohort_'+linkedChildren.schemaName,
     states:`${q(linkedChildren.schemaName)}.item_states`,rows:`${q(linkedChildren.schemaName)}.item_cohorts`};
   return new NativeItemCohort(entry);
 }

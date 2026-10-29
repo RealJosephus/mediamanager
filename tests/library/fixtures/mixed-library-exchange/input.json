@@ -1,0 +1,27 @@
+{
+  "book": {
+    "bytes": 2236,
+    "sha256": "6546ac0441908023bbd7fbfb83c0252eef72a554271ff57d6fa686a90be82c22",
+    "name": " Rich title ",
+    "overview": "Overview nested tail & value",
+    "coverBytes": 95,
+    "coverSha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+  },
+  "photo": {
+    "bytes": 268,
+    "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9",
+    "width": 8,
+    "height": 6
+  },
+  "libraries": [
+    { "name": "Exchange Books", "directory": "Books", "type": "books" },
+    { "name": "Exchange Photos", "directory": "Photos", "type": "homevideos" }
+  ],
+  "files": [
+    { "key": "retainedBook", "type": "Book", "asset": "book", "path": "Books/Retained.epub" },
+    { "key": "removedBook", "type": "Book", "asset": "book", "path": "Books/Removed.epub" },
+    { "key": "retainedPhoto", "type": "Photo", "asset": "photo", "path": "Photos/Album/Retained.jpg" },
+    { "key": "nativeBook", "type": "Book", "asset": "book", "path": "Books/Native.epub", "nativeAddition": true },
+    { "key": "nativePhoto", "type": "Photo", "asset": "photo", "path": "Photos/Album/Native.jpg", "nativeAddition": true }
+  ]
+}

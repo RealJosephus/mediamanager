@@ -74,14 +74,81 @@ const outcome = observation => ({ value: observation.value, failed: observation.
 
 test('Channel and LiveTv visibility match actual native entities, one-hop channel lookup and PostgreSQL recording count/page', {
   timeout: 300000,
-}, async () => {
+}, async t => {
+  const startedAt = performance.now();
+  const progress = (phase, details = {}) => {
+    t.diagnostic(JSON.stringify({ phase, utc: new Date().toISOString(), elapsedMs: performance.now() - startedAt, ...details }));
+    t.signal.throwIfAborted();
+  };
   const input = fixtureInput(), inputBytes = Buffer.from(JSON.stringify(input));
   const output = path.join(validationOutputRoot(), 'channel-visibility-' + randomUUID()); await mkdir(output);
   const inputFilename = path.join(output, 'input.json'); await writeFile(inputFilename, inputBytes, { flag: 'wx' });
   const privateRoot = path.join(output, 'private-native');
-  const report = { comparisons: [], queries: [], cleanup: {}, evidenceScope: 'Actual repository-hydrated entity visibility, actual ChannelManager one-hop lookup and actual native EF selector versus PG; not HTTP authorization or playback.' };
+  const report = { comparisons: [], queries: [], queryCosts: [], selectorCosts: [], explainPlans: [], cleanup: {}, evidenceScope: 'Actual repository-hydrated entity visibility, actual ChannelManager one-hop lookup and actual native EF selector versus PG; not HTTP authorization or playback.' };
   let current, source, database, store, linkedChildren, library, failure;
+  const recentSlowReads = new WeakMap(), explained = new Set(), slowQueryThresholdMs = 1000;
+  report.queryTimingPolicy = { clock: 'performance.now', slowQueryThresholdMs,
+    costScopes: { queryCosts: 'Public recording DTO reader', selectorCosts: 'Direct recording selector reader' },
+    recentSlowReadParameters: 'Only the latest successful slow read is retained in memory per active operation session.',
+    explainAnalyze: 'Before the next SQL dispatch after the original test deadline has actually expired: replay the latest successful slow read from the current case once per SQL hash through the same still-owned physical session. CREATE TEMP TABLE AS replays only its read projection.' };
+  const readProjection = text => {
+    const statement = text.replace(/^\s*\/\*[\s\S]*?\*\//u, '').trimStart();
+    const read = statement.replace(/^CREATE TEMP TABLE "mm_recordings_[0-9a-f]+" AS\s+/u, '');
+    // Restrict diagnostics to known generated reads; WITH alone does not imply
+    // a read-only statement and generic SELECTs can acquire advisory locks.
+    const knownRead = read !== statement || /^WITH RECURSIVE (?:native_visibility_input\(|requested AS \()/u.test(read)
+      || /^\/\* page-relationship-graph \*\//u.test(text);
+    return knownRead ? { readText: read, readProjectionOnly: read !== statement } : null;
+  };
+  const observeRecordings = async (sample, request, expected, stage, operation) => {
+    const query = database.client.query, started = performance.now();
+    const cost = { policy: sample.name, query: request.name, stage, selectedRows: expected.ids.length, sqlQueries: 0, slowest: [] };
+    database.client.query = async function observeRecordingRead(...args) {
+      const sql = typeof args[0] === 'string' ? args[0] : args[0]?.text ?? '';
+      const values = typeof args[0] === 'string' ? args[1] : args[0]?.values;
+      const session = database.root.operationContext.getStore();
+      cost.sqlQueries++;
+      try {
+        const recent = session?.connectionActive ? recentSlowReads.get(session) : undefined;
+        const explainKey = recent ? sample.name + '\0' + request.name + '\0' + recent.sqlSha256 : null;
+        if (t.signal.aborted && recent?.policy === sample.name && recent.query === request.name && !explained.has(explainKey)) {
+          explained.add(explainKey);
+          const capture = { policy: recent.policy, query: recent.query, stage: recent.stage, ordinal: recent.ordinal,
+            sqlSha256: recent.sqlSha256, sql: recent.sql, readText: recent.readText, readProjectionOnly: recent.readProjectionOnly,
+            parameterCount: recent.values?.length ?? 0, observedDurationMs: recent.durationMs,
+            observedFinishedAt: recent.finishedAt, beforeDispatchOrdinal: cost.sqlQueries,
+            startedAt: new Date().toISOString() };
+          report.explainPlans.push(capture);
+          const explainedAt = performance.now();
+          try {
+            const result = await session.client.physicalClient.query({
+              text: 'EXPLAIN (ANALYZE, BUFFERS, TIMING TRUE, SETTINGS, FORMAT JSON) ' + recent.readText, values: recent.values });
+            capture.plan = result.rows[0]['QUERY PLAN'];
+          } catch (error) { capture.error = { code: error.code, message: error.message, stack: error.stack }; }
+          finally { capture.durationMs = performance.now() - explainedAt; capture.finishedAt = new Date().toISOString(); }
+        }
+        const dispatched = performance.now();
+        const result = await query.apply(this, args);
+        const durationMs = performance.now() - dispatched, sqlSha256 = hash(sql);
+        cost.slowest.push({ sqlSha256, label: sql.match(/\/\*\s*([^*\r\n]+)\s*\*\//u)?.[1]?.trim()
+          ?? sql.trimStart().split(/\s/u, 1)[0], durationMs, rows: result.rows?.length });
+        cost.slowest.sort((left, right) => right.durationMs - left.durationMs); cost.slowest.length = Math.min(cost.slowest.length, 3);
+        if (session?.connectionActive && durationMs >= slowQueryThresholdMs) {
+          const projection = readProjection(sql);
+          if (projection) recentSlowReads.set(session, { policy: sample.name, query: request.name, stage, ordinal: cost.sqlQueries,
+            sqlSha256, sql, ...projection, values, durationMs, finishedAt: new Date().toISOString() });
+        }
+        return result;
+      } catch (error) { cost.failure = { code: error.code, message: error.message }; throw error; }
+    };
+    try { return await operation(); }
+    finally {
+      database.client.query = query; cost.durationMs = performance.now() - started;
+      (stage === 'selector' ? report.selectorCosts : report.queryCosts).push(cost);
+    }
+  };
   try {
+    progress('native-inputs-entered');
     current = await currentNativeReference(); report.preparation = current.preparation;
     report.sourceBindings = await current.sourceBindings(['MediaBrowser.Controller/Entities/BaseItem.cs', 'MediaBrowser.Controller/Channels/Channel.cs',
       'MediaBrowser.Controller/LiveTv/LiveTvChannel.cs', 'MediaBrowser.Controller/LiveTv/LiveTvProgram.cs',
@@ -89,8 +156,10 @@ test('Channel and LiveTv visibility match actual native entities, one-hop channe
       'Emby.Server.Implementations/Library/LibraryManager.cs', 'Jellyfin.Server.Implementations/Item/BaseItemRepository.cs',
       'Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs', 'Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs',
       'Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs']);
+    progress('native-oracle-entered');
     const receipt = await recordOracle({ project: 'tests/library/fixtures/channel-visibility/Oracle.csproj', output: path.join(output, 'native'),
       args: [inputFilename, '{output}/native.json', privateRoot, current.sourceDatabase] });
+    progress('native-oracle-returned');
     const nativeBytes = await readFile(path.join(output, 'native/native.json')), native = JSON.parse(nativeBytes);
     assert.ok(receipt.passed && native.actualBaseItemVisibility && native.actualChannelManagerAndLibraryManager && native.actualEfRepositoryCountAndPage);
     assert.equal(native.repositoryHydratedEntities, true); assert.equal(native.recordingExecutorsStarted, false);
@@ -121,6 +190,7 @@ test('Channel and LiveTv visibility match actual native entities, one-hop channe
     const allCount = native.queries.find(row => row.policy === 'all' && row.name === 'all').total;
     assert.ok(native.queries.find(row => row.policy === 'SQL blocked tags' && row.name === 'all').total < allCount);
     assert.ok(native.queries.find(row => row.policy === 'SQL allowed tags' && row.name === 'all').total < allCount);
+    progress('postgres-entered');
     database = await createPostgresTestDatabase(null, 'channel_access'); store = new DomainStore(database);
     linkedChildren = new PostgresLinkedChildrenStore({ database }); await linkedChildren.initialize();
     source = new SqliteDatabase(native.databaseFilename, { readOnly: true, requireMigrationHistory: true });
@@ -130,8 +200,10 @@ test('Channel and LiveTv visibility match actual native entities, one-hop channe
     library = new LibraryService({ store, linkedChildren, fileSystem: testFileSystem, userRoot: rows.BaseItems.find(row => idKey(row.Id) === idKey(id(2))),
       serverId: 'channel-visibility-component', configuration: {} });
     const state = await library.load(database, null, { baseRows: rows.BaseItems });
+    progress('postgres-ready');
     try {
       for (const sample of input.policies) {
+        progress('policy-entered', { policy: sample.name });
         const user = { Id: input.userId, Policy: sample.policy };
         for (const expected of native.results.filter(row => row.policy === sample.name)) {
           const item = state.byId.get(expected.id); assert.ok(item);
@@ -159,8 +231,9 @@ test('Channel and LiveTv visibility match actual native entities, one-hop channe
         }
         const visibility = { blockedTags: sample.policy.BlockedTags, allowedTags: sample.policy.AllowedTags, blockUnratedTypes: sample.policy.BlockUnratedItems };
         for (const request of input.queries) {
+          progress('recording-query-entered', { policy: sample.name, query: request.name });
           const expected = native.queries.find(row => row.policy === sample.name && row.name === request.name);
-          const actual = await store.run(async db => {
+          const actual = await observeRecordings(sample, request, expected, 'selector', () => store.run(async db => {
             const owner = await createPostgresRecordingQuery(db, { startindex: request.startIndex, limit: request.limit },
               { folderIds: [input.collectionId], userId: user.Id, visibility });
             try {
@@ -173,13 +246,17 @@ test('Channel and LiveTv visibility match actual native entities, one-hop channe
                 visibleIds: selected.map(row => state.byId.get(idKey(row.Id)))
                   .filter(item => visibleItem(item, user, state, { query: false, checkStandaloneParents: false })).map(item => idKey(item.Id)) };
             } finally { await owner.close(); }
-          });
+          }));
           report.queries.push({ policy: sample.name, name: request.name, actual, expected });
           assert.deepEqual(actual, { ids: expected.ids, total: expected.total, visibleIds: expected.visibleIds }, sample.name + ' ' + request.name);
-          const projected = await library.queryLiveTvRecordings({ startindex: request.startIndex, limit: request.limit }, { user, folderIds: [input.collectionId] });
+          progress('recording-selector-returned', { policy: sample.name, query: request.name });
+          const projected = await observeRecordings(sample, request, expected, 'dto', () =>
+            library.queryLiveTvRecordings({ startindex: request.startIndex, limit: request.limit }, { user, folderIds: [input.collectionId] }));
           assert.deepEqual({ ids: projected.Items.map(item => idKey(item.Id)), total: projected.TotalRecordCount },
             { ids: expected.visibleIds, total: expected.total }, sample.name + ' DTO ' + request.name);
+          progress('recording-query-returned', { policy: sample.name, query: request.name });
         }
+        progress('policy-returned', { policy: sample.name });
       }
     } finally { await state.dispose(); }
     const graph = await loadPostgresItemGraph(database, [id(21)]);
@@ -200,6 +277,9 @@ test('Channel and LiveTv visibility match actual native entities, one-hop channe
         await rm(privateRoot, { recursive: true, force: true }); }]]) {
       try { await action(); report.cleanup[name] = true; } catch (error) { errors.push(error); report.cleanup[name] = false; }
     }
+    if (t.signal.aborted && !failure) failure = t.signal.reason;
+    t.diagnostic(JSON.stringify({ phase: 'cleanup-returned', utc: new Date().toISOString(),
+      elapsedMs: performance.now() - startedAt, cancelled: t.signal.aborted, cleanup: report.cleanup }));
     await writeFile(path.join(output, 'comparison.json'), JSON.stringify({ ...report, passed: !failure && !errors.length,
       phaseAcceptance: false, releaseAcceptance: false, error: failure?.stack, cleanupErrors: errors.map(error => error.stack) }, null, 2) + '\n');
     if (!failure && errors.length) failure = new AggregateError(errors, 'Channel visibility cleanup failed.');

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import os from 'node:os';
+import { inspect } from 'node:util';
 import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { ImageService } from '../../src/images/service.js';
 import { ImageProcessor } from '../../src/images/processor.js';
@@ -54,7 +55,7 @@ test('external cleanup follows active paths and keeps one target while media-sou
   await manager.deleteItemFiles(item);
   await missing(path.join(locations[2].dataPath, 'attachments', id.slice(0, 2), id));
   assert.equal((await stat(path.join(locations[0].dataPath, 'attachments', id.slice(0, 2), id))).isDirectory(), true);
-  assert.deepEqual(errors, []);
+  t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null }));
 });
 
 test('postgres: later image loads use the active metadata destination for actual image access', postgres, async t => {

@@ -23,6 +23,7 @@ import { createTestRuntime } from '../helpers/runtime.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { LocalAdapter } from '../../plugins/local/adapter.js';
+import { HttpAdapter } from '../../plugins/http/adapter.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 
 const input = JSON.parse(readFileSync(new URL('./fixtures/media-versions/input.json', import.meta.url)));
@@ -200,12 +201,18 @@ test('HTTP PlaybackInfo reads real video shortcut files and persists refreshed r
   const adapter = await storage.createInstance('fixture', 'fixture', {});
   storage.registerType('state-local', configuration => LocalAdapter.open(configuration));
   await storage.createInstance('state-local', 'state-local', { root: programDataPath, writable: true });
+  storage.registerType('http-source', () => new HttpAdapter());
+  await storage.createInstance('http-source', 'http-source', {});
   const vfs = new VirtualFileSystem(storage);
   vfs.mount({ path: '/media', instanceId: 'fixture', capabilities: { create: true, replace: true, delete: true } });
   vfs.mount({ path: '/state', instanceId: 'state-local', capabilities: { create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true } });
+  vfs.mount({ path: '/http-source', instanceId: 'http-source', capabilities: {} });
+  vfs.mount({ path: '/https-source', instanceId: 'http-source', capabilities: {} });
   const identityMap = new IdentityAccessMap();
   identityMap.addPrefix({ identityRoot: 'Z:\\Library\\Shortcuts', accessRoot: '/media', style: 'windows', returnAccess: 'Isolated shortcut bytes.' });
   identityMap.addPrefix({ identityRoot: programDataPath, accessRoot: '/state', style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Isolated application state.' });
+  identityMap.addPrefix({ identityRoot: 'http:', accessRoot: '/http-source', style: 'uri', returnAccess: 'Isolated shortcut source retains its HTTP identity.' });
+  identityMap.addPrefix({ identityRoot: 'https:', accessRoot: '/https-source', style: 'uri', returnAccess: 'Isolated shortcut source retains its HTTPS identity.' });
   const errors = [], observedTargets = [];
   runtime = await createTestRuntime({ database: db, vfs, identityMap, programDataPath,
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },

@@ -535,17 +535,23 @@ export class FolderValidationService {
   async validateChildren(parent, { collectionType, signal, recursive = false,
     refreshChildMetadata = true, allowRemoveRoot = false, reportProgress = () => {}, ...metadataRefreshOptions } = {}) {
     const cleanups = [];
-    let failure;
+    let failure, failed = false;
     return this.#ownership.run(cleanups, () => this.loadContext.withScope(async () => {
       try { if (parent) this.#retain(parent);
         return await this.#validateChildren(parent, { collectionType, signal, recursive,
           refreshChildMetadata, allowRemoveRoot, reportProgress, ...metadataRefreshOptions });
-      } catch (error) { failure = error; throw error; }
+      } catch (error) { failure = error; failed = true; throw error; }
       finally {
         const errors=[];
         for(const cleanup of cleanups.reverse())try{await cleanup();}catch(error){errors.push(error);}
         try{await this.loadContext.linkedChildren.flushReleases();}catch(error){errors.push(error);}
-        if(errors.length)throw new AggregateError(failure?[failure,...errors]:errors,'Folder validation ownership cleanup failed.',failure?{cause:failure}:undefined);
+        if(errors.length) {
+          const error = new AggregateError(failed?[failure,...errors]:errors,'Folder validation ownership cleanup failed.',failed?{cause:failure}:undefined);
+          if (failed) for (const key of ['code', 'status', 'statusCode']) {
+            const value = failure?.[key]; if (value !== undefined) error[key] = value;
+          }
+          throw error;
+        }
       }
     }));
   }

@@ -9,6 +9,7 @@ import { filterEvidenceJson } from '../../tools/compat/filter-reference-output.j
 import { catalog, currentFilterCases } from './fixtures/filter-http-current/scenario.js';
 import { recordCurrentItemFilterNative } from './fixtures/filter-http-current/record-native.js';
 import { assertCompleteFilterHttpResponses, assertCompleteNativeFilterHttpRepeat } from './full-filter-wire.js';
+import { errorObservation } from '../helpers/error-observation.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const fixtureRoot = new URL('./fixtures/filter-http-current/', import.meta.url);
@@ -94,6 +95,12 @@ async function readPublishedRun(root, scenarioName, fixtureBytes, profile) {
   assert.equal(summary.integrityCheckPassedAllStages, true);
   assert.equal(summary.fullDatabaseCoverage.readGates.length, summary.cases);
   assert.ok(summary.fullDatabaseCoverage.readGates.every(entry => entry.stable && entry.beforeSha256 === entry.afterSha256));
+  for (const gate of summary.fullDatabaseCoverage.readGates) {
+    assert.equal(gate.diagnostic.tables.length, gate.userTables);
+    assert.ok(gate.diagnostic.tables.every(table => table.stable && table.beforeCount === table.afterCount
+      && table.beforeSha256 === table.afterSha256 && table.beforeSchemaSha256 === table.afterSchemaSha256));
+    assert.deepEqual(gate.diagnostic.changes, []);
+  }
   assert.equal(summary.fullDatabaseCoverage.baselineSha256, summary.fullDatabaseCoverage.afterShutdownSha256);
   assert.equal(summary.cleanShutdown, true);
   assert.deepEqual(summary.processResult, { code: 0, signal: null });
@@ -234,7 +241,7 @@ async function capture(name) {
     report.nativeExecutionRecorded = true; report.repeat = repeat;
     return { root, fixtureUrl, fixture: JSON.parse(fixtureBytes), binding: { cases: descriptor.cases },
       runs, inputs, nativeServerId, nativeHttp: runs[0].nativeHttp, nativeSummary: runs[0].summary, nativeStages: runs[0].nativeStages };
-  } catch (error) { report.error = { name: error.name, message: error.message, stack: error.stack }; throw error; }
+  } catch (error) { report.error = errorObservation(error); throw error; }
   finally { await writeFile(path.join(root, 'capture-report.json'), json(report), { flag: 'wx' }); }
 }
 

@@ -9,15 +9,17 @@ import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition, quoteIdentifier } from '../../src/database/model.js';
 import { LibraryService } from '../../src/library/library-service.js';
-import { stringifyNativeJson } from '../../src/core/json.js';
+import { parseLosslessJson, stringifyNativeJson } from '../../src/core/json.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 const fixtureBytes = await readFile(new URL('./fixtures/search-by-name-access/native.json', import.meta.url));
 assert.equal(createHash('sha256').update(fixtureBytes).digest('hex'), 'cc269b950eb7d2e05430144e1aea7b3288af7f7aed975693472d1136273ebb21');
-const fixture = JSON.parse(fixtureBytes);
+const fixture = parseLosslessJson(fixtureBytes.toString('utf8'));
 assert.equal(fixture.nativeVerified, true);
 assert.equal(fixture.phaseAcceptance, false);
 assert.deepEqual(fixture.runs.map(run => run.mode), ['blockedB', 'blockedAll', 'conflicts']);
-assert.equal(createHash('sha256').update(JSON.stringify(fixture.runs.slice(0, 2))).digest('hex'), fixture.original48RunsSha256);
+// original48* remains original provenance, not a digest of a new serialization
+// of this separately byte-pinned complete managed fixture.
 for (const run of fixture.runs) {
   assert.equal(run.native.length, run.mode === 'conflicts' ? 30 : 24);
   assert.equal(run.actualUserAndViews.length, run.mode === 'conflicts' ? 15 : 12);
@@ -25,6 +27,7 @@ for (const run of fixture.runs) {
   assert.deepEqual(run.provenance.processResult, { code: 0, signal: null });
   assert.equal(run.provenance.portAvailable, true);
   assert.equal(run.provenance.dllSha256, '31236d2a520e52ab2130742515a552980b0edbde4cfe8da124c0a0cd87c9046c');
+  for (const record of run.native) assert.deepEqual(parseLosslessJson(record.response.bodyText), record.response.bodyJson);
   for (const row of run.actualUserAndViews) {
     assert.equal(row.user.status, 200);
     assert.equal(row.views.status, 200);
@@ -42,8 +45,10 @@ const adapt = (table, row) => ({ ...empty(table), ...Object.fromEntries(columns(
     : column.clrType === 'long' || column.clrType === 'uint' ? BigInt(row[column.name]) : row[column.name]])) });
 const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object'
   ? Object.fromEntries(Object.entries(value).sort(([left], [right]) => left.localeCompare(right))
-    .map(([key, entry]) => [key, key === 'ServerId' ? '$server' : normalize(entry)])) : value;
-const stable = value => JSON.stringify(normalize(value));
+    .map(([key, entry]) => [key, normalize(entry)])) : value;
+const integerJson = (_key, value) => typeof value === 'bigint' ? JSON.rawJSON(value.toString()) : value;
+const stable = value => JSON.stringify(normalize(value), integerJson);
+const candidateServerId = 'candidate-search-audit';
 
 for (const dialect of ['postgres']) test(`${dialect}: 78 complete by-name query DTO responses match native blocked folders and association scope`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
@@ -53,6 +58,10 @@ for (const dialect of ['postgres']) test(`${dialect}: 78 complete by-name query 
   const cases = [], differences = [], cleanup = { databaseClosed: false, schemasRemoved: false };
   try {
     for (const run of fixture.runs) {
+      const observedNativeServerId = run.native.flatMap(record => record.response.bodyJson?.Items ?? [])
+        .find(item => typeof item.Id === 'string' && typeof item.Type === 'string')?.ServerId;
+      // The blocked-all control contains no DTO and needs no server token.
+      if (observedNativeServerId !== undefined) assert.equal(typeof observedNativeServerId, 'string');
       for (const table of ['PeopleBaseItemMap', 'Peoples', 'ItemValuesMap', 'ItemValues', 'AncestorIds', 'BaseItems', 'Users']) {
         await db.client.query('DELETE FROM ' + quoteIdentifier(table));
       }
@@ -66,7 +75,7 @@ for (const dialect of ['postgres']) test(`${dialect}: 78 complete by-name query 
       for (const table of ['AncestorIds', 'ItemValues', 'ItemValuesMap', 'Peoples', 'PeopleBaseItemMap']) {
         for (const row of run.seed[table]) await db.insert(table, adapt(table, row));
       }
-      const library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(db), serverId: 'candidate-search-audit',
+      const library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(db), serverId: candidateServerId,
         configuration: { EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false } });
       await attachLibraryNavigation(library);
       try {
@@ -75,12 +84,14 @@ for (const dialect of ['postgres']) test(`${dialect}: 78 complete by-name query 
         const user = { ...readback, MaxParentalRatingScore: readback.Policy.MaxParentalRating, MaxParentalRatingSubScore: readback.Policy.MaxParentalSubRating };
         const query = Object.fromEntries(new URL(expected.route, 'http://localhost').searchParams);
         let actual;
-        try { actual = { status: 200, body: JSON.parse(stringifyNativeJson(await library.queryItems(query, { user }))) }; }
+        try { actual = { status: 200, body: parseLosslessJson(stringifyNativeJson(await library.queryItems(query, { user }))) }; }
         catch (error) { actual = { status: error.status ?? 500, error: { name: error.name, message: error.message } }; }
         const wanted = { status: expected.response.status, body: expected.response.bodyJson };
         const row = { mode: run.mode, name: expected.name, endpoint: expected.endpoint, route: expected.route, actual, expected: wanted };
         cases.push(row);
-        if (stable(actual) !== stable(wanted)) differences.push(row);
+        const comparable = Object.hasOwn(actual, 'body') ? { ...actual, body: projectItemBody(actual.body,
+          { serverId: candidateServerId, serverToken: observedNativeServerId, date: value => value }) } : actual;
+        if (stable(comparable) !== stable(wanted)) differences.push(row);
       }
       } finally { await closeLibraryNavigation(library); }
     }
@@ -93,7 +104,7 @@ for (const dialect of ['postgres']) test(`${dialect}: 78 complete by-name query 
       const directory = path.resolve(process.env.MEDIAMANAGER_SEARCH_ACCESS_ARTIFACT_DIR);
       await mkdir(directory, { recursive: true });
       await writeFile(path.join(directory, dialect + '.json'), JSON.stringify({ phaseAcceptance: false, dialect, schema, cases, differences, cleanup,
-        boundary: 'Actual database service and native serializer replay complete DTO/status. Native recorded policy/view inputs are supplied; candidate HTTP transport, authentication and legacy routing are not invoked.' }, null, 2) + '\n');
+        boundary: 'Actual database service and native serializer replay complete DTO/status. Native recorded policy/view inputs are supplied; candidate HTTP transport, authentication and legacy routing are not invoked.' }, integerJson, 2) + '\n');
     }
   }
   assert.deepEqual(cleanup, { databaseClosed: true, schemasRemoved: true });

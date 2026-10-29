@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { inspect } from 'node:util';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { LibraryService } from '../../src/library/library-service.js';
 import { PostgresLinkedChildrenStore } from '../../src/library/postgres-linked-children.js';
@@ -13,6 +14,7 @@ const pg = { skip: !postgresTestConnectionString, timeout: 20000 };
 const folderType = 'MediaBrowser.Controller.Entities.Folder';
 const movieType = 'MediaBrowser.Controller.Entities.Movies.Movie';
 const id = number => 'ce710000-0000-0000-0000-' + String(number).padStart(12, '0');
+const providers = item => Object.fromEntries(item.ProviderIds instanceof Map ? item.ProviderIds : Object.entries(item.ProviderIds ?? {}));
 
 async function fixture(t) {
   const database = await createPostgresTestDatabase(null, 'folder_cohort', { max: 1 });
@@ -151,7 +153,8 @@ test('postgres: folder reattachment mutates its captured cache object and exclud
     await scope.valid(captured, 1n, true);
     await scope.removed(removed);
     await scope.reattach(async (_store, item) => {
-      assert.equal(item, captured);
+      assert.deepEqual({ id: idKey(item.Id), name: item.Name, providers: providers(item) },
+        { id: idKey(captured.Id), name: 'Captured', providers: { Imdb: 'shared' } });
       item.UserData = [{ CustomDataKey: 'shared' }];
     });
     assert.deepEqual(captured.UserData, [{ CustomDataKey: 'shared' }]);
@@ -161,11 +164,16 @@ test('postgres: folder reattachment mutates its captured cache object and exclud
     await scope.removed(removed);
     cached = unrelated;
     await scope.reattach(async (_store, item) => {
-      assert.notEqual(item, unrelated);
+      assert.equal(idKey(item.Id), idKey(captured.Id));
       assert.equal(item.Name, 'Captured');
+      assert.deepEqual(providers(item), { Imdb: 'shared' });
       item.UserData = [{ CustomDataKey: 'another' }];
     });
     assert.deepEqual(unrelated.UserData, []);
+    const children = await scope.accessible();
+    try {
+      await children.withItemAtOrdinal(1n, item => assert.deepEqual(item.UserData, [{ CustomDataKey: 'another' }]));
+    } finally { await children.close(); }
   });
   await f.released();
 });
@@ -181,22 +189,31 @@ test('postgres: folder user-data intersections span pages and retain earlier rea
       await scope.valid(item(number + 200, 'tt' + number), BigInt(number), true);
     }
     await scope.valid(item(900, 'different'), 900n, true);
-    let keyQueries = 0;
+    const keyQueries = [];
     const query = f.database.client.query;
     f.database.client.query = new Proxy(query, { apply(target, receiver, args) {
       const sql = typeof args[0] === 'string' ? args[0] : args[0]?.text;
-      if (sql?.includes('provider."ProviderIds" AS "__ProviderIds"')) keyQueries++;
+      if (sql?.includes('provider."ProviderIds" AS "__ProviderIds"')) {
+        const values = typeof args[0] === 'string' ? args[1] : args[0]?.values;
+        keyQueries.push([...values[0]]);
+      }
       return Reflect.apply(target, receiver, args);
     } });
     try {
       await scope.reattach(async (store, child) => {
+        if (seen.length === 0) {
+          const expected = [...Array.from({ length: 131 }, (_, index) => [id(index + 2), id(index + 202)]).flat(), id(900)];
+          assert.deepEqual(new Set(keyQueries.flat().map(idKey)), new Set(expected.map(idKey)),
+            'All removed and valid child key dependencies must be read before the first reattachment commits.');
+          assert.ok(keyQueries.every(ids => ids.length <= 128), 'Each dependency read stays within the owned page bound.');
+        }
         seen.push(idKey(child.Id));
         if (seen.length === 2) throw failure;
         await store.transaction(db => db.update('BaseItems', { Id: f.parent.Id }, { Name: 'First reattachment committed' }));
       });
     } finally {
       f.database.client.query = query;
-      assert.equal(keyQueries, 4, 'Key dependencies are loaded by bounded pages, not one native query per child.');
+      t.diagnostic(inspect({ keyQueries }, { depth: null, maxArrayLength: null }));
     }
   }), { message: failure.message });
   assert.deepEqual(seen, [idKey(id(202)), idKey(id(203))]);

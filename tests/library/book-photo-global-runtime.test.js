@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir, mkdtemp, rm, rename, stat, utimes } from 'node:fs/promises';
 import path from 'node:path';
@@ -11,6 +11,56 @@ import { parseLosslessJson } from '../../src/core/json.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
+import { executionObservation, observeExecutionPhase } from '../../tools/validation/execution-diagnostics.js';
+import { createBookPhotoCostObserver } from './book-photo-global-current-fixture.js';
+
+const candidateFixture = 'tests/library/book-photo-global-runtime.test.js';
+const costs = createBookPhotoCostObserver(candidateFixture);
+after(() => costs.close());
+const diagnosticsEnabled = () => path.isAbsolute(process.env.MEDIAMANAGER_TEST_DIAGNOSTICS_ROOT ?? '');
+const observe = (phase, operation) => costs.observe(phase, () => diagnosticsEnabled()
+  ? observeExecutionPhase('book-photo.candidate.' + phase, operation, { fixture: candidateFixture, ownerFixture: candidateFixture }) : operation());
+
+function observeRuntimeMethods(runtime) {
+  if (!diagnosticsEnabled()) return;
+  // These async operations/delegates retain their receiver and arguments.
+  // Calls through earlier captured closures can bypass these properties;
+  // nested/concurrent observations overlap and never establish zero work.
+  for (const [owner, method, phase] of [
+    [runtime.libraryScanHost, 'validateChildren', 'pipeline.validate-children'],
+    [runtime.libraryScanHost, 'refreshMetadata', 'pipeline.refresh-metadata'],
+    [runtime.metadataScanner, 'refreshLiveItem', 'pipeline.refresh-live-item'],
+    [runtime.metadata, 'refresh', 'pipeline.metadata-refresh'],
+    [runtime.metadata?.images, 'validate', 'pipeline.images.validate'],
+    [runtime.metadata?.images, 'merge', 'pipeline.images.merge'],
+    [runtime.metadata?.images, 'importLocalResult', 'pipeline.images.import-local'],
+    [runtime.metadata?.images, 'refreshProviders', 'pipeline.images.refresh-providers'],
+    [runtime.images, 'load', 'pipeline.image-load'],
+  ]) try {
+    const original = owner?.[method];
+    if (typeof original === 'function') owner[method] = function (...args) {
+      if (!diagnosticsEnabled()) return Reflect.apply(original, this, args);
+      return costs.observe(phase, () => {
+        let observation;
+        try {
+          observation = executionObservation('book-photo.candidate.' + phase, { fixture: candidateFixture, ownerFixture: candidateFixture });
+          void observation.record('started').catch(() => {});
+        } catch { return Reflect.apply(original, this, args); }
+        let result;
+        try { result = Reflect.apply(original, this, args); }
+        catch (error) {
+          void observation.record('failed', { resultKind: 'threw' }).catch(() => {}); throw error;
+        }
+        // Preserve synchronous admission and forward the original value/rejection.
+        void Promise.resolve(result).then(
+          () => observation.record('completed', { resultKind: 'returned' }),
+          () => observation.record('failed', { resultKind: 'threw' }),
+        ).catch(() => {});
+        return result;
+      });
+    };
+  } catch { /* Optional observation cannot replace setup or scan behavior. */ }
+}
 
 const inputFile = new URL('./fixtures/book-photo-global-runtime/input.json', import.meta.url);
 const inputBytes = await readFile(inputFile), matrix = JSON.parse(inputBytes);
@@ -168,30 +218,40 @@ for (const sample of matrix.cases) test('postgres: same-platform actual Book/Pho
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
   const { cases, output } = await actualNativeRun();
   const expected = cases.find(value => value.name === sample.name);
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'book-photo-global-'));
+  const directory = await observe('setup.directory', () => mkdtemp(path.join(os.tmpdir(), 'book-photo-global-')));
   let database, runtime;
+  const queryObservers = [];
   t.after(async () => {
-    try { await runtime?.close(); }
-    finally {
-      try { if (database) await dropPostgresTestDatabase(database); }
+    try {
+      try { if (runtime) await observe('close.runtime', () => runtime.close()); }
       finally {
-        assert.equal(path.dirname(path.resolve(directory)), path.resolve(os.tmpdir()));
-        assert.ok(path.basename(directory).startsWith('book-photo-global-'));
-        await rm(directory, { recursive: true });
+        try { if (database) await observe('close.database', () => dropPostgresTestDatabase(database)); }
+        finally {
+          assert.equal(path.dirname(path.resolve(directory)), path.resolve(os.tmpdir()));
+          assert.ok(path.basename(directory).startsWith('book-photo-global-'));
+          await observe('close.directory', () => rm(directory, { recursive: true }));
+        }
       }
-    }
+    } finally { for (const restore of queryObservers) restore(); }
   });
-  database = await createPostgresTestDatabase(null, 'book_photo_scan', { max: 1 });
+  database = await observe('setup.database', () => createPostgresTestDatabase(null, 'book_photo_scan', { max: 1 }));
+  queryObservers.push(costs.observePool(database, 'main'));
   const program = path.join(directory, 'program'), media = path.join(directory, 'original'), metadata = path.join(directory, 'sidecars');
-  await mkdir(path.join(media, 'Subjects'), { recursive: true });
-  await mkdir(path.join(metadata, 'Subjects'), { recursive: true });
-  await mkdir(path.join(directory, 'ancestors'));
+  await observe('setup.directories', async () => {
+    await mkdir(path.join(media, 'Subjects'), { recursive: true });
+    await mkdir(path.join(metadata, 'Subjects'), { recursive: true });
+    await mkdir(path.join(directory, 'ancestors'));
+  });
   const errors = [];
-  runtime = await createTestRuntime({ database, programDataPath: program, configurationDirectoryPath: path.join(directory, 'config'),
+  runtime = await observe('setup.runtime', () => createTestRuntime({ database, programDataPath: program, configurationDirectoryPath: path.join(directory, 'config'),
     storageConfiguration: path.join(directory, 'storage.json'), serverId: 'book-photo-global',
     configuration: { IsStartupWizardCompleted: true, UICulture: 'en-US', LibraryScanFanoutConcurrency: 1 },
-    onError: error => errors.push({ name: error.name, code: error.code, message: error.message }) });
-  for (const plugin of ['nfo', 'tmdb']) await runtime.plugins.setEnabled(plugin, false);
+    onError: error => errors.push({ name: error.name, code: error.code, message: error.message }) }));
+  queryObservers.push(costs.observePool(runtime.linkedChildren.relationDatabase, 'relation'));
+  observeRuntimeMethods(runtime);
+  await observe('setup.plugins', async () => {
+    for (const plugin of ['nfo', 'tmdb']) await runtime.plugins.setEnabled(plugin, false);
+  });
   const identityPath = process.platform === 'win32' ? path.win32 : path.posix;
   const style = process.platform === 'win32' ? 'windows' : 'posix';
   const identity = process.platform === 'win32' ? 'Z:\\FreshCompound' : '/fresh-compound';
@@ -200,17 +260,19 @@ for (const sample of matrix.cases) test('postgres: same-platform actual Book/Pho
   definition.instances.push({ id: 'fresh-original', type: 'local', config: { root: media, writable: true } },
     { id: 'fresh-sidecar', type: 'local', config: { root: metadata, writable: true } },
     { id: 'fresh-ancestors', type: 'local', config: { root: path.join(directory, 'ancestors'), writable: true } });
-  await storage.configure(definition);
-  await storage.bindPath({ identityRoot: identityPath.parse(identity).root, instanceId: 'fresh-ancestors', purpose: 'library', style,
-    caseSensitive: process.platform !== 'win32', returnAccess: 'Explicit isolated ancestor search; no host-drive fallback.', capabilities });
-  for (const [purpose, instanceId] of [['library', 'fresh-original'], ['metadata', 'fresh-sidecar']]) {
-    await storage.bindPath({ identityRoot: identity, instanceId, purpose, style, caseSensitive: process.platform !== 'win32',
-      returnAccess: 'Independent fresh compound ' + purpose + ' storage.', capabilities });
-  }
+  await observe('setup.storage', async () => {
+    await storage.configure(definition);
+    await storage.bindPath({ identityRoot: identityPath.parse(identity).root, instanceId: 'fresh-ancestors', purpose: 'library', style,
+      caseSensitive: process.platform !== 'win32', returnAccess: 'Explicit isolated ancestor search; no host-drive fallback.', capabilities });
+    for (const [purpose, instanceId] of [['library', 'fresh-original'], ['metadata', 'fresh-sidecar']]) {
+      await storage.bindPath({ identityRoot: identity, instanceId, purpose, style, caseSensitive: process.platform !== 'win32',
+        returnAccess: 'Independent fresh compound ' + purpose + ' storage.', capabilities });
+    }
+  });
   assert.deepEqual((await database.rows('BaseItems')).filter(row => row.Path?.startsWith(identity)), []);
-  await runtime.libraryConfiguration.addVirtualFolder('Subjects', sample.collectionType,
+  await observe('setup.folder', () => runtime.libraryConfiguration.addVirtualFolder('Subjects', sample.collectionType,
     { ...defaultLibraryOptions(), SaveLocalMetadata: sample.saveLocalMetadata, EnablePhotos: sample.enablePhotos,
-      PathInfos: [{ Path: identityPath.join(identity, 'Subjects') }] }, false);
+      PathInfos: [{ Path: identityPath.join(identity, 'Subjects') }] }, false));
   // Only media-file timestamps use a past window. Sidecar writes and
   // DateLastSaved keep their real wall clocks for OPF/Comic HasChanged.
   const mediaTimeAnchor = Math.floor(Date.now() / 1000) * 1000;
@@ -218,22 +280,23 @@ for (const sample of matrix.cases) test('postgres: same-platform actual Book/Pho
     await t.test(step.name, async () => {
       const mediaModified = new Date(mediaTimeAnchor - (sample.steps.length - index) * mutationStepMs);
       assert.ok(mediaModified.getTime() < Date.now());
-      const mediaMutationInputs = await applyChanges(step.changes, { media, metadata, mediaModified });
+      const mediaMutationInputs = await observe('step.apply-changes', () => applyChanges(step.changes, { media, metadata, mediaModified }));
       assert.deepEqual(mediaMutationInputs.map(value => value.path), expected.steps[index].mediaMutationInputs.map(value => value.path));
-      const result = await runtime.libraryScanner.runCompleteScan();
-      const actual = await snapshot(runtime, database, { identity, program });
-      await writeFile(path.join(output, `${sample.name}-${index}-candidate.json`), json({
+      const result = await observe('step.scan', () => runtime.libraryScanner.runCompleteScan());
+      const actual = await observe('step.snapshot', () => snapshot(runtime, database, { identity, program }));
+      // Record includes its original three additional row reads and JSON write.
+      await observe('step.record', async () => writeFile(path.join(output, `${sample.name}-${index}-candidate.json`), json({
         case: sample.name, step: step.name, mediaTimeAnchor: new Date(mediaTimeAnchor).toISOString(),
         mediaMutationTime: mediaModified.toISOString(), mediaMutationInputs, actual, errors, result, programRoot: program,
         BaseItems: await database.rows('BaseItems'), AncestorIds: await database.rows('AncestorIds'),
-        BaseItemImageInfos: await database.rows('BaseItemImageInfos') }));
+        BaseItemImageInfos: await database.rows('BaseItemImageInfos') })));
       assert.equal(expected.steps[index].error, null);
       assert.equal(expected.steps[index].scanException, null);
       assert.deepEqual(actual, expected.steps[index].items);
       if (sample.name === 'book-comic-internal' && step.name === 'replace-comic-input') {
         assert.equal(actual.find(item => item.path === '$MEDIA/Subjects/Story.cbz')?.name, 'Changed Comic Title');
       }
-      await writeFile(path.join(output, `${sample.name}-${index}-comparison.json`), json({ passed: true }));
+      await observe('step.record-comparison', () => writeFile(path.join(output, `${sample.name}-${index}-comparison.json`), json({ passed: true })));
     });
   }
   assert.ok((await stat(media)).isDirectory());

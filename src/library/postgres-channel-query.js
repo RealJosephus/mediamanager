@@ -12,6 +12,15 @@ const countValue = value => {
   return count;
 };
 
+/** List.GetRange validates the range even when the installed catalog is empty. */
+export function channelCatalogRange(query, total) {
+  const startIndex = query.StartIndex ?? 0;
+  const limit = query.Limit > 0 ? Math.min(query.Limit, total - startIndex) : total - startIndex;
+  const invalid = startIndex < 0 ? 'index' : limit < 0 ? 'count' : null;
+  if (invalid) throw Object.assign(new RangeError(`Non-negative number required. (Parameter '${invalid}')`), { status: 400, statusCode: 400 });
+  return { startIndex, limit };
+}
+
 /** CLR OrderBy(string) is stable for culture-equal provider names. The input
  * is the installed extension inventory, rather than library candidates. */
 export async function orderPostgresChannelProviders(database, providers, culture = 'en-US') {
@@ -116,9 +125,7 @@ export async function createPostgresChannelCatalog(database, { culture = 'en-US'
       async select(query, options) {
         assertOpen(); const where = `channel.allowed IS TRUE${options.userId ? ' AND channel.enabled IS TRUE' : ''}`;
         const total = countValue((await database.client.query(`SELECT count(*)::bigint AS count FROM ${table} channel WHERE ${where}`)).rows[0].count);
-        const index = query.StartIndex ?? 0, limit = query.Limit > 0 ? Math.min(query.Limit, total - index) : total - index;
-        const invalid = index < 0 ? 'index' : limit < 0 ? 'count' : null;
-        if (invalid) throw Object.assign(new RangeError(`Non-negative number required. (Parameter '${invalid}')`), { status: 400, statusCode: 400 });
+        const { startIndex: index, limit } = channelCatalogRange(query, total);
         return Object.freeze({ total, startIndex: index, async page(offset = 0) {
           assertOpen();
           if (!Number.isSafeInteger(offset) || offset < 0) throw new TypeError('Channel pages require a nonnegative offset.');

@@ -9,10 +9,12 @@ import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { fileURLToPath } from 'node:url';
 import { currentNativeReference } from '../../../../tools/compat/current-native-reference.js';
-import { createPrivateFilterOutput } from '../../../../tools/compat/filter-reference-output.js';
+import { createPrivateFilterOutput, filterEvidenceJson } from '../../../../tools/compat/filter-reference-output.js';
 import { describeFile } from '../../../../tools/validation/inventory.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../../../tools/validation/paths.js';
 import { catalog, currentFilterCases } from './scenario.js';
+import { describeReadDifference, retainReadDiagnosticRows } from './read-diagnostics.js';
+import { errorObservation } from '../../../helpers/error-observation.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const repoRoot = fileURLToPath(new URL('../../../../', import.meta.url));
@@ -35,7 +37,7 @@ export async function recordCurrentItemFilterNative(scenarioName, destination, p
   const fixturePath = path.join(repoRoot, descriptor.fixture), fixtureBytes = await readFile(fixturePath);
   const originalFixture = JSON.parse(fixtureBytes);
   const privateOutput = await createPrivateFilterOutput(destination);
-  let failure;
+  let failure, failed = false, nativeOwnerClosed = true;
   try {
     const current = await currentNativeReference({ fixtureUserId: originalFixture.userId });
     privateOutput.addSecret(current.accessToken);
@@ -325,9 +327,12 @@ export async function recordCurrentItemFilterNative(scenarioName, destination, p
         const selected = (sql, parameters) => database.prepare(sql).all(...parameters);
         const tableDefinitions = database.prepare(`SELECT "name", "sql" FROM "sqlite_master"
           WHERE "type" = 'table' AND "name" NOT LIKE 'sqlite_%' ORDER BY "name"`).all();
+        const diagnosticTables = [];
         const tableSummaries = tableDefinitions.map(definition => {
           const rows = canonicalRows(database.prepare(`SELECT * FROM ${quote(definition.name)}`).all());
           const columns = database.prepare(`PRAGMA table_info(${quote(definition.name)})`).all();
+          diagnosticTables.push({ name: definition.name, rows,
+            primaryKey: columns.filter(column => column.pk > 0).toSorted((a, b) => a.pk - b.pk).map(column => column.name) });
           const foreignKeys = database.prepare(`PRAGMA foreign_key_list(${quote(definition.name)})`).all();
           const indexes = database.prepare(`PRAGMA index_list(${quote(definition.name)})`).all()
             .map(index => ({ ...index,
@@ -360,6 +365,7 @@ export async function recordCurrentItemFilterNative(scenarioName, destination, p
         const complete = { tableSummaries, sequences,
           sequencesSha256: sha256Bytes(Buffer.from(stable(sequences))), pragmas, foreignKeyCheck, integrityCheck };
         complete.sha256 = sha256Bytes(Buffer.from(stable(complete)));
+        retainReadDiagnosticRows(complete, diagnosticTables);
         return {
           baseItems: selected(`SELECT "Id", "OwnerId", "PrimaryVersionId", "ExtraType", "CustomRating", "OfficialRating",
             "InheritedParentalRatingValue", "InheritedParentalRatingSubValue", "PresentationUniqueKey", "Tags", "DateLastSaved"
@@ -604,12 +610,15 @@ export async function recordCurrentItemFilterNative(scenarioName, destination, p
     let fullDatabaseBaseline;
     let fullDatabaseAfterRun;
     let fullDatabaseAfterShutdown;
+    let sourceUnchanged = false;
     let readiness = { startupComplete: false, httpReady: false, consecutiveHttpSuccesses: 0, attempts: 0 };
     let lifecycle = { shutdownStatus: null, processResult: { code: null, signal: null },
       pidGone: false, portAvailable: false, databaseUnlocked: false, attempts: 0 };
-    let outcomeError;
+    let outcomeError, outcomeFailed = false;
+    const cleanupErrors = [];
     try {
       instance = await startReference(selectedPort);
+      nativeOwnerClosed = false;
       nativeLaunch.command = [dotnet, ...instance.arguments];
       await instance.ready();
       readiness = { httpReady: true };
@@ -727,7 +736,8 @@ export async function recordCurrentItemFilterNative(scenarioName, destination, p
           afterSha256: databaseAfterCaseReads.sha256,
           userTables: databaseBeforeCaseReads.tableSummaries.length,
           sequenceRows: databaseBeforeCaseReads.sequences.length,
-          stable: stableAcrossReads });
+          stable: stableAcrossReads,
+          diagnostic: describeReadDifference(databaseBeforeCaseReads, databaseAfterCaseReads) });
         assert.equal(stableAcrossReads, true, `${testCase.name}: native HTTP reads mutated the complete database.`);
       }
       if (['official-rating-range', 'rating-permissions', 'tag-permissions'].includes(seedScenario)) {
@@ -737,23 +747,43 @@ export async function recordCurrentItemFilterNative(scenarioName, destination, p
       }
       stages.afterReads = { database: selectedDatabaseSnapshot() };
     } catch (error) {
-      outcomeError = error;
+      outcomeFailed = true; outcomeError = error;
     } finally {
-      if (instance) lifecycle = await stopReference(instance, token, origin, setupRecords);
+      if (instance) {
+        try {
+          lifecycle = await stopReference(instance, token, origin, setupRecords);
+          nativeOwnerClosed = lifecycle.pidGone && lifecycle.portAvailable && lifecycle.databaseUnlocked;
+          if (!nativeOwnerClosed || lifecycle.shutdownStatus !== 204) cleanupErrors.push(Object.assign(
+            new Error('Current Native filter owners did not complete a clean shutdown.'), { lifecycle }));
+        } catch (error) { cleanupErrors.push(error); }
+      }
       try { fullDatabaseAfterRun = completeDatabaseSnapshot(); }
-      catch (error) { outcomeError ??= error; }
+      catch (error) { cleanupErrors.push(error); }
       if (baselineDatabaseBytes && lifecycle.pidGone && lifecycle.portAvailable && lifecycle.databaseUnlocked) {
         try { await restoreSerializedDatabase(baselineDatabaseBytes); }
-        catch (error) { outcomeError ??= error; }
+        catch (error) { cleanupErrors.push(error); }
       }
-      stages.before ??= { database: selectedDatabaseSnapshot() };
-      stages.afterReads ??= { database: selectedDatabaseSnapshot() };
-      stages.afterShutdown = { database: selectedDatabaseSnapshot() };
+      for (const stage of ['before', 'afterReads', 'afterShutdown']) {
+        try { stages[stage] ??= { database: selectedDatabaseSnapshot() }; }
+        catch (error) { cleanupErrors.push(error); }
+      }
       try { fullDatabaseAfterShutdown = completeDatabaseSnapshot(); }
-      catch (error) { outcomeError ??= error; }
+      catch (error) { cleanupErrors.push(error); }
+      try { nativeLaunch.after = await executionInputs(); }
+      catch (error) { cleanupErrors.push(error); }
+      try {
+        sourceUnchanged = await sha256File(sourceDatabase) === sourceSummary.sourceDatabaseSha256;
+        assert.equal(sourceUnchanged, true, 'The current stopped source database changed.');
+      } catch (error) { cleanupErrors.push(error); }
+      try { await current.finish(); }
+      catch (error) { cleanupErrors.push(error); }
+    }
+    if (cleanupErrors.length) {
+      outcomeError = new AggregateError(outcomeFailed ? [outcomeError, ...cleanupErrors] : cleanupErrors,
+        'Current Native filter recording and cleanup failed.', outcomeFailed ? { cause: outcomeError } : undefined);
+      outcomeFailed = true;
     }
 
-    nativeLaunch.after = await executionInputs();
     const executionInputsUnchanged = stable(nativeLaunch.before) === stable(nativeLaunch.after);
     const recorderSha256 = await sha256File(recorderPath);
     const fixtureSha256 = sha256Bytes(fixtureBytes);
@@ -767,15 +797,15 @@ export async function recordCurrentItemFilterNative(scenarioName, destination, p
     const completeDatabaseRestored = Boolean(fullDatabaseBaseline && fullDatabaseAfterShutdown)
       && stable(fullDatabaseBaseline) === stable(fullDatabaseAfterShutdown);
     const completeDatabaseReadStableAndRestored = completeDatabaseReadStable && completeDatabaseRestored;
-    const selectedDatabaseStable = stable(stages.before.database) === stable(stages.afterReads.database)
+    const selectedDatabaseStable = ['before', 'afterReads', 'afterShutdown'].every(stage => stages[stage]?.database)
+      && stable(stages.before.database) === stable(stages.afterReads.database)
       && stable(stages.afterReads.database) === stable(stages.afterShutdown.database);
-    const foreignKeyCheckPassedAllStages = Object.values(stages)
-      .every(stage => stage.database.foreignKeyCheck.length === 0);
+    const foreignKeyCheckPassedAllStages = ['before', 'afterReads', 'afterShutdown']
+      .every(name => stages[name]?.database.foreignKeyCheck.length === 0);
     const fullDatabaseSnapshots = [fullDatabaseBaseline, fullDatabaseAfterRun, fullDatabaseAfterShutdown].filter(Boolean);
     const integrityCheckPassedAllStages = fullDatabaseSnapshots.length === 3
       && fullDatabaseSnapshots.every(snapshot => snapshot.integrityCheck.every(row => Object.values(row).includes('ok'))
         && snapshot.foreignKeyCheck.length === 0);
-    const sourceUnchanged = await sha256File(sourceDatabase) === sourceSummary.sourceDatabaseSha256;
     const invocation = {
       scenario: scenarioName,
       identity: 'same-workflow-current-native-filter-http',
@@ -799,7 +829,7 @@ export async function recordCurrentItemFilterNative(scenarioName, destination, p
       && Object.values(negativeControls.artifactManifest).every(Boolean);
     const summary = {
       schemaVersion: 1, identity: 'same-workflow-current-native-filter-http',
-      passed: !outcomeError && records.length === descriptor.expectedRecords
+      passed: !outcomeFailed && records.length === descriptor.expectedRecords
         && completeDatabaseReadStableAndRestored && selectedDatabaseStable && foreignKeyCheckPassedAllStages
         && integrityCheckPassedAllStages && readiness.httpReady && lifecycle.shutdownStatus === 204
         && lifecycle.processResult?.code === 0 && lifecycle.processResult?.signal == null
@@ -810,6 +840,7 @@ export async function recordCurrentItemFilterNative(scenarioName, destination, p
       fullDatabaseCoverage: { userTables: fullDatabaseBaseline?.tableSummaries.length ?? null,
         baselineSha256: fullDatabaseBaseline?.sha256 ?? null, afterRunSha256: fullDatabaseAfterRun?.sha256 ?? null,
         afterShutdownSha256: fullDatabaseAfterShutdown?.sha256 ?? null, readGates: fullDatabaseReadGates,
+        baseline: fullDatabaseBaseline, afterRun: fullDatabaseAfterRun, afterShutdown: fullDatabaseAfterShutdown,
         readStable: completeDatabaseReadStable, restored: completeDatabaseRestored },
       foreignKeyCheckPassedAllStages, integrityCheckPassedAllStages, readiness,
       cleanShutdown: lifecycle.shutdownStatus === 204, processResult: lifecycle.processResult,
@@ -817,10 +848,10 @@ export async function recordCurrentItemFilterNative(scenarioName, destination, p
       recorderSha256, fixtureSha256, scenarioDefinitionSha256, sourceSummary, sourceUnchanged,
       nativeLaunch, executionInputsUnchanged, boundArtifacts, negativeControls,
       baselineRestoration: 'The private post-authentication baseline is restored only after Native has stopped; each real HTTP batch is checked before restoration.',
+      cleanupErrors: cleanupErrors.map(error => errorObservation(error)), nativeOwnerClosed,
       historicalRecordingReused: false, phaseAcceptance: false, releaseAcceptance: false,
-      error: outcomeError ? { name: outcomeError.name, message: outcomeError.message, stack: outcomeError.stack } : null,
+      error: outcomeFailed ? errorObservation(outcomeError) : null,
     };
-    await current.finish();
     await writeFile(summaryPath, json(summary), { flag: 'wx' });
     await writeFile(provenancePath, json({ schemaVersion: 1, identity: summary.identity, invocation,
       fixture: { path: descriptor.fixture, sha256: fixtureSha256 }, recorderSha256, scenarioDefinitionSha256,
@@ -831,12 +862,22 @@ export async function recordCurrentItemFilterNative(scenarioName, destination, p
     }), { flag: 'wx' });
     if (!summary.passed) throw new Error(`Current Native item-filter recording failed: ${JSON.stringify(summary.error ?? summary)}`);
   } catch (error) {
-    failure = privateOutput.publicError(error);
+    failed = true; failure = privateOutput.publicError(error instanceof Error ? error : new Error(String(error), { cause: error }));
+    failure.nativeOwnerClosed = nativeOwnerClosed;
     await mkdir(privateOutput.root, { recursive: true });
     await writeFile(path.join(privateOutput.root, 'recording-error.json'), json({ name: failure.name,
-      message: failure.message, historicalRecordingReused: false, phaseAcceptance: false, releaseAcceptance: false }), { flag: 'wx' });
+      message: failure.message, error: errorObservation(error), nativeOwnerClosed,
+      historicalRecordingReused: false, phaseAcceptance: false, releaseAcceptance: false }), { flag: 'wx' });
   }
-  finally { await privateOutput.publishAndClose(); }
-  if (failure) throw failure;
+  finally {
+    if (nativeOwnerClosed) await privateOutput.publishAndClose();
+    else {
+      await mkdir(destination);
+      await writeFile(path.join(destination, 'recording-error.json'), filterEvidenceJson({ name: failure?.name,
+        message: failure?.message, nativeOwnerClosed: false, privateRootRetained: true,
+        historicalRecordingReused: false, phaseAcceptance: false, releaseAcceptance: false }), { flag: 'wx' });
+    }
+  }
+  if (failed) throw failure;
   return destination;
 }

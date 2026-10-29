@@ -10,7 +10,10 @@ The Node consumer uses the Native pre-operation rows in isolated PostgreSQL/VFS
 state, deletes the Playlist closure, then sends the actual DELETE request to
 the Node HTTP application. It compares status, content type, response body,
 all persistent values, links, file hashes, lookups and ordered side effects.
-Only the verified W3C trace identifier uses the existing response projection.
+Only the nonempty opaque request trace uses the current shared response projection
+in `tests/http/deletion-response-projection.js`; it verifies the parsed body and
+preserves bytes outside that top-level value. The historical format-specific
+normalizers remain sealed and are not used by current consumers.
 The driver's own state root and filesystem separators relocate to `$STATE`;
 Data is parsed for relocation, not claimed as raw SQL TEXT byte evidence.
 

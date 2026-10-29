@@ -4,6 +4,7 @@ import { mkdir, mkdtemp, readFile, realpath, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { inspect } from 'node:util';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { describeFile } from '../../tools/validation/inventory.js';
@@ -29,7 +30,7 @@ const sourcePaths = [
 
 test('current native UserRoot child-ID replay returns manager aliases, original order and complete DTO values in PostgreSQL', {
   skip: !enabled, timeout: 720000,
-}, async () => {
+}, async t => {
   const output = path.join(validationOutputRoot(), 'root-child-id-replay-' + randomUUID()); assertValidationOutputChild(output);
   await mkdir(output, { recursive: true });
   const parent = await realpath(tmpdir()), privateRoot = await realpath(await mkdtemp(path.join(parent, 'mm-root-ids-')));
@@ -38,7 +39,7 @@ test('current native UserRoot child-ID replay returns manager aliases, original 
   const report = { schemaVersion: 1, inputSha256: sha(inputBytes), captures: [], cases: [], differences: [], cleanup: {},
     phaseAcceptance: false, releaseAcceptance: false,
     scope: 'Separate neutral input over actual UserRoot.Children/GetChildren, LibraryManager.GetCollectionFolders and DtoService, independently repeated; formal PostgreSQL runtime navigation and queryItems. No complete private Children graph, GC recovery or final release acceptance.' };
-  let current, sourceDatabase, first, fixture, failure;
+  let current, sourceDatabase, first, fixture, failed = false, failure;
   const unchanged = async (filename, expected) => {
     const value = await describeFile(filename); assert.equal(value.available, true); assert.equal(value.sha256, expected, filename); return value;
   };
@@ -115,8 +116,8 @@ test('current native UserRoot child-ID replay returns manager aliases, original 
     const lock = report.pluginHostLease;
     compare('PG and persistent files after runtime close', report.afterShutdown, { database: before.database,
       files: Object.fromEntries(Object.entries(before.files).filter(([filename]) => filename !== lock.path)) });
-    assert.deepEqual(fixture.errors, []); assert.deepEqual(report.differences, []); report.phaseAcceptance = true;
-  } catch (error) { failure = error; }
+    assert.deepEqual(report.differences, []); report.phaseAcceptance = true;
+  } catch (error) { failed = true; failure = error; }
   finally {
     const failures = [], attempt = async (name, action) => {
       try { await action(); report.cleanup[name] = true; }
@@ -130,10 +131,14 @@ test('current native UserRoot child-ID replay returns manager aliases, original 
     if (first) await attempt('controlledSeedUnchanged', () => unchanged(first.databaseFilename, first.databaseSha256));
     for (const source of report.sourceBindings ?? []) await attempt('source:' + path.basename(source.path), () => unchanged(source.path, source.sha256));
     await attempt('allPrivateDatabasesAndInstanceRemoved', () => removePrivateRoot(privateRoot, parent, 'mm-root-ids-'));
-    if (failures.length) failure = new AggregateError([...(failure ? [failure] : []), ...failures], 'Root child-ID cleanup failed.');
-    report.passed = !failure;
-    if (failure) { report.phaseAcceptance = false; report.error = errorRecord(failure); }
+    if (failures.length) {
+      failure = new AggregateError([...(failed ? [failure] : []), ...failures], 'Root child-ID cleanup failed.', { cause: failed ? failure : failures[0] });
+      failed = true;
+    }
+    t.diagnostic(inspect({ runtimeErrors: fixture?.errors }, { depth: null, maxArrayLength: null }));
+    report.passed = !failed;
+    if (failed) { report.phaseAcceptance = false; report.error = errorRecord(failure); }
     await save();
   }
-  if (failure) throw failure;
+  if (failed) throw failure;
 });

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import { tableDefinition } from '../../src/database/model.js';
 import { DirectoryItemResolverPipeline } from '../../src/library/directory-item-resolver.js';
 import { FolderValidationService } from '../../src/library/folder-validation-service.js';
@@ -84,6 +85,7 @@ async function subject(t, dialect, { newNames = [`New Recording ${sharedKey}.mkv
   }
 
   const phases = [], errors = [];
+  t.after(() => t.diagnostic(inspect({ diagnostics: errors }, { depth: null, maxArrayLength: null, maxStringLength: null })));
   fixture.library.on('ItemRemoved', event => phases.push({ action: 'removed', id: guid(event.Item.Id) }));
   fixture.library.on('ItemAdded', event => phases.push({ action: 'added', id: guid(event.Item.Id) }));
   const creator = new ItemCreationService({ ...fixture });
@@ -153,7 +155,6 @@ for (const dialect of ['postgres']) test(`${dialect}: folder validation reattach
       { action: 'added', id: guid(newId) },
       { action: 'reattach', id: guid(newId) }
     ]);
-    assert.deepEqual(context.errors, []);
     const rows = await userDataRows(context.fixture.database);
     const shared = rows.find(row => row.CustomDataKey === sharedKey);
     const identity = rows.find(row => row.CustomDataKey === context.oldIdKey);

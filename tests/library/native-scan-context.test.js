@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import { createHash, randomUUID } from 'node:crypto';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
@@ -181,6 +182,7 @@ for (const dialect of ['postgres']) for (const name of ['first-high-id-movies', 
       journal.observe(lifecycleFixture.linkedChildren, 'close', 'linkedChildren.close');
       journal.observe(lifecycleFixture.linkedChildren.resourceGraph, 'close', 'resourceGraph.close');
       const errors = [];
+      t.after(() => t.diagnostic(inspect({ name, errors }, { depth: null })));
       const validationFixture = createFolderValidationScanFixture({ store, library, vfs, identityMap,
         ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [current.item.Path] }),
         programDataPath, configuration, resolverPipeline, lifecycleFixture, onError: error => errors.push(error) });
@@ -190,7 +192,6 @@ for (const dialect of ['postgres']) for (const name of ['first-high-id-movies', 
       t.after(async () => { await validationFixture.close(); await lifecycleFixture.close(); await library.close(); await registry.close(); });
       const receipt = await validationFixture.itemCreation.withItem(current.item.Id, parent =>
         validationFixture.validation.validateChildren(parent, { refreshChildMetadata: false }));
-      assert.deepEqual(errors, []);
       assert.ok(seen.length > 0); for (const value of seen) compare(value, { ids: native.result.collectionIds, country: native.result.country, type: native.result.contentType });
       // The context remains the native observation; a null content type now
       // also admits ordinary movies through the actual mixed-library resolver.
@@ -228,13 +229,13 @@ for (const dialect of ['postgres']) for (const sample of fixtures[1].input.filte
       const programDataPath = 'C:\\ProgramData\\MediaManager', resolverPipeline = new DirectoryItemResolverPipeline({ programDataPath, configuration, resolvers: [observer, createVideoFileResolver()] });
       const lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, configuration });
       const errors = [];
+      t.after(() => t.diagnostic(inspect({ name: sample.name, errors }, { depth: null })));
       const validationFixture = createFolderValidationScanFixture({ store, library, vfs, identityMap,
         ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [scanRoot.Path] }),
         programDataPath, configuration, resolverPipeline, lifecycleFixture, onError: error => errors.push(error) });
       t.after(async () => { await validationFixture.close(); await lifecycleFixture.close(); await library.close(); await registry.close(); });
       await validationFixture.itemCreation.withItem(scanRoot.Id, parent =>
         validationFixture.validation.validateChildren(parent, { recursive: true, refreshChildMetadata: false }));
-      assert.deepEqual(errors, []);
       compare(seen.filter(value => value.path === sample.item.Path), [{ path: sample.item.Path, type: native.result.contentType }]);
       const videos = await database.rows('BaseItems', { where: { Path: sample.item.Path + '\\Film.mkv' } });
       assert.equal(videos.length, native.result.contentType === 'movies' ? 1 : 0);

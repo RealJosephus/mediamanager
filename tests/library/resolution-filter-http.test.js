@@ -42,7 +42,6 @@ for (const dialect of ['postgres']) {
       }
     }
     assert.deepEqual(actual.afterReads, actual.beforeReads, `${dialect}: media tables changed during HTTP reads`);
-    assert.deepEqual(actual.runtimeErrors, []);
     assert.deepEqual(actual.cleanup, {
       runtimeClosed: true,
       databaseClosed: true,

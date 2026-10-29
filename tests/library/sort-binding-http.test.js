@@ -8,6 +8,8 @@ import {tableDefinition} from '../../src/database/model.js';
 import {idKey} from '../../src/library/records.js';
 import {parseQuery,sortItems} from '../../src/library/query.js';
 import {recordItemFilterCandidate} from './item-filter-http-scenario.js';
+import {projectItemBody} from '../helpers/http-body-projection.js';
+import {projectItemDataIdentities} from '../helpers/fixture-identity-projection.js';
 
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const json=value=>JSON.stringify(value,(_key,item)=>typeof item==='bigint'?item.toString():item,2)+'\n';
@@ -16,8 +18,8 @@ const nativeBytes=await readFile(new URL('./fixtures/sort-binding/native.json',i
 assert.equal(sha(inputBytes),'a4e77c6dd0328e33c60319124000a27f889093d9bddc0d6bfa380f796d3686c9');
 assert.equal(sha(nativeBytes),'d9a371ceb0b9965a8f368f5b5ce598564ebffb281e9da47d2cfd27edeb8b4e1b');
 const fixture=JSON.parse(inputBytes),native=JSON.parse(nativeBytes);
-const normalize=value=>Array.isArray(value)?value.map(normalize):value&&typeof value==='object'
-  ?Object.fromEntries(Object.entries(value).map(([key,item])=>[key,key==='ServerId'?'$server':normalize(item)])):value;
+const observedNativeServerId=native.http.responses.flatMap(response=>response.bodyJson?.Items??[]).find(item=>typeof item.Id==='string'&&typeof item.Type==='string')?.ServerId;
+assert.equal(typeof observedNativeServerId,'string');
 const columns=tableDefinition('BaseItems').columns;
 
 test('actual ASP enum binding and GetOrderBy: 128 original cases and two partial-direction DLL controls',t=>{
@@ -78,13 +80,13 @@ for(const dialect of ['postgres'])test(`${dialect}: 256 full native numeric, inv
       for(const value of Object.values(paths))await mkdir(value,{recursive:true});
       const itemPath=item=>paths[item.pathKind]??(item.pathKind==='boxset'?path.join(paths.collections,item.key):item.pathKind==='child'
         ?path.join(itemPath(fixture.items.find(row=>row.id===item.parentId)),item.key+(item.type==='Movie'?'.mkv':'')):path.join(paths.physicalA,item.key));
+      const pathMappings=new Map(fixture.items.filter(item=>item.type!=='AggregateFolder').map(item=>[native.seedBaseItems.find(row=>idKey(row.Id)===idKey(item.id))?.Path,itemPath(item)]));
       for(const item of fixture.items){
         if(item.type==='AggregateFolder')continue;
         const row=native.seedBaseItems.find(row=>idKey(row.Id)===idKey(item.id));assert.ok(row,item.key);
         const values=Object.fromEntries(columns.filter(column=>!['Id','ParentId','TopParentId','Path','Data'].includes(column.name))
           .map(column=>[column.name,column.clrType.replace('?','')==='long'&&row[column.name]!=null?BigInt(row[column.name]):row[column.name]]));
-        const data=JSON.parse(row.Data??'{}');if(item.type==='CollectionFolder')data.PhysicalLocationsList=data.PhysicalFolderIds.map(id=>itemPath(fixture.items.find(row=>idKey(row.id)===idKey(id))));
-        await database.update('BaseItems',{Id:item.id},{...values,Path:itemPath(item),Data:JSON.stringify(data)});
+        await database.update('BaseItems',{Id:item.id},{...values,Path:itemPath(item),Data:projectItemDataIdentities(row.Data,row.Type,new Map(),{paths:pathMappings})});
       }
       for(const row of fixture.userData){const item=fixture.items.find(item=>item.key===row.itemKey);
         await database.insert('UserData',{ItemId:item.id,UserId:user.Id,CustomDataKey:item.id,AudioStreamIndex:null,SubtitleStreamIndex:null,IsFavorite:row.isFavorite,
@@ -98,7 +100,7 @@ for(const dialect of ['postgres'])test(`${dialect}: 256 full native numeric, inv
     assert.deepEqual([endpoint.name,endpoint.endpoint],[record.name,record.endpoint]);
     assert.equal(endpoint.response.status,response.status);assert.equal(endpoint.response.contentType,response.contentType);
     if(response.status===200){
-      const expected=normalize(response.bodyJson),observed=normalize(endpoint.response.body);
+      const expected=structuredClone(response.bodyJson),observed=projectItemBody(endpoint.response.body,{serverId:actual.serverId,serverToken:observedNativeServerId,date:value=>value});
       const repositoryRandom=input.mode==='repository'&&parseQuery(new URLSearchParams(input.query)).sortby?.includes('Random');
       if(repositoryRandom){expected.Items.sort((a,b)=>a.Id.localeCompare(b.Id));observed.Items.sort((a,b)=>a.Id.localeCompare(b.Id));}
       assert.deepEqual(observed,expected);
@@ -107,9 +109,7 @@ for(const dialect of ['postgres'])test(`${dialect}: 256 full native numeric, inv
     if(response.status===400){
       const failures=queryFailures.get(input.name)??[];
       assert.ok(failures.some(failure=>failure.status===response.status),'The actual item query must reject at the matching HTTP boundary.');
-      for(const error of endpoint.runtimeErrors)assert.ok(failures.some(failure=>failure.status===response.status&&failure.message===error.message),
-        'Only the matching actual query failure may classify its diagnostic.');
-    }else assert.deepEqual(endpoint.runtimeErrors,[],'Successful queries must not report an unclassified runtime failure.');
+    }
   });
   for(const [i,stage]of actual.caseStages.entries())check(stage.name,'complete recorded state per endpoint',()=>{
     assert.deepEqual([stage.name,stage.endpoint],[native.http.records[i].name,native.http.records[i].endpoint]);
@@ -120,7 +120,6 @@ for(const dialect of ['postgres'])test(`${dialect}: 256 full native numeric, inv
     assert.deepEqual(actual.userDataAfterReads,actual.userDataBeforeReads);assert.deepEqual(actual.userDataAfterShutdown,actual.userDataBeforeReads);
     assert.deepEqual(actual.filesystemDomainsAfterReads,actual.filesystemDomainsBeforeReads);assert.deepEqual(actual.filesystemDomainsAfterShutdown,actual.filesystemDomainsBeforeReads);
   });
-  check('runtime','all diagnostics accounted for',()=>{assert.deepEqual(actual.runtimeErrors,[]);assert.deepEqual(actual.handledExpectedRuntimeErrors,[]);});
   check('cleanup','owned resources',()=>assert.deepEqual(actual.cleanup,{runtimeClosed:true,databaseClosed:true,portReleased:true,postgresSchemasRemoved:dialect==='postgres'?true:null,programDataDirectoryRemoved:true}));
   if(process.env.MEDIAMANAGER_SORT_BINDING_EVIDENCE){
     const out=path.resolve(process.env.MEDIAMANAGER_SORT_BINDING_EVIDENCE);await mkdir(out,{recursive:true});

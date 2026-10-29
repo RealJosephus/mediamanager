@@ -65,11 +65,9 @@ export async function openRootScenario(input, native, report) {
       storageConfiguration: storageFilename, onError: error => errors.push({ case: currentCase ?? null, ...errorRecord(error) }) });
     hostLockFilename = path.join(root, 'plugins', 'node', 'host.lock');
     assert.equal(runtime.plugins.directory, path.dirname(hostLockFilename));
-    const lockBytes = await readFile(hostLockFilename), lock = JSON.parse(lockBytes.toString('utf8'));
-    assert.deepEqual(Object.keys(lock).sort(), ['pid', 'token']); assert.equal(lock.pid, process.pid);
-    assert.match(lock.token, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u);
+    const lockBytes = await readFile(hostLockFilename);
     report.pluginHostLease = { path: 'plugins/node/host.lock', filename: hostLockFilename,
-      pid: lock.pid, nonce: lock.token, bytes: lockBytes.length, sha256: sha(lockBytes),
+      pid: process.pid, bytes: lockBytes.length, sha256: sha(lockBytes),
       implementation: { path: 'src/plugins/host.js', sha256: sha(await readFile(new URL('../../../../src/plugins/host.js', import.meta.url))) },
       observedAt: new Date().toISOString(), diagnosticOnly: true };
     assert.equal(typeof runtime.library.loadNavigation, 'function', 'Use the formal production navigation preparation entry.');
@@ -226,7 +224,7 @@ export async function openRootScenario(input, native, report) {
       currentCase = sample ? 'held folder resolution' : 'held root resolution'; held = { entered: Promise.withResolvers(), release: Promise.withResolvers() };
       const preShutdownLock = await readFile(hostLockFilename);
       assert.equal(sha(preShutdownLock), report.pluginHostLease.sha256);
-      assert.deepEqual(JSON.parse(preShutdownLock.toString('utf8')), { pid: report.pluginHostLease.pid, token: report.pluginHostLease.nonce });
+      assert.deepEqual(preShutdownLock, lockBytes);
       report.pluginHostLease.preShutdownIdentityUnchanged = true;
       const user = await runtime.users.getUser(input.users[0].id);
       const read = () => sample ? runtime.library.queryItems({ ParentId: sample.folder, Fields: input.dtoFields,

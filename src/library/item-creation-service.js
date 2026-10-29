@@ -1,5 +1,5 @@
 import { availableParallelism } from 'node:os';
-import { idKey, VIDEO_TYPES, MIN_DATE } from './records.js';
+import { idKey, nonemptyId, VIDEO_TYPES, MIN_DATE } from './records.js';
 import { parentChainForItem } from './collection-membership.js';
 import { rootCollectionType } from './root-collection-type.js';
 import { invalidateVideoParent } from './video-version-discovery.js';
@@ -15,6 +15,20 @@ import { loadPostgresNavigationRows,
 import { BoundedItemCache } from './bounded-item-cache.js';
 
 const trailerTypes = [null, 'ComingSoonToTheaters', 'ComingSoonToDvd', 'ComingSoonToStreaming', 'Archive', 'LocalTrailer'];
+
+function itemScopeFailure(errors) {
+  if (errors.length === 1) return errors[0];
+  const primary = errors[0];
+  let message = 'Item consumer and relation cleanup failed.';
+  try { if (primary != null) { const value = primary.message; if (typeof value === 'string') message = value; } }
+  catch { /* Diagnostic properties cannot replace an actual failure. */ }
+  const failure = new AggregateError(errors, message, { cause: primary });
+  for (const name of ['code', 'status', 'statusCode']) {
+    try { if (primary != null && Object.hasOwn(primary, name)) failure[name] = primary[name]; }
+    catch { /* The original reason remains available even when its getter throws. */ }
+  }
+  return failure;
+}
 
 /** Actual CreateItems boundary: resolve missing alternates before cancellation,
  * save the complete batch, then publish its live entities and original events. */
@@ -46,8 +60,14 @@ export class ItemCreationService {
     const item = await this.getItemById(id, options);
     if (!item) return operation(null);
     const owner = this.retainItem(item);
-    try { return await operation(item); }
-    finally { owner.release(); await this.linkedChildren.flushReleases(); }
+    let value, primary, failed = false;
+    try { value = await operation(item); }
+    catch (error) { primary = error; failed = true; }
+    const failures = failed ? [primary] : [];
+    try { owner.release(); } catch (error) { failures.push(error); }
+    try { await this.linkedChildren.flushReleases(); } catch (error) { failures.push(error); }
+    if (failures.length) throw itemScopeFailure(failures);
+    return value;
   }
 
   /** A captured entity may outlive its row or leave the bounded registry.
@@ -74,8 +94,10 @@ export class ItemCreationService {
     const cached = this.#registered.get(key);
     if (cached) return cached;
     const item = await this.store.run(async db => {
+      const rows = await loadPostgresRowsByIds(db, [id]);
+      if (!rows.length) return null;
       const state = await this.library.load(db, null,
-        { includeUserData: false, includeFolderLinks: false, includeLinkGraph: false, expandPath, baseRows: await loadPostgresRowsByIds(db, [id]) });
+        { includeUserData: false, includeFolderLinks: false, includeLinkGraph: false, expandPath, baseRows: rows });
       const stored = state.byId.get(key);
       if (!stored) { await state.dispose({ session: db }); return null; }
       let folderLinks;
@@ -114,33 +136,41 @@ export class ItemCreationService {
     // Native persistence keeps the last entity of each ID, in first ID order.
     const unique = new Map();
     for (const item of items) unique.set(idKey(item.Id), item);
+    let saved, primary, failed = false;
     try { for (const item of unique.values()) {
       const loaded = await this.loadContext(item.Id, { draft: item });
+      contexts.push(loaded);
       Object.defineProperty(item, 'NativeTopParentId', { value: itemTopParentId(item, loaded.parents),
         enumerable: false, writable: true, configurable: true });
-      contexts.push(loaded);
     }
-    const saved = await saveNativeItems(this.store, contexts, { signal, creationIntent });
+    saved = await saveNativeItems(this.store, contexts, { signal, creationIntent });
     for (const loaded of contexts) this.recordRepositorySnapshot(loaded.item, loaded.snapshot);
+    } catch (error) { primary = error; failed = true; }
+    const failures = failed ? [primary] : [];
+    for (const loaded of contexts) try { await loaded.dispose(); } catch (error) { failures.push(error); }
+    try { await this.linkedChildren.flushReleases(); } catch (error) { failures.push(error); }
+    if (failures.length) throw itemScopeFailure(failures);
     return saved;
-    } finally {
-      for (const loaded of contexts) await loaded.dispose();
-      await this.linkedChildren.flushReleases();
-    }
   }
 
   async createItems(items, parent = null, { signal, creationIntent = 'library-resolve' } = {}) {
     if (!Array.isArray(items)) throw new TypeError('CreateItems requires a native entity array.');
     return this.store.serializeWrites(async db => {
-      const itemOwners = items.map(item => this.retainItem(item)), contexts = [];
-      let state;
+      const itemOwners = [], contexts = [];
+      let state, result, primary, failed = false;
       try {
+      for (const item of items) itemOwners.push(this.retainItem(item));
       const allItems = [...items];
       const requestedIds = [parent?.Id, ...items.flatMap(item => [item.ParentId, item.TopParentId])].filter(Boolean);
-      const navigationRows = await loadPostgresNavigationRows(db, parent?.Id);
-      const requestedRows = await loadPostgresRowsByIds(db, requestedIds);
-      const graphRows = await loadPostgresPageGraph(db, requestedRows, navigationRows);
-      state = await this.library.load(db, null, { includeUserData: false, includeLinkGraph: false, baseRows: graphRows });
+      // Standalone non-video items need neither alternate-version navigation
+      // nor a parent lookup for ItemAdded. Their save contexts still perform
+      // the complete per-item persistence before registration and that event.
+      if (parent != null || requestedIds.some(nonemptyId) || items.some(item => VIDEO_TYPES.has(item.Type))) {
+        const navigationRows = await loadPostgresNavigationRows(db, parent?.Id);
+        const requestedRows = await loadPostgresRowsByIds(db, requestedIds);
+        const graphRows = await loadPostgresPageGraph(db, requestedRows, navigationRows);
+        state = await this.library.load(db, null, { includeUserData: false, includeLinkGraph: false, baseRows: graphRows });
+      }
       const parentFolder = parent?.IsFolder ? parent : null;
       const parentCollectionType = parent ? await rootCollectionType(this.library, parent, state) : null;
       for (const item of items) {
@@ -163,17 +193,17 @@ export class ItemCreationService {
       for (const item of allItems) this.registerItem(item);
       invalidateVideoParent(parent);
       for (const item of items) if (item.SourceType == null || item.SourceType === 'Library' || item.SourceType === 0) {
-        this.library.reportItemAdded(item, parent ?? state.byId.get(idKey(item.ParentId)) ?? null);
+        this.library.reportItemAdded(item, parent ?? state?.byId.get(idKey(item.ParentId)) ?? null);
       }
-      return allItems;
-      } finally {
-        const failures = [];
-        for (const loaded of contexts) try { await loaded.dispose(); } catch (error) { failures.push(error); }
-        try { await state?.dispose({ session: db }); } catch (error) { failures.push(error); }
-        for (const owner of itemOwners) owner.release();
-        try { await this.linkedChildren.flushReleases({ session: db }); } catch (error) { failures.push(error); }
-        if (failures.length) throw new AggregateError(failures, 'CreateItems relation cleanup failed.');
-      }
+      result = allItems;
+      } catch (error) { primary = error; failed = true; }
+      const failures = failed ? [primary] : [];
+      for (const loaded of contexts) try { await loaded.dispose(); } catch (error) { failures.push(error); }
+      try { await state?.dispose({ session: db }); } catch (error) { failures.push(error); }
+      for (const owner of itemOwners) try { owner.release(); } catch (error) { failures.push(error); }
+      try { await this.linkedChildren.flushReleases({ session: db }); } catch (error) { failures.push(error); }
+      if (failures.length) throw itemScopeFailure(failures);
+      return result;
     });
   }
 }

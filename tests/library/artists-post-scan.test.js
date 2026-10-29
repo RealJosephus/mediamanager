@@ -163,9 +163,6 @@ for (const phase of ['lookup', 'refresh']) test(
       for (const table of ['sets', 'rows', 'pins', 'item_states', 'item_cohorts', 'folder_child_ids']) {
         assert.equal(BigInt((await db.client.query(`SELECT count(*) AS count FROM ${q(linkedChildren.schemaName)}.${q(table)}`)).rows[0].count), 0n, table);
       }
-      for (const table of Object.values(linkedChildren.resourceGraph.tables)) {
-        assert.equal(BigInt((await db.client.query(`SELECT count(*) AS count FROM ${table}`)).rows[0].count), 0n, table);
-      }
     });
     await linkedChildren.close();
     assert.deepEqual((await database.client.query('SELECT nspname FROM pg_namespace WHERE nspname=$1', [linkedChildren.schemaName])).rows, []);

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { createHash, randomUUID } from 'node:crypto';
-import { mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, rename, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { nativeModel } from '../../src/database/model.js';
@@ -175,4 +176,165 @@ export async function fileEvidence(root) {
       base64: bytes.toString('base64'), modified: information.mtime.toISOString(), created: information.birthtime.toISOString() });
   }
   return files.sort((left, right) => left.path < right.path ? -1 : left.path > right.path ? 1 : 0);
+}
+
+/** Bounded cost observations only; no result, query or timing acceptance gate. */
+export function createBookPhotoCostObserver(fixtureName) {
+  const root = process.env.MEDIAMANAGER_TEST_DIAGNOSTICS_ROOT;
+  const enabled = path.isAbsolute(root ?? '');
+  const context = new AsyncLocalStorage(), phases = new Map(), restorers = new Set();
+  const tables = new Set([...nativeModel.tables.map(table => table.name), 'sets', 'rows', 'pins']);
+  const comments = new Set(['item-ancestors', 'folder-scan-path-owners', 'playlist-library-roots',
+    'identity-selectors', 'navigation-root-ids', 'page-relationship-graph', 'dto-artists-by-name', 'artist-selectors']);
+  const verbs = new Set(['SELECT', 'WITH', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'DROP', 'ALTER', 'SET', 'BEGIN', 'COMMIT', 'ROLLBACK']);
+  let dirty = false, publishing = false, writes = Promise.resolve(), completed = false;
+  function phaseStatistics(phase) {
+    if (!/^[a-z][a-z0-9.-]{0,79}$/u.test(phase) || (!phases.has(phase) && phases.size >= 63)) phase = 'other';
+    if (!phases.has(phase)) phases.set(phase, { phase, calls: 0, wallMs: 0, cpuUserMs: 0, cpuSystemMs: 0, driver: new Map() });
+    return phases.get(phase);
+  }
+  function shape(args) {
+    const descriptor = args[0] && typeof args[0] === 'object' ? Object.getOwnPropertyDescriptor(args[0], 'text') : null;
+    const text = (typeof args[0] === 'string' ? args[0] : typeof descriptor?.value === 'string' ? descriptor.value : '').slice(0, 2048);
+    const comment = /^\s*\/\*\s*([a-z0-9-]+)\s*\*\//u.exec(text);
+    if (comment && comments.has(comment[1])) return 'comment/' + comment[1];
+    const verb = text.replace(/^\s*\/\*[\s\S]*?\*\//u, '').trimStart().match(/^[A-Za-z]+/u)?.[0].toUpperCase();
+    if (!verbs.has(verb)) return 'other';
+    const table = /\b(?:FROM|JOIN|INTO|UPDATE|TABLE)\s+(?:"[^"]+"\.)?"([A-Za-z_][A-Za-z0-9_]*)"/iu.exec(text)?.[1];
+    return verb + '/' + (tables.has(table) ? table : 'other');
+  }
+  function checkpoint() {
+    if (!enabled) return;
+    dirty = true;
+    if (publishing) return;
+    publishing = true;
+    writes = (async () => {
+      try {
+        const filename = path.join(root, 'book-photo-cost-' + path.basename(fixtureName, '.js') + '-' + process.pid + '.json');
+        assertValidationOutputChild(filename); await mkdir(root, { recursive: true });
+        while (dirty) {
+          dirty = false;
+          const summary = { schemaVersion: 1, diagnosticOnly: true, fixture: fixtureName, observerClosed: completed,
+            scope: 'Existing Node phases only. CPU and wall deltas are inclusive and include concurrent work in this process; nested/overlapping phases cannot be added. Driver elapsed time includes client roundtrip/continuation, can overlap CPU and other queries, and is not PostgreSQL server CPU or pool-acquisition time.',
+            coverage: 'Pool observation is best effort. Main attachment is attempted after database creation, before runtime setup; the internally created relation pool is attempted after runtime setup. Earlier/checked-out/unscoped queries and replacement owners are unobserved; later observers may bypass a wrapper. Missing observations never prove zero work. Non-Promise queries without an explicit callback count dispatch only. No SQL, parameters, result values, error bodies or per-query journal are retained.',
+            bounds: { phases: 64, driverBucketsPerPhase: 32, classifiedSqlPrefixCharacters: 2048 },
+            phases: [...phases.values()].map(({ driver, ...value }) => {
+              const buckets = [...driver.values()];
+              return { ...value, driver: { count: buckets.reduce((sum, bucket) => sum + bucket.count, 0),
+                completedCount: buckets.reduce((sum, bucket) => sum + bucket.completedCount, 0),
+                totalMs: buckets.reduce((sum, bucket) => sum + bucket.totalMs, 0),
+                maximumMs: Math.max(0, ...buckets.map(bucket => bucket.maximumMs)), buckets } };
+            }) };
+          await writeFile(filename + '.pending', JSON.stringify(summary, null, 2) + '\n');
+          await rename(filename + '.pending', filename);
+        }
+      } catch { /* Missing cost evidence cannot replace any business result. */ }
+      finally { publishing = false; }
+    })();
+    void writes.catch(() => {});
+  }
+  function observe(phase, operation) {
+    if (!enabled) return operation();
+    let current;
+    try {
+      current = { statistics: phaseStatistics(phase), parent: context.getStore(), active: true,
+        started: performance.now(), cpu: process.cpuUsage() };
+      current.statistics.calls++;
+    } catch { return operation(); }
+    const finish = () => {
+      try {
+        if (!current.active) return;
+        current.active = false;
+        const cpu = process.cpuUsage(current.cpu), statistics = current.statistics;
+        statistics.wallMs += performance.now() - current.started;
+        statistics.cpuUserMs += cpu.user / 1000; statistics.cpuSystemMs += cpu.system / 1000;
+        if (['setup.runtime', 'step.scan', 'close.database'].includes(phase)) checkpoint();
+      } catch { /* Preserve the actual operation and raw rejection. */ }
+    };
+    let invoked = false;
+    try {
+      return context.run(current, () => {
+        invoked = true;
+        let result;
+        try { result = operation(); } catch (error) { finish(); throw error; }
+        try {
+          if (result instanceof Promise) return Promise.prototype.then.call(result,
+            value => { finish(); return value; }, error => { finish(); throw error; });
+          finish();
+        } catch { finish(); }
+        return result;
+      });
+    } catch (error) { if (invoked) throw error; return operation(); }
+  }
+  function observePool(database, owner) {
+    if (!enabled || !['main', 'relation'].includes(owner)) return () => {};
+    let pool;
+    try { pool = database?.pool; } catch { return () => {}; }
+    const clients = new Map();
+    let active = true;
+    const acquire = client => {
+      try {
+        if (!active || clients.has(client)) return;
+        const original = client.query;
+        if (typeof original !== 'function') return;
+        function query(...args) {
+          if (!active) return Reflect.apply(original, this, args);
+          const observations = [], seen = new Set();
+          let started;
+          try {
+            const category = owner + '/' + shape(args);
+            for (let value = context.getStore(); value; value = value.parent) {
+              if (!value.active || seen.has(value.statistics)) continue;
+              seen.add(value.statistics);
+              const buckets = value.statistics.driver;
+              const key = buckets.has(category) || buckets.size < 31 ? category : 'other';
+              if (!buckets.has(key)) buckets.set(key, { bucket: key, count: 0, completedCount: 0, totalMs: 0, maximumMs: 0 });
+              const bucket = buckets.get(key); bucket.count++; observations.push(bucket);
+            }
+            started = performance.now();
+          } catch { /* The original driver call still runs unchanged. */ }
+          if (!observations.length) return Reflect.apply(original, this, args);
+          let finished = false;
+          const finish = () => {
+            try {
+              if (finished) return;
+              finished = true;
+              const elapsed = performance.now() - started;
+              for (const bucket of observations) {
+                bucket.completedCount++; bucket.totalMs += elapsed; bucket.maximumMs = Math.max(bucket.maximumMs, elapsed);
+              }
+            } catch { /* Timing never changes callback arguments or query results. */ }
+          };
+          const forwarded = [...args], callback = forwarded.at(-1);
+          if (typeof callback === 'function') forwarded[forwarded.length - 1] = function (...values) {
+            finish(); return Reflect.apply(callback, this, values);
+          };
+          let result;
+          try { result = Reflect.apply(original, this, forwarded); }
+          catch (error) { finish(); throw error; }
+          if (typeof callback !== 'function') try {
+            if (result instanceof Promise) return Promise.prototype.then.call(result,
+              value => { finish(); return value; }, error => { finish(); throw error; });
+          } catch { /* Return the actual original value even if observation fails. */ }
+          return result;
+        }
+        client.query = query; clients.set(client, { original, query });
+      } catch { /* An unavailable observer must not prevent pool admission. */ }
+    };
+    const restore = () => {
+      active = false;
+      try { pool?.off('acquire', acquire); } catch { /* Best-effort diagnostic removal only. */ }
+      for (const [client, value] of clients) try {
+        if (client.query === value.query) client.query = value.original;
+      } catch { /* Never replace a later observer's wrapper. */ }
+      clients.clear(); restorers.delete(restore);
+    };
+    try { pool.on('acquire', acquire); restorers.add(restore); }
+    catch { restore(); }
+    return restore;
+  }
+  return { observe, observePool, async close() {
+    try { for (const restore of [...restorers]) restore(); completed = true; checkpoint(); await writes; }
+    catch { /* This is never an acceptance condition. */ }
+  } };
 }

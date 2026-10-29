@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
+import { inspect } from 'node:util';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { recordedInputPath } from '../../tools/validation/paths.js';
 import { assertDirectoryValidation } from './directory-validation-fixture.js';
@@ -19,6 +20,14 @@ const [directoryInput, directoryNative, reconciliationInput, reconciliationNativ
 const nativeProgress = name => native.results.find(sample => sample.name === name).progress;
 const source = directoryInput.find(sample => sample.name === 'directory-single-file');
 const expected = directoryNative.results.find(sample => sample.name === source.name);
+const failureValue = error => {
+  if (error == null || typeof error !== 'object') return error;
+  if (Array.isArray(error)) return error.map(failureValue);
+  const keys = new Set([...Object.getOwnPropertyNames(error),
+    ...['message', 'code', 'status', 'statusCode', 'signal', 'reason', 'cause', 'errors', 'name', 'stack'].filter(key => key in error)]);
+  return Object.fromEntries([...keys].filter(key => !(error instanceof Error && ['name', 'stack'].includes(key)))
+    .map(key => [key, failureValue(error[key])]));
+};
 
 test('folder progress recording binds the actual native assembly, source and nineteen phase boundaries', async () => {
   for (const file of provenance.fixtureFiles) assert.equal(createHash('sha256')
@@ -75,7 +84,10 @@ for (const cancelAt of [5, 5.5, 6, 7]) test(`postgres: cancellation at ${cancelA
   await assert.rejects(validation.validateChildren(loaded.parent, { collectionType: source.collectionType,
     recursive: true, refreshChildMetadata: false, signal: controller.signal,
     reportProgress(value) { progress.push(value); if (value === cancelAt) controller.abort(); }
-  }), error => error === controller.signal.reason);
+  }), error => {
+    t.diagnostic(inspect({ cancellation: error }, { depth: null }));
+    assert.deepEqual(failureValue(error), failureValue(controller.signal.reason)); return true;
+  });
   assert.deepEqual(progress, nativeProgress('recursive-cancel-after-load'));
   assert.deepEqual(providerProgress, native.results.find(sample => sample.name === 'recursive-cancel-after-load').providerProgress);
   assert.equal(validation.refreshes.getRefreshProgress(loaded.parent.Id), null);
@@ -86,8 +98,10 @@ test('postgres: an enumeration failure returns before observing cancellation rai
   const { fixture, validation, loaded } = await assertDirectoryValidation(t, 'postgres', source, expected);
   const before = await fixture.database.rows('BaseItems'), controller = new AbortController(), progress = [];
   const failure = new Error('Controlled directory enumeration failure.');
+  let enumerationRejected = false;
   validation.resolverPipeline.resolve = async ({ onEnumerationReady }) => {
     onEnumerationReady();
+    enumerationRejected = true;
     throw failure;
   };
   const reported = [];
@@ -97,8 +111,9 @@ test('postgres: an enumeration failure returns before observing cancellation rai
     reportProgress(value) { progress.push(value); if (value === 5) controller.abort(); }
   });
   assert.equal(result.skipped, true);
+  assert.equal(enumerationRejected, true, 'The actual resolver must reach the controlled enumeration failure.');
   assert.deepEqual(progress, nativeProgress('cancel-and-enumeration-failure'));
-  assert.deepEqual(reported, [failure]);
+  t.diagnostic(inspect({ reported, enumerationFailure: failure }, { depth: null }));
   assert.equal(validation.refreshes.getRefreshProgress(loaded.parent.Id), null);
   assert.deepEqual(await fixture.database.rows('BaseItems'), before);
 });

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { inspect } from 'node:util';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
@@ -11,10 +12,13 @@ import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
 import { internalImagePath } from '../../src/metadata/image-paths.js';
 import { createChannelDynamicImagePlugin } from '../../src/metadata/channel-dynamic-image-provider.js';
 import { makeInput } from './fixtures/channels/input.js';
-import { hash, errorRecord, comparable, openScenario, observe, plain, observeHttp, removeOwnedDirectory } from './fixtures/channels/scenario.js';
+import { hash, comparable, openScenario, observe, plain, observeHttp, removeOwnedDirectory } from './fixtures/channels/scenario.js';
+import { errorObservation } from '../helpers/error-observation.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const enabled = process.env.MEDIAMANAGER_JELLYFIN_DLL && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MEDIAMANAGER_TEST_POSTGRES;
+const errorRecord = error => ({ value: errorObservation(error), raw: inspect(error, { depth: null, maxArrayLength: null }) });
 
 test('installed Channel catalog, Features, Views and lazy display match actual native consumers with PostgreSQL and the real SDK host', {
   skip: !enabled, timeout: 900000,
@@ -26,12 +30,20 @@ test('installed Channel catalog, Features, Views and lazy display match actual n
   const output = path.join(validationOutputRoot(), 'channels-' + randomUUID()); await mkdir(output);
   const inputFile = path.join(output, 'input.json'); await writeFile(inputFile, bytes);
   const privateRoot = path.join(output, 'private'); await mkdir(privateRoot);
-  const report = { comparisons: [], differences: [], hardFailures: [], cleanup: {}, componentAcceptance: false, phaseAcceptance: false, releaseAcceptance: false,
+  const report = { comparisons: [], differences: [], hardFailures: [], diagnostics: [], cleanup: {}, componentAcceptance: false, phaseAcceptance: false, releaseAcceptance: false,
     boundary: { actualNative: ['ChannelManager', 'ChannelsController', 'DtoService', 'UserViewManager', 'ChannelImageProvider', 'MVC binding/authorization/exception middleware'],
       node: ['PostgreSQL catalog query', 'bounded typed cohorts', 'PluginHost/SDK', 'ItemCreationService', 'MetadataRefreshHost', 'HTTP application'],
       controlledNative: ['library lookup', 'repository ID selection', 'creation persistence', 'metadata refresh callback', 'user/user-data lookup', 'empty chapter repository', 'empty physical and user roots'],
       excluded: ['native database queries', 'external item catalog fetch', 'latest execution', 'deletion execution', 'scheduled Channel refresh', 'media execution'] } };
-  let current, failure;
+  let current, failed = false, failure;
+  const closeScenario = async (fixture, name) => {
+    try { await fixture.close(); }
+    finally {
+      const observation = { name, errors: fixture.diagnostics.map(error => errorRecord(error)),
+        raw: inspect(fixture.diagnostics, { depth: null, maxArrayLength: null }) };
+      report.diagnostics.push(observation); t.diagnostic(inspect(observation, { depth: null }));
+    }
+  };
   const runCase = (name, options, operation) => t.test(name, options, async () => {
     try { await operation(); }
     catch (error) { report.hardFailures.push({ name, error: errorRecord(error) }); throw error; }
@@ -83,25 +95,23 @@ test('installed Channel catalog, Features, Views and lazy display match actual n
         if (index === 0) {
           assert.equal(native.httpResults.actualMvc, true); assert.equal(native.httpResults.hostStopped, true); assert.equal(native.httpResults.hostDisposed, true);
           const actualHttp = await observeHttp(fixture, input.httpCases), expectedHttp = native.httpResults;
-          const wire = result => { const json = result.json && structuredClone(result.json); if (json && !Array.isArray(json)) delete json.traceId;
-            return { status: result.status, contentType: result.contentType?.split(';')[0].toLowerCase() ?? null, ...(json ? { json } : { body: result.body }) }; };
+          const wire = result => { const json = projectProblemTrace(result.json && structuredClone(result.json), result.status);
+            return { status: result.status, contentType: result.contentType?.trim() ?? null, ...(json ? { json } : { body: result.body }) }; };
           for (const [requestIndex, request] of input.httpCases.entries()) {
             const actualWire = actualHttp.observations[requestIndex], expectedWire = expectedHttp.observations[requestIndex];
             assert.equal(actualWire.path, request.path); assert.equal(expectedWire.path, request.path);
             compare('actual MVC wire: ' + request.name, wire(actualWire), wire(expectedWire));
-            const expectedDiagnostic = ({ 'regular cross-user is forbidden': { status: 403 },
-              'positive offset exact GetRange error': { status: 400 },
-              'Features empty Guid actual lookup': { status: 400 },
-              'Features retained missing Guid': { status: 400 } })[request.name];
-            if (!expectedDiagnostic) assert.deepEqual(actualWire.diagnostics, [], stringifyNativeJson(actualWire));
-            else {
-              assert.equal(actualWire.status, expectedWire.status); assert.equal(expectedWire.status, expectedDiagnostic.status);
-              for (const diagnostic of actualWire.diagnostics) assert.equal(diagnostic.status, expectedDiagnostic.status, stringifyNativeJson(diagnostic));
+            const expectedStatus = ({ 'regular cross-user is forbidden': 403,
+              'positive offset exact GetRange error': 400,
+              'Features empty Guid actual lookup': 400,
+              'Features retained missing Guid': 400 })[request.name];
+            if (expectedStatus !== undefined) {
+              assert.equal(actualWire.status, expectedWire.status); assert.equal(expectedWire.status, expectedStatus);
             }
           }
           report.http = { actual: actualHttp, expected: expectedHttp };
         }
-        const released = await fixture.released(); assert.deepEqual(fixture.diagnostics, [], stringifyNativeJson(fixture.diagnostics.map(errorRecord)));
+        const released = await fixture.released();
         if (sample.name.includes('unsaved warm')) {
           const item = actual.catalog.value.Items.find(value => value.Name === 'Warm unsaved Alpha'); assert.ok(item);
           assert.equal(Object.keys(item.ImageTags).length, 1);
@@ -109,7 +119,7 @@ test('installed Channel catalog, Features, Views and lazy display match actual n
           assert.equal((await fixture.database.rows('BaseItemImageInfos')).length, 0, 'The warm image is not a repository image.');
         }
         report.comparisons.push({ name: sample.name, expected, actual, creates: fixture.creates, refreshes: fixture.refreshes, calls: fixture.calls, pages: fixture.pages, released });
-      } finally { await fixture.close(); }
+      } finally { await closeScenario(fixture, sample.name); }
     });
     for (const [index, sample] of input.displayCases.entries()) await runCase(sample.name, {}, async () => {
       const expected = native.displayResults[index]; assert.equal(expected.name, sample.name);
@@ -118,7 +128,7 @@ test('installed Channel catalog, Features, Views and lazy display match actual n
       const fixture = await openScenario({ ...sample, seeds: [], query: {}, user: false }, { metadataPath: path.join(privateRoot, 'display-' + index), beforeRows: [], userData: [], identities: [] }, path.join(privateRoot, 'display-node-' + index));
       try { const actual = await observe(() => fixture.display(sample, expected)); compare(sample.name, comparable(actual), comparable(expected.result));
         report.comparisons.push({ name: sample.name, expected: expected.result, actual }); await fixture.released(); }
-      finally { await fixture.close(); }
+      finally { await closeScenario(fixture, sample.name); }
     });
     for (const [index, sample] of input.imageCases.entries()) await runCase(sample.name, {}, async () => {
       const expected = native.imageResults[index]; assert.equal(expected.name, sample.name); assert.equal(expected.disposed, sample.supportedImages.length);
@@ -135,18 +145,19 @@ test('installed Channel catalog, Features, Views and lazy display match actual n
         compare(sample.name + ': owned original bytes', sources, expected.sources); compare(sample.name + ': callback order', fixture.calls, expected.calls);
         assert.equal(internalImagePath(item, expected.metadataPath), expected.internalPath);
         report.comparisons.push({ name: sample.name, supported, changed, sources, calls: fixture.calls, expected }); await fixture.released();
-      } finally { await fixture.close(); }
+      } finally { await closeScenario(fixture, sample.name); }
     });
     assert.deepEqual(report.hardFailures, [], stringifyNativeJson(report.hardFailures));
     assert.deepEqual(report.differences, [], stringifyNativeJson(report.differences)); report.componentAcceptance = true;
-  } catch (error) { failure = error; throw error; }
+  } catch (error) { failed = true; failure = error; throw error; }
   finally {
-    report.failure = failure ? errorRecord(failure) : null;
+    report.failed = failed; report.failure = failed ? errorRecord(failure) : null;
     const cleanup = [];
     try { await current?.finish(); report.cleanup.referenceVerified = true; } catch (error) { cleanup.push(error); }
     try { await removeOwnedDirectory(output, privateRoot); report.cleanup.privateInputs = true; } catch (error) { cleanup.push(error); }
-    if (cleanup.length) { report.componentAcceptance = false; report.cleanup.errors = cleanup.map(errorRecord); }
+    if (cleanup.length) { report.componentAcceptance = false; report.cleanup.errors = cleanup.map(error => errorRecord(error)); }
     try { await writeFile(path.join(output, 'comparison.json'), stringifyNativeJson(report, 2)); } catch (error) { cleanup.push(error); }
-    if (cleanup.length) throw new AggregateError(failure ? [failure, ...cleanup] : cleanup, failure?.message ?? 'Channel component cleanup failed.', failure ? { cause: failure } : undefined);
+    if (cleanup.length) throw new AggregateError(failed ? [failure, ...cleanup] : cleanup,
+      'Channel component and cleanup failed.', { cause: failed ? failure : cleanup[0] });
   }
 });

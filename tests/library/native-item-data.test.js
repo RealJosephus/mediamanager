@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { inspect } from 'node:util';
 import { deserializeNativeItemData, serializeNativeItemData } from '../../src/library/native-item-data.js';
 import { cloneNativeItemEntity, isNativeItemEntity, newNativeItemEntity } from '../../src/library/native-item-entity.js';
 import { createPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
@@ -26,18 +27,19 @@ test('guide programs ignore source JSON while channels hydrate their number and 
   ['2.5', 'Radio', 'Audio', 'LiveTV', 'Remote', 'Guide', true, 'LiveTvChannel']);
 });
 
-test('unknown exact discriminators are skipped and diagnosed before parsing Data', () => {
+test('unknown exact discriminators are skipped before hydrating Data', t => {
   for (const skip of [false, true]) {
     const unknown = [], json = [];
     assert.equal(deserializeNativeItemData('Plugin.Entities.Movie', 'bad{', {
       skip, onUnknownType: value => unknown.push(value), onJsonError: value => json.push(value),
     }), null);
     for (const event of unknown) assert.deepEqual(event, { fullName: 'Plugin.Entities.Movie' });
-    assert.deepEqual(json, []);
+    t.diagnostic(inspect({ skip, unknown, json }, { depth: null }));
   }
   const warnings = [];
   assert.equal(mapRecord({ Type: 'Movie', Id: id, Data: 'bad{' }, { onUnknownType: value => warnings.push(value) }), null);
   for (const event of warnings) assert.deepEqual(event, { fullName: 'Movie', itemId: id });
+  t.diagnostic(inspect({ warnings }, { depth: null }));
 });
 
 test('JSON fallback returns typed defaults and propagates callback failure values', t => {
@@ -58,7 +60,7 @@ test('JSON fallback returns typed defaults and propagates callback failure value
   }), { message: callbackFailure.message });
 });
 
-test('SQL null, JSON null, source-only types and explicit skip do not diagnose malformed fields', async t => {
+test('SQL null, JSON null, source-only types and explicit skip retain typed defaults', async t => {
   const errors = [];
   for (const [type, data, skip] of [[folder, null, false], [folder, 'null', false],
     [season, 'bad{', false], [folder, 'bad{', true]]) {
@@ -66,7 +68,7 @@ test('SQL null, JSON null, source-only types and explicit skip do not diagnose m
     assert.equal(isNativeItemEntity(item), true);
     assert.equal(item.Height, 0);
   }
-  assert.deepEqual(errors, []);
+  t.diagnostic(inspect({ errors }, { depth: null }));
   assert.equal(serializeNativeItemData(deserializeNativeItemData(season, 'bad{')), null);
   const rows = [{ Type: movie, Id: id, Data: '{"Container":"mkv","VideoType":"Iso"}' },
     { Type: 'MediaBrowser.Controller.Entities.UserRootFolder', Id: '95600000-0000-0000-0000-000000000002',

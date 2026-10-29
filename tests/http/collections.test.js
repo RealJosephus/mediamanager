@@ -3,7 +3,8 @@ import test from 'node:test';
 import { createTestApplication } from '../helpers/application.js';
 import { AuthenticationService } from '../../src/users/authentication-service.js';
 import { wireGuid } from '../../src/users/native.js';
-import { actualManagerCase, collectionBindingObservation, currentCollections, id, input, noTrace, recordCandidate } from './collections-current-fixture.js';
+import { actualManagerCase, collectionBindingObservation, currentCollections, id, input, projectCollectionHttpBody, recordCandidate } from './collections-current-fixture.js';
+import { parseLosslessJson } from '../../src/core/json.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 
@@ -67,7 +68,8 @@ for (const sample of input.cases.filter(row => !row.actualManager)) test('Collec
   assert.equal(response.status, expected.status);
   assert.equal(response.headers.get('content-type'), expected.contentType);
   assert.equal(response.headers.get('allow') ?? '', expected.allow);
-  if (expected.jsonBody !== null) assert.deepEqual(noTrace(JSON.parse(body)), noTrace(expected.jsonBody));
+  if (expected.jsonBody !== null) assert.deepEqual(projectCollectionHttpBody(parseLosslessJson(body), response.status),
+    projectCollectionHttpBody(expected.jsonBody, expected.status));
   else assert.equal(body, expected.body);
   assert.deepEqual(collectionBindingObservation(calls), collectionBindingObservation(expected.calls));
 });

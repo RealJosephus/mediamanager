@@ -32,11 +32,11 @@ two Native executions exercise 360 cases and 744 requests per platform. The
 separate Static Audio input-integrity file retains five rejection cases; the
 Tags file retains its query-binder regression case.
 
-`current-profile.json` binds 17 current source/input files. The same contract is
+`current-profile.json` binds 18 current source/input files. The same contract is
 used by all twelve test files, including the shared image/rating neutral inputs.
 `currentNativeReference` verifies the executing build's source offer, complete
 runtime, initializer, stopped seed and actual dotnet/FFmpeg/FFprobe dispatch
-inputs before and after use. The recorder additionally binds 25 relevant Native
+inputs before and after use. The recorder additionally binds 28 relevant Native
 source files, the fixture, recorder, request matrix and exact launch arguments.
 
 Each private capture retains the complete Native JSON response bodies, statuses,
@@ -103,4 +103,52 @@ The task definitions, source hashes and configuration hashes are retained in
 readbacks must confirm the isolation before the complete database baseline.
 Native startup work must become idle within the bounded wait. No initializer
 input or shared instance is changed.
+
+# Read failure diagnostics and initialization ownership
+
+Every case still compares the complete database, including all tables,
+schema/column/index/FK descriptions, sequences, pragmas and integrity checks.
+The equality input and its SHA are unchanged by diagnostics. The summary now
+retains each table's row SHA/count and structure SHA before and after every
+actual request batch, plus the complete baseline, stopped after-run and restored
+snapshot summaries. When a read gate fails, at most 64 changed rows and 256
+changed cells retain table/column names and exact primary-key, row and cell
+fingerprints. Arbitrary TEXT/Data, credentials, blobs and keys remain hash-only.
+Only explicit SQL timestamp columns with valid timestamp values can expose
+their timestamps; unknown JSON members are not traversed or rewritten. The
+private already-read rows supply these diagnostics without a second scan or
+new database mutation.
+
+Run `40520156687`, candidate `75c68f1`, failed classification at its twentieth
+case, `status-numeric-unknown`, after 40 actual HTTP responses. Selected fixture
+rows remained stable; the complete database SHA changed. Native then exited
+with code zero and released its PID, port and database, and the original
+baseline was restored. That original summary contains no per-table before/after
+differences, so it cannot establish which table or value changed. The original
+result remains failed. The actual authentication/session/device source bindings
+are retained for interpreting new diagnostics; an activity-stamp hypothesis is
+not recorded as an established cause or used to remove a table from the gate.
+
+The classification file now registers its file resource and teardown
+synchronously, and performs both Native captures in a protected `before` hook.
+An initialization error cannot abort module evaluation before teardown exists.
+The existing file owner waits for the actual callback/finally work to settle,
+then releases only its own token. An independent process regression makes the
+initialization hook fail while it holds an actual listener/file, proves the
+lease remains held during cleanup, then proves both owners close and a real
+successor acquires a fresh token. No stale receipt is reclaimed or ignored.
+
+Recorder cleanup retains the original error followed by ordered cleanup errors.
+It records actual PID/port/database release, keeps the private tree when Native
+ownership remains open, and never calls forced termination a clean shutdown.
+The real request matrices, two repetitions, complete body comparisons and all
+database stability/restoration assertions remain mandatory.
+
+The other ten current filter callers use the same synchronously registered file
+owner and protected initialization/candidate callbacks. Their existing matrices,
+permission readbacks, complete responses, cold/read/shutdown state and cleanup
+checks remain intact. Static Audio additionally retains its own current recorder
+binding; that binding and the enclosing current profile track this recorder's
+actual new bytes. Historical recordings, source provenance and neutral input
+files retain their original identities.
 

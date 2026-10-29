@@ -1,0 +1,7 @@
+# Actual PostgreSQL runtime library monitoring
+
+`../../library-monitor-runtime.test.js` exercises actual mapped local watchers and the PostgreSQL runtime, including metadata and folder refresh, self-write suppression, storage reconfiguration, and owner shutdown. It is separate from the sealed Native component recording in `../library-directory-monitor/`.
+
+The full-scan completion and cancellation cases register a controlled Folder provider whose `hasChanged` returns true, so Default refresh admits the intended blocking provider even when the Folder has already been refreshed. Cancellation is issued only after the actual provider enters. The twenty-second waits remain. The cases retain the actual Existing SQL rows before and after the settled scan, including `DateLastRefreshed`, and provider change-check, entry, return/rejection and release observations. SQL reads occur outside the deliberately held provider context on the fixture's single connection.
+
+Functional checks cover the old watches being released, the completed child refresh, the original cancellation reason, monitoring restarting, and real post-scan directory events reconciling directories created while monitoring was stopped. Fixture teardown awaits runtime closure, drops its PostgreSQL schema and removes its isolated directory. Provider phase names, clocks and diagnostic counts do not decide acceptance. These candidate integration cases do not modify the sealed Native recording or establish full-product or release acceptance.

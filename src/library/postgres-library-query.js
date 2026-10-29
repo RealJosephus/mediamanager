@@ -3,6 +3,7 @@ import { tableDefinition } from '../database/model.js';
 import { decodeValue } from '../database/values.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { withPostgresNativeQueryJitOff } from '../database/postgres-native-query-jit.js';
+import { queryPostgresLibraryStatement } from '../database/postgres.js';
 import { quoteIdentifier as q } from '../database/model.js';
 import { lowerInvariant } from '../core/identity.js';
 import { postgresInvariantLowerFunctionName,
@@ -56,15 +57,30 @@ function safeNonnegativeInteger(value, description) {
 export async function loadPostgresRowsByIds(database, ids) {
   const unique = [...new Map(ids.filter(nonemptyId).map(id => [idKey(id), id])).values()];
   if (!unique.length) return [];
-  // Jellyfin GUID text is NOCASE in SQLite and real databases may contain
-  // either hexadecimal case or Guid "N"/"D" formatting. PostgreSQL's C
-  // collation is deliberately binary, so resolve the stored spelling before
-  // using the typed rows adapter.
+  // Preserve stored Guid TEXT, including hexadecimal case and N/D formatting.
+  // Normalize only the selector; hydrate every matched stored row directly.
+  // Native SQLite's BINARY Id-key comparison has separate cold-read behavior.
   const lookup = [...new Set(unique.map(idKey))];
-  const stored = await itemIds(database,
-    `SELECT "Id" FROM ${qualified(database, 'BaseItems')} WHERE replace(${nativeTextSql(database.schemaName).guidLower("\"Id\"")}, '-', '') = ANY($1::text[])`,
-    [lookup]);
-  return stored.length ? database.rows('BaseItems', { whereIn: { Id: stored } }) : [];
+  const columns = tableDefinition('BaseItems').columns;
+  const idColumn = columns.find(column => column.name === 'Id');
+  const result = await queryPostgresLibraryStatement(database, {
+    text: `SELECT ${columns.map(column => q(column.name)).join(', ')}
+      FROM ${qualified(database, 'BaseItems')}
+      WHERE replace(${nativeTextSql(database.schemaName).guidLower("\"Id\"")}, '-', '') = ANY($1::text[])
+      ORDER BY "Id" ASC`,
+    values: [lookup],
+  });
+  const rows = [];
+  for (const row of result.rows) {
+    const id = decodeValue(idColumn, row.Id, 'postgres');
+    // Match the ID-only reader's admission before decoding other TEXT cells.
+    if (!nonemptyId(id)) continue;
+    const decoded = {};
+    for (const column of columns) decoded[column.name] = column.name === 'Id'
+      ? id : decodeValue(column, row[column.name], 'postgres');
+    rows.push(decoded);
+  }
+  return rows;
 }
 
 /** Follow entity ParentId, including the user's physical-root translation.
@@ -131,7 +147,7 @@ async function queryPostgresRowsByPaths(database, paths, {
     .map(value => [value.toString('hex'), value])).values()];
   if (!keys.length) return [];
   const nativePathKeySql = `${q(database.schemaName)}.${q(postgresNativePathKeyFunctionName)}`;
-  const result = await database.client.query({
+  const result = await queryPostgresLibraryStatement(database, {
     text: `/* folder-scan-path-owners */
       WITH matched AS (
         SELECT item."Id", item."Type", item."Path",
@@ -438,7 +454,9 @@ export async function loadPostgresPageGraph(database, pageRows, navigationRows =
   // one lookup followed by IsVisible, without recursively opening that root.
   // The recursive relation appears once and every expansion is correlated to
   // its current frontier row, so query count remains constant as depth grows.
-  const result = await withPostgresNativeQueryJitOff(database, session => session.client.query({
+  // OFFSET 0 keeps the referenced-Id lookup dependent on its current key
+  // when PostgreSQL plans the recursive join.
+  const result = await withPostgresNativeQueryJitOff(database, session => queryPostgresLibraryStatement(session, {
     text: `/* page-relationship-graph */
       WITH RECURSIVE graph("Id", "ExpandMembers") AS (
         SELECT seed."Id", TRUE
@@ -456,8 +474,11 @@ export async function loadPostgresPageGraph(database, pageRows, navigationRows =
             (current."OwnerId", FALSE), (current."PrimaryVersionId", TRUE),
             (CASE WHEN parent."ExpandMembers" THEN current."ChannelId" END, FALSE)
           ) reference("Id", "Version")
-          JOIN ${baseItems} referenced
-            ON replace(${nativeTextSql(database.schemaName).guidLower("referenced.\"Id\"")}, '-', '') = replace(${nativeTextSql(database.schemaName).guidLower("reference.\"Id\"")}, '-', '')
+          CROSS JOIN LATERAL (
+            SELECT referenced."Id" FROM ${baseItems} referenced
+            WHERE replace(${nativeTextSql(database.schemaName).guidLower("referenced.\"Id\"")}, '-', '') = replace(${nativeTextSql(database.schemaName).guidLower("reference.\"Id\"")}, '-', '')
+            OFFSET 0
+          ) referenced
           WHERE replace(${nativeTextSql(database.schemaName).guidLower("current.\"Id\"")}, '-', '') = replace(${nativeTextSql(database.schemaName).guidLower("parent.\"Id\"")}, '-', '')
             AND reference."Id" IS NOT NULL
           UNION
@@ -538,7 +559,7 @@ export async function loadPostgresMetadataRows(database, referenceId, {
     ? target?.PresentationUniqueKey ?? (target && createPresentationUniqueKey(target)) : null;
   const values = [idKey(referenceId), targetType ?? '', nativeTextBytes(cleanValue(targetName ?? '')), includeDescendants === true,
     !nonemptyId(target?.ParentId), seriesKey == null ? null : nativeTextBytes(seriesKey), Boolean(clrTrim(seriesKey ?? '')), includeChildren];
-  const result = await database.client.query({
+  const result = await queryPostgresLibraryStatement(database, {
     text: `SELECT item."Id"
       FROM ${baseItems} item
       WHERE $8::boolean AND (replace(${nativeTextSql(database.schemaName).guidLower("item.\"ParentId\"")}, '-', '') = $1

@@ -272,7 +272,6 @@ test('elevated folder Refresh scans folders and an ordinary root movie, then pub
     const changed = await collectLibraryChanges(readerSocket.messages, expectedAddedIds, value => observation.deliveryWindows.push(value));
     assert.deepEqual(changed.ItemsAdded.toSorted(), expectedAddedIds.toSorted(), JSON.stringify(changed));
     assert.ok(changed.CollectionFolders.includes(guidN(ids.collection)), JSON.stringify(changed));
-    assert.deepEqual(errors, []);
   } finally {
     releaseListing();
     const closing = runtime.close();

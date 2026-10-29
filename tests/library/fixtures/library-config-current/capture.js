@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describeFile } from '../../../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../../../tools/validation/native-build-inputs.js';
-import { recordOracle } from '../../../../tools/validation/oracle.js';
+import { compileOracle } from '../../../../tools/validation/oracle.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../../../tools/validation/paths.js';
 import { mutationObservation, mutationAccessExpectation } from './observations.js';
 
@@ -73,10 +73,12 @@ async function capture() {
     await writeFile(inputFile, inputBytes, { flag: 'wx' });
     report.originalInput = { filename: fileURLToPath(inputUrl), bytes: originalBytes.length, sha256: hash(originalBytes) };
     report.consumerInput = await describeFile(inputFile);
+    const oracle = await compileOracle({ project, output: path.join(output, 'build') });
+    report.oracleBuild = oracle.buildRecord;
     const runs = [];
     for (const label of ['native-first', 'native-repeat']) {
       const directory = path.join(output, label);
-      const record = await recordOracle({ project, output: directory, args: [inputFile, '{output}/states', '{output}/native.json'] });
+      const record = await oracle.record({ output: directory, args: [inputFile, '{output}/states', '{output}/native.json'] });
       const filename = path.join(directory, 'native.json');
       const native = await verifyNative(record, filename, inputBytes, input);
       report.captures.push({ label, record, observation: await describeFile(filename) });
@@ -109,7 +111,7 @@ async function capture() {
         const bytes = Buffer.from(json(samples)), filename = path.join(output, 'native-consumer-input.json');
         await writeFile(filename, bytes, { flag: 'wx' });
         const directory = path.join(output, 'native-cold-reader');
-        const record = await recordOracle({ project, output: directory, args: [filename, '{output}/unused-state', '{output}/native.json'] });
+        const record = await oracle.record({ output: directory, args: [filename, '{output}/unused-state', '{output}/native.json'] });
         const outputFile = path.join(directory, 'native.json'), native = await verifyNative(record, outputFile, bytes, samples);
         await writeFile(path.join(output, 'native-cold-reader-receipt.json'), json({
           input: await describeFile(filename), record, observation: await describeFile(outputFile),

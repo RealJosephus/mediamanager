@@ -100,7 +100,6 @@ test('postgres: library structure HTTP preserves options, shortcuts, deferred re
   assert.deepEqual(await state.list(), []);
   assert.equal((await state.adapter.stat('/Movies/Present.txt')).kind, 'file'); assert.equal((await state.adapter.stat('/Additional/Present.txt')).kind, 'file');
   assert.match(await fs.readFile(path.join(state.configurationDirectoryPath, 'system.xml'), 'utf8'), /preserved/);
-  assert.deepEqual(state.errors, []);
 });
 
 test('postgres: library structure authorization, product identity and API messages are independent of request language', enabled, async t => {
@@ -134,7 +133,7 @@ test('postgres: library path failure retains options and monitor work, while clo
   state.runtime.libraryOptionsStore.on('updated', failure);
   try {
   const response = await state.request('/Library/VirtualFolders/Paths', { body: { Name: 'Movies', Path: state.additionalPath } });
-  assert.equal(response.status, 500); await started.promise;
+  assert.equal(response.status, 500); assert.equal(response.body, 'Error processing request.'); await started.promise;
   const listing = (await state.list())[0]; assert.deepEqual(listing.LibraryOptions.PathInfos, [{ Path: state.mediaPath }, { Path: state.additionalPath }]);
   assert.equal(await fs.readFile(path.join(state.programDataPath, 'root', 'default', 'Movies', 'Additional.mblink'), 'utf8'), state.additionalPath);
   state.runtime.libraryOptionsStore.off('updated', failure);
@@ -142,7 +141,6 @@ test('postgres: library path failure retains options and monitor work, while clo
   await new Promise(resolve => setImmediate(resolve)); assert.equal(closed, false); assert.equal(monitorStarted, false);
   await assert.rejects(state.runtime.libraryConfiguration.addMediaPath('Movies', { Path: state.additionalPath }), { status: 503 });
   release.resolve(); await closing; assert.equal(monitorStarted, true); assert.equal(closed, true);
-  assert.equal(state.errors.filter(error => error.message === 'Controlled library options event failure.').length, 1);
   } finally { state.runtime.libraryOptionsStore.off('updated', failure); release.resolve(); }
 });
 

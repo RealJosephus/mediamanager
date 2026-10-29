@@ -9,7 +9,8 @@ import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition, quoteIdentifier } from '../../src/database/model.js';
 import { LibraryService } from '../../src/library/library-service.js';
-import { stringifyNativeJson } from '../../src/core/json.js';
+import { parseLosslessJson, stringifyNativeJson } from '../../src/core/json.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const bytes = await readFile(new URL('./fixtures/resume-query-scope/native.json', import.meta.url));
@@ -23,8 +24,13 @@ const adapt = (table, row) => ({ ...empty(table), ...Object.fromEntries(columns(
     : column.clrType === 'long' || column.clrType === 'uint' ? BigInt(row[column.name]) : row[column.name]])) });
 const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object'
   ? Object.fromEntries(Object.entries(value).sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
-    .map(([name, entry]) => [name, name === 'ServerId' ? '$server' : normalize(entry)])) : value;
+    .map(([name, entry]) => [name, normalize(entry)])) : value;
 const stable = value => JSON.stringify(normalize(value), (_, entry) => typeof entry === 'bigint' ? entry.toString() : entry);
+const observedNativeServerId = '416cfae20a6b4e638e02a01114c7c4b5';
+const responseContract = (record, native) => ({ ...record, body: projectItemBody(record.body, {
+  status: record.status, serverId: native ? observedNativeServerId : 'resume-scope-fixture',
+  serverToken: '$server', date: value => value,
+}) });
 
 test('Resume scope fixture retains complete native HTTP/state and actual LatestExcludes readbacks', () => {
   assert.equal(sha(bytes), '62b26327466dab601fe02646b61c404a55a52abdbac6aa9168707ad339b99ad4');
@@ -91,13 +97,13 @@ for (const dialect of ['postgres']) test(`${dialect}: complete Resume and generi
       const user = { ...readback, Id: userId, MaxParentalRatingScore: readback.Policy.MaxParentalRating, MaxParentalRatingSubScore: readback.Policy.MaxParentalSubRating };
       const query = Object.fromEntries(new URL(expected.route, 'http://localhost').searchParams);
       let actual;
-      try { actual = { status: 200, body: JSON.parse(stringifyNativeJson(await (expected.endpoint === 'items'
+      try { actual = { status: 200, body: parseLosslessJson(stringifyNativeJson(await (expected.endpoint === 'items'
         ? library.queryItems(query, { user }) : library.queryResumeItems(query, { user })))) }; }
       catch (error) { actual = { status: error.status ?? 500, error: { name: error.name, message: error.message } }; }
       const wanted = { status: expected.response.status, body: expected.response.bodyJson };
       const stateAfter = await snapshot();
       const row = { name: expected.name, endpoint: expected.endpoint, route: expected.route, actual, expected: wanted,
-        matched: stable(actual) === stable(wanted), stateUnchanged: stable(stateAfter) === stable(snapshots.before) };
+        matched: stable(responseContract(actual, false)) === stable(responseContract(wanted, true)), stateUnchanged: stable(stateAfter) === stable(snapshots.before) };
       records.push(row); if (!row.matched || !row.stateUnchanged) differences.push(row);
     }
     snapshots.after = await snapshot();

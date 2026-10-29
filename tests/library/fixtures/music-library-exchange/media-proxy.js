@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import http from 'node:http';
 import { lstat, readFile } from 'node:fs/promises';
-import { sha } from './scenario.js';
+import { sha } from '../../../helpers/library-exchange-state.js';
 
 const escapeSegment = value => encodeURIComponent(value).replace(/[!'()*]/gu,
   character => '%' + character.charCodeAt(0).toString(16).toUpperCase());

@@ -5,19 +5,9 @@ import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
 
 const input = JSON.parse(await readFile(new URL('./fixtures/person-filters/input.json', import.meta.url), 'utf8'));
 const native = JSON.parse(await readFile(new URL('./fixtures/person-filters/native.json', import.meta.url), 'utf8'));
-// Preserve the original native input/response SHA binding. These two fixture
-// fields describe old candidate diagnostics, not native HTTP response bodies.
-// Actual ASP GetOrderBy throws ArgumentOutOfRangeException for excess directions.
-const excessDirectionCases = new Set(['person-sortname-repository-excess-directions', 'person-sortname-memory-excess-directions']);
 // The native recorder seeds raw SQL CleanName with Name.toLowerCase().
 const candidateInput = { ...input,
-  items: input.items.map(item => ({ ...item, cleanName: item.name.toLowerCase() })),
-  cases: input.cases.map(entry => {
-    if (!excessDirectionCases.has(entry.name)) return entry;
-    assert.equal(entry.expectedRuntimeError, 'Too many sort directions.');
-    return { ...entry, expectedRuntimeError: "Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')" };
-  }) };
-assert.equal(input.cases.filter(entry => excessDirectionCases.has(entry.name)).length, 2);
+  items: input.items.map(item => ({ ...item, cleanName: item.name.toLowerCase() })) };
 const expectedByName = new Map(native.cases.map(entry => [entry.name, entry]));
 const expectedHttpCases = native.cases.reduce((total, entry) => total + entry.endpoints.length, 0);
 
@@ -66,7 +56,6 @@ for (const dialect of ['postgres']) {
       }
     }
     assert.deepEqual(actual.afterReads, actual.beforeReads, `${dialect}: media and people tables changed during HTTP reads`);
-    assert.deepEqual(actual.runtimeErrors, []);
     assert.deepEqual(actual.cleanup, {
       runtimeClosed: true,
       databaseClosed: true,

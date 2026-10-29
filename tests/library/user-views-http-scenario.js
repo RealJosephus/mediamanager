@@ -10,6 +10,7 @@ import { dependencyOrder, quoteIdentifier, tableDefinition } from '../../src/dat
 import { nativeGuid } from '../../src/users/native.js';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { expandStatePath } from './fixture-state-path.js';
+import { rebindUserViewsDataPaths, recordedUserViewsStateRoots } from './user-views-projection.js';
 
 const tables = { baseItems: 'BaseItems', ancestorIds: 'AncestorIds', linkedChildren: 'LinkedChildren',
   itemValues: 'ItemValues', itemValueLinks: 'ItemValuesMap', userData: 'UserData', images: 'BaseItemImageInfos',
@@ -47,9 +48,11 @@ const available = port => new Promise(resolve => { const server = createServer()
 /** Replay complete native media observations with freshly created synthetic accounts. */
 export async function recordUserViewsCandidate({ dialect, fixture, contract, connectionString }) {
   assert.ok(['postgres'].includes(dialect));
+  const recordedStateRoots = recordedUserViewsStateRoots(contract, fixture);
   const root = await mkdtemp(path.join(tmpdir(), 'mm-user-views-'));
-  const referenceRoot = contract.manifest.referenceRoot, schema = 'user_views_' + randomUUID().replaceAll('-', '').slice(0, 16);
+  const referenceRoot = recordedStateRoots.referenceRoot, schema = 'user_views_' + randomUUID().replaceAll('-', '').slice(0, 16);
   const nativeStages = contract.native, configuration = contract.configuration, actors = structuredClone(contract.actors);
+  const serverId = 'user-views-' + dialect;
   let database, runtime, result, port, failure;
   let before;
   const records = [], caseStages = [], setup = [];
@@ -74,18 +77,15 @@ export async function recordUserViewsCandidate({ dialect, fixture, contract, con
     for (const table of dependencyOrder().filter(table => table.name !== 'BaseItems' && byTable[table.name])) {
       for (const row of nativeStages.before.database[byTable[table.name]]) await database.insert(table.name, row);
     }
-    const rewrite = value => typeof value === 'string' ? expandStatePath(value, referenceRoot, root)
-      : Array.isArray(value) ? value.map(rewrite)
-        : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([key, child]) => [key, rewrite(child)])) : value;
     for (const row of await database.rows('BaseItems')) {
-      let Path = rewrite(row.Path);
+      let Path = expandStatePath(row.Path, referenceRoot, root);
       for (const macro of ['%AppDataPath%', '%MetadataPath%']) Path = expandStatePath(Path, macro, macro);
-      const Data = row.Data == null ? null : JSON.stringify(rewrite(JSON.parse(row.Data)));
+      const Data = rebindUserViewsDataPaths(row.Data, row.Type, value => expandStatePath(value, referenceRoot, root));
       if (Path !== row.Path || Data !== row.Data) await database.update('BaseItems', { Id: row.Id }, { Path, Data });
     }
     runtime = await createTestRuntime({ database, configuration: { ...configuration, IsStartupWizardCompleted: true, UICulture: 'en-US',
       EnableFolderView: false, EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false },
-      serverId: 'user-views-' + dialect, serverName: 'User Views Candidate', programDataPath: path.join(root, 'data'),
+      serverId, serverName: 'User Views Candidate', programDataPath: path.join(root, 'data'),
       onError: error => errors.push({ name: error.name, message: error.message, status: error.status ?? null, stack: error.stack }) });
     for (const actor of Object.values(actors)) {
       const created = await runtime.users.createUser({ Name: actor.name, Password: 'user views synthetic password' });
@@ -151,10 +151,10 @@ export async function recordUserViewsCandidate({ dialect, fixture, contract, con
       }
     }
     await runtime.library.userViews.drain();
-    result = { dialect, root, referenceRoot, before, records, caseStages, afterReads: await snapshot(database, root), runtimeErrors: errors, setup, cleanup };
+    result = { dialect, root, referenceRoot, recordedStateRoots, serverId, before, records, caseStages, afterReads: await snapshot(database, root), runtimeErrors: errors, setup, cleanup };
   } catch (error) {
     failure = error;
-    result ??= { dialect, root, referenceRoot, before, records, caseStages, runtimeErrors: errors, setup, cleanup };
+    result ??= { dialect, root, referenceRoot, recordedStateRoots, before, records, caseStages, runtimeErrors: errors, setup, cleanup };
   }
   finally {
     try { if (runtime) await runtime.close(); else await database?.close(); cleanup.runtimeClosed = runtime ? runtime.networkHost.listeners.every(entry => !entry.server.listening) : true; } catch (error) { failure ??= error; }

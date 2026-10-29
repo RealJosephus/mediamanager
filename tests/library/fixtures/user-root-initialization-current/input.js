@@ -1,0 +1,15 @@
+export const rootInitializationInput = Object.freeze({
+  schemaVersion: 1,
+  serverId: 'd99c48f0ea6f4b4d8d628954b80c1a70',
+  cases: ['fresh', 'stored', 'wrong-type', 'lookup-failure', 'blocked-directory'],
+  configuration: { CacheSize: 8, EnableCaseSensitiveItemIds: true, SkipDeserializationForBasicTypes: true },
+  seed: { name: 'Retained root Ω', overview: 'Retained root overview', tags: ['original', '根'],
+    dateCreated: '2026-10-20T01:02:03.1234567Z', dateModified: '2026-10-21T01:02:03.2345678Z',
+    dateLastSaved: '2026-10-22T01:02:03.3456789Z' },
+  saved: { name: 'Saved root Ω', overview: 'root:opaque / Café | value', tags: ['saved', '根', ''],
+    providerIds: { Opaque: 'ABCDEF01-2345-6789-ABCD-EF0123456789 / Path\\\\Keep' },
+    dateCreated: '2026-10-23T01:02:03.1234567Z', dateModified: '2026-10-24T01:02:03.2345678Z',
+    dateLastSaved: '2026-10-25T01:02:03.3456789Z' },
+  blockedBytes: 'Actual original file occupying the user root directory.\n',
+  warmOverview: 'Unpersisted singleton Ω | must survive another read',
+});

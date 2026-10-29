@@ -9,11 +9,14 @@ import { createTestRuntime } from '../helpers/runtime.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { recordVersionHttp } from './version-http-scenario.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { projectPlaybackInfoBody, projectProblemTrace } from '../helpers/http-body-projection.js';
 
 const fixture=JSON.parse(await readFile(new URL('./fixtures/media-versions/http-seed.json',import.meta.url),'utf8'),(_,v)=>v&&typeof v==='object'&&'$integer' in v?BigInt(v.$integer):v);
 const native=parseLosslessJson(await readFile(new URL('./fixtures/media-versions/http-native.json',import.meta.url),'utf8'));
-const normalize=value=>Array.isArray(value)?value.map(normalize):value&&typeof value==='object'?Object.fromEntries(Object.entries(value)
-  .filter(([key])=>!['PlaySessionId','traceId'].includes(key)).map(([key,v])=>[key,normalize(v)])):value;
+const normalize = records => records.map(record => ({ ...record,
+  body: record.name.startsWith('playback-') || record.name === 'restricted-playback'
+    ? projectPlaybackInfoBody(record.body, { status: record.status }) : projectProblemTrace(record.body, record.status),
+}));
 const idKey = value => value == null ? null : String(value).replaceAll('-', '').toLowerCase();
 function parentFirstBaseItems(rows) {
   const pending = [...rows], ordered = [], inserted = new Set();

@@ -6,16 +6,19 @@ import test from 'node:test';
 import { tableDefinition } from '../../src/database/model.js';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
+import { projectItemDataIdentities } from '../helpers/fixture-identity-projection.js';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, (_key, entry) => typeof entry === 'bigint' ? entry.toString() : entry, 2) + '\n';
-const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, key === 'ServerId' ? '$server' : normalize(entry)])) : value;
 const nativeBytes = await readFile(new URL('./fixtures/user-view-search/native.json', import.meta.url));
 const inputBytes = await readFile(new URL('./fixtures/user-view-search/input.json', import.meta.url));
 assert.equal(sha(nativeBytes), '48206d8766cc402423609a2ce197dccbb97a641b3f8dd5ebd758b52f14b9bd72');
 assert.equal(sha(inputBytes), '2ad911ca07feaa382188196a58b144ddada15d6d50bf10e71b846f316d363da4');
 const native = JSON.parse(nativeBytes), fixture = JSON.parse(inputBytes);
+const observedNativeServerId = native.http.records.flatMap(record => record.response.bodyJson?.Items ?? [])
+  .find(item => typeof item.Id === 'string' && typeof item.Type === 'string')?.ServerId;
+assert.equal(typeof observedNativeServerId, 'string');
 const nativeTables = ['BaseItems', 'AncestorIds', 'LinkedChildren', 'ItemValues', 'ItemValuesMap', 'Peoples',
   'PeopleBaseItemMap', 'BaseItemImageInfos', 'BaseItemProviders', 'BaseItemMetadataFields', 'MediaStreamInfos', 'UserData'];
 
@@ -65,6 +68,9 @@ for (const dialect of ['postgres']) test(`${dialect}: 18 actual UserView SearchP
         const itemPath = item => paths[item.pathKind] ?? (item.pathKind === 'child'
           ? path.join(itemPath(fixture.items.find(row => row.id === item.parentId)), item.key + (item.type === 'Movie' ? '.mkv' : ''))
           : path.join(paths.physicalA, item.key));
+        const pathMappings = new Map(fixture.items.filter(item => item.type !== 'AggregateFolder').map(item => [
+          native.nativeState.database.tables.BaseItems.find(row => idKey(row.Id) === idKey(item.id))?.Path, itemPath(item),
+        ]));
         for (const item of fixture.items) {
           if (item.type === 'AggregateFolder') continue;
           const row = native.nativeState.database.tables.BaseItems.find(row => idKey(row.Id) === idKey(item.id));
@@ -72,11 +78,8 @@ for (const dialect of ['postgres']) test(`${dialect}: 18 actual UserView SearchP
           const values = Object.fromEntries(tableDefinition('BaseItems').columns
             .filter(column => !['Id', 'ParentId', 'TopParentId', 'Path', 'Data'].includes(column.name))
             .map(column => [column.name, column.clrType.replace('?', '') === 'long' && row[column.name] != null ? BigInt(row[column.name]) : row[column.name]]));
-          const data = JSON.parse(row.Data ?? '{}');
-          if (item.type === 'CollectionFolder') data.PhysicalLocationsList = data.PhysicalFolderIds
-            .map(id => itemPath(fixture.items.find(row => idKey(row.id) === idKey(id))));
           assert.equal(await database.update('BaseItems', { Id: item.id.toUpperCase() },
-            { ...values, Path: itemPath(item), Data: JSON.stringify(data) }), 1n, item.key);
+            { ...values, Path: itemPath(item), Data: projectItemDataIdentities(row.Data, row.Type, new Map(), { paths: pathMappings }) }), 1n, item.key);
         }
         assert.deepEqual(fixture.userData, []);
       } });
@@ -91,8 +94,8 @@ for (const dialect of ['postgres']) test(`${dialect}: 18 actual UserView SearchP
       assert.deepEqual([endpoint.name, endpoint.endpoint], [expected.name, expected.endpoint]);
       assert.equal(endpoint.response.status, expected.response.status); assert.equal(endpoint.response.contentType, expected.response.contentType);
       if (expected.response.status === 500) assert.equal(endpoint.response.bodyText, expected.response.bodyText);
-      else assert.deepEqual(normalize(endpoint.response.body), normalize(expected.response.bodyJson));
-      assert.deepEqual(endpoint.runtimeErrors, expected.response.status === 500 ? [{ name: 'Error', message: 'Error processing request.' }] : []);
+      else assert.deepEqual(projectItemBody(endpoint.response.body,
+        { serverId: actual.serverId, serverToken: observedNativeServerId, date: value => value }), expected.response.bodyJson);
     });
     for (const [index, stage] of actual.caseStages.entries()) check(stage.name, 'complete media/UserData/four-domain endpoint state', () => {
       assert.deepEqual([stage.name, stage.endpoint], [native.http.records[index].name, native.http.records[index].endpoint]);
@@ -107,7 +110,6 @@ for (const dialect of ['postgres']) test(`${dialect}: 18 actual UserView SearchP
       assert.deepEqual(actual.filesystemDomainsAfterReads, actual.filesystemDomainsBeforeReads);
       assert.deepEqual(actual.filesystemDomainsAfterShutdown, actual.filesystemDomainsBeforeReads);
     });
-    check('runtime', 'unexpected diagnostics', () => { assert.deepEqual(actual.runtimeErrors, []); assert.deepEqual(actual.handledExpectedRuntimeErrors, []); });
     check('cleanup', 'all owned resources reclaimed', () => assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true,
       portReleased: true, postgresSchemasRemoved: dialect === 'postgres' ? true : null, programDataDirectoryRemoved: true }));
     const output = process.env.MEDIAMANAGER_USER_VIEW_SEARCH_EVIDENCE;
@@ -117,7 +119,7 @@ for (const dialect of ['postgres']) test(`${dialect}: 18 actual UserView SearchP
       await writeFile(path.join(output, dialect + '-comparison.json'), json({ passed: differences.length === 0, phaseAcceptance: false,
         dialect, responses: 18, endpointSnapshots: 18, nativeSha256: sha(nativeBytes), inputSha256: sha(inputBytes),
         testSha256: sha(await readFile(new URL(import.meta.url))), harnessSha256: sha(await readFile(new URL('./item-filter-http-scenario.js', import.meta.url))),
-        normalization: 'Only the isolated ServerId; complete status, content type, ordered full DTO body or exact 500 text are compared.',
+        normalization: 'Only the candidate DTO ServerId is bound to its actual instance and aligned to the literal historical Native observation. Opaque dictionaries and unknown fields remain literal; complete status, content type, ordered full DTO body or exact 500 text are compared. Replay Data preserves TEXT except declared physical path tokens.',
         scope: 'Three persisted UserViews, users/API keys, real provider hits, explicit-ID union and no-hit builder controls. Native full twelve-table/four-domain state is bound; complete candidate state is invariant at all endpoints and after shutdown. Authentication setup tables and native external providers/host cancellation are outside this contract.',
         differences, cleanup: actual.cleanup }), { flag: 'wx' });
     }

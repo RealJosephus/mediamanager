@@ -30,13 +30,6 @@ export const errorRecord = error => ({ type: error.nativeException ?? error.name
 export async function observe(operation) { try { return { value: await operation() }; } catch (error) { return { failure: errorRecord(error) }; } }
 export const comparable = value => value?.failure ? { failure: { status: value.failure.status,
   ...(value.failure.status === 400 ? { Message: value.failure.Message } : {}) } } : value;
-export function normalize(value, root) {
-  if (typeof value === 'string') return value.replaceAll(root, '<ROOT>').replaceAll(root.replaceAll('\\', '/'), '<ROOT>');
-  if (Array.isArray(value)) return value.map(item => normalize(item, root));
-  if (value instanceof Map) return Object.fromEntries([...value].map(([key, item]) => [key, normalize(item, root)]));
-  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, normalize(item, root)]));
-  return value;
-}
 const projectDto = item => parseLosslessJson(stringifyNativeJson(item));
 const jsonValue = value => parseLosslessJson(JSON.stringify(value, (_key, entry) => typeof entry === 'bigint' ? JSON.rawJSON(String(entry)) : entry));
 const projectItem = item => jsonValue({ Id: idKey(item.Id), Name: item.Name, Path: item.Path, ExternalId: item.ExternalId ?? null,
