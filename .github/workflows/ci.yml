@@ -296,6 +296,11 @@ jobs:
         with:
           postgres-version: '17'
           user: validation
+      - name: Isolate Windows lifecycle database checkpoints
+        id: lifecycle_postgres
+        if: runner.os == 'Windows' && inputs.native_sqlite == true
+        shell: pwsh
+        run: ./tools/ci/windows-lifecycle-postgres.ps1 start
       - name: Provision pinned media tools
         shell: pwsh
         timeout-minutes: 5
@@ -474,6 +479,10 @@ jobs:
       - name: Audit database resources
         if: always() && steps.environment.outcome == 'success'
         run: node tools/ci/environment.js audit
+      - name: Audit and stop the owned Windows lifecycle database
+        if: always() && steps.lifecycle_postgres.outputs.owned == 'true'
+        shell: pwsh
+        run: ./tools/ci/windows-lifecycle-postgres.ps1 stop
       - name: Remove owned macOS limited broadcast policy
         if: always() && runner.os == 'macOS'
         run: node tools/ci/macos-broadcast.js cleanup

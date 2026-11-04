@@ -172,21 +172,39 @@ async function readConfig(filename) {
 export async function preflight(testPaths, dependencies, environment, { fullProfile = false } = {}) {
   const selected = dependencyClosure(dependencies, testPaths);
   const requiredServices = [...new Set(selected.flatMap(entry => entry.services))].sort();
+  const needsLifecyclePostgres = process.platform === 'win32'
+    && selected.some(entry => entry.path === 'tests/core/system-lifecycle-process.test.js');
+  if (needsLifecyclePostgres) requiredServices.push('lifecyclePostgres');
   const services = [];
   for (const name of requiredServices) {
-    const variable = dependencyVariables[name];
+    const lifecyclePostgres = name === 'lifecyclePostgres';
+    const variable = lifecyclePostgres ? 'MEDIAMANAGER_TEST_LIFECYCLE_POSTGRES' : dependencyVariables[name];
     const value = environment[variable];
     let result = { name, variable, configured: Boolean(value), available: false };
-    if (value && name === 'postgres') {
+    if (value && (name === 'postgres' || lifecyclePostgres)) {
       const { default: pg } = await import('pg');
       const client = new pg.Client({ connectionString: value, connectionTimeoutMillis: 5000 });
       try {
         await client.connect();
         const response = await client.query('SELECT version() AS version, current_database() AS database, current_user AS role, '
           + 'inet_server_addr()::text AS address, inet_server_port() AS port, pg_postmaster_start_time() AS started_at');
-        result.available = true;
         result.version = response.rows[0].version;
         result.identity = response.rows[0];
+        if (needsLifecyclePostgres) {
+          const { rows: [cluster] } = await client.query(`SELECT system_identifier::text,
+            current_setting('server_version_num')::integer AS server_version_num,
+            current_setting('fsync') AS fsync, current_setting('synchronous_commit') AS synchronous_commit,
+            current_setting('full_page_writes') AS full_page_writes FROM pg_control_system()`);
+          Object.assign(result.identity, cluster);
+          if (lifecyclePostgres && (Math.trunc(cluster.server_version_num / 10000) !== 17
+            || [cluster.fsync, cluster.synchronous_commit, cluster.full_page_writes].some(value => value !== 'on')
+            || !/^127\.0\.0\.1(?:\/32)?$/u.test(result.identity.address ?? '')
+            || cluster.system_identifier === services.find(service => service.name === 'postgres')?.identity?.system_identifier)) {
+            throw Object.assign(new Error('The lifecycle fixture requires an independent durable loopback PostgreSQL 17 cluster.'),
+              { code: 'lifecycle-postgres-isolation-required' });
+          }
+        }
+        result.available = true;
       } catch (error) { result.errorCode = error.code || error.name; }
       finally { await client.end().catch(() => {}); }
     } else if (value && name === 'dvdReference') {
