@@ -164,8 +164,9 @@ async function fixture(t) {
     service.result = input => {
       const value = result(input), send = value.send;
       value.send = async (...args) => {
-        const actual = await outcome(send(...args)); actualSends.push({ case: activeCase, ...actual });
-        report.sends.push({ case: activeCase, reasonType: typeof actual.reason, ...observed(actual) });
+        const requestCase = activeCase;
+        const actual = await outcome(send(...args)); actualSends.push({ case: requestCase, ...actual });
+        report.sends.push({ case: requestCase, reasonType: typeof actual.reason, ...observed(actual) });
         if (actual.failed) throw actual.reason;
         return actual.value;
       };
