@@ -36,19 +36,19 @@ async function fixtureFor(name, count, flag) {
 }
 const identity = (value, stateRoot) => value == null ? value : value.replaceAll('$STATE', stateRoot);
 const project = (value, stateRoot) => value == null ? value : value.replaceAll(stateRoot, '$STATE');
-const resolvedLocationLists = new WeakSet();
 const virtualLocations = new Map();
+// Only the fixture's resolved directory uses the host's path separator.
 const projectLocations = (locations, stateRoot, resolved = false) => locations?.map((value, index) =>
   resolved && index === 0 ? projectStatePath(value, stateRoot) : virtualLocations.get(stateRoot)?.get(value) ?? project(value, stateRoot)) ?? null;
 const projectFilePath = (value, stateRoot) => projectStatePath(projectStatePath(projectStatePath(value, stateRoot),
   process.cwd(), '$WORKSPACE'), 'D:\\mediamanager', '$WORKSPACE');
 const expectedResult = result => result.files ? { ...result,
   files: result.files.map(file => ({ ...file, Path: projectFilePath(file.Path, '$STATE') })) } : result;
-function stateProjection(item, stateRoot) {
+function stateProjection(item, stateRoot, resolvedLocations = false) {
   return { Name: item.Name, Path: project(item.Path, stateRoot), refreshFlag: internalFolderRefreshFlag(item),
     cacheCleared: ['AggregateFolder', 'UserRootFolder'].includes(item.Type) ? postgresFolderChildIds(item) == null : null,
     locations: ['AggregateFolder', 'CollectionFolder'].includes(item.Type)
-      ? projectLocations(item.PhysicalLocationsList, stateRoot, resolvedLocationLists.has(item.PhysicalLocationsList)) : null,
+      ? projectLocations(item.PhysicalLocationsList, stateRoot, resolvedLocations) : null,
     physicalIds: item.Type === 'CollectionFolder' ? item.PhysicalFolderIds : null };
 }
 function encodedText(value, encoding) {
@@ -107,9 +107,7 @@ async function seedSample(fixture, sample) {
   // metadata context setup from warming UserRootFolder.Children before the
   // cache controls insert their first child; the real child getter stays active.
   fixture.library.getCollectionFolders = async () => [];
-  const loaded = await fixture.loadContext(id);
-  if (sample.useResolvedLocations) resolvedLocationLists.add(loaded.item.PhysicalLocationsList);
-  return loaded;
+  return fixture.loadContext(id);
 }
 
 const direct = await fixtureFor('internal-folder-refresh', 37, 'actualFrozenInternalFolderRefresh');
@@ -132,6 +130,7 @@ for (const dialect of ['postgres']) {
   const options = {};
   for (const sample of edges.input) test(dialect + ': actual internal directory resolve edge ' + sample.name, options, async t => {
     const fixture = await setupChildrenFixture(t, dialect), loaded = await seedSample(fixture, sample), item = loaded.item;
+    const snapshot = (resolved = sample.useResolvedLocations) => stateProjection(item, fixture.stateRoot, resolved);
     if (item.Type === 'AggregateFolder') await fixture.store.run(session => withPostgresCachedFolderChildren({ session, library: fixture.library, item }, () => {}));
     if (Object.hasOwn(sample, 'flag')) markInternalFolderRefresh(item, sample.flag);
     if (sample.locationsNull) item.PhysicalLocationsList = null;
@@ -142,16 +141,15 @@ for (const dialect of ['postgres']) {
     try {
       if (sample.mode === 'resolve') {
         const resolved = await loaded.rootFolderResolveArgs(sample.setLocations);
-        if (sample.setLocations) resolvedLocationLists.add(item.PhysicalLocationsList);
-        result = { state: stateProjection(item, fixture.stateRoot), locations: projectLocations(resolved.locations, fixture.stateRoot, true),
+        result = { state: snapshot(sample.setLocations || sample.useResolvedLocations), locations: projectLocations(resolved.locations, fixture.stateRoot, true),
           files: resolved.files.map(value => ({ ...value, Path: projectFilePath(value.Path, fixture.stateRoot) })) };
-      } else if (sample.mode === 'before') result = { changed: beforeMetadataRefresh(item, loaded), state: stateProjection(item, fixture.stateRoot) };
+      } else if (sample.mode === 'before') result = { changed: beforeMetadataRefresh(item, loaded), state: snapshot() };
       else {
-        const requiresRefresh = await loaded.requiresRefresh(), state = stateProjection(item, fixture.stateRoot);
-        result = { requiresRefresh, state, changedAfter: beforeMetadataRefresh(item, loaded), after: stateProjection(item, fixture.stateRoot) };
+        const requiresRefresh = await loaded.requiresRefresh(), state = snapshot();
+        result = { requiresRefresh, state, changedAfter: beforeMetadataRefresh(item, loaded), after: snapshot() };
       }
     } catch (error) {
-      failed = true; result = { state: stateProjection(item, fixture.stateRoot) };
+      failed = true; result = { state: snapshot() };
       t.diagnostic(JSON.stringify({ nativeError: { name: expected.exception, parameterName: expected.parameterName },
         nodeError: { name: error?.name ?? null, message: error?.message ?? null, code: error?.code ?? null, status: error?.status ?? null } }));
     }
@@ -159,28 +157,30 @@ for (const dialect of ['postgres']) {
   });
   for (const sample of direct.input) test(dialect + ': actual internal directory hook ' + sample.name, options, async t => {
     const fixture = await setupChildrenFixture(t, dialect), loaded = await seedSample(fixture, sample), item = loaded.item;
+    const snapshot = () => stateProjection(item, fixture.stateRoot, sample.useResolvedLocations);
     if (Object.hasOwn(sample, 'flag')) markInternalFolderRefresh(item, sample.flag);
     // The native direct controls explicitly warm only the ID list. Read a real
     // empty repository list here; its nonnull ID list is observable without a private-field injection.
     if (['AggregateFolder', 'UserRootFolder'].includes(item.Type)) await fixture.store.run(session => withPostgresCachedFolderChildren({ session, library: fixture.library, item }, () => {}));
     let actual;
-    if (sample.mode === 'before') actual = { changed: beforeMetadataRefresh(item, loaded), state: stateProjection(item, fixture.stateRoot) };
+    if (sample.mode === 'before') actual = { changed: beforeMetadataRefresh(item, loaded), state: snapshot() };
     else {
-      const requiresRefresh = await loaded.requiresRefresh(), state = stateProjection(item, fixture.stateRoot);
-      actual = { requiresRefresh, state, changedAfter: beforeMetadataRefresh(item, loaded), after: stateProjection(item, fixture.stateRoot) };
+      const requiresRefresh = await loaded.requiresRefresh(), state = snapshot();
+      actual = { requiresRefresh, state, changedAfter: beforeMetadataRefresh(item, loaded), after: snapshot() };
     }
     compare(actual, direct.native.results.find(value => value.name === sample.name).result);
   });
   for (const sample of resolved.input) test(dialect + ': actual internal directory resolve args ' + sample.name, options, async t => {
     const fixture = await setupChildrenFixture(t, dialect), loaded = await seedSample(fixture, sample), item = loaded.item;
     const result = await loaded.rootFolderResolveArgs(sample.setLocations);
-    if (sample.setLocations) resolvedLocationLists.add(item.PhysicalLocationsList);
-    compare({ state: stateProjection(item, fixture.stateRoot), locations: projectLocations(result.locations, fixture.stateRoot, true),
+    compare({ state: stateProjection(item, fixture.stateRoot, sample.setLocations || sample.useResolvedLocations),
+      locations: projectLocations(result.locations, fixture.stateRoot, true),
       files: result.files.map(file => ({ ...file, Path: projectFilePath(file.Path, fixture.stateRoot) })) },
     expectedResult(resolved.native.results.find(value => value.name === sample.name).result));
   });
   for (const sample of cache.input) test(dialect + ': actual EF-backed root child cache ' + sample.name, options, async t => {
     const fixture = await setupChildrenFixture(t, dialect), loaded = await seedSample(fixture, sample), item = loaded.item;
+    const snapshot = () => stateProjection(item, fixture.stateRoot, sample.useResolvedLocations);
     const childId = '97c00000-0000-0000-0000-000000000010', newId = '97c00000-0000-0000-0000-000000000011';
     const base = (await fixture.database.rows('BaseItems', { where: { Id: id } }))[0];
     await fixture.database.insert('BaseItems', { ...base, Id: childId, Type: typeName('Folder'), ParentId: id, Name: 'Old child', SortName: 'first', Data: '{}' });
@@ -199,8 +199,8 @@ for (const dialect of ['postgres']) {
       else if (operation === 'requires') changed = await loaded.requiresRefresh();
       else if (operation === 'release') releaseCachedFolderChildren(item);
       else if (operation === 'setter') setFolderChildren(item, null);
-      observations.push({ operation, changed, state: stateProjection(item, fixture.stateRoot) });
+      observations.push({ operation, changed, state: snapshot() });
     }
-    compare({ warm, observations, children: await children(), state: stateProjection(item, fixture.stateRoot) }, cache.native.results.find(value => value.name === sample.name).result);
+    compare({ warm, observations, children: await children(), state: snapshot() }, cache.native.results.find(value => value.name === sample.name).result);
   });
 }
