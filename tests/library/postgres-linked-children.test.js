@@ -41,15 +41,22 @@ test('postgres: loaded empty link replacement clears only its parent and preserv
   await database.insert('LinkedChildren', other);
   const rows = async session => (await session.rows('LinkedChildren')).sort((a, b) => a.ParentId.localeCompare(b.ParentId));
   const before = await rows(database);
+  const loaded = await database.withConnection(session => store.load(session, parentId));
+  try {
+    assert.deepEqual(await store.page(loaded), [{ Ordinal: 1n, ItemId: childId, Type: 0, Path: null, LibraryItemId: null }]);
+  } finally { await store.release(loaded); }
   assert.equal(item.LinkedChildrenLoaded, false);
   await database.transaction(session => store.persist(session, item));
   assert.deepEqual(await rows(database), before, 'An unloaded property must not clear persisted members.');
   item.LinkedChildren = null;
   await assert.rejects(database.transaction(session => store.persist(session, item)), { status: 500 });
   assert.deepEqual(await rows(database), before, 'A null sequence rejects before changing persisted members.');
-  for (const kind of ['sentinel', 'owned-empty-revision']) {
-    const empty = kind === 'sentinel' ? EMPTY_NATIVE_LINKS
-      : await store.createFromPlan({ parentId, plan: store.plan(EMPTY_NATIVE_LINKS) });
+  for (const [kind, load] of [
+    ['sentinel', () => EMPTY_NATIVE_LINKS],
+    ['owned-empty-revision', () => store.createFromPlan({ parentId, plan: store.plan(EMPTY_NATIVE_LINKS) })],
+    ['empty-cold-load', () => database.withConnection(session => store.load(session, childId))],
+  ]) {
+    const empty = await load();
     publishNativeItemLinks(item, empty);
     assert.equal(item.LinkedChildrenLoaded, true);
     const rollback = new Error('Rollback empty replacement ' + kind);

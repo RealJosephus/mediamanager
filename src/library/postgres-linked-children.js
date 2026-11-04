@@ -199,17 +199,25 @@ export class PostgresLinkedChildrenStore {
   /** One autocommitted statement publishes a TEMP relation on its owning
    * session. It precedes repository persistence, so save rollback cannot erase
    * assigned members or a preceding successful link cache mutation. */
-  async createFromSession({ session, parentId='00000000000000000000000000000000', plan }) {
+  async createFromSession({ session, parentId, plan }) {
+    return this.#publishFromSession({ session, parentId, plan });
+  }
+  async #publishFromSession({ session, parentId = '00000000000000000000000000000000', plan, omitEmpty = false }) {
     this.#active(); requirePlan(plan);
     if (!sessionValid(session) || session.inTransaction) throw new TypeError('Raw link publication requires its current session before the repository transaction.');
     const id = randomUUID(), offset = plan.values.length;
+    const ownerValues = `$${offset + 1},$${offset + 2}`;
+    const members = omitEmpty ? 'members' : `(${plan.text})`;
+    const owner = omitEmpty
+      ? `SELECT $${offset + 1}::uuid,$${offset + 2}::bytea WHERE EXISTS (SELECT 1 FROM members)`
+      : `VALUES (${ownerValues})`;
     return this.#using(session, async db => {
-    await db.client.query({ text: `WITH owned AS (
-      INSERT INTO ${this.sets}(id,parent_id) VALUES ($${offset + 1},$${offset + 2}) RETURNING id
-    ) INSERT INTO ${this.rows}(set_id,${fields}) SELECT owned.id, source."Ordinal", source."ItemId",
-      source."Type", source."Path", source."LibraryItemId" FROM (${plan.text}) source CROSS JOIN owned
-      ORDER BY source."Ordinal"`, values: [...plan.values, id, encode(parentId)] });
-    return this.#handle(id);
+      const result = await db.client.query({ text: `WITH ${omitEmpty ? `members AS (${plan.text}), ` : ''}owned AS (
+        INSERT INTO ${this.sets}(id,parent_id) ${owner} RETURNING id
+      ) INSERT INTO ${this.rows}(set_id,${fields}) SELECT owned.id, source."Ordinal", source."ItemId",
+        source."Type", source."Path", source."LibraryItemId" FROM ${members} source CROSS JOIN owned
+        ORDER BY source."Ordinal"`, values: [...plan.values, id, encode(parentId)] });
+      return omitEmpty && result.rowCount === 0 ? EMPTY_NATIVE_LINKS : this.#handle(id);
     });
   }
   createFromPlan({ parentId, plan }) {
@@ -285,7 +293,10 @@ export class PostgresLinkedChildrenStore {
       FROM ${relation} WHERE ${nativeTextSql(session.schemaName).guidKey('"ParentId"')}=${nativeTextSql(session.schemaName).guidKey('$1::bytea')} ORDER BY "SortOrder"`, [encode(parentId)]);
   }
   async load(session, parentId) {
-    return this.createFromSnapshot({session,parentId,plan:this.storedPlan(session,parentId)});
+    const source = { session, parentId, plan: this.storedPlan(session, parentId) };
+    // Use one snapshot to detect and publish the members without allocating an
+    // empty set. Explicit writers still own their assigned relation.
+    return session.inTransaction ? this.createFromSnapshot(source) : this.#publishFromSession({ ...source, omitEmpty: true });
   }
   async createFromSnapshot({session,parentId,plan:source}) {
     this.#active();requirePlan(source);
