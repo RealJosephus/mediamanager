@@ -156,7 +156,9 @@ export async function createPostgresYearsSource(database, {
           for (let after = 0n;;) {
             const rows = await ordered.page(after);
             if (!rows.length) break;
-            for (const row of rows) await ordered.withSlot(row.slot, async item => {
+            let index = 0;
+            await ordered.withSlots(rows.map(row => row.slot), async item => {
+              const row = rows[index++];
               active();
               const year = item.ProductionYear;
               if (year != null && year > 0) {

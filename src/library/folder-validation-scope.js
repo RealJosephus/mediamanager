@@ -81,13 +81,23 @@ class FolderValidationScope {
       const state = await this.library.load(this.session, null, { includeUserData: false, baseRows });
       let failure, failed = false;
       try {
+        const page = [];
         for (const row of rows) {
           const item = state.byId.get(idKey(decodeNativeTextBytes(row.Id)));
-          if (!item) continue;
+          if (item) page.push({ item, ordinal: row.Ordinal });
+        }
+        if (page.length) {
+          const slots = await this.cohort.captureSlots(page.map(row => row.item));
           await this.query(`INSERT INTO ${t.current}("Key","Ordinal","SlotKey","PathKey","IdentityPathKey","Type","Deletable")
-            VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT("Key") DO NOTHING`, [idKey(item.Id), row.Ordinal,
-            await this.cohort.captureSlot(item), pathKey(item.Path), encode(nativePathKey(item.Path)), encode(item.NativeType),
-            isFileProtocol(item) && item.CanDelete !== false && !item.IsRoot]);
+            SELECT key,ordinal,slot,path,identity_path,type,deletable
+            FROM unnest($1::text[],$2::bigint[],$3::uuid[],$4::bytea[],$5::bytea[],$6::bytea[],$7::boolean[])
+              AS captured(key,ordinal,slot,path,identity_path,type,deletable)
+            ORDER BY ordinal ON CONFLICT("Key") DO NOTHING`, [
+            page.map(({ item }) => idKey(item.Id)), page.map(({ ordinal }) => ordinal), slots,
+            page.map(({ item }) => pathKey(item.Path)), page.map(({ item }) => encode(nativePathKey(item.Path))),
+            page.map(({ item }) => encode(item.NativeType)),
+            page.map(({ item }) => isFileProtocol(item) && item.CanDelete !== false && !item.IsRoot),
+          ]);
         }
       } catch (error) { failure = error; failed = true; throw error; }
       finally { await releaseResources(failed, failure, [() => state.dispose({ session: this.session })]); }

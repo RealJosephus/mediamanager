@@ -59,7 +59,7 @@ export async function withYearMemoryOrder({ database, source, sortBy = [], sortO
     }));
     await database.client.query(`CREATE UNIQUE INDEX ON ${output}(position)`);
     const skip = Math.max(0, startIndex), take = limit == null ? null : Math.max(0, limit);
-    return await consume(Object.freeze({ withSlot: source.withSlot,
+    return await consume(Object.freeze({ withSlot: source.withSlot, withSlots: source.withSlots,
       async page(after = 0n) {
         signal?.throwIfAborted();
         return (await database.client.query({ text: `SELECT position,slot FROM ${output}

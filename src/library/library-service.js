@@ -3047,8 +3047,6 @@ export class LibraryService extends EventEmitter {
       if (!this.itemCreation) throw libraryError(501, `${type} creation requires the native entity lifecycle.`);
       const metadataPath = this.options.metadataPath ?? path.join(this.options.programDataPath, 'metadata');
       const assets = new MetadataImageAssets({ fileSystem: this.options.fileSystem, metadataPath });
-      const target = await assets.resolve(identity.Path);
-      if (!target.localPath) throw libraryError(501, `${type} creation requires the isolated metadata directory.`);
       const directory = await assets.createDirectory(identity.Path);
       const item = newNativeItemEntity(nativeType);
       Object.assign(item, { Id: identity.Id, Name: name, Path: identity.Path,
