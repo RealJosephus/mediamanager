@@ -488,6 +488,54 @@ jobs:
             echo 'The created loopback alias remained after cleanup.' >&2
             exit 1
           fi
+      - name: Archive case-distinct validation originals
+        id: case_distinct
+        if: always() && runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT"
+          if [[ ! -d "$root" ]]; then exit 0; fi
+          work=$(mktemp -d "$RUNNER_TEMP/mediamanager-case-distinct.XXXXXX")
+          members="$work/members"
+          node --input-type=module - "$root" > "$members" <<'NODE'
+          import { readdir } from 'node:fs/promises';
+          import { join, relative } from 'node:path';
+          const root = process.argv[2];
+          const directories = [root];
+          const firstPaths = new Map();
+          const collisions = new Set();
+          while (directories.length) {
+            const directory = directories.pop();
+            for (const entry of await readdir(directory, { withFileTypes: true })) {
+              const filename = join(directory, entry.name);
+              if (entry.isDirectory()) directories.push(filename);
+              if (!entry.isFile()) continue;
+              const member = relative(root, filename);
+              const key = member.toLowerCase();
+              const first = firstPaths.get(key);
+              if (first === undefined) firstPaths.set(key, member);
+              else {
+                collisions.add(first);
+                collisions.add(member);
+              }
+            }
+          }
+          if (collisions.size) process.stdout.write([...collisions].sort().join('\0') + '\0');
+          NODE
+          if [[ ! -s "$members" ]]; then exit 0; fi
+          archive="$work/case-distinct-evidence.tar"
+          tar --directory "$root" --create --file "$archive" --hard-dereference --null --files-from "$members"
+          tar --directory "$root" --compare --file "$archive"
+          printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT"
+      - name: Preserve case-distinct validation originals
+        if: always() && steps.case_distinct.outputs.archive != ''
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: case-distinct-evidence-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: ${{ steps.case_distinct.outputs.archive }}
+          if-no-files-found: error
+          retention-days: 14
       - name: Preserve validation evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
