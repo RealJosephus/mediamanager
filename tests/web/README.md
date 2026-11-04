@@ -100,7 +100,7 @@ run establishes only its explicitly selected consumers and platforms. Run on
 GitHub Actions with `native_reference`, `native_instance`, `native_sqlite` and
 `web_clients` enabled; do not execute local validation.
 
-`emby-auth-info.test.js` uses the original hosted Emby Web 26.0.38 entry,
+`emby-auth-info.test.js` uses the original hosted Emby Web 26.0.40 entry,
 service worker and its 865-resource catalog, plus the entry/manifest links.
 The startup ebook/PDF plugin modules omitted from that catalog are captured
 from the original `app.js` dependency paths. The actual Cast sender scripts
@@ -112,8 +112,8 @@ entry substitutions can differ from the worker checksum; no client bytes are
 rewritten. The same-run input loader binds the producer, receipts and complete
 served tree before and after the consumer. CI artifacts retain identities and
 observations without redistributing the third-party client resource bundle.
-Earlier 26.0.37 receipts retain their historical resource identities. The current
-capture binds 26.0.38 independently; it does not establish a new 26.0.37 UI run.
+Earlier 26.0.37 and 26.0.38 receipts retain their original resource identities
+and the scope of their recorded UI runs.
 
 A fresh touch-capable Chromium context uses the visible connection wizard,
 selects the actual server at its `/emby` address, and enters the real password.
