@@ -141,6 +141,20 @@ jobs:
         run: |
           printf 'MEDIAMANAGER_VALIDATION_OUTPUT_ROOT=%s\n' "$RUNNER_TEMP/mediamanager-results" >> "$GITHUB_ENV"
           printf 'DOTNET_INSTALL_DIR=%s\n' "$RUNNER_TEMP/mediamanager-dotnet" >> "$GITHUB_ENV"
+      - name: Free hosted Ubuntu disk for complete disc inputs
+        if: runner.os == 'Linux' && runner.environment == 'github-hosted' && (inputs.dvd_reference || inputs.bluray_reference)
+        shell: bash
+        run: |
+          set -euo pipefail
+          df --block-size=1 --output=source,avail,target "$RUNNER_TEMP"
+          # The disc jobs use Node, Go, .NET and media readers. Reclaim only
+          # these unused preinstalled SDKs on the disposable hosted image.
+          for tool in /usr/local/lib/android/sdk /usr/share/swift /opt/hostedtoolcache/CodeQL; do
+            if [[ -d "$tool" && "$(realpath -e -- "$tool")" == "$tool" ]]; then
+              sudo rm -rf --one-file-system -- "$tool"
+            fi
+          done
+          df --block-size=1 --output=source,avail,target "$RUNNER_TEMP"
       - name: Align Windows system timezone with the declared runtime timezone
         if: runner.os == 'Windows'
         shell: pwsh
