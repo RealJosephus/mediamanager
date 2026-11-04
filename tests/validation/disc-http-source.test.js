@@ -136,6 +136,45 @@ test('allowed redirects retain exact range conditions while weak or absent ETags
   }
 });
 
+const itemMetadata = { server: 'dn1.us.archive.org', workable_servers: ['dn1.us.archive.org'],
+  dir: '/0/items/controlled-unit', metadata: { identifier: 'controlled-unit' } };
+
+test('the available Archive node supplies the same object and a canonical retry keeps its pinned validator', async t => {
+  const io = await fixture(t), source = sourceFor(payload), requests = [];
+  const nodeUrl = 'https://dn1.us.archive.org/0/items/controlled-unit/original.iso';
+  const download = createArchiveIsoDownloader({ openFile: io.openFile, rangeBytes: 8, concurrency: 1, retryDelayMs: 0,
+    fetch: async (url, options) => {
+      const range = requestRange(options);
+      requests.push({ url: url.href, ...range, validator: options.headers['If-Match'] });
+      return responseFor(payload, range.start, range.end, { status: url.href === nodeUrl && range.start === 8 ? 500 : 206 });
+    } });
+  const result = await download(source, io.filename, { metadata: itemMetadata });
+  assert.deepEqual(await readFile(io.filename), payload);
+  for (const algorithm of ['sha256', 'sha1', 'md5']) assert.equal(result[algorithm], source[algorithm]);
+  assert.equal(requests[0].url, nodeUrl);
+  assert.deepEqual(requests.filter(({ start }) => start === 8), [nodeUrl, source.url].map(url => ({
+    url, start: 8, end: 15, validator: '"fixed-unit-generation"',
+  })));
+  assert.equal(result.transport.attempts.find(attempt => attempt.status === 500).bodyCancelled, true);
+  assert.equal(result.transport.fileClosed, true);
+});
+
+test('metadata for an unavailable node, another item or a non-Archive host keeps the canonical source', async t => {
+  for (const changes of [{ workable_servers: [] }, { dir: '/0/items/wrong-item' },
+    { server: 'archive.org.invalid', workable_servers: ['archive.org.invalid'] }]) {
+    const io = await fixture(t), source = sourceFor(payload);
+    const download = createArchiveIsoDownloader({ openFile: io.openFile, retryDelayMs: 0,
+      fetch: async (url, options) => {
+        assert.equal(url.href, source.url);
+        const range = requestRange(options);
+        return responseFor(payload, range.start, range.end);
+      } });
+    const result = await download(source, io.filename, { metadata: { ...itemMetadata, ...changes } });
+    assert.deepEqual(await readFile(io.filename), payload);
+    assert.equal(result.sha256, source.sha256);
+  }
+});
+
 const protocolFaults = [
   ['ignored range', 'ARCHIVE_RANGE_STATUS', { status: 200 }],
   ['wrong offset', 'ARCHIVE_CONTENT_RANGE', { headers: { 'content-range': `bytes 1-1/${payload.length}` } }],
