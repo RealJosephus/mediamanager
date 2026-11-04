@@ -180,8 +180,7 @@ export async function fileEvidence(root) {
 
 /** Bounded cost observations only; no result, query or timing acceptance gate. */
 export function createBookPhotoCostObserver(fixtureName) {
-  const root = process.env.MEDIAMANAGER_TEST_DIAGNOSTICS_ROOT;
-  const enabled = path.isAbsolute(root ?? '');
+  const enabled = path.isAbsolute(process.env.MEDIAMANAGER_TEST_DIAGNOSTICS_ROOT ?? '');
   const context = new AsyncLocalStorage(), phases = new Map(), restorers = new Set();
   const tables = new Set([...nativeModel.tables.map(table => table.name), 'sets', 'rows', 'pins']);
   const comments = new Set(['item-ancestors', 'folder-scan-path-owners', 'playlist-library-roots',
@@ -210,6 +209,7 @@ export function createBookPhotoCostObserver(fixtureName) {
     publishing = true;
     writes = (async () => {
       try {
+        const root = validationOutputRoot();
         const filename = path.join(root, 'book-photo-cost-' + path.basename(fixtureName, '.js') + '-' + process.pid + '.json');
         assertValidationOutputChild(filename); await mkdir(root, { recursive: true });
         while (dirty) {
