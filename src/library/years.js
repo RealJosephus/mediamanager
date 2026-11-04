@@ -11,12 +11,12 @@ export async function queryYears({ library, database, input, user, hasUser, pare
   virtualChildren, specialChildren, isVisible, projectPage, signal }) {
   return withYearTraversal({ library, database, input, user, hasUser, parent, state,
     recursive: input.recursive !== false, virtualChildren, specialChildren, isVisible, signal }, async source => {
-    let catalogue, failed = false, primary, order;
+    let catalogue, failed = false, primary, order, emptyNameWindow = false;
     try {
       catalogue = await createNativeItemCohort({ linkedChildren: library.options.linkedChildren });
       const extracted = await source.seal(async (year, position) => {
         const item = await library.getYear(year);
-        await catalogue.capture(item, { ordinal: position });
+        if (!emptyNameWindow) await catalogue.capture(item, { ordinal: position });
       }, {
         ...(hasUser && parent.Type === 'BoxSet' ? {
           withSortedWinners: (raw, consume) => withYearMemoryOrder({ database, source: raw,
@@ -26,9 +26,17 @@ export async function queryYears({ library, database, input, user, hasUser, pare
         beforeExtract: () => {
           order = prepareYearOrder(input.sortBy, input.sortOrder, user);
           if (order.failure && !order.createBeforeFailure) throw order.failure;
+          // A Name comparison cannot affect an empty window. Still resolve
+          // every Year in source order, including its writes and failures.
+          emptyNameWindow = input.limit === 0 && order.sortBy.length === 1
+            && String(order.sortBy[0]).toLowerCase() === 'name';
         },
         afterExtract: () => { if (order.failure) throw order.failure; },
       });
+      if (emptyNameWindow) {
+        signal?.throwIfAborted();
+        return { Items: [], TotalRecordCount: extracted.total, StartIndex: input.startIndex ?? 0 };
+      }
       await catalogue.flush();
       const plan = catalogue.orderedPlan();
       const named = Object.freeze({ withSlot: (slot, operation) => catalogue.withSlot(slot, operation),

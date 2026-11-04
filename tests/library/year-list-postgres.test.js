@@ -162,7 +162,7 @@ test('Years retains the committed factory prefix on a falsy failure and releases
       return item;
     };
     let failed;
-    try { failed = await outcome(f.library.queryYears({ parentId: id(2), recursive: false, limit: 0 }, { signal: t.signal })); }
+    try { failed = await outcome(f.library.queryYears({ parentId: id(2), recursive: false, sortBy: ['Name'], limit: 0 }, { signal: t.signal })); }
     finally { f.library.getYear = getYear; }
     assert.equal(failed.failed, true); assert.equal(failed.reason, marker);
     assert.deepEqual((await yearRows(f)).map(row => row.Name).sort(), ['1900', '1901', '1902']);
