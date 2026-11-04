@@ -32,6 +32,7 @@ export async function queryYears({ library, database, input, user, hasUser, pare
       await catalogue.flush();
       const plan = catalogue.orderedPlan();
       const named = Object.freeze({ withSlot: (slot, operation) => catalogue.withSlot(slot, operation),
+        withSlots: (slots, operation) => catalogue.withSlots(slots, operation),
         async page(after = 0n) {
           const offset = plan.values.length;
           return (await database.client.query({ text: `SELECT source."Ordinal",source."SlotKey" FROM (${plan.text}) source

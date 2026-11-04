@@ -88,7 +88,7 @@ export function createYearSpecialChildren({ library, database, state, user, navi
       await produce(async items => {
         if (!items.length) return;
         const slots = await cohort.captureSlots(items);
-        for (const [index, item] of items.entries()) await projection.append(item, slots[index], ++ordinal);
+        await projection.appendPage(items.map((item, index) => ({ item, slot: slots[index], ordinal: ++ordinal })));
       });
       await cohort.flush();
       let input = query, nativeItemsPlan = projection.plan();

@@ -98,9 +98,10 @@ export async function createPostgresYearsSource(database, {
       async next() {
         active();
         for (;;) {
-          const row = (await database.client.query(`SELECT path,slot,id,kind FROM ${queue} WHERE NOT done ORDER BY path LIMIT 1`)).rows[0];
+          const row = (await database.client.query(`UPDATE ${queue} work SET done=TRUE
+            WHERE work.path=(SELECT path FROM ${queue} WHERE NOT done ORDER BY path LIMIT 1)
+            RETURNING work.path,work.slot,work.id,work.kind`)).rows[0];
           if (!row) return null;
-          await database.client.query(`UPDATE ${queue} SET done=TRUE WHERE path=$1`, [row.path]);
           if (mode === 'user-recursive' && row.kind === 'folder'
             && !(await database.client.query(`INSERT INTO ${visited}(id) VALUES($1) ON CONFLICT DO NOTHING`, [row.id])).rowCount) continue;
           return { ...row, path: row.path.map(BigInt) };
@@ -144,6 +145,7 @@ export async function createPostgresYearsSource(database, {
         await database.client.query(`CREATE TEMP TABLE ${winners} AS ${selection}`);
         await database.client.query(`CREATE UNIQUE INDEX ON ${winners}(position)`);
         const plain = Object.freeze({ withSlot: (slot, operation) => cohort.withSlot(slot, operation),
+          withSlots: (slots, operation) => cohort.withSlots(slots, operation),
           async page(after = 0n) {
             active(); return (await database.client.query(`SELECT position,slot FROM ${winners}
               WHERE position>$1 ORDER BY position LIMIT 128`, [after])).rows.map(row => ({ position: BigInt(row.position), slot: row.slot }));
