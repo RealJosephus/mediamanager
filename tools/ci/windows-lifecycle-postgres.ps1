@@ -46,7 +46,7 @@ SELECT json_build_object(
 )
 '@
     $row = Invoke-PostgresTool 'psql.exe' @('-X', '-w', '-A', '-t', '-h', '127.0.0.1', '-p', "$port",
-        '-U', 'validation', '-d', 'postgres', '-v', 'ON_ERROR_STOP=1', '-c', $sql) | ConvertFrom-Json
+        '-U', 'validation', '-d', 'postgres', '-v', 'ON_ERROR_STOP=1', '-c', $sql) | ConvertFrom-Json -DateKind String
     if ([IO.Path]::GetFullPath($row.dataDirectory) -ine $data -or $row.port -ne $port -or $row.address -ne '127.0.0.1' `
         -or [Math]::Floor($row.version / 10000) -ne 17 -or $row.fsync -ne 'on' -or $row.synchronousCommit -ne 'on' `
         -or $row.fullPageWrites -ne 'on') { throw 'The lifecycle PostgreSQL endpoint is not the owned durable cluster.' }
@@ -81,7 +81,9 @@ $receipt.stopped = $false
 $failures = [Collections.Generic.List[string]]::new()
 $before = $null
 try {
-    if (Test-Path -LiteralPath $initialFile -PathType Leaf) { $before = Get-Content -Raw -LiteralPath $initialFile | ConvertFrom-Json }
+    if (Test-Path -LiteralPath $initialFile -PathType Leaf) {
+        $before = Get-Content -Raw -LiteralPath $initialFile | ConvertFrom-Json -DateKind String
+    }
     if (!$before -or $before.candidate -cne $receipt.candidate -or $before.runId -ne $receipt.runId `
         -or $before.attempt -ne $receipt.attempt -or $before.job -ne $receipt.job) { throw 'The lifecycle cluster has no matching start receipt.' }
     $receipt.cluster = Read-Cluster
@@ -92,6 +94,7 @@ try {
 try {
     if (Test-Path -LiteralPath $pidFile -PathType Leaf) {
         $postmaster = Read-Postmaster
+        $receipt.postmaster = $postmaster
         if ($before -and ($postmaster.id -ne $before.postmaster.id -or $postmaster.startedAt -ne $before.postmaster.startedAt)) {
             throw 'The lifecycle postmaster changed process identity.'
         }
