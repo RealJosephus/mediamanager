@@ -24,7 +24,6 @@ import { probeFileChanged } from '../storage/probe-lifecycle.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { computeBoxSetLibraryFolderIds, parentChainForItem } from './collection-membership.js';
 import { getNewItemId } from '../core/identity.js';
-import { readItemImageRows } from './image-order.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
 import { itemSupportsAncestors } from './item-relations.js';
 import { rebasedMetadataPath } from '../metadata/by-name-path.js';
@@ -332,8 +331,10 @@ export function createMetadataContextLoader(options) {
       return { series, season, lookup: metadataLookup(value, loaded?.parents ?? parents), context: { ...context,
         seriesPath: value.Type === 'Season' && series?.Path ? access(series) : undefined } };
     };
-    const peopleLinks = (await db.rows('PeopleBaseItemMap', { where: { ItemId: item.Id } }))
-      .sort((a, b) => (a.ListOrder ?? 0) - (b.ListOrder ?? 0));
+    const relationshipTables = ['BaseItemProviders', 'BaseItemMetadataFields', 'PeopleBaseItemMap', 'BaseItemImageInfos', 'ItemValuesMap'];
+    if (itemSupportsAncestors(item)) relationshipTables.push('AncestorIds');
+    const relationships = await readMetadataRelationships(db, item.Id, relationshipTables, { checkEmpty: !targetRow });
+    const peopleLinks = relationships.PeopleBaseItemMap.toSorted((a, b) => (a.ListOrder ?? 0) - (b.ListOrder ?? 0));
     const peopleRows = peopleLinks.length
       ? await db.rows('Peoples', { whereIn: { Id: [...new Set(peopleLinks.map(row => row.PeopleId))] } })
       : [];
@@ -353,8 +354,10 @@ export function createMetadataContextLoader(options) {
       }
     }
     const imageItemIds = [item.Id, ...personItemIds];
-    const imageRows = await readNativeImageRows(db, imageItemIds);
-    context.images = (await readItemImageRows(db, item.Id)).map(row => ({ ...row, Type: imageTypes[row.ImageType] ?? row.ImageType, Path: expandPath(row.Path) }));
+    const imageRows = relationships.BaseItemImageInfos.length || personItemIds.length
+      ? await readNativeImageRows(db, imageItemIds) : [];
+    context.images = imageRows.filter(row => row.ItemId === item.Id)
+      .map(row => ({ ...row, Type: imageTypes[row.ImageType] ?? row.ImageType, Path: expandPath(row.Path) }));
     for (const row of peopleLinks) {
       const person = peopleRows.find(entry => sameId(entry.Id, row.PeopleId));
       if (!person) throw new Error('A metadata person relation is missing its person.');
@@ -393,9 +396,6 @@ export function createMetadataContextLoader(options) {
 
     const saveLocalMetadataEnabled = item.SourceType !== 'Channel' && (libraryOptions.SaveLocalMetadata || ['Person', 'Genre', 'MusicGenre', 'Studio', 'Year', 'BoxSet', 'Playlist', 'UserView'].includes(item.Type)
       || item.Type === 'MusicArtist' && item.IsAccessedByName === true);
-    const relationshipTables = ['BaseItemProviders', 'BaseItemMetadataFields', 'PeopleBaseItemMap', 'BaseItemImageInfos', 'ItemValuesMap'];
-    if (itemSupportsAncestors(item)) relationshipTables.push('AncestorIds');
-    const relationships = await readMetadataRelationships(db, item.Id, relationshipTables, { checkEmpty: !targetRow });
     const fileSystemMetadata = async signal => {
       if (!item.Path) return null;
       try {

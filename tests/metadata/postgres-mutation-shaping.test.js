@@ -3,9 +3,12 @@ import { PostgresLinkedChildrenStore } from '../../src/library/postgres-linked-c
 import { newNativeItemEntity, releaseNativeItemLinks } from '../../src/library/native-item-entity.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import path from 'node:path';
 import { tableDefinition } from '../../src/database/model.js';
 import { persistFolderLinks, persistImageMetadata } from '../../src/metadata/persistence.js';
 import { assertMetadataBaseline, readMetadataRelationships } from '../../src/metadata/metadata-baseline.js';
+import { nativePersonIdentity } from '../../src/library/metadata-context.js';
+import { setupChildrenFixture } from './children-fixture.js';
 
 test('PostgreSQL image replacement uses one set delete and one complete batch insert', async () => {
   const calls = [];
@@ -63,6 +66,52 @@ test('a new metadata draft detects a relation inserted before its item under def
     await assertMetadataBaseline(db, loaded);
   }), { code: 'metadata-conflict', status: 409 });
   assert.deepEqual(await database.rows('BaseItemProviders', { where: { ItemId: Id } }), []);
+});
+
+test('metadata contexts retain ordered item images and credits with a complete conflict baseline', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 60000,
+}, async t => {
+  const fixture = await setupChildrenFixture(t), { database } = fixture;
+  const ownerId = '92000000-0000-0000-0000-000000000003';
+  const person = nativePersonIdentity('Context actor', fixture.library.options);
+  await fixture.seed({ target: 'owner', items: [
+    { key: 'owner', type: 'Movie', Id: ownerId, Path: 'Z:\\ChildrenMetadata\\context.mkv' },
+    { key: 'person', type: 'Person', Id: person.Id, Path: person.Path, Name: 'Context actor',
+      ProviderIds: { Custom: 'actor-id' } },
+  ] });
+  const peopleId = '92000000-0000-0000-0000-000000000004';
+  await database.insert('Peoples', { Id: peopleId, Name: 'Context actor', PersonType: 'Actor' });
+  for (const [Role, ListOrder] of [['Alpha role', 9], ['Zulu role', 0]]) {
+    await database.insert('PeopleBaseItemMap', { ItemId: ownerId, PeopleId: peopleId, Role, ListOrder, SortOrder: null });
+  }
+  const images = [];
+  for (const [index, [ItemId, Id, ImageType]] of [
+    [person.Id, '92000000-0000-0000-0000-000000000005', 0],
+    [ownerId, '92000000-0000-0000-0000-000000000009', 2],
+    [ownerId, '92000000-0000-0000-0000-000000000006', 2],
+  ].entries()) {
+    images.push(await database.insert('BaseItemImageInfos', postgresTestRow('BaseItemImageInfos', {
+      Id, ItemId, ImageType, Path: path.join(fixture.stateRoot, 'metadata', `context-${index}.jpg`),
+      DateModified: '2024-01-02T03:04:05.1234567Z', Width: 200 + index, Height: 100 + index,
+      Blurhash: Buffer.from('image-' + index),
+    })));
+  }
+  const loaded = await fixture.loadContext(ownerId);
+  assert.deepEqual(loaded.context.images, images.slice(1).map(image => ({ ...image, Type: 'Backdrop' })));
+  assert.deepEqual(loaded.context.people, ['Zulu role', 'Alpha role'].map(Role => ({
+    Name: 'Context actor', Type: 'Actor', Role, SortOrder: null,
+    ProviderIds: { Custom: 'actor-id' }, ImagePath: images[0].Path,
+  })));
+  for (const table of ['PeopleBaseItemMap', 'BaseItemImageInfos']) {
+    assert.deepEqual(loaded.relationships[table], await database.rows(table, { where: { ItemId: ownerId } }));
+  }
+  await fixture.store.run(db => assertMetadataBaseline(db, loaded));
+  await assert.rejects(database.transaction(async db => {
+    await db.insert('BaseItemProviders', { ItemId: ownerId, ProviderId: 'Changed', ProviderValue: 'later' });
+    await assertMetadataBaseline(db, loaded);
+  }), { code: 'metadata-conflict', status: 409 });
+  assert.deepEqual(await database.rows('BaseItemProviders', { where: { ItemId: ownerId } }), []);
+  await loaded.dispose();
 });
 
 test('folder link path fallback uses the primary-key ordered SQL union of bounded candidates', async t => {
