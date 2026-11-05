@@ -44,6 +44,7 @@ import { DotIgnoreRule } from './dot-ignore-rule.js';
 import { loadPostgresMetadataRows, loadPostgresPageGraph,
   loadPostgresRowsByIds, queryPostgresPlaylistLibraryRoots } from './postgres-library-query.js';
 import { quoteIdentifier as q } from '../database/model.js';
+import { readMetadataRelationships } from '../metadata/metadata-baseline.js';
 
 export const metadataFields = ['Cast', 'Genres', 'ProductionLocations', 'Studios', 'Tags', 'Name', 'Overview', 'Runtime', 'OfficialRating'];
 const imageTypes = ['Primary', 'Art', 'Backdrop', 'Banner', 'Logo', 'Thumb', 'Disc', 'Box', 'Screenshot', 'Menu', 'Chapter', 'BoxRear', 'Profile'];
@@ -392,9 +393,9 @@ export function createMetadataContextLoader(options) {
 
     const saveLocalMetadataEnabled = item.SourceType !== 'Channel' && (libraryOptions.SaveLocalMetadata || ['Person', 'Genre', 'MusicGenre', 'Studio', 'Year', 'BoxSet', 'Playlist', 'UserView'].includes(item.Type)
       || item.Type === 'MusicArtist' && item.IsAccessedByName === true);
-    const relationships = {};
-    for (const table of ['BaseItemProviders', 'BaseItemMetadataFields', 'PeopleBaseItemMap', 'BaseItemImageInfos', 'ItemValuesMap']) relationships[table] = await db.rows(table, { where: { ItemId: item.Id } });
-    if (itemSupportsAncestors(item)) relationships.AncestorIds = await db.rows('AncestorIds', { where: { ItemId: item.Id } });
+    const relationshipTables = ['BaseItemProviders', 'BaseItemMetadataFields', 'PeopleBaseItemMap', 'BaseItemImageInfos', 'ItemValuesMap'];
+    if (itemSupportsAncestors(item)) relationshipTables.push('AncestorIds');
+    const relationships = await readMetadataRelationships(db, item.Id, relationshipTables, { checkEmpty: !targetRow });
     const fileSystemMetadata = async signal => {
       if (!item.Path) return null;
       try {

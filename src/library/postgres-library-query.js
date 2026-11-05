@@ -559,7 +559,8 @@ export async function loadPostgresMetadataRows(database, referenceId, {
     ? target?.PresentationUniqueKey ?? (target && createPresentationUniqueKey(target)) : null;
   const values = [idKey(referenceId), targetType ?? '', nativeTextBytes(cleanValue(targetName ?? '')), includeDescendants === true,
     !nonemptyId(target?.ParentId), seriesKey == null ? null : nativeTextBytes(seriesKey), Boolean(clrTrim(seriesKey ?? '')), includeChildren];
-  const result = await queryPostgresLibraryStatement(database, {
+  const discoversRelated = includeChildren || targetType === 'Series' || (targetType === 'MusicArtist' && !nonemptyId(target?.ParentId));
+  const result = discoversRelated ? await queryPostgresLibraryStatement(database, {
     text: `SELECT item."Id"
       FROM ${baseItems} item
       WHERE $8::boolean AND (replace(${nativeTextSql(database.schemaName).guidLower("item.\"ParentId\"")}, '-', '') = $1
@@ -600,7 +601,7 @@ export async function loadPostgresMetadataRows(database, referenceId, {
       WHERE $2 = 'Series' AND substring(${nativeTextSql(database.schemaName).projection("member.\"Type\"")} from '[^.]+$') IN ('Season', 'Episode')
         AND (NOT $7::boolean OR member."SeriesPresentationUniqueKey" = $6)`,
     values,
-  });
+  }) : { rows: [] };
   const relatedRows = await loadPostgresRowsByIds(database,
     result.rows.map(row => row.Id == null ? null : decodeNativeTextBytes(row.Id)).filter(nonemptyId));
   const relationshipSeeds = [...targetRows, ...relatedRows];

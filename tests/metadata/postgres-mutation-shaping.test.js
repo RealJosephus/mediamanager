@@ -5,6 +5,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { tableDefinition } from '../../src/database/model.js';
 import { persistFolderLinks, persistImageMetadata } from '../../src/metadata/persistence.js';
+import { assertMetadataBaseline, readMetadataRelationships } from '../../src/metadata/metadata-baseline.js';
 
 test('PostgreSQL image replacement uses one set delete and one complete batch insert', async () => {
   const calls = [];
@@ -43,6 +44,25 @@ test('PostgreSQL image replacement uses one set delete and one complete batch in
   const columns = tableDefinition('BaseItemImageInfos').columns.map(column => column.name).sort();
   assert.ok(calls[1][2].every(row => assert.deepEqual(Object.keys(row).sort(), columns) === undefined));
   assert.deepEqual(loaded.relationships.BaseItemImageInfos, inserted);
+});
+
+test('a new metadata draft detects a relation inserted before its item under deferred constraints', async t => {
+  const database = await createPostgresTestDatabase(t, 'metadata_draft');
+  const Id = '92000000-0000-0000-0000-000000000002';
+  const tables = ['BaseItemProviders', 'BaseItemMetadataFields'];
+  const provider = { ItemId: Id, ProviderId: 'Tmdb', ProviderValue: '42' };
+  await assert.rejects(database.transaction(async db => {
+    await db.client.query('SET CONSTRAINTS ALL DEFERRED');
+    const relationships = await readMetadataRelationships(db, Id, tables, { checkEmpty: true });
+    assert.deepEqual(relationships, { BaseItemProviders: [], BaseItemMetadataFields: [] });
+    const loaded = { item: { Id }, relationships };
+    await assertMetadataBaseline(db, loaded);
+    await db.insert('BaseItemProviders', provider);
+    assert.deepEqual(await readMetadataRelationships(db, Id, tables, { checkEmpty: true }),
+      { BaseItemProviders: [provider], BaseItemMetadataFields: [] });
+    await assertMetadataBaseline(db, loaded);
+  }), { code: 'metadata-conflict', status: 409 });
+  assert.deepEqual(await database.rows('BaseItemProviders', { where: { ItemId: Id } }), []);
 });
 
 test('folder link path fallback uses the primary-key ordered SQL union of bounded candidates', async t => {
