@@ -1,15 +1,11 @@
 import { availableParallelism } from 'node:os';
-import { idKey, nonemptyId, VIDEO_TYPES, MIN_DATE } from './records.js';
+import { idKey, nonemptyId, VIDEO_TYPES } from './records.js';
 import { parentChainForItem } from './collection-membership.js';
 import { rootCollectionType } from './root-collection-type.js';
 import { invalidateVideoParent } from './video-version-discovery.js';
 import { saveNativeItems } from '../metadata/persistence.js';
 import { itemTopParentId } from './item-save-tuple.js';
 import { hydrateNativeItemEntity, isNativeItemEntity, nativeItemDescriptor, acquireNativeItemLinkOwner } from './native-item-entity.js';
-import { metadataFields } from './metadata-context.js';
-import { imageTypes } from '../metadata/image-paths.js';
-import { readItemImageRows } from './image-order.js';
-import { readItemTrailerRows } from './trailer-order.js';
 import { loadPostgresNavigationRows,
   loadPostgresPageGraph, loadPostgresRowsByIds } from './postgres-library-query.js';
 import { BoundedItemCache } from './bounded-item-cache.js';
@@ -101,15 +97,11 @@ export class ItemCreationService {
       const stored = state.byId.get(key);
       if (!stored) { await state.dispose({ session: db }); return null; }
       let folderLinks;
+      // Library loading has already hydrated the complete ordered images,
+      // metadata locks, trailer types and user data on this stored entity.
       try { const relations = {
         ...(VIDEO_TYPES.has(stored.Type) ? { videoLinks: (await db.rows('LinkedChildren', { where: { ParentId: stored.Id, ChildType: 3 },
-          orderBy: [{ column: 'SortOrder', direction: 'ASC' }] })).map(link => ({ ItemId: link.ChildId, Type: Number(link.ChildType) })) } : {}),
-        lockedFields: (await db.rows('BaseItemMetadataFields', { where: { ItemId: stored.Id } })).map(row => metadataFields[row.Id] ?? row.Id),
-        trailerTypes: (await readItemTrailerRows(db, stored.Id)).map(row => trailerTypes[row.Id] ?? row.Id),
-        images: (await readItemImageRows(db, stored.Id)).map(row => ({ Path: expandPath(row.Path), Type: imageTypes[row.ImageType] ?? row.ImageType,
-          DateModified: row.DateModified ?? MIN_DATE, Width: row.Width, Height: row.Height,
-          BlurHash: row.Blurhash == null ? null : Buffer.from(row.Blurhash).toString('utf8') })),
-        userData: await db.rows('UserData', { where: { ItemId: stored.Id } })
+          orderBy: [{ column: 'SortOrder', direction: 'ASC' }] })).map(link => ({ ItemId: link.ChildId, Type: Number(link.ChildType) })) } : {})
       };
       if (nativeItemDescriptor(stored.NativeType).family === 'folder') relations.linkedChildren = folderLinks = await this.linkedChildren.load(db, stored.Id);
       return hydrateNativeItemEntity(stored, relations);
