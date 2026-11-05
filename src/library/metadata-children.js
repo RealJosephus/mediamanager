@@ -45,6 +45,20 @@ export function createMetadataChildren(options) {
   const keyFor = item => item.PresentationUniqueKey ?? createPresentationUniqueKey(item, { libraryOptions });
   const findByPath = identity => findPostgresLinkedChildByPath({ library, store, itemCreation: itemCreation() }, identity);
 
+  async function capturePage(session, cohort, target, page) {
+    if (!page.length) return [];
+    const slots = await cohort.captureSlots(page.map(entry => entry.item));
+    // Publish the bounded capture in source order. The final view joins
+    // this selection directly to the captured slots.
+    await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type")
+      SELECT ordinal,id,slot,type FROM
+        unnest($1::bigint[],$2::bytea[],$3::uuid[],$4::bytea[]) WITH ORDINALITY
+          AS captured(ordinal,id,slot,type,position) ORDER BY position`,
+    [page.map(entry => entry.ordinal), page.map(entry => entry.id ?? encoded(entry.item.Id)), slots,
+      page.map(entry => encoded(entry.item.NativeType))]);
+    return slots;
+  }
+
   async function capturePlan(session, source, cohort, target, { offset = 0n, predicate = () => true } = {}) {
     const selected = q('mm_metadata_children_' + randomUUID().replaceAll('-', ''));
     const sql = nativeTextSql(session.schemaName);
@@ -71,17 +85,7 @@ export function createMetadataChildren(options) {
             if (!item || !predicate(item)) continue;
             page.push({ item, ordinal: offset + BigInt(row.Ordinal), id: row.Id });
           }
-          if (page.length) {
-            const slots = await cohort.captureSlots(page.map(entry => entry.item));
-            // Publish the bounded capture in source order. The final view
-            // joins this selection directly to the captured slots.
-            await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type")
-              SELECT ordinal,id,slot,type FROM
-                unnest($1::bigint[],$2::bytea[],$3::uuid[],$4::bytea[]) WITH ORDINALITY
-                  AS captured(ordinal,id,slot,type,position) ORDER BY position`,
-            [page.map(entry => entry.ordinal), page.map(entry => entry.id), slots,
-              page.map(entry => encoded(entry.item.NativeType))]);
-          }
+          await capturePage(session, cohort, target, page);
         } catch (error) { rowFailure = error; throw error; }
         finally { await cleanupResources(rowFailure, [() => state.dispose({ session }), () => linkedChildren.flushReleases({ session })],
           'Metadata child page cleanup failed.'); }
@@ -117,24 +121,36 @@ export function createMetadataChildren(options) {
         // source as navigation. SQL retains the complete sequence; each page
         // borrows its exact entities until capture and recursive reads finish.
         await withPostgresCachedFolderChildren({ session, library, item: current }, async source => {
-          for await (const page of source.pages()) for (const child of page) {
-            const owner = acquireNativeItemLinkOwner(child);
-            let childFailure, retained = false;
-            try {
-              if (predicate(child)) {
-                const ordinal = ++cursor.value, slot = await cohort.capture(child, { ordinal });
-                // Metadata mutations must reach the same manager/warm occurrence
-                // selected by the shared Children source.
-                if (!liveSources.has(slot)) {
-                  liveSources.set(slot, { reference: new WeakRef(child), owner }); retained = true;
-                }
-                await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type") VALUES($1,$2,$3,$4)`,
-                  [ordinal, encoded(child.Id), slot, encoded(child.NativeType)]);
+          for await (const page of source.pages()) {
+            const pending = [], borrowed = [];
+            let pageFailure;
+            const flush = async () => {
+              const slots = await capturePage(session, cohort, target, pending);
+              for (const [index, entry] of pending.entries()) if (!liveSources.has(slots[index])) {
+                liveSources.set(slots[index], { reference: new WeakRef(entry.item), owner: entry.owner });
+                entry.retained = true;
               }
-              if (recursive && child.IsFolder) await captureChildren(child);
-            } catch (error) { childFailure = error; throw error; }
-            finally { await cleanupResources(childFailure, [() => !retained && owner.release(), () => linkedChildren.flushReleases({ session })],
-              'Cached metadata child ownership cleanup failed.'); }
+              pending.length = 0;
+            };
+            try {
+              for (const child of page) {
+                const entry = { item: child, owner: acquireNativeItemLinkOwner(child), retained: false };
+                borrowed.push(entry);
+                if (predicate(child)) {
+                  entry.ordinal = ++cursor.value;
+                  pending.push(entry);
+                }
+                if (recursive && child.IsFolder) {
+                  // Observe this prefix before descending into a live subtree.
+                  await flush();
+                  await captureChildren(child);
+                }
+              }
+              await flush();
+            } catch (error) { pageFailure = error; throw error; }
+            finally { await cleanupResources(pageFailure,
+              [...borrowed.filter(entry => !entry.retained).map(entry => () => entry.owner.release()),
+                () => linkedChildren.flushReleases({ session })], 'Cached metadata page ownership cleanup failed.'); }
           }
         });
       } catch (error) { failure = error; throw error; }
@@ -164,11 +180,9 @@ export function createMetadataChildren(options) {
         let pageFailure;
         try {
           if (!page.entries.length) break;
-          for (const entry of page.entries) if (predicate(entry.item)) {
-            const ordinal = offset + entry.Ordinal, slot = await cohort.capture(entry.item, { ordinal });
-            await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type") VALUES($1,$2,$3,$4)`,
-              [ordinal, encoded(entry.item.Id), slot, encoded(entry.item.NativeType)]);
-          }
+          const selected = page.entries.filter(entry => predicate(entry.item))
+            .map(entry => ({ item: entry.item, ordinal: offset + entry.Ordinal }));
+          await capturePage(session, cohort, target, selected);
           after = page.entries.at(-1).Ordinal;
         } catch (error) { pageFailure = error; throw error; }
         finally { await cleanupResources(pageFailure, [() => page.release()], 'Metadata linked child page cleanup failed.'); }
