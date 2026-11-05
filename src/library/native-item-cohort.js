@@ -187,14 +187,33 @@ class NativeItemCohort {
   }
   async appendSlot(slot,{ordinal}={}) {
     active(this);if(typeof slot!=='string'||typeof ordinal!=='bigint'||ordinal<=0n)throw new TypeError('An owned slot and positive bigint ordinal are required.');
-    const entry=this.entry;
-    await enqueue(entry,async session=>{
-      const result=await session.client.query({name:entry.statementPrefix+'_append',text:`INSERT INTO ${entry.rows}(view_id,"Ordinal",scope_id,slot_id)
-        SELECT $1,$2,scope_id,slot_id FROM ${entry.states} WHERE scope_id=$3 AND slot_id=$4
-        ON CONFLICT(view_id,"Ordinal") DO UPDATE SET scope_id=EXCLUDED.scope_id,slot_id=EXCLUDED.slot_id`,values:[this.id,ordinal,entry.id,slot]});
-      if(result.rowCount!==1)throw new TypeError('The slot belongs to a different or released cohort.');
-    });
+    await this.appendSlots([slot], { ordinals: [ordinal] });
     return slot;
+  }
+  async appendSlots(slots, { ordinals } = {}) {
+    active(this);
+    if (!Array.isArray(slots) || slots.length > 128 || !Array.isArray(ordinals) || ordinals.length !== slots.length
+      || slots.some(slot => typeof slot !== 'string')
+      || ordinals.some(ordinal => typeof ordinal !== 'bigint' || ordinal <= 0n)) {
+      throw new TypeError('Owned slot pages require at most 128 slots and positive bigint ordinals.');
+    }
+    if (!slots.length) return slots;
+    const entry = this.entry;
+    await enqueue(entry, async session => {
+      const result = await session.client.query({ name: entry.statementPrefix + '_append_slots',
+        text: `WITH selected AS (
+          SELECT DISTINCT ON (ordinal) ordinal,slot
+          FROM unnest($2::bigint[],$4::uuid[]) WITH ORDINALITY source(ordinal,slot,position)
+          ORDER BY ordinal,position DESC
+        )
+        INSERT INTO ${entry.rows}(view_id,"Ordinal",scope_id,slot_id)
+        SELECT $1,selected.ordinal,state.scope_id,state.slot_id FROM selected
+        JOIN ${entry.states} state ON state.scope_id=$3 AND state.slot_id=selected.slot
+        ON CONFLICT(view_id,"Ordinal") DO UPDATE SET scope_id=EXCLUDED.scope_id,slot_id=EXCLUDED.slot_id`,
+        values: [this.id, ordinals, entry.id, slots] });
+      if (result.rowCount !== new Set(ordinals).size) throw new TypeError('The slot belongs to a different or released cohort.');
+    });
+    return slots;
   }
   async capture(item,{ordinal}={}) {
     if(typeof ordinal!=='bigint'||ordinal<=0n)throw new TypeError('A positive bigint ordinal is required.');

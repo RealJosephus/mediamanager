@@ -705,7 +705,7 @@ test('postgres: typed SQL definitions retain fresh values across row arities, co
   other=await createNativeItemCohort({linkedChildren:otherLinks});
   const alpha=movie(101,'alpha'),beta=movie(102,'beta'),gamma=movie(103,'gamma');
   const [alphaSlot,betaSlot]=await first.captureSlots([alpha,beta]);
-  await first.appendSlot(alphaSlot,{ordinal:1n});await first.appendSlot(betaSlot,{ordinal:2n});
+  await first.appendSlots([alphaSlot,betaSlot],{ordinals:[1n,2n]});
   const gammaSlot=await first.capture(gamma,{ordinal:3n});
   const siblingSlot=await sibling.capture(alpha,{ordinal:9n});
   const delta=movie(104,'other runtime'),epsilon=movie(105,'other second');
@@ -717,7 +717,7 @@ test('postgres: typed SQL definitions retain fresh values across row arities, co
   assert.deepEqual(await values(sibling,siblingSlot),{id:alpha.Id,name:'alpha updated',rating:'PG'});
   assert.deepEqual(await values(first,betaSlot),{id:beta.Id,name:'beta',rating:'R'});
   assert.deepEqual(await values(first,gammaSlot),{id:gamma.Id,name:'gamma',rating:'PG'});
-  await first.appendSlot(betaSlot,{ordinal:1n});
+  await first.appendSlots([alphaSlot,betaSlot],{ordinals:[1n,1n]});
   const plan=first.orderedPlan();
   const rows=await database.withConnection(async session=>(await session.client.query(plan.text+' ORDER BY "Ordinal"',plan.values)).rows);
   assert.deepEqual(rows.map(row=>[String(row.Ordinal),row.SlotKey]),[['1',betaSlot],['2',betaSlot],['3',gammaSlot]]);

@@ -14,9 +14,21 @@ export async function queryYears({ library, database, input, user, hasUser, pare
     let catalogue, failed = false, primary, order, emptyNameWindow = false;
     try {
       catalogue = await createNativeItemCohort({ linkedChildren: library.options.linkedChildren });
+      // Year factories commit in source order while response captures use
+      // bounded pages before the final SQL sort and window.
+      const pending = [];
+      const flush = async () => {
+        if (!pending.length) return;
+        const slots = await catalogue.captureSlots(pending.map(entry => entry.item));
+        await catalogue.appendSlots(slots, { ordinals: pending.map(entry => entry.ordinal) });
+        pending.length = 0;
+      };
       const extracted = await source.seal(async (year, position) => {
         const item = await library.getYear(year);
-        if (!emptyNameWindow) await catalogue.capture(item, { ordinal: position });
+        if (!emptyNameWindow) {
+          pending.push({ item, ordinal: position });
+          if (pending.length === 128) await flush();
+        }
       }, {
         ...(hasUser && parent.Type === 'BoxSet' ? {
           withSortedWinners: (raw, consume) => withYearMemoryOrder({ database, source: raw,
@@ -37,6 +49,7 @@ export async function queryYears({ library, database, input, user, hasUser, pare
         signal?.throwIfAborted();
         return { Items: [], TotalRecordCount: extracted.total, StartIndex: input.startIndex ?? 0 };
       }
+      await flush();
       await catalogue.flush();
       const plan = catalogue.orderedPlan();
       const named = Object.freeze({ withSlot: (slot, operation) => catalogue.withSlot(slot, operation),
