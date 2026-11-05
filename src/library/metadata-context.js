@@ -160,12 +160,12 @@ export function createMetadataContextLoader(options) {
     };
     try {
     const referenceId = typeof reference === 'string' ? nativeGuid(reference) : reference.Id;
-    const targetRow = (await loadPostgresRowsByIds(db, [referenceId]))[0];
+    const targetRows = await loadPostgresRowsByIds(db, [referenceId]), targetRow = targetRows[0];
     const targetType = draft?.Type ?? String(targetRow?.Type ?? '').split('.').at(-1);
     const targetName = draft?.Name ?? targetRow?.Name;
     // Discovery, hydration and the conflict baseline share this exact observed
     // row. A later edit must be rejected, not adopted as the stale item's base.
-    let scopedRows = await loadPostgresMetadataRows(db, referenceId, { targetRows: targetRow ? [targetRow] : [],
+    let scopedRows = await loadPostgresMetadataRows(db, referenceId, { targetRows,
       targetType, targetName, configuration: currentConfiguration(), includeChildren:false });
     // A newly resolved draft has no BaseItems row yet. Seed its bounded
     // relationship frame from the live references so persistence can still
@@ -564,7 +564,7 @@ export function createMetadataContextLoader(options) {
         }
         return inherited;
       },
-      snapshot: targetRow };
+      snapshot: targetRows.find(row => row.Id === item.Id) };
     // GetUserRootFolder registers a transient singleton without saving it.
     // Its first actual metadata save can insert the canonical root; merely
     // reading virtual folders or cancelling a refresh must not create a row.

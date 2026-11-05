@@ -124,17 +124,20 @@ test('metadata contexts reject repository edits made after their item frame was 
 }, async t => {
   const fixture = await setupChildrenFixture(t), { database, library } = fixture;
   const ownerId = '92000000-0000-0000-0000-000000000007';
+  const capturedId = ownerId.replaceAll('-', '');
   await fixture.seed({ target: 'owner', items: [
-    { key: 'owner', type: 'Movie', Id: ownerId, Name: 'Observed name', Path: 'Z:\\ChildrenMetadata\\observed.mkv' },
+    { key: 'owner', type: 'Movie', Id: ownerId, Name: 'Other stored form', Path: 'Z:\\ChildrenMetadata\\other-form.mkv' },
+    { key: 'captured', type: 'Movie', Id: capturedId, Name: 'Observed name', Path: 'Z:\\ChildrenMetadata\\observed.mkv' },
   ] });
-  const before = (await database.rows('BaseItems', { where: { Id: ownerId } }))[0];
+  const before = (await database.rows('BaseItems', { where: { Id: capturedId } }))[0];
+  const untouched = await database.rows('BaseItems', { where: { Id: ownerId } });
   const load = library.load;
   let edited = false;
   library.load = async function (...args) {
     const state = await load.apply(this, args);
     if (!edited && state.byId.has(ownerId.replaceAll('-', ''))) {
       edited = true;
-      await database.update('BaseItems', { Id: ownerId }, { Name: 'External edit', Overview: 'Keep this later value.' });
+      await database.update('BaseItems', { Id: capturedId }, { Name: 'External edit', Overview: 'Keep this later value.' });
     }
     return state;
   };
@@ -143,11 +146,13 @@ test('metadata contexts reject repository edits made after their item frame was 
   finally { library.load = load; }
   try {
     assert.equal(edited, true);
+    assert.equal(loaded.item.Id, capturedId);
     assert.equal(loaded.item.Name, before.Name);
-    const after = await database.rows('BaseItems', { where: { Id: ownerId } });
+    const after = await database.rows('BaseItems', { where: { Id: capturedId } });
     await assert.rejects(persistMetadata(fixture.store, loaded, { Item: loaded.item }),
       { code: 'metadata-conflict', status: 409 });
-    assert.deepEqual(await database.rows('BaseItems', { where: { Id: ownerId } }), after);
+    assert.deepEqual(await database.rows('BaseItems', { where: { Id: capturedId } }), after);
+    assert.deepEqual(await database.rows('BaseItems', { where: { Id: ownerId } }), untouched);
   } finally { await loaded.dispose(); }
 });
 
