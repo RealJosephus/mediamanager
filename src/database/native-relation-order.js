@@ -59,7 +59,8 @@ export function postgresRelationOrderStatements(schema, controlSchema) {
  * Reassign only this batch's reserved positions without changing save order,
  * relationships or the sequence high-water mark. Updates keep their position. */
 export async function orderNativeItemBatch(database, itemIds) {
-  if (!itemIds.length) return;
+  // One insert already owns its final position; only a batch can reorder it.
+  if (itemIds.length < 2) return;
   return orderNativeItemSelection(database, { text: 'SELECT unnest($1::bytea[]) AS "Id"', values: [itemIds.map(nativeTextBytes)] });
 }
 
