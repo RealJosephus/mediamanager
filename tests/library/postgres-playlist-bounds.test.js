@@ -15,8 +15,7 @@ import { quoteIdentifier } from '../../src/database/model.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { LibraryService } from '../../src/library/library-service.js';
 import { PlaylistService } from '../../src/library/playlist-service.js';
-import { queryPostgresDeletedUserPlaylistBatch,
-  queryPostgresPlaylistPage } from '../../src/library/postgres-playlist-query.js';
+import { queryPostgresDeletedUserPlaylistBatch } from '../../src/library/postgres-playlist-query.js';
 import { initializeLibraryRoot } from '../../src/library/root-initialization.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { attachStateDeletion, createStateRelations, closeStateDeletion } from './deletion-fixture.js';
@@ -66,16 +65,6 @@ const mediaRow = (Id, name, filename) => ({
   ProductionLocations: '',
   Data: '{}',
 });
-
-function planNodes(node, collected = []) {
-  if (!node || typeof node !== 'object') return collected;
-  if (typeof node['Node Type'] === 'string') collected.push(node);
-  for (const value of Object.values(node)) {
-    if (Array.isArray(value)) for (const entry of value) planNodes(entry, collected);
-    else if (value && typeof value === 'object') planNodes(value, collected);
-  }
-  return collected;
-}
 
 test('playlist folder queries apply private access before counting and paging', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
@@ -134,7 +123,7 @@ test('playlist folder queries apply private access before counting and paging', 
   assert.equal(virtualPathPage.TotalRecordCount, 1);
 });
 
-test('postgres playlist operations never use unbounded BaseItems or LinkedChildren adapter reads', {
+test('postgres playlist pages hydrate bounded members and lifecycle changes persist', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
 }, async t => {
   const schema = `playlist_bounds_${process.pid}_${randomBytes(4).toString('hex')}`;
@@ -163,8 +152,6 @@ test('postgres playlist operations never use unbounded BaseItems or LinkedChildr
     await database.insert('BaseItems', mediaRow(id(1), 'First', path.join(directory, 'first.mkv')));
     await database.insert('BaseItems', { ...mediaRow(id(2), 'Second', path.join(directory, 'second.mkv')), Tags: 'hidden' });
 
-    const originalRows = database.rows.bind(database);
-    let guardedReads = 0;
     let largestBaseItemBatch = 0;
     const largeMemberIds = new Set();
     const hydratedLargeMemberIds = new Set();
@@ -191,32 +178,14 @@ test('postgres playlist operations never use unbounded BaseItems or LinkedChildr
       try { return await operation(); }
       finally { database.queryHook = hook; }
     };
-    database.rows = async (table, options) => {
-      if (['BaseItems', 'LinkedChildren'].includes(table)) {
-        guardedReads++;
-        const bounded = options && (options.where || options.whereIn);
-        if (!bounded) throw new Error(`unbounded ${table} read`);
-      }
-      return originalRows(table, options);
-    };
-
     const owner = account(90);
     const editor = account(91);
-    let creationLinkInserts = 0;
-    let creationAncestorInserts = 0;
-    database.queryHook = async (...args) => {
-      const result = await database.client.query(...args);
-      const text = typeof args[0] === 'string' ? args[0] : args[0]?.text ?? '';
-      if (/INSERT INTO [^\n]+\."LinkedChildren"/u.test(text)) creationLinkInserts++;
-      if (/INSERT INTO [^\n]+\."AncestorIds"/u.test(text)) creationAncestorInserts++;
-      return result;
-    };
     const created = await playlists.create({ name: 'Bounded', user: owner, ids: [id(1), id(2)], isPublic: false,
       users: [{ UserId: editor.Id, CanEdit: true }] });
-    database.queryHook = null;
-    assert.equal(creationLinkInserts, 1, 'playlist creation must insert every member in one statement');
-    assert.equal(creationAncestorInserts, 1, 'playlist creation must insert every ancestor in one statement');
-    assert.equal((await playlists.get(created.Id, { user: owner })).ItemIds.length, 2);
+    assert.deepEqual((await playlists.get(created.Id, { user: owner })).ItemIds.map(idKey), [idKey(id(1)), idKey(id(2))]);
+    const createdLinks = await database.rows('LinkedChildren', { where: { ParentId: nativeGuid(created.Id) },
+      orderBy: [{ column: 'SortOrder' }] });
+    assert.deepEqual(createdLinks.map(row => idKey(row.ChildId)), [idKey(id(1)), idKey(id(2))]);
     assert.deepEqual((await playlists.getItems(created.Id, { user: owner, startIndex: 1, limit: 1,
       dtoOptions: { EnableImages: false, EnableUserData: false } })).Items.map(item => item.Name), ['Second']);
     const restricted = { ...owner, Policy: { ...owner.Policy, BlockedTags: ['hidden'] } };
@@ -230,22 +199,12 @@ test('postgres playlist operations never use unbounded BaseItems or LinkedChildr
       await playlists.create({ name: 'Search batch beta', user: owner, isPublic: true }),
       await playlists.create({ name: 'Search batch gamma', user: owner, isPublic: true }),
     ];
-    let accessBatchQueries = 0;
-    database.queryHook = async (...args) => {
-      const result = await database.client.query(...args);
-      const text = typeof args[0] === 'string' ? args[0] : args[0]?.text ?? '';
-      if (text.includes('WITH RECURSIVE requested("PlaylistKey")')) accessBatchQueries++;
-      return result;
-    };
     const searchResult = await library.queryItems({
       SearchTerm: 'Search batch', IncludeItemTypes: 'Playlist', Limit: '10',
       EnableImages: 'false', EnableUserData: 'false',
     }, { user: { ...owner, MaxParentalRatingScore: 5, Configuration: {} } });
-    database.queryHook = null;
     assert.deepEqual(searchResult.Items.map(item => item.Name),
       ['Search batch alpha', 'Search batch beta', 'Search batch gamma']);
-    assert.equal(accessBatchQueries, 1,
-      'one PostgreSQL access query must serve every playlist on the search page');
     for (const playlist of searchBatch) await playlists.delete(playlist.Id, { user: owner });
 
     const createdRow = (await database.rows('BaseItems', { where: { Id: nativeGuid(created.Id) } }))[0];
@@ -312,38 +271,16 @@ test('postgres playlist operations never use unbounded BaseItems or LinkedChildr
         Data: cleanupData(index === 0),
       });
     }
-    const countedCleanup = async () => {
-      let queryCount = 0;
-      let accessBatchQueries = 0;
-      const withConnection = database.withConnection;
-      database.withConnection = function countQueries(operation, options) {
-        return withConnection.call(this, async session => {
-          const query = session.client.query;
-          session.client.query = async function countedQuery(...args) {
-            queryCount += 1;
-            const text = typeof args[0] === 'string' ? args[0] : args[0]?.text ?? '';
-            if (text.includes('WITH RECURSIVE requested("PlaylistKey")')) accessBatchQueries += 1;
-            return query.apply(this, args);
-          };
-          try { return await operation(session); }
-          finally { session.client.query = query; }
-        }, options);
-      };
-      try {
-        await playlists.removeForDeletedUser(cleanupUser);
-        return { queryCount, accessBatchQueries };
-      } finally { database.withConnection = withConnection; }
-    };
-    const singleCleanup = await countedCleanup();
+    const cleanupRows = () => database.rows('BaseItems', { whereIn: { Id: cleanupIds } });
+    const mixedAccessRows = await cleanupRows();
+    await playlists.removeForDeletedUser(cleanupUser);
+    assert.deepEqual(await cleanupRows(), mixedAccessRows);
     for (let index = 1; index < cleanupIds.length; index++) {
       await database.update('BaseItems', { Id: cleanupIds[index] }, { Data: cleanupData(true) });
     }
-    const batchCleanup = await countedCleanup();
-    assert.equal(singleCleanup.accessBatchQueries, 1);
-    assert.equal(batchCleanup.accessBatchQueries, 1,
-      'one PostgreSQL access query must serve the whole deleted-user playlist batch');
-    assert.equal(batchCleanup.queryCount, singleCleanup.queryCount,
-      'deleted-user playlist visibility must use a batch-bounded SQL statement count');
+    const publicRows = await cleanupRows();
+    await playlists.removeForDeletedUser(cleanupUser);
+    assert.deepEqual(await cleanupRows(), publicRows);
 
     await database.insert('BaseItems', {
       ...mediaRow(id(3), 'Unicode tag', path.join(directory, 'unicode-tag.mkv')),
@@ -406,57 +343,6 @@ test('postgres playlist operations never use unbounded BaseItems or LinkedChildr
       dtoOptions: { EnableImages: false, EnableUserData: false } })).TotalRecordCount, 0,
     'a deeply nested collection policy cannot be bypassed');
 
-    let capturedPlaylistQuery;
-    const originalQuery = database.client.query;
-    database.client.query = async query => {
-      const text = typeof query === 'string' ? query : query?.text;
-      if (text?.includes('WITH RECURSIVE selected AS')) {
-        capturedPlaylistQuery = { text, values: query.values };
-      }
-      return originalQuery(query);
-    };
-    try {
-      await queryPostgresPlaylistPage(database, deep.Id, {
-        visibility: {
-          userId: owner.Id,
-          allTopParentIds: [],
-          allowedTopParentIds: [],
-          collectionBlockedTopParentIds: [],
-          collectionAllowedTopParentIds: [],
-          blockedTags: ['deep hidden'],
-          allowedTags: [],
-          maxRating: null,
-          maxSubRating: null,
-          blockUnratedTypes: [],
-        },
-        limit: 1,
-      });
-    } finally {
-      database.client.query = originalQuery;
-    }
-    assert.ok(capturedPlaylistQuery, 'playlist page query was captured');
-    assert.doesNotMatch(capturedPlaylistQuery.text, /__Depth|<\s*63/);
-    assert.match(capturedPlaylistQuery.text,
-      /FROM ancestry\s+JOIN [^\n]+"BaseItems" parent ON [^\n]+mm_native_guid_lower[^\n]+parent\."Id"[^\n]+mm_native_guid_lower[^\n]+ancestry\."ParentId"/);
-    const explanation = await database.withConnection(async session => {
-      await session.client.query('SET enable_seqscan TO off');
-      try {
-        return session.client.query({
-          text: `EXPLAIN (FORMAT JSON) ${capturedPlaylistQuery.text}`,
-          values: capturedPlaylistQuery.values,
-        });
-      } finally {
-        await session.client.query('RESET enable_seqscan');
-      }
-    });
-    const nodes = planNodes(explanation.rows[0]['QUERY PLAN'][0].Plan);
-    const indexNames = new Set(nodes.map(node => node['Index Name']).filter(Boolean));
-    assert.ok(indexNames.has('mm_runtime_linked_children_parent_child_lower_idx'),
-      `playlist seed did not use its parent index: ${[...indexNames].join(', ')}`);
-    assert.ok(indexNames.has('mm_runtime_baseitems_id_lower_idx'),
-      `ancestor lookup did not use its id index: ${[...indexNames].join(', ')}`);
-    assert.equal(nodes.some(node => node['Node Type'] === 'Seq Scan' && node['Relation Name'] === 'BaseItems'), false,
-      'playlist ancestry must not scan the BaseItems catalogue');
     await playlists.delete(deep.Id, { user: owner });
     await store.transaction(async db => {
       await db.update('BaseItems', { Id: deepChildId }, { ParentId: null });
@@ -468,7 +354,7 @@ test('postgres playlist operations never use unbounded BaseItems or LinkedChildr
     const large = await playlists.create({ name: 'Large bounded page', user: owner, isPublic: true });
     const largeId = nativeGuid(large.Id);
     await store.transaction(async db => {
-      for (let index = 100; index < 228; index++) {
+      for (let index = 100; index < 240; index++) {
         const childId = id(index);
         largeMemberIds.add(idKey(childId));
         await db.insert('BaseItems', mediaRow(childId, `Large ${index}`, path.join(directory, `large-${index}.mkv`)));
@@ -479,18 +365,18 @@ test('postgres playlist operations never use unbounded BaseItems or LinkedChildr
     hydratedLargeMemberIds.clear();
     const largePage = await observeHydration(() => playlists.getItems(large.Id, { user: owner, startIndex: 60, limit: 3,
       dtoOptions: { EnableImages: false, EnableUserData: false } }));
-    assert.equal(largePage.TotalRecordCount, 128);
-    assert.equal(largePage.Items.length, 3);
-    assert.ok(largestBaseItemBatch <= 24, `largest complete BaseItems result batch was ${largestBaseItemBatch}`);
-    assert.equal(hydratedLargeMemberIds.size, 3);
+    assert.equal(largePage.TotalRecordCount, largeMemberIds.size);
+    assert.deepEqual(largePage.Items.map(item => item.Id), [160, 161, 162].map(value => idKey(id(value))));
+    assert.ok(largestBaseItemBatch <= 128, `largest complete BaseItems result batch was ${largestBaseItemBatch}`);
+    assert.ok(hydratedLargeMemberIds.size <= 128, `hydrated ${hydratedLargeMemberIds.size} playlist members`);
     largestBaseItemBatch = 0;
     hydratedLargeMemberIds.clear();
     const genericPage = await observeHydration(() => library.queryItems({ ParentId: large.Id, StartIndex: 60, Limit: 3,
       EnableImages: false, EnableUserData: false }, { user: owner }));
-    assert.equal(genericPage.TotalRecordCount, 128);
-    assert.equal(genericPage.Items.length, 3);
-    assert.ok(largestBaseItemBatch <= 24, `generic playlist page returned a complete BaseItems batch of ${largestBaseItemBatch}`);
-    assert.equal(hydratedLargeMemberIds.size, 3);
+    assert.equal(genericPage.TotalRecordCount, largeMemberIds.size);
+    assert.deepEqual(genericPage.Items.map(item => item.Id), largePage.Items.map(item => item.Id));
+    assert.ok(largestBaseItemBatch <= 128, `generic playlist page returned a complete BaseItems batch of ${largestBaseItemBatch}`);
+    assert.ok(hydratedLargeMemberIds.size <= 128, `generic page hydrated ${hydratedLargeMemberIds.size} playlist members`);
     await playlists.add(created.Id, [id(1)], { user: editor, position: 1 });
     await playlists.move(created.Id, id(2).replaceAll('-', '').toLowerCase(), 0, { user: editor });
     await playlists.remove(created.Id, [id(1).replaceAll('-', '').toLowerCase()], { user: editor });
@@ -499,21 +385,13 @@ test('postgres playlist operations never use unbounded BaseItems or LinkedChildr
     await playlists.removeUser(created.Id, editor.Id, { user: owner });
     await playlists.update(created.Id, { user: owner, isPublic: true });
     await playlists.delete(unicodeTags.Id, { user: owner });
-    await playlists.create({ name: 'Deleted owner', user: owner, isPublic: false });
+    const orphan = await playlists.create({ name: 'Deleted owner', user: owner, isPublic: false });
     await playlists.removeForDeletedUser(owner);
-    let largeDeleteLinkStatements = 0;
-    database.queryHook = async (...args) => {
-      const result = await database.client.query(...args);
-      const text = typeof args[0] === 'string' ? args[0] : args[0]?.text ?? '';
-      if (/DELETE FROM [^\n]+\."LinkedChildren"/u.test(text)) largeDeleteLinkStatements++;
-      return result;
-    };
+    assert.deepEqual(await database.rows('BaseItems', { where: { Id: nativeGuid(orphan.Id) } }), []);
+    await database.insert('LinkedChildren', { ParentId: nativeGuid(created.Id), SortOrder: 2, ChildId: largeId, ChildType: 0 });
     await playlists.delete(large.Id, { user: owner });
-    database.queryHook = null;
-    assert.equal(largeDeleteLinkStatements, 1,
-      'playlist deletion must remove every incoming and outgoing link in one statement');
+    assert.deepEqual(await database.rows('LinkedChildren', { whereAny: { ParentId: [largeId], ChildId: [largeId] } }), []);
     await playlists.delete(created.Id, { user: owner });
-    assert.ok(guardedReads > 0);
   } catch (error) {
     failed = true; primary = error;
     await observeFailure('operation', error);

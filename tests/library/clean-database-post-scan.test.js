@@ -38,7 +38,13 @@ for (const observation of native.results) test('postgres: database cleanup match
 }, async t => {
   const value = await setupDatabaseCleanup(t, observation);
   let failure;
-  try { await value.operation(); } catch (error) { failure = error; }
+  const [before, after] = await value.store.run(async session => {
+    const temporaryRelations = async () => (await session.client.query(`SELECT oid FROM pg_class
+      WHERE relnamespace = pg_my_temp_schema() AND relpersistence = 't' ORDER BY oid`)).rows;
+    const before = await temporaryRelations();
+    try { await value.operation(); } catch (error) { failure = error; }
+    return [before, await temporaryRelations()];
+  });
   t.diagnostic(JSON.stringify({ name: observation.sample.Name,
     nativeFailure: observation.failure, failure: failure && { name: failure.name, code: failure.code,
       message: failure.message, stack: failure.stack }, logs: value.logs }));
@@ -57,7 +63,7 @@ for (const observation of native.results) test('postgres: database cleanup match
   assert.deepEqual(await value.snapshot(), value.normalizeNative(observation.after), 'All item columns, values, mappings, directories and file bytes.');
   assert.deepEqual(value.progress, observation.progress, 'Progress and cancellation prefix.');
   assert.deepEqual(taskCalls(value.calls), taskCalls(observation.calls), 'Task and ordinary deletion side-effect prefix.');
-  assert.equal((await value.database.client.query("SELECT count(*) AS count FROM pg_class WHERE relpersistence = 't' AND relname LIKE 'mm_clean_%'")).rows[0].count, 0n);
+  assert.deepEqual(after, before, 'The cleanup operation releases its session-owned temporary relations.');
 });
 
 test('postgres: database cleanup freezes playlist objects across 128-row pages and cascaded deletion', {
