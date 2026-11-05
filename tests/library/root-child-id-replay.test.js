@@ -136,9 +136,8 @@ test('postgres: child ID replay preserves 130 ordered values and live link branc
   const children = Array.from({ length: 130 }, (_, index) => row(id(1000 + index), 'CollectionFolder', rootId,
     { Name: 'Stored child ' + index, SortName: String(index).padStart(3, '0') }));
   await f.database.insertBatch('BaseItems', [row(rootId, 'UserRootFolder', null), ...children]);
-  await f.database.insert('LinkedChildren', { ParentId: children.at(-1).Id, SortOrder: 0, ChildType: 0,
-    ChildId: null, LibraryItemId: null, Path: '/last-page-member' });
-  const before = await f.database.rows('BaseItems'), root = await f.root(rootId);
+  await f.database.insert('LinkedChildren', { ParentId: children.at(-1).Id, SortOrder: 0, ChildType: 0, ChildId: children[0].Id });
+  const before = await f.database.rows('BaseItems'), beforeLinks = await f.database.rows('LinkedChildren'), root = await f.root(rootId);
   const expected = children.map(child => ({ Id: idKey(child.Id), Name: child.Name }));
   assert.deepEqual(await f.values(root), expected);
   const alias = newNativeItemEntity(type('CollectionFolder'));
@@ -154,12 +153,13 @@ test('postgres: child ID replay preserves 130 ordered values and live link branc
         assert.deepEqual((await readTestLinks(child)).map(link => link.Path), ['/first-page-member']);
       }
       if (idKey(child.Id) === idKey(children.at(-1).Id)) {
-        assert.deepEqual((await readTestLinks(child)).map(link => link.Path), ['/last-page-member']);
+        assert.deepEqual((await readTestLinks(child)).map(link => idKey(link.ItemId)), [idKey(children[0].Id)]);
       }
     }
     assert.deepEqual(observed, expected.map((child, index) => index === 0 ? { ...child, Name: alias.Name } : child));
   });
   assert.deepEqual(await f.database.rows('BaseItems'), before);
+  assert.deepEqual(await f.database.rows('LinkedChildren'), beforeLinks);
   await f.close();
   assert.equal((await f.database.client.query('SELECT to_regnamespace($1) AS namespace',
     [f.linkedChildren.schemaName])).rows[0].namespace, null);
