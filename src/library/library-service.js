@@ -3289,15 +3289,23 @@ export class LibraryService extends EventEmitter {
       const values = [...plan.values, target.Path == null ? null : nativeTextBytes(target.Path), folders];
       const pathMatches = `${sql.ordinalIgnoreCaseKey('source."Path"')} IS NOT DISTINCT FROM ${sql.ordinalIgnoreCaseKey(path)}`;
       const folderSource = `(SELECT * FROM (${plan.text}) child WHERE child."NativeType"=ANY($${offset + 2}::bytea[])) source`;
-      const invalid = await db.client.query({ text: `SELECT source."Ordinal" FROM ${folderSource}
-        WHERE source."PhysicalLocations" IS NULL AND NOT (${pathMatches}) ORDER BY source."Ordinal" LIMIT 1`, values });
-      if (invalid.rows.length) throw libraryError(500, "Value cannot be null. (Parameter 'source')");
       const result = [];
       for (let after = 0n;;) {
-        const rows = (await db.client.query({ text: `SELECT source."Ordinal",source."SlotKey" FROM ${folderSource}
-          WHERE source."Ordinal">$${offset + 3} AND ((${pathMatches}) OR EXISTS(
+        const rows = (await db.client.query({ text: `WITH folders AS MATERIALIZED (
+            SELECT source."Ordinal",source."SlotKey",source."Path",source."PhysicalLocations" FROM ${folderSource}
+          ), invalid AS MATERIALIZED (
+            SELECT source."Ordinal" FROM folders source
+            WHERE $${offset + 3}::bigint=0 AND source."PhysicalLocations" IS NULL AND NOT (${pathMatches})
+            ORDER BY source."Ordinal" LIMIT 1
+          )
+          SELECT TRUE AS "Invalid",NULL::bigint AS "Ordinal",NULL::uuid AS "SlotKey" FROM invalid
+          UNION ALL (
+          SELECT FALSE AS "Invalid",source."Ordinal",source."SlotKey" FROM folders source
+          WHERE NOT EXISTS(SELECT 1 FROM invalid) AND source."Ordinal">$${offset + 3} AND ((${pathMatches}) OR EXISTS(
             SELECT 1 FROM unnest(source."PhysicalLocations") location WHERE ${sql.ordinalIgnoreCaseKey("COALESCE(location,decode('','hex'))")}=${sql.ordinalIgnoreCaseKey(span)}))
-          ORDER BY source."Ordinal" LIMIT 128`, values: [...values, after] })).rows;
+          ORDER BY source."Ordinal" LIMIT 128)
+          ORDER BY "Ordinal"`, values: [...values, after] })).rows;
+        if (rows.some(row => row.Invalid)) throw libraryError(500, "Value cannot be null. (Parameter 'source')");
         if (!rows.length) return result;
         for (const row of rows) await source.withSlot(row.SlotKey, folder => { state.adoptItem(folder); result.push(this.#rememberRecord(folder)); });
         after = BigInt(rows.at(-1).Ordinal);

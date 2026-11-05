@@ -215,7 +215,8 @@ test('postgres: complete root ID capture and manager replay cross the SQL bounda
   skip: !postgresTestConnectionString, timeout: 180000,
 }, async t => {
   const f = await setup(t), definitions = Array.from({ length: 257 }, (_, index) =>
-    row(id(100 + index), 'CollectionFolder', id(2), { SortName: String(index).padStart(4, '0') }));
+    row(id(100 + index), 'CollectionFolder', id(2), { SortName: String(index).padStart(4, '0'),
+      Data: '{"PhysicalLocationsList":["/membership/shared"]}' }));
   await f.database.insert('BaseItems', row(id(2), 'UserRootFolder', null));
   await f.database.insertBatch('BaseItems', definitions);
   const root = await f.root(id(2)), original = f.database.client.query;
@@ -231,6 +232,17 @@ test('postgres: complete root ID capture and manager replay cross the SQL bounda
     assert.deepEqual((await f.values(root)).map(child => child.Id), definitions.map(child => idKey(child.Id)));
     assert.equal(maximumRows, 128);
   } finally { f.database.client.query = original; }
+  const target = Object.assign(newNativeItemEntity(type('Year')), { Id: id(900), Path: '/membership/shared' });
+  const selected = await f.library.getCollectionFolders(target);
+  const membership = value => ({ Id: idKey(value.Id), Name: value.Name, Path: value.Path,
+    PhysicalLocationsList: value.PhysicalLocationsList });
+  assert.deepEqual(selected.map(membership), definitions.map(value => ({ Id: idKey(value.Id), Name: value.Name,
+    Path: value.Path, PhysicalLocationsList: ['/membership/shared'] })));
+  selected.at(-1).PhysicalLocationsList = null;
+  setFolderChildren(root, selected);
+  await assert.rejects(f.library.getCollectionFolders(target), {
+    status: 500, message: "Value cannot be null. (Parameter 'source')",
+  }, 'a null location list beyond the first page still rejects the complete directory lookup');
 });
 
 test('postgres: root navigation visibility cannot replace replayed manager occurrences with a request directory cache', {
