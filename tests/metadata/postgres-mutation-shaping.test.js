@@ -5,7 +5,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { tableDefinition } from '../../src/database/model.js';
-import { persistFolderLinks, persistImageMetadata } from '../../src/metadata/persistence.js';
+import { persistFolderLinks, persistImageMetadata, persistMetadata } from '../../src/metadata/persistence.js';
 import { assertMetadataBaseline, readMetadataRelationships } from '../../src/metadata/metadata-baseline.js';
 import { nativePersonIdentity } from '../../src/library/metadata-context.js';
 import { setupChildrenFixture } from './children-fixture.js';
@@ -112,6 +112,38 @@ test('metadata contexts retain ordered item images and credits with a complete c
   }), { code: 'metadata-conflict', status: 409 });
   assert.deepEqual(await database.rows('BaseItemProviders', { where: { ItemId: ownerId } }), []);
   await loaded.dispose();
+});
+
+test('metadata contexts reject repository edits made after their item frame was captured', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 60000,
+}, async t => {
+  const fixture = await setupChildrenFixture(t), { database, library } = fixture;
+  const ownerId = '92000000-0000-0000-0000-000000000007';
+  await fixture.seed({ target: 'owner', items: [
+    { key: 'owner', type: 'Movie', Id: ownerId, Name: 'Observed name', Path: 'Z:\\ChildrenMetadata\\observed.mkv' },
+  ] });
+  const before = (await database.rows('BaseItems', { where: { Id: ownerId } }))[0];
+  const load = library.load;
+  let edited = false;
+  library.load = async function (...args) {
+    const state = await load.apply(this, args);
+    if (!edited && state.byId.has(ownerId.replaceAll('-', ''))) {
+      edited = true;
+      await database.update('BaseItems', { Id: ownerId }, { Name: 'External edit', Overview: 'Keep this later value.' });
+    }
+    return state;
+  };
+  let loaded;
+  try { loaded = await fixture.loadContext(ownerId); }
+  finally { library.load = load; }
+  try {
+    assert.equal(edited, true);
+    assert.equal(loaded.item.Name, before.Name);
+    const after = await database.rows('BaseItems', { where: { Id: ownerId } });
+    await assert.rejects(persistMetadata(fixture.store, loaded, { Item: loaded.item }),
+      { code: 'metadata-conflict', status: 409 });
+    assert.deepEqual(await database.rows('BaseItems', { where: { Id: ownerId } }), after);
+  } finally { await loaded.dispose(); }
 });
 
 test('folder link path fallback uses the primary-key ordered SQL union of bounded candidates', async t => {

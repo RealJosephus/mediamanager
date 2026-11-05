@@ -540,14 +540,15 @@ export async function loadPostgresItemGraph(database, ids, {
  * repository selectors, including presentation-key members outside that tree.
  */
 export async function loadPostgresMetadataRows(database, referenceId, {
+  targetRows,
   targetType,
   targetName,
   includeDescendants = false,
   includeChildren = true,
   configuration = {},
 } = {}) {
+  targetRows ??= await loadPostgresRowsByIds(database, [referenceId]);
   const navigationRows = await loadPostgresNavigationRows(database, referenceId);
-  const targetRows = await loadPostgresRowsByIds(database, [referenceId]);
   const target = targetRows[0] ? mapRecord(targetRows[0]) : null;
   targetType ??= target?.Type;
   targetName ??= target?.Name;
