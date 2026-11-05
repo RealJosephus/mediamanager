@@ -65,12 +65,22 @@ export function createMetadataChildren(options) {
         const state = await library.load(session, null, { baseRows, includeManualLinks: false, includeFolderLinks: true, includeLinkGraph: false });
         let rowFailure;
         try {
+          const page = [];
           for (const row of rows) {
             const item = state.byId.get(idKey(decodeNativeTextBytes(row.Id)));
             if (!item || !predicate(item)) continue;
-            const ordinal = offset + BigInt(row.Ordinal), slot = await cohort.capture(item, { ordinal });
-            await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type") VALUES ($1,$2,$3,$4)`,
-              [ordinal, row.Id, slot, encoded(item.NativeType)]);
+            page.push({ item, ordinal: offset + BigInt(row.Ordinal), id: row.Id });
+          }
+          if (page.length) {
+            const slots = await cohort.captureSlots(page.map(entry => entry.item));
+            // Publish the bounded capture in source order. The final view
+            // joins this selection directly to the captured slots.
+            await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type")
+              SELECT ordinal,id,slot,type FROM
+                unnest($1::bigint[],$2::bytea[],$3::uuid[],$4::bytea[]) WITH ORDINALITY
+                  AS captured(ordinal,id,slot,type,position) ORDER BY position`,
+            [page.map(entry => entry.ordinal), page.map(entry => entry.id), slots,
+              page.map(entry => encoded(entry.item.NativeType))]);
           }
         } catch (error) { rowFailure = error; throw error; }
         finally { await cleanupResources(rowFailure, [() => state.dispose({ session }), () => linkedChildren.flushReleases({ session })],
