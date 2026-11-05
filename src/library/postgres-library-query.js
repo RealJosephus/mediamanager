@@ -29,7 +29,7 @@ function qualified(database, name) {
 }
 
 async function itemIds(database, text, values) {
-  const result = await database.client.query({ text, values });
+  const result = await queryPostgresLibraryStatement(database, { text, values });
   return result.rows.map(row => row.Id == null ? null : decodeNativeTextBytes(row.Id)).filter(nonemptyId);
 }
 

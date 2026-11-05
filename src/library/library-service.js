@@ -47,6 +47,7 @@ import { createPresentationUniqueKey } from './presentation-key.js';
 import { SimilarItemsManager } from './similar-items.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
 import { buildPostgresItemPageQuery, queryPostgresDtoChildCounts, queryPostgresItemPage } from '../database/postgres-item-query.js';
+import { queryPostgresLibraryStatement } from '../database/postgres.js';
 import { loadPostgresItemGraph, loadPostgresNavigationRows, loadPostgresPageGraph, loadPostgresRowsByIds, queryPostgresFolderStats,
   countPostgresNullVideoTypeRows, queryPostgresAlbumSelectorIds, queryPostgresArtistSelectorId,
   queryPostgresArtistSelectorIds, queryPostgresDtoArtistIds,
@@ -3291,7 +3292,7 @@ export class LibraryService extends EventEmitter {
       const folderSource = `(SELECT * FROM (${plan.text}) child WHERE child."NativeType"=ANY($${offset + 2}::bytea[])) source`;
       const result = [];
       for (let after = 0n;;) {
-        const rows = (await db.client.query({ text: `WITH folders AS MATERIALIZED (
+        const rows = (await queryPostgresLibraryStatement(db, { text: `WITH folders AS MATERIALIZED (
             SELECT source."Ordinal",source."SlotKey",source."Path",source."PhysicalLocations" FROM ${folderSource}
           ), invalid AS MATERIALIZED (
             SELECT source."Ordinal" FROM folders source
