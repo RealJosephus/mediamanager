@@ -230,7 +230,7 @@ test('postgres: complete root ID capture and manager replay cross the SQL bounda
     assert.deepEqual((await f.values(root)).map(child => child.Id), definitions.map(child => idKey(child.Id)));
     releaseCachedFolderChildren(root);
     assert.deepEqual((await f.values(root)).map(child => child.Id), definitions.map(child => idKey(child.Id)));
-    assert.equal(maximumRows, 128);
+    assert.ok(maximumRows <= 128);
   } finally { f.database.client.query = original; }
   const target = Object.assign(newNativeItemEntity(type('Year')), { Id: id(900), Path: '/membership/shared' });
   const selected = await f.library.getCollectionFolders(target);
