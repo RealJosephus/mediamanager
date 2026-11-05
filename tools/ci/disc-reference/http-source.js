@@ -26,14 +26,28 @@ function archiveUrl(value) {
 function archiveFileLocations(original, metadata) {
   const { server, dir, workable_servers: workableServers } = metadata ?? {};
   const item = /^\/download\/([A-Za-z0-9_.-]+)\/([^/]+)$/u.exec(original.pathname);
-  const directory = typeof dir === 'string' ? /^\/\d+\/items\/([A-Za-z0-9_.-]+)$/u.exec(dir) : null;
-  if (original.origin !== 'https://archive.org' || original.search || original.hash || !item || item[1] !== directory?.[1]
-    || item[1] !== metadata?.metadata?.identifier || typeof server !== 'string'
-    || !/^(?:[a-z0-9-]+\.)+archive\.org$/iu.test(server)
+  if (original.origin !== 'https://archive.org' || original.search || original.hash || !item
+    || item[1] !== metadata?.metadata?.identifier
     || !Array.isArray(workableServers) || !workableServers.includes(server)) return [original];
-  // Use the preferred node from this run's item metadata. The canonical URL
-  // can route a retry if the item moves while ranges are in flight.
-  return [archiveUrl(`https://${server}${directory[0]}/${item[2]}`), original];
+  const nodeUrl = (host, dir) => {
+    if (typeof host !== 'string' || !/^(?:[a-z0-9-]+\.)+archive\.org$/iu.test(host)) return null;
+    const directory = typeof dir === 'string' ? /^\/\d+\/items\/([A-Za-z0-9_.-]+)$/u.exec(dir) : null;
+    return directory?.[1] === item[1] ? archiveUrl(`https://${host}${directory[0]}/${item[2]}`) : null;
+  };
+  const preferred = nodeUrl(server, dir);
+  if (!preferred) return [original];
+  const locations = [preferred, original];
+  const mirrors = metadata.alternate_locations?.workable;
+  if (Array.isArray(mirrors)) {
+    for (const mirror of mirrors) {
+      const candidate = nodeUrl(mirror?.server, mirror?.dir);
+      if (candidate && candidate.hostname !== preferred.hostname) {
+        locations.push(candidate);
+        break;
+      }
+    }
+  }
+  return locations;
 }
 
 const strongETag = value => typeof value === 'string' && /^"[\x21\x23-\x7e\x80-\xff]*"$/u.test(value) ? value : null;

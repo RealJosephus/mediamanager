@@ -159,6 +159,37 @@ test('the available Archive node supplies the same object and a canonical retry 
   assert.equal(result.transport.fileClosed, true);
 });
 
+test('a failed range can use the declared Archive mirror within the original retry budget', async t => {
+  const io = await fixture(t), source = sourceFor(payload), requests = [];
+  const preferred = 'https://dn1.us.archive.org/0/items/controlled-unit/original.iso';
+  const mirror = { server: 'dn2.ca.archive.org', dir: '/1/items/controlled-unit' };
+  const fallback = 'https://dn2.ca.archive.org/1/items/controlled-unit/original.iso';
+  const download = createArchiveIsoDownloader({ openFile: io.openFile, rangeBytes: 8, concurrency: 1, retryDelayMs: 0,
+    fetch: async (url, options) => {
+      const range = requestRange(options);
+      requests.push({ url: url.href, ...range, validator: options.headers['If-Match'] });
+      if (range.start === 8 && url.href === preferred) {
+        return responseFor(payload, range.start, range.end, { failRead: true, readFailure: new Error('Connection reset') });
+      }
+      return responseFor(payload, range.start, range.end, { status: url.href === source.url ? 503 : 206 });
+    } });
+  const result = await download(source, io.filename, { metadata: { ...itemMetadata, alternate_locations: {
+    servers: [{ server: 'unverified.archive.org', dir: itemMetadata.dir }],
+    workable: [{ server: 'outside.example', dir: itemMetadata.dir }, { server: 'other.archive.org', dir: '/1/items/other' },
+      { server: itemMetadata.server, dir: '/1/items/controlled-unit' }, mirror],
+  } } });
+  assert.deepEqual(requests.filter(({ start }) => start === 8), [preferred, source.url, fallback].map(url => ({
+    url, start: 8, end: 15, validator: '"fixed-unit-generation"',
+  })));
+  assert.deepEqual(await readFile(io.filename), payload);
+  for (const algorithm of ['sha256', 'sha1', 'md5']) assert.equal(result[algorithm], source[algorithm]);
+  assert.equal(result.transport.requestsDrained, true);
+  assert.equal(result.transport.workersDrained, true);
+  assert.equal(result.transport.fileSynced, true);
+  assert.equal(result.transport.fileClosed, true);
+  assert.ok(io.handles.every(handle => handle.fd === -1));
+});
+
 test('metadata for an unavailable node, another item or a non-Archive host keeps the canonical source', async t => {
   for (const changes of [{ workable_servers: [] }, { dir: '/0/items/wrong-item' },
     { server: 'archive.org.invalid', workable_servers: ['archive.org.invalid'] }]) {
