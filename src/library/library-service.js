@@ -453,7 +453,7 @@ export class LibraryService extends EventEmitter {
     state.newUserView = item => this.#userViews?.createdInThisInstance(item.Id) === true;
     const scopedIds = state.items
       .filter(item => item !== state.transientUserRoot).map(item => item.Id);
-    const valueLinks = scopedIds.length ? await db.rows('ItemValuesMap', { whereIn: { ItemId: scopedIds } }) : [];
+    const valueLinks = state.relationPresence.ItemValuesMap ? await db.rows('ItemValuesMap', { whereIn: { ItemId: scopedIds } }) : [];
     const valueIds = [...new Set(valueLinks.map(link => link.ItemValueId))];
     const values = valueIds.length ? await db.rows('ItemValues', { whereIn: { ItemValueId: valueIds } }) : [];
     state.itemValues = values;
@@ -471,7 +471,7 @@ export class LibraryService extends EventEmitter {
         itemValues.set(value.Type, value.CleanValue);
       }
     }
-    const peopleLinks = scopedIds.length ? await db.rows('PeopleBaseItemMap', { whereIn: { ItemId: scopedIds } }) : [];
+    const peopleLinks = state.relationPresence.PeopleBaseItemMap ? await db.rows('PeopleBaseItemMap', { whereIn: { ItemId: scopedIds } }) : [];
     const peopleIds = [...new Set(peopleLinks.map(link => link.PeopleId))];
     const people = peopleIds.length ? await db.rows('Peoples', { whereIn: { Id: peopleIds } }) : [];
     state.people = people;

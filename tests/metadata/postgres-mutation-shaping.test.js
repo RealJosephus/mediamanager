@@ -79,6 +79,11 @@ test('metadata contexts retain ordered item images and credits with a complete c
     { key: 'person', type: 'Person', Id: person.Id, Path: person.Path, Name: 'Context actor',
       ProviderIds: { Custom: 'actor-id' } },
   ] });
+  const empty = await fixture.loadContext(ownerId);
+  try {
+    assert.deepEqual(empty.context.images, []);
+    assert.deepEqual(empty.context.people, []);
+  } finally { await empty.dispose(); }
   const peopleId = '92000000-0000-0000-0000-000000000004';
   await database.insert('Peoples', { Id: peopleId, Name: 'Context actor', PersonType: 'Actor' });
   for (const [Role, ListOrder] of [['Alpha role', 9], ['Zulu role', 0]]) {
