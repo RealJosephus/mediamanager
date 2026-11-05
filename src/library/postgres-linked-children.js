@@ -295,7 +295,7 @@ export class PostgresLinkedChildrenStore {
   async load(session, parentId) {
     const source = { session, parentId, plan: this.storedPlan(session, parentId) };
     // Use one snapshot to detect and publish the members without allocating an
-    // empty set. Explicit writers still own their assigned relation.
+    // empty set. Nonempty writers own their assigned relation.
     return session.inTransaction ? this.createFromSnapshot(source) : this.#publishFromSession({ ...source, omitEmpty: true });
   }
   async createFromSnapshot({session,parentId,plan:source}) {
@@ -548,6 +548,7 @@ export class PostgresLinkedChildrenStore {
         if (finished) throw new Error('The member importer is closed.');
         try {
           await flush();
+          if (ordinal === 0n) return EMPTY_NATIVE_LINKS;
           return await this.createFromSnapshot({ session, parentId, plan: immutablePlan(`SELECT ${fields} FROM ${temporary} ORDER BY "Ordinal"`) });
         }
         finally { await abort(); }

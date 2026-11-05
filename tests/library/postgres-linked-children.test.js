@@ -125,6 +125,14 @@ test('postgres: cold empty links preserve loaded aliases, clone snapshots and la
   }, { readOnly: true });
   const clone = own(cloneNativeItemEntity(item));
   assert.equal(clone.LinkedChildrenLoaded, true);
+  const publishedEmpty = await store.withSession(async session => {
+    const writer = await store.createWriter({ session, parentId });
+    try { return await writer.finish(); } catch (error) { await writer.abort(); throw error; }
+  });
+  publishNativeItemLinks(item, publishedEmpty);
+  assert.equal(item.LinkedChildrenLoaded, true);
+  assert.deepEqual(await rows(item.LinkedChildren), []);
+  assert.deepEqual(await rows(held), []);
   const aliases = new Map([['live', item]]), alias = aliases.get('live');
   alias.Overview = 'Unsaved alias change'; alias.Tags.push('changed'); alias.Data.Future.text = 'unsaved nested value';
   assert.deepEqual(metadata(item), { ...originalMetadata, Overview: 'Unsaved alias change', Tags: ['before', 'changed'],
