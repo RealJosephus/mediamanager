@@ -7,6 +7,8 @@ const hash = value => createHash('sha256').update(value).digest('hex');
 const equal = (left, right) => JSON.stringify(left) === JSON.stringify(right);
 const sorted = values => [...values].sort();
 const validDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/u.test(value);
+const positiveId = value => /^[1-9]\d*$/u.test(String(value)) && Number.isSafeInteger(Number(value));
+const pairPlatforms = { 'ubuntu-24.04': 'linux', 'windows-2025': 'win32', 'macos-15': 'darwin' };
 const unmetPrerequisites = ['Product capability acceptance evidence is not supplied to this CI gate.',
   'Production-scale complete-instance validation and final release review require separate evidence.'];
 const save = (filename, value) => writeFile(filename, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
@@ -177,19 +179,63 @@ export async function verifyReleasePair(output, scope, expectedHead) {
   return pairResult(scope, frozen, rounds, errors);
 }
 
-export async function aggregateReleasePairs({ artifacts, expectedHead, runId, attempt, validationResult }) {
-  const errors = [], platforms = [];
-  const expected = ['ubuntu-24.04', 'windows-2025', 'macos-15'];
+export function selectReleasePairArtifacts({ jobs = [], available = [], expectedHead, runId, attempt }) {
+  const errors = [], selected = [];
+  if (!/^[a-f0-9]{40}$/u.test(expectedHead ?? '') || !positiveId(runId) || !positiveId(attempt)) {
+    return { selected, errors: ['The exact workflow candidate, run and attempt are required.'] };
+  }
+  for (const [os, platform] of Object.entries(pairPlatforms)) {
+    const candidates = jobs.filter(job => job.name?.startsWith(`${os} / shard 1 / `));
+    const job = candidates[0];
+    if (candidates.length !== 1 || String(job.run_id) !== String(runId) || job.head_sha !== expectedHead
+      || String(job.run_attempt) !== String(attempt) || job.status !== 'completed' || !positiveId(job.id) || !positiveId(job.runner_id)) {
+      errors.push(`${os}: the effective platform job did not complete on a runner.`);
+      continue;
+    }
+    if (job.conclusion !== 'success') errors.push(`${os}: the effective platform job did not succeed.`);
+    const uploads = job.steps?.filter(step => step.name === 'Preserve validation evidence') ?? [];
+    const upload = uploads[0], started = Date.parse(upload?.started_at), ended = Date.parse(upload?.completed_at);
+    if (uploads.length !== 1 || upload.status !== 'completed' || upload.conclusion !== 'success' || !(started <= ended)) {
+      errors.push(`${os}: the effective job has no successful evidence upload.`);
+      continue;
+    }
+    // GitHub copies completed jobs into a retry attempt. The upload window
+    // belongs to the execution that actually ran, including on carried jobs.
+    const prefix = `validation-${os}-shard-1-`;
+    const matches = available.filter(artifact => {
+      if (!artifact.name?.startsWith(prefix)) return false;
+      const producerAttempt = artifact.name.slice(prefix.length), created = Date.parse(artifact.created_at);
+      return positiveId(producerAttempt) && Number(producerAttempt) <= Number(attempt) && positiveId(artifact.id)
+        && artifact.expired === false && String(artifact.workflow_run?.id) === String(runId)
+        && artifact.workflow_run?.head_sha === expectedHead && /^sha256:[a-f0-9]{64}$/u.test(artifact.digest ?? '')
+        && created >= started && created <= ended;
+    });
+    if (matches.length !== 1) {
+      errors.push(`${os}: expected one artifact from the effective job's evidence upload.`);
+      continue;
+    }
+    const artifact = matches[0];
+    selected.push({ os, platform, name: artifact.name, id: artifact.id, digest: artifact.digest,
+      producerAttempt: artifact.name.slice(prefix.length), effectiveJobId: job.id,
+      uploadedAt: artifact.created_at, uploadStartedAt: upload.started_at, uploadCompletedAt: upload.completed_at });
+  }
+  return { selected, errors };
+}
+
+export async function aggregateReleasePairs({ artifacts, expectedHead, runId, attempt, validationResult, jobs, available }) {
+  const { selected, errors } = selectReleasePairArtifacts({ jobs, available, expectedHead, runId, attempt });
+  const platforms = [];
   let names = [];
   try { names = await readdir(artifacts); }
   catch (error) { errors.push(`The artifact directory is unavailable (${error.code ?? error.name}).`); }
-  if (!/^[a-f0-9]{40}$/u.test(expectedHead ?? '') || !/^[1-9]\d*$/u.test(String(runId)) || !/^[1-9]\d*$/u.test(String(attempt))) errors.push('The exact workflow candidate, run and attempt are required.');
-  const expectedNames = expected.map(os => `validation-${os}-shard-1-${attempt}`);
-  if (!equal(sorted(names), sorted(expectedNames))) errors.push('Exactly the three current-attempt platform artifacts are required.');
+  if (selected.length !== Object.keys(pairPlatforms).length || !equal(sorted(names), sorted(selected.map(entry => entry.name)))) {
+    errors.push('Exactly the three artifacts from the effective platform jobs are required.');
+  }
   if (validationResult !== 'success') errors.push('The platform validation jobs did not all succeed.');
-  for (const [index, os] of expected.entries()) {
+  for (const source of selected) {
+    const { os, platform } = source;
     try {
-      const artifact = path.join(artifacts, `validation-${os}-shard-1-${attempt}`);
+      const artifact = path.join(artifacts, source.name);
       const ciRoots = (await readdir(artifact)).filter(name => name.startsWith('ci-'));
       if (ciRoots.length !== 1) throw new Error('AmbiguousEvidence');
       const output = path.join(artifact, ciRoots[0]);
@@ -197,14 +243,15 @@ export async function aggregateReleasePairs({ artifacts, expectedHead, runId, at
       const result = await verifyReleasePair(output, scope, expectedHead);
       const environment = JSON.parse(await readFile(path.join(artifact, 'environment.json'), 'utf8'));
       const audit = JSON.parse(await readFile(path.join(artifact, 'postgres-audit.json'), 'utf8'));
-      const platform = ['linux', 'win32', 'darwin'][index];
       if (scope.platform !== platform || environment.runner?.platform !== platform || environment.runner.commit !== expectedHead
-        || String(environment.runner.runId) !== String(runId) || String(environment.runner.attempt) !== String(attempt)) errors.push(`${os}: runner identity differs from the current workflow.`);
+        || String(environment.runner.runId) !== String(runId) || String(environment.runner.attempt) !== source.producerAttempt) {
+        errors.push(`${os}: runner identity differs from the effective job's original upload.`);
+      }
       if (audit.clean !== true || audit.connections?.length !== 0 || audit.leakedSchemas?.length !== 0 || audit.leakedRoles?.length !== 0
         || !equal(audit.schemas, environment.schemas) || !equal(audit.roles, environment.roles)
         || audit.database?.started_at !== environment.database?.started_at) errors.push(`${os}: PostgreSQL cleanup or identity is incomplete.`);
       if (!result.strictPairAcceptance) errors.push(`${os}: two strict full runs did not verify.`);
-      platforms.push({ artifact: path.basename(artifact), ...result });
+      platforms.push({ artifact: source.name, source, ...result });
     } catch (error) { errors.push(`${os}: evidence unavailable (${error.code ?? error.name}).`); }
   }
   if (platforms.length === 3 && !platforms.every(item => item.selectionSha256 === platforms[0].selectionSha256)) errors.push('The discovered full test sets differ across platforms.');

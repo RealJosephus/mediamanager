@@ -182,20 +182,32 @@ test('full subset declarations and shards fail before any executor is invoked', 
   assert.equal(result.frozen, null);
 });
 
-test('cross-platform aggregation rechecks all raw pairs and requires three-platform cleanup without claiming product acceptance', async t => {
+test('aggregation after a single-platform retry rechecks all original pairs and actual three-platform cleanup', async t => {
   const artifacts = await workspace(t);
   const paths = [];
   for (const [os, platform] of [['ubuntu-24.04', 'linux'], ['windows-2025', 'win32'], ['macos-15', 'darwin']]) {
-    paths.push(await writePlatformFixture(artifacts, os, platform, runReleasePair));
+    paths.push(await writePlatformFixture(artifacts, os, platform, runReleasePair, { produced: platform === 'darwin' ? 2 : 1, effective: 2 }));
   }
-  const options = { artifacts, expectedHead: fixtureHead, runId: '44', attempt: '1', validationResult: 'success' };
+  const options = { artifacts, expectedHead: fixtureHead, runId: '44', attempt: '2', validationResult: 'success',
+    jobs: paths.map(row => row.job), available: paths.map(row => row.published) };
   const passed = await aggregateReleasePairs(options);
   assert.equal(passed.strictPairAcceptance, true);
   assert.equal(passed.releaseAcceptance, false);
   assert.equal(passed.platforms.length, 3);
+  assert.deepEqual(passed.platforms.map(item => item.source.producerAttempt), ['1', '1', '2']);
   assert.equal(new Set(passed.platforms.map(item => item.frozen.candidateEntriesSha256)).size, 3, 'Platform checkout bytes can differ while the clean Git head remains the same.');
   assert.equal((await aggregateReleasePairs({ ...options, validationResult: 'failure' })).strictPairAcceptance, false);
-  assert.equal((await aggregateReleasePairs({ ...options, attempt: '2' })).strictPairAcceptance, false);
+  assert.equal((await aggregateReleasePairs({ ...options, attempt: '3' })).strictPairAcceptance, false);
+  const stale = structuredClone(options);
+  stale.jobs[0].steps[0].started_at = '2026-10-02T12:00:00Z';
+  stale.jobs[0].steps[0].completed_at = '2026-10-02T12:00:02Z';
+  assert.equal((await aggregateReleasePairs(stale)).strictPairAcceptance, false, 'A later execution cannot reuse the older artifact.');
+  const wrongRun = structuredClone(options);
+  wrongRun.available[0].workflow_run.id = 45;
+  assert.equal((await aggregateReleasePairs(wrongRun)).strictPairAcceptance, false);
+  const failure = structuredClone(options);
+  failure.jobs[0].conclusion = 'failure';
+  assert.equal((await aggregateReleasePairs(failure)).strictPairAcceptance, false);
   const audit = path.join(paths[0].artifact, 'postgres-audit.json');
   const originalAudit = JSON.parse(await readFile(audit, 'utf8'));
   await saveFixture(audit, { ...originalAudit, clean: false, connections: [{ pid: 17 }] });
@@ -206,14 +218,15 @@ test('cross-platform aggregation rechecks all raw pairs and requires three-platf
   assert.equal((await aggregateReleasePairs(options)).strictPairAcceptance, false, 'A recorded true flag cannot hide altered raw evidence.');
 });
 
-test('missing platform artifacts and stale-attempt evidence never aggregate as a complete pair', async t => {
+test('missing platform artifacts and unbound evidence never aggregate as a complete pair', async t => {
   const artifacts = await workspace(t);
-  await writePlatformFixture(artifacts, 'ubuntu-24.04', 'linux', runReleasePair);
-  const options = { artifacts, expectedHead: fixtureHead, runId: '44', attempt: '1', validationResult: 'success' };
+  const { job, published } = await writePlatformFixture(artifacts, 'ubuntu-24.04', 'linux', runReleasePair);
+  const options = { artifacts, expectedHead: fixtureHead, runId: '44', attempt: '1', validationResult: 'success',
+    jobs: [job], available: [published] };
   const result = await aggregateReleasePairs(options);
   assert.equal(result.strictPairAcceptance, false);
   assert.equal(result.platforms.length, 1);
-  assert.match(result.errors.join('\n'), /three current-attempt/u);
+  assert.match(result.errors.join('\n'), /three artifacts from the effective platform jobs/u);
   await mkdir(path.join(artifacts, 'validation-ubuntu-24.04-shard-1-2'));
   assert.equal((await aggregateReleasePairs(options)).strictPairAcceptance, false);
 });

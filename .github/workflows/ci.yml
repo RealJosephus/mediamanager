@@ -620,16 +620,24 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24.16.0
-      - name: Download every current-attempt pair with its original evidence
+      - name: Select original evidence for the effective platform jobs
+        id: pair-source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: node tools/ci/release-pair-select.js "$RUNNER_TEMP/strict-pair-source.json"
+      - name: Download the selected platform pairs with their original evidence
         id: evidence
+        if: steps.pair-source.outputs.ids != ''
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
-          pattern: validation-*-shard-1-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/strict-pair-artifacts
+          github-token: ${{ github.token }}
+          artifact-ids: ${{ steps.pair-source.outputs.ids }}
+          path: ${{ runner.temp }}/strict-pair-artifacts/${{ steps.pair-source.outputs.only_name }}
       - name: Recheck candidate, inputs, full scope, TAP, registration and database cleanup
         if: always()
         shell: pwsh
-        run: node tools/ci/release-pair-aggregate.js "$env:RUNNER_TEMP/strict-pair-artifacts" "$env:RUNNER_TEMP/strict-pair-receipt"
+        run: node tools/ci/release-pair-aggregate.js "$env:RUNNER_TEMP/strict-pair-artifacts" "$env:RUNNER_TEMP/strict-pair-source.json" "$env:RUNNER_TEMP/strict-pair-receipt"
       - name: Preserve the bounded strict-pair conclusion
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

@@ -59,8 +59,9 @@ export async function writeRunnerFixture(output, scope, { preflightOnly, candida
   return { exitCode: preflightOnly ? 2 : 0, timedOut: false, cancelled: false, elapsedMilliseconds: 1 };
 }
 
-export async function writePlatformFixture(artifacts, os, platform, runReleasePair) {
-  const artifact = path.join(artifacts, `validation-${os}-shard-1-1`);
+export async function writePlatformFixture(artifacts, os, platform, runReleasePair, { produced = 1, effective = produced } = {}) {
+  const name = `validation-${os}-shard-1-${produced}`;
+  const artifact = path.join(artifacts, name);
   const output = path.join(artifact, 'ci-controlled');
   await mkdir(output, { recursive: true });
   const scope = fixtureScope(platform);
@@ -68,8 +69,16 @@ export async function writePlatformFixture(artifacts, os, platform, runReleasePa
   await runReleasePair({ scope, output, expectedHead: fixtureHead,
     execute: (directory, options) => writeRunnerFixture(directory, scope, { ...options, candidateText: `candidate-${platform}`, inputText: `input-${platform}` }) });
   const environment = JSON.parse(capturedRunnerShape.raw.environment), audit = JSON.parse(capturedRunnerShape.raw.audit);
-  Object.assign(environment.runner, { platform, commit: fixtureHead, runId: '44', attempt: '1' });
+  Object.assign(environment.runner, { platform, commit: fixtureHead, runId: '44', attempt: String(produced) });
   await saveFixture(path.join(artifact, 'environment.json'), environment);
   await saveFixture(path.join(artifact, 'postgres-audit.json'), audit);
-  return { artifact, output };
+  const id = 100 + ['linux', 'win32', 'darwin'].indexOf(platform);
+  const date = `2026-10-0${produced}T12:00:`;
+  const job = { id, run_id: 44, head_sha: fixtureHead, run_attempt: effective, runner_id: 2,
+    name: `${os} / shard 1 / Node 24 / PostgreSQL 17`, status: 'completed', conclusion: 'success',
+    steps: [{ name: 'Preserve validation evidence', status: 'completed', conclusion: 'success',
+      started_at: date + '00Z', completed_at: date + '02Z' }] };
+  const published = { id: id + 1000, name, expired: false, digest: 'sha256:' + fixtureHash(name),
+    workflow_run: { id: 44, head_sha: fixtureHead }, created_at: date + '01Z' };
+  return { artifact, output, job, published };
 }
