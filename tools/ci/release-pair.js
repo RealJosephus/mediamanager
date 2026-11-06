@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { readFile, readdir, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { validCurrentInputReceipt } from '../validation/input-receipt.js';
 
@@ -12,6 +12,10 @@ const pairPlatforms = { 'ubuntu-24.04': 'linux', 'windows-2025': 'win32', 'macos
 const unmetPrerequisites = ['Product capability acceptance evidence is not supplied to this CI gate.',
   'Production-scale complete-instance validation and final release review require separate evidence.'];
 const save = (filename, value) => writeFile(filename, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
+const preflightDirectory = 'release-pair-preflight';
+const roundDirectories = ['strict-full-1', 'strict-full-2'];
+const preflightFiles = ['result.json', 'candidate.json', 'inputs-before.json'];
+const roundFiles = [...preflightFiles, 'candidate-after.json', 'inputs-after.json', 'test-registrations.json', 'test.tap', 'stderr.txt'];
 
 export function releasePairEnabled(environment) {
   const value = environment.MEDIAMANAGER_CI_RELEASE_PAIR ?? 'false';
@@ -44,8 +48,7 @@ function scopeErrors(scope) {
 
 async function bundle(output, preflightOnly) {
   const files = {}, evidence = [], errors = [];
-  const names = ['result.json', 'candidate.json', 'inputs-before.json',
-    ...(!preflightOnly ? ['candidate-after.json', 'inputs-after.json', 'test-registrations.json', 'test.tap', 'stderr.txt'] : [])];
+  const names = preflightOnly ? preflightFiles : roundFiles;
   for (const name of names) {
     try {
       const bytes = await readFile(path.join(output, name));
@@ -54,6 +57,25 @@ async function bundle(output, preflightOnly) {
     } catch (error) { errors.push(`${name}: ${error.code ?? error.name}`); }
   }
   return { files, evidence, errors };
+}
+
+export async function stageReleasePairEvidence(results, output) {
+  const roots = (await readdir(results, { withFileTypes: true })).filter(entry => entry.isDirectory() && entry.name.startsWith('ci-'));
+  if (roots.length > 1) throw new Error('The full-pair verification source is ambiguous.');
+  const files = ['environment.json', 'postgres-audit.json'];
+  if (roots.length) {
+    const root = roots[0].name;
+    files.push(...['scope.json', 'release-pair.json', 'release-pair-frozen.json'].map(name => path.join(root, name)),
+      ...preflightFiles.map(name => path.join(root, preflightDirectory, name)),
+      ...roundDirectories.flatMap(directory => roundFiles.map(name => path.join(root, directory, name))));
+  }
+  await mkdir(output);
+  for (const filename of files) {
+    const destination = path.join(output, filename);
+    await mkdir(path.dirname(destination), { recursive: true });
+    try { await copyFile(path.join(results, filename), destination); }
+    catch (error) { if (error.code !== 'ENOENT') throw error; }
+  }
 }
 
 function candidateValid(candidate, expectedHead) {
@@ -132,15 +154,16 @@ export async function runReleasePair({ scope, output, expectedHead, execute, log
   let frozen;
   try {
     if (!errors.length) {
-      const preflightOutput = path.join(output, 'release-pair-preflight');
+      const preflightOutput = path.join(output, preflightDirectory);
       log('Freezing shared candidate and protected current release inputs without executing tests.');
       const execution = await execute(preflightOutput, { preflightOnly: true });
       frozen = { execution, ...await inspectReleaseEvidence(preflightOutput, scope, expectedHead, { preflightOnly: true, execution }) };
       await save(path.join(output, 'release-pair-frozen.json'), frozen);
       if (!frozen.verified) errors.push('Shared full preflight is incomplete.');
-      for (let index = 1; index <= 2 && !errors.length; index++) {
-        const strictOutput = path.join(output, `strict-full-${index}`);
-        log(`Starting independent strict full run ${index}/2 with the frozen inputs.`);
+      for (const [position, directory] of roundDirectories.entries()) {
+        if (errors.length) break;
+        const index = position + 1, strictOutput = path.join(output, directory);
+        log(`Starting independent strict full run ${index}/${roundDirectories.length} with the frozen inputs.`);
         const execution = await execute(strictOutput, { preflightOnly: false });
         const round = await inspectReleaseEvidence(strictOutput, scope, expectedHead, { execution });
         rounds.push({ index, execution, ...round });
@@ -156,9 +179,9 @@ export async function runReleasePair({ scope, output, expectedHead, execute, log
 
 export async function verifyReleasePair(output, scope, expectedHead) {
   const errors = scopeErrors(scope), rounds = [];
-  const frozen = await inspectReleaseEvidence(path.join(output, 'release-pair-preflight'), scope, expectedHead, { preflightOnly: true });
-  for (let index = 1; index <= 2; index++) {
-    rounds.push({ index, ...await inspectReleaseEvidence(path.join(output, `strict-full-${index}`), scope, expectedHead) });
+  const frozen = await inspectReleaseEvidence(path.join(output, preflightDirectory), scope, expectedHead, { preflightOnly: true });
+  for (const [position, directory] of roundDirectories.entries()) {
+    rounds.push({ index: position + 1, ...await inspectReleaseEvidence(path.join(output, directory), scope, expectedHead) });
   }
   if (!frozen.verified) errors.push('Shared preflight evidence is incomplete.');
   for (const round of rounds) {
@@ -184,24 +207,15 @@ export function selectReleasePairArtifacts({ jobs = [], available = [], expected
   if (!/^[a-f0-9]{40}$/u.test(expectedHead ?? '') || !positiveId(runId) || !positiveId(attempt)) {
     return { selected, errors: ['The exact workflow candidate, run and attempt are required.'] };
   }
-  for (const [os, platform] of Object.entries(pairPlatforms)) {
-    const candidates = jobs.filter(job => job.name?.startsWith(`${os} / shard 1 / `));
-    const job = candidates[0];
-    if (candidates.length !== 1 || String(job.run_id) !== String(runId) || job.head_sha !== expectedHead
-      || String(job.run_attempt) !== String(attempt) || job.status !== 'completed' || !positiveId(job.id) || !positiveId(job.runner_id)) {
-      errors.push(`${os}: the effective platform job did not complete on a runner.`);
-      continue;
-    }
-    if (job.conclusion !== 'success') errors.push(`${os}: the effective platform job did not succeed.`);
-    const uploads = job.steps?.filter(step => step.name === 'Preserve validation evidence') ?? [];
+  const fromUpload = (job, os, step, prefix) => {
+    const uploads = job.steps?.filter(entry => entry.name === step) ?? [];
     const upload = uploads[0], started = Date.parse(upload?.started_at), ended = Date.parse(upload?.completed_at);
     if (uploads.length !== 1 || upload.status !== 'completed' || upload.conclusion !== 'success' || !(started <= ended)) {
-      errors.push(`${os}: the effective job has no successful evidence upload.`);
-      continue;
+      errors.push(`${os}: the effective job has no successful ${step} upload.`);
+      return null;
     }
     // GitHub copies completed jobs into a retry attempt. The upload window
     // belongs to the execution that actually ran, including on carried jobs.
-    const prefix = `validation-${os}-shard-1-`;
     const matches = available.filter(artifact => {
       if (!artifact.name?.startsWith(prefix)) return false;
       const producerAttempt = artifact.name.slice(prefix.length), created = Date.parse(artifact.created_at);
@@ -211,13 +225,31 @@ export function selectReleasePairArtifacts({ jobs = [], available = [], expected
         && created >= started && created <= ended;
     });
     if (matches.length !== 1) {
-      errors.push(`${os}: expected one artifact from the effective job's evidence upload.`);
-      continue;
+      errors.push(`${os}: expected one ${step} artifact from the effective job's upload.`);
+      return null;
     }
     const artifact = matches[0];
-    selected.push({ os, platform, name: artifact.name, id: artifact.id, digest: artifact.digest,
-      producerAttempt: artifact.name.slice(prefix.length), effectiveJobId: job.id,
-      uploadedAt: artifact.created_at, uploadStartedAt: upload.started_at, uploadCompletedAt: upload.completed_at });
+    return { name: artifact.name, id: artifact.id, digest: artifact.digest,
+      producerAttempt: artifact.name.slice(prefix.length), uploadedAt: artifact.created_at,
+      uploadStartedAt: upload.started_at, uploadCompletedAt: upload.completed_at };
+  };
+  for (const [os, platform] of Object.entries(pairPlatforms)) {
+    const candidates = jobs.filter(job => job.name?.startsWith(`${os} / shard 1 / `));
+    const job = candidates[0];
+    if (candidates.length !== 1 || String(job.run_id) !== String(runId) || job.head_sha !== expectedHead
+      || String(job.run_attempt) !== String(attempt) || job.status !== 'completed' || !positiveId(job.id) || !positiveId(job.runner_id)) {
+      errors.push(`${os}: the effective platform job did not complete on a runner.`);
+      continue;
+    }
+    if (job.conclusion !== 'success') errors.push(`${os}: the effective platform job did not succeed.`);
+    const core = fromUpload(job, os, 'Preserve full-pair verification evidence', `strict-pair-core-${os}-shard-1-`);
+    const diagnostics = fromUpload(job, os, 'Preserve validation evidence', `validation-${os}-shard-1-`);
+    if (!core || !diagnostics) continue;
+    if (core.producerAttempt !== diagnostics.producerAttempt || String(core.id) === String(diagnostics.id)) {
+      errors.push(`${os}: verification and diagnostic artifacts do not share their original execution.`);
+      continue;
+    }
+    selected.push({ os, platform, ...core, effectiveJobId: job.id, diagnostics });
   }
   return { selected, errors };
 }

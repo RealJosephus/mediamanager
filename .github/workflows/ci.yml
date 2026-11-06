@@ -511,6 +511,19 @@ jobs:
             echo 'The created loopback alias remained after cleanup.' >&2
             exit 1
           fi
+      - name: Collect full-pair verification evidence
+        if: always() && inputs.release_pair && steps.environment.outcome == 'success'
+        id: pair-core
+        shell: bash
+        run: node tools/ci/release-pair-stage.js "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT" "$RUNNER_TEMP/strict-pair-core"
+      - name: Preserve full-pair verification evidence
+        if: always() && steps.pair-core.outcome == 'success'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: strict-pair-core-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/strict-pair-core
+          if-no-files-found: error
+          retention-days: 14
       - name: Preserve validation evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -626,7 +639,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: node tools/ci/release-pair-select.js "$RUNNER_TEMP/strict-pair-source.json"
-      - name: Download the selected platform pairs with their original evidence
+      - name: Download the selected full-pair verification artifacts
         id: evidence
         if: steps.pair-source.outputs.ids != ''
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7

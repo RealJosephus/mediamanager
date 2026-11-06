@@ -4,6 +4,7 @@ import path from 'node:path';
 import { gunzipSync } from 'node:zlib';
 import capturedShape from './fixtures/release-pair/runner-shape.json' with { type: 'json' };
 import { currentInputDigest } from '../../tools/validation/input-receipt.js';
+import { stageReleasePairEvidence } from '../../tools/ci/release-pair.js';
 
 // Synthetic runner receipts for orchestration failure tests only. These are
 // never native observations or evidence of actual full/product acceptance.
@@ -60,25 +61,34 @@ export async function writeRunnerFixture(output, scope, { preflightOnly, candida
 }
 
 export async function writePlatformFixture(artifacts, os, platform, runReleasePair, { produced = 1, effective = produced } = {}) {
-  const name = `validation-${os}-shard-1-${produced}`;
+  const name = `strict-pair-core-${os}-shard-1-${produced}`;
   const artifact = path.join(artifacts, name);
-  const output = path.join(artifact, 'ci-controlled');
-  await mkdir(output, { recursive: true });
+  const results = path.join(path.dirname(artifacts), `runner-${os}`);
+  const original = path.join(results, 'ci-controlled');
+  await mkdir(original, { recursive: true });
   const scope = fixtureScope(platform);
-  await saveFixture(path.join(output, 'scope.json'), scope);
-  await runReleasePair({ scope, output, expectedHead: fixtureHead,
+  await saveFixture(path.join(original, 'scope.json'), scope);
+  await runReleasePair({ scope, output: original, expectedHead: fixtureHead,
     execute: (directory, options) => writeRunnerFixture(directory, scope, { ...options, candidateText: `candidate-${platform}`, inputText: `input-${platform}` }) });
   const environment = JSON.parse(capturedRunnerShape.raw.environment), audit = JSON.parse(capturedRunnerShape.raw.audit);
   Object.assign(environment.runner, { platform, commit: fixtureHead, runId: '44', attempt: String(produced) });
-  await saveFixture(path.join(artifact, 'environment.json'), environment);
-  await saveFixture(path.join(artifact, 'postgres-audit.json'), audit);
+  await saveFixture(path.join(results, 'environment.json'), environment);
+  await saveFixture(path.join(results, 'postgres-audit.json'), audit);
+  await mkdir(path.join(original, 'strict-full-2/test-output'));
+  await writeFile(path.join(original, 'strict-full-2/test-output/consumer.log'), 'diagnostics');
+  await stageReleasePairEvidence(results, artifact);
   const id = 100 + ['linux', 'win32', 'darwin'].indexOf(platform);
   const date = `2026-10-0${produced}T12:00:`;
   const job = { id, run_id: 44, head_sha: fixtureHead, run_attempt: effective, runner_id: 2,
     name: `${os} / shard 1 / Node 24 / PostgreSQL 17`, status: 'completed', conclusion: 'success',
-    steps: [{ name: 'Preserve validation evidence', status: 'completed', conclusion: 'success',
-      started_at: date + '00Z', completed_at: date + '02Z' }] };
+    steps: [{ name: 'Preserve full-pair verification evidence', status: 'completed', conclusion: 'success',
+      started_at: date + '00Z', completed_at: date + '02Z' },
+    { name: 'Preserve validation evidence', status: 'completed', conclusion: 'success',
+      started_at: date + '03Z', completed_at: date + '05Z' }] };
   const published = { id: id + 1000, name, expired: false, digest: 'sha256:' + fixtureHash(name),
     workflow_run: { id: 44, head_sha: fixtureHead }, created_at: date + '01Z' };
-  return { artifact, output, job, published };
+  const diagnosticName = `validation-${os}-shard-1-${produced}`;
+  const diagnostics = { ...published, id: id + 2000, name: diagnosticName, digest: 'sha256:' + fixtureHash(diagnosticName),
+    workflow_run: { ...published.workflow_run }, created_at: date + '04Z' };
+  return { artifact, output: path.join(artifact, 'ci-controlled'), original, job, published, diagnostics };
 }

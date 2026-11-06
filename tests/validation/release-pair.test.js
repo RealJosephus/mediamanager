@@ -183,18 +183,25 @@ test('full subset declarations and shards fail before any executor is invoked', 
 });
 
 test('aggregation after a single-platform retry rechecks all original pairs and actual three-platform cleanup', async t => {
-  const artifacts = await workspace(t);
+  const artifacts = path.join(await workspace(t), 'downloads');
+  await mkdir(artifacts);
   const paths = [];
   for (const [os, platform] of [['ubuntu-24.04', 'linux'], ['windows-2025', 'win32'], ['macos-15', 'darwin']]) {
     paths.push(await writePlatformFixture(artifacts, os, platform, runReleasePair, { produced: platform === 'darwin' ? 2 : 1, effective: 2 }));
   }
   const options = { artifacts, expectedHead: fixtureHead, runId: '44', attempt: '2', validationResult: 'success',
-    jobs: paths.map(row => row.job), available: paths.map(row => row.published) };
+    jobs: paths.map(row => row.job), available: paths.flatMap(row => [row.published, row.diagnostics]) };
   const passed = await aggregateReleasePairs(options);
   assert.equal(passed.strictPairAcceptance, true);
   assert.equal(passed.releaseAcceptance, false);
   assert.equal(passed.platforms.length, 3);
   assert.deepEqual(passed.platforms.map(item => item.source.producerAttempt), ['1', '1', '2']);
+  assert.deepEqual(passed.platforms.map(item => item.source.diagnostics.id), paths.map(row => row.diagnostics.id));
+  for (const { output, original } of paths) {
+    const tap = 'strict-full-2/test.tap';
+    assert.deepEqual(await readFile(path.join(output, tap)), await readFile(path.join(original, tap)));
+    await assert.rejects(readFile(path.join(output, 'strict-full-2/test-output/consumer.log')), { code: 'ENOENT' });
+  }
   assert.equal(new Set(passed.platforms.map(item => item.frozen.candidateEntriesSha256)).size, 3, 'Platform checkout bytes can differ while the clean Git head remains the same.');
   assert.equal((await aggregateReleasePairs({ ...options, validationResult: 'failure' })).strictPairAcceptance, false);
   assert.equal((await aggregateReleasePairs({ ...options, attempt: '3' })).strictPairAcceptance, false);
@@ -205,6 +212,11 @@ test('aggregation after a single-platform retry rechecks all original pairs and 
   const wrongRun = structuredClone(options);
   wrongRun.available[0].workflow_run.id = 45;
   assert.equal((await aggregateReleasePairs(wrongRun)).strictPairAcceptance, false);
+  const wrongAttempt = structuredClone(options);
+  wrongAttempt.available[1].name = 'validation-ubuntu-24.04-shard-1-2';
+  assert.equal((await aggregateReleasePairs(wrongAttempt)).strictPairAcceptance, false);
+  assert.equal((await aggregateReleasePairs({ ...options,
+    available: options.available.filter(artifact => artifact.id !== paths[0].diagnostics.id) })).strictPairAcceptance, false);
   const failure = structuredClone(options);
   failure.jobs[0].conclusion = 'failure';
   assert.equal((await aggregateReleasePairs(failure)).strictPairAcceptance, false);
@@ -219,14 +231,15 @@ test('aggregation after a single-platform retry rechecks all original pairs and 
 });
 
 test('missing platform artifacts and unbound evidence never aggregate as a complete pair', async t => {
-  const artifacts = await workspace(t);
-  const { job, published } = await writePlatformFixture(artifacts, 'ubuntu-24.04', 'linux', runReleasePair);
+  const artifacts = path.join(await workspace(t), 'downloads');
+  await mkdir(artifacts);
+  const { job, published, diagnostics } = await writePlatformFixture(artifacts, 'ubuntu-24.04', 'linux', runReleasePair);
   const options = { artifacts, expectedHead: fixtureHead, runId: '44', attempt: '1', validationResult: 'success',
-    jobs: [job], available: [published] };
+    jobs: [job], available: [published, diagnostics] };
   const result = await aggregateReleasePairs(options);
   assert.equal(result.strictPairAcceptance, false);
   assert.equal(result.platforms.length, 1);
   assert.match(result.errors.join('\n'), /three artifacts from the effective platform jobs/u);
-  await mkdir(path.join(artifacts, 'validation-ubuntu-24.04-shard-1-2'));
+  await mkdir(path.join(artifacts, 'strict-pair-core-ubuntu-24.04-shard-1-2'));
   assert.equal((await aggregateReleasePairs(options)).strictPairAcceptance, false);
 });
