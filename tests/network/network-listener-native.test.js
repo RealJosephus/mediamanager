@@ -1,5 +1,5 @@
 import test from 'node:test';
-import { declareNativeHttpTestFile } from '../helpers/native-http-test-file.js';
+import { declareFileTestResource } from '../helpers/file-test-resource.js';
 import assert from 'node:assert/strict';
 import { createServer as createTcpServer } from 'node:net';
 import { createSecureContext, createServer as createTlsServer, connect as connectTls } from 'node:tls';
@@ -10,10 +10,10 @@ import { currentNetworkListeners, listenerInput } from './network-listener-curre
 import { configurationJson } from '../core/fixtures/configuration/observations.js';
 import { namedError, namedHash } from '../core/named-configuration-current.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_JELLYFIN_DLL) });
-
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
 const settings = { skip: !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 300000 };
+const listenerCapture = declareFileTestResource('native-network-listener-capture', { enabled: !settings.skip });
+const nativeCallback = operation => t => listenerCapture.run(() => operation(t), { signal: t.signal });
 const nativeCase = (capture, name, repeat = false) => (repeat ? capture.repeat : capture.native).cases.find(row => row.name === name);
 const header = (wire, name) => Object.entries(wire.headers ?? {}).find(([key]) => key.toLowerCase() === name)?.[1]?.[0] ?? null;
 const state = row => row.steps.at(-1)?.state ?? row.afterInit;
