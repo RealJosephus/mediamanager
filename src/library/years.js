@@ -8,9 +8,9 @@ import { yearsFailure } from './postgres-years-source.js';
  * response window. Source counts, Guid winners and stable memory order remain
  * SQL-owned; DTO hydration is bounded independently of an unbounded Limit. */
 export async function queryYears({ library, database, input, user, hasUser, parent, state,
-  virtualChildren, specialChildren, isVisible, projectPage, signal }) {
+  virtualChildren, specialChildren, visiblePage, projectPage, signal }) {
   return withYearTraversal({ library, database, input, user, hasUser, parent, state,
-    recursive: input.recursive !== false, virtualChildren, specialChildren, isVisible, signal }, async source => {
+    recursive: input.recursive !== false, virtualChildren, specialChildren, visiblePage, signal }, async source => {
     let catalogue, failed = false, primary, order, emptyNameWindow = false;
     try {
       // Year factories commit in source order while response captures use

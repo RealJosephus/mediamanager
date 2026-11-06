@@ -92,6 +92,7 @@ export async function createPostgresYearsSource(database, {
     return Object.freeze({ close, append,
       async capture(item) { active(); return cohort.captureSlot(item); },
       async withSlot(slot, operation) { active(); return cohort.withSlot(slot, operation); },
+      async withSlots(slots, operation) { active(); return cohort.withSlots(slots, operation); },
       async enqueue({ path, slot, id, kind = 'folder' }) {
         active(); await database.client.query(`INSERT INTO ${queue}(path,slot,id,kind) VALUES($1,$2,$3,$4)`, [path, slot, idKey(id), kind]);
       },
@@ -108,8 +109,10 @@ export async function createPostgresYearsSource(database, {
         }
       },
       async framePage(frame, after = 0n) {
-        active(); return (await database.client.query(`SELECT ordinal,slot FROM ${occurrences}
-          WHERE frame=$1 AND ordinal>$2 AND eligible ORDER BY ordinal LIMIT 128`, [frame, after])).rows.map(row => ({ ordinal: BigInt(row.ordinal), slot: row.slot }));
+        active(); return (await database.client.query(`SELECT ordinal,slot,id,runtime_kind,folder FROM ${occurrences}
+          WHERE frame=$1 AND ordinal>$2 AND eligible ORDER BY ordinal LIMIT 128`, [frame, after])).rows
+          .map(row => ({ ordinal: BigInt(row.ordinal), slot: row.slot, id: decodeNativeTextBytes(row.id),
+            type: decodeNativeTextBytes(row.runtime_kind), folder: row.folder }));
       },
       async setVisible(rows, mask) {
         active(); if (rows.length > 128 || rows.length !== mask.length || mask.some(value => typeof value !== 'boolean')) throw new TypeError('Year visibility needs one decision per bounded occurrence.');

@@ -47,7 +47,7 @@ async function frozen(database, plan, ordinal, consume, signal) {
 }
 
 export function createYearSpecialChildren({ library, database, state, user, navigationRows,
-  visibilityFor, physicalIdsFor, nextUpIdsFor, internalPlan, isVisible, virtualChildren,
+  visibilityFor, physicalIdsFor, nextUpIdsFor, internalPlan, visiblePage, virtualChildren,
   prepareVisibility, memoryRatingContext, signal }) {
   const consumeRows = async (rows, append) => {
     signal?.throwIfAborted();
@@ -133,7 +133,7 @@ export function createYearSpecialChildren({ library, database, state, user, navi
   };
 
   const actualChildren = (parent, capture) => withYearTraversal({ library, database, parent, state, user, hasUser: true,
-    recursive: false, input: {}, virtualChildren, specialChildren: children, isVisible, signal }, source =>
+    recursive: false, input: {}, virtualChildren, specialChildren: children, visiblePage, signal }, source =>
     source.withWinners(async ordered => {
       const consume = async selected => {
         for (let after = 0n;;) {

@@ -38,7 +38,7 @@ test('Years uses Folder occurrence counts and Guid winners while excluded folder
 }, t => owned(t, async f => {
   const source = roots(); source[1].links = ['nested-movie'];
   await f.seed({ target: 'root', items: [...source,
-    { key: 'nested', type: 'Folder', Id: id(3), parent: 'root', ProductionYear: 1980 },
+    { key: 'nested', type: 'Folder', Id: id(3), parent: 'root', ProductionYear: 1980, Tags: ['Blocked source'] },
     { key: 'root-movie', type: 'Movie', Id: id(4), parent: 'root', ProductionYear: 2000, MediaType: 'Video' },
     { key: 'nested-movie', type: 'Movie', Id: id(5), parent: 'nested', ProductionYear: 2001, MediaType: 'Video' },
     { key: 'no-year', type: 'Movie', Id: id(6), parent: 'root', ProductionYear: null, MediaType: 'Video' },
@@ -46,6 +46,11 @@ test('Years uses Folder occurrence counts and Guid winners while excluded folder
   ] });
   t.signal.throwIfAborted();
   const input = { parentId: id(2), includeItemTypes: ['Movie'], excludeItemTypes: ['Folder'], sortBy: ['Name'] };
+  const restricted = { ...user, Policy: { ...user.Policy, BlockedTags: ['Blocked source'] } };
+  const filtered = await f.library.queryYears(input, { user: restricted, hasUser: true, signal: t.signal });
+  assert.equal(filtered.TotalRecordCount, 3);
+  assert.deepEqual(filtered.Items.map(item => item.Name), ['2000']);
+  assert.deepEqual((await yearRows(f)).map(row => row.Name), ['2000']);
   const selected = await f.library.queryYears(input, { user, hasUser: true, signal: t.signal });
   assert.deepEqual(selected.Items.map(item => item.Name), ['2000', '2001']); assert.equal(selected.TotalRecordCount, 5);
   assert.equal(new Set(selected.Items.map(item => item.Id)).size, selected.Items.length);

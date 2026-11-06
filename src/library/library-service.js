@@ -1784,22 +1784,9 @@ export class LibraryService extends EventEmitter {
         parent = userRootItem(state) ?? parent;
       }
       const virtualChildren = source => this.#rootVirtualChildren(source);
-      const visible = async item => {
-        if (!user) throw libraryError(400, "Value cannot be null. (Parameter 'user')");
-        const page = await this.load(db, user, { includeUserData: false,
-          baseRows: await loadPostgresItemGraph(db, [item.Id]) });
-        let failed = false, primary;
-        try {
-          this.adoptLiveItem(page, item);
-          return await this.#postgresStandaloneVisible(db, item, user, page, { checkStandaloneParents: false });
-        } catch (reason) { failed = true; primary = reason; throw reason; }
-        finally {
-          try { await page.dispose({ session: db }); }
-          catch (cleanup) { throw libraryScopeFailure(failed ? [primary, cleanup] : [cleanup], 'Year visibility release failed.'); }
-        }
-      };
+      const visiblePage = (source, entries) => this.#yearVisibilityPage(db, user, source, entries, signal);
       const specialChildren = createYearSpecialChildren({ library: this, database: db, state, user,
-        navigationRows, signal, isVisible: visible, virtualChildren,
+        navigationRows, signal, visiblePage, virtualChildren,
         visibilityFor: source => this.#postgresVisibility(source, user),
         physicalIdsFor: items => this.#postgresPhysicalIds(items, state),
         nextUpIdsFor: items => nextUpTopParentIds(items, state, folder => resolvedPhysicalFolderIds(folder, state), user, this),
@@ -1826,9 +1813,66 @@ export class LibraryService extends EventEmitter {
         }
       };
       const execute = item => queryYears({ library: this, database: db, input, user, hasUser,
-        parent: this.adoptLiveItem(state, item), state, virtualChildren, specialChildren, isVisible: visible, projectPage, signal });
+        parent: this.adoptLiveItem(state, item), state, virtualChildren, specialChildren, visiblePage, projectPage, signal });
       return this.itemCreation ? this.itemCreation.withItem(parent.Id, item => execute(item ?? parent)) : execute(parent);
     }, { channelViews: Boolean(user) });
+  }
+
+  async #yearVisibilityPage(db, user, source, entries, signal) {
+    if (!user) throw libraryError(400, "Value cannot be null. (Parameter 'user')");
+    const withGraph = async (ids, consume) => {
+      signal?.throwIfAborted();
+      const page = await this.load(db, user, { includeUserData: false,
+        baseRows: await loadPostgresItemGraph(db, ids) });
+      let failed = false, primary;
+      try { return await consume(page); }
+      catch (reason) { failed = true; primary = reason; throw reason; }
+      finally {
+        try { await page.dispose({ session: db }); }
+        catch (cleanup) { throw libraryScopeFailure(failed ? [primary, cleanup] : [cleanup], 'Year visibility release failed.'); }
+      }
+    };
+    const check = async (item, page, resolveCollectionFolders) => {
+      signal?.throwIfAborted();
+      const key = idKey(item.Id), stored = page.byId.get(key);
+      this.adoptLiveItem(page, item);
+      try {
+        return await this.#postgresStandaloneVisible(db, item, user, page,
+          { checkStandaloneParents: false, resolveCollectionFolders });
+      } finally {
+        if (stored) page.byId.set(key, stored);
+        else page.byId.delete(key);
+      }
+    };
+    const single = item => withGraph([item.Id], page => check(item, page));
+    // These consumers can enumerate relations in the admitted graph. Keep
+    // their graph scoped to the individual occurrence, in traversal order.
+    const sharesGraph = (type, folder) => !folder && !NAME_TYPES.has(type) && type !== 'BoxSet' && type !== 'Playlist';
+    const mask = [];
+    for (let start = 0; start < entries.length;) {
+      let end = start + 1;
+      if (sharesGraph(entries[start].type, entries[start].folder)) {
+        while (end < entries.length && sharesGraph(entries[end].type, entries[end].folder)) end++;
+      }
+      if (end === start + 1) mask.push(await source.withSlot(entries[start].slot, single));
+      else {
+        const group = entries.slice(start, end);
+        const decisions = await withGraph(group.map(entry => entry.id), page => {
+          const resolve = this.#collectionFolderResolver(page);
+          return source.withSlots(group.map(entry => entry.slot), item => {
+            const stored = page.byId.get(idKey(item.Id));
+            // A live occurrence may have changed since it entered the queue.
+            // Use its own graph if its parent or rating lookups can differ.
+            const sameReferences = stored?.Type === item.Type && ['ParentId', 'OwnerId', 'SeasonId', 'SeriesId']
+              .every(key => idKey(stored[key]) === idKey(item[key]));
+            return sameReferences && sharesGraph(item.Type, item.IsFolder) ? check(item, page, resolve) : single(item);
+          });
+        });
+        mask.push(...decisions);
+      }
+      start = end;
+    }
+    return mask;
   }
 
   async getYearDto(year, { user = null, resolveUser } = {}) {
