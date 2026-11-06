@@ -103,10 +103,18 @@ test('postgres: accessible folder children outlive the request scope with resolv
   const first = Object.assign(newNativeItemEntity(movieType), { Id: id(10), Name: 'First', Path: '/library/first.mkv' });
   const second = Object.assign(newNativeItemEntity(movieType), { Id: id(11), Name: 'Second', Path: '/library/second.mkv' });
   const inaccessible = Object.assign(newNativeItemEntity(folderType), { Id: id(12), Name: 'Unavailable', Path: '/library/unavailable' });
+  const alternate = '/library/alternate.mkv';
   const children = await f.run(async scope => {
     await scope.valid(second, 2n, true);
     await scope.valid(first, 1n, true);
     await scope.valid(inaccessible, 3n, false);
+    await scope.captureAlternatePaths();
+    assert.equal(await scope.hasAlternate(alternate), false);
+    first.LocalAlternateVersions = [alternate];
+    second.LocalAlternateVersions = [alternate];
+    await scope.captureAlternatePaths();
+    assert.equal(await scope.hasAlternate(alternate), true);
+    assert.equal(await scope.primaryFor([alternate], item => item.Name), 'First');
     return scope.accessible();
   });
   try {
