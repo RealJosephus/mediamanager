@@ -130,7 +130,7 @@ export class ItemCreationService {
     for (const item of items) unique.set(idKey(item.Id), item);
     let saved, primary, failed = false;
     try { for (const item of unique.values()) {
-      const loaded = await this.loadContext(item.Id, { draft: item });
+      const loaded = await this.loadContext(item.Id, { draft: item, forItemSave: true });
       contexts.push(loaded);
       Object.defineProperty(item, 'NativeTopParentId', { value: itemTopParentId(item, loaded.parents),
         enumerable: false, writable: true, configurable: true });

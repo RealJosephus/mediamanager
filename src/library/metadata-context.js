@@ -121,7 +121,7 @@ export function createMetadataContextLoader(options) {
     try { return (await vfs.stat(path)).kind === 'file'; }
     catch (error) { if (error.code === 'not-found') return false; throw error; }
   };
-  const loadContext = (reference, { draft, includeChildren = false, paths = capturePathScope() } = {}) => {
+  const loadContext = (reference, { draft, forItemSave = false, includeChildren = false, paths = capturePathScope() } = {}) => {
     const owningScope = activeScope();
     return scopeWork(owningScope, () => store.run(async db => {
     // Capture before awaiting a database session. An actual child operation can
@@ -165,22 +165,34 @@ export function createMetadataContextLoader(options) {
     const targetName = draft?.Name ?? targetRow?.Name;
     // Discovery, hydration and the conflict baseline share this exact observed
     // row. A later edit must be rejected, not adopted as the stale item's base.
-    let scopedRows = await loadPostgresMetadataRows(db, referenceId, { targetRows,
+    const loadMetadataRows = database => loadPostgresMetadataRows(database, referenceId, { targetRows,
       targetType, targetName, configuration: currentConfiguration(), includeChildren:false });
+    const loadState = baseRows => library.load(db, null, { baseRows, includeManualLinks:false,
+      includeFolderLinks:false, includeLinkGraph:false, expandPath });
     // A newly resolved draft has no BaseItems row yet. Seed its bounded
     // relationship frame from the live references so persistence can still
     // derive the physical top parent and TV relationships without loading
     // the catalogue.
-    if (draft) {
-      const references = [draft.ParentId, draft.TopParentId, draft.NativeTopParentId,
-        draft.SeasonId, draft.SeriesId, draft.OwnerId, draft.PrimaryVersionId].filter(nonemptyId);
+    const references = draft ? [draft.ParentId, draft.TopParentId, draft.NativeTopParentId,
+      draft.SeasonId, draft.SeriesId, draft.OwnerId, draft.PrimaryVersionId].filter(nonemptyId) : [];
+    // The standalone Year has no upward relationships. Collection membership
+    // reads the active user root's actual children, even in an empty frame.
+    const hostedRoot = library.rootHost?.userRootFolder;
+    if (forItemSave && targetType === 'Year' && !targetRows.length && !references.length
+      && hostedRoot && sameId(hostedRoot.Id, library.options.userRoot?.Id)) {
+      state = await loadState([]);
+    }
+    const rootOnly = Boolean(state) && state.liveUserRoot === hostedRoot;
+    if (!rootOnly) {
+      await state?.dispose({ session: db });
+      let scopedRows = await loadMetadataRows(db);
       if (references.length) {
         const referenceRows = await loadPostgresRowsByIds(db, references);
         scopedRows = await loadPostgresPageGraph(db, referenceRows, scopedRows,
           { includeManualLinks:false });
       }
+      state = await loadState(scopedRows);
     }
-    state = await library.load(db, null, { baseRows: scopedRows, includeManualLinks:false, includeFolderLinks:false, includeLinkGraph:false, expandPath });
     const item = draft ?? state.byId.get(idKey(referenceId));
     if (!item) throw libraryError(404, 'Metadata item not found.');
     itemOwner = acquireNativeItemLinkOwner(item);
@@ -503,7 +515,9 @@ export function createMetadataContextLoader(options) {
         const baseRows=(await database.client.query(`WITH family AS (SELECT $1::text AS key UNION SELECT ${sql.guidKey('"ChildId"')} FROM ${links} WHERE ${sql.guidKey('"ParentId"')}=$1 AND "ChildType"=2)
           SELECT "Id" FROM ${base} WHERE ${sql.guidKey('"OwnerId"')} IN (SELECT key FROM family) OR ${sql.guidKey('"ParentId"')}=$1 OR ${sql.guidKey('"Id"')} IN (SELECT key FROM family)`,[idKey(item.Id)])).rows;
         const selected=await loadPostgresRowsByIds(database,baseRows.map(row=>decodeNativeTextBytes(row.Id,'runtime')));
-        return library.load(database,null,{baseRows:await loadPostgresPageGraph(database,selected,state.items.map(value=>value.NativeRepositoryColumns).filter(Boolean),{includeManualLinks:false}),includeManualLinks:false,includeLinkGraph:true,expandPath});
+        const navigation = rootOnly ? await loadMetadataRows(database)
+          : state.items.map(value => value.NativeRepositoryColumns).filter(Boolean);
+        return library.load(database,null,{baseRows:await loadPostgresPageGraph(database,selected,navigation,{includeManualLinks:false}),includeManualLinks:false,includeLinkGraph:true,expandPath});
       }),
       getLocalAlternateVersionIds: prospectiveItem => store.run(async database => {
         const ids = (await database.rows('LinkedChildren', { where: { ParentId: item.Id, ChildType: 2 },
