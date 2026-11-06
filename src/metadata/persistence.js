@@ -136,7 +136,7 @@ const imageRow = (id, image) => ({
   DateModified: image.DateModified ?? '0001-01-01 00:00:00', Width: image.Width ?? 0, Height: image.Height ?? 0, Blurhash: image.Blurhash ?? null,
 });
 
-export async function persistMetadataInDatabase(db, loaded, result, { signal, saveVideoRelations = true } = {}) {
+export async function persistMetadataInDatabase(db, loaded, result, { signal, saveVideoRelations = true, captureInsertedRow } = {}) {
     signal?.throwIfAborted();
     const item = result.Item, id = item.Id;
     if (!isNativeItemEntity(item)) throw new TypeError('Metadata persistence requires a branded native entity.');
@@ -163,7 +163,10 @@ export async function persistMetadataInDatabase(db, loaded, result, { signal, sa
     // An absent item with a verified empty relation needs no empty replacement.
     const knownEmpty = table => !stored && loaded.relationships?.[table]?.length === 0;
     if (stored) await db.update('BaseItems', { Id: id }, changes);
-    else await db.insert('BaseItems', changes);
+    else {
+      const inserted = await db.insert('BaseItems', changes);
+      captureInsertedRow?.(inserted);
+    }
     await persistItemProviderIds(db, item, { knownEmpty: knownEmpty('BaseItemProviders') });
     if (!knownEmpty('BaseItemMetadataFields')) await db.deleteWhere('BaseItemMetadataFields', { ItemId: id });
     const metadataFieldRows = [];
@@ -227,20 +230,27 @@ export async function saveNativeItems(store, contexts, { signal, creationIntent 
   signal?.throwIfAborted();
   const frames = [];
   const items = await store.transaction(async db => {
+    const only = contexts.length === 1 && !contexts[0].snapshot ? contexts[0].item : undefined;
+    const newStandaloneYear = only?.Type === 'Year' && !nonempty(only.ParentId) && !nonempty(only.OwnerId);
     // EF orders insert commands after mapping the complete batch. PostgreSQL
     // validates the same final graph while mapping retains native input order.
-    await db.client.query('SET CONSTRAINTS ALL DEFERRED');
+    if (!newStandaloneYear) await db.client.query('SET CONSTRAINTS ALL DEFERRED');
     const newIds = contexts.filter(loaded => !loaded.snapshot).map(loaded => loaded.item.Id);
+    let insertedYear;
     for (const loaded of contexts) {
       loaded.creationIntent = creationIntent;
-      await persistMetadataInDatabase(db, loaded, { Item: loaded.item }, { signal, saveVideoRelations: false });
+      await persistMetadataInDatabase(db, loaded, { Item: loaded.item }, { signal, saveVideoRelations: false,
+        captureInsertedRow: newStandaloneYear ? row => { insertedYear = row; } : undefined });
     }
     await orderNativeItemBatch(db, newIds);
     for (const loaded of contexts) {
       await persistFolderLinks(db, loaded.item, { logger: loaded.logger, linkedChildren: loaded.linkedChildren, reversePath: loaded.reversePath });
       await persistVideoVersionRelations(db, loaded.item, { reversePath: loaded.reversePath, logger: loaded.logger });
     }
-    for (const loaded of contexts) frames.push((await db.rows('BaseItems', { where: { Id: loaded.item.Id } }))[0]);
+    // The standalone Year has no deferred parent/owner dependency and its
+    // relation writes cannot change the BaseItems row returned by the insert.
+    if (insertedYear) frames.push(insertedYear);
+    else for (const loaded of contexts) frames.push((await db.rows('BaseItems', { where: { Id: loaded.item.Id } }))[0]);
     signal?.throwIfAborted();
     return contexts.map(loaded => loaded.item);
   }, { signal });
