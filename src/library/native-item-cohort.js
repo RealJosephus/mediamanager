@@ -200,7 +200,7 @@ class NativeItemCohort {
     if (!slots.length) return slots;
     const entry = this.entry;
     await enqueue(entry, async session => {
-      const result = await session.client.query({ name: entry.statementPrefix + '_append_slots',
+      const result = await session.client.query({ name: entry.statementPrefix + '_append',
         text: `WITH selected AS (
           SELECT DISTINCT ON (ordinal) ordinal,slot
           FROM unnest($2::bigint[],$4::uuid[]) WITH ORDINALITY source(ordinal,slot,position)
