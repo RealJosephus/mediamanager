@@ -41,13 +41,16 @@ export function itemSaveRelations(item, { parents = [], collectionFolders = [] }
     inheritedTags: [...tags.values()].filter(tag => clrTrim(tag) !== '') };
 }
 
-export async function persistItemProviderIds(db, item) {
-  await replacePostgresItemProviderIds(db, item.Id, Object.entries(item.ProviderIds ?? {}));
+export async function persistItemProviderIds(db, item, { knownEmpty = false } = {}) {
+  const entries = Object.entries(item.ProviderIds ?? {});
+  if (entries.length || !knownEmpty) await replacePostgresItemProviderIds(db, item.Id, entries);
 }
 
 // Call within the item's creation/update transaction. Native SaveItems applies
 // these relations immediately on CreateItem and recomputes them on every save.
-export async function persistItemRelations(db, item, { parents = [], collectionFolders = [], preparedRelations } = {}) {
+export async function persistItemRelations(db, item, {
+  parents = [], collectionFolders = [], preparedRelations, knownEmptyValueLinks = false,
+} = {}) {
   const relations = preparedRelations ?? itemSaveRelations(item, { parents, collectionFolders });
   const requestedIds = new Map((relations.ancestorIds ?? []).map(id => [idKey(id), id]));
   const ancestorIds = relations.ancestorIds == null ? null
@@ -60,6 +63,6 @@ export async function persistItemRelations(db, item, { parents = [], collectionF
     ...requireNativeList(item.Tags).map(value => [4, value]),
     ...relations.inheritedTags.map(value => [inheritedTagsType, value]),
   ].filter(([, value]) => value != null && clrTrim(value) !== '');
-  await replacePostgresItemValues(db, item.Id, desiredValues);
+  if (desiredValues.length || !knownEmptyValueLinks) await replacePostgresItemValues(db, item.Id, desiredValues);
   return { ancestorIds, inheritedTags: relations.inheritedTags };
 }

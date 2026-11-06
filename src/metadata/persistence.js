@@ -160,10 +160,12 @@ export async function persistMetadataInDatabase(db, loaded, result, { signal, sa
     changes.SortName = loaded.sortName(item);
     item.SortName = changes.SortName;
     changes.TopParentId = itemTopParentId(item, loaded.parents);
+    // An absent item with a verified empty relation needs no empty replacement.
+    const knownEmpty = table => !stored && loaded.relationships?.[table]?.length === 0;
     if (stored) await db.update('BaseItems', { Id: id }, changes);
     else await db.insert('BaseItems', changes);
-    await persistItemProviderIds(db, item);
-    await db.deleteWhere('BaseItemMetadataFields', { ItemId: id });
+    await persistItemProviderIds(db, item, { knownEmpty: knownEmpty('BaseItemProviders') });
+    if (!knownEmpty('BaseItemMetadataFields')) await db.deleteWhere('BaseItemMetadataFields', { ItemId: id });
     const metadataFieldRows = [];
     for (const field of new Set(item.LockedFields ?? [])) {
       const fieldId = typeof field === 'number' ? field : metadataFields.indexOf(field);
@@ -172,15 +174,16 @@ export async function persistMetadataInDatabase(db, loaded, result, { signal, sa
     }
     await db.insertBatch('BaseItemMetadataFields', metadataFieldRows);
     await persistItemRelations(db, item,
-      { parents: loaded.parents ?? [], collectionFolders: loaded.collectionFolders ?? [], preparedRelations: tuple.relations });
-    if (result.Images != null) {
-      await db.deleteWhere('BaseItemImageInfos', { ItemId: id });
+      { parents: loaded.parents ?? [], collectionFolders: loaded.collectionFolders ?? [], preparedRelations: tuple.relations,
+        knownEmptyValueLinks: knownEmpty('ItemValuesMap') });
+    const suppliedImages = result.Images != null;
+    if (!knownEmpty('BaseItemImageInfos')) await db.deleteWhere('BaseItemImageInfos', { ItemId: id });
+    if (suppliedImages) {
       const rows = result.Images.map(image => imageRow(id, image));
       await insertNativeImageBatch(db, rows);
     } else {
       // SaveItems maps the live entity's images, not a provider's image result.
       // Updated items rewrite owned image rows wholesale inside the transaction.
-      await db.deleteWhere('BaseItemImageInfos', { ItemId: id });
       const rows = (item.ImageInfos ?? []).map(image => imageRow(id, {
         ...image, Blurhash: image.BlurHash == null ? null : Buffer.from(image.BlurHash, 'utf8')
       }));

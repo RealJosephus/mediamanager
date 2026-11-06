@@ -13,7 +13,6 @@ export async function queryYears({ library, database, input, user, hasUser, pare
     recursive: input.recursive !== false, virtualChildren, specialChildren, isVisible, signal }, async source => {
     let catalogue, failed = false, primary, order, emptyNameWindow = false;
     try {
-      catalogue = await createNativeItemCohort({ linkedChildren: library.options.linkedChildren });
       // Year factories commit in source order while response captures use
       // bounded pages before the final SQL sort and window.
       const pending = [];
@@ -35,13 +34,14 @@ export async function queryYears({ library, database, input, user, hasUser, pare
             sortBy: [boxSetDisplayOrder(parent)], sortOrder: ['Ascending'], user,
             configuration: library.options.configuration, signal }, consume),
         } : {}),
-        beforeExtract: () => {
+        beforeExtract: async () => {
           order = prepareYearOrder(input.sortBy, input.sortOrder, user);
           if (order.failure && !order.createBeforeFailure) throw order.failure;
           // A Name comparison cannot affect an empty window. Still resolve
           // every Year in source order, including its writes and failures.
           emptyNameWindow = input.limit === 0 && order.sortBy.length === 1
             && String(order.sortBy[0]).toLowerCase() === 'name';
+          if (!emptyNameWindow) catalogue = await createNativeItemCohort({ linkedChildren: library.options.linkedChildren });
         },
         afterExtract: () => { if (order.failure) throw order.failure; },
       });
