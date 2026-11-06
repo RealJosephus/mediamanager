@@ -31,6 +31,7 @@ const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 // Share one bound across roots, directories and simultaneous verifications.
 // A file retains its slot through close; directory recursion never holds one.
 const byteReadLimit = 4, byteReadWaiters = [];
+const byteReadBuffers = [];
 let activeByteReads = 0, nextByteReadWaiter = 0;
 async function withByteRead(operation) {
   if (activeByteReads === byteReadLimit) await new Promise(resolve => byteReadWaiters.push(resolve));
@@ -52,9 +53,10 @@ const readFile = (...args) => withByteRead(() => readInput(...args));
 async function fileBytes(filename) {
   return withByteRead(async () => {
     const file = await openInput(filename, 'r');
-    let failed = false, failure, result;
+    let failed = false, failure, result, buffer;
     try {
-      const buffer = Buffer.allocUnsafe(256 * 1024), hash = createHash('sha256');
+      buffer = byteReadBuffers.pop() ?? Buffer.allocUnsafe(256 * 1024);
+      const hash = createHash('sha256');
       let bytes = 0;
       for (;;) {
         const { bytesRead } = await file.read(buffer, 0, buffer.length, null);
@@ -67,7 +69,7 @@ async function fileBytes(filename) {
     catch (error) {
       if (failed) throw new AggregateError([failure, error], 'Native input read and close failed.', { cause: failure });
       throw error;
-    }
+    } finally { if (buffer) byteReadBuffers.push(buffer); }
     if (failed) throw failure;
     return result;
   });
