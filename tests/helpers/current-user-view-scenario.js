@@ -14,10 +14,10 @@ const namedViewId = (user, type) => idKey(getNewItemId(`38_namedview_${idKey(use
   'MediaBrowser.Controller.Entities.UserView', { programDataPath: 'Z:\\OracleUserViews' }));
 
 /** Rebind only observed instance identities; Library A and all synthetic media stay literal. */
-export async function currentUserViewScenario(scenario, fixtureBytes, { signal } = {}) {
+export async function currentUserViewScenario(scenario, fixtureBytes, { signal, port = 19000 } = {}) {
   signal?.throwIfAborted();
   const root = path.join(validationOutputRoot(), `${scenario}-${randomUUID()}`);
-  await recordUserViewHttp(scenario, root, 19000);
+  await recordUserViewHttp(scenario, root, port);
   const load = async name => JSON.parse(await readFile(path.join(root, name), 'utf8'));
   const provenance = await load('provenance.json');
   for (const artifact of provenance.artifacts) {

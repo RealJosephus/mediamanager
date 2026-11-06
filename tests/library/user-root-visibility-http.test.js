@@ -12,7 +12,10 @@ import { projectItemBody } from '../helpers/http-body-projection.js';
 
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({
+  enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE),
+  port: 21000,
+});
 
 const fixtureBytes = await readFile(new URL('./fixtures/user-root-visibility/input.json', import.meta.url));
 const fixture = JSON.parse(fixtureBytes);
@@ -32,8 +35,8 @@ const cases = candidateCasesFromTrackedInput(fixture).map(item => {
 for (const dialect of dialects) {
   test(`${dialect}: Library-own visibility and ordinary-user query dispatch matches 256 current native full HTTP list responses`, {
     skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
-  }, nativeCallback(async t => {
-    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('user-root-visibility', fixtureBytes, { signal: t.signal });
+  }, nativeCallback(async (t, port) => {
+    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('user-root-visibility', fixtureBytes, { signal: t.signal, port });
 
     let actual;
     try { actual = await recordItemFilterCandidate({

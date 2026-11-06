@@ -12,7 +12,10 @@ import { projectItemBody } from '../helpers/http-body-projection.js';
 
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({
+  enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE),
+  port: 21002,
+});
 
 const fixtureBytes = await readFile(new URL('./fixtures/user-view-query/input.json', import.meta.url));
 const fixture = JSON.parse(fixtureBytes);
@@ -27,8 +30,8 @@ const cases = candidateCasesFromTrackedInput(fixture);
 for (const dialect of dialects) {
   test(`${dialect}: UserView query dispatch matches 260 current native full HTTP list responses`, {
     skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
-  }, nativeCallback(async t => {
-    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('user-view-query', fixtureBytes, { signal: t.signal });
+  }, nativeCallback(async (t, port) => {
+    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('user-view-query', fixtureBytes, { signal: t.signal, port });
 
     const actual = await recordItemFilterCandidate({
       dialect, fixture: { ...fixture, cases }, connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,

@@ -13,7 +13,10 @@ import { projectItemBody } from '../helpers/http-body-projection.js';
 
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({
+  enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE),
+  port: 21001,
+});
 
 const fixtureBytes = await readFile(new URL('./fixtures/user-view-menu/input.json', import.meta.url));
 const fixture = JSON.parse(fixtureBytes);
@@ -55,8 +58,8 @@ function rowContract(row, userId, userViewIds, final) {
 for (const dialect of dialects) {
   test(`${dialect}: nonrecursive movie/TV menus match 196 full HTTP responses and 28 persisted view lifecycles`, {
     skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
-  }, nativeCallback(async t => {
-    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('user-view-menu', fixtureBytes, { signal: t.signal });
+  }, nativeCallback(async (t, port) => {
+    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('user-view-menu', fixtureBytes, { signal: t.signal, port });
     const nativeOriginalIds = new Set(stages.before.database.baseItems.map(row => idKey(row.Id)));
     const nativeNewRows = rows => rows.filter(row => !nativeOriginalIds.has(idKey(row.Id)));
     assert.equal(nativeNewRows(stages.afterReads.database.baseItems).length, 28);

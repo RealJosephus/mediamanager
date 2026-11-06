@@ -12,7 +12,10 @@ import { projectItemBody } from '../helpers/http-body-projection.js';
 
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({
+  enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE),
+  port: 21004,
+});
 
 const fixtureBytes = await readFile(new URL('./fixtures/studios-http/input.json', import.meta.url));
 const fixture = JSON.parse(fixtureBytes);
@@ -33,8 +36,8 @@ const cases = candidateCasesFromTrackedInput(fixture);
 for (const dialect of dialects) {
   test(`${dialect}: studio list and name APIs match 44 current native full HTTP responses`, {
     skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
-  }, nativeCallback(async t => {
-    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('studios-http', fixtureBytes, { signal: t.signal });
+  }, nativeCallback(async (t, port) => {
+    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('studios-http', fixtureBytes, { signal: t.signal, port });
 
     const actual = await recordItemFilterCandidate({
       dialect, fixture: { ...fixture, cases }, connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,
