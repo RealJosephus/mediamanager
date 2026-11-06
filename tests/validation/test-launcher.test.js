@@ -156,6 +156,8 @@ import assert from 'node:assert/strict';
 test('second file fails independently', () => {
   console.log('original later stdout');
   console.error('original later stderr');
+  console.log('next later stdout');
+  console.error('next later stderr');
   assert.fail(${JSON.stringify(marker)});
 });
 `);
@@ -227,8 +229,8 @@ test('second file fails independently', () => {
   assert.deepEqual(annotations, ['::error file=second.test.mjs::Selected test file failed (selected-file-failed).\n']);
   assert.equal(stdout.includes('::error'), false);
   assert.equal(stderr.includes('::error'), false);
-  assert.equal(await readFile(path.join(second, 'stdout.txt'), 'utf8'), 'original later stdout\n');
-  assert.equal(await readFile(path.join(second, 'stderr.txt'), 'utf8'), 'original later stderr\n');
+  assert.equal(await readFile(path.join(second, 'stdout.txt'), 'utf8'), 'original later stdout\nnext later stdout\n');
+  assert.equal(await readFile(path.join(second, 'stderr.txt'), 'utf8'), 'original later stderr\nnext later stderr\n');
   const events = (await readFile(path.join(second, 'events.jsonl'), 'utf8')).trim().split('\n').map(line => JSON.parse(line));
   assert.ok(events.some(record => record.type === 'test:fail' && record.native.includes(marker)));
   assert.deepEqual(events.map(record => record.sequence), events.map((_, index) => index + 1));
