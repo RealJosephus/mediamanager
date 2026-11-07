@@ -40,11 +40,11 @@ var sourceFiles = Directory.GetFiles(disc, "*", SearchOption.AllDirectories).Ord
         sha256 = Convert.ToHexStringLower(SHA256.HashData(file)) };
 }).OrderBy(file => file.path, StringComparer.Ordinal).ToArray();
 var expected = input.GetProperty("files").EnumerateArray().OrderBy(file => file.GetProperty("path").GetString(), StringComparer.Ordinal).ToArray();
-if (sourceFiles.Length != expected.Length) throw new InvalidOperationException("The Native source must retain every complete original BDMV file.");
+if (sourceFiles.Length != expected.Length) throw new InvalidOperationException("The Native source must retain every supplied BDMV file.");
 for (var index = 0; index < expected.Length; index++) {
     var file = sourceFiles[index]; var original = expected[index];
     if (file.path != original.GetProperty("path").GetString() || file.bytes != original.GetProperty("bytes").GetInt64()
-        || file.sha256 != original.GetProperty("sha256").GetString()) throw new InvalidOperationException("A complete original Blu-ray source member changed.");
+        || file.sha256 != original.GetProperty("sha256").GetString()) throw new InvalidOperationException("A Blu-ray source member changed.");
 }
 var paths = new ServerApplicationPaths(Path.Combine(root, "state"), Path.Combine(root, "log"), Path.Combine(root, "config"), Path.Combine(root, "cache"), Path.Combine(root, "web"));
 Directory.CreateDirectory(paths.ConfigurationDirectoryPath);
@@ -66,7 +66,7 @@ var actualDiscInfo = examiner.GetDiscInfo(disc);
 var bdrom = new BDROM(BdInfoDirectoryInfo.FromFileSystemPath(files, disc));
 bdrom.Scan();
 var selected = bdrom.PlaylistFiles.Values.OrderByDescending(value => value.TotalLength).FirstOrDefault(value => value.IsValid)
-    ?? throw new InvalidOperationException("The complete original Blu-ray must expose a valid actual playlist.");
+    ?? throw new InvalidOperationException("The supplied Blu-ray must expose a valid playlist.");
 var selections = new[] { new { files = encoder.GetPrimaryPlaylistM2tsFiles(disc).Select(Relative).ToArray() } };
 var plan = new { playlistName = selected.Name, runTimeTicks = actualDiscInfo.RunTimeTicks, chapters = selected.Chapters,
     files = selected.StreamClips.Where(clip => clip.AngleIndex == 0).Select(clip => new {
@@ -96,7 +96,7 @@ try {
         totalTicks += information.RunTimeTicks;
         probes.Add(new { file = Relative(filename), information });
     }
-    if (probes.Count == 0) throw new InvalidOperationException("The complete original Blu-ray must select and probe its original M2TS.");
+    if (probes.Count == 0) throw new InvalidOperationException("The supplied Blu-ray must select and probe an M2TS file.");
 } finally {
     await app.StopAsync(); await app.DisposeAsync();
 }
@@ -108,6 +108,6 @@ File.WriteAllText(Path.Combine(root, "native.json"), JsonSerializer.Serialize(ne
     actualMediaEncoder = true, actualFfprobe = true, actualNativeBdInfo = true,
     actualDiscInfo, plan, chapterDefaults, encoder.EncoderPath, encoder.ProbePath,
     sourceFiles, selections, probes, totalTicks, assemblies, proxy = new { requests, closed = true,
-        controlled = "Actual source fork LocalMediaProxy served from the complete verified original files." },
+        controlled = "Actual source fork LocalMediaProxy served from the complete verified supplied files." },
     actualScan = false, actualDatabaseExchange = false, phaseAcceptance = false
 }, new JsonSerializerOptions { WriteIndented = true, Converters = { new JsonStringEnumConverter() } }) + "\n");

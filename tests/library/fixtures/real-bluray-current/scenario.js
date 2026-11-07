@@ -10,17 +10,17 @@ export { functionalJson, libraryOptions, probeValues, technicalDto } from '../re
 const order = values => values.toSorted((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
 const fields = (value, names) => Object.fromEntries(names.map(name => [name, value[name] ?? null]));
 
-export async function materializeOriginalBluray(supply, disc) {
+export async function materializeBluray(supply, disc) {
   await mkdir(disc);
   for (const member of supply.manifest) {
     const filename = path.join(disc, ...member.path.split('/'));
     if (member.kind === 'directory') await mkdir(filename, { recursive: true });
     else await link(path.join(supply.mediaRoot, ...member.path.split('/')), filename);
   }
-  return verifyOriginalBluray(supply, disc);
+  return verifyBluray(supply, disc);
 }
 
-export async function verifyOriginalBluray(supply, disc) {
+export async function verifyBluray(supply, disc) {
   const tree = await describeFile(disc), actual = [];
   assert.ok(tree.available && tree.kind === 'directory');
   const walk = (entries, parent = '') => {
@@ -33,7 +33,7 @@ export async function verifyOriginalBluray(supply, disc) {
     }
   };
   walk(tree.entries);
-  assert.deepEqual(order(actual), supply.manifest, 'The actual scanner must retain every complete original BDMV member and byte.');
+  assert.deepEqual(order(actual), supply.manifest, 'The actual scanner must retain every supplied BDMV member and byte.');
   return { entries: actual, sha256: tree.entriesSha256 };
 }
 
