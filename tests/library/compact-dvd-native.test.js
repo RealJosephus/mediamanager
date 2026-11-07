@@ -1,15 +1,16 @@
+import test from 'node:test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { sha256 } from '../../tools/validation/inventory.js';
 import { prepareFrozenVideo } from '../helpers/frozen-av.js';
-import { defineDvdScanExchange } from './dvd-scan-exchange-scenario.js';
+import { createDvdScanExchange } from './dvd-scan-exchange-scenario.js';
 import { verifyDvd } from './fixtures/real-dvd-current/scenario.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const enabled = Boolean(process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MEDIAMANAGER_JELLYFIN_DLL
   && process.env.MEDIAMANAGER_TEST_POSTGRES);
 
-defineDvdScanExchange({ enabled, movieName: 'Compact DVD (2008)', async prepareInput({ root, signal }) {
+const run = createDvdScanExchange({ enabled, movieName: 'Compact DVD (2008)', async prepareInput({ root, signal }) {
   const mediaRoot = path.join(root, 'fixture-media');
   await mkdir(path.join(mediaRoot, 'VIDEO_TS'), { recursive: true });
   const stereo = await prepareFrozenVideo(root, { container: 'vob', name: 'stereo', includeAudio: true, signal });
@@ -28,3 +29,7 @@ defineDvdScanExchange({ enabled, movieName: 'Compact DVD (2008)', async prepareI
   const supply = { mediaRoot, manifest, receipt };
   return { ...supply, verifyInputs: () => verifyDvd(supply, mediaRoot) };
 } });
+
+test('the compact VIDEO_TS fixture survives actual Native and Node VFS probing, fresh scans, SQLite continuation and cold PostgreSQL', {
+  skip: !enabled, timeout: 900000,
+}, run);

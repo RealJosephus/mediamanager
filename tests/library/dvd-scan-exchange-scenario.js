@@ -1,4 +1,3 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { copyFile, cp, mkdir, readFile, realpath, rename, writeFile } from 'node:fs/promises';
@@ -27,15 +26,12 @@ import { configureStorage, discRows, functionalJson, libraryOptions, materialize
   probeValues, technicalDto, verifyDvd } from './fixtures/real-dvd-current/scenario.js';
 import { startDvdMediaProxy } from './fixtures/real-dvd-current/media-proxy.js';
 
-export function defineDvdScanExchange({ enabled, original = false, movieName, prepareInput }) {
+export function createDvdScanExchange({ enabled, original = false, movieName, prepareInput }) {
   const mediaLease = declareFileTestResource('native-media-5244', { enabled });
   const discovery = declareFileTestResource('hdhomerun-discovery-65001', { enabled });
   const fixture = original ? 'real-dvd' : 'compact-dvd';
-  const title = original ? 'the complete original DVD' : 'the compact VIDEO_TS fixture';
-  test(`${title} survives actual Native and Node VFS probing, fresh scans, SQLite continuation and cold PostgreSQL`, {
-    skip: !enabled, timeout: 900000,
-  }, t => mediaLease.run(() => discovery.run(
-    () => runDvdScanExchange(t, { fixture, original, movieName, prepareInput }), { signal: t.signal }), { signal: t.signal }));
+  return t => mediaLease.run(() => discovery.run(
+    () => runDvdScanExchange(t, { fixture, original, movieName, prepareInput }), { signal: t.signal }), { signal: t.signal });
 }
 
 async function runDvdScanExchange(t, { fixture, original, movieName, prepareInput }) {
