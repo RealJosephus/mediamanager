@@ -5,7 +5,7 @@ import { prepareFrozenVideo } from '../helpers/frozen-av.js';
 import { defineDvdScanExchange } from './dvd-scan-exchange-scenario.js';
 import { verifyDvd } from './fixtures/real-dvd-current/scenario.js';
 
-export const requiredValidationServices = ['dotnet', 'ffmpeg', 'ffprobe', 'jellyfinDll', 'nativeInstance', 'postgres'];
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const enabled = Boolean(process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MEDIAMANAGER_JELLYFIN_DLL
   && process.env.MEDIAMANAGER_TEST_POSTGRES);
 
