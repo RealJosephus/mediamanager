@@ -56,12 +56,12 @@ on:
         required: false
         default: false
       dvd_reference:
-        description: Download and verify the complete original NTSC DVD VIDEO_TS input (requires native_instance)
+        description: Use the complete original NTSC DVD in place of the compact fixture (requires native_instance)
         type: boolean
         required: false
         default: false
       bluray_reference:
-        description: Supply the complete frozen official Sintel Blu-ray ISO and every UDF/BDMV member (requires native_instance)
+        description: Use the complete official Sintel Blu-ray in place of the compact fixture (requires native_instance)
         type: boolean
         required: false
         default: false

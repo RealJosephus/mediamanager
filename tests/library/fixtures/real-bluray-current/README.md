@@ -13,7 +13,10 @@ as its executable; the source service records the same candidate/run/attempt,
 platform, actual Node executable, reader and producer files.
 
 `real-bluray-components.test.js` executes this Oracle against the designated
-Native runtime assemblies. `Program.cs` uses the real ManagedFileSystem,
+Native runtime assemblies. By default the component and scan tests assemble a
+compact BDMV from the frozen M2TS and authored MPLS and CLPI. The explicit
+`bluray_reference` input selects Sintel for those same comparisons.
+`Program.cs` uses the real ManagedFileSystem,
 BDROM/BdInfoExaminer and MediaEncoder, with the same fixed ffmpeg/ffprobe inputs.
 Every original source file is fully hashed. The actual selected M2TS files are
 probed through the designated fork's LocalMediaProxy. Native repeats this

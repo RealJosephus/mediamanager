@@ -1,18 +1,19 @@
-import test from 'node:test';
+import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { sha256 } from '../../tools/validation/inventory.js';
-import { readFrozenAv } from '../helpers/frozen-av.js';
-import { makeBlurayFiles } from '../storage/fixtures/bluray-disc-info/fixture.js';
-import { createBlurayScanExchange } from './bluray-scan-exchange-scenario.js';
-import { verifyBluray } from './fixtures/real-bluray-current/scenario.js';
+import { blurayReferenceInputs } from '../../../../tools/validation/bluray-reference-inputs.js';
+import { sha256 } from '../../../../tools/validation/inventory.js';
+import { readFrozenAv } from '../../../helpers/frozen-av.js';
+import { makeBlurayFiles } from '../../../storage/fixtures/bluray-disc-info/fixture.js';
+import { verifyBluray } from './scenario.js';
 
-export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
-const enabled = Boolean(process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MEDIAMANAGER_JELLYFIN_DLL
-  && process.env.MEDIAMANAGER_TEST_POSTGRES);
-const layout = new URL('../storage/fixtures/bluray-disc-info/input.json', import.meta.url);
+const layout = new URL('../../../storage/fixtures/bluray-disc-info/input.json', import.meta.url);
 
-const run = createBlurayScanExchange({ enabled, movieName: 'Compact Blu-ray (2010)', async prepareInput({ root, signal }) {
+export async function prepareBlurayInput({ root, signal, original }) {
+  if (original) {
+    const supply = await blurayReferenceInputs();
+    return { ...supply, async verifyInputs() { assert.deepEqual((await blurayReferenceInputs()).inputs, supply.inputs); } };
+  }
   const mediaRoot = path.join(root, 'fixture-media');
   const layoutBytes = await readFile(layout, { signal });
   const { bytes: media, source } = await readFrozenAv('source.m2ts', { signal });
@@ -29,8 +30,4 @@ const run = createBlurayScanExchange({ enabled, movieName: 'Compact Blu-ray (201
     layoutSha256: sha256(layoutBytes), source };
   const supply = { mediaRoot, manifest, receipt };
   return { ...supply, verifyInputs: () => verifyBluray(supply, mediaRoot) };
-} });
-
-test('the compact BDMV fixture survives actual Native and Node VFS probing, fresh scans, SQLite continuation and cold PostgreSQL', {
-  skip: !enabled, timeout: 900000,
-}, run);
+}
