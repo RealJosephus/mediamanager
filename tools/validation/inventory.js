@@ -57,7 +57,7 @@ export async function filesIn(directory, traversal = null) {
 export function sha256(bytes) { return createHash('sha256').update(bytes).digest('hex'); }
 async function fileSha256(filename) {
   const digest = createHash('sha256');
-  for await (const chunk of createReadStream(filename)) digest.update(chunk);
+  for await (const chunk of createReadStream(filename, { highWaterMark: 256 * 1024 })) digest.update(chunk);
   return digest.digest('hex');
 }
 

@@ -8,7 +8,7 @@ import { nativeModel } from '../../src/database/model.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
-import { recordOracle } from '../../tools/validation/oracle.js';
+import { compileOracle } from '../../tools/validation/oracle.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
@@ -91,10 +91,12 @@ async function capture() {
       assert.equal(source.sha256, expected.sha256, relativePath); report.sourceBindings.push({ relativePath, source });
     }
     const captures = [], projections = [];
+    const oracle = await compileOracle({ project: fileURLToPath(new URL('current/Oracle.csproj', fixture)),
+      output: path.join(output, 'build') });
     for (const label of ['first', 'repeat']) {
       const nativeRoot = path.join(output, label);
       const receipt = { label, assemblies: [], nativeLibraries: [], releasedCases: [] }; report.captures.push(receipt);
-      receipt.record = await recordOracle({ project: fileURLToPath(new URL('current/Oracle.csproj', fixture)), output: nativeRoot,
+      receipt.record = await oracle.record({ output: nativeRoot,
         args: [fileURLToPath(inputFile), fileURLToPath(new URL('current/assets', fixture)), '{output}/cases', '{output}/native.json'] });
       const filename = path.join(nativeRoot, 'native.json'), bytes = await readFile(filename), native = parseLosslessJson(bytes.toString('utf8'));
       receipt.observation = await describeFile(filename);

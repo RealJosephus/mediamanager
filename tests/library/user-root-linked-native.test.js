@@ -6,7 +6,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { inspect } from 'node:util';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
-import { recordOracle } from '../../tools/validation/oracle.js';
+import { compileOracle } from '../../tools/validation/oracle.js';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { validationOutputRoot, assertValidationOutputChild } from '../../tools/validation/paths.js';
 import { rootLinkInput, rootLinkId } from './fixtures/user-root-linked-current/input.js';
@@ -63,8 +63,10 @@ test('current native UserRoot links preserve positive batches, warm occurrences,
     current = await currentNativeReference(); report.preparation = current.preparation;
     sourceDatabase = await describeFile(current.sourceDatabase); report.sourceDatabase = sourceDatabase;
     report.sourceBindings = await current.sourceBindings(sourcePaths);
+    const oracle = await compileOracle({ project: 'tests/library/fixtures/user-root-linked-current/Oracle.csproj',
+      output: path.join(output, 'build'), environment: current.environment });
     for (const label of ['first', 'repeat']) {
-      const receipt = await recordOracle({ project: 'tests/library/fixtures/user-root-linked-current/Oracle.csproj', output: path.join(output, label), environment: current.environment,
+      const receipt = await oracle.record({ output: path.join(output, label),
         args: [inputFile, '{output}/native.json', path.join(privateRoot, 'native-' + label), current.sourceDatabase] });
       const nativeFilename = path.join(output, label, 'native.json'), nativeBytes = await readFile(nativeFilename), native = JSON.parse(nativeBytes);
       const captured = { label, receipt, output: await describeFile(nativeFilename), runtimeBindings: [] }; report.captures.push(captured);

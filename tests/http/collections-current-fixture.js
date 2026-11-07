@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
-import { recordOracle } from '../../tools/validation/oracle.js';
+import { compileOracle } from '../../tools/validation/oracle.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { nativeModel } from '../../src/database/model.js';
@@ -58,9 +58,10 @@ async function capture() {
     }
     const captures = [];
     report.captures = [];
+    const oracle = await compileOracle({ project: fileURLToPath(new URL('current/Oracle.csproj', fixture)), output: path.join(output, 'build') });
     for (const label of ['first', 'repeat']) {
       const nativeRoot = path.join(output, label);
-      const record = await recordOracle({ project: fileURLToPath(new URL('current/Oracle.csproj', fixture)), output: nativeRoot,
+      const record = await oracle.record({ output: nativeRoot,
         args: [fileURLToPath(inputFile), '{output}/native.json'] });
       const filename = path.join(nativeRoot, 'native.json'), bytes = await fs.readFile(filename), native = parseLosslessJson(bytes.toString('utf8'));
       const receipt = { label, record, observation: await describeFile(filename), assemblies: [] };
