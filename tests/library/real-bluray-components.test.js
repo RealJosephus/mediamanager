@@ -19,10 +19,12 @@ import { validationExecutable, validationOutputRoot } from '../../tools/validati
 import { createPrivateFilterOutput, filterEvidenceJson } from '../../tools/compat/filter-reference-output.js';
 import { declareFileTestResource } from '../helpers/file-test-resource.js';
 import { functionalJson, probeValues } from './fixtures/real-dvd-current/scenario.js';
+import { prepareBlurayInput } from './fixtures/real-bluray-current/input.js';
 import { errorObservation } from '../helpers/error-observation.js';
 
-export const requiredValidationServices = ['blurayReference', 'dotnet', 'jellyfinDll'];
-const enabled = Boolean(process.env.MEDIAMANAGER_TEST_BLURAY_REFERENCE && process.env.MEDIAMANAGER_JELLYFIN_DLL);
+export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
+const original = process.env.MEDIAMANAGER_CI_BLURAY_REFERENCE === 'true';
+const enabled = Boolean(process.env.MEDIAMANAGER_JELLYFIN_DLL);
 const mediaLease = declareFileTestResource('native-media-5244', { enabled });
 const streamFields = { Video: ['Type', 'Codec', 'Index', 'Width', 'Height', 'IsInterlaced', 'IsHearingImpaired', 'AverageFrameRate', 'RealFrameRate', 'BitRate'],
   Audio: ['Type', 'Codec', 'Index', 'Language', 'SampleRate', 'Channels', 'ChannelLayout', 'BitRate', 'IsInterlaced', 'IsHearingImpaired'],
@@ -30,30 +32,39 @@ const streamFields = { Video: ['Type', 'Codec', 'Index', 'Width', 'Height', 'IsI
 const streams = values => values.map(value => Object.fromEntries(streamFields[value.Type].map(key => [key,
   value[key] == null ? null : key.endsWith('FrameRate') ? Math.fround(value[key]) : value[key]])));
 
-test('complete original Sintel BDMV matches the actual Native BDInfo/MediaEncoder through an independent read-only Node VFS', {
+async function assertReceiptNeedsPayload(root, supply) {
+  const refusal = path.join(root, 'receipt-only'), falseRoot = path.join(refusal, 'mediamanager-bluray-reference');
+  await mkdir(falseRoot, { recursive: true }); await cp(supply.evidence, path.join(falseRoot, 'evidence'), { recursive: true });
+  await mkdir(path.join(falseRoot, 'media')); await mkdir(path.join(falseRoot, 'work'));
+  const falseReceipt = { ...supply.receipt, mediaRoot: path.join(falseRoot, 'media'), discRoot: path.join(falseRoot, 'media'),
+    bdmvRoot: path.join(falseRoot, 'media', 'BDMV'), originalIso: path.join(falseRoot, 'work', path.basename(supply.receipt.originalIso)) };
+  await link(supply.receipt.originalIso, falseReceipt.originalIso);
+  await writeFile(path.join(falseRoot, 'evidence/receipt.json'), JSON.stringify(falseReceipt) + '\n');
+  await assert.rejects(blurayReferenceInputs({ ...process.env, RUNNER_TEMP: refusal,
+    MEDIAMANAGER_TEST_BLURAY_REFERENCE: path.join(falseRoot, 'evidence/receipt.json') }),
+  error => Array.isArray(error.actual) && error.actual.length === 0 && error.expected.length === supply.manifest.length);
+}
+
+const label = original ? 'complete original Sintel BDMV' : 'the compact BDMV fixture';
+test(`${label} matches the actual Native BDInfo/MediaEncoder through an independent read-only Node VFS`, {
   skip: !enabled, timeout: 900000,
 }, async t => mediaLease.run(async () => {
-  const destination = path.join(validationOutputRoot(), 'real-bluray-components-' + randomUUID());
+  const fixture = original ? 'real-bluray-components' : 'compact-bluray-components';
+  const destination = path.join(validationOutputRoot(), fixture + '-' + randomUUID());
   const output = await createPrivateFilterOutput(destination); await mkdir(output.root);
-  const root = await realpath(output.root), report = { scope: 'complete-original-sintel-components',
+  const root = await realpath(output.root), report = { scope: original ? 'complete-original-sintel-components' : 'compact-bdmv-components',
     actualScan: false, databaseExchange: false, completeLibraryVerified: false, fullInstanceVerified: false,
     productionScaleVerified: false, phaseAcceptance: false, releaseAcceptance: false, components: [], nodeProbes: [], cleanup: {} };
   let registry, bridge, failed = false, failure;
   try {
-    const supply = await blurayReferenceInputs(); report.original = { receipt: supply.receipt, manifest: supply.manifest };
-    const refusal = path.join(root, 'receipt-only'), falseRoot = path.join(refusal, 'mediamanager-bluray-reference');
-    await mkdir(falseRoot, { recursive: true }); await cp(supply.evidence, path.join(falseRoot, 'evidence'), { recursive: true });
-    await mkdir(path.join(falseRoot, 'media')); await mkdir(path.join(falseRoot, 'work'));
-    const falseReceipt = { ...supply.receipt, mediaRoot: path.join(falseRoot, 'media'), discRoot: path.join(falseRoot, 'media'),
-      bdmvRoot: path.join(falseRoot, 'media', 'BDMV'), originalIso: path.join(falseRoot, 'work', path.basename(supply.receipt.originalIso)) };
-    await link(supply.receipt.originalIso, falseReceipt.originalIso);
-    await writeFile(path.join(falseRoot, 'evidence/receipt.json'), JSON.stringify(falseReceipt) + '\n');
-    await assert.rejects(blurayReferenceInputs({ ...process.env, RUNNER_TEMP: refusal,
-      MEDIAMANAGER_TEST_BLURAY_REFERENCE: path.join(falseRoot, 'evidence/receipt.json') }),
-    error => Array.isArray(error.actual) && error.actual.length === 0 && error.expected.length === supply.manifest.length);
-    report.receiptWithoutOriginalPayloadRejected = true;
+    const supply = await prepareBlurayInput({ root, signal: t.signal, original });
+    report[original ? 'original' : 'input'] = { receipt: supply.receipt, manifest: supply.manifest };
+    if (original) {
+      await assertReceiptNeedsPayload(root, supply);
+      report.receiptWithoutOriginalPayloadRejected = true;
+    }
     const input = { files: supply.manifest.filter(member => member.kind === 'file').map(({ path, bytes, sha256 }) => ({ path, bytes, sha256 })),
-      originalIsoSha256: supply.receipt.download.sha256, ffprobe: validationExecutable('ffprobe') };
+      ...(original ? { originalIsoSha256: supply.receipt.download.sha256 } : {}), ffprobe: validationExecutable('ffprobe') };
     const bytes = Buffer.from(JSON.stringify(input, null, 2) + '\n'), filename = path.join(root, 'input.json');
     await writeFile(filename, bytes, { flag: 'wx' });
     report.componentInput = { bytes: bytes.length, sha256: sha256(bytes), base64: bytes.toString('base64') };
@@ -61,7 +72,7 @@ test('complete original Sintel BDMV matches the actual Native BDInfo/MediaEncode
     for (const label of ['native', 'native-repeat']) {
       const nativeRoot = path.join(root, label);
       const receipt = await oracle.record({ output: nativeRoot,
-        args: [filename, supply.discRoot, validationExecutable('ffmpeg'), '{output}'] });
+        args: [filename, supply.mediaRoot, validationExecutable('ffmpeg'), '{output}'] });
       const raw = await readFile(path.join(nativeRoot, 'native.json'));
       const observation = { label, receipt, raw: { bytes: raw.length, sha256: sha256(raw), base64: raw.toString('base64') } };
       report.components.push(observation);
@@ -77,14 +88,15 @@ test('complete original Sintel BDMV matches the actual Native BDInfo/MediaEncode
     const native = report.components[0].capture;
     assert.deepEqual(functionalJson(report.components[1].capture.plan), functionalJson(native.plan));
     assert.deepEqual(streams(report.components[1].capture.actualDiscInfo.MediaStreams), streams(native.actualDiscInfo.MediaStreams));
-    registry = new StorageRegistry(); registry.registerType('original-bluray', configuration => LocalAdapter.open(configuration));
-    await registry.createInstance('sintel', 'original-bluray', { root: supply.discRoot, writable: false });
-    const vfs = new VirtualFileSystem(registry); vfs.mount({ path: '/sintel', instanceId: 'sintel', capabilities: {} });
-    assert.equal(vfs.capabilities('/sintel').create, false);
+    const virtualDisc = '/disc';
+    registry = new StorageRegistry(); registry.registerType('bluray', configuration => LocalAdapter.open(configuration));
+    await registry.createInstance('bluray', 'bluray', { root: supply.mediaRoot, writable: false });
+    const vfs = new VirtualFileSystem(registry); vfs.mount({ path: virtualDisc, instanceId: 'bluray', capabilities: {} });
+    assert.equal(vfs.capabilities(virtualDisc).create, false);
     bridge = new ProbeReadBridge(vfs);
-    const plan = await readBlurayDiscInfo(vfs, '/sintel', { signal: t.signal });
+    const plan = await readBlurayDiscInfo(vfs, virtualDisc, { signal: t.signal });
     report.nodePlan = plan;
-    const relative = value => value.slice('/sintel/'.length);
+    const relative = value => value.slice(virtualDisc.length + 1);
     const projected = { playlistName: plan.playlistName, runTimeTicks: plan.runTimeTicks, chapters: plan.chapters,
       files: plan.files.map(file => ({ virtualPath: relative(file.virtualPath), timeIn: file.timeIn,
         timeOut: file.timeOut, relativeTimeIn: file.relativeTimeIn })) };
@@ -92,24 +104,24 @@ test('complete original Sintel BDMV matches the actual Native BDInfo/MediaEncode
     assert.deepEqual(plan.files.map(file => relative(file.virtualPath)), native.selections[0].files);
     for (const selected of plan.files) {
       const result = await probeRaw(bridge, selected.virtualPath, { executable: validationExecutable('ffprobe'), extractChapters: true, signal: t.signal });
-      const original = native.probes.find(probe => probe.file === relative(selected.virtualPath)); assert.ok(original);
-      assert.deepEqual(probeValues(normalizeProbe(result.raw, { path: path.join(supply.discRoot, ...original.file.split('/')), isAudio: false })), probeValues(original.information));
-      report.nodeProbes.push({ file: original.file, result });
+      const expected = native.probes.find(probe => probe.file === relative(selected.virtualPath)); assert.ok(expected);
+      assert.deepEqual(probeValues(normalizeProbe(result.raw, { path: path.join(supply.mediaRoot, ...expected.file.split('/')), isAudio: false })), probeValues(expected.information));
+      report.nodeProbes.push({ file: expected.file, result });
     }
     const reference = await probeRaw(bridge, plan.referenceFile.virtualPath, { executable: validationExecutable('ffprobe'), signal: t.signal });
     const completed = blurayMediaStreams(plan, reference.raw); report.nodeCompletedStreams = completed; report.referenceProbe = reference;
     assert.deepEqual(streams(completed), streams(native.actualDiscInfo.MediaStreams));
     const firstProbe = report.nodeProbes.find(probe => probe.file === relative(plan.files[0].virtualPath)); assert.ok(firstProbe);
     const merged = mergeBlurayProbe(plan, normalizeProbe(firstProbe.result.raw, {
-      path: path.join(supply.discRoot, ...firstProbe.file.split('/')), isAudio: false }), reference.raw);
+      path: path.join(supply.mediaRoot, ...firstProbe.file.split('/')), isAudio: false }), reference.raw);
     report.nodeMergedChapters = merged.Chapters;
     const chapters = values => values.map(chapter => ({ StartPositionTicks: String(chapter.StartPositionTicks),
       ImageDateModifiedTicks: dateTicks(chapter.ImageDateModified).toString(),
       ImagePath: chapter.ImagePath ?? null, Name: chapter.Name ?? null }));
     assert.deepEqual(chapters(merged.Chapters), chapters(native.chapterDefaults));
     await verifyBlurayDiscInfo(vfs, plan, { signal: t.signal });
-    assert.deepEqual((await blurayReferenceInputs()).inputs, supply.inputs);
-    report.originalInputsUnchanged = true;
+    await supply.verifyInputs();
+    report[original ? 'originalInputsUnchanged' : 'inputsUnchanged'] = true;
     t.signal.throwIfAborted();
   } catch (error) { failed = true; failure = error; report.error = errorObservation(error); }
   finally {
@@ -123,7 +135,7 @@ test('complete original Sintel BDMV matches the actual Native BDInfo/MediaEncode
     if (failures.length) {
       const reasons = failed ? [failure, ...failures] : failures;
       failure = reasons.length === 1 ? reasons[0] : new AggregateError(reasons,
-        'Original Blu-ray component validation and cleanup failed', { cause: reasons[0] });
+        'Blu-ray component validation and cleanup failed', { cause: reasons[0] });
       failed = true;
     }
     report.passed = !failed;

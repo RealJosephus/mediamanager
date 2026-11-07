@@ -1,12 +1,12 @@
 # Complete original DVD through scan and exchange
 
-`real-dvd-native.test.js` requires `dvdReference`, the designated Native build,
-a fresh stopped Native instance and PostgreSQL. Actions `dvd_reference=true`
-downloads the complete pinned NTSC Big Buck Bunny ISO and supplies its complete
-VIDEO_TS. `native_reference=true` and `native_instance=true` are required too.
-Strict full rejects missing, foreign, changed or incomplete input; an empty
-directory with an otherwise complete receipt is an explicit refusal control.
-There is no generated IFO, substituted transport, cropped title or local probe.
+`real-dvd-native.test.js` uses the designated Native build, a fresh stopped
+Native instance and PostgreSQL. The default input assembles five VOBs from the
+frozen test clip. Actions `dvd_reference=true` selects the complete pinned NTSC
+Big Buck Bunny ISO and its complete VIDEO_TS for the same probe, scan and
+exchange checks. The original input verifier rejects missing, foreign, changed
+or incomplete payloads. An empty directory with an otherwise complete receipt
+is an explicit refusal control for that input.
 
 The first acquisition in Actions run `40494656261` verified all 8,294,793,216 ISO
 bytes against the Archive SHA-1/MD5. It observed ISO SHA-256
@@ -14,8 +14,8 @@ bytes against the Archive SHA-1/MD5. It observed ISO SHA-256
 complete 60-entry VIDEO_TS containing 3,190,976,512 file bytes. That acquisition
 establishes original input only; it does not establish this consumer's success.
 The source descriptor now pins both the ISO SHA-256 and the complete per-file
-VIDEO_TS inventory SHA-256. Every run reacquires the original and checks those
-values. Metadata, all 3,248 original ISO members, complete payload inventory,
+VIDEO_TS inventory SHA-256. Each original-input run reacquires the disc and
+checks those values. Metadata, all 3,248 original ISO members, complete payload inventory,
 HTTP observations, actual libarchive executable and process logs remain in its
 separate acquisition artifact.
 

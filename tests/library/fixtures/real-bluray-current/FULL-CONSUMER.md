@@ -1,8 +1,9 @@
 # Complete original Sintel library and database consumer
 
-`real-bluray-native.test.js` requires the explicit `blurayReference` service,
-the designated current Native build and stopped instance, and PostgreSQL.
-The same-job source contract is documented in `README.md` and
+`real-bluray-native.test.js` uses the designated current Native build and
+stopped instance and PostgreSQL. Actions `bluray_reference=true` selects the
+complete original disc for this scenario. The same-job source contract is
+documented in `README.md` and
 `tools/ci/bluray-reference/CONSUMER-SUPPLY.md`. The complete frozen official ISO
 and every original UDF/BDMV member remain mandatory before and after the test.
 Ordinary hard links materialize all 14 complete BDMV files, both M2TS streams,
