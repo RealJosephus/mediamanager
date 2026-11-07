@@ -13,17 +13,17 @@ const fields = (value, names) => Object.fromEntries(names.map(name => [name, val
 export const streamValues = value => ({ ...value, ...Object.fromEntries(['AverageFrameRate', 'RealFrameRate', 'ReferenceFrameRate']
   .filter(name => value[name] != null).map(name => [name, Math.fround(value[name])])) });
 
-export async function materializeOriginalDvd(supply, disc) {
+export async function materializeDvd(supply, disc) {
   await mkdir(disc);
   for (const member of supply.manifest) {
     const filename = path.join(disc, ...member.path.split('/'));
     if (member.type === 'directory') await mkdir(filename, { recursive: true });
     else await link(path.join(supply.mediaRoot, ...member.path.split('/')), filename);
   }
-  return verifyOriginalDvd(supply, disc);
+  return verifyDvd(supply, disc);
 }
 
-export async function verifyOriginalDvd(supply, disc) {
+export async function verifyDvd(supply, disc) {
   const tree = await describeFile(disc), actual = [];
   assert.ok(tree.available && tree.kind === 'directory');
   const walk = (entries, parent = '') => {
@@ -36,7 +36,7 @@ export async function verifyOriginalDvd(supply, disc) {
     }
   };
   walk(tree.entries);
-  assert.deepEqual(order(actual), supply.manifest, 'The actual scanner must retain every complete original VIDEO_TS member and byte.');
+  assert.deepEqual(order(actual), supply.manifest, 'The actual scanner must retain every supplied VIDEO_TS member and byte.');
   return { entries: actual, sha256: tree.entriesSha256 };
 }
 
