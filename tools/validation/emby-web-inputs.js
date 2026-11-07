@@ -25,7 +25,7 @@ export async function embyWebInputs(environment = process.env) {
   await bind(receiptPath);
   const receipt = JSON.parse(await readFile(receiptPath, 'utf8'));
   if (receipt.schemaVersion !== 1 || receipt.kind !== 'emby-web' || receipt.status !== 'succeeded'
-    || receipt.version !== '26.0.40' || receipt.origin !== 'https://app.emby.media/' || receipt.catalogEntries !== 865
+    || receipt.version !== '26.0.41' || receipt.origin !== 'https://app.emby.media/' || receipt.catalogEntries !== 865
     || receipt.entryAndCatalogUnchanged !== true || receipt.clientInteractionValidated !== false) throw new Error('Emby Web capture is incomplete.');
   for (const [field, variable] of [['repository', 'GITHUB_REPOSITORY'], ['commit', 'GITHUB_SHA'], ['runId', 'GITHUB_RUN_ID'], ['runAttempt', 'GITHUB_RUN_ATTEMPT']]) {
     if (!environment[variable] || receipt[field] !== environment[variable]) throw new Error(`Emby Web evidence belongs to another run: ${field}`);

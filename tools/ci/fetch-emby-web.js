@@ -5,10 +5,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'acorn';
 
-const version = '26.0.40';
+const version = '26.0.41';
 const origin = 'https://app.emby.media/';
-const entryPin = 'f5901ad7a606b0c19740c392be1dee164bf6dbf9ac0ca4cd5ea85b60478ba193';
-const workerPin = '28a8e8ea7d26333358a9f279aeb9f2277496b1035bcd541c3882103c58f7cff8';
+const entryPin = 'db25e3153bf63ed90d4637f51cea591c73c5b381e958e9279ce3ac5744477ce9';
+const workerPin = 'ec722c9e608288d207ec60fa7cdbe4f62560cef6b79ea0a05be6446dff6301be';
 assert.equal(process.env.GITHUB_ACTIONS, 'true', 'Hosted Emby inputs must be frozen in GitHub Actions.');
 assert.ok(process.env.RUNNER_TEMP && process.env.GITHUB_ENV);
 const output = path.join(process.env.RUNNER_TEMP, 'mediamanager-emby-web');
