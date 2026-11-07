@@ -71,7 +71,7 @@ on:
         required: false
         default: false
       emby_web:
-        description: Capture the designated hosted Emby Web and use fixed Chromium (requires native_sqlite)
+        description: Capture the latest hosted Emby Web and use fixed Chromium (requires native_sqlite)
         type: boolean
         required: false
         default: false
