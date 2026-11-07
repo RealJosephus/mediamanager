@@ -241,7 +241,7 @@ try {
   await phase('download-complete-original-iso');
   const image = path.join(work, 'original.iso');
   state.download = { bytes: 0, complete: false }; let lastProgress = 0;
-  const downloaded = await downloadOriginalArchiveIso(source, image, { signal: deadline,
+  const downloaded = await downloadOriginalArchiveIso(source, image, { metadata, signal: deadline,
     onResponse: async observation => { state.http.push(observation); await save(); },
     onProgress: async progress => {
       state.download = { ...progress, complete: false };

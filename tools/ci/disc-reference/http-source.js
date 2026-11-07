@@ -23,6 +23,33 @@ function archiveUrl(value) {
   return url;
 }
 
+function archiveFileLocations(original, metadata) {
+  const { server, dir, workable_servers: workableServers } = metadata ?? {};
+  const item = /^\/download\/([A-Za-z0-9_.-]+)\/([^/]+)$/u.exec(original.pathname);
+  if (original.origin !== 'https://archive.org' || original.search || original.hash || !item
+    || item[1] !== metadata?.metadata?.identifier
+    || !Array.isArray(workableServers) || !workableServers.includes(server)) return [original];
+  const nodeUrl = (host, dir) => {
+    if (typeof host !== 'string' || !/^(?:[a-z0-9-]+\.)+archive\.org$/iu.test(host)) return null;
+    const directory = typeof dir === 'string' ? /^\/\d+\/items\/([A-Za-z0-9_.-]+)$/u.exec(dir) : null;
+    return directory?.[1] === item[1] ? archiveUrl(`https://${host}${directory[0]}/${item[2]}`) : null;
+  };
+  const preferred = nodeUrl(server, dir);
+  if (!preferred) return [original];
+  const locations = [preferred, original];
+  const mirrors = metadata.alternate_locations?.workable;
+  if (Array.isArray(mirrors)) {
+    for (const mirror of mirrors) {
+      const candidate = nodeUrl(mirror?.server, mirror?.dir);
+      if (candidate && candidate.hostname !== preferred.hostname) {
+        locations.push(candidate);
+        break;
+      }
+    }
+  }
+  return locations;
+}
+
 const strongETag = value => typeof value === 'string' && /^"[\x21\x23-\x7e\x80-\xff]*"$/u.test(value) ? value : null;
 /** JSON-safe observations never replace or rewrite the actual thrown value. */
 export function archiveFailureObservation(value) {
@@ -89,12 +116,12 @@ export function createArchiveIsoDownloader({ fetch: request = globalThis.fetch, 
     'ARCHIVE_OPTIONS', `${name} is outside the bounded original ISO transport limits.`);
   requireValue(typeof request === 'function' && typeof openFile === 'function', 'ARCHIVE_OPTIONS', 'Supply actual transport and file functions.');
 
-  return async function download(source, filename, { signal, onResponse, onProgress } = {}) {
+  return async function download(source, filename, { metadata, signal, onResponse, onProgress } = {}) {
     requireValue(source && Number.isSafeInteger(source.bytes) && source.bytes > 0
       && /^[a-f0-9]{40}$/u.test(source.sha1) && /^[a-f0-9]{32}$/u.test(source.md5)
       && (source.sha256 == null || /^[a-f0-9]{64}$/u.test(source.sha256)),
     'ARCHIVE_SOURCE', 'The original ISO needs its fixed size and published digests.');
-    const originalUrl = archiveUrl(source.url);
+    const locations = archiveFileLocations(archiveUrl(source.url), metadata);
     const expected = { bytes: source.bytes, sha1: source.sha1, md5: source.md5,
       ...(source.sha256 == null ? {} : { sha256: source.sha256 }) };
     requireValue(typeof filename === 'string' && filename.length > 0, 'ARCHIVE_TARGET', 'Supply a new original ISO filename.');
@@ -147,13 +174,13 @@ export function createArchiveIsoDownloader({ fetch: request = globalThis.fetch, 
       if (Date.now() - lastProgress >= 30_000) { lastProgress = Date.now(); await progress(); }
     };
 
-    const readAttempt = async (range, attempt, purpose) => {
+    const readAttempt = async (range, attempt, purpose, initialUrl) => {
       const timeout = new AbortController();
       const timeoutError = new ArchiveSourceError('ARCHIVE_RANGE_TIMEOUT', 'An original ISO range exceeded its bounded request deadline.', true);
       const timer = setTimeout(() => timeout.abort(timeoutError), rangeTimeoutMs);
       const requestSignal = AbortSignal.any([controller.signal, timeout.signal]);
       const record = { purpose, range: { start: range.start, end: range.end, total: expected.bytes }, attempt,
-        startedAt: new Date().toISOString(), receivedBytes: 0, redirects: 0, bodyVerified: false, settled: false };
+        startedAt: new Date().toISOString(), url: initialUrl.href, receivedBytes: 0, redirects: 0, bodyVerified: false, settled: false };
       transport.attempts.push(record); transport.activeRequests++;
       transport.maximumActiveRequests = Math.max(transport.maximumActiveRequests, transport.activeRequests);
       let response, reader, bodyEnded = false, cancelPromise, phase = 'fetch', localFailed = false, localFailure, retryable = false;
@@ -173,7 +200,7 @@ export function createArchiveIsoDownloader({ fetch: request = globalThis.fetch, 
       const cancelOnAbort = () => { void cancelBody(); };
       requestSignal.addEventListener('abort', cancelOnAbort, { once: true });
       try {
-        let current = originalUrl;
+        let current = initialUrl;
         for (let redirects = 0; ; redirects++) {
           requestSignal.throwIfAborted(); phase = 'fetch';
           response = await request(current, { method: 'GET', redirect: 'manual', signal: requestSignal,
@@ -251,7 +278,7 @@ export function createArchiveIsoDownloader({ fetch: request = globalThis.fetch, 
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         controller.signal.throwIfAborted();
         if (attempt > 1) transport.retries++;
-        const result = await readAttempt(range, attempt, purpose);
+        const result = await readAttempt(range, attempt, purpose, locations[(attempt - 1) % locations.length]);
         controller.signal.throwIfAborted();
         if (result.ok) return result;
         if (!result.retryable || attempt === maxAttempts) throw result.error;
