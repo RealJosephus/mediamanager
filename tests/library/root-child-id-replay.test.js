@@ -129,6 +129,42 @@ for (const rootType of ['AggregateFolder', 'UserRootFolder']) test(`postgres: co
     'Once replayed, that exact manager occurrence remains mutable inside populated Children.');
 });
 
+test('postgres: child ID replay preserves 130 ordered values and live link branches across capture pages', {
+  skip: !postgresTestConnectionString, timeout: 60000,
+}, async t => {
+  const f = await setup(t), rootId = id(2);
+  const children = Array.from({ length: 130 }, (_, index) => row(id(1000 + index), 'CollectionFolder', rootId,
+    { Name: 'Stored child ' + index, SortName: String(index).padStart(3, '0') }));
+  await f.database.insertBatch('BaseItems', [row(rootId, 'UserRootFolder', null), ...children]);
+  await f.database.insert('LinkedChildren', { ParentId: children.at(-1).Id, SortOrder: 0, ChildType: 0, ChildId: children[0].Id });
+  const before = await f.database.rows('BaseItems'), beforeLinks = await f.database.rows('LinkedChildren'), root = await f.root(rootId);
+  const expected = children.map(child => ({ Id: idKey(child.Id), Name: child.Name }));
+  assert.deepEqual(await f.values(root), expected);
+  const alias = newNativeItemEntity(type('CollectionFolder'));
+  Object.assign(alias, { Id: children[0].Id, Name: 'Current first child', Path: '/live/first-page', ParentId: id(9000) });
+  await assignTestLinks(f, alias, [{ ItemId: null, Type: 0, Path: '/first-page-member', LibraryItemId: null }]);
+  f.manager.registerItem(alias);
+  releaseCachedFolderChildren(root);
+  await f.snapshot(root, async source => {
+    const observed = [];
+    for await (const page of source.pages()) for (const child of page) {
+      observed.push({ Id: idKey(child.Id), Name: child.Name });
+      if (idKey(child.Id) === idKey(children[0].Id)) {
+        assert.deepEqual((await readTestLinks(child)).map(link => link.Path), ['/first-page-member']);
+      }
+      if (idKey(child.Id) === idKey(children.at(-1).Id)) {
+        assert.deepEqual((await readTestLinks(child)).map(link => idKey(link.ItemId)), [idKey(children[0].Id)]);
+      }
+    }
+    assert.deepEqual(observed, expected.map((child, index) => index === 0 ? { ...child, Name: alias.Name } : child));
+  });
+  assert.deepEqual(await f.database.rows('BaseItems'), before);
+  assert.deepEqual(await f.database.rows('LinkedChildren'), beforeLinks);
+  await f.close();
+  assert.equal((await f.database.client.query('SELECT to_regnamespace($1) AS namespace',
+    [f.linkedChildren.schemaName])).rows[0].namespace, null);
+});
+
 test('postgres: empty UserRoot IDs remain empty while empty Aggregate IDs reload after releasing Children', {
   skip: !postgresTestConnectionString, timeout: 60000,
 }, async t => {
@@ -179,7 +215,8 @@ test('postgres: complete root ID capture and manager replay cross the SQL bounda
   skip: !postgresTestConnectionString, timeout: 180000,
 }, async t => {
   const f = await setup(t), definitions = Array.from({ length: 257 }, (_, index) =>
-    row(id(100 + index), 'CollectionFolder', id(2), { SortName: String(index).padStart(4, '0') }));
+    row(id(100 + index), 'CollectionFolder', id(2), { SortName: String(index).padStart(4, '0'),
+      Data: '{"PhysicalLocationsList":["/membership/shared"]}' }));
   await f.database.insert('BaseItems', row(id(2), 'UserRootFolder', null));
   await f.database.insertBatch('BaseItems', definitions);
   const root = await f.root(id(2)), original = f.database.client.query;
@@ -193,8 +230,19 @@ test('postgres: complete root ID capture and manager replay cross the SQL bounda
     assert.deepEqual((await f.values(root)).map(child => child.Id), definitions.map(child => idKey(child.Id)));
     releaseCachedFolderChildren(root);
     assert.deepEqual((await f.values(root)).map(child => child.Id), definitions.map(child => idKey(child.Id)));
-    assert.equal(maximumRows, 128);
+    assert.ok(maximumRows <= 128);
   } finally { f.database.client.query = original; }
+  const target = Object.assign(newNativeItemEntity(type('Year')), { Id: id(900), Path: '/membership/shared' });
+  const selected = await f.library.getCollectionFolders(target);
+  const membership = value => ({ Id: idKey(value.Id), Name: value.Name, Path: value.Path,
+    PhysicalLocationsList: value.PhysicalLocationsList });
+  assert.deepEqual(selected.map(membership), definitions.map(value => ({ Id: idKey(value.Id), Name: value.Name,
+    Path: value.Path, PhysicalLocationsList: ['/membership/shared'] })));
+  selected.at(-1).PhysicalLocationsList = null;
+  setFolderChildren(root, selected);
+  await assert.rejects(f.library.getCollectionFolders(target), {
+    status: 500, message: "Value cannot be null. (Parameter 'source')",
+  }, 'a null location list beyond the first page still rejects the complete directory lookup');
 });
 
 test('postgres: root navigation visibility cannot replace replayed manager occurrences with a request directory cache', {

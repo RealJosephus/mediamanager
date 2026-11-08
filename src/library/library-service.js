@@ -47,6 +47,7 @@ import { createPresentationUniqueKey } from './presentation-key.js';
 import { SimilarItemsManager } from './similar-items.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
 import { buildPostgresItemPageQuery, queryPostgresDtoChildCounts, queryPostgresItemPage } from '../database/postgres-item-query.js';
+import { queryPostgresLibraryStatement } from '../database/postgres.js';
 import { loadPostgresItemGraph, loadPostgresNavigationRows, loadPostgresPageGraph, loadPostgresRowsByIds, queryPostgresFolderStats,
   countPostgresNullVideoTypeRows, queryPostgresAlbumSelectorIds, queryPostgresArtistSelectorId,
   queryPostgresArtistSelectorIds, queryPostgresDtoArtistIds,
@@ -453,7 +454,7 @@ export class LibraryService extends EventEmitter {
     state.newUserView = item => this.#userViews?.createdInThisInstance(item.Id) === true;
     const scopedIds = state.items
       .filter(item => item !== state.transientUserRoot).map(item => item.Id);
-    const valueLinks = scopedIds.length ? await db.rows('ItemValuesMap', { whereIn: { ItemId: scopedIds } }) : [];
+    const valueLinks = state.relationPresence.ItemValuesMap ? await db.rows('ItemValuesMap', { whereIn: { ItemId: scopedIds } }) : [];
     const valueIds = [...new Set(valueLinks.map(link => link.ItemValueId))];
     const values = valueIds.length ? await db.rows('ItemValues', { whereIn: { ItemValueId: valueIds } }) : [];
     state.itemValues = values;
@@ -471,7 +472,7 @@ export class LibraryService extends EventEmitter {
         itemValues.set(value.Type, value.CleanValue);
       }
     }
-    const peopleLinks = scopedIds.length ? await db.rows('PeopleBaseItemMap', { whereIn: { ItemId: scopedIds } }) : [];
+    const peopleLinks = state.relationPresence.PeopleBaseItemMap ? await db.rows('PeopleBaseItemMap', { whereIn: { ItemId: scopedIds } }) : [];
     const peopleIds = [...new Set(peopleLinks.map(link => link.PeopleId))];
     const people = peopleIds.length ? await db.rows('Peoples', { whereIn: { Id: peopleIds } }) : [];
     state.people = people;
@@ -1783,22 +1784,9 @@ export class LibraryService extends EventEmitter {
         parent = userRootItem(state) ?? parent;
       }
       const virtualChildren = source => this.#rootVirtualChildren(source);
-      const visible = async item => {
-        if (!user) throw libraryError(400, "Value cannot be null. (Parameter 'user')");
-        const page = await this.load(db, user, { includeUserData: false,
-          baseRows: await loadPostgresItemGraph(db, [item.Id]) });
-        let failed = false, primary;
-        try {
-          this.adoptLiveItem(page, item);
-          return await this.#postgresStandaloneVisible(db, item, user, page, { checkStandaloneParents: false });
-        } catch (reason) { failed = true; primary = reason; throw reason; }
-        finally {
-          try { await page.dispose({ session: db }); }
-          catch (cleanup) { throw libraryScopeFailure(failed ? [primary, cleanup] : [cleanup], 'Year visibility release failed.'); }
-        }
-      };
+      const visiblePage = (source, entries) => this.#yearVisibilityPage(db, user, source, entries, signal);
       const specialChildren = createYearSpecialChildren({ library: this, database: db, state, user,
-        navigationRows, signal, isVisible: visible, virtualChildren,
+        navigationRows, signal, visiblePage, virtualChildren,
         visibilityFor: source => this.#postgresVisibility(source, user),
         physicalIdsFor: items => this.#postgresPhysicalIds(items, state),
         nextUpIdsFor: items => nextUpTopParentIds(items, state, folder => resolvedPhysicalFolderIds(folder, state), user, this),
@@ -1825,9 +1813,70 @@ export class LibraryService extends EventEmitter {
         }
       };
       const execute = item => queryYears({ library: this, database: db, input, user, hasUser,
-        parent: this.adoptLiveItem(state, item), state, virtualChildren, specialChildren, isVisible: visible, projectPage, signal });
+        parent: this.adoptLiveItem(state, item), state, virtualChildren, specialChildren, visiblePage, projectPage, signal });
       return this.itemCreation ? this.itemCreation.withItem(parent.Id, item => execute(item ?? parent)) : execute(parent);
     }, { channelViews: Boolean(user) });
+  }
+
+  async #yearVisibilityPage(db, user, source, entries, signal) {
+    if (!user) throw libraryError(400, "Value cannot be null. (Parameter 'user')");
+    const withGraph = async (ids, consume) => {
+      signal?.throwIfAborted();
+      const page = await this.load(db, user, { includeUserData: false,
+        baseRows: await loadPostgresItemGraph(db, ids) });
+      let failed = false, primary;
+      try { return await consume(page); }
+      catch (reason) { failed = true; primary = reason; throw reason; }
+      finally {
+        try { await page.dispose({ session: db }); }
+        catch (cleanup) { throw libraryScopeFailure(failed ? [primary, cleanup] : [cleanup], 'Year visibility release failed.'); }
+      }
+    };
+    const check = async (item, page, resolveCollectionFolders) => {
+      signal?.throwIfAborted();
+      const key = idKey(item.Id), stored = page.byId.get(key);
+      this.adoptLiveItem(page, item);
+      try {
+        return await this.#postgresStandaloneVisible(db, item, user, page,
+          { checkStandaloneParents: false, resolveCollectionFolders });
+      } finally {
+        if (stored) page.byId.set(key, stored);
+        else page.byId.delete(key);
+      }
+    };
+    const single = item => {
+      // Collection visibility can reject this live item before reading its relations.
+      if (item.Type === 'CollectionFolder' && user.Policy && !visibleLibrary(item, user, this.options.libraryOptions)) return false;
+      return withGraph([item.Id], page => check(item, page));
+    };
+    // These consumers can enumerate relations in the admitted graph. Keep
+    // their graph scoped to the individual occurrence, in traversal order.
+    const sharesGraph = (type, folder) => !folder && !NAME_TYPES.has(type) && type !== 'BoxSet' && type !== 'Playlist';
+    const mask = [];
+    for (let start = 0; start < entries.length;) {
+      let end = start + 1;
+      if (sharesGraph(entries[start].type, entries[start].folder)) {
+        while (end < entries.length && sharesGraph(entries[end].type, entries[end].folder)) end++;
+      }
+      if (end === start + 1) mask.push(await source.withSlot(entries[start].slot, single));
+      else {
+        const group = entries.slice(start, end);
+        const decisions = await withGraph(group.map(entry => entry.id), page => {
+          const resolve = this.#collectionFolderResolver(page);
+          return source.withSlots(group.map(entry => entry.slot), item => {
+            const stored = page.byId.get(idKey(item.Id));
+            // A live occurrence may have changed since it entered the queue.
+            // Use its own graph if its parent or rating lookups can differ.
+            const sameReferences = stored?.Type === item.Type && ['ParentId', 'OwnerId', 'SeasonId', 'SeriesId']
+              .every(key => idKey(stored[key]) === idKey(item[key]));
+            return sameReferences && sharesGraph(item.Type, item.IsFolder) ? check(item, page, resolve) : single(item);
+          });
+        });
+        mask.push(...decisions);
+      }
+      start = end;
+    }
+    return mask;
   }
 
   async getYearDto(year, { user = null, resolveUser } = {}) {
@@ -3047,8 +3096,6 @@ export class LibraryService extends EventEmitter {
       if (!this.itemCreation) throw libraryError(501, `${type} creation requires the native entity lifecycle.`);
       const metadataPath = this.options.metadataPath ?? path.join(this.options.programDataPath, 'metadata');
       const assets = new MetadataImageAssets({ fileSystem: this.options.fileSystem, metadataPath });
-      const target = await assets.resolve(identity.Path);
-      if (!target.localPath) throw libraryError(501, `${type} creation requires the isolated metadata directory.`);
       const directory = await assets.createDirectory(identity.Path);
       const item = newNativeItemEntity(nativeType);
       Object.assign(item, { Id: identity.Id, Name: name, Path: identity.Path,
@@ -3291,15 +3338,23 @@ export class LibraryService extends EventEmitter {
       const values = [...plan.values, target.Path == null ? null : nativeTextBytes(target.Path), folders];
       const pathMatches = `${sql.ordinalIgnoreCaseKey('source."Path"')} IS NOT DISTINCT FROM ${sql.ordinalIgnoreCaseKey(path)}`;
       const folderSource = `(SELECT * FROM (${plan.text}) child WHERE child."NativeType"=ANY($${offset + 2}::bytea[])) source`;
-      const invalid = await db.client.query({ text: `SELECT source."Ordinal" FROM ${folderSource}
-        WHERE source."PhysicalLocations" IS NULL AND NOT (${pathMatches}) ORDER BY source."Ordinal" LIMIT 1`, values });
-      if (invalid.rows.length) throw libraryError(500, "Value cannot be null. (Parameter 'source')");
       const result = [];
       for (let after = 0n;;) {
-        const rows = (await db.client.query({ text: `SELECT source."Ordinal",source."SlotKey" FROM ${folderSource}
-          WHERE source."Ordinal">$${offset + 3} AND ((${pathMatches}) OR EXISTS(
+        const rows = (await queryPostgresLibraryStatement(db, { text: `WITH folders AS MATERIALIZED (
+            SELECT source."Ordinal",source."SlotKey",source."Path",source."PhysicalLocations" FROM ${folderSource}
+          ), invalid AS MATERIALIZED (
+            SELECT source."Ordinal" FROM folders source
+            WHERE $${offset + 3}::bigint=0 AND source."PhysicalLocations" IS NULL AND NOT (${pathMatches})
+            ORDER BY source."Ordinal" LIMIT 1
+          )
+          SELECT TRUE AS "Invalid",NULL::bigint AS "Ordinal",NULL::uuid AS "SlotKey" FROM invalid
+          UNION ALL (
+          SELECT FALSE AS "Invalid",source."Ordinal",source."SlotKey" FROM folders source
+          WHERE NOT EXISTS(SELECT 1 FROM invalid) AND source."Ordinal">$${offset + 3} AND ((${pathMatches}) OR EXISTS(
             SELECT 1 FROM unnest(source."PhysicalLocations") location WHERE ${sql.ordinalIgnoreCaseKey("COALESCE(location,decode('','hex'))")}=${sql.ordinalIgnoreCaseKey(span)}))
-          ORDER BY source."Ordinal" LIMIT 128`, values: [...values, after] })).rows;
+          ORDER BY source."Ordinal" LIMIT 128)
+          ORDER BY "Ordinal"`, values: [...values, after] })).rows;
+        if (rows.some(row => row.Invalid)) throw libraryError(500, "Value cannot be null. (Parameter 'source')");
         if (!rows.length) return result;
         for (const row of rows) await source.withSlot(row.SlotKey, folder => { state.adoptItem(folder); result.push(this.#rememberRecord(folder)); });
         after = BigInt(rows.at(-1).Ordinal);

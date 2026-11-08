@@ -101,7 +101,7 @@ export async function verifyCollectionRatingConsumer(t, samples, nativePair) {
     const context = { linkedChildren, spoolRoot: root, expandPath: value => value, getPeople: async () => [],
       prepareLinkedXmlItems: async item => {
         const snapshot = await linkedChildren.xmlPaths(item.LinkedChildren, { parentId: item.Id });
-        return { manualCount: snapshot.manualCount, pages: options => snapshot.paths.pages(options),
+        return { manualCount: snapshot.manualCount, pages: options => linkedChildren.pages(snapshot.paths, options),
           close: () => linkedChildren.release(snapshot.paths) };
       } };
     if (expected.includes('\0')) {

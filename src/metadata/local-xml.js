@@ -114,7 +114,7 @@ export function createLocalXmlPlugin({ vfs, fileSystem, externalIdInfos, spoolRo
         ...context, playlistFile: isPlaylistFile(item, item.Path, context.playlistFile),
         prepareLinkedXmlItems: context.prepareLinkedXmlItems ?? (linkedChildren && (async value => {
           const snapshot = await linkedChildren.xmlPaths(value.LinkedChildren, { parentId: value.Id, expandPath: context.expandPath });
-          return { manualCount: snapshot.manualCount, pages: options => snapshot.paths.pages(options),
+          return { manualCount: snapshot.manualCount, pages: options => linkedChildren.pages(snapshot.paths, options),
             close: () => linkedChildren.release(snapshot.paths) };
         }))
       }); } catch (error) { preparationError = error; }

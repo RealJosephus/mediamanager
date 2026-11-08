@@ -24,7 +24,6 @@ import { probeFileChanged } from '../storage/probe-lifecycle.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { computeBoxSetLibraryFolderIds, parentChainForItem } from './collection-membership.js';
 import { getNewItemId } from '../core/identity.js';
-import { readItemImageRows } from './image-order.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
 import { itemSupportsAncestors } from './item-relations.js';
 import { rebasedMetadataPath } from '../metadata/by-name-path.js';
@@ -44,6 +43,7 @@ import { DotIgnoreRule } from './dot-ignore-rule.js';
 import { loadPostgresMetadataRows, loadPostgresPageGraph,
   loadPostgresRowsByIds, queryPostgresPlaylistLibraryRoots } from './postgres-library-query.js';
 import { quoteIdentifier as q } from '../database/model.js';
+import { readMetadataRelationships } from '../metadata/metadata-baseline.js';
 
 export const metadataFields = ['Cast', 'Genres', 'ProductionLocations', 'Studios', 'Tags', 'Name', 'Overview', 'Runtime', 'OfficialRating'];
 const imageTypes = ['Primary', 'Art', 'Backdrop', 'Banner', 'Logo', 'Thumb', 'Disc', 'Box', 'Screenshot', 'Menu', 'Chapter', 'BoxRear', 'Profile'];
@@ -121,7 +121,7 @@ export function createMetadataContextLoader(options) {
     try { return (await vfs.stat(path)).kind === 'file'; }
     catch (error) { if (error.code === 'not-found') return false; throw error; }
   };
-  const loadContext = (reference, { draft, includeChildren = false, paths = capturePathScope() } = {}) => {
+  const loadContext = (reference, { draft, forItemSave = false, includeChildren = false, paths = capturePathScope() } = {}) => {
     const owningScope = activeScope();
     return scopeWork(owningScope, () => store.run(async db => {
     // Capture before awaiting a database session. An actual child operation can
@@ -160,24 +160,39 @@ export function createMetadataContextLoader(options) {
     };
     try {
     const referenceId = typeof reference === 'string' ? nativeGuid(reference) : reference.Id;
-    const targetRow = (await loadPostgresRowsByIds(db, [referenceId]))[0];
+    const targetRows = await loadPostgresRowsByIds(db, [referenceId]), targetRow = targetRows[0];
     const targetType = draft?.Type ?? String(targetRow?.Type ?? '').split('.').at(-1);
     const targetName = draft?.Name ?? targetRow?.Name;
-    let scopedRows = await loadPostgresMetadataRows(db, referenceId, { targetType, targetName, configuration: currentConfiguration(), includeChildren:false });
+    // Discovery, hydration and the conflict baseline share this exact observed
+    // row. A later edit must be rejected, not adopted as the stale item's base.
+    const loadMetadataRows = database => loadPostgresMetadataRows(database, referenceId, { targetRows,
+      targetType, targetName, configuration: currentConfiguration(), includeChildren:false });
+    const loadState = baseRows => library.load(db, null, { baseRows, includeManualLinks:false,
+      includeFolderLinks:false, includeLinkGraph:false, expandPath });
     // A newly resolved draft has no BaseItems row yet. Seed its bounded
     // relationship frame from the live references so persistence can still
     // derive the physical top parent and TV relationships without loading
     // the catalogue.
-    if (draft) {
-      const references = [draft.ParentId, draft.TopParentId, draft.NativeTopParentId,
-        draft.SeasonId, draft.SeriesId, draft.OwnerId, draft.PrimaryVersionId].filter(nonemptyId);
+    const references = draft ? [draft.ParentId, draft.TopParentId, draft.NativeTopParentId,
+      draft.SeasonId, draft.SeriesId, draft.OwnerId, draft.PrimaryVersionId].filter(nonemptyId) : [];
+    // The standalone Year has no upward relationships. Collection membership
+    // reads the active user root's actual children, even in an empty frame.
+    const hostedRoot = library.rootHost?.userRootFolder;
+    if (forItemSave && targetType === 'Year' && !targetRows.length && !references.length
+      && hostedRoot && sameId(hostedRoot.Id, library.options.userRoot?.Id)) {
+      state = await loadState([]);
+    }
+    const rootOnly = Boolean(state) && state.liveUserRoot === hostedRoot;
+    if (!rootOnly) {
+      await state?.dispose({ session: db });
+      let scopedRows = await loadMetadataRows(db);
       if (references.length) {
         const referenceRows = await loadPostgresRowsByIds(db, references);
         scopedRows = await loadPostgresPageGraph(db, referenceRows, scopedRows,
           { includeManualLinks:false });
       }
+      state = await loadState(scopedRows);
     }
-    state = await library.load(db, null, { baseRows: scopedRows, includeManualLinks:false, includeFolderLinks:false, includeLinkGraph:false, expandPath });
     const item = draft ?? state.byId.get(idKey(referenceId));
     if (!item) throw libraryError(404, 'Metadata item not found.');
     itemOwner = acquireNativeItemLinkOwner(item);
@@ -331,8 +346,14 @@ export function createMetadataContextLoader(options) {
       return { series, season, lookup: metadataLookup(value, loaded?.parents ?? parents), context: { ...context,
         seriesPath: value.Type === 'Season' && series?.Path ? access(series) : undefined } };
     };
-    const peopleLinks = (await db.rows('PeopleBaseItemMap', { where: { ItemId: item.Id } }))
-      .sort((a, b) => (a.ListOrder ?? 0) - (b.ListOrder ?? 0));
+    const relationshipTables = ['BaseItemProviders', 'BaseItemMetadataFields', 'PeopleBaseItemMap', 'BaseItemImageInfos', 'ItemValuesMap'];
+    if (itemSupportsAncestors(item)) relationshipTables.push('AncestorIds');
+    // Each relation of a new standalone Year requires its BaseItems owner.
+    // The save still checks the row and every relation in its transaction.
+    const relationships = rootOnly && !db.inTransaction
+      ? Object.fromEntries(relationshipTables.map(table => [table, []]))
+      : await readMetadataRelationships(db, item.Id, relationshipTables, { checkEmpty: !targetRow });
+    const peopleLinks = relationships.PeopleBaseItemMap.toSorted((a, b) => (a.ListOrder ?? 0) - (b.ListOrder ?? 0));
     const peopleRows = peopleLinks.length
       ? await db.rows('Peoples', { whereIn: { Id: [...new Set(peopleLinks.map(row => row.PeopleId))] } })
       : [];
@@ -352,8 +373,10 @@ export function createMetadataContextLoader(options) {
       }
     }
     const imageItemIds = [item.Id, ...personItemIds];
-    const imageRows = await readNativeImageRows(db, imageItemIds);
-    context.images = (await readItemImageRows(db, item.Id)).map(row => ({ ...row, Type: imageTypes[row.ImageType] ?? row.ImageType, Path: expandPath(row.Path) }));
+    const imageRows = relationships.BaseItemImageInfos.length || personItemIds.length
+      ? await readNativeImageRows(db, imageItemIds) : [];
+    context.images = imageRows.filter(row => row.ItemId === item.Id)
+      .map(row => ({ ...row, Type: imageTypes[row.ImageType] ?? row.ImageType, Path: expandPath(row.Path) }));
     for (const row of peopleLinks) {
       const person = peopleRows.find(entry => sameId(entry.Id, row.PeopleId));
       if (!person) throw new Error('A metadata person relation is missing its person.');
@@ -386,15 +409,11 @@ export function createMetadataContextLoader(options) {
         });
       });
     };
-    context.mediaStreams = (await db.rows('MediaStreamInfos', { where: { ItemId: item.Id } })).map(row => projectStream(row, library.options));
     const childrenSource=createMetadataChildren({store,library,linkedChildren,get configuration(){return currentConfiguration();},libraryOptions});
     context.tracks=()=>childrenSource.tracks(item);context.albums=()=>childrenSource.albums(item);
 
     const saveLocalMetadataEnabled = item.SourceType !== 'Channel' && (libraryOptions.SaveLocalMetadata || ['Person', 'Genre', 'MusicGenre', 'Studio', 'Year', 'BoxSet', 'Playlist', 'UserView'].includes(item.Type)
       || item.Type === 'MusicArtist' && item.IsAccessedByName === true);
-    const relationships = {};
-    for (const table of ['BaseItemProviders', 'BaseItemMetadataFields', 'PeopleBaseItemMap', 'BaseItemImageInfos', 'ItemValuesMap']) relationships[table] = await db.rows(table, { where: { ItemId: item.Id } });
-    if (itemSupportsAncestors(item)) relationships.AncestorIds = await db.rows('AncestorIds', { where: { ItemId: item.Id } });
     const fileSystemMetadata = async signal => {
       if (!item.Path) return null;
       try {
@@ -499,7 +518,9 @@ export function createMetadataContextLoader(options) {
         const baseRows=(await database.client.query(`WITH family AS (SELECT $1::text AS key UNION SELECT ${sql.guidKey('"ChildId"')} FROM ${links} WHERE ${sql.guidKey('"ParentId"')}=$1 AND "ChildType"=2)
           SELECT "Id" FROM ${base} WHERE ${sql.guidKey('"OwnerId"')} IN (SELECT key FROM family) OR ${sql.guidKey('"ParentId"')}=$1 OR ${sql.guidKey('"Id"')} IN (SELECT key FROM family)`,[idKey(item.Id)])).rows;
         const selected=await loadPostgresRowsByIds(database,baseRows.map(row=>decodeNativeTextBytes(row.Id,'runtime')));
-        return library.load(database,null,{baseRows:await loadPostgresPageGraph(database,selected,state.items.map(value=>value.NativeRepositoryColumns).filter(Boolean),{includeManualLinks:false}),includeManualLinks:false,includeLinkGraph:true,expandPath});
+        const navigation = rootOnly ? await loadMetadataRows(database)
+          : state.items.map(value => value.NativeRepositoryColumns).filter(Boolean);
+        return library.load(database,null,{baseRows:await loadPostgresPageGraph(database,selected,navigation,{includeManualLinks:false}),includeManualLinks:false,includeLinkGraph:true,expandPath});
       }),
       getLocalAlternateVersionIds: prospectiveItem => store.run(async database => {
         const ids = (await database.rows('LinkedChildren', { where: { ParentId: item.Id, ChildType: 2 },
@@ -560,7 +581,7 @@ export function createMetadataContextLoader(options) {
         }
         return inherited;
       },
-      snapshot: (await db.rows('BaseItems', { where: { Id: item.Id } }))[0] };
+      snapshot: targetRows.find(row => row.Id === item.Id) };
     // GetUserRootFolder registers a transient singleton without saving it.
     // Its first actual metadata save can insert the canonical root; merely
     // reading virtual folders or cancelling a refresh must not create a row.
@@ -585,7 +606,13 @@ export function createMetadataContextLoader(options) {
       const parts = await videoVersionDiscovery?.previewOwnedParts(loaded) ?? [];
       return previewContexts(parts);
     };
-    for (const extension of contextExtensions()) await extension.enrich(loaded, { database: db });
+    const extensions = contextExtensions();
+    // A standalone Year save needs its item and relation baselines. Stream
+    // hydration is only consumed by the full metadata context or extensions.
+    if (!rootOnly || extensions.length !== 0) {
+      context.mediaStreams = (await db.rows('MediaStreamInfos', { where: { ItemId: item.Id } })).map(row => projectStream(row, library.options));
+    }
+    for (const extension of extensions) await extension.enrich(loaded, { database: db });
     owningScope?.contexts.add(loaded);
     return loaded;
     } catch (error) {

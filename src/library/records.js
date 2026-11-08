@@ -176,7 +176,16 @@ export async function loadLibrary(db, { expandPath = value => value, userRoot, p
   for (const item of items) item.Path = expandPath(item.Path);
   const byId = new Map(items.map(item => [idKey(item.Id), item]));
   const scopedIds = items.filter(item => !sameId(item.Id, transientUserRoot?.Id)).map(item => item.Id);
-  const scopedRows = (name, key = 'ItemId') => scopedIds.length ? db.rows(name, { whereIn: { [key]: scopedIds } }) : [];
+  // One scoped observation avoids separate empty relation reads. Nonempty
+  // relations still use their complete typed readers and native row order.
+  const relationTables = ['BaseItemProviders', 'AncestorIds', 'BaseItemMetadataFields', 'BaseItemTrailerTypes',
+    'UserData', 'BaseItemImageInfos', 'ItemValuesMap', 'PeopleBaseItemMap'];
+  const relationPresence = scopedIds.length ? (await db.client.query({
+    text: `SELECT ${relationTables.map(name => `EXISTS (SELECT 1 FROM ${q(db.schemaName)}.${q(name)}
+      WHERE "ItemId"=ANY($1::bytea[])) AS ${q(name)}`).join(',')}`,
+    values: [scopedIds.map(nativeTextBytes)],
+  })).rows[0] : {};
+  const scopedRows = name => relationPresence[name] ? db.rows(name, { whereIn: { ItemId: scopedIds } }) : [];
   const providers = await scopedRows('BaseItemProviders');
   for (const row of providers) {
     const item = byId.get(idKey(row.ItemId));
@@ -197,9 +206,9 @@ export async function loadLibrary(db, { expandPath = value => value, userRoot, p
   // dependent relation reads ordered on that session so transaction snapshots
   // and cancellation boundaries remain deterministic.
   const lockedFields = await scopedRows('BaseItemMetadataFields');
-  const trailerTypes = await readNativeTrailerRows(db, scopedIds);
+  const trailerTypes = relationPresence.BaseItemTrailerTypes ? await readNativeTrailerRows(db, scopedIds) : [];
   const userData = await scopedRows('UserData');
-  const images = await readNativeImageRows(db, scopedIds);
+  const images = relationPresence.BaseItemImageInfos ? await readNativeImageRows(db, scopedIds) : [];
   const rowsByItem = rows => {
     const grouped = new Map(items.map(item => [idKey(item.Id), []]));
     for (const row of rows) {
@@ -241,7 +250,8 @@ export async function loadLibrary(db, { expandPath = value => value, userRoot, p
       FROM unnest($1::bytea[]) source(id)`,[scopedIds.map(nativeTextBytes)])).rows;
     for(const row of rows)hasStoredLinks.set(idKey(decodeNativeTextBytes(row.id,'runtime')),row.present);
   }
-  const state = { items, byId, parents, links, hasStoredLinks, db, transientUserRoot, userRootId: userRoot?.Id, repositoryUserDataRows: userData,
+  const state = { items, byId, parents, links, hasStoredLinks, db, transientUserRoot, userRootId: userRoot?.Id,
+    relationPresence, repositoryUserDataRows: userData,
     adoptItem(item) {
       if (disposed) throw new Error('The library state has been disposed.');
       linkOwners.push(acquireNativeItemLinkOwner(item));

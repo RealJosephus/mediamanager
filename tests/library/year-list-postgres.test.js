@@ -5,6 +5,7 @@ import { mkdir, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
 import { nativeYearIdentity } from '../../src/library/year-identity.js';
+import { LibraryScanHost } from '../../src/library/library-scan-host.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { observeExecutionPhase } from '../../tools/validation/execution-diagnostics.js';
 import { setFolderChildren } from '../../src/library/folder-cache.js';
@@ -38,7 +39,7 @@ test('Years uses Folder occurrence counts and Guid winners while excluded folder
 }, t => owned(t, async f => {
   const source = roots(); source[1].links = ['nested-movie'];
   await f.seed({ target: 'root', items: [...source,
-    { key: 'nested', type: 'Folder', Id: id(3), parent: 'root', ProductionYear: 1980 },
+    { key: 'nested', type: 'Folder', Id: id(3), parent: 'root', ProductionYear: 1980, Tags: ['Blocked source'] },
     { key: 'root-movie', type: 'Movie', Id: id(4), parent: 'root', ProductionYear: 2000, MediaType: 'Video' },
     { key: 'nested-movie', type: 'Movie', Id: id(5), parent: 'nested', ProductionYear: 2001, MediaType: 'Video' },
     { key: 'no-year', type: 'Movie', Id: id(6), parent: 'root', ProductionYear: null, MediaType: 'Video' },
@@ -46,6 +47,11 @@ test('Years uses Folder occurrence counts and Guid winners while excluded folder
   ] });
   t.signal.throwIfAborted();
   const input = { parentId: id(2), includeItemTypes: ['Movie'], excludeItemTypes: ['Folder'], sortBy: ['Name'] };
+  const restricted = { ...user, Policy: { ...user.Policy, BlockedTags: ['Blocked source'] } };
+  const filtered = await f.library.queryYears(input, { user: restricted, hasUser: true, signal: t.signal });
+  assert.equal(filtered.TotalRecordCount, 3);
+  assert.deepEqual(filtered.Items.map(item => item.Name), ['2000']);
+  assert.deepEqual((await yearRows(f)).map(row => row.Name), ['2000']);
   const selected = await f.library.queryYears(input, { user, hasUser: true, signal: t.signal });
   assert.deepEqual(selected.Items.map(item => item.Name), ['2000', '2001']); assert.equal(selected.TotalRecordCount, 5);
   assert.equal(new Set(selected.Items.map(item => item.Id)).size, selected.Items.length);
@@ -97,6 +103,39 @@ test('Years borrows the admitted Aggregate root with warm Children while its vir
           assert.deepEqual(await temporary(db), before); assert.deepEqual(await backend(db), originalBackend);
         });
       })));
+}));
+
+test('Creating a Year under an active user root persists its matching collection tags and emits one ItemAdded', {
+  skip: !enabled, timeout: 60000,
+}, t => owned(t, async f => {
+  const identity = nativeYearIdentity('2000', f.library.options);
+  await f.seed({ target: 'user-root', items: [...roots(),
+    { key: 'matching', type: 'CollectionFolder', Id: id(3), parent: 'user-root',
+      Path: path.join(f.stateRoot, 'matching'), PhysicalLocationsList: [identity.Path], Tags: ['Inherited from collection'] },
+    { key: 'other', type: 'CollectionFolder', Id: id(4), parent: 'user-root',
+      Path: path.join(f.stateRoot, 'other'), PhysicalLocationsList: [], Tags: ['Unrelated collection'] },
+  ] });
+  const rootHost = new LibraryScanHost({ store: f.store, library: f.library, itemCreation: f.library.itemCreation,
+    metadataScanner: f.host, topLevelValidation: {} });
+  f.library.rootHost = rootHost;
+  const added = [];
+  f.library.on('ItemAdded', ({ Item, Parent }) => added.push({ Id: Item.Id, Parent }));
+  try {
+    await rootHost.getUserRootFolder();
+    t.signal.throwIfAborted();
+    const created = await f.library.getYear(2000);
+    assert.equal(created.Id, identity.Id);
+    assert.equal((await stat(created.Path)).isDirectory(), true);
+    const rows = await yearRows(f);
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].Path, identity.StoredPath);
+    const links = await f.database.rows('ItemValuesMap', { where: { ItemId: created.Id } });
+    assert.equal(links.length, 1);
+    const values = await f.database.rows('ItemValues', { where: { ItemValueId: links[0].ItemValueId } });
+    assert.deepEqual(values.map(({ Type, Value }) => [Type, Value]), [[6, 'Inherited from collection']]);
+    assert.equal((await f.library.getYear(2000)).Id, created.Id);
+    assert.deepEqual(added, [{ Id: created.Id, Parent: null }]);
+  } finally { await rootHost.close(); }
 }));
 
 test('Years creates all 130 distinct names before Limit=0 and streams its later sorted response in actual SQL pages of at most 128', {
@@ -162,7 +201,7 @@ test('Years retains the committed factory prefix on a falsy failure and releases
       return item;
     };
     let failed;
-    try { failed = await outcome(f.library.queryYears({ parentId: id(2), recursive: false, limit: 0 }, { signal: t.signal })); }
+    try { failed = await outcome(f.library.queryYears({ parentId: id(2), recursive: false, sortBy: ['Name'], limit: 0 }, { signal: t.signal })); }
     finally { f.library.getYear = getYear; }
     assert.equal(failed.failed, true); assert.equal(failed.reason, marker);
     assert.deepEqual((await yearRows(f)).map(row => row.Name).sort(), ['1900', '1901', '1902']);
