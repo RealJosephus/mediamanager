@@ -1,5 +1,4 @@
-import test, { after } from 'node:test';
-import { acquireTestResource } from '../helpers/test-resource-lease.js';
+import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -15,7 +14,6 @@ import { dateTicks } from '../../src/library/records.js';
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'currentNativeSqlite', 'postgres'];
 const enabled = process.env.MEDIAMANAGER_JELLYFIN_DLL && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE
   && process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE && process.env.MEDIAMANAGER_TEST_POSTGRES;
-const resourceLease = enabled ? await acquireTestResource('native-media-5244') : null;
 
 test('Movie projection preserves AggregateFolder Path and normalizes only additional-location enumeration', () => {
   const aggregate = 'MediaBrowser.Controller.Entities.AggregateFolder|$CASE/program/root';
@@ -252,6 +250,3 @@ test('two independent actual Movie global scans match PG create, timed NFO updat
   }
   if (failure) throw failure;
 });
-
-// Release after all test hooks, streams, processes and resource postconditions.
-after(async () => { await resourceLease?.release(); });

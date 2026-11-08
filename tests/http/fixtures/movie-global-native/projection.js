@@ -532,6 +532,12 @@ export function projectMovieRun(record, specification, eventPolicy) {
       const drainedEntry = one('queue-request-drained');
       assert.ok(Number(admitted.ordinal) < Number(admissionReturned.ordinal));
       assert.ok(Number(admitted.ordinal) < Number(startedEntry.ordinal));
+      if (phase === 'created' && startedEntry.detail.item.type === 'MediaBrowser.Controller.Entities.Movies.BoxSet') {
+        const edit = phaseTrace.find(entry => entry.action === 'updated' && Number(entry.detail.updateReason) === 16
+          && key(entry.detail.item.id) === key(admitted.detail.itemId));
+        assert.ok(edit && Number(edit.ordinal) < Number(startedEntry.ordinal),
+          'The initial queued collection refresh must read after the committed membership edit.');
+      }
       assert.ok(Number(startedEntry.ordinal) < Number(completedEntry.ordinal));
       assert.ok(Number(completedEntry.ordinal) < Number(drainedEntry.ordinal));
       assert.ok(Number(drainedEntry.ordinal) < Number(phaseTrace[drain].ordinal));

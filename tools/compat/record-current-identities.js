@@ -121,6 +121,18 @@ export async function recordCurrentIdentities(kind, mode, destination, { port, p
       assert.equal(account.status, 200);
       assert.equal(idKey(account.bodyJson.Id), idKey(current.userId));
       stages.before = await snapshot();
+      const first = input.fixture.cases[0];
+      if ((first.parallelQueries?.length ?? first.parallelRequests ?? 1) > 1) {
+        // Initialize the cold MVC binder before racing the actual name lookups.
+        const route = identitySideEffectRoute(input, first, 'Limit=1');
+        const response = await request(route);
+        const after = await snapshot();
+        await writeFile(path.join(root, 'binding-warmup.json'), json({ route, response, after }), { flag: 'wx' });
+        assert.equal(response.status, 200);
+        const movie = input.fixture.items.find(item => item.key === 'movie');
+        assert.deepEqual(response.bodyJson.Items.map(item => idKey(item.Id)), [idKey(movie.id)]);
+        assert.deepEqual(after, stages.before);
+      }
       for (const testCase of input.fixture.cases) {
         const queries = testCase.parallelQueries ?? Array.from({ length: testCase.parallelRequests ?? 1 }, () => testCase.query);
         const responses = await Promise.all(queries.map(async (query, index) => {

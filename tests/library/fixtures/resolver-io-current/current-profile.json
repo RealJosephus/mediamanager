@@ -54,8 +54,8 @@
     },
     {
       "filename": "capture.js",
-      "bytes": 6592,
-      "sha256": "7af5fd91915e014364a1c2d13cc67e83593bda5a2da3919229c9c587e42146ad",
+      "bytes": 6687,
+      "sha256": "f675da05d19692eaa43fc97c3a7feb91340f254cc7cc5fcdd3f6ae019efd182f",
       "role": "current-isolated-resolver-input"
     },
     {

@@ -14,6 +14,7 @@ import { describeFile } from '../../../../tools/validation/inventory.js';
 import { assertValidationOutputChild, validationExecutable, validationOutputRoot } from '../../../../tools/validation/paths.js';
 import { startMovieMediaProxy } from './media-proxy.js';
 import { prepareFrozenVideo } from '../../../helpers/frozen-av.js';
+import { acquireTestResource } from '../../../helpers/test-resource-lease.js';
 
 export const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 export const json = value => JSON.stringify(value, (_, entry) => typeof entry === 'bigint' ? JSON.rawJSON(entry.toString()) : entry, 2) + '\n';
@@ -61,13 +62,17 @@ export async function captureMovieGlobal({ signal } = {}) {
   assertValidationOutputChild(root); await mkdir(root, { recursive: true });
   const report = { schemaVersion: 1, captures: [], releaseAcceptance: false,
     historicalEvidenceReplaced: false, preparationIsBusinessOperation: false };
-  let supplied, build, bound, proxy, failure, closing;
+  let supplied, build, bound, proxy, proxyLease, failure, closing, closingProxy;
   const save = () => writeFile(path.join(root, 'capture.json'), json(report));
+  const closeProxy = () => closingProxy ??= (async () => {
+    await proxy?.close();
+    if (proxy) assert.equal(proxy.report.closed, true);
+    await proxyLease?.release();
+    if (proxy) assert.deepEqual(proxy.report.errors, []);
+  })();
   const finish = () => closing ??= (async () => {
-    try {
-      await proxy?.close();
-      if (proxy) { assert.equal(proxy.report.closed, true); assert.deepEqual(proxy.report.errors, []); }
-    } catch (error) { failure ??= error; report.proxyCleanupFailure = { name: error.name, message: error.message, stack: error.stack }; }
+    try { await closeProxy(); }
+    catch (error) { failure ??= error; report.proxyCleanupFailure = { name: error.name, message: error.message, stack: error.stack }; }
     try {
       if (supplied) {
         const after = await currentNativeSqliteInputs();
@@ -150,6 +155,7 @@ export async function captureMovieGlobal({ signal } = {}) {
     await writeFile(boundFile, boundBytes, { flag: 'wx' });
     report.boundInput = await describeFile(boundFile);
     for (const filename of [databaseFile, mediaFile, boundFile]) await chmod(filename, 0o444);
+    proxyLease = await acquireTestResource('native-media-5244', { signal });
     proxy = await startMovieMediaProxy({ root, specification, media: bound.media });
     report.mediaProxy = proxy.report;
     const observations = [];
@@ -195,6 +201,8 @@ export async function captureMovieGlobal({ signal } = {}) {
       assert.ok(requests.length > 0, 'The designated native media proxy must serve actual business media copies.');
       assert.equal(requests.every(entry => [200, 206].includes(entry.status) && entry.fileSha256 === bound.media.sha256), true);
     }
+    await closeProxy();
+    await save();
     return { root, bound, first: observations[0], repeat: observations[1], report, finish };
   } catch (error) { failure = error; await finish(); throw error; }
 }

@@ -19,7 +19,8 @@ validateFixture(fixture);
 test('named detail HTTP creation and complete persistence match current native lifecycles', {
   skip: !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE || !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000,
 }, nativeCallback(async t => {
-  const { http, stages, caseStages, root, nativeServerId } = await currentUserViewScenario('named-item-lifecycle-http', bytes, { signal: t.signal });
+  const { http, stages, readCaseStages, root, nativeServerId } = await currentUserViewScenario('named-item-lifecycle-http', bytes, { signal: t.signal });
+  const caseStages = await readCaseStages();
   assert.equal(http.records.length, 26); assert.equal(caseStages.length, 26);
   const body = name => http.records.find(record => record.name === name)?.response.bodyJson;
   const originals = new Set(stages.before.database.baseItems.map(row => idKey(row.Id)));

@@ -11,7 +11,10 @@ import { recordGenreFilters } from '../../tools/compat/record-genre-filters.js';
 import { recordAlbumFilters } from '../../tools/compat/record-album-filters.js';
 import { loadCurrentByNameScenario, compareCurrentByNameCandidate } from '../helpers/current-byname-filter-scenario.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({
+  enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE),
+  port: 21200,
+});
 
 const inputs = {
   artist: await readFile(new URL('./fixtures/current-byname-filters/artist-input.json', import.meta.url)),
@@ -26,12 +29,12 @@ const counts = { artist: [49, 95], studio: [34, 68], genre: [34, 68], album: [59
 
 for (const kind of ['artist', 'studio', 'genre', 'album']) test(`postgres: current native ${kind} filter requests and mutations`, {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
-}, nativeCallback(async t => {
+}, nativeCallback(async (t, port) => {
   assert.equal(createHash('sha256').update(inputs[kind]).digest('hex'), pins[`${kind}-input.json`]);
   if (kind === 'studio') assert.equal(createHash('sha256').update(studioExpectations).digest('hex'), pins['studio-expected.json']);
   const output = path.join(validationOutputRoot(), `current-${kind}-filters-${randomUUID()}`);
   const interval = { startedAt: new Date().toISOString() };
-  await recorders[kind](output, 19000, 'main');
+  await recorders[kind](output, port, 'main');
   interval.finishedAt = new Date().toISOString();
   const scenario = await loadCurrentByNameScenario(kind, output, inputs[kind], interval);
   assert.equal(scenario.fixture.cases.length, counts[kind][0]);

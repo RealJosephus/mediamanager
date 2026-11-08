@@ -9,15 +9,16 @@ import { recordItemFilterCandidate, validateFixture } from './item-filter-http-s
 import { currentUserViewScenario, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
 import { projectItemBody } from '../helpers/http-body-projection.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE), port: 21011 });
 const bytes = await readFile(new URL('./fixtures/year-detail-http/input.json', import.meta.url));
 const fixture = JSON.parse(bytes);
 validateFixture(fixture);
 
 test('Year detail HTTP, by-name persistence and user DTOs match the designated Native lifecycle', {
   skip: !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE || !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000,
-}, nativeCallback(async t => {
-  const { http, stages, caseStages, root, nativeServerId } = await currentUserViewScenario('year-detail-http', bytes, { signal: t.signal });
+}, nativeCallback(async (t, port) => {
+  const { http, stages, readCaseStages, root, nativeServerId } = await currentUserViewScenario('year-detail-http', bytes, { signal: t.signal, port });
+  const caseStages = await readCaseStages();
   assert.equal(http.records.length, 21); assert.equal(caseStages.length, 21);
   const response = name => http.records.find(record => record.name === name).response;
   const originalNative = new Set(stages.before.database.baseItems.map(row => idKey(row.Id)));

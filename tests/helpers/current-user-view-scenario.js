@@ -4,6 +4,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { getNewItemId } from '../../src/core/identity.js';
 import { idKey } from '../../src/library/records.js';
+import { describeFile } from '../../tools/validation/inventory.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { recordUserViewHttp } from '../../tools/compat/record-user-view-http.js';
 import { createFixtureIdentityProjector } from './fixture-identity-projection.js';
@@ -14,15 +15,16 @@ const namedViewId = (user, type) => idKey(getNewItemId(`38_namedview_${idKey(use
   'MediaBrowser.Controller.Entities.UserView', { programDataPath: 'Z:\\OracleUserViews' }));
 
 /** Rebind only observed instance identities; Library A and all synthetic media stay literal. */
-export async function currentUserViewScenario(scenario, fixtureBytes, { signal } = {}) {
+export async function currentUserViewScenario(scenario, fixtureBytes, { signal, port = 19000 } = {}) {
   signal?.throwIfAborted();
   const root = path.join(validationOutputRoot(), `${scenario}-${randomUUID()}`);
-  await recordUserViewHttp(scenario, root, 19000);
+  await recordUserViewHttp(scenario, root, port);
   const load = async name => JSON.parse(await readFile(path.join(root, name), 'utf8'));
   const provenance = await load('provenance.json');
   for (const artifact of provenance.artifacts) {
     assert.equal(path.basename(artifact.path), artifact.path);
-    assert.equal(digest(await readFile(path.join(root, artifact.path))), artifact.sha256);
+    const actual = await describeFile(path.join(root, artifact.path));
+    assert.equal(actual.sha256, artifact.sha256);
   }
   const cleanup = await load('private-cleanup.json');
   assert.equal(cleanup.privateInstanceRemoved, true);
@@ -62,11 +64,15 @@ export async function currentUserViewScenario(scenario, fixtureBytes, { signal }
   }
   const projectedStages = Object.fromEntries(Object.entries(stages).map(([name, value]) => [name,
     ['before', 'afterReads', 'afterShutdown'].includes(name) ? project.snapshot(value) : value]));
-  const caseStages = (await load('case-stages.json')).map(stage => ({ ...stage,
-    ...(stage.before ? { before: project.snapshot(stage.before) } : {}),
-    ...(stage.after ? { after: project.snapshot(stage.after) } : {}),
-  }));
-  const result = { root, http, stages: projectedStages, caseStages, summary,
+  const readCaseStages = async () => {
+    const bytes = await readFile(path.join(root, 'case-stages.json'));
+    assert.equal(digest(bytes), provenance.artifacts.find(artifact => artifact.path === 'case-stages.json')?.sha256);
+    return JSON.parse(bytes.toString('utf8')).map(stage => ({ ...stage,
+      ...(stage.before ? { before: project.snapshot(stage.before) } : {}),
+      ...(stage.after ? { after: project.snapshot(stage.after) } : {}),
+    }));
+  };
+  const result = { root, http, stages: projectedStages, readCaseStages, summary,
     nativeServerId: provenance.preparation.nativeServerId };
   const inputRoot = fixture.items.find(item => item.key === 'libraryA');
   assert.equal(fixture.rootId, inputRoot.id);

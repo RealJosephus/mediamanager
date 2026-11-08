@@ -12,7 +12,7 @@ import { projectItemBody } from '../helpers/http-body-projection.js';
 import { recordItemFilterCandidate, validateFixture } from './item-filter-http-scenario.js';
 
 const enabled = Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE);
-const nativeCallback = declareNativeHttpTestFile({ enabled });
+const nativeCallback = declareNativeHttpTestFile({ enabled, port: 21012 });
 const bytes = await readFile(new URL('./fixtures/year-list-http/input.json', import.meta.url));
 const fixture = JSON.parse(bytes);
 validateFixture(fixture);
@@ -27,24 +27,19 @@ const years = database => database.baseItems.filter(row => row.Type === yearType
 
 test('Years and CollectionFolder Items HTTP match Native sources, full DTOs, windows and complete committed state', {
   skip: !enabled, timeout: 300000,
-}, nativeCallback(async t => {
-  const { http, stages, caseStages, root, nativeServerId } = await currentUserViewScenario('year-list-http', bytes, { signal: t.signal });
+}, nativeCallback(async (t, port) => {
+  const { http, stages, readCaseStages, root, nativeServerId } = await currentUserViewScenario('year-list-http', bytes, { signal: t.signal, port });
   const nativePolicy = JSON.parse(await readFile(path.join(root, 'provenance.json'), 'utf8')).preparation.initialPolicy;
   assert.equal(typeof nativePolicy.EnableContentDeletion, 'boolean');
   assert.ok(Array.isArray(nativePolicy.EnableContentDeletionFromFolders));
-  assert.equal(http.records.length, 66); assert.equal(caseStages.length, 66);
+  assert.equal(http.records.length, 66);
   assert.ok(http.records.slice(0, 53).every(record => record.route.startsWith('/Years?')));
   const nativeResponse = (name, endpoint = 'items') => http.records.find(record => record.name === name && record.endpoint === endpoint).response;
-  const nativeStage = (name, endpoint = 'items') => caseStages.find(stage => stage.name === name && stage.endpoint === endpoint);
   const initial = new Set(stages.before.database.baseItems.map(row => idKey(row.Id)));
   const nativeCreated = stages.afterReads.database.baseItems.filter(row => !initial.has(idKey(row.Id)));
   assert.ok(nativeCreated.every(row => row.Type === yearType));
-  assert.deepEqual(nativeStage('user sort rejects before creating years').after.database.baseItems, stages.before.database.baseItems);
-  const cold = nativeStage('cold zero limit creates every positive year');
   assert.deepEqual(nativeResponse('cold zero limit creates every positive year').bodyJson.Items, []);
   assert.equal(nativeResponse('cold zero limit creates every positive year').bodyJson.TotalRecordCount, 130);
-  assert.deepEqual(years(cold.after.database).filter(row => !initial.has(idKey(row.Id))).map(row => row.Name).sort(),
-    Array.from({ length: 130 }, (_, index) => String(1900 + index)));
   const all = nativeResponse('direct API movies all').bodyJson;
   assert.equal(all.TotalRecordCount, 130); assert.equal(all.Items.length, 130);
   assert.deepEqual(all.Items.map(item => item.Name), Array.from({ length: 130 }, (_, index) => String(1900 + index)));
@@ -63,9 +58,6 @@ test('Years and CollectionFolder Items HTTP match Native sources, full DTOs, win
   assert.ok(nativeResponse('ordinary view source applies collection grouping').bodyJson.Items.some(item => item.Name === '2181'));
   assert.deepEqual(nativeResponse('ordinary view source restores ungrouped children').bodyJson, ordinary);
   assert.ok(!nativeCreated.some(row => row.Name === '2200'));
-  const failedAfterRandom = nativeStage('user sort after random retains created prefix');
-  assert.ok(!years(failedAfterRandom.before.database).some(row => row.Name === '2199'));
-  assert.ok(years(failedAfterRandom.after.database).some(row => row.Name === '2199'));
   for (const item of nativeResponse('full DTO with item counts stays untagged').bodyJson.Items) {
     for (const field of ['ChildCount', 'MovieCount', 'SeriesCount', 'EpisodeCount', 'SongCount', 'AlbumCount', 'ArtistCount']) assert.ok(!Object.hasOwn(item, field), field);
     assert.equal(item.CanDelete, false);
@@ -188,6 +180,18 @@ test('Years and CollectionFolder Items HTTP match Native sources, full DTOs, win
     },
   });
   await writeFile(path.join(root, 'postgres.json'), json(actual), { flag: 'wx' });
+  // Keep the complete Native case matrix off the heap while the cold Node
+  // request is running. Its original bytes are verified again before comparing.
+  const caseStages = await readCaseStages();
+  assert.equal(caseStages.length, 66);
+  const nativeStage = (name, endpoint = 'items') => caseStages.find(stage => stage.name === name && stage.endpoint === endpoint);
+  assert.deepEqual(nativeStage('user sort rejects before creating years').after.database.baseItems, stages.before.database.baseItems);
+  const cold = nativeStage('cold zero limit creates every positive year');
+  assert.deepEqual(years(cold.after.database).filter(row => !initial.has(idKey(row.Id))).map(row => row.Name).sort(),
+    Array.from({ length: 130 }, (_, index) => String(1900 + index)));
+  const failedAfterRandom = nativeStage('user sort after random retains created prefix');
+  assert.ok(!years(failedAfterRandom.before.database).some(row => row.Name === '2199'));
+  assert.ok(years(failedAfterRandom.after.database).some(row => row.Name === '2199'));
   for (const testCase of fixture.cases.filter(item => item.policy)) {
     const policy = actual.cases.find(item => item.name === testCase.name).policyReadback;
     assert.ok(policy, testCase.name);

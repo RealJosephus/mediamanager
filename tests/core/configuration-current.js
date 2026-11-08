@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
-import { recordOracle } from '../../tools/validation/oracle.js';
+import { compileOracle } from '../../tools/validation/oracle.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
@@ -45,9 +45,10 @@ async function capture() {
       report.sourceBindings.push({ relativePath: relative, source });
     }
     const observations = [];
+    const oracle = await compileOracle({ project: configurationProject, output: path.join(output, 'build') });
     for (const label of ['initial', 'repeat']) {
       const directory = path.join(output, label);
-      const record = await recordOracle({ project: configurationProject, output: directory,
+      const record = await oracle.record({ output: directory,
         args: [fileURLToPath(inputFile), '{output}/native.json'] });
       const filename = path.join(directory, 'native.json'), bytes = await readFile(filename);
       const native = parseLosslessJson(bytes.toString('utf8'));

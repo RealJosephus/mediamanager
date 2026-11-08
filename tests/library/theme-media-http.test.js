@@ -9,7 +9,10 @@ import { recordItemFilterCandidate, validateFixture } from './item-filter-http-s
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
 import { projectItemBody } from '../helpers/http-body-projection.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({
+  enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE),
+  port: 21005,
+});
 
 const fixtureBytes = await readFile(new URL('./fixtures/theme-media-http/input.json', import.meta.url), 'utf8');
 const fixture = JSON.parse(fixtureBytes);
@@ -26,8 +29,8 @@ const normalize = (value, serverId, status) => {
 
 test('theme media APIs match 138 current native full responses with inherited owners, versions and images', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
-}, nativeCallback(async t => {
-  const { http, stages, summary, root, nativeServerId } = await currentUserViewScenario('theme-media-http', fixtureBytes, { signal: t.signal });
+}, nativeCallback(async (t, port) => {
+  const { http, stages, summary, root, nativeServerId } = await currentUserViewScenario('theme-media-http', fixtureBytes, { signal: t.signal, port });
   const body = name => http.records.find(record => record.name === name)?.response.bodyJson;
   const main = body('direct main ThemeMedia');
   assert.ok(main.ThemeSongsResult.Items.length >= 5);

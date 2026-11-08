@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { describeFile, sha256 } from './inventory.js';
 import { assertIsolatedOutput, repositoryRoot, validationExecutable } from './paths.js';
 import { observeExecutionPhase } from './execution-diagnostics.js';
+import { prepareNativeApplicationData } from './native-application-data.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
 
@@ -142,13 +143,17 @@ export async function compileOracle({ project, output, environment = process.env
     return { sourceFilesUnchanged: true, isolatedSourcesUnchanged: true, executableUnchanged: true,
       buildReceipt: receipt, artifactsSha256: currentArtifacts.entriesSha256 };
   };
-  return { buildRecord: structuredClone(buildRecord), async record({ output, args = [], processTimeoutMs = 120000 }) {
+  return { buildRecord: structuredClone(buildRecord), async record({ output, args = [], processTimeoutMs = 120000, isolateApplicationData = false }) {
     validateProcessTimeout(processTimeoutMs);
     output = path.resolve(repositoryRoot, output);
     assertIsolatedOutput(output, environment);
     await mkdir(path.dirname(output), { recursive: true }); await mkdir(output);
+    const applicationData = isolateApplicationData ? await prepareNativeApplicationData(output) : null;
+    const executionContext = applicationData
+      ? { ...context, environment: { ...environment, ...applicationData.runtimeEnvironment } } : context;
     const before = await fresh();
-    const record = await executeOracle(context, { output, args, processTimeoutMs });
+    const record = await executeOracle(executionContext, { output, args, processTimeoutMs });
+    if (applicationData) record.applicationData = applicationData;
     record.executionKind = 'prepared-build';
     record.build = { ...record.build, executed: false, receipt };
     record.verification = { before };

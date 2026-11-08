@@ -12,7 +12,7 @@ import { projectItemBody } from '../helpers/http-body-projection.js';
 
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE), port: 21009 });
 
 const fixtureBytes = await readFile(new URL('./fixtures/latest-media/input.json', import.meta.url));
 const fixture = JSON.parse(fixtureBytes);
@@ -29,8 +29,9 @@ const cases = candidateCasesFromTrackedInput(fixture);
 for (const dialect of dialects) {
   test(`${dialect}: latest media matches 130 current native full HTTP array responses`, {
     skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
-  }, nativeCallback(async t => {
-    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('latest-media', fixtureBytes, { signal: t.signal });
+  }, nativeCallback(async (t, port) => {
+    const { http, stages, readCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('latest-media', fixtureBytes, { signal: t.signal, port });
+    const nativeCaseStages = await readCaseStages();
 
     const actual = await recordItemFilterCandidate({
       dialect, fixture: { ...fixture, cases }, connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,

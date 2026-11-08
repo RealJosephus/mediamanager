@@ -90,7 +90,6 @@ test('Lyrics GET matches actual Native parsing/stream selection through Local an
       'Emby.Server.Implementations/ApplicationHost.cs',
       'Emby.Server.Implementations/Library/MediaSourceManager.cs', 'MediaBrowser.Model/Lyrics/LyricLine.cs', 'MediaBrowser.Model/Lyrics/LyricLineCue.cs',
       'Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs', 'Jellyfin.Api/Middleware/ExceptionMiddleware.cs']);
-    resource = await acquireTestResource('native-media-5244', { signal: t.signal });
     await mkdir(mediaRoot); const metadataPath = path.join(programDataPath, 'metadata'), input = lyricInput(mediaRoot, { metadataPath });
     for (const file of input.files) {
       await mkdir(path.dirname(file.filename), { recursive: true });
@@ -98,7 +97,6 @@ test('Lyrics GET matches actual Native parsing/stream selection through Local an
     }
     report.originalSources = input.files.map(file => ({ name: file.name, filename: file.filename, identity: file.identity, sha256: hash(Buffer.from(file.base64, 'base64')),
       proxyContentType: file.contentType ?? 'text/plain', sourceStatus: file.sourceStatus ?? 200 }));
-    source = await lyricSource(input.files);
     database = await createPostgresTestDatabase(null, 'lyrics_http'); await start();
     const definition = runtime.storage.configuration();
     definition.instances.push({ id: 'lyrics-local', type: 'local', config: { root: mediaRoot, writable: false } }, { id: 'lyrics-http', type: 'http', config: {} });
@@ -138,6 +136,8 @@ test('Lyrics GET matches actual Native parsing/stream selection through Local an
     Object.assign(input, { userId: idKey(users.admin.Id), readerId: idKey(users.regular.Id), mediaRoot, metadataPath, dataPath: path.join(programDataPath, 'data'),
       databaseRows: [{ name: 'BaseItems', rows: itemRows }, { name: 'MediaStreamInfos', rows: [...streamRows].reverse() }] });
     const inputFile = path.join(output, 'input.json'), inputBytes = Buffer.from(stringifyNativeJson(input)); await writeFile(inputFile, inputBytes);
+    resource = await acquireTestResource('native-media-5244', { signal: t.signal });
+    source = await lyricSource(input.files);
     const receipt = await recordOracle({ project: 'tests/http/fixtures/lyrics-current/Oracle.csproj', output: path.join(output, 'native'),
       environment: current.environment, args: [inputFile, '{output}/native.json', path.join(output, 'native-data'), current.sourceDatabase] });
     report.oracle = receipt; assert.equal(receipt.passed, true);

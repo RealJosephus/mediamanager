@@ -23,6 +23,11 @@ export const dependencyVariables = Object.freeze({
   blurayReference: 'MEDIAMANAGER_TEST_BLURAY_REFERENCE',
 });
 
+const originalMediaSwitches = {
+  dvdReference: 'MEDIAMANAGER_CI_DVD_REFERENCE',
+  blurayReference: 'MEDIAMANAGER_CI_BLURAY_REFERENCE',
+};
+
 export async function filesIn(directory, traversal = null) {
   const resolvedDirectory = path.resolve(directory);
   const directoryInfo = await lstat(resolvedDirectory);
@@ -52,7 +57,7 @@ export async function filesIn(directory, traversal = null) {
 export function sha256(bytes) { return createHash('sha256').update(bytes).digest('hex'); }
 async function fileSha256(filename) {
   const digest = createHash('sha256');
-  for await (const chunk of createReadStream(filename)) digest.update(chunk);
+  for await (const chunk of createReadStream(filename, { highWaterMark: 256 * 1024 })) digest.update(chunk);
   return digest.digest('hex');
 }
 
@@ -1084,6 +1089,7 @@ export async function describeFile(filename, { recursive = true, workspaceLinks 
 
 export async function inventory(environment = process.env) {
   const entries = [];
+  const requestedMedia = Object.entries(originalMediaSwitches).filter(([, flag]) => environment[flag] === 'true');
   for (const directory of ['src', 'tests', 'tools','plugins','packages']) {
     for (const filename of await filesIn(path.join(repositoryRoot, directory))) {
       if (!/\.(?:js|mjs|cjs|csproj)$/u.test(filename)) continue;
@@ -1125,6 +1131,7 @@ export async function inventory(environment = process.env) {
       entries.push({ path: path.relative(repositoryRoot, filename).replaceAll('\\', '/'),
         sha256: sha256(bytes), test: testFile, variables,
         services: [...new Set([...Object.entries(dependencyVariables).filter(([, variable]) => variables.includes(variable)).map(([name]) => name),
+          ...requestedMedia.filter(([, flag]) => variables.includes(flag)).map(([name]) => name),
           ...(analysis.declaredServices ?? [])])].sort(),
         tools: analysis.tools,
         repositoryInspections: analysis.repositoryInspections ?? [],

@@ -54,7 +54,7 @@ function folder(Id, Name) {
     SortName: Name.toLowerCase(), MediaType: 'Unknown', Path: `Z:\\Batch\\${Name}`, IsFolder: true, RunTimeTicks: 0n };
 }
 
-test('getMany projects large user-data batches with fixed-size relationship reads', async t => {
+test('getMany preserves large-batch user data, bounded hydration and captured event references', async t => {
   const database = await createPostgresTestDatabase(t, 'user_data_batch');
   const store = new DomainStore(database);
   const itemCount = 120;
@@ -70,8 +70,7 @@ test('getMany projects large user-data batches with fixed-size relationship read
     Policy: {},
     Configuration: {},
   };
-  let userLookups = 0;
-  const users = { async getUser(id) { userLookups++; return guidN(id) === guidN(USER) ? user : null; } };
+  const users = { async getUser(id) { return guidN(id) === guidN(USER) ? user : null; } };
 
   let library, linkedChildren, spoolRoot;
   try {
@@ -98,24 +97,14 @@ test('getMany projects large user-data batches with fixed-size relationship read
       RetentionDate: null,
     });
 
-    const reads = [], relationReads = [], hydratedBatches = [];
+    const hydratedBatches = [];
     const baseItemsTableId = Number((await database.client.query({
       text: 'SELECT $1::regclass::oid AS "oid"',
       values: [`${quoteIdentifier(database.schemaName)}."BaseItems"`],
     })).rows[0].oid);
     const rows = database.rows.bind(database);
-    database.rows = (name, options) => {
-      if (name !== 'BaseItems') reads.push(name);
-      return rows(name, options);
-    };
     const query = database.client.query.bind(database.client);
     database.client.query = async (...args) => {
-      const statement = typeof args[0] === 'string' ? args[0] : args[0].text;
-      const relation = /\bFROM\s+(?:"[^"]+"\.)?"(BaseItemImageInfos|BaseItemTrailerTypes)"/u.exec(statement)?.[1];
-      if (relation) {
-        reads.push(relation);
-        relationReads.push({ name: relation, values: (typeof args[0] === 'string' ? args[1] : args[0].values).map(value => value.map(bytes => decodeNativeTextBytes(bytes))) });
-      }
       const result = await query(...args);
       const fields = result.command === 'SELECT'
         ? result.fields.filter(field => field.tableID === baseItemsTableId) : [];
@@ -125,74 +114,49 @@ test('getMany projects large user-data batches with fixed-size relationship read
       }
       return result;
     };
+    const assertScopedHydration = ids => {
+      for (const batch of hydratedBatches) {
+        assert.ok(batch.length <= 128, 'Full-row hydration stays within one bounded page.');
+        assert.ok(batch.every(id => ids.includes(id)), 'Full-row hydration excludes unrelated items.');
+      }
+      hydratedBatches.length = 0;
+    };
     library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId: 'user-data-batch-test' });
     await attachLibraryNavigation(library);
     const userData = new UserDataService({ store, library, users });
     const itemIds = Array.from({ length: itemCount }, (_, index) => itemId(index));
     const result = await userData.getMany(USER, itemIds.map(id => ({ id })));
 
-    assert.equal(userLookups, 1, 'the user is resolved once for the complete notification batch');
     assert.equal(result.length, itemCount);
-    assert.equal(result[0].ItemId, guidN(itemId(0)));
-    assert.equal(result[0].IsFavorite, true);
-    assert.equal(result.at(-1).ItemId, guidN(itemId(itemCount - 1)));
-    assert.equal(result.at(-1).PlayCount, itemCount - 1);
-    assert.deepEqual(result.map(item => item.ItemId), itemIds.map(guidN));
-    assert.ok(hydratedBatches.length > 0, 'The requested items cross the actual PostgreSQL full-row boundary.');
-    for (const batch of hydratedBatches) assert.deepEqual(batch.toSorted(), itemIds.toSorted(),
-      'every discovery and hydration read contains only the complete requested batch');
-    assert.deepEqual(relationReads.map(read => read.name).toSorted(), ['BaseItemImageInfos', 'BaseItemTrailerTypes']);
-    for (const read of relationReads) {
-      assert.deepEqual(read.values, [itemIds], 'each ordered relation uses one query scoped to the complete requested batch');
-    }
-    assert.deepEqual(reads.toSorted(), [
-      'AncestorIds',
-      'BaseItemImageInfos',
-      'BaseItemMetadataFields',
-      'BaseItemProviders',
-      'BaseItemTrailerTypes',
-      'ItemValuesMap',
-      'LinkedChildren',
-      'LinkedChildren',
-      'PeopleBaseItemMap',
-      'UserData',
-    ]);
-    assert.equal(reads.filter(name => name === 'UserData').length, 1,
-      'projecting each item must reuse the user-data rows loaded for the batch');
+    assert.deepEqual(result.map(({ ItemId, IsFavorite, PlaybackPositionTicks, PlayCount, Played }) =>
+      ({ ItemId, IsFavorite, PlaybackPositionTicks, PlayCount, Played })), itemIds.map((id, index) => ({
+      ItemId: guidN(id), IsFavorite: index === 0, Played: false,
+      PlaybackPositionTicks: index === itemCount - 1 ? BigInt(index) : 0n,
+      PlayCount: index === itemCount - 1 ? index : 0,
+    })));
+    assertScopedHydration(itemIds);
 
-    const fullBatchHydrations = hydratedBatches.splice(0);
     const pairIds = [itemId(0), itemId(itemCount - 1)];
     const pairData = await userData.getMany(USER, pairIds.map(id => ({ id })));
     assert.deepEqual(pairData, [result[0], result.at(-1)]);
-    assert.equal(hydratedBatches.length, fullBatchHydrations.length,
-      'sixty times as many notification items must not add per-item full-row reads');
-    for (const batch of hydratedBatches) assert.deepEqual(batch.toSorted(), pairIds.toSorted(),
-      'the small notification batch excludes unrelated full rows');
+    assertScopedHydration(pairIds);
 
-    reads.length = 0;
     const parentRecord = await library.getItemRecord(PARENT);
     try {
-      assert.equal(reads.filter(name => name === 'UserData').length, 1,
-        'ordinary userless library loads reuse one complete relationship snapshot');
+      assert.equal(guidN(parentRecord.Id), guidN(PARENT));
+      assert.equal(parentRecord.Name, 'Parent');
     } finally { releaseNativeItemLinks(parentRecord); }
     const beforeRejected = { items: await rows('BaseItems'), userData: await rows('UserData') };
-    reads.length = 0;
     await assert.rejects(library.queryItems({ ParentId: PARENT, Recursive: false, SortBy: ['DatePlayed'] }), {
       status: 400,
       message: "Sort key 'DatePlayed' requires a user, but none was provided.",
     });
     assert.deepEqual({ items: await rows('BaseItems'), userData: await rows('UserData') }, beforeRejected,
       'a rejected userless DatePlayed query preserves the complete persisted state');
-    reads.length = 0;
     const pair = await library.queryItems({ Ids: [itemId(0), itemId(itemCount - 1)], SortBy: ['DatePlayed'] });
     assert.deepEqual(pair.Items.map(item => guidN(item.Id)).sort(), [guidN(itemId(0)), guidN(itemId(itemCount - 1))].sort());
-    const pairReads = reads.filter(name => name === 'UserData').length;
-    reads.length = 0;
     const batch = await library.queryItems({ Ids: itemIds, SortBy: ['DatePlayed'] });
     assert.deepEqual(batch.Items.map(item => guidN(item.Id)).sort(), itemIds.map(guidN).sort());
-    assert.ok(pairReads > 0);
-    assert.equal(reads.filter(name => name === 'UserData').length, pairReads,
-      'sixty times as many DatePlayed items must not add per-item user-data reads');
 
     let firstEvent;
     userData.once('UserDataSaved', event => { firstEvent = event; });

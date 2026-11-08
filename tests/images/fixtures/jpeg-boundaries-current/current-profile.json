@@ -30,8 +30,8 @@
     {
       "role": "oracleCapture",
       "filename": "capture.js",
-      "bytes": 9837,
-      "sha256": "82bfe66a0aacd2569b02cfcb9af5fc5d6fccd8788c8aef1f08a47f760cb98fda"
+      "bytes": 9919,
+      "sha256": "0b3977259d75529ecbf68b573141e8f2cfde40067f74ee32bea8ec9a58b573f7"
     },
     {
       "role": "inputProvenance",
