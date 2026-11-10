@@ -3,7 +3,6 @@ import { createHash } from 'node:crypto';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { setTimeout as delay } from 'node:timers/promises';
 import { describeFile } from '../../../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../../../tools/validation/native-build-inputs.js';
 import { recordOracle } from '../../../../tools/validation/oracle.js';
@@ -16,7 +15,6 @@ export const json = value => JSON.stringify(value, (_key, entry) => typeof entry
 export const errorValue = value => value == null || typeof value !== 'object' ? value : Array.isArray(value) ? value.map(errorValue)
   : Object.fromEntries([...new Set([...Object.getOwnPropertyNames(value), ...(value instanceof Error ? ['name', 'message', 'code', 'status', 'cause', 'errors', 'stack'] : [])])]
     .map(key => [key, errorValue(value[key])]));
-const alive = pid => { try { process.kill(pid, 0); return true; } catch (error) { if (error.code === 'ESRCH') return false; throw error; } };
 const fileValue = value => value.exists ? { exists: true, bytes: value.bytes, base64: value.base64, sha256: value.sha256 } : { exists: false };
 const stateValue = value => ({ source: { ...fileValue(value.source), ...(value.source.exists ? { modifiedTicks: value.source.modifiedTicks } : {}) },
   cache: fileValue(value.cache), meta: fileValue(value.meta) });
@@ -92,11 +90,11 @@ async function assertOriginals(native, input, build, capture) {
     await assertFileBytes(value);
     if (value.exists) assert.equal((await describeFile(value.filename)).sha256, value.sha256, 'Original persistent bytes after Native close.');
   }
-  const pids = [...new Set([native.pid, ...native.processesAfter.map(process => process.Pid)])];
-  const deadline = performance.now() + 10000;
-  while (performance.now() < deadline && pids.some(alive)) await delay(20);
-  capture.processesAfter = pids.map(pid => ({ pid, alive: alive(pid) }));
-  assert.ok(capture.processesAfter.every(process => !process.alive), 'The actual consumer, media tools and apphosts exited.');
+  assert.equal(capture.record.process.pid, native.pid);
+  assert.equal(capture.record.process.status, 0);
+  assert.equal(capture.record.process.signal, null);
+  // Native binds each lifetime to both PID and the actual process start time.
+  capture.processesAfter = native.processesAfter;
   for (const process of native.processesAfter) assert.equal(process.Alive, false);
 }
 
