@@ -56,6 +56,8 @@ jobs:
         run: ./tools/ci/fetch-emby-server.ps1
       - name: Supply pinned probe tools for the controlled media library
         shell: pwsh
+        env:
+          MEDIAMANAGER_RELEASE_ASSET_TOKEN: ${{ github.token }}
         run: ./tools/ci/setup-media.ps1
       - name: Capture actual isolated HTTP contracts
         run: node tools/compat/capture-emby-contracts.mjs

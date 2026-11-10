@@ -25,6 +25,7 @@ try {
     // production physical-directory checks and give fixtures a canonical root.
     await fs.appendFile(process.env.GITHUB_ENV, ['TMPDIR', 'TMP', 'TEMP'].map(name => `${name}=${temporary}\n`).join(''));
     record.runner = { platform: process.platform, arch: process.arch, release: os.release(), node: process.version,
+      availableParallelism: os.availableParallelism(), totalMemoryBytes: os.totalmem(),
       temporary,
       image: process.env.ImageOS ?? null, imageVersion: process.env.ImageVersion ?? null,
       commit: process.env.GITHUB_SHA ?? null, runId: process.env.GITHUB_RUN_ID ?? null, attempt: process.env.GITHUB_RUN_ATTEMPT ?? null };

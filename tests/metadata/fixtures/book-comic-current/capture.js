@@ -4,7 +4,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { verifyNativeBuild } from '../../../../tools/validation/native-build-inputs.js';
-import { recordOracle } from '../../../../tools/validation/oracle.js';
+import { compileOracle } from '../../../../tools/validation/oracle.js';
 import { describeFile } from '../../../../tools/validation/inventory.js';
 import { validationOutputRoot, assertValidationOutputChild } from '../../../../tools/validation/paths.js';
 
@@ -74,9 +74,11 @@ async function capture() {
       report.assetBindings.push({ ...asset, actual });
     }
     let first, consumer;
+    const comicOracle = await compileOracle({ project: 'tests/metadata/fixtures/book-comic-current/Oracle.csproj',
+      output: path.join(output, 'native-build') });
     for (const label of ['native-first', 'native-repeat']) {
       const directory = path.join(output, label);
-      const record = await recordOracle({ project: 'tests/metadata/fixtures/book-comic-current/Oracle.csproj', output: directory,
+      const record = await comicOracle.record({ output: directory,
         args: ['{output}/state', fileURLToPath(inputFile),
           fileURLToPath(new URL('../../../images/fixtures/splashscreen/assets/portrait.png', import.meta.url)),
           fileURLToPath(new URL('../../../images/fixtures/splashscreen/assets/portrait.jpg', import.meta.url)),
@@ -102,9 +104,11 @@ async function capture() {
       if (first) assert.deepEqual(functionalNative(native), functionalNative(first), 'Independent Comic captures');
       else first = native;
     }
+    const imageOracle = await compileOracle({ project: 'tests/metadata/fixtures/book-comic-current/image-consumer/Oracle.csproj',
+      output: path.join(output, 'image-build') });
     for (const label of ['image-first', 'image-repeat']) {
       const directory = path.join(output, label);
-      const record = await recordOracle({ project: 'tests/metadata/fixtures/book-comic-current/image-consumer/Oracle.csproj', output: directory,
+      const record = await imageOracle.record({ output: directory,
         args: ['{output}/state', fileURLToPath(new URL('./assets/', import.meta.url)), '{output}/native.json'] });
       const filename = path.join(directory, 'native.json'), observed = JSON.parse(await readFile(filename));
       report.captures.push({ label, record, observation: await describeFile(filename) });

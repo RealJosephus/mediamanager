@@ -12,7 +12,7 @@ import { projectProblemTrace } from '../helpers/http-body-projection.js';
 
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE), port: 21008 });
 
 const fixtureBytes = await readFile(new URL('./fixtures/item-filters-http/input.json', import.meta.url));
 const fixture = JSON.parse(fixtureBytes);
@@ -27,8 +27,9 @@ const cases = candidateCasesFromTrackedInput(fixture);
 for (const dialect of dialects) {
   test(`${dialect}: Filters and Filters2 match 81 current native full HTTP responses`, {
     skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
-  }, nativeCallback(async t => {
-    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot } = await currentUserViewScenario('item-filters-http', fixtureBytes, { signal: t.signal });
+  }, nativeCallback(async (t, port) => {
+    const { http, stages, readCaseStages, summary, root: nativeEvidenceRoot } = await currentUserViewScenario('item-filters-http', fixtureBytes, { signal: t.signal, port });
+    const nativeCaseStages = await readCaseStages();
 
     const body = name => http.records.find(record => record.name === name)?.response.bodyJson;
     const legacy = body('filters library movies');

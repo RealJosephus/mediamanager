@@ -62,6 +62,7 @@ async function collectNativeInstanceInputs(environment) {
   const scripts = [
     [initialization.initializer, fileURLToPath(new URL('../compat/initialize-reference.mjs', import.meta.url))],
     [initialization.nativeProcessInputs, fileURLToPath(new URL('../compat/native-process-inputs.js', import.meta.url))],
+    [initialization.nativeApplicationData, fileURLToPath(new URL('./native-application-data.js', import.meta.url))],
     [seed.preparation, fileURLToPath(new URL('../compat/prepare-media-reference.mjs', import.meta.url))],
   ];
   for (const [descriptor, filename] of scripts) {

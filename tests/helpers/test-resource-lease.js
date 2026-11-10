@@ -13,7 +13,7 @@ function leaseError(code, key, directory, message, owner, cause) {
   });
 }
 
-async function readOwner(key, directory) {
+async function readPublishedOwner(key, directory) {
   let info;
   try { info = await lstat(directory); }
   catch (error) { if (error.code === 'ENOENT') return undefined; throw error; }
@@ -37,6 +37,21 @@ async function readOwner(key, directory) {
     throw leaseError('test-resource-owner-invalid', key, directory, 'The published test resource owner is invalid.');
   }
   return owner;
+}
+
+async function readOwner(key, directory, signal) {
+  const deadline = performance.now() + publicationMilliseconds;
+  for (;;) {
+    signal?.throwIfAborted();
+    try { return await readPublishedOwner(key, directory); }
+    catch (error) {
+      // Windows may deny open while another process unlinks the published file.
+      // Recheck the physical lease without granting admission on a read error.
+      if (process.platform !== 'win32' || error.code !== 'test-resource-owner-invalid'
+        || error.cause?.code !== 'EPERM' || error.cause.syscall !== 'open' || performance.now() >= deadline) throw error;
+      await delay(pollMilliseconds, undefined, { signal });
+    }
+  }
 }
 
 function ownerIsAlive(pid) {
@@ -110,7 +125,7 @@ export async function acquireTestResource(key, {
       if (signal?.aborted) { await release(); signal.throwIfAborted(); }
       return { resource: key, directory, owner: { ...owner }, release };
     }
-    const owner = await readOwner(key, directory);
+    const owner = await readOwner(key, directory, signal);
     if (owner === undefined) { unpublishedSince = undefined; continue; }
     if (owner === null) {
       unpublishedSince ??= performance.now();
@@ -123,7 +138,7 @@ export async function acquireTestResource(key, {
       if (!ownerIsAlive(owner.pid)) {
         // A normal owner may release and exit between the read and PID probe.
         // Only a still-published identical receipt establishes abandonment.
-        const current = await readOwner(key, directory);
+        const current = await readOwner(key, directory, signal);
         if (current?.token !== owner.token || current.pid !== owner.pid) continue;
         throw leaseError('test-resource-owner-exited', key, directory,
           'The test resource owner exited without releasing its lease; its receipt was preserved.', owner);

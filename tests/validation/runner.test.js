@@ -17,6 +17,29 @@ import { describeFile } from '../../tools/validation/inventory.js';
 
 const complete = '# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n';
 
+test('explicit original disc requests require the supplied media at the real consumers', async () => {
+  const consumers = [
+    ['tests/library/real-dvd-native.test.js', 'dvdReference'],
+    ['tests/library/real-bluray-native.test.js', 'blurayReference'],
+    ['tests/library/real-bluray-components.test.js', 'blurayReference'],
+  ];
+  const environment = { ...process.env, MEDIAMANAGER_TEST_DVD_REFERENCE: undefined, MEDIAMANAGER_TEST_BLURAY_REFERENCE: undefined };
+  const compact = await inventory({ ...environment, MEDIAMANAGER_CI_DVD_REFERENCE: 'false', MEDIAMANAGER_CI_BLURAY_REFERENCE: 'false' });
+  const originalEnvironment = { ...environment, MEDIAMANAGER_CI_DVD_REFERENCE: 'true', MEDIAMANAGER_CI_BLURAY_REFERENCE: 'true' };
+  const originals = await inventory(originalEnvironment);
+  const discServices = (dependencies, filename) => [...new Set(dependencyClosure(dependencies, [filename])
+    .flatMap(entry => entry.services).filter(service => service === 'dvdReference' || service === 'blurayReference'))];
+  for (const [filename, service] of consumers) {
+    assert.deepEqual(discServices(compact, filename), [], filename);
+    assert.deepEqual(discServices(originals, filename), [service], filename);
+  }
+  const missing = await preflight(consumers.map(([filename]) => filename), originals, originalEnvironment);
+  assert.equal(missing.ready, false);
+  for (const name of ['dvdReference', 'blurayReference']) {
+    assert.equal(missing.services.find(service => service.name === name)?.available, false, name);
+  }
+});
+
 test('archive tool aliases bind the actual executable and detect changed or missing targets', { timeout: 30000 }, async t => {
   const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'validation-tool-alias-')));
   t.after(() => rm(root, { recursive: true, force: true }));
@@ -100,6 +123,11 @@ test('validation preserves leftover resource evidence and accepts only an absent
 test('full validation cannot be narrowed by paths or inherited dialect selectors', () => {
   assert.throws(() => argumentsFor(['--profile', 'full', '--', 'tests/validation/runner.test.js']),
     /cannot be combined with an explicit test subset/u);
+  assert.equal(argumentsFor(['--profile', 'full', '--full-shard', '5']).fullShard, 5);
+  for (const args of [['--full-shard', '1'], ['--profile', 'full', '--full-shard', '0'],
+    ['--profile', 'full', '--full-shard', '6'], ['--profile', 'full', '--full-shard', '1', '--', 'tests/one.test.js']]) {
+    assert.throws(() => argumentsFor(args));
+  }
   assert.deepEqual(fullProfileNarrowingEnvironment({
     MEDIAMANAGER_TEST_POSTGRES: 'configured',
     MEDIAMANAGER_ARTIST_CONCURRENCY_DIALECT: 'sqlite',

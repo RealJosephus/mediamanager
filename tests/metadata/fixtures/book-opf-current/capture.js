@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 import { verifyNativeBuild } from '../../../../tools/validation/native-build-inputs.js';
-import { recordOracle } from '../../../../tools/validation/oracle.js';
+import { compileOracle } from '../../../../tools/validation/oracle.js';
 import { describeFile } from '../../../../tools/validation/inventory.js';
 import { validationOutputRoot, assertValidationOutputChild } from '../../../../tools/validation/paths.js';
 
@@ -75,9 +75,11 @@ async function capture() {
       for (const entry of group.assets) await assetBytes(name, entry);
     }
     let first;
+    const oracle = await compileOracle({ project: 'tests/metadata/fixtures/book-opf-current/Oracle.csproj',
+      output: path.join(output, 'native-build') });
     for (const label of ['native-first', 'native-repeat']) {
       const directory = path.join(output, label);
-      const record = await recordOracle({ project: 'tests/metadata/fixtures/book-opf-current/Oracle.csproj', output: directory,
+      const record = await oracle.record({ output: directory,
         args: [fileURLToPath(inputFile), '{output}/assets', '{output}/native.json'] });
       const filename = path.join(directory, 'native.json'), bytes = await readFile(filename), native = JSON.parse(bytes);
       report.captures.push({ label, record, observation: await describeFile(filename) });

@@ -9,9 +9,10 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { verifyNativeBuild } from '../validation/native-build-inputs.js';
 import { describeFile } from '../validation/inventory.js';
+import { prepareNativeApplicationData } from '../validation/native-application-data.js';
 import { validationExecutable } from '../validation/paths.js';
 import { assertFreshReferenceOutput, captureReferenceInput } from './reference-inputs.js';
-import { prepareNativeApplicationData, resolveNativeTools, verifyNativeProcessInputs } from './native-process-inputs.js';
+import { resolveNativeTools, verifyNativeProcessInputs } from './native-process-inputs.js';
 
 const [destination, ...extra] = process.argv.slice(2);
 if (!destination || extra.length) throw new Error('Usage: node tools/compat/initialize-reference.mjs NEW_OUTPUT_DIRECTORY (requires the same-run native build environment)');
@@ -22,6 +23,7 @@ assertFreshReferenceOutput(outputRoot, [build.root, ...executables.flatMap(execu
   [executable, ...executable.dispatch].map(identity => path.dirname(identity.filename)))]);
 const initializer = await describeFile(fileURLToPath(import.meta.url));
 const nativeProcessInputs = await describeFile(fileURLToPath(new URL('./native-process-inputs.js', import.meta.url)));
+const nativeApplicationData = await describeFile(fileURLToPath(new URL('../validation/native-application-data.js', import.meta.url)));
 await mkdir(root, { recursive: true });
 for (const name of ['data', 'config', 'cache', 'log']) await mkdir(path.join(root, name));
 const { runtimeEnvironment, subtitleEditDataDirectory } = await prepareNativeApplicationData(root);
@@ -122,7 +124,7 @@ try {
   const database = new SqliteDatabase(filename, { readOnly: true, requireMigrationHistory: true });
   try {
     report = { schemaVersion: 1, createdAt: new Date().toISOString(), root, port, base, initializedFromEmpty: true, credentialsRecorded: false,
-      initializer, nativeProcessInputs, executables, runtimeEnvironment, subtitleEditDataDirectory,
+      initializer, nativeProcessInputs, nativeApplicationData, executables, runtimeEnvironment, subtitleEditDataDirectory,
       build: { root: build.root, identitySha256: build.identitySha256,
         runtimeIdentitySha256: build.runtimeIdentitySha256,
         source: build.receipt.source, commit: build.receipt.commit, runId: build.receipt.runId, runAttempt: build.receipt.runAttempt,

@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describeFile } from '../../../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../../../tools/validation/native-build-inputs.js';
-import { recordOracle } from '../../../../tools/validation/oracle.js';
+import { compileOracle } from '../../../../tools/validation/oracle.js';
 import { nativeSourcePaths } from './input.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
@@ -41,11 +41,13 @@ export async function captureSubtitleText(output, scenarios, candidate, { signal
     const input = path.join(output, 'native-input.json'), bytes = Buffer.from(json({ ...scenarios, candidate }));
     await fs.writeFile(input, bytes, { flag: 'wx' }); report.input = await describeFile(input);
     const executions = [];
+    signal?.throwIfAborted();
+    const oracle = await compileOracle({ project: fileURLToPath(new URL('Oracle.csproj', import.meta.url)),
+      output: path.join(output, 'build') });
     for (const label of ['initial', 'repeat']) {
       signal?.throwIfAborted();
       const directory = path.join(output, label);
-      const record = await recordOracle({ project: fileURLToPath(new URL('Oracle.csproj', import.meta.url)), output: directory,
-        args: [input, '{output}/native.json'] });
+      const record = await oracle.record({ output: directory, args: [input, '{output}/native.json'], isolateApplicationData: true });
       const filename = path.join(directory, 'native.json'), native = JSON.parse(await fs.readFile(filename));
       report.captures.push({ label, record, observation: await describeFile(filename), pid: native.pid, processAliveAfter: alive(native.pid) });
       assert.equal(native.actualExecution, true); assert.equal(native.inputSha256, hash(bytes));

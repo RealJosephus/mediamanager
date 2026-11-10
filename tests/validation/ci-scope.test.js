@@ -7,11 +7,12 @@ import { syncBuiltinESMExports } from 'node:module';
 import path from 'node:path';
 import { inflateRawSync } from 'node:zlib';
 import { applyInputIdentity, ciExecutionArguments, ciProfile, ciTestConcurrency, classify, provisionedServicesFor, restrictToRequested, skipGuards } from '../../tools/ci/scope.js';
+import { main as provisionInputs } from '../../tools/ci/provision.js';
 import { captureInputIdentity, executionManifestContract, executionManifestReferences, inputsUnchanged } from '../../tools/validation/inputs.js';
 import { designatedJellyfinRepository, verifyDesignatedJellyfinSourcePackage } from '../../tools/validation/designated-jellyfin-source.js';
 import { repositoryRoot, validationPath } from '../../tools/validation/paths.js';
 import { nativeBuildInputs, verifyNativeBuild, verifyNativeRuntime } from '../../tools/validation/native-build-inputs.js';
-import { describeFile } from '../../tools/validation/inventory.js';
+import { describeFile, filesIn } from '../../tools/validation/inventory.js';
 
 const ownPath = 'tests/validation/ci-scope.test.js';
 const otherPath = 'tests/core/password.test.js';
@@ -22,6 +23,24 @@ const entry = (filename, overrides = {}) => ({ path: filename, test: true, impor
 const relative = filename => path.relative(repositoryRoot, filename).replaceAll('\\', '/');
 const description = filename => ({ filename, available: true, kind: 'file' });
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+
+test('provisioning records its plan and appends usable flags without replacing earlier job environment values', async t => {
+  const output = path.join(repositoryRoot, '.test-output');
+  await mkdir(output, { recursive: true });
+  const root = await mkdtemp(path.join(output, 'ci-input-provisioning-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const githubEnvironment = path.join(root, 'github-env');
+  await writeFile(githubEnvironment, 'EXISTING_VALUE=retained\n', { flag: 'wx' });
+  await provisionInputs({ GITHUB_EVENT_NAME: 'workflow_dispatch', GITHUB_ENV: githubEnvironment,
+    MEDIAMANAGER_VALIDATION_OUTPUT_ROOT: root, MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true', MEDIAMANAGER_CI_NATIVE_INSTANCE: 'true' });
+  const written = Object.fromEntries((await readFile(githubEnvironment, 'utf8')).trim().split('\n').map(line => line.split('=')));
+  assert.equal(written.EXISTING_VALUE, 'retained');
+  const services = provisionedServicesFor(written);
+  assert.ok(services.includes('jellyfinDll')); assert.ok(services.includes('nativeInstance'));
+  assert.equal(services.includes('currentNativeSqlite'), false);
+  const receipt = JSON.parse(await readFile(path.join(root, 'provisioning', 'affected-inputs.json'), 'utf8'));
+  assert.equal(receipt.impact.mode, 'manual');
+});
 
 async function extractOrdinaryZip(archiveFilename, prefix, destination) {
   const archive = await readFile(archiveFilename), end = archive.length - 22;
@@ -92,6 +111,27 @@ test('reviewed current consumers bind executable inputs without promoting ordina
   }, record);
   assert.deepEqual(recordReferences, [{ ...sourceFile, sourceArchiveFallback: true }, dotnet, jellyfinDll, oracleAssembly]);
   assert.deepEqual(executionManifestReferences({ kind: 'consumer-native' }, { assemblies: [jellyfinDll, { name: 'no location' }] }, record), [jellyfinDll]);
+});
+
+test('current oracle manifests match their checked-in JavaScript and .NET sources', async () => {
+  const manifests = new Map();
+  for (const filename of await filesIn(path.join(repositoryRoot, 'tests'))) {
+    const contract = executionManifestContract(relative(filename));
+    if (contract?.kind === 'current-oracle') manifests.set(contract.manifest, contract);
+  }
+  for (const contract of manifests.values()) {
+    const filename = path.join(repositoryRoot, contract.manifest);
+    const manifest = JSON.parse(await readFile(filename, 'utf8'));
+    for (const source of executionManifestReferences(contract, manifest, filename)) {
+      const localPath = relative(source.filename);
+      if (path.isAbsolute(localPath) || localPath.startsWith('../') || !/\.(?:[cm]?js|cs|csproj|props)$/iu.test(localPath)) continue;
+      const actual = await describeFile(source.filename, { recursive: false });
+      const label = `${contract.manifest}: ${localPath}`;
+      assert.equal(actual.kind, 'file', label);
+      assert.equal(actual.sha256, source.sha256, label);
+      if (source.bytes !== undefined) assert.equal(actual.bytes, source.bytes, label);
+    }
+  }
 });
 
 test('current reader profiles retain required-input ownership at the actual consumer', async () => {
@@ -777,6 +817,20 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   await assert.rejects(capture([ownPath], { GITHUB_RUN_ID: 'different-run' }), /workflow run: runId/u);
   await assert.rejects(capture([ownPath], { GITHUB_JOB: 'build' }), /producer workflow/u);
   await assert.rejects(capture([ownPath], { GITHUB_WORKFLOW: 'Different workflow' }), /producer workflow/u);
+  const producerFile = path.join(root, 'receipts', 'build-receipt.json');
+  const verifyTrigger = async (eventName, ref) => {
+    const workflowRef = `${designatedJellyfinRepository}/.github/workflows/ci.yml@${ref}`;
+    await writeFile(producerFile, JSON.stringify({ ...receipt, producer: { ...receipt.producer, eventName, ref, workflowRef } }));
+    return nativeBuildInputs({ ...environment, GITHUB_EVENT_NAME: eventName, GITHUB_REF: ref, GITHUB_WORKFLOW_REF: workflowRef });
+  };
+  try {
+    await verifyTrigger('push', 'refs/heads/main');
+    await verifyTrigger('pull_request', 'refs/pull/35/merge');
+    await assert.rejects(verifyTrigger('push', 'refs/heads/other'), /producer workflow/u);
+    await assert.rejects(verifyTrigger('pull_request_target', 'refs/heads/main'), /producer workflow/u);
+  } finally {
+    await writeFile(producerFile, JSON.stringify(receipt));
+  }
   await assert.rejects(capture([ownPath], { MEDIAMANAGER_CHECKOUT_TREE: 'd'.repeat(40) }), /checkout HEAD and tree/u);
   await assert.rejects(capture([ownPath], { MEDIAMANAGER_CI_MATRIX_OS: matrixOs === 'windows-2025' ? 'ubuntu-24.04' : 'windows-2025' }), /runner platform/u);
   const mismatchedSnapshot = JSON.stringify({ ...JSON.parse(snapshot), files: designated.manifest.files.map((file, index) => ({

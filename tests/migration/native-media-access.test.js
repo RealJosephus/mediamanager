@@ -32,7 +32,8 @@ import { startActualWebDav } from '../storage/helpers/actual-webdav.js';
 import { knownAncestorIgnoreIdentityMap } from '../library/ignore-namespace-fixture.js';
 import { prepareFrozenVideo } from '../helpers/frozen-av.js';
 import { stopNativeReference } from '../../tools/compat/native-shutdown.js';
-import { prepareNativeApplicationData, resolveNativeTools, verifyNativeProcessInputs } from '../../tools/compat/native-process-inputs.js';
+import { resolveNativeTools, verifyNativeProcessInputs } from '../../tools/compat/native-process-inputs.js';
+import { prepareNativeApplicationData } from '../../tools/validation/native-application-data.js';
 import { samiMediaFilename, samiFallbackMediaFilename, samiMediaBytes, observeSamiMediaConsumer,
   observeSamiFallbackMediaConsumer, assertSameSamiMediaConsumer, assertRestoredSamiCache } from './helpers/sami-media-consumer.js';
 

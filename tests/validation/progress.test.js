@@ -30,7 +30,7 @@ test('CI progress observes immediate top-level execution without forwarding name
 
 test('CI stderr forwarding recovers from oversized lines and UTF-8 chunk boundaries without leaking raw stderr', () => {
   const filename = 'tests/进度.test.js', received = [];
-  const record = { event: 'start', kind: 'test', file: filename, line: 2, column: 1 };
+  const record = { event: 'start', kind: 'file', file: filename, line: 1, column: 1 };
   const line = progressPrefix + JSON.stringify(record) + '\n';
   const forward = progressForwarder({ environment: { GITHUB_ACTIONS: 'true' }, selected: [filename], write: value => received.push(value) });
   forward(Buffer.from('private stderr\n' + progressPrefix + '{invalid json}\n'));
@@ -191,6 +191,11 @@ test('PRIVATE_FAILURE_TITLE', () => { throw new Error('PRIVATE_FAILURE_BODY'); }
       assert.equal(progress.filter(entry => entry.kind === 'test' && entry.event === 'passed').length, 1);
       assert.equal(progress.filter(entry => entry.kind === 'test' && entry.event === 'failed').length, 1);
       assert.equal(progress.filter(entry => entry.kind === 'file' && entry.event === 'failed' && entry.passed === false).length, 1);
+      const consoleProgress = forwarded.filter(line => line.startsWith(progressPrefix))
+        .map(line => JSON.parse(line.slice(progressPrefix.length)));
+      assert.ok(consoleProgress.some(entry => entry.kind === 'file' && entry.event === 'start'));
+      assert.ok(consoleProgress.some(entry => entry.kind === 'file' && entry.event === 'failed'));
+      assert.deepEqual(consoleProgress.filter(entry => entry.kind === 'test').map(entry => entry.event), ['failed']);
       assert.deepEqual(forwarded.filter(line => line.startsWith('::error ')), [
         '::error file=sample.test.mjs::Selected test file failed (selected-file-failed).\n',
       ]);

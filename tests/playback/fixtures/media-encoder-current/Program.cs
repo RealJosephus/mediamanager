@@ -52,6 +52,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 
+static void PublishTrace(string filename, object value) {
+    // HLS can make media available while its executable wrapper is still running.
+    var pending = filename + ".pending";
+    File.WriteAllText(pending, JsonSerializer.Serialize(value));
+    File.Move(pending, filename);
+}
+
 // This actual apphost is an explicitly controlled executable boundary. It never
 // forwards capability probes, lavfi, hardware initialization or A/V encoding.
 if (args.Length > 0 && args[0].StartsWith('-')) {
@@ -70,28 +77,28 @@ if (args.Length > 0 && args[0].StartsWith('-')) {
     var forward = version || originalInput && !forbidden && (probe || copy);
     var recordFile = Path.Combine(traceDirectory, Guid.NewGuid().ToString("N") + ".json");
     if (!forward) {
-        File.WriteAllText(recordFile, JsonSerializer.Serialize(new { wrapperPid = Environment.ProcessId, childPid = (int?)null,
-            arguments = args, forwarded = false, boundary = "Removed capability/generation branch" }));
+        PublishTrace(recordFile, new { wrapperPid = Environment.ProcessId, childPid = (int?)null,
+            arguments = args, forwarded = false, boundary = "Removed capability/generation branch" });
         Environment.ExitCode = 2; return;
     }
     var executable = control.GetProperty(probe ? "ffprobe" : "ffmpeg").GetString()!;
     if (version && control.TryGetProperty("versionText", out var text)) {
-        File.WriteAllText(recordFile, JsonSerializer.Serialize(new { wrapperPid = Environment.ProcessId, childPid = (int?)null,
-            arguments = args, forwarded = false, boundary = "Controlled executable version text", stdout = text.GetString() }));
+        PublishTrace(recordFile, new { wrapperPid = Environment.ProcessId, childPid = (int?)null,
+            arguments = args, forwarded = false, boundary = "Controlled executable version text", stdout = text.GetString() });
         Console.Write(text.GetString()); Environment.ExitCode = control.TryGetProperty("exitCode", out var exit) ? exit.GetInt32() : 0; return;
     }
     var start = new ProcessStartInfo(executable) { UseShellExecute = false, CreateNoWindow = true,
         RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true };
     foreach (var argument in args) start.ArgumentList.Add(argument);
     using var process = Process.Start(start) ?? throw new IOException("The original media process did not start."); process.StandardInput.Close();
-    File.WriteAllText(recordFile, JsonSerializer.Serialize(new { wrapperPid = Environment.ProcessId, childPid = process.Id, executable, arguments = args, forwarded = true }));
+    PublishTrace(recordFile, new { wrapperPid = Environment.ProcessId, childPid = process.Id, executable, arguments = args, forwarded = true });
     var stderr = process.StandardError.BaseStream.CopyToAsync(Console.OpenStandardError());
     if (version) {
         var output = await process.StandardOutput.ReadToEndAsync(); await process.WaitForExitAsync(); await stderr;
         if (control.TryGetProperty("versionMode", out var mode) && mode.GetString() == "libraries-only")
             output = string.Join("\n", output.Split('\n').Where(line => line.TrimStart().StartsWith("lib", StringComparison.Ordinal))) + "\n";
         if (control.TryGetProperty("holdVersion", out var hold) && hold.GetBoolean()) {
-            File.WriteAllText(Path.Combine(traceDirectory, "version-held.json"), JsonSerializer.Serialize(new { wrapperPid = Environment.ProcessId, childPid = process.Id }));
+            PublishTrace(Path.Combine(traceDirectory, "version-held.json"), new { wrapperPid = Environment.ProcessId, childPid = process.Id });
             await Task.Delay(Timeout.Infinite);
         }
         Console.Write(output); Environment.ExitCode = control.TryGetProperty("exitCode", out var exit) ? exit.GetInt32() : process.ExitCode;

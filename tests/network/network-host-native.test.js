@@ -1,5 +1,5 @@
 import test from 'node:test';
-import { declareNativeHttpTestFile } from '../helpers/native-http-test-file.js';
+import { declareFileTestResource } from '../helpers/file-test-resource.js';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
@@ -22,10 +22,10 @@ import { namedError, namedHash } from '../core/named-configuration-current.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
 import { describeFile } from '../../tools/validation/inventory.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_JELLYFIN_DLL) });
-
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
 const settings = { skip: !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 300000 };
+const listenerCapture = declareFileTestResource('native-network-listener-capture', { enabled: !settings.skip });
+const nativeCallback = operation => t => listenerCapture.run(() => operation(t), { signal: t.signal });
 const payload = value => value == null || typeof value !== 'object' ? value : Array.isArray(value) ? value.map(payload)
   : Object.fromEntries(Object.getOwnPropertyNames(value).filter(name => !(value instanceof Error && ['name', 'stack'].includes(name)))
     .map(name => [name, payload(value[name])]));

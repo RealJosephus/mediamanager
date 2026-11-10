@@ -12,7 +12,7 @@ import { bindFixtureInput } from '../helpers/fixture-input-binding.js';
 import { currentUserViewScenario, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
 import { projectItemBody } from '../helpers/http-body-projection.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE), port: 21015 });
 
 const bytes = await readFile(new URL('./fixtures/live-tv-recommended-http/input.json', import.meta.url));
 const fixture = JSON.parse(bytes);
@@ -23,8 +23,8 @@ const normalize = (value, serverId, status) => projectItemBody(value, { serverId
 
 test('recommended guide HTTP matches native repository limits, scoring, fields and access in PostgreSQL', {
   skip: !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE || !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000,
-}, nativeCallback(async t => {
-  const { http, stages, root, nativeServerId } = await currentUserViewScenario('live-tv-recommended-http', bytes, { signal: t.signal });
+}, nativeCallback(async (t, port) => {
+  const { http, stages, root, nativeServerId } = await currentUserViewScenario('live-tv-recommended-http', bytes, { signal: t.signal, port });
   assert.equal(http.records.length, 64);
   const body = name => http.records.find(record => record.name === name)?.response.bodyJson;
   assert.equal(body('airing limited').Items.length, 3);

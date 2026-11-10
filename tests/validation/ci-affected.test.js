@@ -4,6 +4,8 @@ import path from 'node:path';
 import { affectedUnavailable, applyAffectedSelection, changedFilesForEvent, parseGitChanges, selectAffected } from '../../tools/ci/affected.js';
 import { repositoryRoot } from '../../tools/validation/paths.js';
 import { analyzeJavaScriptDependencies, caseFoldedEntryMap, inventory, resolveLocalImport } from '../../tools/validation/inventory.js';
+import { planAffectedInputs } from '../../tools/ci/provision.js';
+import { provisionedServicesFor } from '../../tools/ci/scope.js';
 
 const first = 'tests/core/first.test.js', second = 'tests/core/second.test.js', unrelated = 'tests/core/unrelated.test.js';
 const base = '1'.repeat(40), head = '2'.repeat(40), branch = '3'.repeat(40);
@@ -19,6 +21,38 @@ const plan = (entries, changes, overrides = {}) => selectAffected({ dependencies
   tracked: new Set([...entries.map(value => value.path), ...changes.map(value => value.path)]), comparison: comparison(changes), ...overrides });
 const codes = value => value.fallbackReasons.map(reason => reason.code);
 const success = stdout => ({ status: 0, stdout: stdout ?? '' });
+
+test('automatic affected Native tests request their complete declared input closure before availability checks', () => {
+  const entries = [entry(first, { imports: ['tests/helpers/native.js'], services: ['postgres'] }),
+    entry('tests/helpers/native.js', { services: ['currentNativeSqlite'] }), entry(unrelated, { services: ['embyWeb'] })];
+  const impact = plan(entries, [change(first)]), before = structuredClone(impact);
+  const planned = planAffectedInputs({ dependencies: { entries }, impact, environment: { GITHUB_EVENT_NAME: 'push' } });
+  const supplied = provisionedServicesFor(planned.flags);
+  for (const service of ['postgres', 'dotnet', 'jellyfinDll', 'nativeInstance', 'currentNativeSqlite']) assert.ok(supplied.includes(service));
+  assert.equal(supplied.includes('embyWeb'), false);
+  assert.deepEqual(impact, before);
+});
+
+test('affected hosted Emby requests its browser and native prerequisites without selecting another client', () => {
+  const entries = [entry(first, { services: ['browser', 'embyWeb'] })], impact = plan(entries, [change(first)]);
+  const planned = planAffectedInputs({ dependencies: { entries }, impact, environment: { GITHUB_EVENT_NAME: 'pull_request' } });
+  const supplied = provisionedServicesFor(planned.flags);
+  for (const service of ['browser', 'embyWeb', 'currentNativeSqlite', 'nativeInstance', 'jellyfinDll']) assert.ok(supplied.includes(service));
+  assert.equal(supplied.includes('jellyfinWeb'), false);
+});
+
+test('manual, full and fallback input choices remain explicit rather than provisioning every optional service', () => {
+  const entries = [entry(first, { services: ['currentNativeSqlite', 'alist'] })], impact = plan(entries, [change(first)]);
+  for (const environment of [{ GITHUB_EVENT_NAME: 'workflow_dispatch' },
+    { GITHUB_EVENT_NAME: 'push', MEDIAMANAGER_CI_TEST_FILES: first },
+    { GITHUB_EVENT_NAME: 'push', MEDIAMANAGER_CI_PROFILE: 'full' }]) {
+    const planned = planAffectedInputs({ dependencies: { entries }, impact, environment });
+    assert.deepEqual(provisionedServicesFor(planned.flags), ['postgres', 'dotnet']);
+  }
+  const planned = planAffectedInputs({ dependencies: { entries }, impact: { ...impact, mode: 'allavailable' },
+    environment: { GITHUB_EVENT_NAME: 'push', MEDIAMANAGER_CI_ALIST_REFERENCE: 'true' } });
+  assert.deepEqual(provisionedServicesFor(planned.flags), ['postgres', 'dotnet', 'alist']);
+});
 
 function eventHarness({ eventName = 'push', event = { before: base, after: head, forced: false }, diff = `M\0${first}\0`, overrides = {} } = {}) {
   const calls = [];

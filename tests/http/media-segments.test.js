@@ -13,7 +13,7 @@ import { MediaSegmentService, mediaSegmentProviderId } from '../../src/library/m
 import { stringifyNativeJson, parseLosslessJson } from '../../src/core/json.js';
 import { createSqliteTarget, databaseDigest, getNativeEnvelope, transferDatabase } from '../../src/migration/database-transfer.js';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
-import { recordOracle } from '../../tools/validation/oracle.js';
+import { compileOracle } from '../../tools/validation/oracle.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createTestApplication } from '../helpers/application.js';
 import { projectProblemTrace } from '../helpers/http-body-projection.js';
@@ -91,16 +91,18 @@ test('MediaSegments uses actual MVC and Native EF rows with bounded PG HTTP deli
       'MediaBrowser.Model/Querying/QueryResult.cs', 'src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/MediaSegmentType.cs',
       'src/Jellyfin.Extensions/Json/Converters/JsonGuidConverter.cs', 'Emby.Server.Implementations/Library/LibraryManager.cs',
       'Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs', 'Jellyfin.Api/Middleware/ExceptionMiddleware.cs']);
-    const oracle = async (label, filename, mode) => {
-      const receipt = await recordOracle({ project: 'tests/http/fixtures/media-segments-current/Oracle.csproj', output: path.join(output, label),
-        environment: current.environment, args: [inputFile, '{output}/native.json', path.join(output, label + '-data'), filename, mode] });
+    const oracle = await compileOracle({ project: 'tests/http/fixtures/media-segments-current/Oracle.csproj',
+      output: path.join(output, 'build'), environment: current.environment });
+    const captureNative = async (label, filename, mode) => {
+      const receipt = await oracle.record({ output: path.join(output, label),
+        args: [inputFile, '{output}/native.json', path.join(output, label + '-data'), filename, mode] });
       assert.equal(receipt.passed, true); const bytes = await readFile(path.join(output, label, 'native.json')), native = parseLosslessJson(bytes.toString('utf8'));
       assert.equal(native.inputSha256, sha(inputBytes)); assert.equal(native.before, native.after);
       for (const flag of ['actualMvc', 'actualController', 'actualManager', 'actualEfSqlite', 'hostStopped', 'hostDisposed']) assert.equal(native[flag], true);
       assert.equal(native.providerMethodsInvoked, false); for (const assembly of native.assemblies) assert.equal(sha(await readFile(assembly.filename)), assembly.sha256);
       report.captures.push({ label, receipt, native }); return native;
     };
-    const first = await oracle('first', current.sourceDatabase, 'seed');
+    const first = await captureNative('first', current.sourceDatabase, 'seed');
     database = await createPostgresTestDatabase(null, 'media_segments');
     source = new SqliteDatabase(first.databaseFilename, { readOnly: true, requireMigrationHistory: true });
     report.instanceBinding = { serverId: current.preparation.nativeServerId, originIdentityDigest: sha(await readFile(first.databaseFilename)) };
@@ -134,7 +136,7 @@ test('MediaSegments uses actual MVC and Native EF rows with bounded PG HTTP deli
     const changed = await databaseDigest(database), exported = path.join(output, 'exported.db');
     target = await createSqliteTarget(exported, await getNativeEnvelope(database));
     report.export = await transferDatabase(database, target); assert.deepEqual(await databaseDigest(target), changed); target.close(); target = undefined;
-    const continued = await oracle('native-read-export', exported, 'read'); await compareCases('native-consumed-export', continued);
+    const continued = await captureNative('native-read-export', exported, 'read'); await compareCases('native-consumed-export', continued);
     fresh = await createPostgresTestDatabase(null, 'segments_fresh'); source = new SqliteDatabase(continued.databaseFilename, { readOnly: true, requireMigrationHistory: true });
     report.reimport = await transferDatabase(source, fresh, { instanceBinding: report.instanceBinding });
     assert.deepEqual(await databaseDigest(fresh), changed); source.close(); source = undefined;

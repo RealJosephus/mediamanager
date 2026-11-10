@@ -100,20 +100,16 @@ run establishes only its explicitly selected consumers and platforms. Run on
 GitHub Actions with `native_reference`, `native_instance`, `native_sqlite` and
 `web_clients` enabled; do not execute local validation.
 
-`emby-auth-info.test.js` uses the original hosted Emby Web 26.0.38 entry,
-service worker and its 865-resource catalog, plus the entry/manifest links.
-The startup ebook/PDF plugin modules omitted from that catalog are captured
-from the original `app.js` dependency paths. The actual Cast sender scripts
-are also frozen; the browser's real external script responses must match those
-bytes and hashes. No network interception supplies replacement responses.
-The CI capture pins the published entry/catalog SHA-256, records every actual
-resource hash and retains the worker's declared checksums separately. Hosted
-entry substitutions can differ from the worker checksum; no client bytes are
-rewritten. The same-run input loader binds the producer, receipts and complete
-served tree before and after the consumer. CI artifacts retain identities and
-observations without redistributing the third-party client resource bundle.
-Earlier 26.0.37 receipts retain their historical resource identities. The current
-capture binds 26.0.38 independently; it does not establish a new 26.0.37 UI run.
+`emby-auth-info.test.js` uses the Emby Web release served by the official host
+when the CI job starts capturing it. The capture reads the version from the
+entry and downloads the current service worker catalog, entry/manifest links
+and startup plugin modules referenced by `app.js`. It checks the entry and
+worker again after the download to catch a release change during capture.
+It records SHA-256 for every original resource and keeps the worker's declared
+checksums separately. The browser's actual Cast script responses must match
+the captured external resources. The same-run input loader binds the producer,
+receipts and complete served tree before and after the consumer. CI artifacts
+retain identities and observations without redistributing the client bundle.
 
 A fresh touch-capable Chromium context uses the visible connection wizard,
 selects the actual server at its `/emby` address, and enters the real password.

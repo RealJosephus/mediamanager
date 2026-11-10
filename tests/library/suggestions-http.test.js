@@ -12,15 +12,18 @@ import { projectSingleSourceName } from '../helpers/single-source-name-projectio
 import { projectItemBody } from '../helpers/http-body-projection.js';
 import { createFixtureIdentityProjector, projectItemDataIdentities } from '../helpers/fixture-identity-projection.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({
+  enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE),
+  port: 21006,
+});
 const bytes = await readFile(new URL('./fixtures/suggestions-http/input.json', import.meta.url));
 const fixture = JSON.parse(bytes);
 validateFixture(fixture);
 
 test('Suggestions HTTP match Native membership, permissions, complete DTOs, counts and random windows without changing persisted state', {
   skip: !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE || !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000,
-}, nativeCallback(async t => {
-  const { http, stages, root, nativeServerId } = await currentUserViewScenario('suggestions-http', bytes, { signal: t.signal });
+}, nativeCallback(async (t, port) => {
+  const { http, stages, root, nativeServerId } = await currentUserViewScenario('suggestions-http', bytes, { signal: t.signal, port });
   assert.equal(http.records.length, 45);
   assert.deepEqual(stages.before, stages.afterReads); assert.deepEqual(stages.afterReads, stages.afterShutdown);
   const nodeToFixture = new Map(), fixtureToNode = new Map();

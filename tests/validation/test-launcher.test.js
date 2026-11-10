@@ -113,6 +113,67 @@ test('selected file executes in its own global context', async () => {
   for (const filename of files) assert.deepEqual(JSON.parse(await readFile(path.join(directory, 'receipts', filename + '.json'), 'utf8')), { executed: true });
 });
 
+test('independent directories can release a resource while nearby selected files wait for it', { timeout: 30000 }, async t => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'mm-selection-resources-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const serial = path.join(directory, 'serial'), independent = path.join(directory, 'independent');
+  const output = path.join(directory, 'output'), receipts = path.join(directory, 'receipts'), leases = path.join(directory, 'leases');
+  await Promise.all([serial, independent, output, receipts].map(value => mkdir(value)));
+  const entered = path.join(directory, 'entered'), release = path.join(directory, 'release');
+  const resourceModule = new URL('../helpers/test-resource-lease.js', import.meta.url).href;
+  const files = [path.join(serial, 'first.test.mjs'), path.join(serial, 'second.test.mjs'), path.join(independent, 'release.test.mjs')];
+  for (const [index, filename] of files.slice(0, 2).entries()) {
+    await writeFile(filename, `import test from 'node:test';
+import { access, writeFile } from 'node:fs/promises';
+import { setTimeout } from 'node:timers/promises';
+import { acquireTestResource } from ${JSON.stringify(resourceModule)};
+test('selected resource owner ${index}', { timeout: 10000 }, async t => {
+  const lease = await acquireTestResource('serial-fixture', { root: ${JSON.stringify(leases)}, signal: t.signal });
+  try {
+    if (${index} === 0) {
+      await writeFile(${JSON.stringify(entered)}, 'entered', { flag: 'wx' });
+      while (true) {
+        try { await access(${JSON.stringify(release)}); break; }
+        catch (error) { if (error.code !== 'ENOENT') throw error; }
+        await setTimeout(20, undefined, { signal: t.signal });
+      }
+    }
+    await writeFile(${JSON.stringify(path.join(receipts, String(index)))}, 'executed', { flag: 'wx' });
+  } finally { await lease.release(); }
+});
+`);
+  }
+  await writeFile(files[2], `import test from 'node:test';
+import { access, writeFile } from 'node:fs/promises';
+import { setTimeout } from 'node:timers/promises';
+test('independent selected file releases the owner', { timeout: 10000 }, async t => {
+  while (true) {
+    try { await access(${JSON.stringify(entered)}); break; }
+    catch (error) { if (error.code !== 'ENOENT') throw error; }
+    await setTimeout(20, undefined, { signal: t.signal });
+  }
+  await writeFile(${JSON.stringify(release)}, 'release', { flag: 'wx' });
+  await writeFile(${JSON.stringify(path.join(receipts, '2'))}, 'executed', { flag: 'wx' });
+});
+`);
+  const selectionFile = path.join(output, 'test-selection.json'), bytes = JSON.stringify({ files, concurrency: 2 });
+  const sha256 = createHash('sha256').update(bytes).digest('hex');
+  await writeFile(selectionFile, bytes, { flag: 'wx' });
+  const environment = await prepareTestExecutionEnvironment({ ...process.env, GITHUB_ACTIONS: 'false' }, output, sha256);
+  environment.MEDIAMANAGER_TEST_REGISTRATION_ROOT = directory;
+  delete environment.NODE_TEST_CONTEXT;
+  const result = spawnSync(process.execPath, [launcher, selectionFile, sha256], {
+    cwd: directory, env: environment, windowsHide: true, encoding: 'utf8', timeout: 20000,
+  });
+  assert.equal(result.error, undefined);
+  assert.equal(result.status, 0, `${result.stderr}\n${result.stdout}`);
+  assert.deepEqual(parseTapSummary(result.stdout), { tests: 3, suites: 0, pass: 3, fail: 0, cancelled: 0, skipped: 0, todo: 0 });
+  assert.deepEqual((await readdir(receipts)).sort(), ['0', '1', '2']);
+  for (const filename of await readdir(receipts)) assert.equal(await readFile(path.join(receipts, filename), 'utf8'), 'executed');
+  assert.deepEqual(await readdir(leases), []);
+  assert.deepEqual(await readFile(selectionFile), Buffer.from(bytes));
+});
+
 test('a changed selection fails before executing any selected file', async t => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'mm-selection-drift-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
@@ -156,6 +217,8 @@ import assert from 'node:assert/strict';
 test('second file fails independently', () => {
   console.log('original later stdout');
   console.error('original later stderr');
+  console.log('next later stdout');
+  console.error('next later stderr');
   assert.fail(${JSON.stringify(marker)});
 });
 `);
@@ -227,8 +290,8 @@ test('second file fails independently', () => {
   assert.deepEqual(annotations, ['::error file=second.test.mjs::Selected test file failed (selected-file-failed).\n']);
   assert.equal(stdout.includes('::error'), false);
   assert.equal(stderr.includes('::error'), false);
-  assert.equal(await readFile(path.join(second, 'stdout.txt'), 'utf8'), 'original later stdout\n');
-  assert.equal(await readFile(path.join(second, 'stderr.txt'), 'utf8'), 'original later stderr\n');
+  assert.equal(await readFile(path.join(second, 'stdout.txt'), 'utf8'), 'original later stdout\nnext later stdout\n');
+  assert.equal(await readFile(path.join(second, 'stderr.txt'), 'utf8'), 'original later stderr\nnext later stderr\n');
   const events = (await readFile(path.join(second, 'events.jsonl'), 'utf8')).trim().split('\n').map(line => JSON.parse(line));
   assert.ok(events.some(record => record.type === 'test:fail' && record.native.includes(marker)));
   assert.deepEqual(events.map(record => record.sequence), events.map((_, index) => index + 1));

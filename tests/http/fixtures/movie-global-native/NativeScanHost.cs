@@ -129,6 +129,7 @@ public sealed class NativeScanHost : IAsyncDisposable
     private IResolverIgnoreRule[] _ignoreRules = [];
     private readonly List<(string Name, IDisposable Resource)> _ownedResources = [];
     private readonly ConcurrentQueue<QueueRequest> _queueRequests = new();
+    private readonly TaskCompletionSource<Guid> _initialCollectionEdit = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private readonly AsyncLocal<int?> _metadataObservation = new();
     private readonly AsyncLocal<int?> _queueObservation = new();
     private int _nextMetadataObservation;
@@ -368,7 +369,12 @@ public sealed class NativeScanHost : IAsyncDisposable
         _ignoreRules = ignoreRules; _resolvers = resolvers;
         Manager.AddParts(ignoreRules,resolvers,[],[],[]);
         Manager.ItemAdded+=(_,e)=>Add("added",new { item=Item(e.Item),parent=e.Parent?.Id, updateReason=(int)e.UpdateReason });
-        Manager.ItemUpdated+=(_,e)=>Add("updated",new { item=Item(e.Item),parent=e.Parent?.Id, updateReason=(int)e.UpdateReason });
+        Manager.ItemUpdated+=(_,e)=>
+        {
+            Add("updated",new { item=Item(e.Item),parent=e.Parent?.Id, updateReason=(int)e.UpdateReason });
+            if (_phase == "created" && e.Item is BoxSet && e.UpdateReason == ItemUpdateType.MetadataEdit)
+                _initialCollectionEdit.TrySetResult(e.Item.Id);
+        };
         Manager.ItemRemoved+=(_,e)=>Add("removed",new { item=Item(e.Item),parent=e.Parent?.Id, updateReason=(int)e.UpdateReason });
         SeedFilesystem();
         // No root object, Children array, private root field or cached topology
@@ -722,10 +728,17 @@ public sealed class NativeScanHost : IAsyncDisposable
         try
         {
             if (request is null) return await Provider.RefreshSingleItem(item, options, token);
-            request.Started++;
-            Add("queue-metadata-start", new { requestId = request.Id, itemId = item.Id, item = Item(item) });
             try
             {
+                // The post-scan task creates the BoxSet and then saves its members.
+                // Run the real queued reader after that save has written collection.xml.
+                if (request.Phase == "created" && item is BoxSet)
+                {
+                    var edited = await _initialCollectionEdit.Task.WaitAsync(TimeSpan.FromSeconds(30), token);
+                    if (edited != item.Id) throw new InvalidOperationException("The initial collection edit belongs to another item.");
+                }
+                request.Started++;
+                Add("queue-metadata-start", new { requestId = request.Id, itemId = item.Id, item = Item(item) });
                 var result = await Provider.RefreshSingleItem(item, options, token);
                 request.Completed++;
                 Add("queue-metadata-completed", new { requestId = request.Id, itemId = item.Id, updateType = (int)result, item = Item(item) });

@@ -12,7 +12,7 @@ import { projectItemBody } from '../helpers/http-body-projection.js';
 
 import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE), port: 21007 });
 
 const fixtureBytes = await readFile(new URL('./fixtures/dto-item-counts-http/input.json', import.meta.url));
 const fixture = JSON.parse(fixtureBytes);
@@ -34,8 +34,9 @@ const cases = candidateCasesFromTrackedInput(fixture);
 for (const dialect of dialects) {
   test(`${dialect}: generic ItemCounts APIs match 114 current native full HTTP responses`, {
     skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
-  }, nativeCallback(async t => {
-    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('dto-item-counts-http', fixtureBytes, { signal: t.signal });
+  }, nativeCallback(async (t, port) => {
+    const { http, stages, readCaseStages, summary, root: nativeEvidenceRoot, nativeServerId } = await currentUserViewScenario('dto-item-counts-http', fixtureBytes, { signal: t.signal, port });
+    const nativeCaseStages = await readCaseStages();
 
     const body = name => http.records.find(record => record.name === name && record.endpoint === 'items')?.response.bodyJson;
     const batch = body('all supported kinds batch').Items;

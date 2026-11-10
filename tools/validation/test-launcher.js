@@ -26,10 +26,27 @@ export function observeFileFailures(source, files, { environment = process.env, 
   return () => source.removeListener('test:complete', listener);
 }
 
+function interleaveDirectories(files) {
+  const directories = new Map();
+  for (const filename of files) {
+    const directory = path.dirname(filename);
+    if (!directories.has(directory)) directories.set(directory, []);
+    directories.get(directory).push(filename);
+  }
+  const groups = [...directories.values()], ordered = [];
+  for (let index = 0; ordered.length < files.length; index++) {
+    for (const group of groups) if (index < group.length) ordered.push(group[index]);
+  }
+  return ordered;
+}
+
 export async function launchSelectedTests(filename, expectedSha256) {
   const selection = await readTestSelection(filename, expectedSha256);
   const diagnostics = await fileTestDiagnostics(selection.files);
-  const source = run({ files: selection.files, concurrency: selection.concurrency, isolation: 'process', forceExit: false });
+  // Nearby fixtures often share an exclusive resource. Give independent
+  // directories work before their waiters occupy every process slot.
+  const files = selection.concurrency > 1 ? interleaveDirectories(selection.files) : selection.files;
+  const source = run({ files, concurrency: selection.concurrency, isolation: 'process', forceExit: false });
   const stopObserving = observeFileFailures(source, selection.files);
   diagnostics.observe(source);
   source.on('test:summary', summary => { if (!summary.success) process.exitCode = 1; });

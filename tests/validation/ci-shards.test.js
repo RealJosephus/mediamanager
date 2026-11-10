@@ -3,6 +3,26 @@ import assert from 'node:assert/strict';
 import { partitionSelection } from '../../tools/ci/shards.js';
 import { ciSummary } from '../../tools/ci/summary.js';
 import { analyzeJavaScriptDependencies } from '../../tools/validation/inventory.js';
+import { fullPartitionScopeValid, scaleTestFiles } from '../../tools/validation/full-partitions.js';
+
+test('release partitions cover every discovered file exactly once and isolate both scale consumers', () => {
+  const discovered = [...Array.from({ length: 19 }, (_, index) => `tests/example/${index}.test.js`), ...scaleTestFiles].sort();
+  const union = [];
+  for (let index = 1; index <= 5; index++) {
+    const classification = { records: discovered.map(path => ({ path, selected: true, reasons: [] })) };
+    const sharding = partitionSelection(classification, { MEDIAMANAGER_CI_RELEASE_PAIR: 'true',
+      MEDIAMANAGER_CI_SHARD: String(index), MEDIAMANAGER_CI_SHARDS: '5' }, 'full');
+    const scope = { sharding, discovered, selected: sharding.assigned, excluded: classification.records.filter(record => !record.selected) };
+    assert.equal(fullPartitionScopeValid(scope), true);
+    assert.equal(fullPartitionScopeValid({ ...scope, selected: scope.selected.slice(1) }), false);
+    assert.equal(fullPartitionScopeValid({ ...scope, discovered: [...discovered, 'tests/new.test.js'] }), false);
+    if (index === 5) assert.deepEqual(sharding.assigned, scaleTestFiles);
+    else assert.ok(sharding.assigned.every(file => !scaleTestFiles.includes(file)));
+    union.push(...sharding.assigned);
+  }
+  assert.deepEqual(union.sort(), discovered);
+  assert.equal(new Set(union).size, discovered.length);
+});
 
 test('CI shards partition the complete frozen available scope exactly once and preserve dependency exclusions', () => {
   const records = ['f', 'b', 'e', 'a', 'd', 'c'].map(path => ({ path, selected: path !== 'e', reasons: path === 'e' ? [{ code: 'input-not-shipped' }] : [] }));

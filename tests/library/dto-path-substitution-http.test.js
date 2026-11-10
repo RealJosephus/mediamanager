@@ -10,7 +10,10 @@ import { currentUserViewScenario, userViewEvidenceJson as json } from '../helper
 import { projectSingleSourceName } from '../helpers/single-source-name-projection.js';
 import { projectItemBody } from '../helpers/http-body-projection.js';
 
-const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
+const nativeCallback = declareNativeHttpTestFile({
+  enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE),
+  port: 21003,
+});
 
 const bytes = await readFile(new URL('./fixtures/dto-path-substitution-http/input.json', import.meta.url));
 const fixture = JSON.parse(bytes);
@@ -20,8 +23,8 @@ const normalize = (value, serverId, status) => projectItemBody(value, { serverId
 
 test('file DTO and media source substitutions match current native HTTP without changing storage identities', {
   skip: !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE || !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000,
-}, nativeCallback(async t => {
-  const { http, stages, root, nativeServerId } = await currentUserViewScenario('dto-path-substitution-http', bytes, { signal: t.signal });
+}, nativeCallback(async (t, port) => {
+  const { http, stages, root, nativeServerId } = await currentUserViewScenario('dto-path-substitution-http', bytes, { signal: t.signal, port });
   assert.equal(http.records.length, 48);
   const body = name => http.records.find(record => record.name === name)?.response.bodyJson;
   assert.equal(body('mapped movie').Path, '/client/media\\Film.mkv');

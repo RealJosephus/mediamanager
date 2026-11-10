@@ -15,10 +15,15 @@ on:
           - available
           - full
       release_pair:
-        description: Run strict full twice per platform against one supplied candidate and input set; product release acceptance remains separate
+        description: Run two complete full rounds per platform in five fixed partitions; requires successful same-candidate qualification
         type: boolean
         required: false
         default: false
+      qualification_run_id:
+        description: Successful manual three-platform validation run on this exact commit, required before release_pair
+        type: string
+        required: false
+        default: ''
       test_files:
         description: Exact test paths separated by commas or newlines; leave empty for all available tests
         type: string
@@ -56,12 +61,12 @@ on:
         required: false
         default: false
       dvd_reference:
-        description: Download and verify the complete original NTSC DVD VIDEO_TS input (requires native_instance)
+        description: Use the complete original NTSC DVD in place of the compact fixture (requires native_instance)
         type: boolean
         required: false
         default: false
       bluray_reference:
-        description: Supply the complete frozen official Sintel Blu-ray ISO and every UDF/BDMV member (requires native_instance)
+        description: Use the complete official Sintel Blu-ray in place of the compact fixture (requires native_instance)
         type: boolean
         required: false
         default: false
@@ -71,7 +76,7 @@ on:
         required: false
         default: false
       emby_web:
-        description: Capture the designated hosted Emby Web and use fixed Chromium (requires native_sqlite)
+        description: Capture the latest hosted Emby Web and use fixed Chromium (requires native_sqlite)
         type: boolean
         required: false
         default: false
@@ -101,7 +106,45 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  qualification:
+    name: Check same-candidate qualification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Check out exact candidate
+        if: inputs.release_pair
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        if: inputs.release_pair
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.16.0
+      - name: Require successful qualification before provisioning the full matrix
+        if: inputs.release_pair
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUALIFICATION_RUN_ID: ${{ inputs.qualification_run_id }}
+        shell: bash
+        run: node tools/ci/release-qualification-check.js "$QUALIFICATION_RUN_ID" "$RUNNER_TEMP/qualification.json"
+      - name: Preserve qualification decision
+        if: always() && inputs.release_pair
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: qualification-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/qualification.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Allow development validation
+        if: ${{ !inputs.release_pair }}
+        run: echo 'Development validation does not require prior qualification.'
+
   validate:
+    needs: qualification
     name: ${{ matrix.os }} / shard ${{ matrix.shard }} / Node 24 / PostgreSQL 17
     runs-on: ${{ matrix.os }}
     # Provisioning and large evidence uploads have their own outer budget.
@@ -111,28 +154,28 @@ jobs:
       fail-fast: false
       matrix:
         os: ${{ fromJSON(inputs.release_pair && '["ubuntu-24.04","windows-2025","macos-15"]' || inputs.platform == 'windows' && '["windows-2025"]' || inputs.platform == 'linux' && '["ubuntu-24.04"]' || inputs.platform == 'macos' && '["macos-15"]' || '["ubuntu-24.04","windows-2025","macos-15"]') }}
-        shard: ${{ fromJSON((inputs.release_pair || inputs.validation_profile == 'full' || inputs.test_files) && '[1]' || '[1,2,3,4]') }}
+        shard: ${{ fromJSON(inputs.release_pair && '[1,2,3,4,5]' || (inputs.validation_profile == 'full' || inputs.test_files) && '[1]' || '[1,2,3,4]') }}
     env:
       TZ: Asia/Taipei
       MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
       MEDIAMANAGER_CI_TEST_FILES: ${{ inputs.test_files || '' }}
       MEDIAMANAGER_CI_TIMEOUT_MS: ${{ inputs.diagnostic_timeout_ms || '' }}
       MEDIAMANAGER_TEST_QUERY_TIMINGS: ${{ inputs.query_timings && 'true' || 'false' }}
-      MEDIAMANAGER_CI_TEST_CONCURRENCY: ${{ inputs.test_concurrency || '1' }}
+      MEDIAMANAGER_CI_TEST_CONCURRENCY: ${{ inputs.release_pair && (matrix.shard == 5 && '1' || '2') || inputs.test_concurrency || '1' }}
       MEDIAMANAGER_CI_PROFILE: ${{ inputs.release_pair && 'full' || inputs.validation_profile || 'available' }}
       MEDIAMANAGER_CI_RELEASE_PAIR: ${{ inputs.release_pair && 'true' || 'false' }}
       MEDIAMANAGER_CI_PLATFORM: ${{ inputs.platform || 'all' }}
       MEDIAMANAGER_CI_MATRIX_OS: ${{ matrix.os }}
       MEDIAMANAGER_CI_SHARD: ${{ matrix.shard }}
-      MEDIAMANAGER_CI_SHARDS: ${{ (inputs.release_pair || inputs.validation_profile == 'full' || inputs.test_files) && '1' || '4' }}
-      MEDIAMANAGER_CI_NATIVE_REFERENCE: ${{ inputs.native_reference && 'true' || 'false' }}
-      MEDIAMANAGER_CI_NATIVE_INSTANCE: ${{ inputs.native_instance && 'true' || 'false' }}
-      MEDIAMANAGER_CI_NATIVE_SQLITE: ${{ inputs.native_sqlite && 'true' || 'false' }}
+      MEDIAMANAGER_CI_SHARDS: ${{ inputs.release_pair && '5' || (inputs.validation_profile == 'full' || inputs.test_files) && '1' || '4' }}
+      MEDIAMANAGER_CI_NATIVE_REFERENCE: ${{ (inputs.release_pair || inputs.native_reference) && 'true' || 'false' }}
+      MEDIAMANAGER_CI_NATIVE_INSTANCE: ${{ (inputs.release_pair || inputs.native_instance) && 'true' || 'false' }}
+      MEDIAMANAGER_CI_NATIVE_SQLITE: ${{ (inputs.release_pair || inputs.native_sqlite) && 'true' || 'false' }}
       MEDIAMANAGER_CI_DVD_REFERENCE: ${{ inputs.dvd_reference && 'true' || 'false' }}
       MEDIAMANAGER_CI_BLURAY_REFERENCE: ${{ inputs.bluray_reference && 'true' || 'false' }}
-      MEDIAMANAGER_CI_WEB_CLIENTS: ${{ inputs.web_clients && 'true' || 'false' }}
-      MEDIAMANAGER_CI_EMBY_WEB: ${{ inputs.emby_web && 'true' || 'false' }}
-      MEDIAMANAGER_CI_ALIST_REFERENCE: ${{ inputs.alist_reference && 'true' || 'false' }}
+      MEDIAMANAGER_CI_WEB_CLIENTS: ${{ (inputs.release_pair || inputs.web_clients) && 'true' || 'false' }}
+      MEDIAMANAGER_CI_EMBY_WEB: ${{ (inputs.release_pair || inputs.emby_web) && 'true' || 'false' }}
+      MEDIAMANAGER_CI_ALIST_REFERENCE: ${{ (inputs.release_pair || inputs.alist_reference) && 'true' || 'false' }}
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
       DOTNET_NOLOGO: '1'
     steps:
@@ -141,6 +184,20 @@ jobs:
         run: |
           printf 'MEDIAMANAGER_VALIDATION_OUTPUT_ROOT=%s\n' "$RUNNER_TEMP/mediamanager-results" >> "$GITHUB_ENV"
           printf 'DOTNET_INSTALL_DIR=%s\n' "$RUNNER_TEMP/mediamanager-dotnet" >> "$GITHUB_ENV"
+      - name: Free hosted Ubuntu disk for complete disc inputs
+        if: runner.os == 'Linux' && runner.environment == 'github-hosted' && (inputs.dvd_reference || inputs.bluray_reference)
+        shell: bash
+        run: |
+          set -euo pipefail
+          df --block-size=1 --output=source,avail,target "$RUNNER_TEMP"
+          # The disc jobs use Node, Go, .NET and media readers. Reclaim only
+          # these unused preinstalled SDKs on the disposable hosted image.
+          for tool in /usr/local/lib/android/sdk /usr/share/swift /opt/hostedtoolcache/CodeQL; do
+            if [[ -d "$tool" && "$(realpath -e -- "$tool")" == "$tool" ]]; then
+              sudo rm -rf --one-file-system -- "$tool"
+            fi
+          done
+          df --block-size=1 --output=source,avail,target "$RUNNER_TEMP"
       - name: Align Windows system timezone with the declared runtime timezone
         if: runner.os == 'Windows'
         shell: pwsh
@@ -158,7 +215,6 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: Bind exact checkout HEAD and tree
-        if: inputs.native_reference == true
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -225,12 +281,14 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --bin-links=false
+      - name: Plan required inputs for affected tests
+        run: node tools/ci/provision.js
       - name: Provision fixed WebDAV executable
         shell: pwsh
         timeout-minutes: 5
         run: ./tools/ci/setup-webdav.ps1
       - name: Build designated AList API-only test host
-        if: inputs.alist_reference == true
+        if: env.MEDIAMANAGER_CI_ALIST_REFERENCE == 'true'
         shell: pwsh
         timeout-minutes: 30
         run: ./tools/ci/build-alist.ps1
@@ -282,7 +340,7 @@ jobs:
         shell: pwsh
         run: ./tools/ci/verify-dotnet.ps1
       - name: Build and immediately verify isolated native reference from sealed source
-        if: inputs.native_reference == true
+        if: env.MEDIAMANAGER_CI_NATIVE_REFERENCE == 'true'
         shell: pwsh
         run: |
           ./tools/ci/build-native.ps1
@@ -296,12 +354,19 @@ jobs:
         with:
           postgres-version: '17'
           user: validation
+      - name: Isolate lifecycle database checkpoints
+        id: lifecycle_postgres
+        if: (runner.os == 'Windows' || runner.os == 'macOS') && env.MEDIAMANAGER_CI_NATIVE_SQLITE == 'true'
+        shell: pwsh
+        run: ./tools/ci/lifecycle-postgres.ps1 start
       - name: Provision pinned media tools
         shell: pwsh
         timeout-minutes: 5
+        env:
+          MEDIAMANAGER_RELEASE_ASSET_TOKEN: ${{ github.token }}
         run: ./tools/ci/setup-media.ps1
       - name: Provision complete original DVD reference
-        if: inputs.dvd_reference == true
+        if: env.MEDIAMANAGER_CI_DVD_REFERENCE == 'true'
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -320,7 +385,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Complete original DVD provisioning failed; no substitute input is permitted.' }
           ('MEDIAMANAGER_TEST_DVD_REFERENCE=' + (Join-Path $output 'evidence/receipt.json')) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Provision complete original Sintel Blu-ray reference
-        if: inputs.bluray_reference == true
+        if: env.MEDIAMANAGER_CI_BLURAY_REFERENCE == 'true'
         shell: pwsh
         timeout-minutes: 60
         run: |
@@ -349,7 +414,7 @@ jobs:
           & node tools/ci/bluray-reference/provision.js --output (Join-Path $env:RUNNER_TEMP 'mediamanager-bluray-reference') --archive-tool $archivePath
           if ($LASTEXITCODE -ne 0) { throw 'Complete original Blu-ray provisioning failed; no substitute input is permitted.' }
       - name: Initialize isolated native instance and controlled media seed
-        if: inputs.native_instance == true
+        if: env.MEDIAMANAGER_CI_NATIVE_INSTANCE == 'true'
         shell: pwsh
         timeout-minutes: 10
         run: |
@@ -368,7 +433,7 @@ jobs:
           "MEDIAMANAGER_NATIVE_INSTANCE_ROOT=$instanceRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "MEDIAMANAGER_TEST_NATIVE_INSTANCE=$(Join-Path $seeded 'instance')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Supply current stopped-instance SQLite input
-        if: inputs.native_sqlite == true
+        if: env.MEDIAMANAGER_CI_NATIVE_SQLITE == 'true'
         shell: pwsh
         timeout-minutes: 5
         run: |
@@ -385,12 +450,12 @@ jobs:
           "MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE=$(Join-Path $sqliteRoot 'input.db')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           'MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE_MOUNT_CONTRACT_JSON={"mounts":[]}' | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Build the designated Jellyfin Web client
-        if: inputs.web_clients == true
+        if: env.MEDIAMANAGER_CI_WEB_CLIENTS == 'true'
         shell: pwsh
         timeout-minutes: 25
         run: ./tools/ci/build-jellyfin-web.ps1
       - name: Install the fixed browser for actual Web interaction
-        if: inputs.web_clients == true || inputs.emby_web == true
+        if: env.MEDIAMANAGER_CI_WEB_CLIENTS == 'true' || env.MEDIAMANAGER_CI_EMBY_WEB == 'true'
         shell: pwsh
         timeout-minutes: 10
         run: |
@@ -452,7 +517,8 @@ jobs:
           '@ | node --input-type=module - (ConvertTo-Json -InputObject $commands -Depth 3 -Compress)
           if ($LASTEXITCODE -ne 0) { throw 'Browser installation receipt failed.' }
       - name: Capture the unmodified designated hosted Emby Web client
-        if: inputs.emby_web == true
+        id: hosted_emby_web
+        if: env.MEDIAMANAGER_CI_EMBY_WEB == 'true'
         timeout-minutes: 15
         run: node tools/ci/fetch-emby-web.js
       - name: Record runner and database identity
@@ -474,6 +540,10 @@ jobs:
       - name: Audit database resources
         if: always() && steps.environment.outcome == 'success'
         run: node tools/ci/environment.js audit
+      - name: Audit and stop the owned lifecycle database
+        if: always() && steps.lifecycle_postgres.outputs.owned == 'true'
+        shell: pwsh
+        run: ./tools/ci/lifecycle-postgres.ps1 stop
       - name: Remove owned macOS limited broadcast policy
         if: always() && runner.os == 'macOS'
         run: node tools/ci/macos-broadcast.js cleanup
@@ -488,6 +558,19 @@ jobs:
             echo 'The created loopback alias remained after cleanup.' >&2
             exit 1
           fi
+      - name: Collect full-pair verification evidence
+        if: always() && inputs.release_pair && steps.environment.outcome == 'success'
+        id: pair-core
+        shell: bash
+        run: node tools/ci/release-pair-stage.js "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT" "$RUNNER_TEMP/strict-pair-core"
+      - name: Preserve full-pair verification evidence
+        if: always() && steps.pair-core.outcome == 'success'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: strict-pair-core-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/strict-pair-core
+          if-no-files-found: error
+          retention-days: 14
       - name: Preserve validation evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -498,7 +581,7 @@ jobs:
           include-hidden-files: true
           retention-days: 14
       - name: Preserve complete original DVD acquisition evidence
-        if: always() && inputs.dvd_reference == true
+        if: always() && env.MEDIAMANAGER_CI_DVD_REFERENCE == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: dvd-reference-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
@@ -506,7 +589,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Preserve complete original Blu-ray acquisition evidence
-        if: always() && inputs.bluray_reference == true
+        if: always() && env.MEDIAMANAGER_CI_BLURAY_REFERENCE == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: bluray-reference-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
@@ -516,7 +599,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Preserve same-run native reference and build evidence
-        if: always() && inputs.native_reference == true
+        if: always() && env.MEDIAMANAGER_CI_NATIVE_REFERENCE == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: native-reference-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
@@ -527,7 +610,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Preserve native initialization receipts and redacted log
-        if: always() && inputs.native_instance == true
+        if: always() && env.MEDIAMANAGER_CI_NATIVE_INSTANCE == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: native-instance-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
@@ -538,7 +621,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Preserve same-run AList API host source and build evidence
-        if: always() && inputs.alist_reference == true
+        if: always() && env.MEDIAMANAGER_CI_ALIST_REFERENCE == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: alist-api-host-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
@@ -549,7 +632,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Preserve current SQLite supply receipt without database credentials
-        if: always() && inputs.native_sqlite == true
+        if: always() && env.MEDIAMANAGER_CI_NATIVE_SQLITE == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: current-native-sqlite-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
@@ -557,7 +640,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Preserve designated Jellyfin Web assets and build evidence
-        if: always() && inputs.web_clients == true
+        if: always() && env.MEDIAMANAGER_CI_WEB_CLIENTS == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: jellyfin-web-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
@@ -569,7 +652,7 @@ jobs:
           include-hidden-files: true
           retention-days: 14
       - name: Preserve hosted Emby resource identities without redistributing client assets
-        if: always() && inputs.emby_web == true
+        if: always() && env.MEDIAMANAGER_CI_EMBY_WEB == 'true' && steps.hosted_emby_web.outcome != 'skipped'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: emby-web-input-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
@@ -578,7 +661,7 @@ jobs:
           retention-days: 14
 
   strict-pair-receipt:
-    name: Verify all three strict full pairs
+    name: Verify complete two-round coverage on all three platforms
     if: ${{ always() && inputs.release_pair }}
     needs: validate
     runs-on: ubuntu-24.04
@@ -597,16 +680,24 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24.16.0
-      - name: Download every current-attempt pair with its original evidence
+      - name: Select original evidence for the effective platform jobs
+        id: pair-source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: node tools/ci/release-pair-select.js "$RUNNER_TEMP/strict-pair-source.json"
+      - name: Download the selected full-pair verification artifacts
         id: evidence
+        if: steps.pair-source.outputs.ids != ''
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
-          pattern: validation-*-shard-1-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/strict-pair-artifacts
+          github-token: ${{ github.token }}
+          artifact-ids: ${{ steps.pair-source.outputs.ids }}
+          path: ${{ runner.temp }}/strict-pair-artifacts/${{ steps.pair-source.outputs.only_name }}
       - name: Recheck candidate, inputs, full scope, TAP, registration and database cleanup
         if: always()
         shell: pwsh
-        run: node tools/ci/release-pair-aggregate.js "$env:RUNNER_TEMP/strict-pair-artifacts" "$env:RUNNER_TEMP/strict-pair-receipt"
+        run: node tools/ci/release-pair-aggregate.js "$env:RUNNER_TEMP/strict-pair-artifacts" "$env:RUNNER_TEMP/strict-pair-source.json" "$env:RUNNER_TEMP/strict-pair-receipt"
       - name: Preserve the bounded strict-pair conclusion
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -615,3 +706,11 @@ jobs:
           path: ${{ runner.temp }}/strict-pair-receipt
           if-no-files-found: error
           retention-days: 14
+
+  release-materials:
+    name: Build validated candidate delivery
+    if: ${{ inputs.release_pair && needs.strict-pair-receipt.result == 'success' }}
+    needs: strict-pair-receipt
+    uses: ./.github/workflows/release-package.yml
+    permissions:
+      contents: read

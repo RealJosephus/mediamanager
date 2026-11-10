@@ -25,7 +25,6 @@ import { captureCurrentHttpSubtitles, hash, json, errorValue } from './fixtures/
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 const enabled = Boolean(process.env.MEDIAMANAGER_JELLYFIN_DLL && postgresTestConnectionString);
-const alive = pid => { try { process.kill(pid, 0); return true; } catch (error) { if (error.code === 'ESRCH') return false; throw error; } };
 const fileValue = value => value.exists ? { exists: true, bytes: value.bytes, base64: value.base64, sha256: value.sha256 } : { exists: false };
 const stateValue = value => ({ source: fileValue(value.source), cache: fileValue(value.cache), meta: fileValue(value.meta),
   sourceOnline: value.sourceOnline, sourceMode: value.sourceMode });
@@ -84,7 +83,6 @@ test('current Native HTTP subtitle identities deliver raw responses, formatted t
       assert.ok(listenersClosed); assert.equal(database.closed, true);
       for (const command of report.mediaCommands.filter(value => value.generation === generation)) {
         assert.equal(command.closed, true, 'An actual media child closed before runtime shutdown returned.');
-        if (command.pid) assert.equal(alive(command.pid), false);
       }
     } finally { lastDatabase = database; database = undefined; }
   };

@@ -118,7 +118,8 @@ test('the actual production CLI retains its selected target across HTTP restarts
   let database, nextDatabase, source, storage, nextStorage, child, childResult, childClosed, socket, failed = false, failure;
   let stdout = '', stderr = '';
   const secrets = new Set();
-  const connectionString = process.env.MEDIAMANAGER_TEST_POSTGRES;
+  const connectionString = ['win32', 'darwin'].includes(process.platform) ? process.env.MEDIAMANAGER_TEST_LIFECYCLE_POSTGRES
+    : process.env.MEDIAMANAGER_TEST_POSTGRES;
   const isolatedDatabaseName = 'mm_system_cli_' + randomUUID().replaceAll('-', '');
   const peerSchemaName = 'mm_links_peer_' + randomUUID().replaceAll('-', '');
   let admin, isolatedConnectionString, childConnectionString, isolatedDatabaseCreated = false, peerSchemaCreated = false;
@@ -128,15 +129,18 @@ test('the actual production CLI retains its selected target across HTTP restarts
     assert.deepEqual(rows, [{ nspname: peerSchemaName }]);
   };
   try {
-    // The pinned CI setup-postgres action creates validation with createuser -s.
+    assert.ok(connectionString, 'The selected lifecycle PostgreSQL service is required.');
     // Keep every mm_links schema in this scenario's own database, since sibling
-    // test files concurrently own runtime schemas in the shared test database.
+    // files can own schemas in the same maintenance database. Windows also
+    // isolates the DROP DATABASE checkpoint from the main test cluster.
     // The server retains the 15-second execution deadline. An equally timed
     // client read deadline can reject before its cancellation/ReadyForQuery
     // arrives, losing the actual outcome of a database-owning DDL command.
     admin = new pg.Client({ connectionString, connectionTimeoutMillis: 10000, query_timeout: 0, statement_timeout: 15000 });
     await admin.connect();
-    const maintenance = (await admin.query("SELECT current_database() AS database, current_user AS role, pg_backend_pid() AS pid, current_setting('statement_timeout') AS statement_timeout")).rows[0];
+    const maintenance = (await admin.query(`SELECT current_database() AS database, current_user AS role,
+      inet_server_addr()::text AS address, inet_server_port() AS port, pg_postmaster_start_time() AS started_at,
+      pg_backend_pid() AS pid, current_setting('statement_timeout') AS statement_timeout`)).rows[0];
     assert.notEqual(isolatedDatabaseName, maintenance.database);
     report.isolatedPostgres = { database: isolatedDatabaseName, maintenance, created: false, dropped: false };
     report.sharedPostgresPeer = { database: maintenance.database, schema: peerSchemaName, created: false, retained: [], dropped: false };

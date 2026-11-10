@@ -316,8 +316,9 @@ finally {
         if (!process.Alive) continue;
         try {
             using var original = Process.GetProcessById(process.Pid);
+            if (original.HasExited || StartedUtcTicks(original) != process.StartedUtcTicks) continue;
             original.Kill(entireProcessTree: true); await original.WaitForExitAsync();
-            emergencyCleanup.Add(new { process.Pid, killed = true });
+            emergencyCleanup.Add(new { process.Pid, process.StartedUtcTicks, killed = true });
         } catch (Exception error) { emergencyCleanup.Add(new { process.Pid, error = Failure(error) }); failures.Add(Failure(error)); }
     }
     try { await app.StopAsync(); await app.DisposeAsync(); report["inputHostClosed"] = true; } catch (Exception error) { failures.Add(Failure(error)); }
@@ -355,7 +356,8 @@ static async Task RunMediaTool(string[] arguments) {
         || value.StartsWith("nullsrc", StringComparison.Ordinal));
     var admitted = version || !forbidden && original && (probe || text);
     var trace = Path.Combine(control.GetProperty("traceDirectory").GetString()!, Guid.NewGuid().ToString("N") + ".json");
-    var row = new Dictionary<string, object?> { ["wrapperPid"] = Environment.ProcessId, ["childPid"] = null,
+    using var wrapperProcess = Process.GetCurrentProcess();
+    var row = new Dictionary<string, object?> { ["wrapperPid"] = Environment.ProcessId, ["wrapperStartedUtcTicks"] = StartedUtcTicks(wrapperProcess), ["childPid"] = null,
         ["arguments"] = arguments, ["forwarded"] = admitted, ["kind"] = version ? "version" : probe ? "probe" : "sami-to-srt",
         ["boundary"] = "Only version, declared-source probe and exact declared SAMI text -> SRT cache conversion are admitted." };
     WriteTrace(trace, row);
@@ -365,7 +367,10 @@ static async Task RunMediaTool(string[] arguments) {
         RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true };
     foreach (var argument in arguments) start.ArgumentList.Add(argument);
     using var process = Process.Start(start) ?? throw new IOException("The admitted media tool did not start.");
-    process.StandardInput.Close(); row["childPid"] = process.Id; row["executable"] = executable;
+    row["childPid"] = process.Id;
+    var childStarted = StartedUtcTicksIfRunning(process);
+    row["childStartedUtcTicks"] = childStarted; row["childExitedBeforeIdentity"] = childStarted is null;
+    process.StandardInput.Close(); row["executable"] = executable;
     row["spawnedUtc"] = DateTime.UtcNow.ToString("O"); WriteTrace(trace, row);
     using var termination = OperatingSystem.IsWindows() ? null : PosixSignalRegistration.Create(PosixSignal.SIGTERM, context => {
         context.Cancel = true; try { if (!process.HasExited) process.Kill(entireProcessTree: true); } catch (InvalidOperationException) { }
@@ -428,21 +433,34 @@ static object[] TraceValues(string directory) => Directory.GetFiles(directory, "
     filename, value = JsonDocument.Parse(File.ReadAllBytes(filename)).RootElement.Clone(),
     stdout = FileValue(filename + ".stdout.bin"), stderr = FileValue(filename + ".stderr.bin"),
 }).Cast<object>().ToArray();
-static bool Alive(int pid) {
-    try { using var process = Process.GetProcessById(pid); return !process.HasExited; }
+static string StartedUtcTicks(Process process) => process.StartTime.ToUniversalTime().Ticks.ToString(CultureInfo.InvariantCulture);
+static string? StartedUtcTicksIfRunning(Process process) {
+    try { return StartedUtcTicks(process); }
+    catch (System.ComponentModel.Win32Exception) when (process.HasExited) { return null; }
+    catch (InvalidOperationException) when (process.HasExited) { return null; }
+}
+static bool Alive(ProcessIdentity identity) {
+    Process? process = null;
+    try { process = Process.GetProcessById(identity.Pid); return !process.HasExited && StartedUtcTicks(process) == identity.StartedUtcTicks; }
     catch (ArgumentException) { return false; }
+    catch (InvalidOperationException) { return false; }
+    // A procfs read can lose the process after the preceding liveness check.
+    catch (System.ComponentModel.Win32Exception) when (process?.HasExited == true) { return false; }
+    finally { process?.Dispose(); }
 }
 static async Task<ProcessObservation[]> ObserveProcesses(IEnumerable<string> traceFiles) {
-    var pids = traceFiles.SelectMany(filename => {
+    var identities = traceFiles.SelectMany(filename => {
         using var document = JsonDocument.Parse(File.ReadAllBytes(filename)); var value = document.RootElement;
-        return new[] { value.GetProperty("wrapperPid"), value.GetProperty("childPid") }
-            .Where(pid => pid.ValueKind == JsonValueKind.Number).Select(pid => pid.GetInt32()).ToArray();
+        return new[] { "wrapper", "child" }.Where(prefix => value.GetProperty(prefix + "Pid").ValueKind == JsonValueKind.Number
+                && !(value.TryGetProperty(prefix + "ExitedBeforeIdentity", out var exited) && exited.ValueKind == JsonValueKind.True))
+            .Select(prefix => new ProcessIdentity(value.GetProperty(prefix + "Pid").GetInt32(), value.GetProperty(prefix + "StartedUtcTicks").GetString()!)).ToArray();
     }).Distinct().ToArray();
     var deadline = Stopwatch.StartNew();
-    while (deadline.Elapsed < TimeSpan.FromSeconds(5) && pids.Any(Alive)) await Task.Delay(20);
-    return pids.Select(pid => new ProcessObservation(pid, Alive(pid))).ToArray();
+    while (deadline.Elapsed < TimeSpan.FromSeconds(5) && identities.Any(Alive)) await Task.Delay(20);
+    return identities.Select(identity => new ProcessObservation(identity.Pid, identity.StartedUtcTicks, Alive(identity))).ToArray();
 }
-public sealed record ProcessObservation(int Pid, bool Alive);
+public sealed record ProcessIdentity(int Pid, string StartedUtcTicks);
+public sealed record ProcessObservation(int Pid, string StartedUtcTicks, bool Alive);
 public sealed class Sample {
     public string Name = "", SourcePath = "", Url = "", CachePath = "", MediaSourceId = "";
     public MediaProtocol Protocol; public int Index;

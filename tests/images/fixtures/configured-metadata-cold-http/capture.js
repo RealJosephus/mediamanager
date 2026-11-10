@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describeFile } from '../../../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../../../tools/validation/native-build-inputs.js';
-import { recordOracle } from '../../../../tools/validation/oracle.js';
+import { compileOracle } from '../../../../tools/validation/oracle.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../../../tools/validation/paths.js';
 import { dateTicks } from '../../../../src/library/records.js';
 
@@ -58,9 +58,10 @@ async function capture() {
       report.sourceBindings.push({ relativePath, actual });
     }
     let native;
+    const oracle = await compileOracle({ project: fileURLToPath(new URL('./Oracle.csproj', root)), output: path.join(output, 'build') });
     for (const label of ['native-first', 'native-repeat']) {
       const directory = path.join(output, label);
-      const record = await recordOracle({ project: fileURLToPath(new URL('./Oracle.csproj', root)), output: directory,
+      const record = await oracle.record({ output: directory,
         args: [fileURLToPath(new URL('./input.json', root)), '{output}/native.json',
           fileURLToPath(new URL('../../../images/fixtures/processor/single.png', root))] });
       const filename = path.join(directory, 'native.json'); report.captures.push({ label, record, observation: await describeFile(filename) });

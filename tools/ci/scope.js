@@ -4,6 +4,7 @@ import { parse } from 'acorn';
 import { dependencyClosure } from '../validation/inventory.js';
 import { repositoryRoot, validationPath } from '../validation/paths.js';
 import { releasePairEnabled } from './release-pair.js';
+import { fullPartitionScopeValid } from '../validation/full-partitions.js';
 
 export const provisionedServices = ['postgres', 'dotnet'];
 export const provisionedTools = ['dotnet', 'ffmpeg', 'ffprobe', 'git', 'tar'];
@@ -27,8 +28,11 @@ export function ciProfile(environment) {
 export function ciExecutionArguments(scope, output) {
   if (scope.schemaVersion !== 1 || !Array.isArray(scope.selected) || !scope.selected.length) throw new Error('Invalid CI scope.');
   const concurrency = String(ciTestConcurrency({ MEDIAMANAGER_CI_TEST_CONCURRENCY: scope.testConcurrency ?? 1 }));
-  if (scope.releasePair && (scope.profile !== 'full' || scope.sharding?.index !== 1 || scope.sharding?.total !== 1)) {
-    throw new Error('Release pairs require the complete unsharded full profile.');
+  if (scope.releasePair) {
+    if (scope.profile !== 'full' || scope.requested?.length || !fullPartitionScopeValid(scope)) {
+      throw new Error('Release pairs require an exact partition of the complete full profile.');
+    }
+    return ['--output', output, '--concurrency', concurrency, '--profile', 'full', '--full-shard', String(scope.sharding.index)];
   }
   if (scope.profile === 'full') {
     if (scope.requested?.length || scope.excluded?.length || !Array.isArray(scope.discovered)

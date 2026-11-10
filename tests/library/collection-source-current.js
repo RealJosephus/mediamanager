@@ -7,7 +7,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
-import { recordOracle } from '../../tools/validation/oracle.js';
+import { compileOracle } from '../../tools/validation/oracle.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
@@ -47,9 +47,11 @@ async function capture() {
       assert.equal(source.sha256, expected.sha256, relative); report.sourceBindings.push({ relativePath: relative, source });
     }
     const observations = [];
+    const oracle = await compileOracle({ project: fileURLToPath(new URL('current/Oracle.csproj', fixture)),
+      output: path.join(output, 'native-build') });
     for (const label of ['initial', 'repeat']) {
       const directory = path.join(output, label);
-      const record = await recordOracle({ project: fileURLToPath(new URL('current/Oracle.csproj', fixture)), output: directory,
+      const record = await oracle.record({ output: directory,
         args: ['{output}', fileURLToPath(inputFile), '{output}/native.json'] });
       const filename = path.join(directory, 'native.json'), bytes = await readFile(filename);
       const native = parseLosslessJson(bytes.toString('utf8'));

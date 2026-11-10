@@ -40,6 +40,11 @@ const reviewedResourceReflection = new Map([
   ['plugins/host.js', new Set(['Object.getPrototypeOf(value)', 'Reflect.get(target,key,target)', 'Reflect.getOwnPropertyDescriptor(value,key)'])],
   ['../plugins/local/adapter.js', new Set(['Reflect.get(object,key,object)'])],
   ['images/service.js', new Set(['Object.getOwnPropertyDescriptors(current)'])],
+  ['database/postgres.js', new Set([
+    "Object.getOwnPropertyDescriptor(query,'text')",
+    "Object.getOwnPropertyDescriptor(query,'values')",
+    'Object.getPrototypeOf(query)!==Object.prototype',
+  ])],
 ]);
 const allowedChildProcessModules = [
   'playback/extraction.js',
@@ -117,6 +122,9 @@ function bindingIdentifier(node, parent) {
 export function auditMediaExecutionSource(relative, source) {
   const syntax = parse(source, { ecmaVersion: 'latest', sourceType: 'module', allowHashBang: true });
   const expression = node => source.slice(node.start, node.end).replace(/\s+/gu, '');
+  const reviewedReflection = reviewedResourceReflection.get(relative);
+  const reviewedPrototypeCheck = node => node?.type === 'BinaryExpression'
+    && reviewedReflection?.has(expression(node)) === true;
   const bindsSymbol = pattern => pattern?.type === 'Identifier' ? pattern.name === 'Symbol'
     : pattern?.type === 'AssignmentPattern' ? bindsSymbol(pattern.left)
       : pattern?.type === 'RestElement' ? bindsSymbol(pattern.argument)
@@ -182,7 +190,7 @@ export function auditMediaExecutionSource(relative, source) {
       if (node.callee.type === 'MemberExpression' && node.callee.object?.type === 'Identifier'
         && ['Object', 'Reflect'].includes(node.callee.object.name)
         && reflectiveProperties.has(propertyName(node.callee))) {
-        assert.equal(reviewedResourceReflection.get(relative)?.has(expression(node)), true,
+        assert.ok(reviewedReflection?.has(expression(node)) || reviewedPrototypeCheck(parent),
           `${relative} must not use an indirect execution bridge`);
       }
       if (node.callee.type === 'Identifier' && node.callee.name === 'spawn') {
@@ -209,7 +217,9 @@ export function auditMediaExecutionSource(relative, source) {
         assert.equal(readsFunctionKind, true,
           `${relative} must not use a dynamic Function constructor as an indirect execution bridge`);
       }
-      if (indirectProperties.has(property)) assert.fail(`${relative} must not use an indirect execution bridge`);
+      if (indirectProperties.has(property) && !(property === 'prototype' && reviewedPrototypeCheck(parent))) {
+        assert.fail(`${relative} must not use an indirect execution bridge`);
+      }
       if (node.object?.type === 'Identifier' && node.object.name === 'process' && node.computed && property === null) {
         assert.fail(`${relative} must not use an indirect execution bridge`);
       }
@@ -308,6 +318,15 @@ test('plugin entry and resource exceptions remain limited to their reviewed expr
   for (const source of ["await import('node:child_process');", 'await import(entry);',
     "Reflect.get(process, 'getBuiltinModule')('node:child_process');", 'Object.getPrototypeOf(process);']) {
     assert.throws(() => auditMediaExecutionSource('plugins/host.js', source), /dynamic import|indirect execution bridge/u);
+  }
+  for (const source of ["Object.getOwnPropertyDescriptor(query, 'text')?.value;",
+    "Object.getOwnPropertyDescriptor(query, 'values')?.value;", 'Object.getPrototypeOf(query) !== Object.prototype;']) {
+    assert.equal(auditMediaExecutionSource('database/postgres.js', source), false);
+    assert.throws(() => auditMediaExecutionSource('library/query.js', source), /indirect execution bridge/u);
+  }
+  for (const source of ["Object.getOwnPropertyDescriptor(query, 'constructor');",
+    'Object.getPrototypeOf(query);', 'Object.prototype;', 'Object.getPrototypeOf(process) !== Object.prototype;']) {
+    assert.throws(() => auditMediaExecutionSource('database/postgres.js', source), /indirect execution bridge/u);
   }
   assert.throws(() => auditMediaExecutionSource('../plugins/local/adapter.js',
     "import { spawn } from 'node:child_process'; spawn('ffmpeg', [], { shell: false });"), /must not load child_process/u);

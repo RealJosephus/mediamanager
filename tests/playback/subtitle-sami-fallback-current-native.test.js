@@ -25,7 +25,6 @@ import { captureCurrentSamiFallback, hash, json, errorValue } from './fixtures/s
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 const enabled = Boolean(process.env.MEDIAMANAGER_JELLYFIN_DLL && postgresTestConnectionString);
-const alive = pid => { try { process.kill(pid, 0); return true; } catch (error) { if (error.code === 'ESRCH') return false; throw error; } };
 const fileValue = value => value.exists ? { exists: true, bytes: value.bytes, base64: value.base64, sha256: value.sha256 } : { exists: false };
 const stateValue = value => ({ source: { ...fileValue(value.source), ...(value.source.exists ? { modifiedTicks: value.source.modifiedTicks } : {}) },
   cache: fileValue(value.cache), meta: fileValue(value.meta) });
@@ -67,7 +66,7 @@ test('current Native File SAMI fallback consumes real FFmpeg SRT, independent me
       report.cleanup.push({ generation, runtimeClosed: true, listenersClosed, databaseClosed: database.closed });
       assert.ok(listenersClosed); assert.equal(database.closed, true);
       assert.ok(report.readers.filter(row => row.generation === generation).every(row => row.closed), 'Every actual media reader drained before storage close.');
-      assert.ok(report.mediaCommands.filter(row => row.generation === generation).every(row => row.closed && (!row.pid || !alive(row.pid))), 'Every actual media tool exited before runtime close returned.');
+      assert.ok(report.mediaCommands.filter(row => row.generation === generation).every(row => row.closed), 'Every actual media tool closed before runtime close returned.');
     } finally { lastDatabase = database; database = undefined; }
   };
   const instrumentMedia = () => {

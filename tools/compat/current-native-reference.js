@@ -8,7 +8,8 @@ import { DatabaseSync } from 'node:sqlite';
 import { nativeInstanceInputs } from '../validation/native-instance-inputs.js';
 import { describeFile } from '../validation/inventory.js';
 import { validationExecutable } from '../validation/paths.js';
-import { prepareNativeApplicationData, resolveNativeTools, verifyNativeProcessInputs } from './native-process-inputs.js';
+import { resolveNativeTools, verifyNativeProcessInputs } from './native-process-inputs.js';
+import { prepareNativeApplicationData } from '../validation/native-application-data.js';
 import { stopNativeReference } from './native-shutdown.js';
 import { observeExecutionPhase } from '../validation/execution-diagnostics.js';
 
