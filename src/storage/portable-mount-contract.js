@@ -313,12 +313,16 @@ function internalAccessMount(value, ...contracts) {
   return null;
 }
 
-/** Project one filesystem-semantic value from a persisted mount contract to an
- * explicitly retargeted contract. Exported absolute paths can be required to
- * belong to the contract; protocol URLs and internal VFS access paths always
- * fail closed except for a field that explicitly permits a Jellyfin-native
- * remote playback protocol. */
-export function projectPortableJellyfinPath(value, sourceValue, targetValue = sourceValue,
+function pathProjectionContracts(sourceValue, targetValue) {
+  const source = sourceValue == null ? null : canonicalPortableMountContract(sourceValue);
+  if (!source) return { source, target: null, retargeted: false };
+  const target = targetValue == null || targetValue === sourceValue
+    ? source : assertPortableMountRetarget(source, targetValue);
+  return { source, target, retargeted: source !== target && JSON.stringify(source) !== JSON.stringify(target) };
+}
+
+/** Validate each path before applying the already scoped mount projection. */
+function projectPortablePath(value, readContracts,
   { label = 'Jellyfin path', protocolPolicy = 'none', allowInternalPath = false, requireMount = false } = {}) {
   if (value == null || value === '') return value;
   if (typeof value !== 'string') throw new TypeError(`${label} must be text`);
@@ -331,10 +335,8 @@ export function projectPortableJellyfinPath(value, sourceValue, targetValue = so
     if (!opaqueStorageProtocolPattern.test(value) && permittedNativeUrl(value, protocolPolicy)) return value;
     throw new Error(`${label} contains a storage protocol URL`);
   }
-  const source = sourceValue == null ? null : canonicalPortableMountContract(sourceValue);
-  const target = source == null ? null : assertPortableMountRetarget(source, targetValue ?? source);
+  const { source, target, retargeted } = readContracts();
   if (!source) return value;
-  const retargeted = JSON.stringify(source) !== JSON.stringify(target);
   // Access namespaces are never portable identity paths. Check them before
   // identity roots so even an overly broad POSIX identity root cannot disguise
   // an internal VFS path as native Jellyfin state.
@@ -362,4 +364,16 @@ export function projectPortableJellyfinPath(value, sourceValue, targetValue = so
   }
   if (requireMount) throw new Error(`${label} is outside every portable mount`);
   return value;
+}
+
+/** Project one filesystem-semantic value under the portable mount contract. */
+export function projectPortableJellyfinPath(value, sourceValue, targetValue = sourceValue, options) {
+  return projectPortablePath(value, () => pathProjectionContracts(sourceValue, targetValue), options);
+}
+
+/** Bind the validated mount pair on the first filesystem value in this audit. */
+export function createPortableJellyfinPathProjector(sourceValue, targetValue = sourceValue) {
+  let contracts;
+  const readContracts = () => (contracts ??= pathProjectionContracts(sourceValue, targetValue));
+  return (value, options) => projectPortablePath(value, readContracts, options);
 }

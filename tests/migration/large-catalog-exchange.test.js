@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
 import { copyFile, mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
@@ -36,9 +36,14 @@ const dataDigest = count => {
 const nativePage = rows => rows.map(row => ({ id: nativeGuid(row.Id), Name: row.Name, SortName: row.SortName,
   ProductionYear: row.ProductionYear, runTimeTicks: row.RunTimeTicks?.toString() ?? null }));
 
+let exchange;
+after(async () => { await exchange?.catch(() => {}); });
+
 test('100000 actual Native model items retain bounded PG selection and complete values through Node mutations, Native continuation and fresh PG', {
   skip: !enabled, timeout: 900000,
-}, async t => {
+}, t => { exchange = runLargeCatalogExchange(t); return exchange; });
+
+async function runLargeCatalogExchange(t) {
   const destination = path.join(validationOutputRoot(), 'large-catalog-exchange-' + randomUUID());
   const output = await createPrivateFilterOutput(destination); output.addSecret(process.env.MEDIAMANAGER_TEST_POSTGRES);
   await mkdir(output.root);
@@ -321,4 +326,4 @@ test('100000 actual Native model items retain bounded PG selection and complete 
     }
   }
   if (failed) throw output.publicError(failure);
-});
+}

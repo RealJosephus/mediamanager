@@ -166,18 +166,19 @@ test('local restore refuses unrelated destinations and unexpected staged entries
   await assert.rejects(access(destination), { code: 'ENOENT' });
 });
 
-test('interrupted packages have no commit and cannot be restored', async t => {
+test('cancelled package creation publishes no committed package and cannot be restored', async t => {
   const fixture = await createInstanceFixture(t, { prefix: 'mediamanager-state-abort-' });
   const destination = path.join(fixture.directory, 'package');
   const controller = new AbortController(); controller.abort();
-  await assert.rejects(createStatePackage(await fixture.packageOptions({ destination, signal: controller.signal })), /abort/iu);
+  await assert.rejects(createStatePackage(await fixture.packageOptions({ destination, signal: controller.signal })),
+    error => error === controller.signal.reason);
   await assert.rejects(access(destination), { code: 'ENOENT' });
   const staging = captureStagingPath(destination);
-  const progress = JSON.parse(await readFile(path.join(staging, 'progress.json'), 'utf8'));
-  assert.equal(progress.stage, 'preflight');
-  assert.match(progress.lastError, /abort/iu);
   await assert.rejects(access(path.join(staging, 'COMMITTED')), { code: 'ENOENT' });
   await assert.rejects(verifyStatePackage(staging));
+  const restored = path.join(fixture.directory, 'restored');
+  await assert.rejects(restoreStatePackage(staging, restored));
+  await assert.rejects(access(restored), { code: 'ENOENT' });
 });
 
 test('package capture resumes one bound generation, repairs partial files and publishes only after verification', async t => {

@@ -128,11 +128,12 @@ test('native media HTTP policy retains exact scalar types and nested path restri
     assert.throws(() => projector.projectRow('BaseItems', row), pattern, `${type} Path: ${value}`);
   }
   for (const data of [
-    { AdditionalParts: ['https://photos.invalid/part.jpg'] },
-    { LinkedAlternateVersions: [{ Path: 'https://photos.invalid/alternate.jpg' }] },
+    '{"AdditionalParts":["https://photos.invalid/part.jpg"]}',
+    '{"LinkedAlternateVersions":[{"Path":"https://photos.invalid/alternate.jpg"}]}',
+    String.raw`{"Additional\u0050arts":["https://photos.invalid/part.jpg"],"AdditionalParts":null}`,
   ]) assert.throws(() => projector.projectRow('BaseItems', exchangeRow('BaseItems', {
     Type: 'MediaBrowser.Controller.Entities.Photo', ChannelId: null,
-    Path: 'https://photos.invalid/a.jpg', Data: JSON.stringify(data),
+    Path: 'https://photos.invalid/a.jpg', Data: data,
   })), /storage protocol URL/u);
 });
 

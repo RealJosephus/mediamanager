@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { after, before } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
 import { access, cp, mkdir, readFile, readdir, realpath, unlink, writeFile } from 'node:fs/promises';
@@ -24,7 +24,8 @@ import { createPrivateFilterOutput, filterEvidenceJson } from '../../tools/compa
 import { compileOracle } from '../../tools/validation/oracle.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
-import { declareFileTestResource } from '../helpers/file-test-resource.js';
+import { acquireTestResources, settleTestResourceRelease } from '../helpers/test-resource-group.js';
+import { acquireTestResource } from '../helpers/test-resource-lease.js';
 import { orderedExchangeSnapshot } from '../helpers/ordered-exchange-snapshot.js';
 import { assertRemoved, databaseFilename, idKey, itemSnapshot, portAvailable,
   removeSyntheticPreparation, sha, stoppedDatabase, unusedPort } from '../helpers/library-exchange-state.js';
@@ -37,8 +38,7 @@ import { compareInstanceAssets, startRestoreWorker } from './fixtures/production
 export const requiredValidationServices = ['postgres', 'nativeInstance', 'dotnet', 'jellyfinDll'];
 const enabled = Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE
   && process.env.MEDIAMANAGER_JELLYFIN_DLL);
-const mediaLease = declareFileTestResource('native-media-5244', { enabled });
-const discoveryLease = declareFileTestResource('hdhomerun-discovery-65001', { enabled });
+const discoveryResource = 'hdhomerun-discovery-65001';
 const inputBytes = await readFile(new URL('./fixtures/production-instance-state-exchange/input.json', import.meta.url));
 const input = JSON.parse(inputBytes);
 const mediaBytes = await readFile(new URL('../fixtures/frozen-av/source.m2ts', import.meta.url));
@@ -55,9 +55,21 @@ const nativePage = rows => rows.map(row => ({ id: nativeGuid(row.Id), Name: row.
 const nativeDtoPage = rows => rows.map(row => ({ id: nativeGuid(row.Id), Name: row.Name ?? null, SortName: row.SortName ?? null,
   ProductionYear: row.ProductionYear ?? null, runTimeTicks: row.RunTimeTicks?.toString() ?? null }));
 
+let initialDiscovery, exchange;
+before(async ({ signal }) => {
+  if (enabled) initialDiscovery = await acquireTestResource(discoveryResource, { signal });
+});
+after(async () => {
+  // File teardown waits even if the timed test has already reported failure.
+  await exchange?.catch(() => {});
+  await initialDiscovery?.release();
+});
+
 test('one generated 100000-item instance preserves whole state through real restore-owner death, Native full-host consumption and fresh PG', {
   skip: !enabled, timeout: 900000,
-}, async t => mediaLease.run(() => discoveryLease.run(async () => {
+}, t => { exchange = runProductionInstanceExchange(t); return exchange; });
+
+async function runProductionInstanceExchange(t) {
   const destination = path.join(validationOutputRoot(), 'production-instance-state-' + randomUUID());
   const output = await createPrivateFilterOutput(destination);
   output.addSecret(process.env.MEDIAMANAGER_TEST_POSTGRES); await mkdir(output.root);
@@ -75,6 +87,7 @@ test('one generated 100000-item instance preserves whole state through real rest
   report.databaseMetrics = { diagnosticOnly: true, inclusiveCallDurations: true, calls: metrics.records,
     processScope: 'Parent Node calls only. Restore, Native and PostgreSQL process CPU is not represented by parent process CPU deltas.' };
   let current, native, proxy, database, fresh, sqlite, remoteSource, sourceServer, sourceStorage, remoteTarget, targetServer, targetStorage;
+  let nativeLeases = [];
   let failed = false, failure, phase = 'prepare';
   const workers = [];
   const databaseOwners = new Set(), closedDatabaseOwners = new Set();
@@ -89,7 +102,7 @@ test('one generated 100000-item instance preserves whole state through real rest
   };
   const stage = async (name, operation) => {
     const entry = { name, startedAt: new Date().toISOString() }; report.stages.push(entry); phase = name; metrics.setPhase(name);
-    if (proxy) proxy.report.phase = name;
+    if (proxy && !proxyClosed) proxy.report.phase = name;
     const started = performance.now(), cpu = process.cpuUsage();
     entry.resourcesBefore = process.resourceUsage();
     try { t.signal.throwIfAborted(); const value = await operation(); t.signal.throwIfAborted(); entry.completed = true; return value; }
@@ -137,8 +150,31 @@ test('one generated 100000-item instance preserves whole state through real rest
     if (!result.cleanShutdown || !result.pidGone || !result.portAvailable) ownerCloseFailed = true;
     assert.equal(result.cleanShutdown, true); assert.equal(result.pidGone, true); assert.equal(result.portAvailable, true);
   };
-  const startNative = async (target, label) => {
+  const closeProxy = async () => {
+    if (!proxy || proxyClosed) return;
+    await proxy.close();
+    proxyClosed = true;
+  };
+  const releaseNativeLeases = async () => {
+    if (native || (proxy && !proxyClosed)) return;
+    const errors = await settleTestResourceRelease(nativeLeases);
+    if (errors.length) throw new AggregateError(errors, 'Native instance resource release failed.', { cause: errors[0] });
+    nativeLeases = [];
+  };
+  const startNative = async (target, label, { media = false } = {}) => {
     await current.prepareClone(target, port);
+    if (media) {
+      nativeLeases = await acquireTestResources([
+        { key: discoveryResource }, { key: 'native-media-5244' },
+      ], { signal: t.signal });
+      proxy = await startOwnedMediaProxy([physicalMedia]);
+      proxy.report.phase = phase;
+      report.proxy = proxy.report;
+    } else {
+      nativeLeases = [initialDiscovery];
+      initialDiscovery = undefined;
+    }
+    t.signal.throwIfAborted();
     native = current.start({ referenceRoot: target, outputRoot: root, label, origin });
     nativeOwners.add(native);
     await native.ready(); await idle();
@@ -187,6 +223,7 @@ test('one generated 100000-item instance preserves whole state through real rest
       await startNative(instanceRoot, 'native-initial-owner');
       for (const task of await idle()) assert.equal((await request('/ScheduledTasks/' + task.Id + '/Triggers', { method: 'POST', body: [] })).status, 204);
       await stopNative('initial-owner');
+      await releaseNativeLeases();
     });
     const catalogInput = { ...input, userId: current.userId, mediaRoot }, catalogInputFile = path.join(root, 'catalog-input.json');
     const catalogInputBytes = Buffer.from(JSON.stringify(catalogInput));
@@ -353,9 +390,8 @@ test('one generated 100000-item instance preserves whole state through real rest
     assert.equal(continued.after.rows, input.items); assert.equal(continued.after.userStateRows, input.items);
     assert.equal(continued.after.dataSha256, dataDigest()); assert.equal(continued.after.nodeAddedItemPresent, false);
     assert.equal(continued.after.nativeAddedItemPresent, true); assert.equal(continued.after.retained.Name, 'Native continued at production cardinality');
-    proxy = await startOwnedMediaProxy([physicalMedia]); report.proxy = proxy.report;
     await stage('native-full-host-consumption', async () => {
-      await startNative(restoredRoot, 'native-restored-full-host');
+      await startNative(restoredRoot, 'native-restored-full-host', { media: true });
       const page = await request('/Items?' + new URLSearchParams({ ParentId: idKey(input.parentId), Recursive: 'true',
         IncludeItemTypes: 'Movie', SortBy: 'SortName', SortOrder: 'Ascending', StartIndex: '0', Limit: '128',
         EnableImages: 'false', EnableTotalRecordCount: 'true', Fields: 'Path' }));
@@ -387,6 +423,8 @@ test('one generated 100000-item instance preserves whole state through real rest
       assert.ok(postProbePage.value.Items.length <= 128);
       report.nativePostProbeSelection = { filteredCount: postProbePage.value.TotalRecordCount, page: nativeDtoPage(postProbePage.value.Items) };
       await stopNative('restored-full-host');
+      await closeProxy();
+      await releaseNativeLeases();
     });
     const finalState = await discoverInstanceState({ instanceRoot: restoredRoot }); assert.equal(finalState.identity.serverId, report.binding.serverId);
     fresh = ownDatabase(await createPostgresTestDatabase(null, 'production_return', { deferRuntimeSchemaInitialization: true }));
@@ -436,7 +474,7 @@ test('one generated 100000-item instance preserves whole state through real rest
     catch (error) { ownerCloseFailed = true; cleanupErrors.push(error); }
     for (const operation of [() => stopNative('finally-native'),
       ...[...sqliteOwners].filter(owner => !closedSqliteOwners.has(owner)).map(owner => () => closeSqlite(owner)),
-      async () => { if (proxy) { await proxy.close(); proxyClosed = true; } },
+      closeProxy, releaseNativeLeases,
       () => sourceStorage?.registry.close(), () => sourceServer?.close(),
       () => targetStorage?.registry.close(), () => targetServer?.close(), () => dropPostgresTestDatabase(fresh),
       () => dropPostgresTestDatabase(database), ...[...databaseOwners].map(owner => () => closeDatabase(owner)),
@@ -491,4 +529,4 @@ test('one generated 100000-item instance preserves whole state through real rest
     if (failure === null || typeof failure !== 'object') throw failure;
     throw output.publicError(failure);
   }
-}, { signal: t.signal }), { signal: t.signal }));
+}

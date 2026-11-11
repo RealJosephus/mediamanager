@@ -5,7 +5,7 @@ import { constants as fsConstants } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import { exportCurrentSqlite, databaseDigest, getNativeEnvelope } from './database-transfer.js';
+import { exportCurrentSqlite, databaseDigest, databaseDigestWithProjection, getNativeEnvelope } from './database-transfer.js';
 import { verifyPostgresTransferContract } from '../database/postgres-transfer-contract.js';
 import { SqliteDatabase } from '../database/sqlite.js';
 import { captureRemoteAssets, inspectRemoteAssets, verifyRemoteGeneration, restoreRemoteAssets, validateRemoteAssetManifest } from './remote-assets.js';
@@ -895,7 +895,7 @@ function nativeEnvelopeIdentity(envelope) {
 }
 
 async function captureSourceIdentity(database, instanceState, remotePlan,
-  { requirePinnedEnvelope = true, targetPortableMountContract = undefined, instanceStatePaths = null } = {}) {
+  { requirePinnedEnvelope = true, targetPortableMountContract = undefined, instanceStatePaths = null, signal } = {}) {
   let databaseState;
   const capture = async current => {
     const postgresContract = current.dialect === 'postgres'
@@ -912,8 +912,7 @@ async function captureSourceIdentity(database, instanceState, remotePlan,
       targetContract: projectedPortableMountContract,
       instanceStatePaths,
     });
-    const tables = await databaseDigest(current);
-    const projectedTables = await databaseDigest(current, { rowTransform: projector.projectRow });
+    const { tables, projectedTables } = await databaseDigestWithProjection(current, projector.projectRow, { signal });
     return {
       tables,
       projectedTables,
@@ -926,7 +925,7 @@ async function captureSourceIdentity(database, instanceState, remotePlan,
       liveTvState: await captureLiveTvState(current),
     };
   };
-  if (database.dialect === 'postgres') databaseState = await database.transaction(capture, { readOnly: true });
+  if (database.dialect === 'postgres') databaseState = await database.transaction(capture, { readOnly: true, signal });
   else {
     if (database.database.isTransaction) throw new Error('State package source database must not already be in a transaction');
     database.database.exec('BEGIN');
@@ -1158,6 +1157,7 @@ async function createStatePackageOwned(options, lease) {
     requirePinnedEnvelope: !testOnlyAllowSyntheticEnvelope,
     targetPortableMountContract: exportPortableMountContract,
     instanceStatePaths: { programData: instanceState.paths.programData, metadata: instanceState.paths.metadata },
+    signal,
   });
   if (canonicalJson(sourceIdentity.database.portableMountContract) !== canonicalJson(sourcePortableMountContract)) {
     throw new Error('PostgreSQL portable VFS mount contract changed during state package preflight');
@@ -1386,6 +1386,7 @@ async function createStatePackageOwned(options, lease) {
       requirePinnedEnvelope: !testOnlyAllowSyntheticEnvelope,
       targetPortableMountContract: exportPortableMountContract,
       instanceStatePaths: { programData: instanceState.paths.programData, metadata: instanceState.paths.metadata },
+      signal,
     });
     if (canonicalJson(finalSourceIdentity) !== canonicalJson(sourceIdentity)) throw new Error('Package source database or remote generation changed during capture');
     const finalWriteBarrier = await assertCaptureSessionHeld(captureSession, instanceState, 'post');

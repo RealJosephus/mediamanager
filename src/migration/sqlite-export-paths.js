@@ -2,7 +2,7 @@ import { NativeTextCell, nativeTextCell } from '../database/native-text.js';
 import path from 'node:path';
 import { tokenizeJson } from '../core/json-tokens.js';
 import { nativeModel } from '../database/model.js';
-import { projectPortableJellyfinPath } from '../storage/portable-mount-contract.js';
+import { createPortableJellyfinPathProjector } from '../storage/portable-mount-contract.js';
 
 const directPathColumns = Object.freeze(new Map([
   ['BaseItemImageInfos', ['Path']],
@@ -46,6 +46,8 @@ const dataPathArrays = new Set([
   'PhysicalLocationsList',
   'SubtitleFiles',
 ]);
+const dataPathProperties = new Set([...dataPathArrays, 'LinkedAlternateVersions', 'ShortcutPath']);
+const baseItemPathFields = ['Path', 'Type', 'ChannelId', 'Data'];
 
 const selfLocatedFolderTypes = new Set([
   'MediaBrowser.Controller.Entities.AggregateFolder',
@@ -139,7 +141,12 @@ function projectBaseItemData(value, project, label, { physicalLocationOwnerPath,
   // Jellyfin deliberately tolerates opaque/legacy Data values when a row
   // cannot be deserialized. There is no sound way to interpret paths in such
   // a value, so retain its exact text instead of corrupting an R7 exchange.
-  try { JSON.parse(value); root = tokenizeJson(value); }
+  try {
+    const data = JSON.parse(value);
+    if (data === null || typeof data !== 'object' || !Object.keys(data).some(key => dataPathProperties.has(key))) return value;
+    // Only the token view retains every occurrence and its original spelling.
+    root = tokenizeJson(value);
+  }
   catch { return value; }
   if (!root.properties) return value;
   const replacements = [];
@@ -184,6 +191,9 @@ export function createSqliteExportPathProjector({ sourceContract = null, targetC
   const instanceRoots = canonicalInstanceStateRoots(instanceStatePaths);
   const targetInstanceRoots = canonicalInstanceStateRoots(targetInstanceStatePaths);
   if (targetInstanceRoots && !instanceRoots) throw new TypeError('Target instance paths require their explicit source instance paths');
+  const projectMediaPath = createPortableJellyfinPathProjector(sourceContract, targetContract);
+  const auditInstancePath = sourceContract === targetContract
+    ? projectMediaPath : createPortableJellyfinPathProjector(sourceContract);
   const statistics = { auditedPaths: 0, rewrittenPaths: 0 };
   const project = (value, label, options = {}) => {
     if (value == null || value === '') return value;
@@ -191,8 +201,8 @@ export function createSqliteExportPathProjector({ sourceContract = null, targetC
     const { instanceState = false, allowInstanceState = false, ...pathOptions } = options;
     const instanceProjected = instanceState || allowInstanceState
       ? virtualInstanceStatePath(value, instanceRoots, targetInstanceRoots) : value;
-    const projected = projectPortableJellyfinPath(instanceProjected, sourceContract,
-      instanceState ? sourceContract : targetContract, {
+    const projectPath = instanceState ? auditInstancePath : projectMediaPath;
+    const projected = projectPath(instanceProjected, {
       label,
       requireMount: sourceContract !== null,
       ...pathOptions,
@@ -224,22 +234,25 @@ export function createSqliteExportPathProjector({ sourceContract = null, targetC
     return result;
   };
   const projectRow = (tableName, row) => {
-    const fields = [...(directPathColumns.get(tableName) ?? []), ...(tableName === 'BaseItems' ? ['Type', 'ChannelId', 'Data'] : [])];
-    const semantic = { ...row }, opaque = new Set();
+    const fields = tableName === 'BaseItems' ? baseItemPathFields : directPathColumns.get(tableName);
+    if (!fields) return row;
+    const semantic = {};
+    let opaqueData = false;
     for (const key of fields) {
       const value = row[key];
-      if (value == null) continue;
+      if (value == null) { semantic[key] = value; continue; }
       if (!(value instanceof NativeTextCell)) throw new TypeError('Path projection requires raw native TEXT cells.');
       try { semantic[key] = value.string(); }
       catch (error) {
         if (key !== 'Data') throw error;
-        opaque.add(key); semantic[key] = null;
+        opaqueData = true;
+        semantic.Data = null;
       }
     }
     const projected = projectStringRow(tableName, semantic);
     let result = row;
     for (const key of fields) {
-      if (opaque.has(key) || projected[key] === semantic[key]) continue;
+      if ((opaqueData && key === 'Data') || projected[key] === semantic[key]) continue;
       if (result === row) result = { ...row };
       result[key] = projected[key] == null ? projected[key] : nativeTextCell(projected[key]);
     }

@@ -128,7 +128,7 @@ test('a whole CI-native instance completes real library verification and preserv
     const observed = { phase, route, method, anonymous, ...(body === undefined ? {} : { body }) }; report.requests.push(observed);
     const response = await fetch(origin + route, { method, redirect: 'error',
       signal: cleanup ? AbortSignal.timeout(30000) : AbortSignal.any([t.signal, AbortSignal.timeout(30000)]),
-      headers: { ...(anonymous ? {} : { Authorization: `MediaBrowser Token="${token}"` }), Accept: binary ? '*/*' : 'application/json',
+      headers: { ...(anonymous ? {} : { Authorization: `MediaBrowser Token="${token}"` }), Connection: 'close', Accept: binary ? '*/*' : 'application/json',
         ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
     const bytes = Buffer.from(await response.arrayBuffer());

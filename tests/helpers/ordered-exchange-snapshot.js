@@ -12,6 +12,13 @@ export async function orderedExchangeSnapshot(database, { signal, rowTransform, 
   }
   const snapshot = await completeSnapshot(database, { signal, rowTransform }), insertionOrder = {};
   for (const name of nativeInsertionOrderedTables) {
+    if (insertionRowTransform === rowTransform) {
+      // databaseDigest already hashes these tables in their native insertion
+      // order, including every cell. Reuse this scan at the same boundary.
+      const { rows, sha256 } = snapshot.tables.find(table => table.name === name);
+      insertionOrder[name] = { rows, sha256 };
+      continue;
+    }
     const columns = tableDefinition(name).columns;
     const hash = createHash('sha256');
     let after, rows = 0;
