@@ -17,6 +17,7 @@ import { rawHttp } from '../images/http-client.js';
 import { imageHeaderProjection } from '../images/header-projection.js';
 import { imageUploadExtension, decodeBase64Stream } from '../../src/images/upload.js';
 import { escapeXml } from '../../src/core/xml.js';
+import { AuthenticationService } from '../../src/users/authentication-service.js';
 
 const fixture = new URL('./fixtures/branding/', import.meta.url);
 const [nativeBytes, inputBytes, proofBytes] = await Promise.all(['native.json', 'input.json', 'provenance.json'].map(name => readFile(new URL(name, fixture))));
@@ -86,10 +87,9 @@ test('branding HTTP matches native actions, model binding, files and failure com
     } }) : testFileSystem;
     const images = new ImageService({ fileSystem, processor }), branding = new BrandingService({ fileSystem, configurationStore: store, images, dataPath });
     const auth = { IsAuthenticated: sample.identity != null && sample.identity !== 'anonymous', IsAdministrator: sample.identity === 'admin' };
-    const authentication = { read: () => auth, authenticate: async () => auth, authorize(value, { policy }) {
-      if (!value.IsAuthenticated) throw Object.assign(new Error('Unauthenticated.'), { status: 401 });
-      if (policy === 'RequiresElevation' && !value.IsAdministrator) throw Object.assign(new Error('Administrator required.'), { status: 403 });
-    } };
+    auth.User = { Policy: { IsAdministrator: auth.IsAdministrator, EnableRemoteAccess: true }, AccessSchedules: [] };
+    const authentication = new AuthenticationService({ store: {}, users: {}, serverId: 'branding-fixture', isLocalNetwork: () => true });
+    authentication.read = () => auth; authentication.authenticate = async () => auth;
     const application = await createTestApplication({ branding, authentication, configuration: { IsStartupWizardCompleted: true, UICulture: 'en-US' }, onError: error => errors.push(error) });
     await new Promise(resolve => application.server.listen(0, '127.0.0.1', resolve));
     try {
