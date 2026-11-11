@@ -1,5 +1,7 @@
 import path from 'node:path';
 import { localXmlBufferSize } from './local-xml-writer.js';
+import { ownStorageDirectory } from '../storage/ownership.js';
+import { operationFailure } from '../core/operation-failure.js';
 
 const fileSink = handle => ({ async write(bytes) {
   for (let offset = 0; offset < bytes.length;) {
@@ -27,22 +29,24 @@ export async function validateXmlSpoolRoot(root, fileSystem) {
 }
 
 export async function networkXmlSpool(root, fileSystem) {
-  const directory = await fileSystem.mkdtemp(path.join(root, 'xml-save-'));
-  const target = path.join(directory, 'frame.xml');
-  let handle;
-  try { handle = await fileSystem.open(target, 'wx'); }
-  catch (error) { await fileSystem.rmdir(directory); throw error; }
-  let closed = false, disposed = false;
-  const readers = new Set();
-  const close = async () => {
-    if (closed) return;
-    closed = true;
-    await handle.close();
-  };
-  const dispose = async () => {
-    if (disposed) return;
-    disposed = true;
+  const owner = ownStorageDirectory(fileSystem, root); fileSystem = owner.fileSystem;
+  let directory, target, handle;
+  try {
+    directory = await fileSystem.mkdtemp(path.join(root, 'xml-save-'));
+    target = path.join(directory, 'frame.xml'); handle = await fileSystem.open(target, 'wx');
+  } catch (error) {
+    const errors = [error];
+    if (directory) try { await fileSystem.rmdir(directory); } catch (error) { errors.push(error); }
+    try { await owner.close(); } catch (error) { errors.push(error); }
+    if (errors.length > 1) throw new AggregateError(errors, 'The XML spool could not be opened.', { cause: error });
+    throw error;
+  }
+  let closing, disposing;
+  const readers = new Set(), opening = new Set(), uploads = new Set();
+  const close = () => closing ??= Promise.resolve().then(() => handle.close());
+  const dispose = () => disposing ??= (async () => {
     const errors = [];
+    await Promise.allSettled([...uploads, ...opening]);
     try { await close(); } catch (error) { errors.push(error); }
     for (const reader of readers) {
       try { await reader.close(); } catch (error) { errors.push(error); }
@@ -50,16 +54,20 @@ export async function networkXmlSpool(root, fileSystem) {
     }
     try { await fileSystem.unlink(target); } catch (error) { errors.push(error); }
     try { await fileSystem.rmdir(directory); } catch (error) { errors.push(error); }
+    try { await owner.close(); } catch (error) { errors.push(error); }
     if (errors.length) throw new AggregateError(errors, 'The XML spool could not be completely released.');
-  };
+  })();
   const prepare = async () => {
-    if (disposed) throw new Error('The XML spool has been released.');
+    if (disposing) throw new Error('The XML spool has been released.');
     await close();
     const size = (await fileSystem.stat(target, { bigint: true })).size;
     async function* stream() {
-      if (disposed) throw new Error('The XML spool has been released.');
-      const reader = await fileSystem.open(target, 'r');
-      readers.add(reader);
+      if (disposing) throw new Error('The XML spool has been released.');
+      const pending = fileSystem.open(target, 'r').then(reader => { readers.add(reader); return reader; });
+      opening.add(pending);
+      let reader;
+      try { reader = await pending; } finally { opening.delete(pending); }
+      const errors = [];
       try {
         while (true) {
           const bytes = Buffer.allocUnsafe(localXmlBufferSize);
@@ -67,13 +75,17 @@ export async function networkXmlSpool(root, fileSystem) {
           if (!bytesRead) return;
           yield bytes.subarray(0, bytesRead);
         }
-      } finally { if (readers.delete(reader)) await reader.close(); }
+      } catch (error) { errors.push(error); }
+      finally {
+        try { if (readers.delete(reader)) await reader.close(); } catch (error) { errors.push(error); }
+        if (errors.length) throw operationFailure(errors, 'The XML spool reader could not be released.');
+      }
     }
     return Object.freeze({ size, stream, close: dispose });
   };
   return { sink: fileSink(handle), close, prepare, dispose,
     writeTextSync(value) {
-      if(closed||disposed) throw new Error('The XML spool cannot accept more text.');
+      if(closing||disposing) throw new Error('The XML spool cannot accept more text.');
       for(let start=0;start<value.length;) {
         let end=Math.min(start+2048,value.length); if(end<value.length && /[\uD800-\uDBFF]/u.test(value[end-1]))end--;
         const bytes=Buffer.from(value.slice(start,end),'utf8');
@@ -81,27 +93,20 @@ export async function networkXmlSpool(root, fileSystem) {
         start=end;
       }
     },
-    async upload(vfs, destination, options = {}) {
-      await close();
-      const size = (await fileSystem.stat(target, { bigint: true })).size;
-      const reader = await fileSystem.open(target, 'r');
-      let readerClosed = false;
-      const closeReader = async () => { if (!readerClosed) { readerClosed = true; await reader.close(); } };
-      async function* chunks() {
-        try {
-          while (true) {
-            // Each yielded chunk owns its bytes: the transport may prefetch
-            // the next chunk before it finishes consuming the previous one.
-            const bytes = Buffer.allocUnsafe(localXmlBufferSize);
-            const { bytesRead } = await reader.read(bytes, 0, bytes.length, null);
-            if (!bytesRead) return;
-            yield bytes.subarray(0, bytesRead);
-          }
-        } finally { await closeReader(); }
-      }
-      const stream = chunks();
-      try { return await vfs.write(destination, stream, { ...options, size }); }
-      finally { try { await stream.return(); } finally { await closeReader(); } }
+    upload(vfs, destination, options = {}) {
+      const uploading = (async () => {
+        const prepared = await prepare(), stream = prepared.stream();
+        const errors = [];
+        let result;
+        try { result = await vfs.write(destination, stream, { ...options, size: prepared.size }); }
+        catch (error) { errors.push(error); }
+        try { await stream.return(); } catch (error) { errors.push(error); }
+        if (errors.length) throw operationFailure(errors, 'The XML frame could not be uploaded.');
+        return result;
+      })();
+      uploads.add(uploading);
+      void uploading.then(() => uploads.delete(uploading), () => uploads.delete(uploading));
+      return uploading;
     },
   };
 }

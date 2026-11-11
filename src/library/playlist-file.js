@@ -4,6 +4,8 @@ import { nativeDirectoryName, nativeFileName, nativePlaylistIsFile } from './nat
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { clrTrim } from '../metadata/whitespace.js';
 import { StorageError, requireCapability } from '../storage/errors.js';
+import { ownStorageDirectory } from '../storage/ownership.js';
+import { operationFailure } from '../core/operation-failure.js';
 
 const extensions = new Set(['.m3u', '.m3u8', '.pls', '.wpl', '.zpl']);
 const albumArtistTypes = new Set(['Audio', 'AudioBook', 'MusicAlbum']);
@@ -21,9 +23,15 @@ async function releasePlaylistResources(releases, failures = []) {
   for (const release of releases) {
     try { await release(); } catch (error) { failures.push(error); }
   }
-  if (failures.length === 1) throw failures[0];
-  if (failures.length > 1) throw new AggregateError(failures,
-    failures[0]?.message ?? 'Playlist file resources failed to release.', { cause: failures[0] });
+  if (failures.length) throw operationFailure(failures, 'Playlist file resources failed to release.');
+}
+
+function missingPlaylistFile(error) {
+  try {
+    // A missing target can still own a failed response cleanup. Only a single
+    // absence permits creation; diagnostic access cannot replace a rejection.
+    return error?.code === 'not-found' && !(error instanceof AggregateError) && error.errors === undefined;
+  } catch { return false; }
 }
 
 function unescapeUri(value) {
@@ -191,7 +199,7 @@ export class PlaylistFileWriter {
     const accessPath = this.identityMap.resolve({ itemId: item.Id, identityPath: item.Path, style });
     const resolved = this.vfs.resolve(accessPath);
     const info = await this.vfs.stat(accessPath).catch(error => {
-      if (error.code === 'not-found') return null;
+      if (missingPlaylistFile(error)) return null;
       throw error;
     });
     if (info?.kind === 'directory' || !nativePlaylistIsFile(item)) return { accessPath, identityPath: item.Path, metadataOnly: true };
@@ -219,7 +227,10 @@ export async function preparePlaylistFile(playlistPath,cohort,{fileSystem,spoolR
   if(cohort==null)throw new TypeError('The playlist children cannot be null.');
   if(typeof cohort.page!=='function'||typeof cohort.count!=='function')throw new TypeError('Playlist file serialization requires a typed SQL cohort.');
   if(typeof spoolRoot!=='string'||!path.isAbsolute(spoolRoot))throw new TypeError('A state-owned playlist spool directory is required.');
-  const filename=path.join(spoolRoot,`playlist-${randomUUID()}.tmp`),file=await fileSystem.open(filename,'wx');
+  const owner=ownStorageDirectory(fileSystem,spoolRoot);fileSystem=owner.fileSystem;
+  const filename=path.join(spoolRoot,`playlist-${randomUUID()}.tmp`);let file;
+  try{file=await fileSystem.open(filename,'wx');}
+  catch(error){await releasePlaylistResources([()=>owner.close()],[error]);}
   const eol=windows?'\r\n':'\n';let size=0n,closed=false,trailing='';
   const emit=async text=>{const bytes=Buffer.from(text);for(let offset=0;offset<bytes.length;){const written=await file.write(bytes,offset,bytes.length-offset);if(!written.bytesWritten)throw new Error('The playlist spool write made no progress.');offset+=written.bytesWritten;}size+=BigInt(bytes.length);};
   const text=async value=>{
@@ -255,9 +266,34 @@ export async function preparePlaylistFile(playlistPath,cohort,{fileSystem,spoolR
     if(extension==='.pls')await text(`NumberOfEntries=${count}`+eol+eol+'Version=2');
     else if(['.wpl','.zpl'].includes(extension))await text((count?eol+'    </seq>':'')+eol+'  </body>'+eol+'</smil>');
     await file.close();closed=true;let close;
-    return Object.freeze({size,stream:()=>{if(close)throw new Error('The playlist spool has been released.');return fileSystem.createReadStream(filename);},
-      close:()=>close??=fileSystem.rm(filename,{force:true})});
+    const readers=new Set(),opening=new Set(),reading=new Set();
+    const closeReader=reader=>reader.closing??=Promise.resolve().then(()=>reader.file.close()).finally(()=>readers.delete(reader));
+    async function* stream(){
+      if(close)throw new Error('The playlist spool has been released.');
+      const pending=fileSystem.open(filename,'r').then(file=>{const reader={file};readers.add(reader);return reader;});
+      opening.add(pending);let reader;
+      try{reader=await pending;}finally{opening.delete(pending);}
+      const failures=[];
+      try{
+        while(!close){
+          const buffer=Buffer.allocUnsafe(65536),pending=Promise.resolve().then(()=>reader.file.read(buffer,0,buffer.length,null));
+          reading.add(pending);let result;
+          try{result=await pending;}finally{reading.delete(pending);}
+          if(close||!result.bytesRead)return;
+          yield buffer.subarray(0,result.bytesRead);
+        }
+      }catch(error){failures.push(error);}
+      finally{await releasePlaylistResources([()=>closeReader(reader)],failures);}
+    }
+    return Object.freeze({size,stream:()=>{if(close)throw new Error('The playlist spool has been released.');return stream();},
+      close:()=>close??=Promise.resolve().then(async()=>{
+        // Revocation prevents fresh reads. Join admitted opens and reads before
+        // closing their FDs, unlinking the spool, or releasing its storage lease.
+        await Promise.allSettled([...opening,...reading]);
+        await releasePlaylistResources([...readers].map(reader=>()=>closeReader(reader))
+          .concat([()=>fileSystem.rm(filename,{force:true}),()=>owner.close()]));
+      })});
   }catch(error){
-    await releasePlaylistResources([()=>!closed&&file.close(),()=>fileSystem.rm(filename,{force:true})],[error]);
+    await releasePlaylistResources([()=>!closed&&file.close(),()=>fileSystem.rm(filename,{force:true}),()=>owner.close()],[error]);
   }
 }

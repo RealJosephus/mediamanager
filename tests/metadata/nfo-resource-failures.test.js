@@ -49,14 +49,19 @@ async function fixture(t) {
   await fs.mkdir(media, { recursive: true }); await fs.mkdir(spoolRoot);
   const filename = path.join(media, 'item.nfo'); await fs.writeFile(filename, original);
   const registry = new StorageRegistry(); registry.registerType('local', configuration => LocalAdapter.open(configuration));
+  const spoolOwners = { retained: 0, released: 0 };
   const report = { name: t.name, scope: 'Node NFO provider, real Local VFS sidecar and state spool. Controlled failures occur at the admitted read/write/release boundaries. No Native exception or full server equivalence claim.',
-    observations: [], cleanup: {}, phaseAcceptance: false, releaseAcceptance: false };
+    observations: [], cleanup: { spoolOwners }, phaseAcceptance: false, releaseAcceptance: false };
   const state = { root, filename, spoolRoot, registry, report, failSpoolCleanup: true,
     cleanupError: controlledFailure('Controlled NFO spool unlink failure.', 'EIO', 503) };
   t.after(async () => {
     const errors = [];
     try { await registry.close(); report.cleanup.storageClosed = true; } catch (error) { errors.push(error); report.cleanup.storageFailure = rawFailure(error); }
-    try { report.finalSidecarBase64 = (await fs.readFile(filename)).toString('base64'); report.spoolEntries = await fs.readdir(spoolRoot); }
+    try {
+      report.finalSidecarBase64 = (await fs.readFile(filename)).toString('base64');
+      report.spoolEntries = await fs.readdir(spoolRoot);
+      assert.equal(spoolOwners.released, spoolOwners.retained);
+    }
     catch (error) { errors.push(error); report.cleanup.observationFailure = rawFailure(error); }
     try { await fs.writeFile(path.join(root, 'report.json'), JSON.stringify(report, null, 2) + '\n', { flag: 'wx' }); }
     catch (error) { errors.push(error); }
@@ -66,13 +71,27 @@ async function fixture(t) {
   const vfs = new VirtualFileSystem(registry);
   vfs.mount({ path: '/media', instanceId: 'local', root: '/', capabilities: { create: true, replace: true, delete: true } });
   Object.assign(state, { vfs, fileSystem: bindMethods(testFileSystem, {
-    async unlink(target) {
-      await testFileSystem.unlink(target);
-      if (state.failSpoolCleanup && path.basename(target) === 'frame.xml' && path.dirname(target).startsWith(spoolRoot + path.sep)) {
-        state.cleanupError.path = target;
-        report.observations.push({ phase: 'spool-unlink-after-real-release', path: target, failure: rawFailure(state.cleanupError) });
-        throw state.cleanupError;
-      }
+    // The XML spool performs its I/O through the retained filesystem.
+    retainDirectory(root, options) {
+      const owner = testFileSystem.retainDirectory(root, options);
+      spoolOwners.retained++;
+      return {
+        fileSystem: bindMethods(owner.fileSystem, {
+          async unlink(target) {
+            const fail = state.failSpoolCleanup && path.basename(target) === 'frame.xml' && path.dirname(path.dirname(target)) === root;
+            const frame = fail ? await fs.stat(target) : null;
+            await owner.fileSystem.unlink(target);
+            if (!frame) return;
+            assert.ok(frame.size > 0);
+            await assert.rejects(fs.stat(target), { code: 'ENOENT' });
+            state.cleanupError.path = target;
+            report.observations.push({ phase: 'spool-unlink-after-real-release', path: target, frameBytes: frame.size,
+              removed: true, failure: rawFailure(state.cleanupError) });
+            throw state.cleanupError;
+          },
+        }),
+        async close() { await owner.close(); spoolOwners.released++; },
+      };
     },
   }) });
   state.plugin = options => createNfoPlugin({ vfs, spoolRoot, fileSystem: state.fileSystem, ...options });

@@ -5,6 +5,7 @@ import { nativePlaylistIsFile } from '../library/native-path.js';
 import { createLocalXmlProviders } from './local-xml-provider.js';
 import { directFileXmlSink, networkXmlSpool, validateXmlSpoolRoot } from './local-xml-sinks.js';
 import { MetadataImageAssets } from './image-assets.js';
+import { operationFailure } from '../core/operation-failure.js';
 
 const providerName = 'Emby Xml';
 
@@ -88,7 +89,7 @@ export function createLocalXmlPlugin({ vfs, fileSystem, externalIdInfos, spoolRo
   }
   const validateDestination = async (item, context = {}) => {
     if (context.localPath != null) return localDestination(item, context, fileSystem).catch(error=>{
-      if (error.cause?.details?.reason === 'link') throw unsafe(error.message);
+      if (error?.cause?.details?.reason === 'link') throw unsafe(error.message);
       throw error;
     });
     if (!vfs || typeof vfs.capabilities !== 'function' || typeof vfs.write !== 'function') {
@@ -108,25 +109,28 @@ export function createLocalXmlPlugin({ vfs, fileSystem, externalIdInfos, spoolRo
     const output = destination.kind === 'local'
       ? await directFileXmlSink(destination.path, fileSystem)
       : await networkXmlSpool(destination.spoolRoot, fileSystem);
-    let preparationError;
-    try {
-      try { await streamLocalXml(item, output.sink, {
+    const errors = [];
+    let uploadFailed = false, uploadError;
+    try { await streamLocalXml(item, output.sink, {
         ...context, playlistFile: isPlaylistFile(item, item.Path, context.playlistFile),
         prepareLinkedXmlItems: context.prepareLinkedXmlItems ?? (linkedChildren && (async value => {
           const snapshot = await linkedChildren.xmlPaths(value.LinkedChildren, { parentId: value.Id, expandPath: context.expandPath });
           return { manualCount: snapshot.manualCount, pages: options => linkedChildren.pages(snapshot.paths, options),
             close: () => linkedChildren.release(snapshot.paths) };
         }))
-      }); } catch (error) { preparationError = error; }
-      if (destination.kind === 'vfs') {
-        try { await output.upload(vfs, destination.path, { overwrite: true, ...destination.options }); }
-        catch (error) {
-          if (!preparationError) throw error;
-          Object.defineProperty(preparationError, 'frameCommitError', { value: error });
-        }
-      }
-      if (preparationError) throw preparationError;
-    } finally { if (output.dispose) await output.dispose(); else await output.close(); }
+    }); } catch (error) { errors.push(error); }
+    if (destination.kind === 'vfs') {
+      // Native preparation failures still commit their bounded partial frame.
+      try { await output.upload(vfs, destination.path, { overwrite: true, ...destination.options }); }
+      catch (error) { errors.push(error); uploadFailed = true; uploadError = error; }
+    }
+    try { if (output.dispose) await output.dispose(); else await output.close(); }
+    catch (error) { errors.push(error); }
+    if (errors.length) {
+      const failure = operationFailure(errors, 'The local XML save could not be completed.');
+      if (uploadFailed && errors.length > 1) failure.frameCommitError = uploadError;
+      throw failure;
+    }
     const result = { path: destination.path, changed: true };
     // DateLastSaved must cover the actual closed file, not a wall-clock sample
     // that can precede the filesystem's final modification timestamp.
@@ -161,5 +165,9 @@ export async function serializeLocalXml(item, context = {}) {
     await streamLocalXml(item, output.sink, { ...context,
       playlistFile: isPlaylistFile(item, item.Path, context.playlistFile) });
     return await output.prepare();
-  } catch (error) { await output.dispose(); throw error; }
+  } catch (error) {
+    const errors = [error];
+    try { await output.dispose(); } catch (error) { errors.push(error); }
+    throw operationFailure(errors, 'The local XML frame could not be prepared.');
+  }
 }

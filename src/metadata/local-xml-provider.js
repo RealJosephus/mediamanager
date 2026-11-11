@@ -4,10 +4,15 @@ import { nativePlaylistIsFile } from '../library/native-path.js';
 import { newNativeItemEntity, releaseNativeItemLinks } from '../library/native-item-entity.js';
 import { MetadataImageAssets } from './image-assets.js';
 import { fetchLocalXml } from './local-xml-parser.js';
+import { operationFailure } from '../core/operation-failure.js';
 
 const types = { BoxSet: 'MediaBrowser.Controller.Entities.Movies.BoxSet', Playlist: 'MediaBrowser.Controller.Playlists.Playlist' };
-const missing = error => ['not-found', 'ENOENT', 'ENOTDIR'].includes(error.code);
-const ioError = error => missing(error) || ['io', 'unavailable', 'EIO'].includes(error.code);
+const classified = (error, codes) => {
+  try { return !Array.isArray(error?.errors) && codes.includes(error?.code); }
+  catch { return false; }
+};
+const missing = error => classified(error, ['not-found', 'ENOENT', 'ENOTDIR']);
+const ioError = error => classified(error, ['not-found', 'ENOENT', 'ENOTDIR', 'io', 'unavailable', 'EIO']);
 
 /** Native GetXmlFile performs uncancelled lookup; only parser outer iterations
  * observe cancellation. Network paths never fall back to host media files. */
@@ -34,8 +39,13 @@ export function createLocalXmlProviders({ fileSystem, vfs, savePath, store, link
   };
   const read = async function* (file, context) {
     const handle = await (file.local ? assets(context).openRead(file.filename) : vfs.openRead(file.filename));
+    const errors = [];
     try { yield* decodeNativeTextStream(handle.stream); }
-    finally { await handle.close(); }
+    catch (error) { errors.push(error); }
+    finally {
+      try { await handle.close(); } catch (error) { errors.push(error); }
+      if (errors.length) throw operationFailure(errors, 'The local XML input failed to close.');
+    }
   };
   return Object.keys(types).map(type => ({
     id: `${type}XmlProvider`, name: 'Emby Xml', kind: 'local', order: 1, itemTypes: [type],
@@ -49,7 +59,10 @@ export function createLocalXmlProviders({ fileSystem, vfs, savePath, store, link
           signal: context.signal, externalIdInfos: ids, session, linkedChildren }));
       } catch (error) {
         if (ioError(error)) return result;
-        releaseNativeItemLinks(result.Item); await linkedChildren.flushReleases(); throw error;
+        const errors = [error];
+        try { releaseNativeItemLinks(result.Item); } catch (error) { errors.push(error); }
+        try { await linkedChildren.flushReleases(); } catch (error) { errors.push(error); }
+        throw operationFailure(errors, 'The local XML metadata operation failed.');
       }
     },
     async hasChanged(item, context = {}) {
