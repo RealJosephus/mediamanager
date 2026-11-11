@@ -4,6 +4,7 @@ import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { EventEmitter } from 'node:events';
+import { setTimeout as delay } from 'node:timers/promises';
 import { LocalAdapter } from '../../plugins/local/adapter.js';
 import { watchDirectory } from '../../plugins/local/watch.js';
 import { StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
@@ -46,36 +47,49 @@ function recorder() {
 test('local watches existing and newly created subdirectories and releases subscriptions', { timeout: 10000 }, async t => {
   const { root, adapter } = await local(t);
   await fs.mkdir(path.join(root, 'existing'));
+  await fs.writeFile(path.join(root, 'existing', 'delete.flac'), 'delete');
   const recorded = recorder();
+  let operation = 'open subscription';
+  t.after(() => {
+    if (operation !== 'complete') t.diagnostic(JSON.stringify({ operation, events: recorded.events.slice(-30),
+      errors: recorded.errors.map(({ code, message }) => ({ code, message })) }));
+  });
   const subscription = await adapter.watch('/', recorded);
   t.after(() => subscription.close());
-  let change = recorded.next(event => event.path === '/existing/电影%2F.mkv');
-  await fs.writeFile(path.join(root, 'existing', '电影%2F.mkv'), 'one');
-  await change;
-  change = recorded.next(event => event.path === '/new');
-  await fs.mkdir(path.join(root, 'new'));
-  await change;
-  change = recorded.next(event => event.path === '/new/track.flac');
-  await fs.writeFile(path.join(root, 'new', 'track.flac'), 'two');
-  await change;
-  change = recorded.next(event => event.path === '/new/track.flac' && event.type === 'rename');
-  await fs.unlink(path.join(root, 'new', 'track.flac'));
-  await change;
-  change = recorded.next(event => event.path === '/new');
-  await fs.rmdir(path.join(root, 'new'));
-  await change;
-  change = recorded.next(event => event.path === '/new');
-  await fs.mkdir(path.join(root, 'new'));
-  await change;
-  change = recorded.next(event => event.path === '/new/recreated.flac');
-  await fs.writeFile(path.join(root, 'new', 'recreated.flac'), 'three');
-  await change;
+  const mutate = async (label, logicalPath, action) => {
+    operation = label;
+    const observed = recorded.next(event => event.path === logicalPath);
+    await action();
+    await observed;
+  };
+  const observeWrite = async (logicalPath, filename) => {
+    operation = `write ${logicalPath}`;
+    const observed = recorded.next(event => event.path === logicalPath).then(() => true);
+    void observed.catch(() => {});
+    // The OS may arm the new watcher after fs.watch returns. Keep making real
+    // changes until its callback proves readiness, within the case deadline.
+    do {
+      t.signal.throwIfAborted();
+      await fs.appendFile(filename, 'x', { signal: t.signal });
+    } while (!await Promise.race([observed, delay(100, false, { signal: t.signal })]));
+  };
+  const existing = path.join(root, 'existing'), created = path.join(root, 'new');
+  await observeWrite('/existing/电影%2F.mkv', path.join(existing, '电影%2F.mkv'));
+  await mutate('unlink existing file', '/existing/delete.flac', () => fs.unlink(path.join(existing, 'delete.flac')));
+  await mutate('create directory', '/new', () => fs.mkdir(created));
+  await observeWrite('/new/track.flac', path.join(created, 'track.flac'));
+  await fs.unlink(path.join(created, 'track.flac'));
+  await mutate('remove directory', '/new', () => fs.rmdir(created));
+  await mutate('recreate directory', '/new', () => fs.mkdir(created));
+  await observeWrite('/new/recreated.flac', path.join(created, 'recreated.flac'));
+  operation = 'close subscription';
   await subscription.close();
   const count = recorded.events.length;
   await fs.writeFile(path.join(root, 'after-close.txt'), 'closed');
-  await new Promise(resolve => setTimeout(resolve, 30));
+  await delay(30);
   assert.equal(recorded.events.length, count);
   assert.deepEqual(recorded.errors, []);
+  operation = 'complete';
 });
 
 test('directory churn during event reconciliation keeps the root watch alive', { timeout: 10000 }, async t => {
