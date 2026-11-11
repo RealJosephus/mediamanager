@@ -1,3 +1,5 @@
+import { Readable } from 'node:stream';
+import { finished } from 'node:stream/promises';
 import { StorageError, checkAbort, requireCapability } from '@mediamanager/plugin-sdk/storage/errors';
 import { baseName, normalizePath, parentPath, validateName } from '@mediamanager/plugin-sdk/storage/paths';
 import { normalizeRange, parseContentRange, rangeHeader, resolveRange, unsignedInteger } from '@mediamanager/plugin-sdk/storage/range';
@@ -76,6 +78,29 @@ function lengthHeader(value) {
   return BigInt(value);
 }
 
+const sourceFailure = (reason, message) => reason instanceof StorageError ? reason
+  : Object.assign(new StorageError('unavailable', message), { cause: reason });
+const diagnostic = (error, key) => {
+  try { return error?.[key]; } catch { return undefined; }
+};
+function combinedFailure(errors) {
+  if (errors.length === 1) return errors[0];
+  const primary = errors[0];
+  const code = diagnostic(primary, 'code') ?? 'unavailable';
+  const message = diagnostic(primary, 'message');
+  const text = typeof message === 'string' ? message : 'The AList operation failed during cleanup.';
+  let failure;
+  try { failure = new StorageError(code, text, diagnostic(primary, 'details')); }
+  catch { failure = new StorageError(code, text); }
+  for (const key of ['status', 'statusCode']) {
+    const value = diagnostic(primary, key);
+    if (value !== undefined) failure[key] = value;
+  }
+  return Object.assign(failure, { cause: new AggregateError(errors, text, { cause: primary }), errors });
+}
+const expectedAbort = (error, scope) => scope.signal.aborted
+  && (diagnostic(error, 'name') === 'AbortError' || diagnostic(error, 'code') === 'ABORT_ERR');
+
 export class AListAdapter {
   #baseUrl;
   #credentialRef;
@@ -86,6 +111,7 @@ export class AListAdapter {
   #pageSize;
   #maxJsonBytes;
   #closed = false;
+  #closing;
   #operations = new Set();
 
   constructor(config, { resolveCredential, fetch: fetchImplementation = globalThis.fetch } = {}) {
@@ -119,20 +145,30 @@ export class AListAdapter {
     if (timeout <= 0) throw new StorageError('timeout', 'The storage operation deadline expired.');
     const controller = new AbortController();
     let timedOut = false;
-    const onAbort = () => controller.abort();
+    const onAbort = () => controller.abort(options.signal.reason);
     options.signal?.addEventListener('abort', onAbort, { once: true });
     const timer = setTimeout(() => { timedOut = true; controller.abort(); }, Math.max(0, timeout));
     timer.unref();
+    const completed = Promise.withResolvers();
     const scope = {
+      done: completed.promise, cleanupErrors: [],
       signal: controller.signal,
       abort: () => controller.abort(),
       error: (error) => {
-        if (timedOut && error?.code === 'cancelled') return new StorageError('timeout', 'The storage operation timed out.');
+        if (timedOut && diagnostic(error, 'code') === 'cancelled') {
+          return Object.assign(new StorageError('timeout', 'The storage operation timed out.'), { cause: error });
+        }
         if (error instanceof StorageError) return error;
-        if (controller.signal.aborted) return new StorageError(timedOut ? 'timeout' : 'cancelled', timedOut ? 'The storage operation timed out.' : 'The storage operation was cancelled.');
-        return new StorageError('unavailable', 'The storage transport failed.');
+        if (controller.signal.aborted) {
+          return Object.assign(new StorageError(timedOut ? 'timeout' : 'cancelled',
+            timedOut ? 'The storage operation timed out.' : 'The storage operation was cancelled.'), { cause: error });
+        }
+        return Object.assign(new StorageError('unavailable', 'The storage transport failed.'), { cause: error });
       },
-      dispose: () => { clearTimeout(timer); options.signal?.removeEventListener('abort', onAbort); this.#operations.delete(scope); },
+      dispose: () => {
+        clearTimeout(timer); options.signal?.removeEventListener('abort', onAbort);
+        this.#operations.delete(scope); completed.resolve(scope.cleanupErrors);
+      },
     };
     this.#operations.add(scope);
     return scope;
@@ -152,13 +188,14 @@ export class AListAdapter {
   async #cancelBody(response, scope) {
     if (response?.body && !response.bodyUsed) {
       try { await response.body.cancel(); }
-      catch (error) { if (!scope.signal.aborted) throw scope.error(error); }
+      catch (error) { if (!expectedAbort(error, scope)) throw sourceFailure(error, 'The AList response did not close.'); }
     }
   }
 
   async #api(operation, body, options = {}, request = {}) {
-    const scope = this.#scope(options);
-    let response;
+    const scope = request.scope ?? this.#scope(options);
+    let response, result;
+    const errors = [];
     try {
       const headers = new Headers(request.headers);
       if (this.#credentialRef) {
@@ -173,17 +210,22 @@ export class AListAdapter {
         body: request.body ?? JSON.stringify(body), redirect: 'manual', signal: scope.signal,
         ...(request.body ? { duplex: 'half' } : {}),
       });
+      checkAbort(scope.signal);
       if (redirectStatuses.has(response.status)) throw new StorageError('invalid-response', 'AList API redirects are not allowed.');
       if (!response.ok) throw statusError(response.status, operation, response.headers.get('retry-after'));
       const envelope = await this.#jsonBody(response);
+      checkAbort(scope.signal);
       if (!envelope || !Number.isSafeInteger(envelope.code)) throw new StorageError('invalid-response', 'AList returned an invalid response envelope.');
       if (envelope.code !== 200) throw statusError(envelope.code, operation, response.headers.get('retry-after'), String(envelope.message ?? ''));
-      return envelope.data;
-    } catch (error) { throw scope.error(error); }
+      result = envelope.data;
+    } catch (error) { errors.push(scope.error(error)); }
     finally {
       try { await this.#cancelBody(response, scope); }
-      finally { scope.dispose(); }
+      catch (error) { errors.push(error); scope.cleanupErrors.push(error); }
+      finally { if (!request.scope) scope.dispose(); }
     }
+    if (errors.length) throw combinedFailure(errors);
+    return result;
   }
 
   async #get(path, options) {
@@ -221,14 +263,29 @@ export class AListAdapter {
       consistency: 'weak', snapshot: null, deletionSafe: false };
   }
 
+  async #discardDownloadResponse(response, scope, primary) {
+    try { await this.#cancelBody(response, scope); }
+    catch (cleanup) {
+      scope.cleanupErrors.push(cleanup);
+      scope.abort();
+      throw primary ? combinedFailure([primary, cleanup]) : cleanup;
+    }
+  }
+
   async #download(url, headers, scope) {
     for (let redirects = 0; redirects <= 5; redirects++) {
       const response = await this.#fetch(url, { method: 'GET', headers, redirect: 'manual', signal: scope.signal });
       if (!redirectStatuses.has(response.status)) return response;
-      await response.body?.cancel();
-      const location = response.headers.get('location');
-      if (!location || redirects === 5) throw new StorageError('invalid-response', 'The backend download redirect chain is invalid.');
-      url = safeUrl(location, url);
+      let next, primary;
+      try {
+        const location = response.headers.get('location');
+        if (!location || redirects === 5) throw new StorageError('invalid-response', 'The backend download redirect chain is invalid.');
+        next = safeUrl(location, url);
+      } catch (error) { primary = scope.error(error); }
+      await this.#discardDownloadResponse(response, scope, primary);
+      if (primary) throw primary;
+      checkAbort(scope.signal);
+      url = next;
     }
   }
 
@@ -252,10 +309,15 @@ export class AListAdapter {
         if (typeof data.raw_url !== 'string' || !data.raw_url) throw new StorageError('invalid-response', 'AList did not supply a download URL.');
         const url = safeUrl(data.raw_url, this.#baseUrl);
         response = await this.#download(url, headers, scope);
+        checkAbort(scope.signal);
         if (attempt === 0 && [401, 403, 404, 410].includes(response.status)) {
-          await response.body?.cancel();
+          const expired = response;
+          const primary = statusError(expired.status, 'read', expired.headers.get('retry-after'));
+          response = undefined;
+          await this.#discardDownloadResponse(expired, scope, primary);
           const refreshed = await this.#get(path, { ...options, signal: scope.signal });
           if (refreshed.raw_url && refreshed.raw_url !== data.raw_url) { data = refreshed; continue; }
+          throw primary;
         }
         break;
       }
@@ -294,22 +356,41 @@ export class AListAdapter {
         totalSize = contentLength;
       }
       const expectedLength = rangeHonored ? range.end - range.start + 1n : contentLength;
-      let closed = false;
-      let reader;
-      const close = async () => {
-        if (closed) return;
-        closed = true;
-        try { if (reader) await reader.cancel(); else await response.body?.cancel(); }
-        catch (error) { if (!scope.signal.aborted) throw scope.error(error); }
-        finally { scope.abort(); scope.dispose(); }
+      let closing, reader, readFailure;
+      const close = () => {
+        if (closing) return closing;
+        scope.signal.removeEventListener('abort', abort);
+        closing = Promise.resolve().then(async () => {
+          const failures = [];
+          try { if (reader) await reader.cancel(); else await response.body?.cancel(); }
+          catch (error) {
+            // A failed ReadableStream repeats its stored error from cancel().
+            // Only independent cleanup failures belong to the closing owner.
+            if (!(readFailure instanceof Error && error === readFailure) && !expectedAbort(error, scope)) {
+              failures.push(sourceFailure(error, 'The AList read did not close.'));
+            }
+          }
+          try { reader?.releaseLock(); }
+          catch (error) { failures.push(sourceFailure(error, 'The AList read lock did not release.')); }
+          finally { scope.cleanupErrors.push(...failures); scope.abort(); scope.dispose(); }
+          if (failures.length) throw combinedFailure(failures);
+        });
+        return closing;
       };
+      const abort = () => { void close().catch(() => {}); };
+      scope.signal.addEventListener('abort', abort, { once: true });
+      if (scope.signal.aborted) { await close(); checkAbort(scope.signal); }
       async function* stream() {
         let count = 0n;
+        const errors = [];
         try {
-          if (closed) throw new StorageError('closed', 'The read handle is closed.');
+          if (closing) throw new StorageError('closed', 'The read handle is closed.');
           reader = response.body?.getReader();
           if (reader) while (true) {
-            const { value, done } = await reader.read();
+            let part;
+            try { part = await reader.read(); }
+            catch (error) { readFailure = error; throw error; }
+            const { value, done } = part;
             checkAbort(scope.signal);
             if (done) break;
             count += BigInt(value.byteLength);
@@ -317,15 +398,19 @@ export class AListAdapter {
             yield value;
           }
           if (expectedLength !== null && count !== expectedLength) throw new StorageError('invalid-response', 'The backend read ended before its declared length.');
-        } catch (error) { throw scope.error(error); }
-        finally { await close(); }
+        } catch (error) { errors.push(scope.error(error)); }
+        finally {
+          try { await close(); } catch (error) { errors.push(error); }
+          if (errors.length) throw combinedFailure(errors);
+        }
       }
       return { stream: stream(), rangeHonored, range, totalSize, contentLength,
         version, contentType: response.headers.get('content-type'), acceptRanges: response.headers.get('accept-ranges'), close };
     } catch (error) {
-      try { await this.#cancelBody(response, scope); }
+      const primary = scope.error(error);
+      try { await this.#discardDownloadResponse(response, scope, primary); }
       finally { scope.dispose(); }
-      throw scope.error(error);
+      throw primary;
     }
   }
 
@@ -346,18 +431,82 @@ export class AListAdapter {
       if (!Number.isFinite(modified)) throw new TypeError('The modification time is invalid.');
       headers['Last-Modified'] = String(modified);
     }
-    async function* body() {
-      let count = 0n;
-      for await (const chunk of bytes ? [bytes] : data) {
-        checkAbort(options.signal);
-        if (!(chunk instanceof Uint8Array)) throw new TypeError('Upload chunks must be bytes.');
-        count += BigInt(chunk.byteLength);
-        if (count > size) throw new StorageError('invalid-response', 'The upload exceeded its declared length.');
-        yield chunk;
+    const scope = this.#scope(options), errors = [], aborted = Promise.withResolvers();
+    const cancellation = new StorageError('cancelled', 'The AList upload was cancelled.');
+    let iterator, upload, uploadFinished, uploadClosed, sourceClose, sourceNext, bodyFailed = false, bodyFailure;
+    const closeSource = () => {
+      if (!sourceClose) {
+        sourceClose = (async () => { const result = await iterator?.return?.(); await result?.value; })();
+        void sourceClose.catch(() => {});
       }
-      if (count !== size) throw new StorageError('invalid-response', 'The upload ended before its declared length.');
+      return sourceClose;
+    };
+    const cancel = () => { aborted.reject(cancellation); upload?.destroy(cancellation); closeSource(); };
+    void aborted.promise.catch(() => {});
+    try {
+      const input = bytes ? [bytes] : data;
+      const iterate = input?.[Symbol.asyncIterator] ?? input?.[Symbol.iterator];
+      if (typeof iterate !== 'function') throw new TypeError('An upload must provide bytes.');
+      iterator = iterate.call(input);
+      async function* body() {
+        let count = 0n;
+        try {
+          for (;;) {
+            checkAbort(scope.signal);
+            sourceNext = Promise.resolve().then(() => iterator.next());
+            const part = await Promise.race([sourceNext, aborted.promise]);
+            checkAbort(scope.signal);
+            if (part.done) break;
+            const chunk = await part.value;
+            checkAbort(scope.signal);
+            if (!(chunk instanceof Uint8Array)) throw new TypeError('Upload chunks must be bytes.');
+            count += BigInt(chunk.byteLength);
+            if (count > size) throw new StorageError('invalid-response', 'The upload exceeded its declared length.');
+            yield chunk;
+          }
+          if (count !== size) throw new StorageError('invalid-response', 'The upload ended before its declared length.');
+        } catch (error) {
+          bodyFailed = true; bodyFailure = error;
+          throw sourceFailure(error, 'The AList upload source failed.');
+        }
+      }
+      upload = Readable.from(body(), { objectMode: false, autoDestroy: true });
+      uploadClosed = new Promise(resolve => upload.once('close', resolve));
+      uploadFinished = finished(upload, { cleanup: true });
+      void uploadFinished.catch(() => {});
+      scope.signal.addEventListener('abort', cancel, { once: true });
+      checkAbort(scope.signal);
+      let requestBody = upload;
+      if (size === 0n) {
+        for await (const _chunk of upload) { /* Validate the empty entity's actual producer. */ }
+        requestBody = Buffer.alloc(0);
+      }
+      await this.#api('put', null, options, { method: 'PUT', headers, body: requestBody, scope });
+      await uploadFinished;
+      checkAbort(scope.signal);
+    } catch (error) {
+      // Fetch wraps producer failures in a transport error. Keep an actual API
+      // rejection authoritative when its early response also stops the body.
+      const failedSource = bodyFailed && error?.code === 'unavailable' && !error.details?.operation && !error.errors;
+      errors.push(failedSource ? scope.error(sourceFailure(bodyFailure, 'The AList upload source failed.')) : scope.error(error));
+    } finally {
+      // Closing the adapter joins this owner until both the upload stream and
+      // its original producer have completed cleanup, including a pending next().
+      scope.abort(); cancel(); scope.signal.removeEventListener('abort', cancel);
+      try { await closeSource(); }
+      catch (error) {
+        const failure = sourceFailure(error, 'The AList upload source did not close.');
+        errors.push(failure); scope.cleanupErrors.push(failure);
+      }
+      await Promise.allSettled([sourceNext]);
+      if (uploadClosed) await uploadClosed;
+      if (uploadFinished) {
+        try { await uploadFinished; }
+        catch (error) { if (!errors.length && error !== cancellation) errors.push(scope.error(error)); }
+      }
+      scope.dispose();
     }
-    await this.#api('put', null, options, { method: 'PUT', headers, body: body() });
+    if (errors.length) throw combinedFailure(errors);
     return { size, atomic: false };
   }
 
@@ -371,6 +520,11 @@ export class AListAdapter {
     if (options.ifMatch !== undefined) throw new StorageError('not-supported', 'AList does not provide conditional deletes.');
     path = normalizePath(path);
     if (path === '/') throw new StorageError('permission-denied', 'The AList root cannot be removed.');
+    // FsRemove recursively removes directories. A prior empty listing cannot
+    // make that operation nonrecursive when another writer adds a child.
+    if (options.recursive !== true && (await this.stat(path, options)).kind === 'directory') {
+      throw new StorageError('not-supported', 'AList directory deletion requires recursive: true.');
+    }
     return this.#api('remove', { dir: parentPath(path), names: [baseName(path)] }, options);
   }
 
@@ -385,8 +539,16 @@ export class AListAdapter {
     return this.#api('rename', { path, name: baseName(destination), overwrite: options.overwrite === true }, options);
   }
 
-  async close() {
+  close() {
+    if (this.#closing) return this.#closing;
+    const completed = Promise.withResolvers(); this.#closing = completed.promise;
     this.#closed = true;
-    for (const scope of this.#operations) { scope.abort(); scope.dispose(); }
+    const operations = [...this.#operations];
+    for (const scope of operations) scope.abort();
+    (async () => {
+      const failures = (await Promise.all(operations.map(scope => scope.done))).flat();
+      if (failures.length) throw combinedFailure(failures);
+    })().then(completed.resolve, completed.reject);
+    return this.#closing;
   }
 }

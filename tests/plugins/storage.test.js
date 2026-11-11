@@ -3,17 +3,21 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { setImmediate as immediate } from 'node:timers/promises';
 import { openConfiguredPluginHost } from './configuration-host.js';
 import {createConfiguredStorage} from '../../src/storage-bootstrap.js';
 import {MetadataImageAssets} from '../../src/metadata/image-assets.js';
 import {prepareItemSourceDeletion} from '../../src/library/item-source-deletion.js';
+import {validationOutputRoot} from '../../tools/validation/paths.js';
 
 const capabilities={create:true,replace:true,mkdir:true,delete:true,rename:true,atomicReplace:true};
 const read=async handle=>{try{const chunks=[];for await(const chunk of handle.stream)chunks.push(chunk);return Buffer.concat(chunks);}finally{await handle.close();}};
 
 test('local storage package enforces bounds, ranges, write outcomes, links and disable recovery',async t=>{
- const root=await fs.mkdtemp(path.join(os.tmpdir(),'plugin-local-'));
- let host,storage;t.after(async()=>{await storage?.close();await host?.close();await fs.rm(root,{recursive:true,force:true});});
+ const output=path.resolve(validationOutputRoot());await fs.mkdir(output,{recursive:true});
+ const evidence=await fs.mkdtemp(path.join(output,'storage-plugin-drain-')),root=path.join(evidence,'work');await fs.mkdir(root);
+ const releaseRead=Promise.withResolvers();let host,storage,sourceOwner,sourceRead,upload,stopping;
+ t.after(async()=>{releaseRead.resolve();await storage?.close();await Promise.allSettled([upload,stopping]);await sourceRead?.close();await sourceOwner?.close();await host?.close();await fs.rm(root,{recursive:true,force:true});});
  host=await openConfiguredPluginHost({directory:path.join(root,'host')});storage=await createConfiguredStorage(undefined,{plugins:host});
  const definition=storage.configuration();definition.instances.push({id:'media',type:'local',config:{root:path.join(root,'media'),writable:true,createRoot:true}});
  definition.mounts.push({path:'/media',instanceId:'media',capabilities},{path:'/read-only',instanceId:'media',capabilities:{}});
@@ -38,19 +42,36 @@ test('local storage package enforces bounds, ranges, write outcomes, links and d
  await assert.rejects(vfs.list('/media'),{code:'permission-denied'});
  await vfs.delete('/media/link',{recursive:true});assert.equal(await fs.readFile(path.join(root,'outside','retained'),'utf8'),'retain');
  const handle=await vfs.openRead(name);
- let started;const ready=new Promise(resolve=>{started=resolve;});let returned=false;
- const waiting={ [Symbol.asyncIterator](){return this;},next(){started();return new Promise(()=>{});},return(){returned=true;return {done:true};} };
- const upload=vfs.write('/media/cancelled-upload',waiting,{atomic:true});await ready;
- const cancelled=assert.rejects(upload);
- await host.setEnabled('local',false);
- await cancelled;assert.equal(returned,true);
+ const sourcePath=path.join(root,'source.bin'),prefix=Buffer.from('real upload prefix'),tail=Buffer.from('drained source tail');
+ await fs.writeFile(sourcePath,Buffer.concat([prefix,tail]));sourceOwner=await fs.open(sourcePath,'r');
+ const ready=Promise.withResolvers(),returned=Promise.withResolvers();let calls=0,returns=0,readCompleted=false,uploadSettled=false,disableSettled=false;
+ const waiting={
+  [Symbol.asyncIterator](){return this;},
+  async next(){
+   if(++calls===1){const chunk=Buffer.alloc(prefix.length);const {bytesRead}=await sourceOwner.read(chunk,0,chunk.length,0);assert.equal(bytesRead,prefix.length);return {done:false,value:chunk};}
+   assert.equal(calls,2);sourceRead=await fs.open(sourcePath,'r');ready.resolve();
+   try{await releaseRead.promise;const chunk=Buffer.alloc(tail.length);const {bytesRead}=await sourceRead.read(chunk,0,chunk.length,prefix.length);assert.equal(bytesRead,tail.length);assert.deepEqual(chunk,tail);readCompleted=true;return {done:false,value:chunk};}
+   finally{await sourceRead.close();}
+  },
+  async return(){returns++;await sourceOwner.close();returned.resolve();return {done:true};},
+ };
+ upload=vfs.write('/media/cancelled-upload',waiting,{atomic:true});void upload.then(()=>{uploadSettled=true;},()=>{uploadSettled=true;});await Promise.race([ready.promise,upload]);
+ const temporary=(await fs.readdir(path.join(root,'media'))).filter(name=>name.startsWith('.storage-')&&name.endsWith('.tmp'));assert.equal(temporary.length,1);
+ const temporaryPath=path.join(root,'media',temporary[0]),stagedPrefix=await fs.readFile(temporaryPath);assert.deepEqual(stagedPrefix,prefix);
+ stopping=host.setEnabled('local',false);void stopping.then(()=>{disableSettled=true;},()=>{disableSettled=true;});await Promise.race([returned.promise,stopping]);await immediate();
+ const beforeDrain={uploadSettled,disableSettled,sourceFd:sourceOwner.fd,nextFd:sourceRead.fd,readCompleted};
+ assert.equal(uploadSettled,false);assert.equal(disableSettled,false);assert.equal(sourceOwner.fd,-1);assert.notEqual(sourceRead.fd,-1);assert.equal(readCompleted,false);
+ releaseRead.resolve();await stopping;await assert.rejects(upload,{code:'cancelled'});
+ assert.equal(readCompleted,true);assert.equal(sourceRead.fd,-1);assert.equal(calls,2);assert.equal(returns,1);
  await assert.rejects(fs.stat(path.join(root,'media','cancelled-upload')),{code:'ENOENT'});
+ await assert.rejects(fs.stat(temporaryPath),{code:'ENOENT'});
  await assert.rejects(read(handle));await assert.rejects(vfs.stat(name),{code:'not-supported'});
  assert.deepEqual(storage.configuration(),definition);
  await host.setEnabled('local',true);assert.equal((await read(await vfs.openRead(name))).toString(),'prefix');
  const prior=storage.configuration(),invalid=structuredClone(prior);invalid.instances.find(value=>value.id==='media').config.unknown=true;
  await assert.rejects(storage.configure(invalid),TypeError);assert.deepEqual(storage.configuration(),prior);
  await vfs.delete(name);await assert.rejects(vfs.stat(name),{code:'not-found'});
+ await fs.writeFile(path.join(evidence,'drain.json'),JSON.stringify({beforeDrain,afterDrain:{uploadSettled,disableSettled,sourceFd:sourceOwner.fd,nextFd:sourceRead.fd,readCompleted},calls,returns,stagedPrefix:stagedPrefix.toString(),atomicTargetAbsent:true,temporaryRemoved:true,disabledHandleRejected:true,recoveredBytes:'prefix'},null,2)+'\n');
 });
 
 test('media and metadata select independent plugins for each nested identity prefix',async t=>{

@@ -14,6 +14,7 @@ import { createNfoPlugin } from '../../plugins/nfo/plugin.js';
 import { captureRemoteAssets, restoreRemoteAssets } from '../../src/migration/remote-assets.js';
 import { vfsStreamResult } from '../../src/http/binary-result.js';
 import { startActualWebDav } from './helpers/actual-webdav.js';
+import { remoteFileContract } from './remote-file-contract.js';
 
 const executable = process.env.MEDIAMANAGER_WEBDAV_EXECUTABLE;
 const evidenceDirectory = process.env.MEDIAMANAGER_WEBDAV_EVIDENCE
@@ -81,6 +82,8 @@ test('actual external rclone WebDAV supports independent VFS access, writes, NFO
     }
   });
 
+  await t.test('remote copies retain exact bodies and directories require explicit recursive deletion',
+    () => remoteFileContract(vfs, { checks }));
   const bytes = wave();
   const name = '中文 %2F # sample.wav';
   const mediaPath = `/network/${name}`;

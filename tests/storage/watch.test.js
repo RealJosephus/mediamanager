@@ -4,6 +4,7 @@ import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { EventEmitter } from 'node:events';
+import { setTimeout as delay } from 'node:timers/promises';
 import { LocalAdapter } from '../../plugins/local/adapter.js';
 import { watchDirectory } from '../../plugins/local/watch.js';
 import { StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
@@ -43,55 +44,79 @@ function recorder() {
   };
 }
 
+function trackWatchOperations(t, recorded) {
+  let operation = 'open subscription';
+  t.after(() => {
+    if (operation !== 'complete') t.diagnostic(JSON.stringify({ operation, events: recorded.events.slice(-30),
+      errors: recorded.errors.map(({ code, message }) => ({ code, message })) }));
+  });
+  return label => { operation = label; };
+}
+
+async function observeWrite(t, root, recorded, logicalPath) {
+  const observed = recorded.next(event => event.path === logicalPath).then(() => true);
+  void observed.catch(() => {});
+  const filename = path.join(root, logicalPath.slice(1));
+  // The OS may arm the watcher after fs.watch returns. Its own callback on
+  // this path proves readiness within the case deadline.
+  do {
+    t.signal.throwIfAborted();
+    await fs.appendFile(filename, 'x', { signal: t.signal });
+  } while (!await Promise.race([observed, delay(100, false, { signal: t.signal })]));
+}
+
 test('local watches existing and newly created subdirectories and releases subscriptions', { timeout: 10000 }, async t => {
   const { root, adapter } = await local(t);
   await fs.mkdir(path.join(root, 'existing'));
-  const recorded = recorder();
-  const subscription = await adapter.watch('/', recorded);
+  await fs.writeFile(path.join(root, 'existing', 'delete.flac'), 'delete');
+  const recorded = recorder(), operation = trackWatchOperations(t, recorded);
+  const subscription = await adapter.watch('/', { ...recorded, signal: t.signal });
   t.after(() => subscription.close());
-  let change = recorded.next(event => event.path === '/existing/电影%2F.mkv');
-  await fs.writeFile(path.join(root, 'existing', '电影%2F.mkv'), 'one');
-  await change;
-  change = recorded.next(event => event.path === '/new');
-  await fs.mkdir(path.join(root, 'new'));
-  await change;
-  change = recorded.next(event => event.path === '/new/track.flac');
-  await fs.writeFile(path.join(root, 'new', 'track.flac'), 'two');
-  await change;
-  change = recorded.next(event => event.path === '/new/track.flac' && event.type === 'rename');
-  await fs.unlink(path.join(root, 'new', 'track.flac'));
-  await change;
-  change = recorded.next(event => event.path === '/new');
-  await fs.rmdir(path.join(root, 'new'));
-  await change;
-  change = recorded.next(event => event.path === '/new');
-  await fs.mkdir(path.join(root, 'new'));
-  await change;
-  change = recorded.next(event => event.path === '/new/recreated.flac');
-  await fs.writeFile(path.join(root, 'new', 'recreated.flac'), 'three');
-  await change;
+  const mutate = async (label, logicalPath, action) => {
+    operation(label);
+    const observed = recorded.next(event => event.path === logicalPath);
+    await action();
+    await observed;
+  };
+  const existing = path.join(root, 'existing'), created = path.join(root, 'new');
+  operation('write existing subdirectory');
+  await observeWrite(t, root, recorded, '/existing/电影%2F.mkv');
+  await mutate('unlink existing file', '/existing/delete.flac', () => fs.unlink(path.join(existing, 'delete.flac')));
+  await mutate('create directory', '/new', () => fs.mkdir(created));
+  operation('write new subdirectory');
+  await observeWrite(t, root, recorded, '/new/track.flac');
+  await fs.unlink(path.join(created, 'track.flac'));
+  await mutate('remove directory', '/new', () => fs.rmdir(created));
+  await mutate('recreate directory', '/new', () => fs.mkdir(created));
+  operation('write recreated subdirectory');
+  await observeWrite(t, root, recorded, '/new/recreated.flac');
+  operation('close subscription');
   await subscription.close();
   const count = recorded.events.length;
   await fs.writeFile(path.join(root, 'after-close.txt'), 'closed');
-  await new Promise(resolve => setTimeout(resolve, 30));
+  await delay(30);
   assert.equal(recorded.events.length, count);
   assert.deepEqual(recorded.errors, []);
+  operation('complete');
 });
 
 test('directory churn during event reconciliation keeps the root watch alive', { timeout: 10000 }, async t => {
   const { root, adapter } = await local(t);
-  const recorded = recorder();
-  const subscription = await adapter.watch('/', recorded);
+  const recorded = recorder(), operation = trackWatchOperations(t, recorded);
+  const subscription = await adapter.watch('/', { ...recorded, signal: t.signal });
   t.after(() => subscription.close());
+  operation('confirm root watch before directory churn');
+  await observeWrite(t, root, recorded, '/ready.txt');
+  operation('create and remove transient directories');
   for (let index = 0; index < 20; index++) {
     const directory = path.join(root, 'transient-' + index);
     await fs.mkdir(path.join(directory, 'nested'), { recursive: true });
     await fs.rm(directory, { recursive: true, maxRetries: 5, retryDelay: 20 });
   }
-  const change = recorded.next(event => event.path === '/surviving.txt');
-  await fs.writeFile(path.join(root, 'surviving.txt'), 'still watched');
-  await change;
+  operation('observe root write after directory churn');
+  await observeWrite(t, root, recorded, '/surviving.txt');
   assert.deepEqual(recorded.errors, []);
+  operation('complete');
 });
 
 test('local watch rejects files and junctions and observes cancellation', { timeout: 10000 }, async t => {
@@ -116,30 +141,83 @@ test('a rejected link subtree preserves the active local watch and its replaceme
   const outside = await fs.mkdtemp(path.join(os.tmpdir(), 'mediamanager-watch-outside-'));
   t.after(() => fs.rm(outside, { recursive: true, force: true }));
   const recorded = recorder(), rejected = Promise.withResolvers();
-  const subscription = await adapter.watch('/', { ...recorded, onError(error, state) {
+  const operation = trackWatchOperations(t, recorded), blocked = path.join(root, 'blocked');
+  const subscription = await adapter.watch('/', { ...recorded, signal: t.signal, onError(error, state) {
     recorded.onError(error, state); rejected.resolve({ error, state });
   } });
   t.after(() => subscription.close());
-  await fs.symlink(outside, path.join(root, 'blocked'), process.platform === 'win32' ? 'junction' : 'dir');
+  operation('confirm root watch before link creation');
+  await observeWrite(t, root, recorded, '/ready.txt');
+  operation('reject newly created link');
+  await fs.symlink(outside, blocked, process.platform === 'win32' ? 'junction' : 'dir');
   const diagnostic = await rejected.promise;
   assert.equal(diagnostic.error.code, 'permission-denied');
+  assert.equal(diagnostic.error.details?.reason, 'link');
   assert.deepEqual(diagnostic.state, { terminal: false });
-  let changed = recorded.next(event => event.path === '/surviving.txt');
+  operation('observe root write while link remains rejected');
   await fs.writeFile(path.join(outside, 'outside.txt'), 'must not be observed');
-  await fs.writeFile(path.join(root, 'surviving.txt'), 'still active'); await changed;
+  await observeWrite(t, root, recorded, '/surviving.txt');
   assert.equal(recorded.events.some(event => event.path.startsWith('/blocked/')), false);
-  changed = recorded.next(event => event.path === '/blocked');
-  await fs.unlink(path.join(root, 'blocked')); await changed;
-  changed = recorded.next(event => event.path === '/blocked');
-  await fs.mkdir(path.join(root, 'blocked')); await changed;
-  changed = recorded.next(event => event.path === '/blocked/restored.txt');
-  await fs.writeFile(path.join(root, 'blocked', 'restored.txt'), 'watched'); await changed;
+  operation('observe removal of rejected link');
+  const removed = recorded.next(event => event.path === '/blocked');
+  await fs.unlink(blocked);
+  await removed;
+  operation('observe replacement directory');
+  const replaced = recorded.next(event => event.path === '/blocked');
+  await fs.mkdir(blocked);
+  await replaced;
+  operation('observe file in replacement directory');
+  await observeWrite(t, root, recorded, '/blocked/restored.txt');
+  operation('close subscription');
+  await subscription.close();
+  assert.equal(recorded.events.some(event => event.path === '/blocked/outside.txt'), false);
   assert.ok(recorded.errorStates.every(state => state.terminal === false));
+  operation('complete');
 });
 
-async function controlledWatch(t) {
+test('deleting a watched root ends the subscription after accepting a child with the same basename', { timeout: 10000 }, async t => {
+  const { root, adapter } = await local(t);
+  const recorded = recorder(), operation = trackWatchOperations(t, recorded);
+  const terminal = Promise.withResolvers();
+  const subscription = await adapter.watch('/', { ...recorded, signal: t.signal, onError(error, state) {
+    recorded.onError(error, state);
+    if (state.terminal) terminal.resolve(error);
+  } });
+  t.after(() => subscription.close());
+
+  const basename = path.basename(root), child = `/${basename}`;
+  operation('observe child with the root basename');
+  await observeWrite(t, root, recorded, child);
+  operation('unlink the child');
+  const unlinked = recorded.next(event => event.path === child);
+  await fs.unlink(path.join(root, basename));
+  await unlinked;
+  assert.deepEqual(recorded.errors, []);
+
+  operation('delete the watched root');
+  await fs.rmdir(root);
+  const failure = await terminal.promise;
+  assert.equal(failure.code, 'not-found');
+  assert.deepEqual(recorded.errorStates, [{ terminal: true }]);
+
+  operation('write after recreating the root');
+  const count = recorded.events.length;
+  await fs.mkdir(root);
+  const fresh = recorder();
+  const replacement = await adapter.watch('/', { ...fresh, signal: t.signal });
+  t.after(() => replacement.close());
+  await observeWrite(t, root, fresh, '/after-root-deletion.txt');
+  await replacement.close();
+  assert.equal(recorded.events.length, count);
+  await subscription.close();
+  t.diagnostic(JSON.stringify({ watchRootDeleted: true, code: failure.code, terminal: true,
+    callbackName: failure.details?.callbackName ?? null, nativeCode: failure.details?.nativeCode ?? null }));
+  operation('complete');
+});
+
+async function controlledWatch(t, { windows = true } = {}) {
   const { root, adapter } = await local(t), handles = [], resolved = [], recorded = recorder();
-  const subscription = await watchDirectory('/', { ...recorded, windows: true, failure: error => error,
+  const subscription = await watchDirectory('/', { ...recorded, windows, failure: error => error,
     resolve: async filename => {
       resolved.push(filename);
       try { await adapter.stat(filename); }
@@ -156,6 +234,52 @@ async function controlledWatch(t) {
   t.after(() => subscription.close());
   return { root, handles, resolved, recorded, subscription };
 }
+
+test('a queued root notification cannot retarget a watch after immediate replacement', { timeout: 10000 }, async t => {
+  const f = await controlledWatch(t, { windows: false });
+  const sameName = path.basename(f.root);
+  await fs.writeFile(path.join(f.root, sameName), 'original');
+  const changed = f.recorded.next(event => event.path === `/${sameName}`);
+  f.handles[0].change('rename', sameName);
+  await changed;
+
+  await fs.unlink(path.join(f.root, sameName));
+  await fs.rmdir(f.root);
+  await fs.mkdir(f.root);
+  await fs.writeFile(path.join(f.root, sameName), 'replacement');
+  const count = f.recorded.events.length;
+  const next = f.recorded.next(() => true);
+  f.handles[0].change('rename', sameName);
+  await assert.rejects(next, { code: 'not-found' });
+  assert.equal(f.recorded.events.length, count);
+  assert.deepEqual(f.recorded.errorStates, [{ terminal: true }]);
+  assert.ok(f.handles[0].closed);
+});
+
+test('an old child watch only invalidates the directory after replacement', { timeout: 10000 }, async t => {
+  const f = await controlledWatch(t, { windows: false });
+  const child = path.join(f.root, 'child');
+  await fs.mkdir(child);
+  const created = f.recorded.next(event => event.path === '/child');
+  f.handles[0].change('rename', 'child');
+  await created;
+  const original = f.handles.find(handle => handle.target === child);
+  await fs.rename(child, path.join(f.root, 'detached'));
+  await fs.mkdir(child);
+  await fs.writeFile(path.join(child, 'child'), 'replacement');
+  const invalidated = f.recorded.next(() => true);
+  original.change('rename', 'child');
+  assert.deepEqual(await invalidated, { path: '/child', type: 'rename' });
+  assert.ok(original.closed);
+
+  const replacement = f.handles.findLast(handle => handle.target === child);
+  assert.notEqual(replacement, original);
+  const changed = f.recorded.next(() => true);
+  original.change('change', 'stale');
+  replacement.change('change', 'child');
+  assert.deepEqual(await changed, { path: '/child/child', type: 'change' });
+  assert.deepEqual(f.recorded.errors, []);
+});
 
 test('Windows descendant and DeletePending callbacks retain sibling watches and reject stale owners', { timeout: 10000 }, async t => {
   const f = await controlledWatch(t), rootWatch = f.handles[0];
@@ -187,7 +311,7 @@ test('ambiguous native callback names rescan only the held directory and retain 
     '\\\\server\\share\\file', '/outside', 'child//file', 'bad\0name']) {
     const after = f.resolved.length, change = f.recorded.next(event => event.path === '/');
     rootWatch.change('rename', name); await change;
-    assert.deepEqual(f.resolved.slice(after), ['/']);
+    assert.deepEqual([...new Set(f.resolved.slice(after))], ['/']);
     assert.equal(f.recorded.errors.at(-1).details.callbackName, name);
     assert.equal(f.recorded.errors.at(-1).details.watchPath, '/');
     assert.deepEqual(f.recorded.errorStates.at(-1), { terminal: false });

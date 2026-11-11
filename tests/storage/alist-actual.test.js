@@ -10,6 +10,7 @@ import { AListAdapter } from '../../plugins/alist/adapter.js';
 import { createNfoPlugin } from '../../plugins/nfo/plugin.js';
 import { captureRemoteAssets, restoreRemoteAssets } from '../../src/migration/remote-assets.js';
 import { startActualAList } from './helpers/actual-alist.js';
+import { remoteFileContract } from './remote-file-contract.js';
 
 const executable = process.env.MEDIAMANAGER_ALIST_EXECUTABLE;
 const connectionString = process.env.MEDIAMANAGER_TEST_POSTGRES;
@@ -50,6 +51,8 @@ test('actual current-source AList supports VFS byte access, network NFO and ffpr
     }
   });
   const bytes = wave(); const mediaPath = '/network/中文 %2F # sample.wav';
+  await t.test('remote copies retain exact bodies and directories require explicit recursive deletion',
+    () => remoteFileContract(vfs, { checks }));
   await t.test('synchronous upload preserves names, byte length and modification time', async () => {
     await vfs.write(mediaPath, bytes, { overwrite: false, modified: '2026-09-25T01:02:03.456Z' });
     const info = await vfs.stat(mediaPath);
