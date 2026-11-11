@@ -41,7 +41,17 @@ async function persist(filename, value) {
 }
 const dynamic = resolve => new Proxy({}, { get(_object,key) {
   const owner = resolve(), value = owner[key]; return typeof value === 'function' ? value.bind(owner) : value;
-} });
+}, set(_object,key,value) { resolve()[key] = value; return true; } });
+
+async function closeStorage(owner, closeRegistry = () => owner.registry.close()) {
+  const errors = [];
+  // Sequential file owners must finish their pinned upload and spool cleanup
+  // while their original adapters are still available.
+  try { await owner.fileSystem.close(); } catch (error) { errors.push(error); }
+  try { await closeRegistry(); } catch (error) { errors.push(error); }
+  if (errors.length === 1) throw errors[0];
+  if (errors.length) throw new AggregateError(errors, 'Storage files and adapters failed to close.', { cause: errors[0] });
+}
 
 function mountIdentityOverlays(vfs, declarations, groups) {
   const mounts = declarations.map(mount=>({...mount,path:normalizePath(mount.path),root:normalizePath(mount.root??'/')}));
@@ -128,7 +138,9 @@ export async function createConfiguredStorage(filename, { environment = process.
         for (const prefix of [...mediaPrefixes,...definition.ignorePrefixes]) ignoreIdentityMap.addPrefix(prefix);
       }
       const contract = portableMountContract === undefined ? undefined : assertPortableMountStorageConfiguration(portableMountContract,definition);
-      return { registry,vfs,identityMap,metadataIdentityMap,ignoreIdentityMap,unavailable,portableMountContract:contract };
+      const fileSystem = new StorageFileSystem({ vfs, identityMap: metadataIdentityMap });
+      fileSystem.spoolRoot = current?.fileSystem.spoolRoot;
+      return { registry,vfs,identityMap,metadataIdentityMap,ignoreIdentityMap,fileSystem,unavailable,portableMountContract:contract };
     } catch (error) { await registry.close(); throw error; }
   };
   const change = async (definition, save = true, strictType) => {
@@ -137,7 +149,7 @@ export async function createConfiguredStorage(filename, { environment = process.
     catch (error) { await candidate.registry.close(); throw error; }
     if (!initializing) await notifyBefore();
     const previous = current; current = candidate; configuration = clone(definition);
-    try { await previous?.registry.close(); } catch (error) { await report(error); }
+    try { if (previous) await closeStorage(previous); } catch (error) { await report(error); }
     if (save && !initializing) await notify();
     return clone(configuration);
   };
@@ -174,14 +186,20 @@ export async function createConfiguredStorage(filename, { environment = process.
         extensions.delete(extension.type);
         if (!initializing && !closed) await enqueue(async () => {
           await notifyBefore();
-          await current.registry.unregisterType(extension.type);
+          const owner = current;
+          try { await closeStorage(owner, () => owner.registry.unregisterType(extension.type)); }
+          finally {
+            const fileSystem = new StorageFileSystem({ vfs: owner.vfs, identityMap: owner.metadataIdentityMap });
+            fileSystem.spoolRoot = owner.fileSystem.spoolRoot;
+            owner.fileSystem = fileSystem;
+          }
         });
       };
     });
     await change(configuration); initializing = false;
     const vfs = dynamic(()=>current.vfs), identityMap = dynamic(()=>current.identityMap), ignoreIdentityMap = dynamic(()=>current.ignoreIdentityMap);
     const metadataIdentityMap=dynamic(()=>current.metadataIdentityMap);
-    const fileSystem = new StorageFileSystem({vfs,identityMap:metadataIdentityMap});
+    const fileSystem = dynamic(()=>current.fileSystem);
     const metadataPath = access => {
       let identity;
       try { identity=current.identityMap.identityFor(access); }
@@ -252,12 +270,12 @@ export async function createConfiguredStorage(filename, { environment = process.
       close:()=>{
         if(closing)return closing;
         closed=true;
-        return closing=(async()=>{unsubscribe();listeners.clear();beforeListeners.clear();await tail;await current.registry.close();})();
+        return closing=(async()=>{unsubscribe();listeners.clear();beforeListeners.clear();await tail;await closeStorage(current);})();
       },
     };
   } catch(error) {
     closed=true;
-    try { await current?.registry.close(); }
+    try { if (current) await closeStorage(current); }
     catch(cleanup) { throw new AggregateError([error,cleanup],'Storage initialization and cleanup failed.',{cause:error}); }
     throw error;
   }

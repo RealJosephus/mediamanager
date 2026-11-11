@@ -55,6 +55,69 @@ test('recursive directories and realpath retain mapped identity style and reject
   assert.deepEqual(await fs.readdir(outside), []);
 });
 
+test('mapped unlink and rmdir preserve the other object kind and nonempty directories', async t => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'storage-file-removal-'));
+  const registry = new StorageRegistry();
+  t.after(async () => {
+    try { await registry.close(); }
+    finally { assert.equal(path.dirname(root), os.tmpdir()); await fs.rm(root, { recursive: true }); }
+  });
+  registry.registerType('local', config => LocalAdapter.open(config));
+  await registry.createInstance('disk', 'local', { root, writable: true });
+  const vfs = new VirtualFileSystem(registry), identityMap = new IdentityAccessMap();
+  vfs.mount({ path: '/disk', instanceId: 'disk', capabilities: { delete: true } });
+  identityMap.addPrefix({ identityRoot: 'Z:\\State', accessRoot: '/disk', style: 'windows', returnAccess: 'Retain the file identity.' });
+  const files = new StorageFileSystem({ vfs, identityMap });
+  await fs.writeFile(path.join(root, 'file'), 'retain');
+  await fs.mkdir(path.join(root, 'empty')); await fs.mkdir(path.join(root, 'nonempty'));
+  await fs.writeFile(path.join(root, 'nonempty', 'child'), 'retain child');
+  await assert.rejects(files.unlink('Z:\\State\\empty'), { code: 'EISDIR' });
+  await assert.rejects(files.rmdir('Z:\\State\\file'), { code: 'ENOTDIR' });
+  await assert.rejects(files.rmdir('Z:\\State\\nonempty'), { code: 'ENOTEMPTY' });
+  assert.equal(await fs.readFile(path.join(root, 'file'), 'utf8'), 'retain');
+  assert.equal(await fs.readFile(path.join(root, 'nonempty', 'child'), 'utf8'), 'retain child');
+  await files.rmdir('Z:\\State\\empty'); await files.unlink('Z:\\State\\file');
+  assert.deepEqual(await fs.readdir(root), ['nonempty']);
+});
+
+test('copying a file to itself or a local alias preserves its bytes and mount restrictions', async t => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'storage-file-copy-'));
+  const registry = new StorageRegistry();
+  t.after(async () => {
+    try { await registry.close(); }
+    finally { assert.equal(path.dirname(root), os.tmpdir()); await fs.rm(root, { recursive: true }); }
+  });
+  registry.registerType('local', config => LocalAdapter.open(config));
+  await registry.createInstance('disk', 'local', { root, writable: true });
+  await registry.createInstance('second', 'local', { root, writable: true });
+  const vfs = new VirtualFileSystem(registry), identityMap = new IdentityAccessMap();
+  for (const [name, instanceId, capabilities] of [
+    ['Source', 'disk', { create: true, replace: true }], ['Alias', 'disk', { create: true, replace: true }],
+    ['Second', 'second', { create: true, replace: true }], ['Read', 'disk', {}],
+  ]) {
+    vfs.mount({ path: '/' + name, instanceId, capabilities });
+    identityMap.addPrefix({ identityRoot: 'Z:\\' + name, accessRoot: '/' + name, style: 'windows',
+      returnAccess: 'Retain the mapped copy identity.' });
+  }
+  const files = new StorageFileSystem({ vfs, identityMap });
+  const bytes = Buffer.concat([Buffer.alloc(131079, 0x97), Buffer.from('\0中文')]);
+  await fs.writeFile(path.join(root, 'source.bin'), bytes);
+  await fs.link(path.join(root, 'source.bin'), path.join(root, 'linked.bin'));
+  for (const destination of ['Z:\\Source\\source.bin', 'Z:\\Alias\\source.bin', 'Z:\\Second\\source.bin',
+    'Z:\\Source\\linked.bin', 'Z:\\Second\\linked.bin']) {
+    await files.copyFile('Z:\\Source\\source.bin', destination);
+    assert.deepEqual(await fs.readFile(path.join(root, 'source.bin')), bytes);
+    assert.deepEqual(await fs.readFile(path.join(root, 'linked.bin')), bytes);
+  }
+  await assert.rejects(files.copyFile('Z:\\Source\\source.bin', 'Z:\\Read\\source.bin'), { code: 'ENOTSUP' });
+  await assert.rejects(files.copyFile('Z:\\Source\\missing', 'Z:\\Source\\missing'), { code: 'ENOENT' });
+  await assert.rejects(files.copyFile('Z:\\Source', 'Z:\\Source'), { code: 'EISDIR' });
+  await fs.writeFile(path.join(root, 'copy.bin'), 'Previous contents.');
+  await files.copyFile('Z:\\Source\\source.bin', 'Z:\\Source\\copy.bin');
+  assert.deepEqual(await fs.readFile(path.join(root, 'copy.bin')), bytes);
+  assert.deepEqual(await fs.readFile(path.join(root, 'source.bin')), bytes);
+});
+
 test('file handles enforce mount creation, replacement and virtual directory restrictions', async t => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'storage-file-handles-'));
   const registry = new StorageRegistry();

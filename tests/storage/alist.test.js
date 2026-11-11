@@ -192,7 +192,7 @@ test('AList synchronous upload, mkdir, rename and remove use actual protocol wit
   const requests = [];
   const api = await server(t, async (request, response) => {
     requests.push({ url: request.url, method: request.method, headers: request.headers, body: await body(request) });
-    json(response, null);
+    json(response, request.url === '/api/fs/get' ? file('new.nfo') : null);
   });
   assert.throws(() => new AListAdapter({ baseUrl: api, capabilities: { write: true } }), /unsupported fields/u);
   assert.throws(() => new AListAdapter({ baseUrl: api, capabilities: { create: 'true' } }), /must be boolean/u);
@@ -214,7 +214,8 @@ test('AList synchronous upload, mkdir, rename and remove use actual protocol wit
   assert.deepEqual(requests[0].body, data);
   assert.deepEqual(JSON.parse(requests[1].body), { path: '/电影/new' });
   assert.deepEqual(JSON.parse(requests[2].body), { path: '/电影/old.nfo', name: 'new.nfo', overwrite: false });
-  assert.deepEqual(JSON.parse(requests[3].body), { dir: '/电影', names: ['new.nfo'] });
+  assert.deepEqual(JSON.parse(requests[3].body), { path: '/电影/new.nfo', password: 'directory-only' });
+  assert.deepEqual(JSON.parse(requests[4].body), { dir: '/电影', names: ['new.nfo'] });
   assert.equal(adapter.capabilities.atomicReplace, false);
   assert.equal(adapter.capabilities.conditionalWrite, false);
   await assert.rejects(adapter.write('/file', data, { atomic: true }), { code: 'not-supported' });
@@ -225,7 +226,43 @@ test('AList synchronous upload, mkdir, rename and remove use actual protocol wit
   const readonly = new AListAdapter({ baseUrl: api }); t.after(() => readonly.close());
   await assert.rejects(readonly.write('/file', data), { code: 'not-supported' });
   await assert.rejects(readonly.mkdir('/directory'), { code: 'not-supported' });
-  assert.equal(requests.length, 4);
+  assert.equal(requests.length, 5);
+});
+
+test('AList directory deletes require explicit recursion and failed inspection cannot delete', async t => {
+  const directories = new Set(['/nonempty', '/empty']);
+  const files = new Map([['/nonempty/child', Buffer.from('Retain the complete child.')], ['/file', Buffer.from('file')]]);
+  const removals = [];
+  const api = await server(t, async (request, response) => {
+    const input = JSON.parse(await body(request));
+    if (request.url === '/api/fs/get') {
+      if (input.path === '/denied') { json(response, null, 403); return; }
+      if (!directories.has(input.path) && !files.has(input.path)) { json(response, null, 404); return; }
+      json(response, { ...file(input.path.slice(1)), is_dir: directories.has(input.path) }); return;
+    }
+    assert.equal(request.url, '/api/fs/remove');
+    const target = input.dir.replace(/\/$/u, '') + '/' + input.names[0];
+    removals.push(target); directories.delete(target);
+    for (const name of files.keys()) if (name === target || name.startsWith(target + '/')) files.delete(name);
+    json(response, null);
+  });
+  const adapter = new AListAdapter({ baseUrl: api, capabilities: { delete: true } });
+  t.after(() => adapter.close());
+  for (const directory of directories) for (const options of [{}, { recursive: false }, { recursive: 'true' }]) {
+    await assert.rejects(adapter.delete(directory, options), { code: 'not-supported' });
+  }
+  await assert.rejects(adapter.delete('/denied'), { code: 'permission-denied' });
+  await assert.rejects(adapter.delete('/missing'), { code: 'not-found' });
+  assert.deepEqual(removals, []);
+  assert.deepEqual([...directories], ['/nonempty', '/empty']);
+  assert.equal(files.get('/nonempty/child').toString(), 'Retain the complete child.');
+  await adapter.delete('/file');
+  assert.equal(files.has('/file'), false);
+  await adapter.delete('/nonempty', { recursive: true });
+  assert.equal(files.has('/nonempty/child'), false);
+  await adapter.delete('/empty', { recursive: true });
+  assert.deepEqual([...directories], []);
+  assert.deepEqual(removals, ['/file', '/nonempty', '/empty']);
 });
 
 test('business envelopes preserve typed failures and hide remote error bodies', async (t) => {

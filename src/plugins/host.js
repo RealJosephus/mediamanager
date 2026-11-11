@@ -10,6 +10,7 @@ import { liveTvSignalPositions, validateLiveTvExtension, validateLiveTvResult, v
 import { inspectPackage, stagePackage, verifyRelease, physicalDirectory, officialPackagesPath, validPluginId } from './package.js';
 import { createConfigurationBinding } from '../../packages/plugin-sdk/configuration.js';
 import { lyricSignalPositions, validateLyricExtension, copyLyricProviderResult } from '../lyrics/contract.js';
+import { storageOwnership } from '../storage/ownership.js';
 
 const error = (status,message) => Object.assign(new Error(message),{status,statusCode:status});
 const object = value => value !== null && typeof value==='object' && !Array.isArray(value);
@@ -147,6 +148,16 @@ class PluginScope {
     const scope=this, wrappers=new Map(), liveTv=liveTvSignalPositions[kind];let proxy;
     return proxy=new Proxy(Object.create(liveTv?null:Object.getPrototypeOf(value)),{get(_target,key){
       const target=value;
+      if(kind==='adapter'&&key===storageOwnership)return ()=>{
+        if(!scope.active||!scope.admitted)throw error(503,'The plugin is unavailable.');
+        const owner=new PluginScope();owner.admitted=true;
+        let closing;
+        const close=()=>closing??=owner.close().finally(()=>scope.resources.delete(close));
+        scope.resources.add(close);
+        // Consumer disposal drains these continuations before the adapter is
+        // unregistered. Ordinary calls still use the revoked plugin scope.
+        return {adapter:owner.wrap(target,'adapter'),close};
+      };
       const property=Reflect.get(target,key,target);
       if(key==='providers'&&!liveTv)return property.map(provider=>scope.wrap(provider));
       if(typeof property!=='function')return property;

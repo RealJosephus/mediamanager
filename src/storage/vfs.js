@@ -33,6 +33,8 @@ export class VirtualFileSystem {
 
   constructor(registry) { this.#registry = registry; }
 
+  mountDefinitions() { return [...this.#mounts.values()]; }
+
   mount(definition, { deferred = false } = {}) {
     if (!definition || typeof definition !== 'object' || Array.isArray(definition)
       || Object.keys(definition).some(name => !['path', 'instanceId', 'root', 'capabilities'].includes(name))) {

@@ -10,16 +10,33 @@ import { watchDirectory } from './watch.js';
 const codes = { ENOENT: 'not-found', ENOTDIR: 'not-directory', EISDIR: 'is-directory',
   EPERM: 'permission-denied', EACCES: 'permission-denied', EEXIST: 'already-exists',
   ENOTEMPTY: 'not-empty', EBUSY: 'unavailable', ABORT_ERR: 'cancelled' };
-const publicFailure = error => Object.fromEntries(['status', 'statusCode', 'errors']
-  .filter(key => error != null && Object.hasOwn(error, key)).map(key => [key, error[key]]));
-const failure = error => error instanceof StorageError ? error
-  : Object.assign(new StorageError(Object.hasOwn(codes, error?.code) ? codes[error.code] : 'unavailable',
-    error?.message ?? 'The local storage operation failed.', { nativeCode: error?.code }), publicFailure(error), { cause: error });
+const diagnostic = (error, key) => {
+  try { return error?.[key]; } catch { return undefined; }
+};
+const failureMessage = error => {
+  try { return String(diagnostic(error, 'message') ?? 'The local storage operation failed.'); }
+  catch { return 'The local storage operation failed.'; }
+};
+const publicFailure = error => {
+  const fields = {};
+  for (const key of ['status', 'statusCode', 'errors']) {
+    try { if (error != null && Object.hasOwn(error, key)) fields[key] = error[key]; }
+    catch { /* A diagnostic getter cannot replace a rejection or abort notification. */ }
+  }
+  return fields;
+};
+const failure = error => {
+  if (error instanceof StorageError) return error;
+  const nativeCode = diagnostic(error, 'code');
+  return Object.assign(new StorageError(typeof nativeCode === 'string' && Object.hasOwn(codes, nativeCode) ? codes[nativeCode] : 'unavailable',
+    failureMessage(error), { nativeCode }), publicFailure(error), { cause: error });
+};
 const combinedFailure = errors => {
   if (errors.length === 1) return errors[0];
   const primary = failure(errors[0]);
-  return Object.assign(new StorageError(primary.code, primary.message, primary.details), publicFailure(primary),
-    { cause: new AggregateError(errors, primary.message, { cause: errors[0] }), errors });
+  const code = diagnostic(primary, 'code'), message = failureMessage(primary);
+  return Object.assign(new StorageError(typeof code === 'string' ? code : 'unavailable', message, diagnostic(primary, 'details')), publicFailure(primary),
+    { cause: new AggregateError(errors, message, { cause: errors[0] }), errors });
 };
 const version = info => `"${createHash('sha256').update([info.dev, info.ino, info.size, info.mtimeNs, info.ctimeNs].join(':')).digest('hex')}"`;
 const date = ns => {
@@ -107,14 +124,19 @@ export class LocalAdapter {
     const write = /[wa+]/u.test(flags);
     if (write) requireCapability(this, flags.includes('x') ? 'create' : 'replace');
     const target = await this.#target(value, { missing: write });
-    const raw = await fs.open(target, flags), owner = this; let closed = false;
-    const close = async () => { if (closed) return; closed = true; owner.#handles.delete(handle); await raw.close(); };
+    const raw = await fs.open(target, flags), owner = this; let closing;
+    const close = () => {
+      if (closing) return closing;
+      closing = Promise.resolve().then(() => raw.close());
+      void closing.then(() => owner.#handles.delete(handle), () => owner.#handles.delete(handle));
+      return closing;
+    };
     const handle = new Proxy(raw, { get(object, key) {
       if (key === 'close') return close;
-      if (key === 'writeSync') return bytes => { if (closed || owner.#closed) throw new StorageError('closed', 'The storage file is closed.'); return writeSync(raw.fd, bytes); };
+      if (key === 'writeSync') return bytes => { if (closing || owner.#closed) throw new StorageError('closed', 'The storage file is closed.'); return writeSync(raw.fd, bytes); };
       const property = Reflect.get(object, key, object);
       return typeof property === 'function' ? (...args) => {
-        if (closed || owner.#closed) throw new StorageError('closed', 'The storage file is closed.');
+        if (closing || owner.#closed) throw new StorageError('closed', 'The storage file is closed.');
         checkAbort(options.signal); return property.apply(object, args);
       } : property;
     } });
@@ -162,7 +184,8 @@ export class LocalAdapter {
             }
           } finally { await close(); }
         }
-        return { stream: stream(), close, size: range ? range.end - range.start + 1n : 0n,
+        const contentLength = range ? range.end - range.start + 1n : 0n;
+        return { stream: stream(), close, size: contentLength, contentLength,
           totalSize: info.size, version: version(info), modified: date(info.mtimeNs), range: requested ? range : null,
           rangeHonored: Boolean(requested), status: requested ? 206 : 200, contentType: null };
       } catch (error) { await file.close(); throw error; }
@@ -189,12 +212,13 @@ export class LocalAdapter {
         // Promise.race subscribes. It owns no source cleanup or business result.
         void aborted.promise.catch(() => {});
         signal.addEventListener('abort', cancel, { once: true });
-        let iterator;
+        let iterator, sourceNext;
         try {
           iterator = source[Symbol.asyncIterator]?.() ?? source[Symbol.iterator]();
           for (;;) {
             active();
-            const next = await Promise.race([iterator.next(), aborted.promise]);
+            sourceNext = Promise.resolve().then(() => iterator.next());
+            const next = await Promise.race([sourceNext, aborted.promise]);
             if (next.done) break;
             const bytes = await next.value;
             active();
@@ -208,7 +232,10 @@ export class LocalAdapter {
         finally {
           signal.removeEventListener('abort', cancel);
           if (signal.aborted) try { await source?.destroy?.(signal.reason); } catch (error) { errors.push(error); }
-          try { await iterator?.return?.(); } catch (error) { errors.push(error); }
+          try { const returned = await iterator?.return?.(); await returned?.value; } catch (error) { errors.push(error); }
+          // A custom iterator may finish return() while its previous next()
+          // still owns I/O. Cancellation does not transfer that ownership.
+          await Promise.allSettled([sourceNext]);
         }
         if (!errors.length) {
           await handle.sync(); await handle.close(); active();

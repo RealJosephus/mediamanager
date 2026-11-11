@@ -5,6 +5,7 @@ import { once } from 'node:events';
 import { WebDavAdapter } from '../../plugins/webdav/adapter.js';
 import { StorageRegistry } from '../../src/storage/registry.js';
 import { VirtualFileSystem } from '../../src/storage/vfs.js';
+import { remoteFileContract } from './remote-file-contract.js';
 
 async function server(t, handler) {
   const service = http.createServer(async (request, response) => {
@@ -127,6 +128,22 @@ function assertNoStaging(service, paths) {
   assert.deepEqual([...service.files.keys()].sort(), paths.map(path => '/dav' + path).sort(),
     'Only the declared complete destination entities may remain.');
 }
+
+test('WebDAV file operations preserve remote bytes and refuse nonrecursive directory deletes', async t => {
+  const service = await writableDav(t), registry = new StorageRegistry();
+  const capabilities = { create: true, replace: true, mkdir: true, delete: true };
+  registry.registerType('webdav', config => new WebDavAdapter(config));
+  t.after(() => registry.close());
+  await registry.createInstance('remote', 'webdav', { baseUrl: service.origin + '/dav/', capabilities });
+  const vfs = new VirtualFileSystem(registry);
+  vfs.mount({ path: '/network', instanceId: 'remote', capabilities });
+  await remoteFileContract(vfs);
+  assert.deepEqual([...service.collections], ['/dav']);
+  assert.deepEqual([...service.files.keys()], []);
+  const directoryDeletes = service.requests.filter(request => request.method === 'DELETE'
+    && ['/dav/file-contract/nonempty', '/dav/file-contract/empty'].includes(request.path));
+  assert.equal(directoryDeletes.length, 2, 'Only the two explicitly recursive directory deletes reach HTTP.');
+});
 
 test('WebDAV exclusive publish preserves complete entities and keeps caller capabilities separate', async t => {
   const service = await writableDav(t), adapter = createAdapter(service);
@@ -658,6 +675,7 @@ test('WebDAV create, replace, collection, delete and cross-directory MOVE are in
   let forcedMethod = null;
   const origin = await server(t, async (request, response) => {
     requests.push({ method: request.method, url: request.url, headers: request.headers, body: await requestBody(request) });
+    if (request.method === 'PROPFIND') { sendXml(response, [resource(request.url)]); return; }
     const forced = forcedStatus !== null && (forcedMethod === null || forcedMethod === request.method);
     const status = (forced ? forcedStatus : null) ?? ({ PUT: 204,
       MKCOL: 201, DELETE: 204, MOVE: 201 })[request.method] ?? 500;
@@ -841,6 +859,48 @@ test('WebDAV cancellation, timeout, close and early read close abort upstream wo
   await streamClosed;
   assert.equal(streamEndedAtClose, false);
   assert.equal((await streaming.stat('/file')).kind, 'file');
+});
+
+test('WebDAV resolves namespace declarations on each response and scalar element', async t => {
+  let document;
+  const origin = await server(t, (_request, response) => {
+    response.writeHead(207, { 'Content-Type': 'application/xml' });
+    response.end(document);
+  });
+  const adapter = new WebDavAdapter({ baseUrl: `${origin}/dav/` });
+  t.after(() => adapter.close());
+  document = multistatus([
+    resource('/dav/', { directory: true, prefix: 'r' }).replace('<r:response>', '<r:response xmlns:r="DAV:">'),
+    resource('/dav/file', { size: 17, prefix: 's' }).replace('<s:response>', '<s:response xmlns:s="DAV:">'),
+  ]);
+  const page = await adapter.listPage('/');
+  assert.equal(page.complete, true);
+  assert.deepEqual(page.entries.map(({ name, size }) => ({ name, size })), [{ name: 'file', size: 17n }]);
+  for (const [opening, closing] of [
+    ['<h:href xmlns:h="DAV:">', '</h:href>'],
+    ['<href xmlns="DAV:">', '</href>'],
+  ]) {
+    document = multistatus([resource('/dav/file', { size: 17 })
+      .replace('<d:href>', opening).replace('</d:href>', closing)]);
+    assert.equal((await adapter.stat('/file')).size, 17n);
+  }
+});
+
+test('WebDAV rejects scalar namespace rebinding and does not leak sibling declarations', async t => {
+  let document;
+  const origin = await server(t, (_request, response) => {
+    response.writeHead(207, { 'Content-Type': 'application/xml' });
+    response.end(document);
+  });
+  const adapter = new WebDavAdapter({ baseUrl: `${origin}/dav/` });
+  t.after(() => adapter.close());
+  document = multistatus([resource('/dav/file').replace('<d:href>', '<d:href xmlns:d="urn:not-dav">')]);
+  await assert.rejects(adapter.stat('/file'), { code: 'invalid-response' });
+  document = multistatus([
+    resource('/dav/', { directory: true, prefix: 'r' }).replace('<r:response>', '<r:response xmlns:r="DAV:">'),
+    resource('/dav/file', { prefix: 'r' }),
+  ]);
+  await assert.rejects(adapter.listPage('/'), { code: 'invalid-response' });
 });
 
 test('WebDAV rejects malformed, oversized and failed child multistatus documents', async (t) => {
