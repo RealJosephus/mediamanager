@@ -4,12 +4,15 @@ import { lstat, readFile, readdir, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import { inspectInstanceConfiguration } from '../configuration.js';
 import { decodeServerIdentity, isServerIdentity } from '../core/server-identity.js';
+import { instancePathApi, instancePathKey, instancePathContains } from './instance-paths.js';
 
 const instanceStateKind = 'jellyfin-instance-state';
 const sha256Pattern = /^[a-f0-9]{64}$/u;
 
 const sha256 = value => createHash('sha256').update(value).digest('hex');
 const timestampFromNanoseconds = value => new Date(Number(value / 1_000_000n)).toISOString();
+export const stateFileMode = metadata => process.platform === 'win32' ? null : Number(metadata.mode & 0o777n);
+export const isStateFileMode = mode => mode === null || (Number.isInteger(mode) && mode >= 0 && mode <= 0o777);
 const fileSha256 = async filename => {
   const hash = createHash('sha256');
   for await (const chunk of createReadStream(filename)) hash.update(chunk);
@@ -97,7 +100,8 @@ async function databaseGeneration(sqlitePath) {
     const before = await lstat(filename, { bigint: true }), digest = await fileSha256(filename), after = await lstat(filename, { bigint: true });
     const generation = metadata => [metadata.dev, metadata.ino, metadata.size, metadata.mtimeNs, metadata.ctimeNs].join(':');
     if (generation(before) !== generation(after)) throw new Error(`Jellyfin SQLite ${role} file changed while its generation was hashed`);
-    files.push({ role, bytes: before.size.toString(), modifiedAt: timestampFromNanoseconds(before.mtimeNs), sha256: digest });
+    files.push({ role, bytes: before.size.toString(), mode: stateFileMode(before),
+      modifiedAt: timestampFromNanoseconds(before.mtimeNs), sha256: digest });
   }
   return { algorithm: 'sha256', digest: sha256(canonicalJson(files)), files };
 }
@@ -128,10 +132,12 @@ export function calculateStateGeneration(rootLabels, records) {
       directories.add(key);
       normalized.push({ label: value.label, path: value.path, kind: 'directory', modifiedAt: value.modifiedAt, parts });
     } else {
-      exactKeys(value, ['label', 'path', 'kind', 'bytes', 'modifiedAt', 'sha256'], 'Jellyfin state generation file');
-      if (!/^(?:0|[1-9]\d*)$/u.test(value.bytes) || !sha256Pattern.test(value.sha256)) throw new Error('Invalid Jellyfin state generation file');
+      exactKeys(value, ['label', 'path', 'kind', 'bytes', 'mode', 'modifiedAt', 'sha256'], 'Jellyfin state generation file');
+      if (!/^(?:0|[1-9]\d*)$/u.test(value.bytes) || !sha256Pattern.test(value.sha256) || !isStateFileMode(value.mode)) {
+        throw new Error('Invalid Jellyfin state generation file');
+      }
       normalized.push({ label: value.label, path: value.path, kind: 'file', bytes: value.bytes,
-        modifiedAt: value.modifiedAt, sha256: value.sha256, parts });
+        mode: value.mode, modifiedAt: value.modifiedAt, sha256: value.sha256, parts });
     }
   }
   for (const label of roots) if (!directories.has(`${label}\0`)) throw new Error(`Missing Jellyfin state generation root: ${label}`);
@@ -183,7 +189,7 @@ async function stateGeneration(roots) {
       else if (metadata.isFile()) {
         const digest = await fileSha256(filename), after = await lstat(filename, { bigint: true });
         if (generation(metadata) !== generation(after)) throw new Error(`Jellyfin state file changed during generation capture: ${filename}`);
-        records.push({ label, path: childRelative.split(path.sep).join('/'), kind: 'file', bytes: metadata.size.toString(),
+        records.push({ label, path: childRelative.split(path.sep).join('/'), kind: 'file', bytes: metadata.size.toString(), mode: stateFileMode(metadata),
           modifiedAt: timestampFromNanoseconds(metadata.mtimeNs), sha256: digest });
       } else throw new Error(`Jellyfin state contains an unsupported filesystem entry: ${filename}`);
     }
@@ -293,7 +299,7 @@ function identityPayload(state) {
       algorithm: state.identity.databaseGeneration.algorithm,
       digest: state.identity.databaseGeneration.digest,
       files: state.identity.databaseGeneration.files.map(file => ({ role: file.role, bytes: file.bytes,
-        modifiedAt: file.modifiedAt, sha256: file.sha256 })),
+        mode: file.mode, modifiedAt: file.modifiedAt, sha256: file.sha256 })),
     },
     controlGeneration: {
       algorithm: state.identity.controlGeneration.algorithm,
@@ -340,6 +346,9 @@ function assertDiscoveredState(state) {
   plainRecord(state, 'discovered Jellyfin instance state');
   exactKeys(state, ['kind', 'instanceRoot', 'identity', 'paths', 'pathBindings', 'roots'], 'discovered Jellyfin instance state');
   if (state.kind !== instanceStateKind) throw new Error('Invalid discovered Jellyfin instance state');
+  const sourcePath = instancePathApi(state.instanceRoot);
+  const sourceKey = value => instancePathKey(value, sourcePath);
+  const sourceContains = (root, value) => instancePathContains(root, value, sourcePath);
   plainRecord(state.identity, 'discovered Jellyfin instance identity');
   exactKeys(state.identity, ['algorithm', 'digest', 'serverId', 'criticalFiles', 'databaseGeneration', 'controlGeneration', 'stateGeneration'], 'discovered Jellyfin instance identity');
   exactKeys(state.identity.criticalFiles, ['systemConfiguration', 'networkConfiguration', 'serverIdentity'], 'discovered Jellyfin critical identity');
@@ -361,8 +370,8 @@ function assertDiscoveredState(state) {
   if (generation.algorithm !== 'sha256' || !sha256Pattern.test(generation.digest) || !Array.isArray(generation.files)
     || generation.files.length < 1 || generation.files[0]?.role !== 'sqlite'
     || new Set(generationRoles).size !== generationRoles.length || roleOrder.some((order, index) => order < 0 || (index && order <= roleOrder[index - 1]))
-    || generation.files.some(file => !file || Object.keys(file).sort().join(',') !== 'bytes,modifiedAt,role,sha256'
-      || !/^(?:0|[1-9]\d*)$/u.test(file.bytes) || !sha256Pattern.test(file.sha256)
+    || generation.files.some(file => !file || Object.keys(file).sort().join(',') !== 'bytes,mode,modifiedAt,role,sha256'
+      || !/^(?:0|[1-9]\d*)$/u.test(file.bytes) || !sha256Pattern.test(file.sha256) || !isStateFileMode(file.mode)
       || typeof file.modifiedAt !== 'string' || Number.isNaN(Date.parse(file.modifiedAt))
       || new Date(file.modifiedAt).toISOString() !== file.modifiedAt)
     || generation.digest !== sha256(canonicalJson(generation.files))) throw new Error('Invalid discovered Jellyfin database generation');
@@ -375,9 +384,9 @@ function assertDiscoveredState(state) {
   const inventoryNames = new Set(), inventoryRoots = new Set();
   for (const entry of control.inventory) {
     plainRecord(entry, 'discovered Jellyfin top-level inventory entry');
-    if (typeof entry.name !== 'string' || !entry.name || path.basename(entry.name) !== entry.name || entry.name === '.' || entry.name === '..'
-      || inventoryNames.has(pathKey(entry.name))) throw new Error('Invalid discovered Jellyfin top-level inventory');
-    inventoryNames.add(pathKey(entry.name));
+    if (typeof entry.name !== 'string' || !entry.name || sourcePath.basename(entry.name) !== entry.name || entry.name === '.' || entry.name === '..'
+      || inventoryNames.has(sourceKey(entry.name))) throw new Error('Invalid discovered Jellyfin top-level inventory');
+    inventoryNames.add(sourceKey(entry.name));
     if (entry.kind === 'state-root') {
       exactKeys(entry, ['name', 'kind', 'root'], 'discovered Jellyfin top-level state root');
       if (typeof entry.root !== 'string' || !entry.root || inventoryRoots.has(entry.root)) {
@@ -404,31 +413,31 @@ function assertDiscoveredState(state) {
   const rootLabels = Object.keys(state.roots), requiredRoots = ['data', 'config', 'cache', 'log'];
   if (requiredRoots.some(label => !rootLabels.includes(label))
     || rootLabels.some(label => ![...requiredRoots, 'metadata-external', 'cache-external'].includes(label))
-    || Object.values({ instanceRoot: state.instanceRoot, ...state.paths, ...state.roots }).some(value => typeof value !== 'string' || !path.isAbsolute(value) || path.resolve(value) !== value)
-    || pathKey(state.roots.data) !== pathKey(path.join(state.instanceRoot, 'data'))
-    || pathKey(state.roots.config) !== pathKey(path.join(state.instanceRoot, 'config'))
-    || pathKey(state.roots.cache) !== pathKey(path.join(state.instanceRoot, 'cache'))
-    || pathKey(state.roots.log) !== pathKey(path.join(state.instanceRoot, 'log'))
-    || pathKey(state.paths.programData) !== pathKey(state.roots.data)
-    || pathKey(state.paths.configuration) !== pathKey(state.roots.config)
-    || pathKey(state.paths.defaultCache) !== pathKey(state.roots.cache)
-    || pathKey(state.paths.cache) !== pathKey(state.roots['cache-external'] ?? state.paths.cache)
-    || (state.roots['cache-external'] == null && !Object.values(state.roots).some(root => pathsOverlap(root, state.paths.cache)))
-    || pathKey(state.paths.log) !== pathKey(state.roots.log)
-    || pathKey(state.paths.defaultMetadata) !== pathKey(path.join(state.paths.programData, 'metadata'))
-    || pathKey(state.paths.sqlite) !== pathKey(path.join(state.paths.programData, 'data', 'jellyfin.db'))
-    || (state.roots['metadata-external'] != null && pathKey(state.paths.metadata) !== pathKey(state.roots['metadata-external']))
-    || (state.roots['metadata-external'] == null && !Object.values(state.roots).some(root => pathsOverlap(root, state.paths.metadata)))) {
+    || Object.values({ instanceRoot: state.instanceRoot, ...state.paths, ...state.roots }).some(value => typeof value !== 'string' || !sourcePath.isAbsolute(value) || sourcePath.resolve(value) !== value)
+    || sourceKey(state.roots.data) !== sourceKey(sourcePath.join(state.instanceRoot, 'data'))
+    || sourceKey(state.roots.config) !== sourceKey(sourcePath.join(state.instanceRoot, 'config'))
+    || sourceKey(state.roots.cache) !== sourceKey(sourcePath.join(state.instanceRoot, 'cache'))
+    || sourceKey(state.roots.log) !== sourceKey(sourcePath.join(state.instanceRoot, 'log'))
+    || sourceKey(state.paths.programData) !== sourceKey(state.roots.data)
+    || sourceKey(state.paths.configuration) !== sourceKey(state.roots.config)
+    || sourceKey(state.paths.defaultCache) !== sourceKey(state.roots.cache)
+    || sourceKey(state.paths.cache) !== sourceKey(state.roots['cache-external'] ?? state.paths.cache)
+    || (state.roots['cache-external'] == null && !Object.values(state.roots).some(root => sourceContains(root, state.paths.cache)))
+    || sourceKey(state.paths.log) !== sourceKey(state.roots.log)
+    || sourceKey(state.paths.defaultMetadata) !== sourceKey(sourcePath.join(state.paths.programData, 'metadata'))
+    || sourceKey(state.paths.sqlite) !== sourceKey(sourcePath.join(state.paths.programData, 'data', 'jellyfin.db'))
+    || (state.roots['metadata-external'] != null && sourceKey(state.paths.metadata) !== sourceKey(state.roots['metadata-external']))
+    || (state.roots['metadata-external'] == null && !Object.values(state.roots).some(root => sourceContains(root, state.paths.metadata)))) {
     throw new Error('Invalid discovered Jellyfin path model');
   }
   const rootEntries = Object.entries(state.roots);
   for (let index = 0; index < rootEntries.length; index++) for (let other = index + 1; other < rootEntries.length; other++) {
-    if (pathsOverlap(rootEntries[index][1], rootEntries[other][1]) || pathsOverlap(rootEntries[other][1], rootEntries[index][1])) {
+    if (sourceContains(rootEntries[index][1], rootEntries[other][1]) || sourceContains(rootEntries[other][1], rootEntries[index][1])) {
       throw new Error('Invalid overlapping discovered Jellyfin state roots');
     }
   }
-  const expectedInventoryRoots = rootEntries.filter(([, value]) => pathKey(path.dirname(value)) === pathKey(state.instanceRoot))
-    .map(([root, value]) => ({ name: path.basename(value), kind: 'state-root', root }))
+  const expectedInventoryRoots = rootEntries.filter(([, value]) => sourceKey(sourcePath.dirname(value)) === sourceKey(state.instanceRoot))
+    .map(([root, value]) => ({ name: sourcePath.basename(value), kind: 'state-root', root }))
     .sort((left, right) => compareText(left.name, right.name));
   const expectedInventory = control.restoredState === null ? expectedInventoryRoots
     : [...expectedInventoryRoots, { name: 'mediamanager-state.json', kind: 'restored-state' }]
@@ -445,10 +454,10 @@ function assertDiscoveredState(state) {
       && !binding.relativePath.includes(':') && !binding.relativePath.includes('\0') && !path.posix.isAbsolute(binding.relativePath)
       && (binding.relativePath === '' || !binding.relativePath.split('/').some(part => !part || part === '.' || part === '..'));
     const bindingRoot = state.roots[binding.root];
-    const reconstructed = bindingRoot && path.resolve(bindingRoot, ...binding.relativePath.split('/').filter(Boolean));
+    const reconstructed = bindingRoot && sourcePath.resolve(bindingRoot, ...binding.relativePath.split('/').filter(Boolean));
     const defaultPath = name === 'metadata' ? state.paths.defaultMetadata : state.paths.defaultCache;
-    if (typeof binding.configured !== 'boolean' || !bindingRoot || !validRelative || pathKey(reconstructed) !== pathKey(effectivePath)
-      || (!binding.configured && pathKey(effectivePath) !== pathKey(defaultPath))) {
+    if (typeof binding.configured !== 'boolean' || !bindingRoot || !validRelative || sourceKey(reconstructed) !== sourceKey(effectivePath)
+      || (!binding.configured && sourceKey(effectivePath) !== sourceKey(defaultPath))) {
       throw new Error(`Invalid discovered Jellyfin ${name} path binding`);
     }
   }

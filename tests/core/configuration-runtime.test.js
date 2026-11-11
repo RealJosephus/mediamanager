@@ -14,6 +14,11 @@ import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { configurationValue, configurationJson } from './fixtures/configuration/observations.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
 import { configurationProject } from './configuration-current.js';
+import { createInstanceFixture } from '../migration/instance-fixture.js';
+import { cloneStoppedInstance } from '../../src/migration/instance-copy.js';
+import { discoverInstanceState } from '../../src/migration/instance-state.js';
+import { createStatePackage, restoreStatePackage, verifyStatePackage } from '../../src/migration/state-package.js';
+import { escapeXml } from '../../src/core/xml.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 
@@ -77,15 +82,40 @@ test('postgres: all Unicode configuration encodings feed the real runtime, persi
       const bytes = await fs.readFile(filename); observations.push({ name: encoding + '-' + kind, root: kind, value: parseConfigurationXml(bytes, kind), sha256: hash(bytes) });
     }
   });
+  const transfer = await createInstanceFixture(t);
+  const metadata = path.join(transfer.directory, '源 metadata & state');
+  await fs.mkdir(metadata);
+  const asset = Buffer.from([2, 0, 255, 8]);
+  await fs.writeFile(path.join(metadata, 'state.bin'), asset);
+  const original = xml('utf-16le', 'ServerConfiguration', '<ServerName>实例 🎧</ServerName>'
+    + `<MetadataPath>${escapeXml(metadata)}</MetadataPath>`);
+  await fs.writeFile(path.join(transfer.root, 'config/system.xml'), original);
+  const clone = path.join(transfer.directory, 'clone'), packed = path.join(transfer.directory, 'package');
+  const restored = path.join(transfer.directory, 'restored');
+  await cloneStoppedInstance({ instanceState: await discoverInstanceState({ instanceRoot: transfer.root }), destination: clone });
+  await createStatePackage(await transfer.packageOptions({ destination: packed }));
+  await restoreStatePackage(packed, restored);
+  for (const [name, destination] of [['instance-clone', clone], ['instance-restore', restored]]) {
+    const filename = path.join(destination, 'config/system.xml');
+    const bytes = await fs.readFile(filename), value = parseConfigurationXml(bytes, 'server');
+    assert.equal(value.MetadataPath, path.join(destination, 'metadata-external'));
+    assert.equal(value.ServerName, '实例 🎧');
+    assert.deepEqual(await fs.readFile(path.join(value.MetadataPath, 'state.bin')), asset);
+    consumers.push({ name, root: 'server', filename, changes: { ServerName: 'Native continuation after transfer' } });
+    observations.push({ name, root: 'server', value, sha256: hash(bytes) });
+  }
   const inputFile = path.join(output, 'native-input.json'); await fs.writeFile(inputFile, configurationJson(consumers), { flag: 'wx' });
   const recording = await recordOracle({ project: configurationProject, output: path.join(output, 'native-continuation'), args: ['consume', inputFile, '{output}/native.json'] });
   const returned = parseLosslessJson((await fs.readFile(path.join(output, 'native-continuation', 'native.json'))).toString('utf8'));
   await fs.writeFile(path.join(output, 'proof.json'), configurationJson({ recording, observations, actualNativeReadAndWrite: true }), { flag: 'wx' });
-  assert.equal(returned.actualXmlSerializer, true); assert.equal(returned.actualContinuedWrite, true); assert.equal(returned.results.length, 28);
+  assert.equal(returned.actualXmlSerializer, true); assert.equal(returned.actualContinuedWrite, true); assert.equal(returned.results.length, 30);
   for (const sample of consumers) {
     const row = returned.results.find(row => row.name === sample.name); assert.equal(row.accepted, true, sample.name);
     assert.deepEqual(configurationValue(row.value, row.root), observations.find(value => value.name === sample.name).value, sample.name);
     const bytes = await fs.readFile(sample.filename); assert.deepEqual(parseConfigurationXml(bytes, sample.root), configurationValue(row.reread, row.root), sample.name);
     for (const [name, value] of Object.entries(sample.changes)) assert.equal(parseConfigurationXml(bytes, sample.root)[name], value, sample.name + '.' + name);
   }
+  await verifyStatePackage(packed);
+  assert.deepEqual(await fs.readFile(path.join(packed, 'files/config/system.xml')), original);
+  assert.deepEqual(await fs.readFile(path.join(transfer.root, 'config/system.xml')), original);
 });

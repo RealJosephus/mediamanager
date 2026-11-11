@@ -411,6 +411,59 @@ test('payload changes after preflight cannot be published and leave resumable pa
   assert.deepEqual(await readFile(secondFilename), changedPayload);
 });
 
+test('restore reports verified progress and retries after an immutable or opaque plugin rejection', async t => {
+  const unavailable = Object.freeze(Object.assign(new Error('The second target is unavailable.'), {
+    code: 'unavailable', status: 503, statusCode: 503,
+  }));
+  const opaque = Object.freeze(Object.create(null, {
+    message: { get() { throw new Error('The diagnostic is unavailable.'); } },
+    code: { value: 'opaque' },
+  }));
+  for (const [label, rejection, expected] of [
+    ['frozen error', unavailable, { message: unavailable.message, code: 'unavailable', status: 503, statusCode: 503 }],
+    ['opaque rejection', opaque, { message: 'Remote restore failed', code: 'opaque' }],
+    ['null rejection', null, { message: 'Remote restore failed' }],
+  ]) await t.test(label, async t => {
+    const directory = await temporaryDirectory(t, 'mediamanager-remote-progress-');
+    const firstPayload = Buffer.from('first'), secondPayload = Buffer.from('second');
+    const first = manifestFile({ assetId: 'first', restorePath: 'first.nfo', payload: firstPayload });
+    const second = manifestFile({ assetId: 'second', virtualPath: '/source/second.nfo',
+      restorePath: 'second.nfo', payload: secondPayload });
+    await writePackagePayload(directory, first, firstPayload);
+    await writePackagePayload(directory, second, secondPayload);
+    const { adapter, vfs } = await memoryVfs(t);
+    const write = adapter.write.bind(adapter);
+    adapter.write = async (filename, data, options) => {
+      if (filename === '/second.nfo') throw rejection;
+      return write(filename, data, options);
+    };
+    const options = {
+      directory,
+      manifest: { generation: 'resumable', remoteAssets: [first, second] },
+      vfs,
+      targets: { first: '/target/first.nfo', second: '/target/second.nfo' },
+    };
+    await assert.rejects(restoreRemoteAssets(options), asyncError => {
+      assert.equal(asyncError.cause, rejection);
+      for (const [key, value] of Object.entries(expected)) assert.equal(asyncError[key], value);
+      const progress = asyncError.remoteRestoreProgress;
+      assert.equal(progress.generation, 'resumable');
+      assert.equal(progress.complete, false);
+      assert.deepEqual(progress.completed.map(entry => [entry.assetId, entry.target, entry.sha256, entry.reused]),
+        [['first', '/target/first.nfo', first.sha256, false]]);
+      return true;
+    });
+    assert.deepEqual(await adapterContent(adapter, '/first.nfo'), firstPayload);
+    await assert.rejects(adapter.stat('/second.nfo'), { code: 'not-found' });
+
+    adapter.write = write;
+    const restored = await restoreRemoteAssets(options);
+    assert.equal(restored.complete, true);
+    assert.deepEqual(restored.completed.map(entry => [entry.assetId, entry.reused]), [['first', true], ['second', false]]);
+    assert.deepEqual(await adapterContent(adapter, '/second.nfo'), secondPayload);
+  });
+});
+
 test('restore cannot complete when later work changes an already verified remote target', async t => {
   for (const reused of [false, true]) await t.test(reused ? 'reused target' : 'new target', async t => {
     const directory = await temporaryDirectory(t, 'mediamanager-remote-generation-');

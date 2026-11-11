@@ -188,7 +188,7 @@ export async function verifyNativeMediaAccess(plan, { database, baseUrl, accessT
   const records = [], items = [];
   const call = async (route, headers = {}) => {
     signal?.throwIfAborted();
-    const response = await fetch(new URL(route, base), { headers: { Authorization: `MediaBrowser Token="${accessToken}"`, ...headers }, redirect: 'error',
+    const response = await fetch(new URL(route, base), { headers: { Authorization: `MediaBrowser Token="${accessToken}"`, ...headers, Connection: 'close' }, redirect: 'error',
       signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(timeoutMs)]) : AbortSignal.timeout(timeoutMs) });
     records.push({ route, status: response.status, ...(headers.Range ? { range: headers.Range } : {}), contentType: response.headers.get('content-type'),
       contentLength: response.headers.get('content-length'), contentRange: response.headers.get('content-range') });

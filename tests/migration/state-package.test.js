@@ -1,10 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { access, link, mkdir, readFile, readdir, rename, rm, stat, writeFile } from 'node:fs/promises';
+import { constants } from 'node:fs';
+import { access, chmod, link, mkdir, readFile, readdir, rename, rm, stat, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { createStatePackage, verifyStatePackage, restoreStatePackage } from '../../src/migration/state-package.js';
 import { discoverInstanceState } from '../../src/migration/instance-state.js';
+import { cloneStoppedInstance } from '../../src/migration/instance-copy.js';
 import { readInstanceConfiguration } from '../../src/configuration.js';
 import { createIsolatedOfflineCopyCaptureSession } from '../../src/migration/capture-session.js';
 import { seedAllTables } from '../database/fixtures.js';
@@ -58,6 +60,151 @@ test('state package captures complete instance roots and unknown assets, then de
   await assert.rejects(verifyStatePackage(destination), /checksum/u);
 });
 
+test('state restore repairs staged permission drift and restores execute access', async t => {
+  const fixture = await createInstanceFixture(t);
+  const plugin = path.join(fixture.root, 'config/plugins');
+  const helper = 'config/plugins/helper';
+  const script = '#!/bin/sh\nprintf "%s\\n" "restored plugin helper"\n';
+  const posix = process.platform !== 'win32';
+  await mkdir(plugin);
+  await writeFile(path.join(fixture.root, helper), script);
+  await writeFile(path.join(plugin, 'private.dat'), 'private data');
+  await writeFile(path.join(plugin, 'group.dat'), 'group-readable data');
+  if (posix) {
+    await chmod(path.join(fixture.root, helper), 0o750);
+    await chmod(path.join(plugin, 'private.dat'), 0o600);
+    await chmod(path.join(plugin, 'group.dat'), 0o640);
+    t.diagnostic(`Exercising POSIX restore permissions as uid ${process.getuid()}`);
+    const stale = await fixture.packageOptions({ destination: path.join(fixture.directory, 'stale') });
+    await chmod(path.join(fixture.root, helper), 0o640);
+    await assert.rejects(createStatePackage(stale), /complete state generation is no longer current/u);
+    await chmod(path.join(fixture.root, helper), 0o750);
+  }
+  const packageDirectory = path.join(fixture.directory, 'package');
+  const manifest = await createStatePackage(await fixture.packageOptions({ destination: packageDirectory }));
+  const destination = path.join(fixture.directory, 'restored');
+  const staging = path.join(fixture.directory, `.restored.mediamanager-restore-${manifest.generation}`);
+  const controller = new AbortController();
+  await assert.rejects(restoreStatePackage(packageDirectory, destination, {
+    signal: controller.signal,
+    onProgress: ({ path: relative }) => { if (relative === helper) controller.abort(); },
+  }), /abort/iu);
+  if (posix) await chmod(path.join(staging, helper), 0o600);
+
+  const restored = await restoreStatePackage(packageDirectory, destination);
+  assert.equal(restored.resumed, true);
+  assert.equal(await readFile(path.join(destination, helper), 'utf8'), script);
+  assert.equal(await readFile(path.join(destination, 'config/plugins/private.dat'), 'utf8'), 'private data');
+  assert.equal(await readFile(path.join(destination, 'config/plugins/group.dat'), 'utf8'), 'group-readable data');
+  if (posix) {
+    for (const [file, mode] of [[helper, 0o750], ['config/plugins/private.dat', 0o600],
+      ['config/plugins/group.dat', 0o640], ['data/data/jellyfin.db', 0o600]]) {
+      assert.equal((await stat(path.join(destination, file))).mode & 0o777, mode);
+    }
+    await access(path.join(destination, helper), constants.X_OK);
+    await chmod(path.join(destination, helper), 0o600);
+    await assert.rejects(restoreStatePackage(packageDirectory, destination), /Restored asset permissions differ/u);
+  }
+});
+
+test('state packages preserve distinct filesystem spellings and never overwrite a case alias', async t => {
+  const fixture = await createInstanceFixture(t);
+  const metadata = path.join(fixture.root, 'data/metadata');
+  await writeFile(path.join(metadata, 'Logo.png'), 'upper image');
+  let distinctNames = true;
+  try { await writeFile(path.join(metadata, 'logo.png'), 'lower image', { flag: 'wx' }); }
+  catch (error) { if (error.code !== 'EEXIST') throw error; distinctNames = false; }
+  if (distinctNames) {
+    for (const directory of ['People', 'people']) {
+      await mkdir(path.join(metadata, directory));
+      await writeFile(path.join(metadata, directory, 'photos.bin'), directory);
+    }
+  }
+  const packageDirectory = path.join(fixture.directory, 'package');
+  const manifest = await createStatePackage(await fixture.packageOptions({ destination: packageDirectory }));
+  await verifyStatePackage(packageDirectory);
+  const destination = path.join(fixture.directory, 'restored');
+  const restored = await restoreStatePackage(packageDirectory, destination);
+  assert.equal(await readFile(path.join(restored.destination, 'data/metadata/Logo.png'), 'utf8'), 'upper image');
+  if (distinctNames) {
+    assert.deepEqual((await readdir(path.join(restored.destination, 'data/metadata'))).sort(), ['Logo.png', 'People', 'logo.png', 'people']);
+    assert.equal(await readFile(path.join(restored.destination, 'data/metadata/logo.png'), 'utf8'), 'lower image');
+    for (const directory of ['People', 'people']) {
+      assert.equal(await readFile(path.join(restored.destination, 'data/metadata', directory, 'photos.bin'), 'utf8'), directory);
+    }
+  } else {
+    const target = path.join(fixture.directory, 'collision');
+    const staging = path.join(fixture.directory, `.collision.mediamanager-restore-${manifest.generation}`);
+    const alias = path.join(staging, 'data/metadata/logo.png');
+    await assert.rejects(restoreStatePackage(packageDirectory, target, {
+      onProgress: async ({ path: relative }) => {
+        if (relative === manifest.database.restorePath) await writeFile(alias, 'independent image', { flag: 'wx' });
+      },
+    }), /collides with an existing filesystem name/u);
+    assert.deepEqual(await readdir(path.dirname(alias)), ['logo.png']);
+    assert.equal(await readFile(alias, 'utf8'), 'independent image');
+    await assert.rejects(access(target), { code: 'ENOENT' });
+    await unlink(alias);
+    const retried = await restoreStatePackage(packageDirectory, target);
+    assert.equal(retried.resumed, true);
+    assert.deepEqual(await readdir(path.join(target, 'data/metadata')), ['Logo.png']);
+    assert.equal(await readFile(path.join(target, 'data/metadata/Logo.png'), 'utf8'), 'upper image');
+  }
+});
+
+test('Unicode system configuration survives cloning, packaging and restoration', async t => {
+  for (const [encoding, customPaths] of [['utf-16le', false], ['utf-16le', true], ['utf-16be', true]]) {
+    await t.test(`${encoding} with ${customPaths ? 'custom' : 'default'} paths`, async t => {
+      const fixture = await createInstanceFixture(t);
+      const metadata = path.join(fixture.directory, '外部 metadata & state');
+      const cache = path.join(fixture.directory, '外部 cache');
+      if (customPaths) {
+        await mkdir(metadata);
+        await mkdir(cache);
+        await writeFile(path.join(metadata, 'asset.bin'), Buffer.from([0, 255, 2]));
+      }
+      const unknown = '<Extra xmlns="urn:future"><MetadataPath>preserve 中文</MetadataPath></Extra>';
+      const paths = customPaths
+        ? `<MetadataPath >${xml(metadata)}</MetadataPath><CachePath>${xml(cache)}</CachePath>`
+        : '';
+      const content = Buffer.from(`\uFEFF<?xml version="1.0" encoding="utf-16"?><ServerConfiguration>`
+        + `<ServerName>Music 🎧 中文</ServerName>${unknown}${paths}</ServerConfiguration>`, 'utf16le');
+      if (encoding === 'utf-16be') content.swap16();
+      const system = path.join(fixture.root, 'config/system.xml');
+      await writeFile(system, content);
+      const source = await discoverInstanceState({ instanceRoot: fixture.root });
+      assert.equal(source.pathBindings.metadata.configured, customPaths);
+      assert.equal(source.pathBindings.cache.configured, customPaths);
+
+      const clone = path.join(fixture.directory, 'clone $&');
+      await cloneStoppedInstance({ instanceState: source, destination: clone });
+      const packageDirectory = path.join(fixture.directory, 'package');
+      await createStatePackage(await fixture.packageOptions({ destination: packageDirectory }));
+      await verifyStatePackage(packageDirectory);
+      const restored = path.join(fixture.directory, 'restored $1 &');
+      await restoreStatePackage(packageDirectory, restored);
+      for (const destination of [clone, restored]) {
+        const discovered = await discoverInstanceState({ instanceRoot: destination });
+        assert.deepEqual(discovered.pathBindings, source.pathBindings);
+        assert.equal(discovered.identity.serverId, source.identity.serverId);
+        const bytes = await readFile(path.join(destination, 'config/system.xml'));
+        const { configuration } = await readInstanceConfiguration(destination);
+        assert.equal(configuration.ServerName, 'Music 🎧 中文');
+        if (customPaths) {
+          assert.equal(configuration.MetadataPath, path.join(destination, 'metadata-external'));
+          assert.equal(configuration.CachePath, path.join(destination, 'cache-external'));
+          assert.ok(bytes.toString('utf8').includes(unknown));
+          assert.deepEqual(await readFile(path.join(discovered.paths.metadata, 'asset.bin')), Buffer.from([0, 255, 2]));
+        } else {
+          assert.deepEqual(bytes, content);
+        }
+      }
+      assert.deepEqual(await readFile(system), content);
+      assert.deepEqual(await readFile(path.join(packageDirectory, 'files/config/system.xml')), content);
+    });
+  }
+});
+
 test('external metadata and cache restore inside each destination without merging default roots or retaining source paths', async t => {
   const fixture = await createInstanceFixture(t, { prefix: 'mediamanager-state-external-' });
   const metadata = path.join(fixture.directory, 'source metadata & state');
@@ -76,7 +223,7 @@ test('external metadata and cache restore inside each destination without mergin
   });
   await rm(metadata, { recursive: true }); await rm(cache, { recursive: true });
 
-  for (const name of ['restored-a', 'restored-b']) {
+  for (const name of ['restored-a', 'restored $1 $& $$ & final']) {
     const destination = path.join(fixture.directory, name);
     await restoreStatePackage(packageDirectory, destination);
     const settings = await readInstanceConfiguration(destination);
@@ -166,18 +313,19 @@ test('local restore refuses unrelated destinations and unexpected staged entries
   await assert.rejects(access(destination), { code: 'ENOENT' });
 });
 
-test('interrupted packages have no commit and cannot be restored', async t => {
+test('cancelled package creation publishes no committed package and cannot be restored', async t => {
   const fixture = await createInstanceFixture(t, { prefix: 'mediamanager-state-abort-' });
   const destination = path.join(fixture.directory, 'package');
   const controller = new AbortController(); controller.abort();
-  await assert.rejects(createStatePackage(await fixture.packageOptions({ destination, signal: controller.signal })), /abort/iu);
+  await assert.rejects(createStatePackage(await fixture.packageOptions({ destination, signal: controller.signal })),
+    error => error === controller.signal.reason);
   await assert.rejects(access(destination), { code: 'ENOENT' });
   const staging = captureStagingPath(destination);
-  const progress = JSON.parse(await readFile(path.join(staging, 'progress.json'), 'utf8'));
-  assert.equal(progress.stage, 'preflight');
-  assert.match(progress.lastError, /abort/iu);
   await assert.rejects(access(path.join(staging, 'COMMITTED')), { code: 'ENOENT' });
   await assert.rejects(verifyStatePackage(staging));
+  const restored = path.join(fixture.directory, 'restored');
+  await assert.rejects(restoreStatePackage(staging, restored));
+  await assert.rejects(access(restored), { code: 'ENOENT' });
 });
 
 test('package capture resumes one bound generation, repairs partial files and publishes only after verification', async t => {

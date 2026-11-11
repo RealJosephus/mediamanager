@@ -48,6 +48,7 @@ function identityPayload(state) {
       files: state.identity.databaseGeneration.files.map(file => ({
         role: file.role,
         bytes: file.bytes,
+        mode: file.mode,
         modifiedAt: file.modifiedAt,
         sha256: file.sha256,
       })),

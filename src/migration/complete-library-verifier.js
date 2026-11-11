@@ -93,7 +93,9 @@ function nativeClient({ baseUrl, accessToken, signal, requestTimeoutMs }) {
       : AbortSignal.timeout(requestTimeoutMs);
     const response = await fetch(new URL(route, base), {
       method,
-      headers: { Authorization: `MediaBrowser Token="${accessToken}"` },
+      // Restores can replace the server at this origin between independent
+      // observations. Each request must complete its own connection lifetime.
+      headers: { Authorization: `MediaBrowser Token="${accessToken}"`, Connection: 'close' },
       redirect: 'error',
       signal: requestSignal,
     });
