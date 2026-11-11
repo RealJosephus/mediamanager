@@ -4,6 +4,7 @@ import { lstat, readFile, readdir, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import { inspectInstanceConfiguration } from '../configuration.js';
 import { decodeServerIdentity, isServerIdentity } from '../core/server-identity.js';
+import { instancePathApi, instancePathKey, instancePathContains } from './instance-paths.js';
 
 const instanceStateKind = 'jellyfin-instance-state';
 const sha256Pattern = /^[a-f0-9]{64}$/u;
@@ -340,6 +341,9 @@ function assertDiscoveredState(state) {
   plainRecord(state, 'discovered Jellyfin instance state');
   exactKeys(state, ['kind', 'instanceRoot', 'identity', 'paths', 'pathBindings', 'roots'], 'discovered Jellyfin instance state');
   if (state.kind !== instanceStateKind) throw new Error('Invalid discovered Jellyfin instance state');
+  const sourcePath = instancePathApi(state.instanceRoot);
+  const sourceKey = value => instancePathKey(value, sourcePath);
+  const sourceContains = (root, value) => instancePathContains(root, value, sourcePath);
   plainRecord(state.identity, 'discovered Jellyfin instance identity');
   exactKeys(state.identity, ['algorithm', 'digest', 'serverId', 'criticalFiles', 'databaseGeneration', 'controlGeneration', 'stateGeneration'], 'discovered Jellyfin instance identity');
   exactKeys(state.identity.criticalFiles, ['systemConfiguration', 'networkConfiguration', 'serverIdentity'], 'discovered Jellyfin critical identity');
@@ -375,9 +379,9 @@ function assertDiscoveredState(state) {
   const inventoryNames = new Set(), inventoryRoots = new Set();
   for (const entry of control.inventory) {
     plainRecord(entry, 'discovered Jellyfin top-level inventory entry');
-    if (typeof entry.name !== 'string' || !entry.name || path.basename(entry.name) !== entry.name || entry.name === '.' || entry.name === '..'
-      || inventoryNames.has(pathKey(entry.name))) throw new Error('Invalid discovered Jellyfin top-level inventory');
-    inventoryNames.add(pathKey(entry.name));
+    if (typeof entry.name !== 'string' || !entry.name || sourcePath.basename(entry.name) !== entry.name || entry.name === '.' || entry.name === '..'
+      || inventoryNames.has(sourceKey(entry.name))) throw new Error('Invalid discovered Jellyfin top-level inventory');
+    inventoryNames.add(sourceKey(entry.name));
     if (entry.kind === 'state-root') {
       exactKeys(entry, ['name', 'kind', 'root'], 'discovered Jellyfin top-level state root');
       if (typeof entry.root !== 'string' || !entry.root || inventoryRoots.has(entry.root)) {
@@ -404,31 +408,31 @@ function assertDiscoveredState(state) {
   const rootLabels = Object.keys(state.roots), requiredRoots = ['data', 'config', 'cache', 'log'];
   if (requiredRoots.some(label => !rootLabels.includes(label))
     || rootLabels.some(label => ![...requiredRoots, 'metadata-external', 'cache-external'].includes(label))
-    || Object.values({ instanceRoot: state.instanceRoot, ...state.paths, ...state.roots }).some(value => typeof value !== 'string' || !path.isAbsolute(value) || path.resolve(value) !== value)
-    || pathKey(state.roots.data) !== pathKey(path.join(state.instanceRoot, 'data'))
-    || pathKey(state.roots.config) !== pathKey(path.join(state.instanceRoot, 'config'))
-    || pathKey(state.roots.cache) !== pathKey(path.join(state.instanceRoot, 'cache'))
-    || pathKey(state.roots.log) !== pathKey(path.join(state.instanceRoot, 'log'))
-    || pathKey(state.paths.programData) !== pathKey(state.roots.data)
-    || pathKey(state.paths.configuration) !== pathKey(state.roots.config)
-    || pathKey(state.paths.defaultCache) !== pathKey(state.roots.cache)
-    || pathKey(state.paths.cache) !== pathKey(state.roots['cache-external'] ?? state.paths.cache)
-    || (state.roots['cache-external'] == null && !Object.values(state.roots).some(root => pathsOverlap(root, state.paths.cache)))
-    || pathKey(state.paths.log) !== pathKey(state.roots.log)
-    || pathKey(state.paths.defaultMetadata) !== pathKey(path.join(state.paths.programData, 'metadata'))
-    || pathKey(state.paths.sqlite) !== pathKey(path.join(state.paths.programData, 'data', 'jellyfin.db'))
-    || (state.roots['metadata-external'] != null && pathKey(state.paths.metadata) !== pathKey(state.roots['metadata-external']))
-    || (state.roots['metadata-external'] == null && !Object.values(state.roots).some(root => pathsOverlap(root, state.paths.metadata)))) {
+    || Object.values({ instanceRoot: state.instanceRoot, ...state.paths, ...state.roots }).some(value => typeof value !== 'string' || !sourcePath.isAbsolute(value) || sourcePath.resolve(value) !== value)
+    || sourceKey(state.roots.data) !== sourceKey(sourcePath.join(state.instanceRoot, 'data'))
+    || sourceKey(state.roots.config) !== sourceKey(sourcePath.join(state.instanceRoot, 'config'))
+    || sourceKey(state.roots.cache) !== sourceKey(sourcePath.join(state.instanceRoot, 'cache'))
+    || sourceKey(state.roots.log) !== sourceKey(sourcePath.join(state.instanceRoot, 'log'))
+    || sourceKey(state.paths.programData) !== sourceKey(state.roots.data)
+    || sourceKey(state.paths.configuration) !== sourceKey(state.roots.config)
+    || sourceKey(state.paths.defaultCache) !== sourceKey(state.roots.cache)
+    || sourceKey(state.paths.cache) !== sourceKey(state.roots['cache-external'] ?? state.paths.cache)
+    || (state.roots['cache-external'] == null && !Object.values(state.roots).some(root => sourceContains(root, state.paths.cache)))
+    || sourceKey(state.paths.log) !== sourceKey(state.roots.log)
+    || sourceKey(state.paths.defaultMetadata) !== sourceKey(sourcePath.join(state.paths.programData, 'metadata'))
+    || sourceKey(state.paths.sqlite) !== sourceKey(sourcePath.join(state.paths.programData, 'data', 'jellyfin.db'))
+    || (state.roots['metadata-external'] != null && sourceKey(state.paths.metadata) !== sourceKey(state.roots['metadata-external']))
+    || (state.roots['metadata-external'] == null && !Object.values(state.roots).some(root => sourceContains(root, state.paths.metadata)))) {
     throw new Error('Invalid discovered Jellyfin path model');
   }
   const rootEntries = Object.entries(state.roots);
   for (let index = 0; index < rootEntries.length; index++) for (let other = index + 1; other < rootEntries.length; other++) {
-    if (pathsOverlap(rootEntries[index][1], rootEntries[other][1]) || pathsOverlap(rootEntries[other][1], rootEntries[index][1])) {
+    if (sourceContains(rootEntries[index][1], rootEntries[other][1]) || sourceContains(rootEntries[other][1], rootEntries[index][1])) {
       throw new Error('Invalid overlapping discovered Jellyfin state roots');
     }
   }
-  const expectedInventoryRoots = rootEntries.filter(([, value]) => pathKey(path.dirname(value)) === pathKey(state.instanceRoot))
-    .map(([root, value]) => ({ name: path.basename(value), kind: 'state-root', root }))
+  const expectedInventoryRoots = rootEntries.filter(([, value]) => sourceKey(sourcePath.dirname(value)) === sourceKey(state.instanceRoot))
+    .map(([root, value]) => ({ name: sourcePath.basename(value), kind: 'state-root', root }))
     .sort((left, right) => compareText(left.name, right.name));
   const expectedInventory = control.restoredState === null ? expectedInventoryRoots
     : [...expectedInventoryRoots, { name: 'mediamanager-state.json', kind: 'restored-state' }]
@@ -445,10 +449,10 @@ function assertDiscoveredState(state) {
       && !binding.relativePath.includes(':') && !binding.relativePath.includes('\0') && !path.posix.isAbsolute(binding.relativePath)
       && (binding.relativePath === '' || !binding.relativePath.split('/').some(part => !part || part === '.' || part === '..'));
     const bindingRoot = state.roots[binding.root];
-    const reconstructed = bindingRoot && path.resolve(bindingRoot, ...binding.relativePath.split('/').filter(Boolean));
+    const reconstructed = bindingRoot && sourcePath.resolve(bindingRoot, ...binding.relativePath.split('/').filter(Boolean));
     const defaultPath = name === 'metadata' ? state.paths.defaultMetadata : state.paths.defaultCache;
-    if (typeof binding.configured !== 'boolean' || !bindingRoot || !validRelative || pathKey(reconstructed) !== pathKey(effectivePath)
-      || (!binding.configured && pathKey(effectivePath) !== pathKey(defaultPath))) {
+    if (typeof binding.configured !== 'boolean' || !bindingRoot || !validRelative || sourceKey(reconstructed) !== sourceKey(effectivePath)
+      || (!binding.configured && sourceKey(effectivePath) !== sourceKey(defaultPath))) {
       throw new Error(`Invalid discovered Jellyfin ${name} path binding`);
     }
   }

@@ -1,0 +1,102 @@
+name: State package portability
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    name: Capture / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    env:
+      MEDIAMANAGER_STATE_PACKAGE_OUTPUT: ${{ github.workspace }}/.test-output/state-package-source
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.16.0'
+      - run: npm ci --ignore-scripts --bin-links=false
+      - name: Capture with complete TAP
+        shell: pwsh
+        run: |
+          if ((git rev-parse HEAD).Trim() -ne $env:GITHUB_SHA) { throw 'Candidate mismatch' }
+          $env:TEMP = $env:RUNNER_TEMP
+          $env:TMP = $env:RUNNER_TEMP
+          $env:TMPDIR = $env:RUNNER_TEMP
+          node --test --test-reporter=tap --test-reporter-destination=stdout --test-reporter=tap --test-reporter-destination="$env:RUNNER_TEMP/capture.tap" tests/migration/fixtures/state-package-platform/capture.mjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          # Keep empty state directories when transporting the package.
+          tar -cf "$env:RUNNER_TEMP/state-package-source.tar" -C "$env:MEDIAMANAGER_STATE_PACKAGE_OUTPUT" .
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: state-package-source-${{ matrix.os }}-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/state-package-source.tar
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: state-package-capture-tap-${{ matrix.os }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/capture.tap
+          if-no-files-found: error
+
+  restore:
+    name: Restore all sources / ${{ matrix.os }}
+    needs: capture
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    env:
+      MEDIAMANAGER_STATE_PACKAGE_INPUTS: ${{ github.workspace }}/.test-output/state-package-inputs
+      MEDIAMANAGER_STATE_PACKAGE_OUTPUT: ${{ github.workspace }}/.test-output/state-package-restored
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.16.0'
+      - run: npm ci --ignore-scripts --bin-links=false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          pattern: state-package-source-*-${{ github.sha }}-*
+          path: ${{ env.MEDIAMANAGER_STATE_PACKAGE_INPUTS }}
+      - name: Restore and compare every source platform
+        shell: pwsh
+        run: |
+          if ((git rev-parse HEAD).Trim() -ne $env:GITHUB_SHA) { throw 'Candidate mismatch' }
+          $env:TEMP = $env:RUNNER_TEMP
+          $env:TMP = $env:RUNNER_TEMP
+          $env:TMPDIR = $env:RUNNER_TEMP
+          foreach ($source in Get-ChildItem -LiteralPath $env:MEDIAMANAGER_STATE_PACKAGE_INPUTS -Directory) {
+            tar -xf (Join-Path $source.FullName 'state-package-source.tar') -C $source.FullName
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          node --test --test-reporter=tap --test-reporter-destination=stdout --test-reporter=tap --test-reporter-destination="$env:RUNNER_TEMP/restore.tap" tests/migration/fixtures/state-package-platform/restore.mjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: state-package-restore-${{ matrix.os }}-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ env.MEDIAMANAGER_STATE_PACKAGE_OUTPUT }}
+            ${{ runner.temp }}/restore.tap
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30

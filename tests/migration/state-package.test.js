@@ -76,7 +76,7 @@ test('external metadata and cache restore inside each destination without mergin
   });
   await rm(metadata, { recursive: true }); await rm(cache, { recursive: true });
 
-  for (const name of ['restored-a', 'restored-b']) {
+  for (const name of ['restored-a', 'restored $1 $& $$ & final']) {
     const destination = path.join(fixture.directory, name);
     await restoreStatePackage(packageDirectory, destination);
     const settings = await readInstanceConfiguration(destination);

@@ -60,7 +60,7 @@ test('copies external roots and rebases their configured paths into the clone', 
   await writeFile(path.join(metadata, 'person.jpg'), 'external metadata');
   await writeFile(path.join(cache, 'image.bin'), 'external cache');
   await writeFile(path.join(root, 'config/system.xml'), `<ServerConfiguration><MetadataPath>${xml(metadata)}</MetadataPath><CachePath>${xml(cache)}</CachePath></ServerConfiguration>`);
-  const source = await discoverInstanceState({ instanceRoot: root }), destination = path.join(parent, 'clone & final');
+  const source = await discoverInstanceState({ instanceRoot: root }), destination = path.join(parent, 'clone $1 $& $$ & final');
   const cloned = await cloneStoppedInstance({ instanceState: source, destination });
   assert.deepEqual(cloned.pathBindings, source.pathBindings);
   assert.deepEqual(cloned.roots, {

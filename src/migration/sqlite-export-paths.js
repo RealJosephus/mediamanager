@@ -3,6 +3,7 @@ import path from 'node:path';
 import { tokenizeJson } from '../core/json-tokens.js';
 import { nativeModel } from '../database/model.js';
 import { createPortableJellyfinPathProjector } from '../storage/portable-mount-contract.js';
+import { instancePathApi } from './instance-paths.js';
 
 const directPathColumns = Object.freeze(new Map([
   ['BaseItemImageInfos', ['Path']],
@@ -88,31 +89,51 @@ function canonicalInstanceStateRoots(value) {
     || Object.keys(value).sort().join(',') !== 'metadata,programData') {
     throw new TypeError('instanceStatePaths must contain exactly programData and metadata');
   }
-  const result = {};
+  const pathApi = instancePathApi(value.programData);
+  const result = { pathApi };
   for (const key of ['programData', 'metadata']) {
-    if (typeof value[key] !== 'string' || value[key].includes('\0') || !path.isAbsolute(value[key])) {
+    if (typeof value[key] !== 'string' || value[key].includes('\0') || !pathApi.isAbsolute(value[key])
+      || instancePathApi(value[key]) !== pathApi) {
       throw new TypeError(`instanceStatePaths.${key} must be an absolute path`);
     }
-    result[key] = path.resolve(value[key]);
+    result[key] = pathApi.resolve(value[key]);
   }
   return result;
 }
 
 function virtualInstanceStatePath(value, roots, targetRoots = null) {
-  if (!roots || typeof value !== 'string' || !path.isAbsolute(value)) return value;
+  if (!roots || typeof value !== 'string') return value;
+  const sourcePath = roots.pathApi, targetPath = targetRoots?.pathApi ?? sourcePath;
+  const targetRelative = relative => {
+    if (sourcePath === targetPath) return relative;
+    const segments = relative === '' ? [] : relative.split(sourcePath === path.win32 ? /[\\/]/u : /\//u);
+    if (segments.some(segment => !segment || segment === '.' || segment === '..'
+      || targetPath === path.win32 && /[\\:]/u.test(segment))) {
+      throw new Error('An instance state path cannot be represented beneath the target root');
+    }
+    return segments.join(targetPath.sep);
+  };
+  // Packaged paths already virtualized by the producer still carry that
+  // producer's separators. Translate only these known instance-state roles.
+  if (targetRoots && sourcePath !== targetPath) {
+    const virtual = /^(%AppDataPath%|%MetadataPath%)(?:[\\/](.*))?$/iu.exec(value);
+    if (virtual) return virtual[1] + (virtual[2] === undefined ? '' : targetPath.sep + targetRelative(virtual[2]));
+  }
+  if (!sourcePath.isAbsolute(value)) return value;
+  if (instancePathApi(value) !== sourcePath) return value;
   // Match Jellyfin's ReverseVirtualPath ordering: first DataPath
   // (ProgramDataPath/data), then internal metadata. In particular,
   // ProgramDataPath/root is an absolute native path, never %AppDataPath%/root.
-  for (const [root, token] of [[path.join(roots.programData, 'data'), '%AppDataPath%'], [roots.metadata, '%MetadataPath%']]) {
-    const relative = path.relative(root, path.resolve(value));
-    if (relative === '' || !path.isAbsolute(relative) && relative !== '..' && !relative.startsWith(`..${path.sep}`)) {
-      return relative === '' ? token : `${token}${path.sep}${relative}`;
+  for (const [root, token] of [[sourcePath.join(roots.programData, 'data'), '%AppDataPath%'], [roots.metadata, '%MetadataPath%']]) {
+    const relative = sourcePath.relative(root, sourcePath.resolve(value));
+    if (relative === '' || !sourcePath.isAbsolute(relative) && relative !== '..' && !relative.startsWith(`..${sourcePath.sep}`)) {
+      return relative === '' ? token : `${token}${targetPath.sep}${targetRelative(relative)}`;
     }
   }
   if (targetRoots) {
-    const relative = path.relative(roots.programData, path.resolve(value));
-    if (relative === '' || !path.isAbsolute(relative) && relative !== '..' && !relative.startsWith(`..${path.sep}`)) {
-      return path.join(targetRoots.programData, relative);
+    const relative = sourcePath.relative(roots.programData, sourcePath.resolve(value));
+    if (relative === '' || !sourcePath.isAbsolute(relative) && relative !== '..' && !relative.startsWith(`..${sourcePath.sep}`)) {
+      return targetPath.join(targetRoots.programData, targetRelative(relative));
     }
   }
   return value;

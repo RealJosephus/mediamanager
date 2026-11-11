@@ -122,7 +122,7 @@ function rewriteConfiguredPath(xml, field, value) {
     throw new Error(`Configured Jellyfin ${field} must have exactly one simple XML element`);
   }
   const escaped = value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-  return xml.replace(expression, `<${field}>${escaped}</${field}>`);
+  return xml.replace(expression, () => `<${field}>${escaped}</${field}>`);
 }
 
 function assertCloneState(source, cloned, destination, expectedRoots) {

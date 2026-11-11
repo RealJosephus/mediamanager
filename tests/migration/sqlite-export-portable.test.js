@@ -208,6 +208,41 @@ test('native instance token roots distinguish DataPath from ProgramDataPath and 
   assert.deepEqual(nativeTextBytes(restoreProjector.projectRow('BaseItems', invalid).Data), Buffer.from([0xff, 0x80, 0]));
 });
 
+for (const [name, sourceApi, sourceRoot, targetApi, targetRoot] of [
+  ['Windows to POSIX', path.win32, 'C:\\source', path.posix, '/restored'],
+  ['POSIX to Windows', path.posix, '/source', path.win32, 'D:\\restored'],
+  ['UNC to POSIX', path.win32, '\\\\server\\share\\source', path.posix, '/restored'],
+  ['POSIX to UNC', path.posix, '/source', path.win32, '\\\\server\\share\\restored'],
+]) test(`instance restore projects absolute and virtual paths from ${name}`, () => {
+  const source = { programData: sourceApi.join(sourceRoot, 'data'), metadata: sourceApi.join(sourceRoot, 'metadata-external') };
+  const target = { programData: targetApi.join(targetRoot, 'data'), metadata: targetApi.join(targetRoot, 'metadata-external') };
+  const projector = createSqliteExportPathProjector({ instanceStatePaths: source, targetInstanceStatePaths: target });
+  const sourceOwner = sourceApi.join(source.programData, 'root', 'default', 'Movies');
+  const targetOwner = targetApi.join(target.programData, 'root', 'default', 'Movies');
+  const data = owner => '{ "PhysicalLocationsList" : [' + JSON.stringify(owner)
+    + '], "Unknown" : {"Path":' + JSON.stringify(sourceOwner) + ',"Counter":9223372036854775807} }';
+  const original = exchangeRow('BaseItems', { Type: 'MediaBrowser.Controller.Entities.CollectionFolder', Path: sourceOwner, Data: data(sourceOwner) });
+  const restored = projector.projectRow('BaseItems', original);
+  assert.equal(restored.Path.string(), targetOwner);
+  assert.equal(restored.Data.string(), data(targetOwner));
+  assert.equal(original.Path.string(), sourceOwner);
+  assert.equal(original.Data.string(), data(sourceOwner));
+  for (const [absolute, token, parts] of [
+    [sourceApi.join(source.programData, 'data', 'playlists', 'one'), '%AppDataPath%', ['playlists', 'one']],
+    [sourceApi.join(source.metadata, 'views', 'one'), '%MetadataPath%', ['views', 'one']],
+  ]) {
+    const expected = token + targetApi.sep + parts.join(targetApi.sep);
+    for (const filename of [absolute, token + sourceApi.sep + parts.join(sourceApi.sep)]) {
+      const row = exchangeRow('BaseItems', { Type: 'MediaBrowser.Controller.Entities.UserView', Path: filename, Data: null });
+      assert.equal(projector.projectRow('BaseItems', row).Path.string(), expected);
+    }
+  }
+  const unknown = exchangeRow('BaseItems', { Type: 'Unknown.Provider.Folder', Path: sourceOwner, Data: '{"Path":' + JSON.stringify(sourceOwner) + '}' });
+  assert.strictEqual(projector.projectRow('BaseItems', unknown), unknown);
+  const opaque = { ...original, Data: new NativeTextCell(Buffer.from([0xff, 0x80, 0])) };
+  assert.deepEqual(nativeTextBytes(projector.projectRow('BaseItems', opaque).Data), Buffer.from([0xff, 0x80, 0]));
+});
+
 for (const [name, type, property, location] of [
   ['unmapped media location', 'CollectionFolder', 'PhysicalLocationsList', 'Y:\\Outside\\Media'],
   ['another configuration directory', 'CollectionFolder', 'PhysicalLocationsList', path.resolve('export-owner-state', 'root', 'default', 'Other')],

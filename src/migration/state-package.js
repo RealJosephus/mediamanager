@@ -18,6 +18,7 @@ import { assertPortableMountRetarget, canonicalPortableMountContract,
 import { createSqliteExportPathProjector } from './sqlite-export-paths.js';
 import { projectRestoredDatabasePaths } from './state-database-paths.js';
 import { captureLiveTvState, validateLiveTvState } from './live-tv-state.js';
+import { instancePathApi, instancePathKey, instancePathContains } from './instance-paths.js';
 
 const sha256Value = value => createHash('sha256').update(value).digest('hex');
 function preserveFailureFields(error, reason) {
@@ -354,21 +355,23 @@ function validateDirectoryManifest(directories, files, databaseRestorePath) {
   return seen;
 }
 function expectedDatabaseRestorePath(instanceState) {
-  const containingRoots = Object.entries(instanceState.roots)
-    .filter(([, root]) => inside(path.resolve(root), path.resolve(instanceState.paths.sqlite)));
-  if (containingRoots.length !== 1) throw new Error('Discovered SQLite database must belong to exactly one state root');
-  const [label, root] = containingRoots[0];
-  const relative = path.relative(root, instanceState.paths.sqlite).split(path.sep).join('/');
+  const { label, relative } = sourceDatabaseLocation(instanceState);
   const restorePath = `${label}/${relative}`;
   if (!safeRelative(restorePath)) throw new Error('Discovered SQLite database has an invalid restore path');
   return restorePath;
 }
-function validateExcludedDatabaseFiles(excluded, instanceState) {
-  if (!Array.isArray(excluded) || excluded.some(value => !safeRelative(value))) throw new Error('Invalid excluded database file manifest');
-  const containingRoots = Object.entries(instanceState.roots).filter(([, root]) => inside(path.resolve(root), path.resolve(instanceState.paths.sqlite)));
+
+function sourceDatabaseLocation(instanceState) {
+  const sourcePath = instancePathApi(instanceState.instanceRoot);
+  const containingRoots = Object.entries(instanceState.roots)
+    .filter(([, root]) => instancePathContains(root, instanceState.paths.sqlite, sourcePath));
   if (containingRoots.length !== 1) throw new Error('Discovered SQLite database must belong to exactly one state root');
   const [label, root] = containingRoots[0];
-  const relative = path.relative(root, instanceState.paths.sqlite).split(path.sep).join('/');
+  return { label, relative: sourcePath.relative(root, instanceState.paths.sqlite).split(sourcePath.sep).join('/') };
+}
+function validateExcludedDatabaseFiles(excluded, instanceState) {
+  if (!Array.isArray(excluded) || excluded.some(value => !safeRelative(value))) throw new Error('Invalid excluded database file manifest');
+  const { label, relative } = sourceDatabaseLocation(instanceState);
   const suffix = { sqlite: '', wal: '-wal', shm: '-shm' };
   const expected = instanceState.identity.databaseGeneration.files.map(file => `${label}/${relative}${suffix[file.role]}`)
     .map(value => value.toLowerCase()).sort();
@@ -392,10 +395,7 @@ function validatePackagedStateGeneration(manifest, instanceState) {
     ...manifest.instanceFiles.map(file => ({ ...stateRecordPath(file.path, rootLabels), kind: 'file',
       bytes: file.bytes.toString(), modifiedAt: file.modifiedAt, sha256: file.sha256 })),
   ];
-  const containingRoots = Object.entries(instanceState.roots).filter(([, root]) => inside(path.resolve(root), path.resolve(instanceState.paths.sqlite)));
-  if (containingRoots.length !== 1) throw new Error('Discovered SQLite database must belong to exactly one state root');
-  const [databaseLabel, databaseRoot] = containingRoots[0];
-  const databaseRelative = path.relative(databaseRoot, instanceState.paths.sqlite).split(path.sep).join('/');
+  const { label: databaseLabel, relative: databaseRelative } = sourceDatabaseLocation(instanceState);
   const suffix = { sqlite: '', wal: '-wal', shm: '-shm' };
   for (const file of instanceState.identity.databaseGeneration.files) records.push({ label: databaseLabel,
     path: `${databaseRelative}${suffix[file.role]}`, kind: 'file', bytes: file.bytes,
@@ -407,6 +407,7 @@ function validatePackagedStateGeneration(manifest, instanceState) {
 }
 
 async function validatePackagedPathBindings(directory, instanceState, systemFile) {
+  const sourcePath = instancePathApi(instanceState.instanceRoot);
   const filename = path.join(directory, 'files', 'config', 'system.xml');
   if (!systemFile) throw new Error('State package is missing the native system configuration');
   const xml = (await readVerifiedRegularFile(directory, filename, controlFileLimits.systemConfiguration,
@@ -417,7 +418,7 @@ async function validatePackagedPathBindings(directory, instanceState, systemFile
   for (const [name, field] of [['metadata', 'MetadataPath'], ['cache', 'CachePath']]) {
     const binding = instanceState.pathBindings[name], value = parsed[field];
     const configured = typeof value === 'string' && Boolean(value.trim());
-    if (configured !== binding.configured || configured && pathIdentity(value) !== pathIdentity(instanceState.paths[name])) {
+    if (configured !== binding.configured || configured && instancePathKey(value, sourcePath) !== instancePathKey(instanceState.paths[name], sourcePath)) {
       throw new Error(`State package ${field} does not match its discovered path binding`);
     }
     if (configured) {
@@ -553,14 +554,14 @@ function canonicalJson(value, seen = new WeakSet()) {
   return result;
 }
 
-function validateCaptureProgress(progress, expected) {
+function validateCaptureProgress(progress, expected, sourcePath = path) {
   if (!progress || typeof progress !== 'object' || Array.isArray(progress)
     || Object.keys(progress).sort().join(',') !== 'destination,generation,kind,lastError,requestSha256,sourceSha256,stage,startedAt,updatedAt'
     || progress.kind !== 'state-package-capture'
     || typeof progress.generation !== 'string' || !/^[a-f0-9-]{36}$/iu.test(progress.generation)
-    || typeof progress.destination !== 'string' || !path.isAbsolute(progress.destination) || path.resolve(progress.destination) !== progress.destination
+    || typeof progress.destination !== 'string' || !sourcePath.isAbsolute(progress.destination) || sourcePath.resolve(progress.destination) !== progress.destination
     || !/^[a-f0-9]{64}$/u.test(progress.requestSha256) || !/^[a-f0-9]{64}$/u.test(progress.sourceSha256)
-    || expected.destination !== undefined && pathIdentity(progress.destination) !== pathIdentity(expected.destination)
+    || expected.destination !== undefined && instancePathKey(progress.destination, sourcePath) !== instancePathKey(expected.destination, sourcePath)
     || progress.requestSha256 !== expected.requestSha256
     || progress.sourceSha256 !== expected.sourceSha256 || !['preflight', 'files-captured', 'database-captured', 'verified'].includes(progress.stage)
     || typeof progress.startedAt !== 'string' || Number.isNaN(Date.parse(progress.startedAt))
@@ -583,7 +584,7 @@ function rewriteConfiguredPath(xml, tag, value) {
   const matches = [...xml.matchAll(expression)];
   if (matches.length !== 1) throw new Error(`Configured Jellyfin ${tag} must have exactly one simple XML element`);
   const escaped = value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-  return xml.replace(expression, `<${tag}>${escaped}</${tag}>`);
+  return xml.replace(expression, () => `<${tag}>${escaped}</${tag}>`);
 }
 
 function restorePreparationBinding(manifest, manifestSha256, destination) {
@@ -1450,7 +1451,7 @@ async function verifyStatePackageDetailed(directory) {
   const progress = (await readJsonBounded(directory, path.join(directory, 'progress.json'), controlFileLimits.progress,
     'State package capture progress')).value;
   const sourceSha256 = sha256Value(canonicalJson(manifest.source));
-  validateCaptureProgress(progress, { destination: progress.destination, requestSha256: manifest.captureRequestSha256, sourceSha256 });
+  validateCaptureProgress(progress, { destination: progress.destination, requestSha256: manifest.captureRequestSha256, sourceSha256 }, instancePathApi(instanceState.instanceRoot));
   if (progress.stage !== 'verified' || progress.generation !== manifest.generation) {
     throw new Error('State package generation does not match its commit or capture request');
   }
