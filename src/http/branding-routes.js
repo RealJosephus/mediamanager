@@ -24,7 +24,7 @@ export function registerBrandingRoutes(add, { branding }) {
     add(method, '/System/Configuration/Branding', () => branding.getOptions({ includeLocation: true }));
   }
   add('POST', '/System/Configuration/Branding', async context => { await branding.updateOptions(context.body); return noContent(); },
-    { policy: 'RequiresElevation', body: true, bindBody: bindOptions, bodyParameter: 'configuration', bodyType: 'MediaBrowser.Model.Branding.BrandingOptionsDto' });
+    { policy: ['Default', 'RequiresElevation'], body: true, bindBody: bindOptions, bodyParameter: 'configuration', bodyType: 'MediaBrowser.Model.Branding.BrandingOptionsDto' });
   add('POST', '/Branding/Splashscreen', context => branding.upload(context.request), { policy: 'RequiresElevation' });
   add('DELETE', '/Branding/Splashscreen', () => branding.deleteSplashscreen(), { policy: 'RequiresElevation' });
 }

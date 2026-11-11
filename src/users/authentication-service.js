@@ -66,6 +66,10 @@ export class AuthenticationService extends EventEmitter {
   }
 
   authorize(auth, { policy = 'Default', remoteEndPoint, startupWizardCompleted = true, requiredPermission } = {}) {
+    if (Array.isArray(policy)) {
+      for (const requirement of policy) this.authorize(auth, { policy: requirement, remoteEndPoint, startupWizardCompleted, requiredPermission });
+      return true;
+    }
     const firstTimeSetup = policy.startsWith('FirstTimeSetup');
     if (firstTimeSetup && !startupWizardCompleted) {
       if (auth?.IsAuthenticated && !auth.IsApiKey && auth.User) this.checkUserAccess(auth.User, { remoteEndPoint, ignoreParentalControl: true });
