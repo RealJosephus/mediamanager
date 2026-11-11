@@ -46,8 +46,18 @@ async function frozen(database, plan, ordinal, consume, signal) {
   }
 }
 
+async function capturePage(source, slots, capture) {
+  if (!slots.length) return;
+  const items = [];
+  await source.withSlots(slots, async item => {
+    items.push(item);
+    // Keep the entire page borrowed while the downstream SQL owner captures it.
+    if (items.length === slots.length) await capture(items);
+  });
+}
+
 export function createYearSpecialChildren({ library, database, state, user, navigationRows,
-  visibilityFor, physicalIdsFor, nextUpIdsFor, internalPlan, isVisible, virtualChildren,
+  visibilityFor, physicalIdsFor, nextUpIdsFor, internalPlan, visiblePage, virtualChildren,
   prepareVisibility, memoryRatingContext, signal }) {
   const consumeRows = async (rows, append) => {
     signal?.throwIfAborted();
@@ -88,7 +98,7 @@ export function createYearSpecialChildren({ library, database, state, user, navi
       await produce(async items => {
         if (!items.length) return;
         const slots = await cohort.captureSlots(items);
-        for (const [index, item] of items.entries()) await projection.append(item, slots[index], ++ordinal);
+        await projection.appendPage(items.map((item, index) => ({ item, slot: slots[index], ordinal: ++ordinal })));
       });
       await cohort.flush();
       let input = query, nativeItemsPlan = projection.plan();
@@ -117,7 +127,10 @@ export function createYearSpecialChildren({ library, database, state, user, navi
         for (let after = 0n;;) {
           const rows = await page(after);
           if (!rows.length) break;
-          for (const row of rows) if (row.Id != null) await (collections ?? cohort).withSlot(row.__SlotKey, item => append([item]));
+          const slots = rows.filter(row => row.Id != null).map(row => row.__SlotKey);
+          if (collections) {
+            for (const slot of slots) await collections.withSlot(slot, item => append([item]));
+          } else await capturePage(cohort, slots, append);
           after = BigInt(rows.at(-1).__ordinal);
         }
       }, signal);
@@ -133,13 +146,13 @@ export function createYearSpecialChildren({ library, database, state, user, navi
   };
 
   const actualChildren = (parent, capture) => withYearTraversal({ library, database, parent, state, user, hasUser: true,
-    recursive: false, input: {}, virtualChildren, specialChildren: children, isVisible, signal }, source =>
+    recursive: false, input: {}, virtualChildren, specialChildren: children, visiblePage, signal }, source =>
     source.withWinners(async ordered => {
       const consume = async selected => {
         for (let after = 0n;;) {
           const page = await selected.page(after);
           if (!page.length) break;
-          for (const row of page) await selected.withSlot(row.slot, item => capture([item]));
+          await capturePage(selected, page.map(row => row.slot), capture);
           after = page.at(-1).position;
         }
       };

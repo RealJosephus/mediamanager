@@ -5,13 +5,14 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { availableParallelism } from 'node:os';
 import { EventEmitter } from 'node:events';
 import { getNewItemId } from '../core/identity.js';
+import { withCleanup } from '../core/operation-failure.js';
 import { loadLibrary, mapRecord, dtoId, idKey, sameId, nonemptyId, guid, cleanValue, dateText, dateTicks, libraryError, unsupported, repositoryCleanName, repositoryTopParentId, repositoryValue, repositoryIdPresent, NAME_TYPES, VIDEO_TYPES, MIN_DATE, EMPTY_ID } from './records.js';
 import { visibleItem, visibleLibrary } from './permissions.js';
 import { parentChainForItem, userRootItem } from './collection-membership.js';
 import { canDeleteItem, hasFileProtocol } from './delete-permission.js';
 import { requireNativeList } from './item-relations.js';
 import { parseQuery, resolveOfficialRatingRanges, binaryCompare } from './query.js';
-import { dtoOptions, prefetchPostgresDtoRelations, projectItem, projectUserData, mediaSources } from './dto.js';
+import { dtoOptions, prefetchPostgresDtoRelations, projectItem, projectUserData, projectSearchHints, mediaSources } from './dto.js';
 import { sortMediaSources } from './media-versions.js';
 import { selectDefaultTracks } from './media-streams.js';
 import { nativeContainsSubPath, nativePathWithin, sameNativePath } from './native-path.js';
@@ -46,7 +47,9 @@ import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { createPresentationUniqueKey } from './presentation-key.js';
 import { SimilarItemsManager } from './similar-items.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
-import { buildPostgresItemPageQuery, queryPostgresDtoChildCounts, queryPostgresItemPage } from '../database/postgres-item-query.js';
+import { buildPostgresItemPageQuery, queryPostgresDtoChildCounts, queryPostgresItemPage, visitPostgresItemPages,
+  visitPostgresItemPlanPages } from '../database/postgres-item-query.js';
+import { queryPostgresLibraryStatement } from '../database/postgres.js';
 import { loadPostgresItemGraph, loadPostgresNavigationRows, loadPostgresPageGraph, loadPostgresRowsByIds, queryPostgresFolderStats,
   countPostgresNullVideoTypeRows, queryPostgresAlbumSelectorIds, queryPostgresArtistSelectorId,
   queryPostgresArtistSelectorIds, queryPostgresDtoArtistIds,
@@ -61,7 +64,7 @@ import { queryPostgresProgramRecordingInfo, queryPostgresSeriesTimerProgramFilte
 import { queryPostgresRecordingFolderSources, orderPostgresRecordingFolders, createPostgresRecordingQuery } from './postgres-live-tv-recordings-query.js';
 import { recordingSourceVisibleWithoutUser, recordingFoldersMissingUser } from './live-tv-recording-folders-access.js';
 import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
-import { dtoItemCountKinds, queryPostgresDtoItemCounts } from './postgres-dto-item-counts-query.js';
+import { dtoItemCountKinds, queryPostgresDtoItemCounts, queryPostgresLibraryCounts } from './postgres-dto-item-counts-query.js';
 import { queryPostgresItemFilters } from './postgres-item-filters-query.js';
 import { querySuggestions } from './suggestions.js';
 import { queryYears } from './years.js';
@@ -74,6 +77,7 @@ import { queryPostgresUserViewChildPresence } from './postgres-user-views-query.
 import { channelCatalogRange, createPostgresChannelFeatureQuery, createPostgresChannelCatalog, orderPostgresChannelProviders } from './postgres-channel-query.js';
 import { createPostgresChannelItemsQuery, createPostgresStaleChannelItemQuery } from './postgres-channel-items-query.js';
 import { queryPostgresBuiltInSearch, resolvePostgresSearchCollation } from './postgres-search-provider.js';
+import { buildSearchHintsPlan } from './search-hints.js';
 import { matchesPostgresUserViewGenre, queryPostgresUserViewGenrePage } from './postgres-user-view-genre-query.js';
 import { queryPostgresSeriesEpisodePage } from './postgres-series-episodes-query.js';
 import { filterPostgresSimilarAccessRows, hasPostgresVisibleArtistRelation, localGenreTagSimilarQuery, queryPostgresLocalSimilarRows,
@@ -247,6 +251,7 @@ export class LibraryService extends EventEmitter {
     if (!store || !serverId) throw new TypeError('LibraryService requires store and serverId.');
     expandPath ??= programDataPath ? createVirtualPathExpander(options) : undefined;
     Object.assign(this, { store, options: { fileSystem, linkedChildren, serverId, libraryOptions, programDataPath, dataPath, get metadataPath() { return options.metadataPath; }, get configuration() { const { configuration = {} } = options; return configuration; }, expandPath, userRoot, userRootPath, localization, liveTv, externalUrlRegistry, musicBrainzServer, logger }, clock, onError });
+    this.options.reversePath = identity => this.options.programDataPath ? createVirtualPathReverser(this.options)(identity) : identity;
     this.options.filterSourceIds = (db, user, ids) => this.#filterMediaSourceIds(db, user, ids);
     this.#records = new BoundedItemCache(configuration.CacheSize ?? availableParallelism() * 100,
       { onRemove: item => { this.#recordOwners.get(item)?.release(); this.#recordOwners.delete(item); } });
@@ -453,7 +458,7 @@ export class LibraryService extends EventEmitter {
     state.newUserView = item => this.#userViews?.createdInThisInstance(item.Id) === true;
     const scopedIds = state.items
       .filter(item => item !== state.transientUserRoot).map(item => item.Id);
-    const valueLinks = scopedIds.length ? await db.rows('ItemValuesMap', { whereIn: { ItemId: scopedIds } }) : [];
+    const valueLinks = state.relationPresence.ItemValuesMap ? await db.rows('ItemValuesMap', { whereIn: { ItemId: scopedIds } }) : [];
     const valueIds = [...new Set(valueLinks.map(link => link.ItemValueId))];
     const values = valueIds.length ? await db.rows('ItemValues', { whereIn: { ItemValueId: valueIds } }) : [];
     state.itemValues = values;
@@ -471,7 +476,7 @@ export class LibraryService extends EventEmitter {
         itemValues.set(value.Type, value.CleanValue);
       }
     }
-    const peopleLinks = scopedIds.length ? await db.rows('PeopleBaseItemMap', { whereIn: { ItemId: scopedIds } }) : [];
+    const peopleLinks = state.relationPresence.PeopleBaseItemMap ? await db.rows('PeopleBaseItemMap', { whereIn: { ItemId: scopedIds } }) : [];
     const peopleIds = [...new Set(peopleLinks.map(link => link.PeopleId))];
     const people = peopleIds.length ? await db.rows('Peoples', { whereIn: { Id: peopleIds } }) : [];
     state.people = people;
@@ -1667,6 +1672,46 @@ export class LibraryService extends EventEmitter {
     return { scope, topParentIds, visibility: user ? visibility : undefined };
   }
 
+  queryItemCounts({ isFavorite } = {}, { user = null } = {}) {
+    if (!user && isFavorite !== undefined) throw libraryError(500, 'A favorite item count requires a user.');
+    return this.#runWithStates(async db => {
+      let visibility;
+      if (user) {
+        const state = await this.load(db, user, { includeUserData: false, baseRows: await loadPostgresNavigationRows(db) });
+        visibility = await this.#postgresUserViewVisibility(state, user);
+      }
+      return queryPostgresLibraryCounts(db, { userId: user?.Id, isFavorite, visibility });
+    }, { channelViews: Boolean(user) });
+  }
+
+  async #postgresUserViewVisibility(state, user) {
+    const views = await this.userViews.views(state, user, { includeHidden: true });
+    const roots = await this.navigationChildren(state, user);
+    const topParentIds = views.flatMap(item => queryTopParentIds(item, state, user, roots));
+    return { ...await this.#postgresVisibility(state, user), topParentIds };
+  }
+
+  querySearchHints(input, { user = null, signal } = {}) {
+    return this.#runWithStates(async db => {
+      const navigationRows = await loadPostgresNavigationRows(db, input.parentId);
+      const navigation = user ? await this.load(db, user, { includeUserData: false, baseRows: navigationRows }) : null;
+      const visibility = user ? await this.#postgresUserViewVisibility(navigation, user) : undefined;
+      const plan = buildSearchHintsPlan(db, input, { userId: user?.Id, visibility });
+      const SearchHints = [];
+      if (!plan) return { SearchHints, TotalRecordCount: 0 };
+      const { total } = await visitPostgresItemPlanPages(db, plan, { signal }, async page => {
+        if (!page.rows.length) return;
+        const baseRows = await loadPostgresPageGraph(db, page.rows, navigationRows);
+        const state = await this.load(db, user, { baseRows, includeUserData: false });
+        await withCleanup(async () => {
+          const items = page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
+          SearchHints.push(...await projectSearchHints(items, state, this.options));
+        }, [() => state.dispose({ session: db })], 'Search hint page cleanup failed.');
+      });
+      return { SearchHints, TotalRecordCount: total };
+    }, { channelViews: Boolean(user), signal });
+  }
+
   querySuggestions(input = {}, { user = null, signal } = {}) {
     return this.#runWithStates(db => querySuggestions(this, db, input, {
       user, signal,
@@ -1783,22 +1828,9 @@ export class LibraryService extends EventEmitter {
         parent = userRootItem(state) ?? parent;
       }
       const virtualChildren = source => this.#rootVirtualChildren(source);
-      const visible = async item => {
-        if (!user) throw libraryError(400, "Value cannot be null. (Parameter 'user')");
-        const page = await this.load(db, user, { includeUserData: false,
-          baseRows: await loadPostgresItemGraph(db, [item.Id]) });
-        let failed = false, primary;
-        try {
-          this.adoptLiveItem(page, item);
-          return await this.#postgresStandaloneVisible(db, item, user, page, { checkStandaloneParents: false });
-        } catch (reason) { failed = true; primary = reason; throw reason; }
-        finally {
-          try { await page.dispose({ session: db }); }
-          catch (cleanup) { throw libraryScopeFailure(failed ? [primary, cleanup] : [cleanup], 'Year visibility release failed.'); }
-        }
-      };
+      const visiblePage = (source, entries) => this.#yearVisibilityPage(db, user, source, entries, signal);
       const specialChildren = createYearSpecialChildren({ library: this, database: db, state, user,
-        navigationRows, signal, isVisible: visible, virtualChildren,
+        navigationRows, signal, visiblePage, virtualChildren,
         visibilityFor: source => this.#postgresVisibility(source, user),
         physicalIdsFor: items => this.#postgresPhysicalIds(items, state),
         nextUpIdsFor: items => nextUpTopParentIds(items, state, folder => resolvedPhysicalFolderIds(folder, state), user, this),
@@ -1825,9 +1857,70 @@ export class LibraryService extends EventEmitter {
         }
       };
       const execute = item => queryYears({ library: this, database: db, input, user, hasUser,
-        parent: this.adoptLiveItem(state, item), state, virtualChildren, specialChildren, isVisible: visible, projectPage, signal });
+        parent: this.adoptLiveItem(state, item), state, virtualChildren, specialChildren, visiblePage, projectPage, signal });
       return this.itemCreation ? this.itemCreation.withItem(parent.Id, item => execute(item ?? parent)) : execute(parent);
     }, { channelViews: Boolean(user) });
+  }
+
+  async #yearVisibilityPage(db, user, source, entries, signal) {
+    if (!user) throw libraryError(400, "Value cannot be null. (Parameter 'user')");
+    const withGraph = async (ids, consume) => {
+      signal?.throwIfAborted();
+      const page = await this.load(db, user, { includeUserData: false,
+        baseRows: await loadPostgresItemGraph(db, ids) });
+      let failed = false, primary;
+      try { return await consume(page); }
+      catch (reason) { failed = true; primary = reason; throw reason; }
+      finally {
+        try { await page.dispose({ session: db }); }
+        catch (cleanup) { throw libraryScopeFailure(failed ? [primary, cleanup] : [cleanup], 'Year visibility release failed.'); }
+      }
+    };
+    const check = async (item, page, resolveCollectionFolders) => {
+      signal?.throwIfAborted();
+      const key = idKey(item.Id), stored = page.byId.get(key);
+      this.adoptLiveItem(page, item);
+      try {
+        return await this.#postgresStandaloneVisible(db, item, user, page,
+          { checkStandaloneParents: false, resolveCollectionFolders });
+      } finally {
+        if (stored) page.byId.set(key, stored);
+        else page.byId.delete(key);
+      }
+    };
+    const single = item => {
+      // Collection visibility can reject this live item before reading its relations.
+      if (item.Type === 'CollectionFolder' && user.Policy && !visibleLibrary(item, user, this.options.libraryOptions)) return false;
+      return withGraph([item.Id], page => check(item, page));
+    };
+    // These consumers can enumerate relations in the admitted graph. Keep
+    // their graph scoped to the individual occurrence, in traversal order.
+    const sharesGraph = (type, folder) => !folder && !NAME_TYPES.has(type) && type !== 'BoxSet' && type !== 'Playlist';
+    const mask = [];
+    for (let start = 0; start < entries.length;) {
+      let end = start + 1;
+      if (sharesGraph(entries[start].type, entries[start].folder)) {
+        while (end < entries.length && sharesGraph(entries[end].type, entries[end].folder)) end++;
+      }
+      if (end === start + 1) mask.push(await source.withSlot(entries[start].slot, single));
+      else {
+        const group = entries.slice(start, end);
+        const decisions = await withGraph(group.map(entry => entry.id), page => {
+          const resolve = this.#collectionFolderResolver(page);
+          return source.withSlots(group.map(entry => entry.slot), item => {
+            const stored = page.byId.get(idKey(item.Id));
+            // A live occurrence may have changed since it entered the queue.
+            // Use its own graph if its parent or rating lookups can differ.
+            const sameReferences = stored?.Type === item.Type && ['ParentId', 'OwnerId', 'SeasonId', 'SeriesId']
+              .every(key => idKey(stored[key]) === idKey(item[key]));
+            return sameReferences && sharesGraph(item.Type, item.IsFolder) ? check(item, page, resolve) : single(item);
+          });
+        });
+        mask.push(...decisions);
+      }
+      start = end;
+    }
+    return mask;
   }
 
   async getYearDto(year, { user = null, resolveUser } = {}) {
@@ -2807,35 +2900,35 @@ export class LibraryService extends EventEmitter {
       return await project(db, buildPostgresItemPageQuery(db, pageQuery, { ...postgresQueryOptions, includeOrdinal: true }),
         owner ? { withSlot: (slot, operation) => owner.withSlot(slot, operation) } : undefined);
     }
-    const page = await queryPostgresItemPage(db, pageQuery, postgresQueryOptions);
-    const graphRows = await loadPostgresPageGraph(db, page.rows, navigationRows);
-    const state = await this.load(db, user, { baseRows: graphRows });
-    const items = [];
-    if (folderLinks) {
-      for (const selected of page.slots) {
-        if (selected.slot) await (folderCollections ?? folderLinks).withSlot(selected.slot,
-          item => items.push(this.adoptLiveItem(state, item)));
-        else { const item = state.byId.get(idKey(selected.id)); if (item) items.push(item); }
-      }
-    } else items.push(...page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean));
-    const start = page.startIndex;
-    state.folderStats = await queryPostgresFolderStats(db,
-      items.filter(item => item.IsFolder).map(item => item.Id), user?.Id);
-    if (!project) return { Items: items, TotalRecordCount: page.total, StartIndex: start };
-    const options = dtoOptions(query);
-    if (user?.Policy.AllowedTags?.length) options.fields.add('tags');
-    const projectionItems = searchScores && user
-      ? await this.#filterPostgresStandalonePage(db, items, user, state, { skipRelatedNameCheck: true })
-      : items;
-    await this.#prefetchPostgresDtos(projectionItems, state, user, options);
-    const dtos = [];
-    for (const item of projectionItems) {
-      dtos.push(await projectItem(item, state, user, options, this.options));
-    }
-    const totalRecordCount = searchScores ? page.total : dispatch.pageResult ? dtos.length
+    const options = project ? dtoOptions(query) : null;
+    if (options && user?.Policy.AllowedTags?.length) options.fields.add('tags');
+    const Items = [];
+    const { total, startIndex } = await visitPostgresItemPages(db, pageQuery, postgresQueryOptions, async page => {
+      const graphRows = await loadPostgresPageGraph(db, page.rows, navigationRows);
+      const state = await this.load(db, user, { baseRows: graphRows });
+      await withCleanup(async () => {
+        const items = [];
+        if (folderLinks) {
+          for (const selected of page.slots) {
+            if (selected.slot) await (folderCollections ?? folderLinks).withSlot(selected.slot,
+              item => items.push(this.adoptLiveItem(state, item)));
+            else { const item = state.byId.get(idKey(selected.id)); if (item) items.push(item); }
+          }
+        } else items.push(...page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean));
+        state.folderStats = await queryPostgresFolderStats(db,
+          items.filter(item => item.IsFolder).map(item => item.Id), user?.Id);
+        if (!options) { Items.push(...items); return; }
+        const projectionItems = searchScores && user
+          ? await this.#filterPostgresStandalonePage(db, items, user, state, { skipRelatedNameCheck: true })
+          : items;
+        await this.#prefetchPostgresDtos(projectionItems, state, user, options);
+        for (const item of projectionItems) Items.push(await projectItem(item, state, user, options, this.options));
+      }, [() => state.dispose({ session: db })], 'Item query page cleanup failed.');
+    });
+    const totalRecordCount = !project || searchScores ? total : dispatch.pageResult ? Items.length
       : query.enabletotalrecordcount === false && dispatch.postFilter ? 0
-        : repositoryQuery && query.enabletotalrecordcount === false ? dtos.length : page.total;
-    return { Items: dtos, TotalRecordCount: totalRecordCount, StartIndex: start };
+        : repositoryQuery && query.enabletotalrecordcount === false ? Items.length : total;
+    return { Items, TotalRecordCount: totalRecordCount, StartIndex: startIndex };
     } catch (error) { primaryError = error; primaryFailed = true; throw error; }
     finally {
       const failures = [];
@@ -3047,8 +3140,6 @@ export class LibraryService extends EventEmitter {
       if (!this.itemCreation) throw libraryError(501, `${type} creation requires the native entity lifecycle.`);
       const metadataPath = this.options.metadataPath ?? path.join(this.options.programDataPath, 'metadata');
       const assets = new MetadataImageAssets({ fileSystem: this.options.fileSystem, metadataPath });
-      const target = await assets.resolve(identity.Path);
-      if (!target.localPath) throw libraryError(501, `${type} creation requires the isolated metadata directory.`);
       const directory = await assets.createDirectory(identity.Path);
       const item = newNativeItemEntity(nativeType);
       Object.assign(item, { Id: identity.Id, Name: name, Path: identity.Path,
@@ -3291,15 +3382,23 @@ export class LibraryService extends EventEmitter {
       const values = [...plan.values, target.Path == null ? null : nativeTextBytes(target.Path), folders];
       const pathMatches = `${sql.ordinalIgnoreCaseKey('source."Path"')} IS NOT DISTINCT FROM ${sql.ordinalIgnoreCaseKey(path)}`;
       const folderSource = `(SELECT * FROM (${plan.text}) child WHERE child."NativeType"=ANY($${offset + 2}::bytea[])) source`;
-      const invalid = await db.client.query({ text: `SELECT source."Ordinal" FROM ${folderSource}
-        WHERE source."PhysicalLocations" IS NULL AND NOT (${pathMatches}) ORDER BY source."Ordinal" LIMIT 1`, values });
-      if (invalid.rows.length) throw libraryError(500, "Value cannot be null. (Parameter 'source')");
       const result = [];
       for (let after = 0n;;) {
-        const rows = (await db.client.query({ text: `SELECT source."Ordinal",source."SlotKey" FROM ${folderSource}
-          WHERE source."Ordinal">$${offset + 3} AND ((${pathMatches}) OR EXISTS(
+        const rows = (await queryPostgresLibraryStatement(db, { text: `WITH folders AS MATERIALIZED (
+            SELECT source."Ordinal",source."SlotKey",source."Path",source."PhysicalLocations" FROM ${folderSource}
+          ), invalid AS MATERIALIZED (
+            SELECT source."Ordinal" FROM folders source
+            WHERE $${offset + 3}::bigint=0 AND source."PhysicalLocations" IS NULL AND NOT (${pathMatches})
+            ORDER BY source."Ordinal" LIMIT 1
+          )
+          SELECT TRUE AS "Invalid",NULL::bigint AS "Ordinal",NULL::uuid AS "SlotKey" FROM invalid
+          UNION ALL (
+          SELECT FALSE AS "Invalid",source."Ordinal",source."SlotKey" FROM folders source
+          WHERE NOT EXISTS(SELECT 1 FROM invalid) AND source."Ordinal">$${offset + 3} AND ((${pathMatches}) OR EXISTS(
             SELECT 1 FROM unnest(source."PhysicalLocations") location WHERE ${sql.ordinalIgnoreCaseKey("COALESCE(location,decode('','hex'))")}=${sql.ordinalIgnoreCaseKey(span)}))
-          ORDER BY source."Ordinal" LIMIT 128`, values: [...values, after] })).rows;
+          ORDER BY source."Ordinal" LIMIT 128)
+          ORDER BY "Ordinal"`, values: [...values, after] })).rows;
+        if (rows.some(row => row.Invalid)) throw libraryError(500, "Value cannot be null. (Parameter 'source')");
         if (!rows.length) return result;
         for (const row of rows) await source.withSlot(row.SlotKey, folder => { state.adoptItem(folder); result.push(this.#rememberRecord(folder)); });
         after = BigInt(rows.at(-1).Ordinal);

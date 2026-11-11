@@ -10,6 +10,7 @@ import { hasFileProtocol } from './delete-permission.js';
 import { NAME_TYPES, idKey, nonemptyId, EMPTY_ID, libraryError } from './records.js';
 import { yearsFailure } from './postgres-years-source.js';
 import { cachedFolderChildrenSnapshot } from './folder-cache.js';
+import { EMPTY_NATIVE_LINKS } from './postgres-linked-children.js';
 
 const folder = item => item && nativeItemDescriptor(item.NativeType).family === 'folder';
 
@@ -120,10 +121,13 @@ export function createYearFolderSource({ library, database, state, user, virtual
 
   async function linked(item, append) {
     await ensureLinks(item);
-    if (!user || !['BoxSet', 'Playlist'].includes(item.Type)) return consume(await metadata.linked(item), append);
+    if (item.LinkedChildren !== EMPTY_NATIVE_LINKS && (!user || !['BoxSet', 'Playlist'].includes(item.Type))) {
+      return consume(await metadata.linked(item), append);
+    }
     const operation = linkedChildren.admitHandleOperation(item.LinkedChildren);
     let failed = false, primary;
     try {
+      if (operation.handle === EMPTY_NATIVE_LINKS) return;
       // BoxSet.GetLinkedChildren(User) uses per-link manager lookups, not
       // ResolveLinkedChildren's eager positive-ID repository batch.
       if (await linkedChildren.count(operation.handle, { session: database }) === 0n) return;

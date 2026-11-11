@@ -8,30 +8,52 @@ import { yearsFailure } from './postgres-years-source.js';
  * response window. Source counts, Guid winners and stable memory order remain
  * SQL-owned; DTO hydration is bounded independently of an unbounded Limit. */
 export async function queryYears({ library, database, input, user, hasUser, parent, state,
-  virtualChildren, specialChildren, isVisible, projectPage, signal }) {
+  virtualChildren, specialChildren, visiblePage, projectPage, signal }) {
   return withYearTraversal({ library, database, input, user, hasUser, parent, state,
-    recursive: input.recursive !== false, virtualChildren, specialChildren, isVisible, signal }, async source => {
-    let catalogue, failed = false, primary, order;
+    recursive: input.recursive !== false, virtualChildren, specialChildren, visiblePage, signal }, async source => {
+    let catalogue, failed = false, primary, order, emptyNameWindow = false;
     try {
-      catalogue = await createNativeItemCohort({ linkedChildren: library.options.linkedChildren });
+      // Year factories commit in source order while response captures use
+      // bounded pages before the final SQL sort and window.
+      const pending = [];
+      const flush = async () => {
+        if (!pending.length) return;
+        const slots = await catalogue.captureSlots(pending.map(entry => entry.item));
+        await catalogue.appendSlots(slots, { ordinals: pending.map(entry => entry.ordinal) });
+        pending.length = 0;
+      };
       const extracted = await source.seal(async (year, position) => {
         const item = await library.getYear(year);
-        await catalogue.capture(item, { ordinal: position });
+        if (!emptyNameWindow) {
+          pending.push({ item, ordinal: position });
+          if (pending.length === 128) await flush();
+        }
       }, {
         ...(hasUser && parent.Type === 'BoxSet' ? {
           withSortedWinners: (raw, consume) => withYearMemoryOrder({ database, source: raw,
             sortBy: [boxSetDisplayOrder(parent)], sortOrder: ['Ascending'], user,
             configuration: library.options.configuration, signal }, consume),
         } : {}),
-        beforeExtract: () => {
+        beforeExtract: async () => {
           order = prepareYearOrder(input.sortBy, input.sortOrder, user);
           if (order.failure && !order.createBeforeFailure) throw order.failure;
+          // A Name comparison cannot affect an empty window. Still resolve
+          // every Year in source order, including its writes and failures.
+          emptyNameWindow = input.limit === 0 && order.sortBy.length === 1
+            && String(order.sortBy[0]).toLowerCase() === 'name';
+          if (!emptyNameWindow) catalogue = await createNativeItemCohort({ linkedChildren: library.options.linkedChildren });
         },
         afterExtract: () => { if (order.failure) throw order.failure; },
       });
+      if (emptyNameWindow) {
+        signal?.throwIfAborted();
+        return { Items: [], TotalRecordCount: extracted.total, StartIndex: input.startIndex ?? 0 };
+      }
+      await flush();
       await catalogue.flush();
       const plan = catalogue.orderedPlan();
       const named = Object.freeze({ withSlot: (slot, operation) => catalogue.withSlot(slot, operation),
+        withSlots: (slots, operation) => catalogue.withSlots(slots, operation),
         async page(after = 0n) {
           const offset = plan.values.length;
           return (await database.client.query({ text: `SELECT source."Ordinal",source."SlotKey" FROM (${plan.text}) source

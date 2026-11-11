@@ -4,6 +4,7 @@ import { decodeNativeTextBytes } from '../database/native-text.js';
 import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
 import { queryPostgresNamedItemCounts } from './postgres-named-items-query.js';
 import { idKey } from './records.js';
+import { nativeItemDescriptor, nativeItemTypes } from './native-item-entity.js';
 
 const general = ['Audio', 'Episode', 'Movie', 'LiveTvProgram', 'MusicAlbum', 'MusicArtist', 'MusicVideo', 'Series', 'Trailer'];
 export const dtoItemCountKinds = Object.freeze({
@@ -18,6 +19,26 @@ const countedTypes = { Movie: 'MovieCount', Series: 'SeriesCount', Episode: 'Epi
 const publicNames = Object.values(countedTypes).filter(name => !['BoxSetCount', 'BookCount'].includes(name));
 const emptyCounts = () => Object.fromEntries([...publicNames.map(name => [name, 0]), ['ChildCount', 0]]);
 const int32 = expression => `(((((${expression})::bigint + 2147483648) % 4294967296 + 4294967296) % 4294967296) - 2147483648)`;
+
+const nativeCountFields = new Map(nativeItemTypes.flatMap(type => {
+  const field = countedTypes[nativeItemDescriptor(type).type];
+  return field ? [[type, field]] : [];
+}));
+
+export async function queryPostgresLibraryCounts(database, { isFavorite, userId, visibility }) {
+  const plan = buildPostgresItemPageQuery(database, { excludelocationtypes: ['Virtual'], isfavorite: isFavorite }, {
+    userId, visibility, countByType: true, includePlaceholderRows: true,
+  });
+  const result = await database.client.query(plan);
+  const counts = Object.fromEntries(Object.values(countedTypes).map(field => [field, 0]));
+  counts.ItemCount = 0;
+  for (const row of result.rows) {
+    const field = nativeCountFields.get(decodeNativeTextBytes(row.Type));
+    if (field) counts[field] = row.Count;
+    counts.ItemCount += row.Count;
+  }
+  return counts;
+}
 
 /** Count only the final selected DTO identities; all associations remain SQL. */
 export async function queryPostgresDtoItemCounts(database, items, { scope = {}, userId, visibility } = {}) {

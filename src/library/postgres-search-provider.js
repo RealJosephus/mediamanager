@@ -117,17 +117,23 @@ export async function queryPostgresBuiltInSearch(database, query, {
   nameAccessTypes = [],
   signal,
 } = {}) {
+  // ItemsController passes Limit * 3 using Int32 arithmetic.
+  const limit = query.limit == null ? 100 : Math.imul(query.limit, 3);
+  const plan = buildPostgresSearchProviderPlan(database, query, { userId, parentId, visibility, nameAccessTypes, limit });
+  if (!plan) return new Map();
+  const result = await database.client.query({ ...plan, signal });
+  return new Map(result.rows.map(row => [idKey(decodeNativeTextBytes(row.Id)), Number(row.Score)]));
+}
+
+export function buildPostgresSearchProviderPlan(database, query, {
+  userId, parentId, visibility, nameAccessTypes = [], limit = 100,
+} = {}) {
   if (database?.dialect !== 'postgres') {
     throw new TypeError('PostgreSQL search-provider queries require a PostgreSQL database.');
   }
   const raw = removeDiacritics(clrTrim(query.searchterm ?? ''));
   const clean = cleanValue(raw);
-  if (!raw || !clean) return new Map();
-
-  // ItemsController passes Limit * 3 using Int32 arithmetic. Both the provider
-  // and SearchManager use 100 when the caller omitted Limit.
-  const limit = query.limit == null ? 100 : Math.imul(query.limit, 3);
-  if (limit <= 0) return new Map();
+  if (!raw || !clean || limit <= 0) return null;
 
   const providerQuery = {
     searchterm: raw,
@@ -179,6 +185,5 @@ SELECT "Id", "Score"
 FROM scored
 ORDER BY "Score" DESC, ${nativeTextSql(database.schemaName).guidLower("\"Id\"")} ASC
 LIMIT ${limitParameter}`;
-  const result = await database.client.query({ text, values, signal });
-  return new Map(result.rows.map(row => [idKey(decodeNativeTextBytes(row.Id)), Number(row.Score)]));
+  return { text, values };
 }

@@ -30,6 +30,8 @@ const blank = table => Object.fromEntries(tableDefinition(table).columns.filter(
     : type === 'bool' ? false : column.type === 'TEXT' ? '' : ['long', 'uint'].includes(type) ? 0n : 0];
 }));
 const id = index => `ba320000-0000-0000-0000-${String(index).padStart(12, '0')}`;
+const temporaryTables = async db => (await db.client.query(`SELECT relname FROM pg_class
+  WHERE relnamespace=pg_my_temp_schema() AND relkind='r' ORDER BY relname`)).rows;
 
 for (const phase of ['lookup', 'refresh']) test(
   `postgres: MusicGenre caller cancellation during ${phase} stops later tasks and drains SQL resources`, {
@@ -75,11 +77,10 @@ for (const phase of ['lookup', 'refresh']) test(
       logger: { error: error => errors.push({ name: error.name, message: error.message, code: error.code, stack: error.stack }) } });
     let result;
     await store.run(async db => {
-      const temporaryTables = () => db.client.query("SELECT relname FROM pg_class WHERE relnamespace=pg_my_temp_schema() AND relkind='r' ORDER BY relname");
-      const original = (await temporaryTables()).rows;
+      const original = await temporaryTables(db);
       [result] = await Promise.allSettled([lifecycle.runPostScanTasks({ signal: controller.signal,
         reportProgress: value => progress.push(value) })]);
-      assert.deepEqual((await temporaryTables()).rows, original, 'Cancellation must drop every actual MusicGenre TEMP table.');
+      assert.deepEqual(await temporaryTables(db), original, 'Cancellation must drop every actual MusicGenre TEMP table.');
     });
     t.diagnostic(JSON.stringify({ phase, outcome: result.status, reason: result.status === 'rejected'
       ? { name: result.reason?.name, message: result.reason?.message, code: result.reason?.code } : null,
@@ -305,8 +306,12 @@ for (const recording of native.results) test('postgres: native music genre post-
   } };
   const task = new MusicGenresPostScanTask({ store, library, metadataScanner, logger: { error: (...args) => logged.push(args[0].message) } });
   let failure = null;
-  try { await task.run({ signal: controller.signal, reportProgress: value => progress.push(value) }); }
-  catch (error) { failure = error; }
+  await store.run(async db => {
+    const original = await temporaryTables(db);
+    try { await task.run({ signal: controller.signal, reportProgress: value => progress.push(value) }); }
+    catch (error) { failure = error; }
+    assert.deepEqual(await temporaryTables(db), original);
+  });
   assert.equal(Boolean(failure), Boolean(recording.failure), recording.failure?.type);
   if (recording.failure?.type === 'OperationCanceledException') assert.equal(failure?.code, 'cancelled');
   assert.deepEqual(calls, recording.calls, 'Native lookup, creation and refresh order is preserved.');
@@ -314,7 +319,6 @@ for (const recording of native.results) test('postgres: native music genre post-
   const genres = (await database.rows('BaseItems', { where: { Type: 'MediaBrowser.Controller.Entities.Audio.MusicGenre' } }))
     .map(row => ({ Id: guid(row.Id), Name: row.Name })).sort((a, b) => a.Id.localeCompare(b.Id));
   assert.deepEqual(genres, recording.genres);
-  assert.deepEqual((await database.client.query("SELECT relname FROM pg_class WHERE relname LIKE 'mm_music_genres_%'")).rows, []);
   if (process.env.MEDIAMANAGER_MUSIC_GENRES_POST_SCAN_EVIDENCE) {
     const directory = process.env.MEDIAMANAGER_MUSIC_GENRES_POST_SCAN_EVIDENCE;
     await mkdir(directory, { recursive: true });

@@ -28,13 +28,13 @@ function context(database, kind) {
 }
 
 /** Resolve source relations, filter the named entities, collapse and page in SQL. */
-export async function queryPostgresNamedItemPage(database, {
+export function buildPostgresNamedItemPlan(database, {
   kind, mediaQuery = {}, nameQuery = {}, scope = {}, userId, visibility,
-  topParentIds = [], startIndex = 0, limit, enableTotalRecordCount = true,
+  topParentIds = [], startIndex = 0, limit, mediaItemIdsPlan,
   itemValueTypes = valueTypes[kind],
 } = {}) {
   const { sql, table, values, ctes, bind, append, same } = context(database, kind);
-  append('media_ids', buildPostgresItemPageQuery(database, mediaQuery, { scope, userId, visibility,
+  append('media_ids', buildPostgresItemPageQuery(database, mediaQuery, { scope, userId, visibility, itemIdsPlan: mediaItemIdsPlan,
     nameAccessTypes: ['Person', 'Genre', 'MusicGenre', 'Studio', 'Year', 'MusicArtist']
       .filter(type => mediaQuery.includeitemtypes?.includes(type)) }));
   append('name_ids', buildPostgresItemPageQuery(database, { ...nameQuery, includeitemtypes: [kind] }, {
@@ -56,10 +56,15 @@ export async function queryPostgresNamedItemPage(database, {
   )`, 'representatives AS (SELECT * FROM candidates WHERE __representative = 1)',
   `page AS (SELECT "Id", __name_order FROM representatives ORDER BY __name_order
     ${limit === undefined || limit < 0 ? '' : `LIMIT ${bind(limit)}`} OFFSET ${bind(Math.max(startIndex, 0))})`);
-  const result = await database.client.query({
+  return {
     text: `WITH ${ctes.join(',\n')}, total AS (SELECT count(*) AS "Total" FROM representatives)
       SELECT page."Id", total."Total" FROM total LEFT JOIN page ON TRUE ORDER BY page.__name_order`, values,
-  });
+  };
+}
+
+export async function queryPostgresNamedItemPage(database, options) {
+  const { enableTotalRecordCount = true, startIndex = 0 } = options ?? {};
+  const result = await database.client.query(buildPostgresNamedItemPlan(database, options));
   const ids = result.rows.filter(row => row.Id != null).map(row => decodeNativeTextBytes(row.Id));
   const rows = ids.length ? await database.rows('BaseItems', { whereIn: { Id: ids } }) : [];
   const byId = new Map(rows.map(row => [idKey(row.Id), row]));

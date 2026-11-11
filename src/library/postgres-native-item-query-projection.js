@@ -19,9 +19,38 @@ const bytes = value => value == null ? null : nativeTextBytes(value);
 const queryColumns = [...columns.map(column => column.name), '__Occurrence', '__SlotKey',
   ...lists.map(name => '__' + name), '__ProviderKeys', '__ProviderValues', '__ImageTypes', '__LibraryFolderIds',
   ...episodeOrderFields.map(name => '__' + name), '__LinkedChildrenNull'];
+const insertColumns = queryColumns.map(q).join(',');
 
 export function nativeItemQueryColumns(alias) {
   return queryColumns.map(name => `${alias}.${q(name)}`).join(',');
+}
+
+function projectionValues({ item, slot, ordinal }) {
+  const descriptor = nativeItemDescriptor(item.NativeType), values = [];
+  for (const column of columns) {
+    const name = column.name;
+    let value = name === 'Type' ? item.NativeType : name === 'CleanName' ? cleanValue(item.Name)
+      : name === 'Data' ? null : lists.includes(name) ? null : item[name];
+    if (name === 'ParentId' || name === 'OwnerId' || name === 'PrimaryVersionId') value = nonemptyId(value) ? value : null;
+    if (name === 'IsFolder') value = descriptor.family === 'folder' && item.IsFolder;
+    if (name === 'ChannelId') value ??= EMPTY_ID;
+    if (dates.has(name) && value != null) value = nativeDate(value);
+    if (name === 'ExtraType' && typeof value === 'string') value = extraTypes.indexOf(value);
+    if (name === 'Audio' && typeof value === 'string') value = audioTypes.indexOf(value);
+    if (value == null) value = column.nullable ? null : column.type === 'TEXT' ? '' : column.clrType === 'bool' ? false : 0;
+    // PostgreSQL can carry Single NaN/Infinity until the native comparison or
+    // selected DTO consumes it. Persistence's finite-only encoder cannot.
+    values.push(column.type === 'TEXT' ? bytes(value) : typeof value === 'bigint' ? value.toString() : value);
+  }
+  values.push(ordinal, slot);
+  for (const name of lists) values.push(item[name]?.map(bytes) ?? null);
+  const providers = item.ProviderIds == null ? null : Object.entries(item.ProviderIds);
+  values.push(providers?.map(([name]) => bytes(name)) ?? null, providers?.map(([, value]) => bytes(value)) ?? null,
+    item.ImageInfos?.map(image => typeof image.Type === 'number' ? image.Type : imageTypes.indexOf(image.Type)) ?? null,
+    item.LibraryFolderIds == null ? null : JSON.stringify(item.LibraryFolderIds));
+  for (const name of episodeOrderFields) values.push(item[name] ?? null);
+  values.push(descriptor.family === 'folder' && item.LinkedChildren === null);
+  return values;
 }
 
 /** Query columns describe a live object, not a new persistence image. Keep
@@ -45,39 +74,21 @@ export async function createPostgresNativeItemQueryProjection(session) {
     0::bigint AS "__SourceOrdinal" FROM ${q(session.schemaName)}."BaseItems" source`,
   values: Object.freeze([]) });
   let closed = false;
+  const appendPage = async page => {
+    if (closed) throw new Error('The live item query projection has closed.');
+    if (page.length > 128) throw new RangeError('Live item query projection pages require at most 128 items.');
+    if (!page.length) return;
+    const rows = page.map(projectionValues);
+    const placeholders = rows.map((row, index) =>
+      '(' + row.map((_, column) => '$' + (index * row.length + column + 1)).join(',') + ')');
+    await session.client.query(`INSERT INTO ${table} (${insertColumns}) VALUES ${placeholders.join(',')}`, rows.flat());
+  };
   return Object.freeze({ table, plan() {
     if (closed) throw new Error('The live item query projection has closed.');
     return Object.freeze({ text: `SELECT *, "__Occurrence" AS "__SourceOrdinal" FROM ${table}`, values: Object.freeze([]), repository });
-  }, async append(item, slot, ordinal) {
-    if (closed) throw new Error('The live item query projection has closed.');
-    const descriptor = nativeItemDescriptor(item.NativeType), values = [];
-    for (const column of columns) {
-      const name = column.name;
-      let value = name === 'Type' ? item.NativeType : name === 'CleanName' ? cleanValue(item.Name)
-        : name === 'Data' ? null : lists.includes(name) ? null : item[name];
-      if (name === 'ParentId' || name === 'OwnerId' || name === 'PrimaryVersionId') value = nonemptyId(value) ? value : null;
-      if (name === 'IsFolder') value = descriptor.family === 'folder' && item.IsFolder;
-      if (name === 'ChannelId') value ??= EMPTY_ID;
-      if (dates.has(name) && value != null) value = nativeDate(value);
-      if (name === 'ExtraType' && typeof value === 'string') value = extraTypes.indexOf(value);
-      if (name === 'Audio' && typeof value === 'string') value = audioTypes.indexOf(value);
-      if (value == null) value = column.nullable ? null : column.type === 'TEXT' ? '' : column.clrType === 'bool' ? false : 0;
-      // PostgreSQL can carry Single NaN/Infinity until the native comparison or
-      // selected DTO consumes it. Persistence's finite-only encoder cannot.
-      values.push(column.type === 'TEXT' ? bytes(value) : typeof value === 'bigint' ? value.toString() : value);
-    }
-    const names = columns.map(column => q(column.name));
-    names.push('"__Occurrence"', '"__SlotKey"'); values.push(ordinal, slot);
-    for (const name of lists) { names.push(q('__' + name)); values.push(item[name]?.map(bytes) ?? null); }
-    names.push('"__ProviderKeys"', '"__ProviderValues"', '"__ImageTypes"', '"__LibraryFolderIds"');
-    const providers = item.ProviderIds == null ? null : Object.entries(item.ProviderIds);
-    values.push(providers?.map(([name]) => bytes(name)) ?? null, providers?.map(([, value]) => bytes(value)) ?? null,
-      item.ImageInfos?.map(image => typeof image.Type === 'number' ? image.Type : imageTypes.indexOf(image.Type)) ?? null,
-      item.LibraryFolderIds == null ? null : JSON.stringify(item.LibraryFolderIds));
-    for (const name of episodeOrderFields) { names.push(q('__' + name)); values.push(item[name] ?? null); }
-    names.push('"__LinkedChildrenNull"'); values.push(descriptor.family === 'folder' && item.LinkedChildren === null);
-    await session.client.query(`INSERT INTO ${table} (${names.join(',')}) VALUES (${values.map((_, index) => '$' + (index + 1)).join(',')})`, values);
-  }, async close() {
+  }, append(item, slot, ordinal) {
+    return appendPage([{ item, slot, ordinal }]);
+  }, appendPage, async close() {
     if (closed) return; closed = true;
     await session.client.query(`DROP TABLE ${table}`);
   } });

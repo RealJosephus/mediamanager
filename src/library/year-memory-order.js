@@ -38,7 +38,13 @@ export async function withYearMemoryOrder({ database, source, sortBy = [], sortO
       signal?.throwIfAborted();
       const rows = await source.page(after);
       if (!rows.length) break;
-      for (const row of rows) await source.withSlot(row.slot, item => projection.append(item, row.slot, row.position));
+      const page = [];
+      // Keep the borrowed entities alive until their complete page reaches SQL.
+      await source.withSlots(rows.map(row => row.slot), async item => {
+        const row = rows[page.length];
+        page.push({ item, slot: row.slot, ordinal: row.position });
+        if (page.length === rows.length) await projection.appendPage(page);
+      });
       after = rows.at(-1).position;
     }
     const plan = buildPostgresItemPageQuery(database, { sortby: order.sortBy, sortorder: order.sortOrder }, {
@@ -53,7 +59,7 @@ export async function withYearMemoryOrder({ database, source, sortBy = [], sortO
     }));
     await database.client.query(`CREATE UNIQUE INDEX ON ${output}(position)`);
     const skip = Math.max(0, startIndex), take = limit == null ? null : Math.max(0, limit);
-    return await consume(Object.freeze({ withSlot: source.withSlot,
+    return await consume(Object.freeze({ withSlot: source.withSlot, withSlots: source.withSlots,
       async page(after = 0n) {
         signal?.throwIfAborted();
         return (await database.client.query({ text: `SELECT position,slot FROM ${output}

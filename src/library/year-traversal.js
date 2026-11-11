@@ -8,7 +8,7 @@ import { createYearFolderSource } from './year-folder-source.js';
  * Guid visited set, occurrence count and final Guid winners. Source callbacks
  * are the native UserView branch and per-item IsVisible, not public Items. */
 export async function withYearTraversal({ library, database, parent, user, hasUser, recursive, input,
-  state, virtualChildren, specialChildren, isVisible, signal }, consume) {
+  state, virtualChildren, specialChildren, visiblePage, signal }, consume) {
   const isFolder = parent.IsFolder && nativeItemDescriptor(parent.NativeType).family === 'folder';
   const rootView = isFolder && hasUser && parent.Type === 'UserView';
   const directSpecial = isFolder && hasUser && !recursive && ['Series', 'Season'].includes(parent.Type);
@@ -63,9 +63,7 @@ export async function withYearTraversal({ library, database, parent, user, hasUs
           for (let after = 0n;;) {
             const page = await source.framePage(frame, after);
             if (!page.length) break;
-            const mask = [];
-            for (const entry of page) mask.push(await source.withSlot(entry.slot, isVisible));
-            await source.setVisible(page, mask);
+            await source.setVisible(page, await visiblePage(source, page));
             after = page.at(-1).ordinal;
           }
         } else await reader.physical(item, append);

@@ -1,6 +1,8 @@
 import { decodeNativeTextBytes, nativeTextBytes, nativeTextProjection, nativeTextOrdinalIgnoreCaseKey } from './native-text.js';
 import { nativeTextSql } from './native-text-sql.js';
 import { quoteIdentifier as q } from './model.js';
+import { randomUUID } from 'node:crypto';
+import { operationFailure } from '../core/operation-failure.js';
 import { postgresAliasedVersionFamilyKey, postgresSignedPaddedInteger } from './postgres-query-expressions.js';
 import { withPostgresNativeQueryJitOff } from './postgres-native-query-jit.js';
 import {
@@ -181,6 +183,7 @@ export function buildPostgresItemPageQuery(database, query, {
   includeOwnedItems = false,
   includeAlternateVersions = false,
   includePlaceholderRows = false,
+  countByType = false,
   groupByPresentationKey = false,
   includeOrdinal = false,
   nameAccessTypes = [],
@@ -2218,6 +2221,10 @@ export function buildPostgresItemPageQuery(database, query, {
   ctes.push(postCollapsePredicates.length
     ? `selected AS ${selectedMaterialization}(SELECT i.* FROM collapsed i WHERE ${postCollapsePredicates.join('\n    AND ')})`
     : `selected AS ${selectedMaterialization}(SELECT * FROM collapsed)`);
+  if (countByType) {
+    return Object.freeze({ text: `WITH RECURSIVE ${ctes.join(',\n')}
+SELECT "Type", count(*)::integer AS "Count" FROM selected GROUP BY "Type"`, values: Object.freeze(values) });
+  }
   if (useMemoryInsertion) {
     ctes.push(`memory_sort_input AS (
       SELECT memory_source.*, row_number() OVER (ORDER BY ${memoryInsertionSourceOrder.join(', ')}) AS "__input_ordinal",
@@ -2277,38 +2284,111 @@ export function buildPostgresItemPageQuery(database, query, {
   return Object.freeze({ text: orderedText, values: Object.freeze(values), startIndex, limit });
 }
 
-/** Execute a bounded, relational PostgreSQL item query and decode only its page. */
-export async function queryPostgresItemPage(database, query, options = {}) {
-  const plan = buildPostgresItemPageQuery(database, query, options);
-  const execute = async session => {
-    let result;
-    try { result = await session.client.query({ text: plan.text, values: plan.values, signal: options.signal }); }
-    catch (error) {
-      if (error.code === 'MM002') throw Object.assign(new TypeError("Value cannot be null. (Parameter 'source')", { cause: error }),
-        { status: 400, statusCode: 400 });
-      throw error;
-    }
-    const ids = result.rows.map(row => row.Id == null ? null : decodeNativeTextBytes(row.Id)).filter(id => id != null);
-    const total = result.rows.length ? Number(result.rows[0].TotalRecordCount) : 0;
-    if (!Number.isSafeInteger(total) || total < 0) throw new Error('PostgreSQL returned an invalid item count.');
+const itemPageSize = 128;
+
+function itemCount(selected) {
+  const count = Number(selected[0]?.TotalRecordCount ?? 0);
+  if (!Number.isSafeInteger(count) || count < 0) throw new Error('PostgreSQL returned an invalid item count.');
+  return count;
+}
+
+function itemQueryError(error) {
+  if (error?.code === 'MM002') return Object.assign(new TypeError("Value cannot be null. (Parameter 'source')", { cause: error }),
+    { status: 400, statusCode: 400 });
+  return error;
+}
+
+async function hydrateItemPage(session, selected, options) {
+  const slots = selected.filter(row => row.Id != null).map(row => ({ id: decodeNativeTextBytes(row.Id), slot: row.__SlotKey }));
+  const ordered = [];
+  for (let offset = 0; offset < slots.length; offset += itemPageSize) {
+    const ids = slots.slice(offset, offset + itemPageSize).map(value => value.id);
     const rows = ids.length ? await session.rows('BaseItems', { whereIn: { Id: ids } }) : [];
     const byId = new Map(rows.map(row => [String(row.Id).toLowerCase(), row]));
-    return {
-      rows: ids.map(id => byId.get(String(id).toLowerCase())).filter(Boolean),
-      total,
-      startIndex: plan.startIndex,
-      plan,
-      ...(options.nativeItemsPlan ? { slots: result.rows.filter(row => row.Id != null).map(row => ({
-        id: decodeNativeTextBytes(row.Id), slot: row.__SlotKey,
-      })) } : {}),
-    };
-  };
+    for (const id of ids) {
+      const row = byId.get(id.toLowerCase());
+      if (row) ordered.push(row);
+    }
+  }
+  return { rows: ordered, ...(options.nativeItemsPlan ? { slots } : {}) };
+}
+
+function executeItemSelection(database, options, execute) {
   const projectionCount = options.nativeVisibilityProjections?.length ?? 0;
   // Repository BoxSet visibility and its lazy-root probe also contain the
   // native relational visibility expressions, without a live-item source.
   return options.nativeItemsPlan || projectionCount > 0 || options.visibility?.boxSetStandalone === true
     ? withPostgresNativeQueryJitOff(database, execute)
     : execute(database);
+}
+
+/** Execute a relational item selection and hydrate only its requested window. */
+export async function queryPostgresItemPage(database, query, options = {}) {
+  const plan = buildPostgresItemPageQuery(database, query, options);
+  return readPostgresItemPlan(database, plan, options);
+}
+
+function readPostgresItemPlan(database, plan, options) {
+  return executeItemSelection(database, options, async session => {
+    let selected;
+    try { selected = (await session.client.query({ text: plan.text, values: plan.values, signal: options.signal })).rows; }
+    catch (error) { throw itemQueryError(error); }
+    return { ...await hydrateItemPage(session, selected, options), total: itemCount(selected), startIndex: plan.startIndex, plan };
+  });
+}
+
+/** Visit the same SQL-selected window in small batches, including when Limit is omitted. */
+export async function visitPostgresItemPages(session, query, options, visit) {
+  return visitPostgresItemPlanPages(session, buildPostgresItemPageQuery(session, query, options), options, visit);
+}
+
+export async function visitPostgresItemPlanPages(session, plan, options, visit) {
+  const { limit } = plan;
+  if (limit >= 0 && limit <= itemPageSize && !(options.resumableMode === 'memory' && limit === 0)) {
+    const page = await readPostgresItemPlan(session, plan, options);
+    await visit(page);
+    return { total: page.total, startIndex: page.startIndex };
+  }
+
+  const cursor = q('mm_item_page_' + randomUUID().replaceAll('-', ''));
+  const hold = !session.inTransaction;
+  const declare = db => executeItemSelection(db, options, current => current.client.query({
+    text: `DECLARE ${cursor} NO SCROLL CURSOR${hold ? ' WITH HOLD' : ''} FOR ${plan.text}`,
+    values: plan.values, signal: options.signal,
+  }));
+  let declared = false, primary, failed = false;
+  try {
+    // PostgreSQL retains the selected IDs and their order. Finish our own
+    // transaction before projecting DTOs, which may lazily persist by-name items.
+    if (hold) await session.transaction(declare, { readOnly: true, isolation: 'read-committed', signal: options.signal });
+    else await declare(session);
+    declared = true;
+    const fetch = async () => (await session.client.query({
+      text: `FETCH FORWARD ${itemPageSize} FROM ${cursor}`, signal: options.signal,
+    })).rows;
+    let selected = await fetch();
+    const total = itemCount(selected);
+    while (selected.length) {
+      await visit(await hydrateItemPage(session, selected, options));
+      if (selected.length < itemPageSize) break;
+      selected = await fetch();
+    }
+    return { total, startIndex: plan.startIndex };
+  } catch (error) {
+    failed = true;
+    primary = itemQueryError(error);
+    throw primary;
+  } finally {
+    if (declared) try { await session.client.query(`CLOSE ${cursor}`); }
+    catch (cleanup) {
+      if (hold) session.discardConnection(cleanup);
+      // Rollback also closes an ordinary cursor if the caller's transaction
+      // was already aborted by a failed statement.
+      if (hold || !failed || cleanup?.code !== '25P02') {
+        throw operationFailure(failed ? [primary, cleanup] : [cleanup], 'Item query cursor cleanup failed.');
+      }
+    }
+  }
 }
 
 function rebasePostgresParameters(text, offset) {

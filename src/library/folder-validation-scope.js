@@ -37,6 +37,8 @@ async function releaseResources(failed, failure, operations) {
 class FolderValidationScope {
   constructor({ session, store, library, linkedChildren, parent }, cohort) {
     Object.assign(this, { session, store, library, linkedChildren, parent, cohort });
+    this.alternatesReady = null;
+    this.reattachReady = null;
     const suffix = randomUUID().replaceAll('-', '');
     this.tables = Object.fromEntries(['source', 'current', 'paths', 'claims', 'valid', 'alternates',
       'removed', 'deferred', 'keys', 'matches'].map(name => [name, q('mm_folder_' + name + '_' + suffix)]));
@@ -53,13 +55,9 @@ class FolderValidationScope {
       CREATE TEMP TABLE ${t.paths}("PathKey" bytea PRIMARY KEY,"Key" text NOT NULL);
       CREATE TEMP TABLE ${t.claims}("Key" text PRIMARY KEY,"IdentityPathKey" bytea,"Type" bytea);
       CREATE TEMP TABLE ${t.valid}("Key" text PRIMARY KEY,"Ordinal" bigint NOT NULL UNIQUE,"SlotKey" uuid NOT NULL,
-        "AccessibleOrdinal" bigint UNIQUE,"AccessibleSlot" uuid);
-      CREATE TEMP TABLE ${t.alternates}("Key" text,"PathKey" bytea,PRIMARY KEY("Key","PathKey"));
-      CREATE INDEX ON ${t.alternates}("PathKey");
+        "AccessibleOrdinal" bigint UNIQUE,"AccessibleSlot" uuid,"Video" boolean NOT NULL);
       CREATE TEMP TABLE ${t.removed}("Key" text PRIMARY KEY,"Ordinal" bigserial UNIQUE,"SlotKey" uuid NOT NULL);
-      CREATE TEMP TABLE ${t.deferred}("Ordinal" bigserial PRIMARY KEY,"SlotKey" uuid,"PrimarySlot" uuid);
-      CREATE TEMP TABLE ${t.keys}("Key" bytea PRIMARY KEY);
-      CREATE TEMP TABLE ${t.matches}("Ordinal" bigint PRIMARY KEY,"SlotKey" uuid NOT NULL)`);
+      CREATE TEMP TABLE ${t.deferred}("Ordinal" bigserial PRIMARY KEY,"SlotKey" uuid,"PrimarySlot" uuid)`);
     // Validate the parent independently of child presence, including an empty
     // directory. No request cancellation is observed until capture completes.
     const parentState = await this.library.load(this.session, null, { includeUserData: false,
@@ -81,13 +79,23 @@ class FolderValidationScope {
       const state = await this.library.load(this.session, null, { includeUserData: false, baseRows });
       let failure, failed = false;
       try {
+        const page = [];
         for (const row of rows) {
           const item = state.byId.get(idKey(decodeNativeTextBytes(row.Id)));
-          if (!item) continue;
+          if (item) page.push({ item, ordinal: row.Ordinal });
+        }
+        if (page.length) {
+          const slots = await this.cohort.captureSlots(page.map(row => row.item));
           await this.query(`INSERT INTO ${t.current}("Key","Ordinal","SlotKey","PathKey","IdentityPathKey","Type","Deletable")
-            VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT("Key") DO NOTHING`, [idKey(item.Id), row.Ordinal,
-            await this.cohort.captureSlot(item), pathKey(item.Path), encode(nativePathKey(item.Path)), encode(item.NativeType),
-            isFileProtocol(item) && item.CanDelete !== false && !item.IsRoot]);
+            SELECT key,ordinal,slot,path,identity_path,type,deletable
+            FROM unnest($1::text[],$2::bigint[],$3::uuid[],$4::bytea[],$5::bytea[],$6::bytea[],$7::boolean[])
+              AS captured(key,ordinal,slot,path,identity_path,type,deletable)
+            ORDER BY ordinal ON CONFLICT("Key") DO NOTHING`, [
+            page.map(({ item }) => idKey(item.Id)), page.map(({ ordinal }) => ordinal), slots,
+            page.map(({ item }) => pathKey(item.Path)), page.map(({ item }) => encode(nativePathKey(item.Path))),
+            page.map(({ item }) => encode(item.NativeType)),
+            page.map(({ item }) => isFileProtocol(item) && item.CanDelete !== false && !item.IsRoot),
+          ]);
         }
       } catch (error) { failure = error; failed = true; throw error; }
       finally { await releaseResources(failed, failure, [() => state.dispose({ session: this.session })]); }
@@ -152,10 +160,10 @@ class FolderValidationScope {
 
   async valid(item, ordinal, accessible) {
     const slot = await this.cohort.captureSlot(item);
-    await this.query(`INSERT INTO ${this.tables.valid} VALUES($1,$2,$3,$4,$5) ON CONFLICT("Key") DO UPDATE SET
+    await this.query(`INSERT INTO ${this.tables.valid} VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT("Key") DO UPDATE SET
       "SlotKey"=EXCLUDED."SlotKey","AccessibleOrdinal"=COALESCE(${this.tables.valid}."AccessibleOrdinal",EXCLUDED."AccessibleOrdinal"),
-      "AccessibleSlot"=COALESCE(EXCLUDED."AccessibleSlot",${this.tables.valid}."AccessibleSlot")`,
-    [idKey(item.Id), ordinal, slot, accessible ? ordinal : null, accessible ? slot : null]);
+      "AccessibleSlot"=COALESCE(EXCLUDED."AccessibleSlot",${this.tables.valid}."AccessibleSlot"),"Video"=EXCLUDED."Video"`,
+    [idKey(item.Id), ordinal, slot, accessible ? ordinal : null, accessible ? slot : null, VIDEO_TYPES.has(item.Type)]);
   }
 
   async removed(item) {
@@ -212,26 +220,39 @@ class FolderValidationScope {
   }
 
   async captureAlternatePaths() {
-    await this.each(`SELECT * FROM ${this.tables.valid}`, async item => {
-      if (!VIDEO_TYPES.has(item.Type)) return;
+    const { alternates, valid } = this.tables;
+    // Native entity types are immutable. Keep the selection in SQL and read
+    // the selected videos' current paths in their original resolver order.
+    await this.each(`SELECT * FROM ${valid} WHERE "Video"`, async item => {
       const paths = item.LocalAlternateVersions ?? [];
       for (let offset = 0; offset < paths.length; offset += 128) {
-        await this.query(`INSERT INTO ${this.tables.alternates} SELECT $1,path FROM unnest($2::bytea[]) path
-          ON CONFLICT DO NOTHING`, [idKey(item.Id), paths.slice(offset, offset + 128).filter(Boolean).map(pathKey)]);
+        const keys = paths.slice(offset, offset + 128).filter(Boolean).map(pathKey);
+        if (!keys.length) continue;
+        this.alternatesReady ??= this.query(`CREATE TEMP TABLE ${alternates}("Key" text,"PathKey" bytea,PRIMARY KEY("Key","PathKey"));
+          CREATE INDEX ON ${alternates}("PathKey")`);
+        await this.alternatesReady;
+        await this.query(`INSERT INTO ${alternates} SELECT $1,path FROM unnest($2::bytea[]) path
+          ON CONFLICT DO NOTHING`, [idKey(item.Id), keys]);
       }
     });
   }
 
   async hasAlternate(identityPath) {
-    return (await this.query(`SELECT EXISTS(SELECT 1 FROM ${this.tables.alternates} WHERE "PathKey"=$1) AS present`, [pathKey(identityPath)])).rows[0].present;
+    const key = pathKey(identityPath);
+    if (!this.alternatesReady) return false;
+    await this.alternatesReady;
+    return (await this.query(`SELECT EXISTS(SELECT 1 FROM ${this.tables.alternates} WHERE "PathKey"=$1) AS present`, [key])).rows[0].present;
   }
 
   async primaryFor(paths, operation) {
     // Each path array belongs to one already captured Video, never a library
     // candidate set. The winner and its valid-child order are selected by SQL.
+    const keys = paths.filter(Boolean).map(pathKey);
+    if (!this.alternatesReady || !keys.length) return;
+    await this.alternatesReady;
     const row = (await this.query(`SELECT valid."SlotKey" FROM ${this.tables.valid} valid WHERE EXISTS(
       SELECT 1 FROM ${this.tables.alternates} alternate WHERE alternate."Key"=valid."Key" AND alternate."PathKey"=ANY($1::bytea[]))
-      ORDER BY valid."Ordinal" LIMIT 1`, [paths.filter(Boolean).map(pathKey)])).rows[0];
+      ORDER BY valid."Ordinal" LIMIT 1`, [keys])).rows[0];
     if (row) return this.cohort.withSlot(row.SlotKey, item => operation(item, row.SlotKey));
   }
 
@@ -239,6 +260,9 @@ class FolderValidationScope {
     const t = this.tables;
     if (!(await this.query(`SELECT EXISTS(SELECT 1 FROM ${t.removed}) AS present`)).rows[0].present) return;
     signal?.throwIfAborted();
+    this.reattachReady ??= this.query(`CREATE TEMP TABLE ${t.keys}("Key" bytea PRIMARY KEY);
+      CREATE TEMP TABLE ${t.matches}("Ordinal" bigint PRIMARY KEY,"SlotKey" uuid NOT NULL)`);
+    await this.reattachReady;
     // Freeze the complete key intersection before reattaching the first child.
     // A later key failure must not leave an earlier reattachment committed.
     await this.eachPage(`SELECT * FROM ${t.removed}`, async items => {

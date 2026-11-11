@@ -551,6 +551,23 @@ export function registerDomainRoutes(add, services) {
     try { return await library.getAncestors(guid(context, 'itemId'), { user: await optionalRequestUser(context) }); }
     catch (error) { if (error.status === 404) return notFound(); throw error; }
   });
+  add('GET', '/Items/Counts', async context => {
+    const isFavorite = boolean(context, 'isFavorite');
+    return library.queryItemCounts({ isFavorite }, { user: await optionalRequestUser(context) });
+  });
+  add('GET', '/Search/Hints', async context => {
+    const searchTerm = query(context, 'searchTerm');
+    if (!searchTerm || !clrTrim(searchTerm)) throw new BindingError('searchTerm', 'The searchTerm field is required.');
+    const input = { searchTerm, parentId: guid(context, 'parentId'), startIndex: integer(context, 'startIndex'),
+      limit: integer(context, 'limit'), includeItemTypes: commaEnums(context, 'includeItemTypes', itemKinds),
+      excludeItemTypes: commaEnums(context, 'excludeItemTypes', itemKinds), mediaTypes: commaEnums(context, 'mediaTypes', mediaTypes) };
+    for (const flag of ['isMovie', 'isSeries', 'isNews', 'isKids', 'isSports']) input[flag] = boolean(context, flag);
+    for (const flag of ['includePeople', 'includeMedia', 'includeGenres', 'includeStudios', 'includeArtists']) {
+      if (query(context, flag) === '') throw new BindingError(flag, "The value '' is invalid.");
+      input[flag] = boolean(context, flag, true);
+    }
+    return library.querySearchHints(input, { user: await optionalRequestUser(context), signal: context.signal });
+  });
   add('GET', ['/Items/{itemId}', '/Users/{userId}/Items/{itemId}'], async context => {
     try {
       const itemId = guid(context, 'itemId'), user = await requestUser(context, { required: false });

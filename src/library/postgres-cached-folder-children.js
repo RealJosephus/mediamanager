@@ -96,18 +96,28 @@ async function build({ session, library, item, children }, entry) {
     if (entry.invalidated) { binding.unbind(); return null; }
     construction = binding.retain();
     let ordinal = 0n;
-    const capture = async (child, live = children !== undefined) => {
-      const owner = acquireNativeItemLinkOwner(child);
+    const capturePage = async (values, { live = children !== undefined, map } = {}) => {
+      const page = [], pageOwners = [];
       let failure;
       try {
-        const slot = await cohort.capture(child, { ordinal: ++ordinal });
-        if (live) warm.set(slot, new WeakRef(child));
+        for (const value of values) {
+          let child = value;
+          if (map) {
+            child = map(value);
+            if (!child) continue;
+          }
+          pageOwners.push(acquireNativeItemLinkOwner(child));
+          page.push(child);
+        }
+        const slots = await cohort.captureSlots(page);
+        await cohort.appendSlots(slots, { ordinals: page.map(() => ++ordinal) });
+        if (live) for (const [index, child] of page.entries()) warm.set(slots[index], new WeakRef(child));
       } catch (error) { failure = error; throw error; }
       finally { await releaseAll(failure, 'Captured Folder child cleanup failed.',
-        [() => owner.release(), () => links.flushReleases({ session })]); }
+        [...pageOwners.map(owner => () => owner.release()), () => links.flushReleases({ session })]); }
     };
     if (children !== undefined) {
-      for (const child of children) await capture(child);
+      for (let offset = 0; offset < children.length; offset += 128) await capturePage(children.slice(offset, offset + 128));
     } else {
       if (ids && item.Type === 'AggregateFolder' && await ids.empty()) ids = null;
       if (ids) {
@@ -117,11 +127,20 @@ async function build({ session, library, item, children }, entry) {
           const rows = (await session.client.query({ text: `SELECT source."Ordinal",source."Id" FROM (${source.text}) source
             WHERE source."Ordinal">$${offset + 1} ORDER BY source."Ordinal" LIMIT 128`, values: [...source.values, after] })).rows;
           if (!rows.length) break;
-          for (const row of rows) {
-            const id = decodeNativeTextBytes(row.Id);
-            if (!nonemptyId(id)) throw libraryError(400, "Guid can't be empty (Parameter 'id')");
-            await library.itemCreation.withItem(id, child => child ? capture(child, true) : undefined);
-          }
+          const page = [], pageOwners = [];
+          let pageFailure;
+          try {
+            for (const row of rows) {
+              const id = decodeNativeTextBytes(row.Id);
+              if (!nonemptyId(id)) throw libraryError(400, "Guid can't be empty (Parameter 'id')");
+              await library.itemCreation.withItem(id, child => {
+                if (child) { pageOwners.push(acquireNativeItemLinkOwner(child)); page.push(child); }
+              });
+            }
+            await capturePage(page, { live: true });
+          } catch (error) { pageFailure = error; throw error; }
+          finally { await releaseAll(pageFailure, 'Folder child ID page cleanup failed.',
+            [...pageOwners.map(owner => () => owner.release()), () => links.flushReleases({ session })]); }
           after = BigInt(rows.at(-1).Ordinal);
         }
       } else {
@@ -144,10 +163,10 @@ async function build({ session, library, item, children }, entry) {
               const state = await library.load(current, null, { baseRows, includeUserData: true, includeFolderLinks: true, includeManualLinks: false, includeLinkGraph: true });
               let pageFailure;
               try {
-                for (const row of rows) {
+                await capturePage(rows, { live: false, map: row => {
                   const stored = state.byId.get(idKey(decodeNativeTextBytes(row.Id)));
-                  if (stored) await capture(hydrateNativeItemEntity(stored, stored.Type === 'Trailer' ? { trailerTypes: [] } : {}));
-                }
+                  return stored ? hydrateNativeItemEntity(stored, stored.Type === 'Trailer' ? { trailerTypes: [] } : {}) : null;
+                } });
               } catch (error) { pageFailure = error; throw error; }
               finally { await releaseAll(pageFailure, 'Cold Folder page release failed.', [() => state.dispose({ session: current })]); }
             }

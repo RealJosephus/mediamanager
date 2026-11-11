@@ -92,23 +92,27 @@ export async function createPostgresYearsSource(database, {
     return Object.freeze({ close, append,
       async capture(item) { active(); return cohort.captureSlot(item); },
       async withSlot(slot, operation) { active(); return cohort.withSlot(slot, operation); },
+      async withSlots(slots, operation) { active(); return cohort.withSlots(slots, operation); },
       async enqueue({ path, slot, id, kind = 'folder' }) {
         active(); await database.client.query(`INSERT INTO ${queue}(path,slot,id,kind) VALUES($1,$2,$3,$4)`, [path, slot, idKey(id), kind]);
       },
       async next() {
         active();
         for (;;) {
-          const row = (await database.client.query(`SELECT path,slot,id,kind FROM ${queue} WHERE NOT done ORDER BY path LIMIT 1`)).rows[0];
+          const row = (await database.client.query(`UPDATE ${queue} work SET done=TRUE
+            WHERE work.path=(SELECT path FROM ${queue} WHERE NOT done ORDER BY path LIMIT 1)
+            RETURNING work.path,work.slot,work.id,work.kind`)).rows[0];
           if (!row) return null;
-          await database.client.query(`UPDATE ${queue} SET done=TRUE WHERE path=$1`, [row.path]);
           if (mode === 'user-recursive' && row.kind === 'folder'
             && !(await database.client.query(`INSERT INTO ${visited}(id) VALUES($1) ON CONFLICT DO NOTHING`, [row.id])).rowCount) continue;
           return { ...row, path: row.path.map(BigInt) };
         }
       },
       async framePage(frame, after = 0n) {
-        active(); return (await database.client.query(`SELECT ordinal,slot FROM ${occurrences}
-          WHERE frame=$1 AND ordinal>$2 AND eligible ORDER BY ordinal LIMIT 128`, [frame, after])).rows.map(row => ({ ordinal: BigInt(row.ordinal), slot: row.slot }));
+        active(); return (await database.client.query(`SELECT ordinal,slot,id,runtime_kind,folder FROM ${occurrences}
+          WHERE frame=$1 AND ordinal>$2 AND eligible ORDER BY ordinal LIMIT 128`, [frame, after])).rows
+          .map(row => ({ ordinal: BigInt(row.ordinal), slot: row.slot, id: decodeNativeTextBytes(row.id),
+            type: decodeNativeTextBytes(row.runtime_kind), folder: row.folder }));
       },
       async setVisible(rows, mask) {
         active(); if (rows.length > 128 || rows.length !== mask.length || mask.some(value => typeof value !== 'boolean')) throw new TypeError('Year visibility needs one decision per bounded occurrence.');
@@ -144,6 +148,7 @@ export async function createPostgresYearsSource(database, {
         await database.client.query(`CREATE TEMP TABLE ${winners} AS ${selection}`);
         await database.client.query(`CREATE UNIQUE INDEX ON ${winners}(position)`);
         const plain = Object.freeze({ withSlot: (slot, operation) => cohort.withSlot(slot, operation),
+          withSlots: (slots, operation) => cohort.withSlots(slots, operation),
           async page(after = 0n) {
             active(); return (await database.client.query(`SELECT position,slot FROM ${winners}
               WHERE position>$1 ORDER BY position LIMIT 128`, [after])).rows.map(row => ({ position: BigInt(row.position), slot: row.slot }));
@@ -154,7 +159,9 @@ export async function createPostgresYearsSource(database, {
           for (let after = 0n;;) {
             const rows = await ordered.page(after);
             if (!rows.length) break;
-            for (const row of rows) await ordered.withSlot(row.slot, async item => {
+            let index = 0;
+            await ordered.withSlots(rows.map(row => row.slot), async item => {
+              const row = rows[index++];
               active();
               const year = item.ProductionYear;
               if (year != null && year > 0) {

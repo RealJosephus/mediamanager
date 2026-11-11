@@ -32,11 +32,12 @@ async function fixture(t) {
   assert.equal(links.relationDatabase.pool.options.max, 1);
   library = new LibraryService({ store, linkedChildren: links, serverId: 'folder-cohort' });
   const parent = Object.assign(newNativeItemEntity(folderType), { Id: id(1), Path: '/library', Name: 'Library' });
-  const seed = (number, fields = {}) => database.insert('BaseItems', postgresTestRow('BaseItems', {
+  const seedRow = (number, fields = {}) => postgresTestRow('BaseItems', {
     Id: id(number), Type: movieType, ParentId: parent.Id, Path: '/library/film-' + number + '.mkv',
     Name: 'Film ' + number, SortName: String(number).padStart(4, '0'), Data: '{}',
     DateCreated: '2026-10-16 00:00:00.0000000', DateModified: '2026-10-16 00:00:00.0000000', ...fields
-  }));
+  });
+  const seed = (number, fields) => database.insert('BaseItems', seedRow(number, fields));
   await seed(1, { Type: folderType, ParentId: null, IsFolder: true, Path: parent.Path });
   const run = operation => store.run(session => withFolderValidationScope({ session, store, library,
     linkedChildren: links, parent }, operation));
@@ -47,19 +48,19 @@ async function fixture(t) {
     assert.deepEqual((await database.client.query(`SELECT relname FROM pg_class WHERE relnamespace=pg_my_temp_schema()
       AND relname LIKE 'mm_folder_%'`)).rows, []);
   };
-  return { database, store, links, library, parent, seed, run, released };
+  return { database, store, links, library, parent, seed, seedRow, run, released };
 }
 
 test('postgres: folder validation freezes ordered repository children before mutation and bounds hydration to 128', pg, async t => {
   const f = await fixture(t);
-  await f.database.transaction(async () => {
-    for (let number = 2; number <= 261; number++) await f.seed(number);
-    await f.seed(400, { OwnerId: id(2) });
-    await f.seed(401, { OwnerId: id(2), ExtraType: 1 });
-    await f.seed(402, { PrimaryVersionId: id(2) });
-    await f.seed(403, { Type: 'Unknown.Plugin.Item' });
-    await f.seed(404, { ParentId: id(2) });
-  });
+  await f.database.transaction(session => session.insertBatch('BaseItems', [
+    ...Array.from({ length: 260 }, (_, index) => f.seedRow(index + 2)),
+    f.seedRow(400, { OwnerId: id(2) }),
+    f.seedRow(401, { OwnerId: id(2), ExtraType: 1 }),
+    f.seedRow(402, { PrimaryVersionId: id(2) }),
+    f.seedRow(403, { Type: 'Unknown.Plugin.Item' }),
+    f.seedRow(404, { ParentId: id(2) }),
+  ]));
   const load = f.library.load.bind(f.library), sizes = [];
   f.library.load = (session, user, options) => { sizes.push(options.baseRows.length); return load(session, user, options); };
   await f.run(async scope => {
@@ -102,10 +103,18 @@ test('postgres: accessible folder children outlive the request scope with resolv
   const first = Object.assign(newNativeItemEntity(movieType), { Id: id(10), Name: 'First', Path: '/library/first.mkv' });
   const second = Object.assign(newNativeItemEntity(movieType), { Id: id(11), Name: 'Second', Path: '/library/second.mkv' });
   const inaccessible = Object.assign(newNativeItemEntity(folderType), { Id: id(12), Name: 'Unavailable', Path: '/library/unavailable' });
+  const alternate = '/library/alternate.mkv';
   const children = await f.run(async scope => {
     await scope.valid(second, 2n, true);
     await scope.valid(first, 1n, true);
     await scope.valid(inaccessible, 3n, false);
+    await scope.captureAlternatePaths();
+    assert.equal(await scope.hasAlternate(alternate), false);
+    first.LocalAlternateVersions = [alternate];
+    second.LocalAlternateVersions = [alternate];
+    await scope.captureAlternatePaths();
+    assert.equal(await scope.hasAlternate(alternate), true);
+    assert.equal(await scope.primaryFor([alternate], item => item.Name), 'First');
     return scope.accessible();
   });
   try {
@@ -121,10 +130,10 @@ test('postgres: accessible folder children outlive the request scope with resolv
 
 test('postgres: malformed late children fail before reconciliation and release every captured page', pg, async t => {
   const f = await fixture(t);
-  await f.database.transaction(async () => {
-    for (let number = 2; number <= 131; number++) await f.seed(number);
-    await f.seed(132, { Type: 'MediaBrowser.Controller.Entities.UserView', Data: '{"DisplayParentId":"invalid-guid"}' });
-  });
+  await f.database.transaction(session => session.insertBatch('BaseItems', [
+    ...Array.from({ length: 130 }, (_, index) => f.seedRow(index + 2)),
+    f.seedRow(132, { Type: 'MediaBrowser.Controller.Entities.UserView', Data: '{"DisplayParentId":"invalid-guid"}' }),
+  ]));
   let called = false;
   await assert.rejects(f.run(() => { called = true; }), /Guid|GUID|Unrecognized/iu);
   assert.equal(called, false);

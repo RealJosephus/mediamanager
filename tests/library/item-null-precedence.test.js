@@ -1,11 +1,12 @@
 import { testFileSystem } from '../storage/plugin-files.js';
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash, randomUUID } from 'node:crypto';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
-import { tableDefinition } from '../../src/database/model.js';
+import { nativeModel, quoteIdentifier, tableDefinition } from '../../src/database/model.js';
+import { nativeInsertionOrderedTables, nativeRelationOrderDefinition } from '../../src/database/native-relation-order.js';
 import { EMPTY_ID, idKey, nonemptyId } from '../../src/library/records.js';
 import { applyNativeItemValues, newNativeItemEntity } from '../../src/library/native-item-entity.js';
 import { persistMetadata } from '../../src/metadata/persistence.js';
@@ -55,13 +56,28 @@ test('nullable list comparison rejects wrong inferred collections, lost values a
     assert.throws(() => compare(changed, expected), assert.AssertionError);
   }
 });
-async function databaseFor(t, dialect) {
-  const schema = 'item_null_precedence_' + randomUUID().replaceAll('-', '').slice(0, 16);
-  const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
-  const store = new DomainStore(database);
-  t.after(async () => { if (dialect === 'postgres') { await database.client.query(`DROP SCHEMA "${schema}" CASCADE`); await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`); } await store.close(); });
-  return { database, store };
+let databaseOwner;
+async function databaseForCase() {
+  if (!databaseOwner) {
+    const schema = 'item_null_precedence_' + randomUUID().replaceAll('-', '').slice(0, 16);
+    const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
+    const nativeTables = nativeModel.tables.map(table => `${quoteIdentifier(schema)}.${quoteIdentifier(table.name)}`);
+    const orderTables = nativeInsertionOrderedTables.map(table =>
+      `${quoteIdentifier(database.controlSchema)}.${quoteIdentifier(nativeRelationOrderDefinition(table).table)}`);
+    databaseOwner = { database, store: new DomainStore(database),
+      reset: `TRUNCATE TABLE ${[...nativeTables, ...orderTables].join(', ')} RESTART IDENTITY` };
+  } else {
+    // Every case seeds an empty catalog with fresh insertion positions. Keep
+    // the verified table definitions and the file's connection owner in place.
+    await databaseOwner.database.client.query(databaseOwner.reset);
+  }
+  return databaseOwner;
 }
+after(async () => {
+  if (!databaseOwner) return;
+  try { await databaseOwner.database.dropSchemasCreatedByThisOpen(); }
+  finally { await databaseOwner.store.close(); }
+});
 function stateFor(sample) {
   const item = related(sample.item), parents = sample.parents.map(related), folders = sample.collections.map(related);
   if (!Object.hasOwn(sample.item, 'ParentId')) item.ParentId = parents[0]?.Id ?? EMPTY_ID;
@@ -106,9 +122,9 @@ for (const sample of input) test('native mapper display columns ' + sample.name,
   if (!error) compare(columns, expected.mapperColumns);
 });
 const savedProjection = expected => Object.fromEntries(['values', 'maps', 'ancestors', 'storedDataIsNull', 'columns'].map(key => [key, expected[key]]));
-for (const dialect of ['postgres']) for (const sample of input) test(`${dialect}: actual collection discovery feeds metadata save ${sample.name}`,
-  { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    const { database, store } = await databaseFor(t, dialect), current = stateFor(sample), expected = native.results.find(value => value.name === sample.name);
+for (const sample of input) test(`postgres: actual collection discovery feeds metadata save ${sample.name}`,
+  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async () => {
+    const { database, store } = await databaseForCase(), current = stateFor(sample), expected = native.results.find(value => value.name === sample.name);
     await seedRelations(database, sample, current);
     const { item, state, folders } = current;
     const collections = collectionFoldersForItem(item, state, folders);
@@ -130,9 +146,9 @@ for (const dialect of ['postgres']) for (const sample of input) test(`${dialect}
 
 const scanSamples = input.filter(sample => !/^(parent|root|collection)-tags-null-/.test(sample.name) && sample.parents.length > 0 && !['Season', 'Episode'].includes(sample.item.type)
   && !['stale-persisted-ancestor', 'repeat-create'].includes(sample.name));
-for (const dialect of ['postgres']) for (const sample of scanSamples) test(`${dialect}: Folder validation creates native relations ${sample.name}`,
-  { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    const { database, store } = await databaseFor(t, dialect), current = stateFor(sample), expected = native.results.find(value => value.name === sample.name);
+for (const sample of scanSamples) test(`postgres: Folder validation creates native relations ${sample.name}`,
+  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+    const { database, store } = await databaseForCase(), current = stateFor(sample), expected = native.results.find(value => value.name === sample.name);
     const userRootId = '97b00000-0000-0000-0000-000000000008';
     await seedRelations(database, sample, current);
     await database.insert('BaseItems', { ...blank, Id: userRootId, Type: nativeType('UserRootFolder'), Name: 'User root', IsFolder: true, Data: '{}' });

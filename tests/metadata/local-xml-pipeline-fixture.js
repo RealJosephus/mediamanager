@@ -128,7 +128,8 @@ export async function runLocalXmlFailurePipeline(t, protocols, startActualAList)
       activeLookup = fault === 'links' ? 'links' : null;
       try {
         const result = await runtime.linkedChildren.xmlPaths(current.LinkedChildren, { parentId: current.Id, expandPath: loaded.context.expandPath });
-        return { manualCount: result.manualCount, pages: options => result.paths.pages(options), close: () => runtime.linkedChildren.release(result.paths) };
+        return { manualCount: result.manualCount, pages: options => runtime.linkedChildren.pages(result.paths, options),
+          close: () => runtime.linkedChildren.release(result.paths) };
       } finally { activeLookup = null; }
     };
     loaded.item.Name = 'New common title';

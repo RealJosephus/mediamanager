@@ -24,7 +24,6 @@ import { probeFileChanged } from '../storage/probe-lifecycle.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { computeBoxSetLibraryFolderIds, parentChainForItem } from './collection-membership.js';
 import { getNewItemId } from '../core/identity.js';
-import { readItemImageRows } from './image-order.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
 import { itemSupportsAncestors } from './item-relations.js';
 import { rebasedMetadataPath } from '../metadata/by-name-path.js';
@@ -44,6 +43,7 @@ import { DotIgnoreRule } from './dot-ignore-rule.js';
 import { loadPostgresMetadataRows, loadPostgresPageGraph,
   loadPostgresRowsByIds, queryPostgresPlaylistLibraryRoots } from './postgres-library-query.js';
 import { quoteIdentifier as q } from '../database/model.js';
+import { readMetadataRelationships } from '../metadata/metadata-baseline.js';
 
 export const metadataFields = ['Cast', 'Genres', 'ProductionLocations', 'Studios', 'Tags', 'Name', 'Overview', 'Runtime', 'OfficialRating'];
 const imageTypes = ['Primary', 'Art', 'Backdrop', 'Banner', 'Logo', 'Thumb', 'Disc', 'Box', 'Screenshot', 'Menu', 'Chapter', 'BoxRear', 'Profile'];
@@ -94,7 +94,7 @@ export function createMetadataContextLoader(options) {
     }
     return work;
   };
-  const capturePathScope = ({ imageAssets: accessAssets } = {}) => {
+  const capturePathScope = ({ imageAssets: accessAssets, fileSystem: scopedFileSystem = fileSystem } = {}) => {
     const configuration = currentConfiguration();
     const programDataPath = library.options.programDataPath;
     const metadataPath = library.options.metadataPath ?? (programDataPath && imageMetadataPath(programDataPath));
@@ -106,11 +106,11 @@ export function createMetadataContextLoader(options) {
       EnableCaseSensitiveItemIds: configuration.EnableCaseSensitiveItemIds,
       EnableNormalizedItemByNameIds: configuration.EnableNormalizedItemByNameIds,
     } };
-    return { ...roots, expandPath, reversePath,
-      libraryRuntimeOptions: { ...library.options, ...roots, expandPath, get configuration() { return currentConfiguration(); } },
+    return { ...roots, expandPath, reversePath, fileSystem: scopedFileSystem,
+      libraryRuntimeOptions: { ...library.options, ...roots, expandPath, fileSystem: scopedFileSystem, get configuration() { return currentConfiguration(); } },
       personIdentity: name => nativePersonIdentity(name, identityOptions),
       imageAssets: accessAssets ? accessAssets.withMetadataPath(metadataPath)
-        : new MetadataImageAssets({ fileSystem, vfs, identityMap: metadataIdentityMap, metadataPath }) };
+        : new MetadataImageAssets({ fileSystem: scopedFileSystem, vfs, identityMap: metadataIdentityMap, metadataPath }) };
   };
   ignoreRule ??= vfs && identityMap ? new DotIgnoreRule({ vfs, identityMap }) : undefined;
   const videoVersionDiscovery = vfs && identityMap ? new VideoVersionDiscovery({ store, library, vfs, identityMap, ignoreRule, resolveFile: videoPathResolver, externalData, logger }) : undefined;
@@ -121,22 +121,49 @@ export function createMetadataContextLoader(options) {
     try { return (await vfs.stat(path)).kind === 'file'; }
     catch (error) { if (error.code === 'not-found') return false; throw error; }
   };
-  const loadContext = (reference, { draft, includeChildren = false, paths = capturePathScope() } = {}) => {
+  // XML calls LibraryManager.GetPeople after its common frame has already
+  // reached the sink. Read at that boundary; refresh's initial credits are
+  // a different observation and cannot hide a later repository failure.
+  const getPeople = current => {
+    const currentPaths = capturePathScope();
+    return store.run(async database => {
+      const credits = (await database.rows('PeopleBaseItemMap', { where: { ItemId: current.Id } }))
+        .sort((left, right) => (left.ListOrder ?? 0) - (right.ListOrder ?? 0));
+      const people = credits.length ? await database.rows('Peoples', {
+        whereIn: { Id: [...new Set(credits.map(row => row.PeopleId))] } }) : [];
+      const identities = people.map(person => currentPaths.personIdentity(person.Name).Id);
+      const providerRows = identities.length ? await database.rows('BaseItemProviders', { whereIn: { ItemId: identities } }) : [];
+      const personImages = identities.length ? await readNativeImageRows(database, identities) : [];
+      return credits.map(credit => {
+        const person = people.find(value => sameId(value.Id, credit.PeopleId));
+        if (!person) throw new Error('A metadata person relation is missing its person.');
+        const personId = currentPaths.personIdentity(person.Name).Id;
+        const image = personImages.find(value => sameId(value.ItemId, personId) && value.ImageType === 0);
+        return { Name: person.Name, Type: person.PersonType ?? 'Unknown', Role: credit.Role, SortOrder: credit.SortOrder,
+          ProviderIds: Object.fromEntries(providerRows.filter(value => sameId(value.ItemId, personId)).map(value => [value.ProviderId, value.ProviderValue])),
+          ImagePath: image ? currentPaths.expandPath(image.Path) : null };
+      });
+    });
+  };
+
+  const loadContext = (reference, { draft, forItemSave = false, includeChildren = false, paths = capturePathScope() } = {}) => {
     const owningScope = activeScope();
     return scopeWork(owningScope, () => store.run(async db => {
     // Capture before awaiting a database session. An actual child operation can
     // pass its own current scope through lookup, creation and hydration.
-    const { metadataPath, dataPath, expandPath, reversePath, personIdentity, imageAssets } = paths;
-    const userViewAssets = new MetadataImageAssets({ fileSystem, metadataPath, stateRoots: library.options.programDataPath
-      ? [imagePathApiForRoot(library.options.programDataPath).join(library.options.programDataPath, 'root')] : [] });
-    const internalAssets = new MetadataImageAssets({ fileSystem, vfs, identityMap, metadataPath,
-      stateRoots: [library.options.programDataPath && imagePathApiForRoot(library.options.programDataPath).join(library.options.programDataPath, 'root'), dataPath].filter(Boolean) });
+    const { programDataPath, metadataPath, dataPath, expandPath, reversePath, personIdentity, imageAssets } = paths;
+    const scopedFileSystem = paths.fileSystem ?? fileSystem;
+    const captureContextPaths = scopeOptions => capturePathScope({ fileSystem: scopedFileSystem, ...scopeOptions });
+    const userViewAssets = new MetadataImageAssets({ fileSystem: scopedFileSystem, metadataPath, stateRoots: programDataPath
+      ? [imagePathApiForRoot(programDataPath).join(programDataPath, 'root')] : [] });
+    const internalAssets = new MetadataImageAssets({ fileSystem: scopedFileSystem, vfs, identityMap, metadataPath,
+      stateRoots: [programDataPath && imagePathApiForRoot(programDataPath).join(programDataPath, 'root'), dataPath].filter(Boolean) });
     // Instance-owned XML keeps its own storage mapping even under media roots.
-    const stateLocalXmlAssets = new MetadataImageAssets({ fileSystem, metadataPath, stateRoots: [dataPath].filter(Boolean) });
-    const managedCollectionAssets = new MetadataImageAssets({ fileSystem, metadataPath,
-      stateRoots: [library.options.programDataPath, dataPath].filter(Boolean) });
-    const instanceIgnoreAssets = new MetadataImageAssets({ fileSystem, metadataPath,
-      stateRoots: [library.options.programDataPath, dataPath].filter(Boolean) });
+    const stateLocalXmlAssets = new MetadataImageAssets({ fileSystem: scopedFileSystem, metadataPath, stateRoots: [dataPath].filter(Boolean) });
+    const managedCollectionAssets = new MetadataImageAssets({ fileSystem: scopedFileSystem, metadataPath,
+      stateRoots: [programDataPath, dataPath].filter(Boolean) });
+    const instanceIgnoreAssets = new MetadataImageAssets({ fileSystem: scopedFileSystem, metadataPath,
+      stateRoots: [programDataPath, dataPath].filter(Boolean) });
     const rootFileData = new RootFolderFileData({ assets: internalAssets, expandPath });
     const stateExtraDiscovery = assets => new OwnedExtraDiscovery({ files: stateOwnedFiles(assets),
       ignoreRule: new DotIgnoreRule({ fileAccess: stateIgnoreFileAccess(instanceIgnoreAssets, ignoreRule?.fileAccess) }),
@@ -160,24 +187,39 @@ export function createMetadataContextLoader(options) {
     };
     try {
     const referenceId = typeof reference === 'string' ? nativeGuid(reference) : reference.Id;
-    const targetRow = (await loadPostgresRowsByIds(db, [referenceId]))[0];
+    const targetRows = await loadPostgresRowsByIds(db, [referenceId]), targetRow = targetRows[0];
     const targetType = draft?.Type ?? String(targetRow?.Type ?? '').split('.').at(-1);
     const targetName = draft?.Name ?? targetRow?.Name;
-    let scopedRows = await loadPostgresMetadataRows(db, referenceId, { targetType, targetName, configuration: currentConfiguration(), includeChildren:false });
+    // Discovery, hydration and the conflict baseline share this exact observed
+    // row. A later edit must be rejected, not adopted as the stale item's base.
+    const loadMetadataRows = database => loadPostgresMetadataRows(database, referenceId, { targetRows,
+      targetType, targetName, configuration: currentConfiguration(), includeChildren:false });
+    const loadState = baseRows => library.load(db, null, { baseRows, includeManualLinks:false,
+      includeFolderLinks:false, includeLinkGraph:false, expandPath });
     // A newly resolved draft has no BaseItems row yet. Seed its bounded
     // relationship frame from the live references so persistence can still
     // derive the physical top parent and TV relationships without loading
     // the catalogue.
-    if (draft) {
-      const references = [draft.ParentId, draft.TopParentId, draft.NativeTopParentId,
-        draft.SeasonId, draft.SeriesId, draft.OwnerId, draft.PrimaryVersionId].filter(nonemptyId);
+    const references = draft ? [draft.ParentId, draft.TopParentId, draft.NativeTopParentId,
+      draft.SeasonId, draft.SeriesId, draft.OwnerId, draft.PrimaryVersionId].filter(nonemptyId) : [];
+    // The standalone Year has no upward relationships. Collection membership
+    // reads the active user root's actual children, even in an empty frame.
+    const hostedRoot = library.rootHost?.userRootFolder;
+    if (forItemSave && targetType === 'Year' && !targetRows.length && !references.length
+      && hostedRoot && sameId(hostedRoot.Id, library.options.userRoot?.Id)) {
+      state = await loadState([]);
+    }
+    const rootOnly = Boolean(state) && state.liveUserRoot === hostedRoot;
+    if (!rootOnly) {
+      await state?.dispose({ session: db });
+      let scopedRows = await loadMetadataRows(db);
       if (references.length) {
         const referenceRows = await loadPostgresRowsByIds(db, references);
         scopedRows = await loadPostgresPageGraph(db, referenceRows, scopedRows,
           { includeManualLinks:false });
       }
+      state = await loadState(scopedRows);
     }
-    state = await library.load(db, null, { baseRows: scopedRows, includeManualLinks:false, includeFolderLinks:false, includeLinkGraph:false, expandPath });
     const item = draft ?? state.byId.get(idKey(referenceId));
     if (!item) throw libraryError(404, 'Metadata item not found.');
     itemOwner = acquireNativeItemLinkOwner(item);
@@ -187,7 +229,7 @@ export function createMetadataContextLoader(options) {
     if (!draft && nativeItemDescriptor(item.NativeType).family === 'folder') item.LinkedChildren = await linkedChildren.load(db, item.Id);
     const collectionsPath = dataPath && imagePathApiForRoot(dataPath).join(dataPath, 'collections');
     const declaredStateRoot = filename => typeof filename === 'string' && imagePathApiForRoot(filename).isAbsolute(filename)
-      && [dataPath, library.options.programDataPath].filter(Boolean).find(root =>
+      && [dataPath, programDataPath].filter(Boolean).find(root =>
         nativeFileSystemPathsEqual(filename, root) || nativeContainsSubPath(filename, root));
     // Native FindFolders also selects a direct AggregateFolder child whose
     // path contains DataPath/collections. Only that declared state ancestor
@@ -268,7 +310,7 @@ export function createMetadataContextLoader(options) {
     if (series) Object.assign(item, { SeriesProviderIds: series.ProviderIds, SeriesDisplayOrder: series.DisplayOrder });
     if (season) Object.assign(item, { SeasonProviderIds: season.ProviderIds, SeasonIndexNumber: season.IndexNumber });
     if (item.Type === 'Episode') item.IsMissingEpisode = item.LocationType === 'Virtual';
-    const context = { fileSystem, linkedChildren, spoolRoot, expandPath, capturePathScope, people: [], images: [], mediaStreams: [], tracks: [], albums: [], userData: null,
+    const context = { fileSystem: scopedFileSystem, linkedChildren, spoolRoot, expandPath, capturePathScope: captureContextPaths, people: [], images: [], mediaStreams: [], tracks: [], albums: [], userData: null,
       getUserData: (current, userId) => {
         const id = nativeGuid(userId);
         return store.run(async database => (await database.rows('Users', { where: { Id: id } })).length
@@ -314,7 +356,7 @@ export function createMetadataContextLoader(options) {
     await refreshMetadataPathContext();
     if (item.Type === 'Playlist') {
       try {
-        const info = context.localPath ? await fileSystem.stat(context.localPath) : await vfs.stat(context.accessPath);
+        const info = context.localPath ? await scopedFileSystem.stat(context.localPath) : await vfs.stat(context.accessPath);
         setNativePlaylistFileState(item, context.localPath ? info.isFile() : info.kind === 'file');
       } catch {
         // Directory.Exists returns false for an absent path, so a missing path
@@ -331,8 +373,14 @@ export function createMetadataContextLoader(options) {
       return { series, season, lookup: metadataLookup(value, loaded?.parents ?? parents), context: { ...context,
         seriesPath: value.Type === 'Season' && series?.Path ? access(series) : undefined } };
     };
-    const peopleLinks = (await db.rows('PeopleBaseItemMap', { where: { ItemId: item.Id } }))
-      .sort((a, b) => (a.ListOrder ?? 0) - (b.ListOrder ?? 0));
+    const relationshipTables = ['BaseItemProviders', 'BaseItemMetadataFields', 'PeopleBaseItemMap', 'BaseItemImageInfos', 'ItemValuesMap'];
+    if (itemSupportsAncestors(item)) relationshipTables.push('AncestorIds');
+    // Each relation of a new standalone Year requires its BaseItems owner.
+    // The save still checks the row and every relation in its transaction.
+    const relationships = rootOnly && !db.inTransaction
+      ? Object.fromEntries(relationshipTables.map(table => [table, []]))
+      : await readMetadataRelationships(db, item.Id, relationshipTables, { checkEmpty: !targetRow });
+    const peopleLinks = relationships.PeopleBaseItemMap.toSorted((a, b) => (a.ListOrder ?? 0) - (b.ListOrder ?? 0));
     const peopleRows = peopleLinks.length
       ? await db.rows('Peoples', { whereIn: { Id: [...new Set(peopleLinks.map(row => row.PeopleId))] } })
       : [];
@@ -352,8 +400,10 @@ export function createMetadataContextLoader(options) {
       }
     }
     const imageItemIds = [item.Id, ...personItemIds];
-    const imageRows = await readNativeImageRows(db, imageItemIds);
-    context.images = (await readItemImageRows(db, item.Id)).map(row => ({ ...row, Type: imageTypes[row.ImageType] ?? row.ImageType, Path: expandPath(row.Path) }));
+    const imageRows = relationships.BaseItemImageInfos.length || personItemIds.length
+      ? await readNativeImageRows(db, imageItemIds) : [];
+    context.images = imageRows.filter(row => row.ItemId === item.Id)
+      .map(row => ({ ...row, Type: imageTypes[row.ImageType] ?? row.ImageType, Path: expandPath(row.Path) }));
     for (const row of peopleLinks) {
       const person = peopleRows.find(entry => sameId(entry.Id, row.PeopleId));
       if (!person) throw new Error('A metadata person relation is missing its person.');
@@ -362,39 +412,12 @@ export function createMetadataContextLoader(options) {
       context.people.push({ Name: person.Name, Type: person.PersonType ?? 'Unknown', Role: row.Role, SortOrder: row.SortOrder,
         ProviderIds: { ...personItem?.ProviderIds }, ImagePath: image ? expandPath(image.Path) : null });
     }
-    // XML calls LibraryManager.GetPeople after its common frame has already
-    // reached the sink. Read at that boundary; refresh's initial credits are
-    // a different observation and cannot hide a later repository failure.
-    context.getPeople = current => {
-      const currentPaths = capturePathScope();
-      return store.run(async database => {
-        const credits = (await database.rows('PeopleBaseItemMap', { where: { ItemId: current.Id } }))
-          .sort((left, right) => (left.ListOrder ?? 0) - (right.ListOrder ?? 0));
-        const people = credits.length ? await database.rows('Peoples', {
-          whereIn: { Id: [...new Set(credits.map(row => row.PeopleId))] } }) : [];
-        const identities = people.map(person => currentPaths.personIdentity(person.Name).Id);
-        const providerRows = identities.length ? await database.rows('BaseItemProviders', { whereIn: { ItemId: identities } }) : [];
-        const personImages = identities.length ? await readNativeImageRows(database, identities) : [];
-        return credits.map(credit => {
-          const person = people.find(value => sameId(value.Id, credit.PeopleId));
-          if (!person) throw new Error('A metadata person relation is missing its person.');
-          const personId = currentPaths.personIdentity(person.Name).Id;
-          const image = personImages.find(value => sameId(value.ItemId, personId) && value.ImageType === 0);
-          return { Name: person.Name, Type: person.PersonType ?? 'Unknown', Role: credit.Role, SortOrder: credit.SortOrder,
-            ProviderIds: Object.fromEntries(providerRows.filter(value => sameId(value.ItemId, personId)).map(value => [value.ProviderId, value.ProviderValue])),
-            ImagePath: image ? currentPaths.expandPath(image.Path) : null };
-        });
-      });
-    };
-    context.mediaStreams = (await db.rows('MediaStreamInfos', { where: { ItemId: item.Id } })).map(row => projectStream(row, library.options));
+    context.getPeople = getPeople;
     const childrenSource=createMetadataChildren({store,library,linkedChildren,get configuration(){return currentConfiguration();},libraryOptions});
     context.tracks=()=>childrenSource.tracks(item);context.albums=()=>childrenSource.albums(item);
 
     const saveLocalMetadataEnabled = item.SourceType !== 'Channel' && (libraryOptions.SaveLocalMetadata || ['Person', 'Genre', 'MusicGenre', 'Studio', 'Year', 'BoxSet', 'Playlist', 'UserView'].includes(item.Type)
       || item.Type === 'MusicArtist' && item.IsAccessedByName === true);
-    const relationships = {};
-    for (const table of ['BaseItemProviders', 'BaseItemMetadataFields', 'PeopleBaseItemMap', 'BaseItemImageInfos', 'ItemValuesMap']) relationships[table] = await db.rows(table, { where: { ItemId: item.Id } });
-    if (itemSupportsAncestors(item)) relationships.AncestorIds = await db.rows('AncestorIds', { where: { ItemId: item.Id } });
     const fileSystemMetadata = async signal => {
       if (!item.Path) return null;
       try {
@@ -499,7 +522,9 @@ export function createMetadataContextLoader(options) {
         const baseRows=(await database.client.query(`WITH family AS (SELECT $1::text AS key UNION SELECT ${sql.guidKey('"ChildId"')} FROM ${links} WHERE ${sql.guidKey('"ParentId"')}=$1 AND "ChildType"=2)
           SELECT "Id" FROM ${base} WHERE ${sql.guidKey('"OwnerId"')} IN (SELECT key FROM family) OR ${sql.guidKey('"ParentId"')}=$1 OR ${sql.guidKey('"Id"')} IN (SELECT key FROM family)`,[idKey(item.Id)])).rows;
         const selected=await loadPostgresRowsByIds(database,baseRows.map(row=>decodeNativeTextBytes(row.Id,'runtime')));
-        return library.load(database,null,{baseRows:await loadPostgresPageGraph(database,selected,state.items.map(value=>value.NativeRepositoryColumns).filter(Boolean),{includeManualLinks:false}),includeManualLinks:false,includeLinkGraph:true,expandPath});
+        const navigation = rootOnly ? await loadMetadataRows(database)
+          : state.items.map(value => value.NativeRepositoryColumns).filter(Boolean);
+        return library.load(database,null,{baseRows:await loadPostgresPageGraph(database,selected,navigation,{includeManualLinks:false}),includeManualLinks:false,includeLinkGraph:true,expandPath});
       }),
       getLocalAlternateVersionIds: prospectiveItem => store.run(async database => {
         const ids = (await database.rows('LinkedChildren', { where: { ParentId: item.Id, ChildType: 2 },
@@ -534,9 +559,9 @@ export function createMetadataContextLoader(options) {
         return itemParentalRating(value, ratingState, library.options,
           earlier.found ? [] : await store.run(session => library.getCollectionFolders(value, { ...ratingState, db: session })));
       },
-      personIdentity, capturePathScope, reloadMetadataContext: loadContext,
+      personIdentity, capturePathScope: captureContextPaths, reloadMetadataContext: loadContext,
       imageAssets: context.imageAssets,
-      dataPath, metadataPath, fileSystem,
+      dataPath, metadataPath, fileSystem: scopedFileSystem,
       videoVersionDiscovery, versionItemCache, adoptVersionItem:value=>state.adoptItem(value), loadDraftContext: value => loadContext(value.Id, { draft: value, paths }),
       findOwnedExtras: (currentState, options) => (context.localPath && stateLocalXmlTypes.has(item.Type)
         ? managedCollectionItem ? managedCollectionExtraDiscovery : stateOwnedExtraDiscovery
@@ -560,7 +585,7 @@ export function createMetadataContextLoader(options) {
         }
         return inherited;
       },
-      snapshot: (await db.rows('BaseItems', { where: { Id: item.Id } }))[0] };
+      snapshot: targetRows.find(row => row.Id === item.Id) };
     // GetUserRootFolder registers a transient singleton without saving it.
     // Its first actual metadata save can insert the canonical root; merely
     // reading virtual folders or cancelling a refresh must not create a row.
@@ -585,7 +610,13 @@ export function createMetadataContextLoader(options) {
       const parts = await videoVersionDiscovery?.previewOwnedParts(loaded) ?? [];
       return previewContexts(parts);
     };
-    for (const extension of contextExtensions()) await extension.enrich(loaded, { database: db });
+    const extensions = contextExtensions();
+    // A standalone Year save needs its item and relation baselines. Stream
+    // hydration is only consumed by the full metadata context or extensions.
+    if (!rootOnly || extensions.length !== 0) {
+      context.mediaStreams = (await db.rows('MediaStreamInfos', { where: { ItemId: item.Id } })).map(row => projectStream(row, library.options));
+    }
+    for (const extension of extensions) await extension.enrich(loaded, { database: db });
     owningScope?.contexts.add(loaded);
     return loaded;
     } catch (error) {
@@ -595,7 +626,8 @@ export function createMetadataContextLoader(options) {
     }
     }));
   };
-  loadContext.library=library;loadContext.linkedChildren=linkedChildren;
+  loadContext.library=library;loadContext.linkedChildren=linkedChildren;loadContext.getPeople=getPeople;
+  loadContext.capturePathScope = capturePathScope;
   loadContext.withContext = (reference, options, operation) => scopeWork(activeScope(), async () => {
     const loaded = await loadContext(reference, options);
     const errors = [];
