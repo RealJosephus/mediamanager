@@ -257,19 +257,30 @@ export function preflightSqlite(database, { requireMigrationHistory = false, val
   if (integrity.length !== 1 || Object.values(integrity[0])[0] !== 'ok') differences.push('SQLite integrity check failed');
   if (database.prepare('PRAGMA foreign_key_check').all().length) differences.push('Foreign key violations');
   if (validateRows && !differences.length) for (const table of nativeModel.tables) {
-    for (const row of statement(database, `SELECT ${table.columns.map(column => sqliteCellProjection(column)).join(', ')} FROM ${q(table.name)}`).iterate()) {
-      for (const column of table.columns) {
-        try { encodeValue(column, decodeValue(column, row[column.name], 'sqlite', 'exchange'), 'sqlite'); }
+    const rows = statement(database, `SELECT ${table.columns.map(column => sqliteCellProjection(column)).join(', ')} FROM ${q(table.name)}`);
+    rows.setReturnArrays(true);
+    for (const row of rows.iterate()) {
+      for (let index = 0; index < table.columns.length; index++) {
+        const column = table.columns[index];
+        const value = row[index];
+        // Exchange accepts every original TEXT byte sequence. Check the
+        // projection here and the source storage class below without copying it.
+        if (column.type === 'TEXT' && value instanceof Uint8Array) continue;
+        try { encodeValue(column, decodeValue(column, value, 'sqlite', 'exchange'), 'sqlite'); }
         catch (error) { differences.push(`${table.name}.${column.name}: ${error.message}`); break; }
       }
       if (differences.length) break;
     }
     // Raw TEXT bytes can cross exchange without a Unicode decoding step.
     // Non-TEXT SQLite storage classes are not silently coerced by this view.
-    for (const column of table.columns.filter(entry => entry.type === 'TEXT')) {
-      if (database.prepare(`SELECT 1 FROM ${q(table.name)} WHERE ${q(column.name)} IS NOT NULL AND typeof(${q(column.name)}) <> 'text' LIMIT 1`).get()) {
-        differences.push(`${table.name}.${column.name}: unexpected native TEXT storage class`); break;
-      }
+    const textColumns = table.columns.filter(entry => entry.type === 'TEXT');
+    if (textColumns.length) {
+      // Inspect every original storage class in one table scan. The minimum
+      // column position preserves the earlier column-wise failure selection.
+      const invalidColumn = database.prepare(`SELECT MIN(CASE ${textColumns.map((column, index) =>
+        `WHEN ${q(column.name)} IS NOT NULL AND typeof(${q(column.name)}) <> 'text' THEN ${index}`).join(' ')}
+        ELSE NULL END) AS invalid_column FROM ${q(table.name)}`).get().invalid_column;
+      if (invalidColumn !== null) differences.push(`${table.name}.${textColumns[invalidColumn].name}: unexpected native TEXT storage class`);
     }
     if (differences.length) break;
   }

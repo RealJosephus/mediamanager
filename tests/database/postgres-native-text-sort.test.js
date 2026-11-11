@@ -27,7 +27,7 @@ test('actual PostgreSQL native TEXT projection preserves complete UTF8 bytes, es
     String.raw`C:\Library\Movie.mkv`, '/library/%25literal', 'Café 中文 😀', 'e\u0301', '\0', '\u0001', '\0\u0001',
     '\u00010', '\u00011', '\u000110', '\u000111', '\u0001\u0001', '\u0001\0', '\0\u0001\0',
     '0\u00010\u00011\u000110\u0001110', 'literal\u00010 and \u00011',
-    'before\0between\u0001after', 'Unknown traceId & opaque bytes\0中文'];
+    'before\0between\u0001after', 'Unknown traceId & opaque bytes\0中文', '\uFEFF', '\uFEFFBOM\0\u0001中文😀'];
   const raw = values.map(value => value === null ? null : nativeTextBytes(value));
   const originals = raw.map(value => value === null ? null : Buffer.from(value));
   const expected = values.map(value => value === null ? null : nativeTextProjection(value));
@@ -51,6 +51,12 @@ test('actual PostgreSQL native TEXT projection preserves complete UTF8 bytes, es
   assert.deepEqual(result.rows.map(row => row.projected_ordinal_key), ordinalKeys,
     'ASCII, adjacent escaped NUL/SOH, literal escape suffixes and Unicode retain complete UTF16 code units.');
   assert.deepEqual(raw, originals, 'SQL projection leaves every original byte buffer unchanged.');
+
+  for (const value of ['\uD800', '\uDC00', 'before\uD800after']) {
+    const expectedError = { name: 'TypeError', message: 'Runtime TEXT must be a well-formed string.' };
+    assert.throws(() => nativeTextBytes(value), expectedError);
+    assert.throws(() => nativeTextProjection(value), expectedError);
+  }
 
   for (const value of [Buffer.from([0x80]), Buffer.from([0xc0, 0xaf]), Buffer.from([0xed, 0xa0, 0x80]),
     Buffer.from([0xf5, 0x80, 0x80, 0x80]), Buffer.from([0xe2, 0x82]), Buffer.from([0x00, 0x80]), Buffer.from([0xff, 0x00, 0x01])]) {

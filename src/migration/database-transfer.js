@@ -163,11 +163,25 @@ async function recoverPrivateSqliteStaging(staging, destination) {
 }
 
 export async function databaseDigest(database, { batchSize = 128, signal, rowTransform } = {}) {
-  if (rowTransform !== undefined && typeof rowTransform !== 'function') throw new TypeError('rowTransform must be a function');
-  const tables = [];
+  const [tables] = await databaseDigests(database, [rowTransform], { batchSize, signal });
+  return tables;
+}
+
+/** Read one stable database snapshot for both the raw and projected digests.
+ * A projection returns the original row only when its cells are unchanged. */
+export async function databaseDigestWithProjection(database, projectRow, { signal } = {}) {
+  if (typeof projectRow !== 'function') throw new TypeError('A database digest projection is required');
+  const [tables, projectedTables] = await databaseDigests(database, [undefined, projectRow], { batchSize: 128, signal });
+  return { tables, projectedTables };
+}
+
+async function databaseDigests(database, transforms, { batchSize, signal }) {
+  if (transforms.some(transform => transform !== undefined && typeof transform !== 'function')) throw new TypeError('rowTransform must be a function');
+  const results = transforms.map(() => []);
   for (const table of nativeModel.tables) {
     signal?.throwIfAborted();
-    const hash = createHash('sha256');
+    const hashes = transforms.map(() => createHash('sha256'));
+    const line = row => `${canonicalRow(table, row)}\n`;
     let count = 0;
     let after;
     for (;;) {
@@ -175,16 +189,22 @@ export async function databaseDigest(database, { batchSize = 128, signal, rowTra
       const page = await transferBatch(database, table, batchSize, after);
       const batch = page.rows;
       for (const original of batch) {
-        const row = rowTransform ? rowTransform(table.name, original) : original;
-        hash.update(`${canonicalRow(table, row)}\n`);
+        let unchanged;
+        for (let index = 0; index < transforms.length; index++) {
+          const transform = transforms[index];
+          const row = transform ? transform(table.name, original) : original;
+          hashes[index].update(row === original ? (unchanged ??= line(original)) : line(row));
+        }
       }
       count += batch.length;
       if (!page.more) break;
       after = page.after;
     }
-    tables.push({ name: table.name, rows: count, sha256: hash.digest('hex') });
+    for (const [index, hash] of hashes.entries()) {
+      results[index].push({ name: table.name, rows: count, sha256: hash.digest('hex') });
+    }
   }
-  return tables;
+  return results;
 }
 
 async function transferBatch(database, table, batchSize, after) {
@@ -350,8 +370,11 @@ export async function transferDatabase(source, target, options = {}) {
   if (requestedMountContract && target.dialect !== 'postgres') {
     throw new Error('A portable VFS mount contract can only be written to a PostgreSQL target');
   }
-  await source.preflight();
-  await target.preflight();
+  const sqliteSource = source.dialect === 'sqlite';
+  if (!sqliteSource) {
+    await source.preflight();
+    await target.preflight();
+  }
   if (source.dialect === 'postgres' && target.dialect === 'postgres') {
     const sourceDatabase = await source.databaseIdentity();
     const targetDatabase = await target.databaseIdentity();
@@ -392,7 +415,10 @@ export async function transferDatabase(source, target, options = {}) {
     // The contract envelope is immutable provenance, while sequence high-water
     // is live PostgreSQL state. Capture it only after the repeatable-read
     // snapshot exists and while the runtime writer boundary is still held.
+    // The SQLite envelope validates the source inside this read transaction.
+    // Validate the target after that check and before starting its writes.
     const envelope = await getNativeEnvelope(source);
+    if (sqliteSource) await target.preflight();
     if (sourceSnapshotLock) {
       sourceSnapshotLock = false;
       await releasePostgresSourceSnapshotLock(source);

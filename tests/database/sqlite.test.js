@@ -94,6 +94,22 @@ test('native TEXT preflight still rejects a BLOB storage class instead of coerci
   } finally { database.close(); }
 });
 
+test('native TEXT validation rejects corrupt cells across different rows until each is repaired', () => {
+  const database = new SqliteDatabase(':memory:', { create: true });
+  try {
+    seedAllTables(database);
+    const original = database.rows('BaseItems')[0], secondId = '99999999-0000-0000-0000-000000000001';
+    database.insert('BaseItems', { ...original, Id: secondId });
+    database.database.prepare('UPDATE "BaseItems" SET "Name" = ? WHERE "Id" = ?').run(Buffer.from([0xff, 0]), original.Id);
+    database.database.prepare('UPDATE "BaseItems" SET "Album" = ? WHERE "Id" = ?').run(Buffer.from([0, 1, 0xff]), secondId);
+    assert.throws(() => database.preflight(), /unexpected native TEXT storage class/u);
+    database.database.prepare('UPDATE "BaseItems" SET "Album" = NULL WHERE "Id" = ?').run(secondId);
+    assert.throws(() => database.preflight(), /BaseItems\.Name: unexpected native TEXT storage class/u);
+    database.database.prepare('UPDATE "BaseItems" SET "Name" = ? WHERE "Id" = ?').run(original.Name, original.Id);
+    database.preflight();
+  } finally { database.close(); }
+});
+
 test('upsert replaces omitted nullable columns when an existing native item changes type', () => {
   const database = new SqliteDatabase(':memory:', { create: true });
   try {
