@@ -2,6 +2,10 @@ import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { nativePathKey } from '../library/native-path.js';
 
 const decoder = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true });
+const runtimeText = value => {
+  if (typeof value !== 'string' || !value.isWellFormed()) throw new TypeError('Runtime TEXT must be a well-formed string.');
+  return value;
+};
 
 /** A raw native SQLite TEXT cell. Its bytes remain authoritative even when
  * they are not valid Unicode or JSON. Runtime strings are separate views. */
@@ -19,13 +23,12 @@ export class NativeTextCell {
 }
 
 export function nativeTextCell(value) {
-  if (typeof value !== 'string' || !value.isWellFormed()) throw new TypeError('Runtime TEXT must be a well-formed string.');
-  return new NativeTextCell(Buffer.from(value, 'utf8'));
+  return new NativeTextCell(Buffer.from(runtimeText(value), 'utf8'));
 }
 
 export function nativeTextBytes(value) {
   if (value instanceof NativeTextCell) return value.bytes();
-  return nativeTextCell(value).bytes();
+  return Buffer.from(runtimeText(value), 'utf8');
 }
 
 export function decodeNativeTextBytes(value, consumer = 'runtime') {
@@ -34,7 +37,7 @@ export function decodeNativeTextBytes(value, consumer = 'runtime') {
   return consumer === 'exchange' ? cell : cell.string();
 }
 
-const runtimeString = value => value instanceof NativeTextCell ? value.string() : nativeTextCell(value).string();
+const runtimeString = value => value instanceof NativeTextCell ? value.string() : runtimeText(value);
 
 /** SQL projections are derived views; NUL and literal SOH have distinct escapes. */
 export function nativeTextProjection(value) {

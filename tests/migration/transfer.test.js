@@ -1227,6 +1227,25 @@ test('cancellation rolls back target data and leaves source unchanged', async ()
   } finally { source.close(); target.close(); }
 });
 
+test('a rejected SQLite source releases its snapshot and can transfer after repair', async () => {
+  const source = new SqliteDatabase(':memory:', { create: true });
+  const target = new SqliteDatabase(':memory:', { create: true });
+  try {
+    seedAllTables(source);
+    const expected = await databaseDigest(source);
+    const empty = await databaseDigest(target);
+    const { Id, Name } = source.rows('BaseItems')[0];
+    const setName = source.database.prepare('UPDATE "BaseItems" SET "Name" = ? WHERE "Id" = ?');
+    setName.run(Buffer.from([0xff, 0]), Id);
+    await assert.rejects(transferDatabase(source, target), /BaseItems\.Name: unexpected native TEXT storage class/u);
+    assert.deepEqual(await databaseDigest(target), empty);
+    source.transaction(() => setName.run(Name, Id));
+    await transferDatabase(source, target);
+    assert.deepEqual(await databaseDigest(target), expected);
+    assert.deepEqual(await databaseDigest(source), expected);
+  } finally { source.close(); target.close(); }
+});
+
 test('real PostgreSQL round trip preserves every table, new writes, defaults, sequences and null ordering', { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-pg-'));
   const source = new SqliteDatabase(':memory:', { create: true });

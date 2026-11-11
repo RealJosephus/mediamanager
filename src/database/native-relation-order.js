@@ -59,7 +59,8 @@ export function postgresRelationOrderStatements(schema, controlSchema) {
  * Reassign only this batch's reserved positions without changing save order,
  * relationships or the sequence high-water mark. Updates keep their position. */
 export async function orderNativeItemBatch(database, itemIds) {
-  if (!itemIds.length) return;
+  // One insert already owns its final position; only a batch can reorder it.
+  if (itemIds.length < 2) return;
   return orderNativeItemSelection(database, { text: 'SELECT unnest($1::bytea[]) AS "Id"', values: [itemIds.map(nativeTextBytes)] });
 }
 
@@ -165,24 +166,32 @@ export async function scanNativeRelationRows(database, name, { after, limit, con
   const columns = tableDefinition(name).columns;
   if (!Number.isSafeInteger(limit) || limit < 1) throw new TypeError('A relation scan requires a positive batch size.');
   const selected = columns.map(column => database.dialect === 'sqlite' ? sqliteCellProjection(column, 'image') : `image.${q(column.name)}`).join(', ');
-  let rows;
   if (database.dialect === 'postgres') {
-    rows = (await database.client.query({
+    const { rows } = await database.client.query({
       text: `SELECT ${selected}, sequence.position AS "__position"
         FROM ${q(database.schemaName)}.${q(name)} image
         JOIN ${q(database.controlSchema)}.${q(table)} sequence ON ${keys.map(([key, column]) => `sequence.${q(key)} = image.${q(column)}`).join(' AND ')}
         ${after === undefined ? '' : 'WHERE sequence.position > $2::bigint'}
         ORDER BY sequence.position LIMIT $1`,
       values: after === undefined ? [limit] : [limit, after],
-    })).rows;
-  } else if (database.dialect === 'sqlite') {
-    const query = database.database.prepare(`SELECT ${selected}, image.rowid AS "__position"
-      FROM ${q(name)} image ${after === undefined ? '' : 'WHERE image.rowid > ?'}
-      ORDER BY image.rowid LIMIT ?`);
-    query.setReadBigInts(true);
-    rows = query.all(...(after === undefined ? [limit] : [after, limit]));
-  } else throw new TypeError('Unsupported relation database.');
-  return { rows: rows.map(row => decode(row, database.dialect, columns, consumer)), after: rows.at(-1)?.__position };
+    });
+    return { rows: rows.map(row => decode(row, 'postgres', columns, consumer)), after: rows.at(-1)?.__position };
+  }
+  if (database.dialect !== 'sqlite') throw new TypeError('Unsupported relation database.');
+  const query = database.database.prepare(`SELECT ${selected}, image.rowid AS "__position"
+    FROM ${q(name)} image ${after === undefined ? '' : 'WHERE image.rowid > ?'}
+    ORDER BY image.rowid LIMIT ?`);
+  query.setReadBigInts(true);
+  query.setReturnArrays(true);
+  const rows = query.all(...(after === undefined ? [limit] : [after, limit]));
+  return { rows: rows.map(row => {
+    const decoded = {};
+    for (let index = 0; index < columns.length; index++) {
+      const column = columns[index];
+      decoded[column.name] = decodeValue(column, row[index], 'sqlite', consumer);
+    }
+    return decoded;
+  }), after: rows.at(-1)?.[columns.length] };
 }
 
 /** EF SaveChanges orders new image commands by Guid before inserting them. */

@@ -834,6 +834,7 @@ export const postgresRuntimeIndexes = Object.freeze([
     'substring(mm_bytes_text_projection("Type") from \'[^.]+$\') = \'MusicArtist\''),
   index('mm_runtime_baseitems_media_type_sort_idx', 'BaseItems',
     '"MediaType", "SortName" ASC NULLS FIRST, "Id" ASC'),
+  index('mm_runtime_baseitems_production_year_idx', 'BaseItems', '"ProductionYear"'),
   index('mm_runtime_baseitems_sort_idx', 'BaseItems',
     '"SortName" ASC NULLS FIRST, "Id" ASC'),
   index('mm_runtime_baseitems_normalized_sort_idx', 'BaseItems',
