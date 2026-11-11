@@ -94,7 +94,7 @@ export function createMetadataContextLoader(options) {
     }
     return work;
   };
-  const capturePathScope = ({ imageAssets: accessAssets } = {}) => {
+  const capturePathScope = ({ imageAssets: accessAssets, fileSystem: scopedFileSystem = fileSystem } = {}) => {
     const configuration = currentConfiguration();
     const programDataPath = library.options.programDataPath;
     const metadataPath = library.options.metadataPath ?? (programDataPath && imageMetadataPath(programDataPath));
@@ -106,11 +106,11 @@ export function createMetadataContextLoader(options) {
       EnableCaseSensitiveItemIds: configuration.EnableCaseSensitiveItemIds,
       EnableNormalizedItemByNameIds: configuration.EnableNormalizedItemByNameIds,
     } };
-    return { ...roots, expandPath, reversePath,
-      libraryRuntimeOptions: { ...library.options, ...roots, expandPath, get configuration() { return currentConfiguration(); } },
+    return { ...roots, expandPath, reversePath, fileSystem: scopedFileSystem,
+      libraryRuntimeOptions: { ...library.options, ...roots, expandPath, fileSystem: scopedFileSystem, get configuration() { return currentConfiguration(); } },
       personIdentity: name => nativePersonIdentity(name, identityOptions),
       imageAssets: accessAssets ? accessAssets.withMetadataPath(metadataPath)
-        : new MetadataImageAssets({ fileSystem, vfs, identityMap: metadataIdentityMap, metadataPath }) };
+        : new MetadataImageAssets({ fileSystem: scopedFileSystem, vfs, identityMap: metadataIdentityMap, metadataPath }) };
   };
   ignoreRule ??= vfs && identityMap ? new DotIgnoreRule({ vfs, identityMap }) : undefined;
   const videoVersionDiscovery = vfs && identityMap ? new VideoVersionDiscovery({ store, library, vfs, identityMap, ignoreRule, resolveFile: videoPathResolver, externalData, logger }) : undefined;
@@ -121,22 +121,49 @@ export function createMetadataContextLoader(options) {
     try { return (await vfs.stat(path)).kind === 'file'; }
     catch (error) { if (error.code === 'not-found') return false; throw error; }
   };
+  // XML calls LibraryManager.GetPeople after its common frame has already
+  // reached the sink. Read at that boundary; refresh's initial credits are
+  // a different observation and cannot hide a later repository failure.
+  const getPeople = current => {
+    const currentPaths = capturePathScope();
+    return store.run(async database => {
+      const credits = (await database.rows('PeopleBaseItemMap', { where: { ItemId: current.Id } }))
+        .sort((left, right) => (left.ListOrder ?? 0) - (right.ListOrder ?? 0));
+      const people = credits.length ? await database.rows('Peoples', {
+        whereIn: { Id: [...new Set(credits.map(row => row.PeopleId))] } }) : [];
+      const identities = people.map(person => currentPaths.personIdentity(person.Name).Id);
+      const providerRows = identities.length ? await database.rows('BaseItemProviders', { whereIn: { ItemId: identities } }) : [];
+      const personImages = identities.length ? await readNativeImageRows(database, identities) : [];
+      return credits.map(credit => {
+        const person = people.find(value => sameId(value.Id, credit.PeopleId));
+        if (!person) throw new Error('A metadata person relation is missing its person.');
+        const personId = currentPaths.personIdentity(person.Name).Id;
+        const image = personImages.find(value => sameId(value.ItemId, personId) && value.ImageType === 0);
+        return { Name: person.Name, Type: person.PersonType ?? 'Unknown', Role: credit.Role, SortOrder: credit.SortOrder,
+          ProviderIds: Object.fromEntries(providerRows.filter(value => sameId(value.ItemId, personId)).map(value => [value.ProviderId, value.ProviderValue])),
+          ImagePath: image ? currentPaths.expandPath(image.Path) : null };
+      });
+    });
+  };
+
   const loadContext = (reference, { draft, forItemSave = false, includeChildren = false, paths = capturePathScope() } = {}) => {
     const owningScope = activeScope();
     return scopeWork(owningScope, () => store.run(async db => {
     // Capture before awaiting a database session. An actual child operation can
     // pass its own current scope through lookup, creation and hydration.
-    const { metadataPath, dataPath, expandPath, reversePath, personIdentity, imageAssets } = paths;
-    const userViewAssets = new MetadataImageAssets({ fileSystem, metadataPath, stateRoots: library.options.programDataPath
-      ? [imagePathApiForRoot(library.options.programDataPath).join(library.options.programDataPath, 'root')] : [] });
-    const internalAssets = new MetadataImageAssets({ fileSystem, vfs, identityMap, metadataPath,
-      stateRoots: [library.options.programDataPath && imagePathApiForRoot(library.options.programDataPath).join(library.options.programDataPath, 'root'), dataPath].filter(Boolean) });
+    const { programDataPath, metadataPath, dataPath, expandPath, reversePath, personIdentity, imageAssets } = paths;
+    const scopedFileSystem = paths.fileSystem ?? fileSystem;
+    const captureContextPaths = scopeOptions => capturePathScope({ fileSystem: scopedFileSystem, ...scopeOptions });
+    const userViewAssets = new MetadataImageAssets({ fileSystem: scopedFileSystem, metadataPath, stateRoots: programDataPath
+      ? [imagePathApiForRoot(programDataPath).join(programDataPath, 'root')] : [] });
+    const internalAssets = new MetadataImageAssets({ fileSystem: scopedFileSystem, vfs, identityMap, metadataPath,
+      stateRoots: [programDataPath && imagePathApiForRoot(programDataPath).join(programDataPath, 'root'), dataPath].filter(Boolean) });
     // Instance-owned XML keeps its own storage mapping even under media roots.
-    const stateLocalXmlAssets = new MetadataImageAssets({ fileSystem, metadataPath, stateRoots: [dataPath].filter(Boolean) });
-    const managedCollectionAssets = new MetadataImageAssets({ fileSystem, metadataPath,
-      stateRoots: [library.options.programDataPath, dataPath].filter(Boolean) });
-    const instanceIgnoreAssets = new MetadataImageAssets({ fileSystem, metadataPath,
-      stateRoots: [library.options.programDataPath, dataPath].filter(Boolean) });
+    const stateLocalXmlAssets = new MetadataImageAssets({ fileSystem: scopedFileSystem, metadataPath, stateRoots: [dataPath].filter(Boolean) });
+    const managedCollectionAssets = new MetadataImageAssets({ fileSystem: scopedFileSystem, metadataPath,
+      stateRoots: [programDataPath, dataPath].filter(Boolean) });
+    const instanceIgnoreAssets = new MetadataImageAssets({ fileSystem: scopedFileSystem, metadataPath,
+      stateRoots: [programDataPath, dataPath].filter(Boolean) });
     const rootFileData = new RootFolderFileData({ assets: internalAssets, expandPath });
     const stateExtraDiscovery = assets => new OwnedExtraDiscovery({ files: stateOwnedFiles(assets),
       ignoreRule: new DotIgnoreRule({ fileAccess: stateIgnoreFileAccess(instanceIgnoreAssets, ignoreRule?.fileAccess) }),
@@ -202,7 +229,7 @@ export function createMetadataContextLoader(options) {
     if (!draft && nativeItemDescriptor(item.NativeType).family === 'folder') item.LinkedChildren = await linkedChildren.load(db, item.Id);
     const collectionsPath = dataPath && imagePathApiForRoot(dataPath).join(dataPath, 'collections');
     const declaredStateRoot = filename => typeof filename === 'string' && imagePathApiForRoot(filename).isAbsolute(filename)
-      && [dataPath, library.options.programDataPath].filter(Boolean).find(root =>
+      && [dataPath, programDataPath].filter(Boolean).find(root =>
         nativeFileSystemPathsEqual(filename, root) || nativeContainsSubPath(filename, root));
     // Native FindFolders also selects a direct AggregateFolder child whose
     // path contains DataPath/collections. Only that declared state ancestor
@@ -283,7 +310,7 @@ export function createMetadataContextLoader(options) {
     if (series) Object.assign(item, { SeriesProviderIds: series.ProviderIds, SeriesDisplayOrder: series.DisplayOrder });
     if (season) Object.assign(item, { SeasonProviderIds: season.ProviderIds, SeasonIndexNumber: season.IndexNumber });
     if (item.Type === 'Episode') item.IsMissingEpisode = item.LocationType === 'Virtual';
-    const context = { fileSystem, linkedChildren, spoolRoot, expandPath, capturePathScope, people: [], images: [], mediaStreams: [], tracks: [], albums: [], userData: null,
+    const context = { fileSystem: scopedFileSystem, linkedChildren, spoolRoot, expandPath, capturePathScope: captureContextPaths, people: [], images: [], mediaStreams: [], tracks: [], albums: [], userData: null,
       getUserData: (current, userId) => {
         const id = nativeGuid(userId);
         return store.run(async database => (await database.rows('Users', { where: { Id: id } })).length
@@ -329,7 +356,7 @@ export function createMetadataContextLoader(options) {
     await refreshMetadataPathContext();
     if (item.Type === 'Playlist') {
       try {
-        const info = context.localPath ? await fileSystem.stat(context.localPath) : await vfs.stat(context.accessPath);
+        const info = context.localPath ? await scopedFileSystem.stat(context.localPath) : await vfs.stat(context.accessPath);
         setNativePlaylistFileState(item, context.localPath ? info.isFile() : info.kind === 'file');
       } catch {
         // Directory.Exists returns false for an absent path, so a missing path
@@ -385,30 +412,7 @@ export function createMetadataContextLoader(options) {
       context.people.push({ Name: person.Name, Type: person.PersonType ?? 'Unknown', Role: row.Role, SortOrder: row.SortOrder,
         ProviderIds: { ...personItem?.ProviderIds }, ImagePath: image ? expandPath(image.Path) : null });
     }
-    // XML calls LibraryManager.GetPeople after its common frame has already
-    // reached the sink. Read at that boundary; refresh's initial credits are
-    // a different observation and cannot hide a later repository failure.
-    context.getPeople = current => {
-      const currentPaths = capturePathScope();
-      return store.run(async database => {
-        const credits = (await database.rows('PeopleBaseItemMap', { where: { ItemId: current.Id } }))
-          .sort((left, right) => (left.ListOrder ?? 0) - (right.ListOrder ?? 0));
-        const people = credits.length ? await database.rows('Peoples', {
-          whereIn: { Id: [...new Set(credits.map(row => row.PeopleId))] } }) : [];
-        const identities = people.map(person => currentPaths.personIdentity(person.Name).Id);
-        const providerRows = identities.length ? await database.rows('BaseItemProviders', { whereIn: { ItemId: identities } }) : [];
-        const personImages = identities.length ? await readNativeImageRows(database, identities) : [];
-        return credits.map(credit => {
-          const person = people.find(value => sameId(value.Id, credit.PeopleId));
-          if (!person) throw new Error('A metadata person relation is missing its person.');
-          const personId = currentPaths.personIdentity(person.Name).Id;
-          const image = personImages.find(value => sameId(value.ItemId, personId) && value.ImageType === 0);
-          return { Name: person.Name, Type: person.PersonType ?? 'Unknown', Role: credit.Role, SortOrder: credit.SortOrder,
-            ProviderIds: Object.fromEntries(providerRows.filter(value => sameId(value.ItemId, personId)).map(value => [value.ProviderId, value.ProviderValue])),
-            ImagePath: image ? currentPaths.expandPath(image.Path) : null };
-        });
-      });
-    };
+    context.getPeople = getPeople;
     const childrenSource=createMetadataChildren({store,library,linkedChildren,get configuration(){return currentConfiguration();},libraryOptions});
     context.tracks=()=>childrenSource.tracks(item);context.albums=()=>childrenSource.albums(item);
 
@@ -555,9 +559,9 @@ export function createMetadataContextLoader(options) {
         return itemParentalRating(value, ratingState, library.options,
           earlier.found ? [] : await store.run(session => library.getCollectionFolders(value, { ...ratingState, db: session })));
       },
-      personIdentity, capturePathScope, reloadMetadataContext: loadContext,
+      personIdentity, capturePathScope: captureContextPaths, reloadMetadataContext: loadContext,
       imageAssets: context.imageAssets,
-      dataPath, metadataPath, fileSystem,
+      dataPath, metadataPath, fileSystem: scopedFileSystem,
       videoVersionDiscovery, versionItemCache, adoptVersionItem:value=>state.adoptItem(value), loadDraftContext: value => loadContext(value.Id, { draft: value, paths }),
       findOwnedExtras: (currentState, options) => (context.localPath && stateLocalXmlTypes.has(item.Type)
         ? managedCollectionItem ? managedCollectionExtraDiscovery : stateOwnedExtraDiscovery
@@ -622,7 +626,8 @@ export function createMetadataContextLoader(options) {
     }
     }));
   };
-  loadContext.library=library;loadContext.linkedChildren=linkedChildren;
+  loadContext.library=library;loadContext.linkedChildren=linkedChildren;loadContext.getPeople=getPeople;
+  loadContext.capturePathScope = capturePathScope;
   loadContext.withContext = (reference, options, operation) => scopeWork(activeScope(), async () => {
     const loaded = await loadContext(reference, options);
     const errors = [];

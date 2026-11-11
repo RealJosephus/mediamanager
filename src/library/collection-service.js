@@ -12,6 +12,7 @@ import { newNativeItemEntity } from './native-item-entity.js';
 import { updateLiveItemRepository } from './live-item-repository.js';
 import { queryPostgresItemPage } from '../database/postgres-item-query.js';
 import { quoteIdentifier } from '../database/model.js';
+import { ownStorageDirectories } from '../storage/ownership.js';
 
 const boxSetType = 'MediaBrowser.Controller.Entities.Movies.BoxSet';
 const defaultRefresh = () => ({ MetadataRefreshMode: 'Default', ImageRefreshMode: 'Default', IsAutomated: true });
@@ -28,6 +29,30 @@ const inside = (root, value) => {
   const relative = path.relative(path.toNamespacedPath(root), path.toNamespacedPath(value));
   return relative === '' || relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
 };
+const classifiedPathFailure = (error, codes) => {
+  try { return !Array.isArray(error?.errors) && codes.includes(error?.code); }
+  catch { return false; }
+};
+
+async function withCollectionCleanup(operation, cleanups) {
+  const errors = [];
+  let result;
+  try { result = await operation(); } catch (error) { errors.push(error); }
+  for (const cleanup of cleanups) try { await cleanup(); } catch (error) { errors.push(error); }
+  if (errors.length === 1) throw errors[0];
+  if (errors.length) {
+    const primary = errors[0];
+    let message = 'Collection operation cleanup failed.';
+    try { if (typeof primary?.message === 'string') message = primary.message; } catch { /* Preserve the original reason. */ }
+    const failure = new AggregateError(errors, message, { cause: primary });
+    for (const name of ['code', 'status', 'statusCode']) {
+      try { if (primary != null && Object.hasOwn(primary, name)) failure[name] = primary[name]; }
+      catch { /* Diagnostic access cannot replace the original reason. */ }
+    }
+    throw failure;
+  }
+  return result;
+}
 
 /** Collection mutations retain their live entity and the native side-effect
  * order. Queries only select the requested IDs or a single physical root. */
@@ -83,32 +108,43 @@ export class CollectionService extends EventEmitter {
     let admission;
     try { admission = this.libraryConfiguration.admitOperation(); }
     catch (error) { return Promise.reject(error); }
-    return this.#enqueue(async () => {
-      try { return await operation(admission); }
-      finally { admission.release(); }
-    });
+    return this.#enqueue(() => withCollectionCleanup(() => operation(admission), [() => admission.release()]));
   }
 
-  async #statePath(filename) {
+  #stateRoot(filename) {
     const stateRoot = [this.programDataPath, this.dataPath].find(root => inside(root, filename));
     if (!path.isAbsolute(filename) || !stateRoot) {
       throw libraryError(501, 'Managed collections must remain inside the isolated instance.');
     }
+    return stateRoot;
+  }
+
+  #ownStatePath(filename) {
+    const stateRoot = this.#stateRoot(filename), identities = [stateRoot];
+    // Identity prefixes can select unrelated access namespaces. Retain every
+    // checked path's actual mount, including missing mkdir ancestors, without
+    // turning those paths into new protected mount roots.
+    for (let ancestor = filename; path.relative(stateRoot, ancestor) !== ''; ancestor = path.dirname(ancestor)) identities.push(ancestor);
+    return ownStorageDirectories(this.fileSystem, identities, { requiredCapabilities: [], preserveMountRoots: true });
+  }
+
+  async #statePath(filename, fileSystem = this.fileSystem) {
+    const stateRoot = this.#stateRoot(filename);
     let root;
-    try { root = await this.fileSystem.realpath(stateRoot); }
-    catch (error) { if (error.code !== 'ENOENT') throw error; }
+    try { root = await fileSystem.realpath(stateRoot); }
+    catch (error) { if (!classifiedPathFailure(error, ['ENOENT'])) throw error; }
     let ancestor = filename;
     while (true) {
       try {
-        const actual = await this.fileSystem.realpath(ancestor);
+        const actual = await fileSystem.realpath(ancestor);
         if (!root || !inside(root, actual)) throw libraryError(501, 'Managed collections traverse an external link or junction.');
         return filename;
       } catch (error) {
-        if (!['ENOENT', 'ENOTDIR'].includes(error.code)) throw error;
+        if (!classifiedPathFailure(error, ['ENOENT', 'ENOTDIR'])) throw error;
         try {
-          await this.fileSystem.lstat(ancestor);
+          await fileSystem.lstat(ancestor);
           throw libraryError(501, 'Managed collections traverse an unresolved link or reparse point.');
-        } catch (linkError) { if (!['ENOENT', 'ENOTDIR'].includes(linkError.code)) throw linkError; }
+        } catch (linkError) { if (!classifiedPathFailure(linkError, ['ENOENT', 'ENOTDIR'])) throw linkError; }
         if (ancestor === stateRoot) return filename;
         ancestor = path.dirname(ancestor);
       }
@@ -123,8 +159,11 @@ export class CollectionService extends EventEmitter {
   async #collectionsFolder(createIfNeeded, admission) {
     const existing = await this.#findFolder();
     if (existing || !createIfNeeded) return existing;
-    await this.fileSystem.mkdir(await this.#statePath(this.collectionsPath), { recursive: true });
-    await this.#statePath(this.collectionsPath);
+    const files = this.#ownStatePath(this.collectionsPath);
+    await withCollectionCleanup(async () => {
+      await files.fileSystem.mkdir(await this.#statePath(this.collectionsPath, files.fileSystem), { recursive: true });
+      await this.#statePath(this.collectionsPath, files.fileSystem);
+    }, [() => files.close()]);
     const options = { ...defaultLibraryOptions(), PathInfos: [{ Path: this.collectionsPath }],
       EnableRealtimeMonitor: false, SaveLocalMetadata: true };
     const name = this.localization?.text('Collections', { culture: this.localization.serverCulture }) ?? 'Collections';
@@ -160,46 +199,48 @@ export class CollectionService extends EventEmitter {
     const parent = await this.#collectionsFolder(true, admission);
     if (!parent) throw libraryError(500, 'Unable to resolve the collections library folder, so the collection cannot be created.');
     const parentOwner = this.itemCreation.retainItem(parent);
-    try {
-    const filename = path.join(parent.Path, folderName);
-    await this.#statePath(filename);
-    await this.monitor.reportFileSystemChangeBeginning?.(filename);
-    let itemOwner, item;
-    try {
-    try {
-      await this.fileSystem.mkdir(filename, { recursive: true });
-      await this.#statePath(filename);
-      const info = await this.fileSystem.stat(filename, { bigint: true });
-      item = newNativeItemEntity(boxSetType);
-      itemOwner = this.itemCreation.retainItem(item);
-      item.Name = name; item.Path = filename; item.IsLocked = options.IsLocked === true;
-      item.ProviderIds = options.ProviderIds === undefined ? {} : options.ProviderIds;
-      item.DateCreated = nativeDateFromUnixNanoseconds(info.birthtimeNs);
-      item.DateModified = nativeDateFromUnixNanoseconds(info.mtimeNs);
-      item.ParentId = parent.Id;
-      item.Id = nativeGuid(getNewItemId(filename, boxSetType, {
-        programDataPath: this.programDataPath,
-        enableCaseSensitiveItemIds: this.library.options?.configuration?.EnableCaseSensitiveItemIds
-      }));
-      await this.itemCreation.createItems([item], parent);
-      await this.store.run(session => attachEmptyCollectionLinks(this, item, session));
-      const ids = options.ItemIdList === undefined ? [] : options.ItemIdList;
-      if (ids.length) await this.#add(item.Id, creationItemIds(ids), false,
-        { ...defaultRefresh(), MetadataRefreshMode: 'FullRefresh' });
-      else this.#queue(item, defaultRefresh());
-      this.emit('CollectionCreated', { Collection: item, Options: options });
-    } finally { await this.monitor.reportFileSystemChangeComplete?.(filename, false); }
-      // The controller projects after the native monitor completion, while
-      // the exact created instance still owns its current live relation.
-      return consume ? await consume(item) : item;
-    } finally {
-      itemOwner?.release();
-      await this.store.run(session => this.linkedChildren.flushReleases({ session }));
-    }
-    } finally {
-      parentOwner.release();
-      await this.store.run(session => this.linkedChildren.flushReleases({ session }));
-    }
+    return withCollectionCleanup(async () => {
+      const filename = path.join(parent.Path, folderName);
+      // Directory checks, creation and CreateItems' metadata context observe
+      // one admitted storage generation. Later member/queue stages commit
+      // independently and must capture their own current storage access.
+      const files = this.#ownStatePath(filename);
+      let itemOwner, item, monitorBegan = false;
+      return withCollectionCleanup(async () => {
+        await withCollectionCleanup(async () => {
+          await withCollectionCleanup(async () => {
+            await this.#statePath(filename, files.fileSystem);
+            await this.monitor.reportFileSystemChangeBeginning?.(filename);
+            monitorBegan = true;
+            await files.fileSystem.mkdir(filename, { recursive: true });
+            await this.#statePath(filename, files.fileSystem);
+            const info = await files.fileSystem.stat(filename, { bigint: true });
+            item = newNativeItemEntity(boxSetType);
+            itemOwner = this.itemCreation.retainItem(item);
+            item.Name = name; item.Path = filename; item.IsLocked = options.IsLocked === true;
+            item.ProviderIds = options.ProviderIds === undefined ? {} : options.ProviderIds;
+            item.DateCreated = nativeDateFromUnixNanoseconds(info.birthtimeNs);
+            item.DateModified = nativeDateFromUnixNanoseconds(info.mtimeNs);
+            item.ParentId = parent.Id;
+            item.Id = nativeGuid(getNewItemId(filename, boxSetType, {
+              programDataPath: this.programDataPath,
+              enableCaseSensitiveItemIds: this.library.options?.configuration?.EnableCaseSensitiveItemIds
+            }));
+            const paths = this.loadContext.capturePathScope?.({ fileSystem: files.fileSystem });
+            await this.itemCreation.createItems([item], parent, { paths });
+          }, [() => files.close()]);
+          await this.store.run(session => attachEmptyCollectionLinks(this, item, session));
+          const ids = options.ItemIdList === undefined ? [] : options.ItemIdList;
+          if (ids.length) await this.#add(item.Id, creationItemIds(ids), false,
+            { ...defaultRefresh(), MetadataRefreshMode: 'FullRefresh' });
+          else this.#queue(item, defaultRefresh());
+          this.emit('CollectionCreated', { Collection: item, Options: options });
+        }, [() => monitorBegan ? this.monitor.reportFileSystemChangeComplete?.(filename, false) : undefined]);
+        // The controller projects after the native monitor completion, while
+        // the exact created instance still owns its current live relation.
+        return consume ? await consume(item) : item;
+      }, [() => itemOwner?.release(), () => this.store.run(session => this.linkedChildren.flushReleases({ session }))]);
+    }, [() => parentOwner.release(), () => this.store.run(session => this.linkedChildren.flushReleases({ session }))]);
   }
 
   #withCollection(id, action, operation) {

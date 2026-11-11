@@ -5,6 +5,12 @@ import { buildPostgresItemPageQuery, queryPostgresItemPage } from '../database/p
 import { hydrateNativeItemEntity, acquireNativeItemLinkOwner } from './native-item-entity.js';
 import { quoteIdentifier as q } from '../database/model.js';
 import { nativeTextBytes } from '../database/native-text.js';
+import { operationFailure } from '../core/operation-failure.js';
+
+async function releaseResolutionResources(releases, errors) {
+  for (const release of releases) try { await release(); } catch (error) { errors.push(error); }
+  if (errors.length) throw operationFailure(errors, 'Linked-child resolution and cleanup failed.');
+}
 
 /** LibraryManager.FindByPath's default repository query and live final lookup
  * are shared by metadata and UserRoot resolution, independently of the parent. */
@@ -31,6 +37,7 @@ export async function resolvePostgresLinkedChildren({ session, item, links, link
     capturePage: async (rows, publishSlot) => {
       const state = await library.load(session, null, { baseRows: rows.map(row => row.baseRow),
         includeUserData: true, includeFolderLinks: true, includeManualLinks: false, includeLinkGraph: true });
+      const errors = [];
       try {
         for (const row of rows) {
           const stored = state.byId.get(idKey(row.baseRow.Id));
@@ -39,10 +46,13 @@ export async function resolvePostgresLinkedChildren({ session, item, links, link
           // empty type filter does not request the TrailerTypes navigation.
           const child = hydrateNativeItemEntity(stored, stored.Type === 'Trailer' ? { trailerTypes: [] } : {});
           const owner = acquireNativeItemLinkOwner(child);
+          const failures = [];
           try { await publishSlot(row.ordinal, await cohort.captureSlot(child)); }
-          finally { owner.release(); await linkedChildren.flushReleases({ session }); }
+          catch (error) { failures.push(error); }
+          await releaseResolutionResources([() => owner.release(), () => linkedChildren.flushReleases({ session })], failures);
         }
-      } finally { await state.dispose({ session }); }
+      } catch (error) { errors.push(error); }
+      await releaseResolutionResources([() => state.dispose({ session })], errors);
     }
   });
   for (let after = 0n; ; ) {
@@ -59,6 +69,7 @@ export async function resolvePostgresLinkedChildren({ session, item, links, link
       }
       const capture = async child => {
         const owner = child ? itemCreation.retainItem(child) : null;
+        const errors = [];
         try {
           const nextId = child ? child.Id : EMPTY_ID;
           // Commit live cache publication before a later lookup failure or
@@ -68,7 +79,8 @@ export async function resolvePostgresLinkedChildren({ session, item, links, link
           const slotKey = child ? await cohort.capture(child, { ordinal: ordinalOffset + link.Ordinal, session }) : null;
           await resolution.recordResolution(link.Ordinal, { itemId: nextId,
             resolvedId: child?.Id ?? null, slotKey });
-        } finally { owner?.release(); await linkedChildren.flushReleases({ session }); }
+        } catch (error) { errors.push(error); }
+        await releaseResolutionResources([() => owner?.release(), () => linkedChildren.flushReleases({ session })], errors);
       };
       const fallback = async () => {
         if (link.Path) return capture(await findByPath(makeNativeAbsolutePath(item.Path, link.Path)));

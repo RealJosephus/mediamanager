@@ -248,6 +248,7 @@ export class LibraryService extends EventEmitter {
     if (!store || !serverId) throw new TypeError('LibraryService requires store and serverId.');
     expandPath ??= programDataPath ? createVirtualPathExpander(options) : undefined;
     Object.assign(this, { store, options: { fileSystem, linkedChildren, serverId, libraryOptions, programDataPath, dataPath, get metadataPath() { return options.metadataPath; }, get configuration() { const { configuration = {} } = options; return configuration; }, expandPath, userRoot, userRootPath, localization, liveTv, externalUrlRegistry, musicBrainzServer, logger }, clock, onError });
+    this.options.reversePath = identity => this.options.programDataPath ? createVirtualPathReverser(this.options)(identity) : identity;
     this.options.filterSourceIds = (db, user, ids) => this.#filterMediaSourceIds(db, user, ids);
     this.#records = new BoundedItemCache(configuration.CacheSize ?? availableParallelism() * 100,
       { onRemove: item => { this.#recordOwners.get(item)?.release(); this.#recordOwners.delete(item); } });

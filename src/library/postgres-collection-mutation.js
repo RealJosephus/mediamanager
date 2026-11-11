@@ -7,6 +7,19 @@ import { createPostgresCollectionMembership } from './postgres-collection-member
 import { CollectionEventItems } from './collection-event-items.js';
 import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
+import { operationFailure } from '../core/operation-failure.js';
+
+async function withMemberCleanup(operation, cleanups) {
+  const errors = [];
+  let value;
+  try { value = await operation(); } catch (error) { errors.push(error); }
+  const primary = errors[0];
+  for (const cleanup of cleanups) {
+    try { await cleanup(primary); } catch (error) { errors.push(error); }
+  }
+  if (errors.length) throw operationFailure(errors, 'Collection membership operation failed.');
+  return value;
+}
 
 function requireLinks(collection) {
   if (collection.LinkedChildren === null) throw libraryError(500, 'A collection linked child relation cannot be null.');
@@ -33,23 +46,19 @@ async function event(parent, session, collection, membership, cohort, count, nam
   // non-deduplicated request relation, promoted before the TEMP can be dropped.
   await cohort.flush();
   const view = await cohort.view({ session, plan: membership.eventPlan() });
-  const items = new CollectionEventItems({ linkedChildren: parent.linkedChildren, view,
-    itemCreation: parent.itemCreation, store: parent.store, count: BigInt(count),
-    scope: parent.eventScope, collection });
-  try { parent.emit(name, { Collection: collection, Items: items }); }
-  finally { await items.release({ session }); }
+  let items;
+  await withMemberCleanup(() => {
+    items = new CollectionEventItems({ linkedChildren: parent.linkedChildren, view,
+      itemCreation: parent.itemCreation, store: parent.store, count: BigInt(count),
+      scope: parent.eventScope, collection });
+    parent.emit(name, { Collection: collection, Items: items });
+  }, [() => items ? items.release({ session }) : view.release({ session })]);
 }
 
 async function withCollectionOwner(parent, collection, operation) {
   const owner = parent.itemCreation.retainItem(collection);
-  let failure;
-  try { return await operation(); }
-  catch (error) { failure = error; throw error; }
-  finally {
-    owner.release();
-    try { await parent.store.run(session => parent.linkedChildren.flushReleases({ session })); }
-    catch (cleanup) { if (failure) throw new AggregateError([failure, cleanup], failure.message, { cause: failure }); throw cleanup; }
-  }
+  return withMemberCleanup(operation, [() => owner.release(),
+    () => parent.store.run(session => parent.linkedChildren.flushReleases({ session }))]);
 }
 
 /** The manager serializes this whole operation and supplies an inherited
@@ -64,8 +73,8 @@ async function addOwnedCollectionMembers(parent, collection, { query, ids, fireE
   refreshOptions }) {
   requireLinks(collection);
   return parent.store.run(async session => {
-    let membership, cohort, failure;
-    try {
+    let membership, cohort;
+    return withMemberCleanup(async () => {
       cohort = await createNativeItemCohort({ linkedChildren: parent.linkedChildren });
       membership = await createPostgresCollectionMembership(session, { collectionId: collection.Id,
         linksPlan: parent.linkedChildren.plan(collection.LinkedChildren, { session }) });
@@ -88,15 +97,7 @@ async function addOwnedCollectionMembers(parent, collection, { query, ids, fireE
       await parent.updateRepository(collection);
       parent.queueCollection(collection, { ...refreshOptions, ForceSave: true });
       if (fireEvent) await event(parent, session, collection, membership, cohort, count, 'ItemsAddedToCollection');
-    } catch (error) { failure = error; throw error; }
-    finally {
-      const errors = [];
-      for (const cleanup of [() => membership?.dispose(failure), () => cohort?.release()]) {
-        try { await cleanup(); } catch (error) { errors.push(error); }
-      }
-      if (errors.length) throw new AggregateError(failure ? [failure, ...errors] : errors,
-        'Collection operation cleanup failed.', failure ? { cause: failure } : undefined);
-    }
+    }, [primary => membership?.dispose(primary), () => cohort?.release()]);
   });
 }
 
@@ -114,16 +115,15 @@ async function removeOwnedCollectionMembers(parent, collection, ids, refreshOpti
     parent.queueCollection(collection, { ...refreshOptions, ForceSave: true });
     return parent.store.run(async session => {
       const cohort = await createNativeItemCohort({ linkedChildren: parent.linkedChildren });
-      try { await event(parent, session, collection, { eventPlan: () => ({
+      return withMemberCleanup(() => event(parent, session, collection, { eventPlan: () => ({
         text: 'SELECT NULL::bigint AS "Ordinal", NULL::uuid AS "SlotKey" WHERE FALSE', values: [] }) },
-      cohort, 0, 'ItemsRemovedFromCollection'); }
-      finally { await cohort.release(); }
+      cohort, 0, 'ItemsRemovedFromCollection'), [() => cohort.release()]);
     });
   }
   requireLinks(collection);
   return parent.store.run(async session => {
-    let membership, cohort, failure;
-    try {
+    let membership, cohort;
+    return withMemberCleanup(async () => {
       cohort = await createNativeItemCohort({ linkedChildren: parent.linkedChildren });
       membership = await createPostgresCollectionMembership(session, { collectionId: collection.Id,
         linksPlan: parent.linkedChildren.plan(collection.LinkedChildren, { session }) });
@@ -137,14 +137,6 @@ async function removeOwnedCollectionMembers(parent, collection, ids, refreshOpti
       await parent.updateRepository(collection);
       parent.queueCollection(collection, { ...refreshOptions, ForceSave: true });
       await event(parent, session, collection, membership, cohort, eventCount, 'ItemsRemovedFromCollection');
-    } catch (error) { failure = error; throw error; }
-    finally {
-      const errors = [];
-      for (const cleanup of [() => membership?.dispose(failure), () => cohort?.release()]) {
-        try { await cleanup(); } catch (error) { errors.push(error); }
-      }
-      if (errors.length) throw new AggregateError(failure ? [failure, ...errors] : errors,
-        'Collection operation cleanup failed.', failure ? { cause: failure } : undefined);
-    }
+    }, [primary => membership?.dispose(primary), () => cohort?.release()]);
   });
 }

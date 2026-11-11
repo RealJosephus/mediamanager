@@ -15,6 +15,7 @@ import { createNativeItemCohort } from './native-item-cohort.js';
 import { metadataChildSequence } from './metadata-child-sequence.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { clearFolderChildIds, releaseCachedFolderChildren, setFolderChildren } from './folder-cache.js';
+import { operationFailure } from '../core/operation-failure.js';
 
 export const physicalFolderNativeType = 'MediaBrowser.Controller.Entities.Folder';
 export const collectionFolderNativeType = 'MediaBrowser.Controller.Entities.CollectionFolder';
@@ -53,24 +54,23 @@ async function* linkedRows(linkedChildren, handle, session) {
 async function linkedChildrenSequenceEqual(linkedChildren, left, right, session) {
   const iterators = [linkedRows(linkedChildren, left, session)[Symbol.asyncIterator](),
     linkedRows(linkedChildren, right, session)[Symbol.asyncIterator]()];
-  let equal = false, failure;
+  let equal = false;
+  const errors = [];
   try {
     for (;;) {
       const leftRow = await iterators[0].next(), rightRow = await iterators[1].next();
       if (leftRow.done || rightRow.done) { equal = leftRow.done === rightRow.done; break; }
       if (!linkedChildEquals(leftRow.value, rightRow.value)) break;
     }
-  } catch (error) { failure = error; }
-  const cleanupErrors = [];
-  for (const iterator of iterators) try { await iterator.return?.(); } catch (error) { cleanupErrors.push(error); }
-  if (cleanupErrors.length) throw new AggregateError([...(failure ? [failure] : []), ...cleanupErrors],
-    failure?.message ?? 'Linked-child comparison cleanup failed.', failure ? { cause: failure } : undefined);
-  if (failure) throw failure;
+  } catch (error) { errors.push(error); }
+  for (const iterator of iterators) try { await iterator.return?.(); } catch (error) { errors.push(error); }
+  if (errors.length) throw operationFailure(errors, 'Linked-child comparison cleanup failed.');
   return equal;
 }
 
 async function appendFolderLinkedChildren(linkedChildren, writer, folder, session) {
-  let temporary, failure;
+  let temporary;
+  const errors = [];
   try {
     const source = folder.LinkedChildrenLoaded ? folder.LinkedChildren
       : temporary = await linkedChildren.load(session, folder.Id);
@@ -78,47 +78,44 @@ async function appendFolderLinkedChildren(linkedChildren, writer, folder, sessio
     for await (const page of linkedChildren.pages(source, { session })) {
       for (const row of page) await writer.append(row);
     }
-  } catch (error) { failure = error; }
+  } catch (error) { errors.push(error); }
   if (temporary) {
     try { await linkedChildren.release(temporary, { session }); }
-    catch (error) {
-      if (failure) throw new AggregateError([failure, error], failure.message, { cause: failure });
-      throw error;
-    }
+    catch (error) { errors.push(error); }
   }
-  if (failure) throw failure;
+  if (errors.length) throw operationFailure(errors, 'Physical-folder linked-child cleanup failed.');
 }
 
 async function refreshCollectionFolderLinkedChildren(loaded, physicalFolders) {
   const linkedChildren = loaded.linkedChildren, item = loaded.item;
   return linkedChildren.withSession(async session => {
-    let writer, replacement, currentTemporary, changed, failure, published = false;
+    let writer, replacement, currentTemporary, changed, published = false, finishing = false;
+    const errors = [];
     try {
       writer = await linkedChildren.createWriter({ session, parentId: item.Id });
       for (const folder of physicalFolders) await appendFolderLinkedChildren(linkedChildren, writer, folder, session);
+      finishing = true;
       replacement = await writer.finish();
       const current = item.LinkedChildrenLoaded ? item.LinkedChildren
         : currentTemporary = await linkedChildren.load(session, item.Id);
       changed = !await linkedChildrenSequenceEqual(linkedChildren, replacement, current, session);
       if (currentTemporary) {
-        await linkedChildren.release(currentTemporary, { session }); currentTemporary = null;
+        const temporary = currentTemporary; currentTemporary = null;
+        await linkedChildren.release(temporary, { session });
       }
       // Native CollectionFolder assigns the freshly flattened sequence even
       // when its comparer says that no repository save is required.
       try { publishNativeItemLinks(item, replacement); published = true; }
       catch (error) { published = item.LinkedChildren === replacement; throw error; }
-    } catch (error) { failure = error; }
+    } catch (error) { errors.push(error); }
 
-    const cleanupErrors = [];
-    try { await writer?.abort(); } catch (error) { cleanupErrors.push(error); }
+    if (!finishing) try { await writer?.abort(); } catch (error) { errors.push(error); }
     if (currentTemporary) try { await linkedChildren.release(currentTemporary, { session }); }
-    catch (error) { cleanupErrors.push(error); }
+    catch (error) { errors.push(error); }
     if (replacement && !published) try { await linkedChildren.release(replacement, { session }); }
-    catch (error) { cleanupErrors.push(error); }
-    try { await linkedChildren.flushReleases({ session }); } catch (error) { cleanupErrors.push(error); }
-    if (cleanupErrors.length) throw new AggregateError([...(failure ? [failure] : []), ...cleanupErrors],
-      failure?.message ?? 'CollectionFolder linked-child cleanup failed.', failure ? { cause: failure } : undefined);
-    if (failure) throw failure;
+    catch (error) { errors.push(error); }
+    try { await linkedChildren.flushReleases({ session }); } catch (error) { errors.push(error); }
+    if (errors.length) throw operationFailure(errors, 'CollectionFolder linked-child cleanup failed.');
     return changed;
   });
 }

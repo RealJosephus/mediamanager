@@ -1,3 +1,12 @@
+import { operationFailure } from '../core/operation-failure.js';
+
+async function releaseEventResources(releases, errors = []) {
+  for (const release of releases) {
+    try { await release(); } catch (error) { errors.push(error); }
+  }
+  if (errors.length) throw operationFailure(errors, 'Collection event resource cleanup failed.');
+}
+
 /** One event invocation borrows this bounded raw relation. A listener that
  * crosses an asynchronous boundary must synchronously retain its own lease.
  * Entries preserve the original request order and repeated new members. */
@@ -22,14 +31,25 @@ export class CollectionEventItems {
   #released = false;
   #releaseScope;
   #collectionOwner;
-  constructor({ linkedChildren, view, itemCreation, store, count, scope, collection }) {
+  constructor({ linkedChildren, view, itemCreation, store, count, scope, collection, retainView = false }) {
     Object.assign(this, { linkedChildren, view, itemCreation, store, count, scope, collection });
     this.#releaseScope = scope.acquire();
-    this.#collectionOwner = itemCreation.retainItem(collection);
+    try {
+      this.#collectionOwner = itemCreation.retainItem(collection);
+      // A retained view is acquired only after its synchronous owners exist.
+      // A failed constructor leaves an incoming view with its original caller.
+      if (retainView) this.view = view.retain();
+    } catch (error) {
+      const errors = [error];
+      for (const release of [() => this.#collectionOwner?.release(), () => this.#releaseScope()]) {
+        try { release(); } catch (cleanup) { errors.push(cleanup); }
+      }
+      throw operationFailure(errors, 'Collection event ownership acquisition failed.');
+    }
   }
   retain() {
     if (this.#released) throw new Error('Collection event items have been released.');
-    return new CollectionEventItems({ linkedChildren: this.linkedChildren, view: this.view.retain(),
+    return new CollectionEventItems({ linkedChildren: this.linkedChildren, view: this.view, retainView: true,
       itemCreation: this.itemCreation, store: this.store, count: this.count, scope: this.scope, collection: this.collection });
   }
   async page(options = {}) {
@@ -40,39 +60,57 @@ export class CollectionEventItems {
     const release = async () => {
       if (released) return;
       released = true;
-      const failures = [];
-      try { await captured?.release(); } catch (error) { failures.push(error); }
-      try { await this.store.run(async session => {
-        try { await retained.release({ session }); }
-        finally { await this.linkedChildren.flushReleases({ session }); }
-      }); } catch (error) { failures.push(error); }
-      if (failures.length) throw new AggregateError(failures, 'Collection event page cleanup failed.');
+      await releaseEventResources([() => captured?.release(), async () => {
+        let entered = false;
+        try {
+          await this.store.run(session => {
+            entered = true;
+            return releaseEventResources([
+              () => retained.release({ session }), () => this.linkedChildren.flushReleases({ session }),
+            ]);
+          });
+        } catch (error) {
+          if (entered) throw error;
+          // Failed native admission never borrowed these owners. Their SQL
+          // cohort can still drain through its independent relation pool.
+          await releaseEventResources([
+            () => retained.release(), () => this.linkedChildren.flushReleases(),
+          ], [error]);
+        }
+      }]);
     };
     try {
       captured = await retained.view.page(options);
       const entries = captured.entries.map(row => ({ Ordinal: row.Ordinal, Item: row.item }));
       return Object.freeze({ entries, release });
     } catch (error) {
-      try { await release(); } catch (cleanup) { throw new AggregateError([error, cleanup], error.message, { cause: error }); }
+      try { await release(); } catch (cleanup) { throw operationFailure([error, cleanup], 'Collection event page read failed.'); }
       throw error;
     }
   }
   async *pages(options = {}) {
     const retained = this.retain();
+    const errors = [];
     try {
       for (let after = options.after ?? 0n; ; ) {
         const page = await retained.page({ ...options, after });
+        const pageErrors = [];
         try {
           if (!page.entries.length) return;
           yield page; after = page.entries.at(-1).Ordinal;
-        } finally { await page.release(); }
+        } catch (error) { pageErrors.push(error); throw error; }
+        finally { await releaseEventResources([() => page.release()], pageErrors); }
       }
-    } finally { await retained.release(); }
+    } catch (error) { errors.push(error); throw error; }
+    finally { await releaseEventResources([() => retained.release()], errors); }
   }
   async release({ session } = {}) {
     if (this.#released) return;
     this.#released = true;
-    try { await this.view.release({ session }); }
-    finally { try { this.#collectionOwner.release(); } finally { this.#releaseScope(); } }
+    const errors = [];
+    for (const release of [() => this.view.release({ session }), () => this.#collectionOwner.release(), () => this.#releaseScope()]) {
+      try { await release(); } catch (error) { errors.push(error); }
+    }
+    if (errors.length) throw operationFailure(errors, 'Collection event ownership release failed.');
   }
 }

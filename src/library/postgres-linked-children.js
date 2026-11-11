@@ -10,6 +10,7 @@ import { nativeGuid } from '../users/native.js';
 import { clrTrim } from '../metadata/whitespace.js';
 import { createNativeResourceGraph } from './native-resource-graph.js';
 import { mapRecord } from './records.js';
+import { operationFailure as linkOperationFailure } from '../core/operation-failure.js';
 
 const handles = new WeakSet();
 const revisionObservers = new WeakMap();
@@ -257,7 +258,8 @@ export class PostgresLinkedChildrenStore {
       await db.client.query({text:`CREATE TEMP TABLE ${selected} AS SELECT row_number() OVER(ORDER BY item."SortName") AS "__Ordinal",item.* FROM ${items} item
         WHERE EXISTS(SELECT 1 FROM (${raw.text}) source WHERE source."Type"=0 AND ${sql.guidKey('source."ItemId"')}<>'00000000000000000000000000000000'
           AND ${sql.guidKey('item."Id"')}=${sql.guidKey('source."ItemId"')})`,values:raw.values});
-      let materialized;
+      let materialized, writer, paths, finishing = false, dropFailed = false, dropFailure;
+      const errors = [];
       try{
       await db.client.query(`CREATE TEMP TABLE ${valid}(id bytea PRIMARY KEY,path bytea)`);
       // GetItemList maps the complete positive-ID batch before the saver opens
@@ -273,16 +275,22 @@ export class PostgresLinkedChildrenStore {
         FROM (${raw.text}) source LEFT JOIN ${valid} item ON ${sql.guidKey('item.id')}=${sql.guidKey('source."ItemId"')}
         WHERE source."Type"=0 ORDER BY source."Ordinal"`, [...raw.values]);
       materialized = await this.createFromSession({ session: db, parentId, plan });
-      const writer = await this.createWriter({ session: db, parentId });
-      try {
+      writer = await this.createWriter({ session: db, parentId });
         for await (const page of this.pages(materialized, { session: db })) for (const row of page) {
           const value = row.Path == null ? null : expandPath(row.Path);
           if (typeof value === 'string' && clrTrim(value)) await writer.append({ ...row, Path: value });
         }
-        return { manualCount, paths: await writer.finish() };
-      } catch (error) { await writer.abort(); throw error; }
-      finally { await this.release(materialized, { session: db }); }
-      }finally{await db.client.query(`DROP TABLE IF EXISTS ${selected},${valid}`);}
+      finishing = true;
+      paths = await writer.finish();
+      } catch (error) { errors.push(error); }
+      if (writer && !finishing) try { await writer.abort(); } catch (error) { errors.push(error); }
+      if (materialized !== undefined) try { await this.release(materialized, { session: db }); } catch (error) { errors.push(error); }
+      try { await db.client.query(`DROP TABLE IF EXISTS ${selected},${valid}`); }
+      catch (error) { errors.push(error); dropFailed = true; dropFailure = error; }
+      if (errors.length && paths !== undefined) try { await this.release(paths, { session: db }); } catch (error) { errors.push(error); }
+      if (dropFailed) db.discardConnection(dropFailure);
+      if (errors.length) throw linkOperationFailure(errors, 'XML path projection failed to close.');
+      return { manualCount, paths };
     });
   }
   storedPlan(session, parentId) {
@@ -308,26 +316,34 @@ export class PostgresLinkedChildrenStore {
     const cursor = q('mm_link_read_' + randomUUID().replaceAll('-', ''));
     return this.#run(async () => {
     await session.client.query({ text: `DECLARE ${cursor} NO SCROLL CURSOR FOR ${source.text}`, values: source.values });
+    const errors = [];
+    let result;
     try {
     let rows = (await session.client.query(`FETCH FORWARD 128 FROM ${cursor}`)).rows;
     // The cursor has observed the real source snapshot. An empty relation
     // needs no writer, mutable branch or independently owned SQL cache.
-    if (!rows.length) return EMPTY_NATIVE_LINKS;
-    return await this.#using(null, async target => {
+    if (!rows.length) result = EMPTY_NATIVE_LINKS;
+    else result = await this.#using(null, async target => {
       const writer = await this.createWriter({ session: target, parentId });
+      let finishing = false;
       try {
         for (;;) {
           for (const row of rows) await writer.append({ ItemId: decode(row.ItemId), Type: Number(row.Type), Path: decode(row.Path), LibraryItemId: decode(row.LibraryItemId) });
           rows = (await session.client.query(`FETCH FORWARD 128 FROM ${cursor}`)).rows;
           if (!rows.length) break;
         }
+        finishing = true;
         return await writer.finish();
       } catch (error) {
-        try { await writer.abort(); } catch (cleanup) { throw new AggregateError([error, cleanup], error.message, { cause: error }); }
+        if (!finishing) try { await writer.abort(); } catch (cleanup) { throw linkOperationFailure([error, cleanup], 'Snapshot publication failed.'); }
         throw error;
       }
     });
-    } finally { await session.client.query(`CLOSE ${cursor}`); }
+    } catch (error) { errors.push(error); }
+    try { await session.client.query(`CLOSE ${cursor}`); } catch (error) { errors.push(error); }
+    if (errors.length && result !== undefined) try { await this.release(result); } catch (error) { errors.push(error); }
+    if (errors.length) throw linkOperationFailure(errors, 'Snapshot publication failed to close.');
+    return result;
     });
   }
   async page(handle, { session, after = 0n, limit = pageSize } = {}) {
@@ -341,12 +357,18 @@ export class PostgresLinkedChildrenStore {
   }
   async *pages(handle, options = {}) {
     const pinned = handle === EMPTY_NATIVE_LINKS ? handle : this.retain(handle);
+    const errors = [];
     try {
       for (let after = 0n; ; ) {
         const page = await this.page(pinned, { ...options, after }); if (!page.length) return;
         yield page; after = page.at(-1).Ordinal;
       }
-    } finally { if (isLinkedChildrenHandle(pinned)) await this.release(pinned, { session: options.session }); }
+    } catch (error) { errors.push(error); }
+    finally {
+      if (isLinkedChildrenHandle(pinned)) try { await this.release(pinned, { session: options.session }); }
+      catch (error) { errors.push(error); }
+      if (errors.length) throw linkOperationFailure(errors, 'Linked-child pagination failed to close.');
+    }
   }
   async count(handle, { session } = {}) {
     const plan = this.plan(handle);
@@ -504,6 +526,7 @@ export class PostgresLinkedChildrenStore {
       const pinned=(await db.client.query(`SELECT EXISTS(SELECT 1 FROM ${this.pins} WHERE scope_id=$1) AS present`,[scopeId])).rows[0].present;
       if(!pinned)return;
       const candidates=q('mm_unpin_'+randomUUID().replaceAll('-','')),protectedSets=q('mm_active_'+randomUUID().replaceAll('-',''));
+      const errors=[];
       try{
         await db.client.query(`CREATE TEMP TABLE ${candidates} AS SELECT DISTINCT set_id FROM ${this.pins} WHERE scope_id=$1`,[scopeId]);
         await db.client.query(`CREATE TEMP TABLE ${protectedSets}(id uuid PRIMARY KEY)`);
@@ -514,7 +537,10 @@ export class PostgresLinkedChildrenStore {
         await db.client.query(`DELETE FROM ${this.pins} WHERE scope_id=$1`,[scopeId]);
         await db.client.query(`DELETE FROM ${this.sets} source WHERE EXISTS(SELECT 1 FROM ${candidates} candidate WHERE candidate.set_id=source.id)
           AND NOT EXISTS(SELECT 1 FROM ${this.pins} pins WHERE pins.set_id=source.id) AND NOT EXISTS(SELECT 1 FROM ${protectedSets} active WHERE active.id=source.id)`);
-      }finally{await db.client.query(`DROP TABLE IF EXISTS ${candidates},${protectedSets}`);}
+      }catch(error){errors.push(error);}
+      try{await db.client.query(`DROP TABLE IF EXISTS ${candidates},${protectedSets}`);}
+      catch(error){errors.push(error);db.discardConnection(error);}
+      if(errors.length)throw linkOperationFailure(errors,'The linked state scope could not be released.');
     });
   }
   async createWriter({ session, parentId }) {
@@ -524,35 +550,70 @@ export class PostgresLinkedChildrenStore {
     try { await session.client.query(`CREATE TEMP TABLE ${temporary} ("Ordinal" bigint PRIMARY KEY, "ItemId" bytea,
       "Type" integer NOT NULL, "Path" bytea, "LibraryItemId" bytea)`); }
     catch (error) { releaseLease(); throw error; }
-    let ordinal = 0n, finished = false; const buffer = [];
+    let ordinal = 0n, closed = false, result, finishing, closing, aborting;
+    let appending = Promise.resolve();
+    const buffer = [];
     const flush = async () => {
       if (!buffer.length) return;
       const values = [], tuples = buffer.map(row => '(' + [row.Ordinal, encode(row.ItemId), row.Type, encode(row.Path), encode(row.LibraryItemId)]
         .map(value => { values.push(value); return '$' + values.length; }).join(',') + ')');
       await session.client.query({ text: `INSERT INTO ${temporary}(${fields}) VALUES ${tuples.join(',')}`, values }); buffer.length = 0;
     };
-    const abort = async () => {
-      if (finished) return; finished = true;
-      try { await session.client.query(`DROP TABLE ${temporary}`); } finally { releaseLease(); }
+    const dispose = () => closing ??= (async () => {
+      try { await session.client.query(`DROP TABLE ${temporary}`); }
+      catch (error) {
+        const errors = [error];
+        // finish still owns its published relation until this cleanup succeeds.
+        // Release it while the connection remains usable, then retire the
+        // connection so an undropped TEMP table cannot enter the pool again.
+        try { if (result !== undefined) await this.release(result, { session }); }
+        catch (cleanup) { errors.push(cleanup); }
+        finally { session.discardConnection(error); }
+        throw linkOperationFailure(errors, 'The member importer failed to close.');
+      } finally { releaseLease(); }
+    })();
+    const abort = () => {
+      closed = true;
+      // A finish already owns publication. Join it before cleanup so abort
+      // cannot DROP the source table under its admitted INSERT or snapshot.
+      return aborting ??= Promise.resolve().then(async () => {
+        await Promise.allSettled([finishing ?? appending]);
+        return dispose();
+      });
     };
     return Object.freeze({
-      async append(link) {
-        if (finished) throw new Error('The member importer is closed.');
-        const type = typeof link.Type === 'number' ? link.Type : ['Manual','Shortcut','LocalAlternateVersion','LinkedAlternateVersion'].indexOf(link.Type ?? 'Manual');
-        if (!Number.isInteger(type) || type < -2147483648 || type > 2147483647
-          || typeof link.Type === 'string' && type < 0) throw new TypeError('A native integer linked child Type is required.');
-        buffer.push({ ...link, Type: type, Ordinal: ++ordinal }); if (buffer.length === pageSize) await flush();
+      append(link) {
+        if (closed) return Promise.reject(new Error('The member importer is closed.'));
+        let row;
+        try {
+          const type = typeof link.Type === 'number' ? link.Type : ['Manual','Shortcut','LocalAlternateVersion','LinkedAlternateVersion'].indexOf(link.Type ?? 'Manual');
+          if (!Number.isInteger(type) || type < -2147483648 || type > 2147483647
+            || typeof link.Type === 'string' && type < 0) throw new TypeError('A native integer linked child Type is required.');
+          row = { ...link, Type: type, Ordinal: ++ordinal };
+        } catch (error) { return Promise.reject(error); }
+        appending = appending.then(async () => {
+          buffer.push(row); if (buffer.length === pageSize) await flush();
+        });
+        void appending.catch(() => {});
+        return appending;
       },
       get count() { return ordinal; }, abort,
-      finish: () => this.#operationContext.run(this, async () => {
-        if (finished) throw new Error('The member importer is closed.');
-        try {
-          await flush();
-          if (ordinal === 0n) return EMPTY_NATIVE_LINKS;
-          return await this.createFromSnapshot({ session, parentId, plan: immutablePlan(`SELECT ${fields} FROM ${temporary} ORDER BY "Ordinal"`) });
-        }
-        finally { await abort(); }
-      }),
+      finish: () => {
+        if (closed) return Promise.reject(new Error('The member importer is closed.'));
+        closed = true;
+        return finishing = this.#operationContext.run(this, async () => {
+          const errors = [];
+          try {
+            await appending;
+            await flush();
+            result = ordinal === 0n ? EMPTY_NATIVE_LINKS
+              : await this.createFromSnapshot({ session, parentId, plan: immutablePlan(`SELECT ${fields} FROM ${temporary} ORDER BY "Ordinal"`) });
+          } catch (error) { errors.push(error); }
+          try { await dispose(); } catch (error) { errors.push(error); }
+          if (errors.length) throw linkOperationFailure(errors, 'The member import failed.');
+          return result;
+        });
+      },
     });
   }
   withSession(operation) { this.#active(); return this.#using(null, operation); }
@@ -573,6 +634,7 @@ export class PostgresLinkedChildrenStore {
     this.plan(item.LinkedChildren); // Preserve the native null sentinel failure.
     const captured=item.LinkedChildren===EMPTY_NATIVE_LINKS?EMPTY_NATIVE_LINKS:this.retain(item.LinkedChildren);
     const source = this.plan(captured);
+    const errors=[];
     try{
     const sql = nativeTextSql(session.schemaName), items = `${q(session.schemaName)}.${q('BaseItems')}`;
     const links = `${q(session.schemaName)}.${q('LinkedChildren')}`, order = `${q(session.controlSchema)}.item_order`;
@@ -642,7 +704,11 @@ export class PostgresLinkedChildrenStore {
         after = BigInt(rows.at(-1).first_ordinal);
       }
     }
-    }finally{await this.release(captured);}
+    }catch(error){errors.push(error);}
+    finally{
+      try{await this.release(captured);}catch(error){errors.push(error);}
+      if(errors.length)throw linkOperationFailure(errors,'Linked-child persistence failed to close.');
+    }
   }
   close() {
     if (this.#closePromise) return this.#closePromise;

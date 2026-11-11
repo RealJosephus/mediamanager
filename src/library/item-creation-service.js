@@ -122,7 +122,7 @@ export class ItemCreationService {
     await this.linkedChildren.flushReleases();
   }
 
-  async saveItems(items, { signal, creationIntent = 'library-save' } = {}) {
+  async saveItems(items, { signal, creationIntent = 'library-save', paths } = {}) {
     signal?.throwIfAborted();
     const contexts = [];
     // Native persistence keeps the last entity of each ID, in first ID order.
@@ -130,7 +130,7 @@ export class ItemCreationService {
     for (const item of items) unique.set(idKey(item.Id), item);
     let saved, primary, failed = false;
     try { for (const item of unique.values()) {
-      const loaded = await this.loadContext(item.Id, { draft: item, forItemSave: true });
+      const loaded = await this.loadContext(item.Id, { draft: item, forItemSave: true, paths });
       contexts.push(loaded);
       Object.defineProperty(item, 'NativeTopParentId', { value: itemTopParentId(item, loaded.parents),
         enumerable: false, writable: true, configurable: true });
@@ -145,7 +145,7 @@ export class ItemCreationService {
     return saved;
   }
 
-  async createItems(items, parent = null, { signal, creationIntent = 'library-resolve' } = {}) {
+  async createItems(items, parent = null, { signal, creationIntent = 'library-resolve', paths } = {}) {
     if (!Array.isArray(items)) throw new TypeError('CreateItems requires a native entity array.');
     return this.store.serializeWrites(async db => {
       const itemOwners = [], contexts = [];
@@ -169,7 +169,7 @@ export class ItemCreationService {
         if (!VIDEO_TYPES.has(item.Type)) continue;
         if (item.LocalAlternateVersions === null) throw Object.assign(new TypeError('A native video version array cannot be null.'), { status: 500 });
         if (!item.LocalAlternateVersions?.length) continue;
-        const loaded = await this.loadContext(item.Id, { draft: item });
+        const loaded = await this.loadContext(item.Id, { draft: item, paths });
         contexts.push(loaded);
         for (const [key, cached] of this.#registered) loaded.versionItemCache.set(key, cached);
         loaded.parent = parentFolder;
@@ -181,7 +181,7 @@ export class ItemCreationService {
         for (const alternate of alternates) itemOwners.push(this.retainItem(alternate));
         allItems.push(...alternates);
       }
-      await this.saveItems(allItems, { signal, creationIntent });
+      await this.saveItems(allItems, { signal, creationIntent, paths });
       for (const item of allItems) this.registerItem(item);
       invalidateVideoParent(parent);
       for (const item of items) if (item.SourceType == null || item.SourceType === 'Library' || item.SourceType === 0) {

@@ -5,6 +5,7 @@ import { nativeTextBytes, decodeNativeTextBytes } from '../database/native-text.
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { nativeGuid } from '../users/native.js';
 import { idKey, EMPTY_ID } from './records.js';
+import { operationFailure } from '../core/operation-failure.js';
 
 const pageSize = 128;
 const plan = text => Object.freeze({ text, values: Object.freeze([]) });
@@ -59,7 +60,7 @@ export async function createPostgresLinkedResolutionWorkspace(session, { linksPl
       FROM (${linksPlan.text}) source ORDER BY "Ordinal"`, values: linksPlan.values });
     await session.client.query(`CREATE INDEX ON ${raw} ((${key.guidKey('"ResolvedId"')}))`);
   } catch (error) {
-    try { await dispose(error); } catch (cleanup) { throw new AggregateError([error, cleanup], error.message, { cause: error }); }
+    try { await dispose(error); } catch (cleanup) { throw operationFailure([error, cleanup], 'Linked resolution workspace creation failed.'); }
     throw error;
   }
   return Object.freeze({
