@@ -11,6 +11,7 @@ import { blurayReferenceInputs } from './bluray-reference-inputs.js';
 import { assertIsolatedOutput, repositoryRoot, validationExecutable, validationOutputRoot } from './paths.js';
 import registrationReporter, { progressLineLimit, progressPrefix, progressRecord } from './tap-registration-reporter.js';
 import { launchSelectedTests } from './test-launcher.js';
+import { fullPartition, fullShardCount } from './full-partitions.js';
 
 void registrationReporter;
 void launchSelectedTests;
@@ -53,7 +54,11 @@ export function progressForwarder({ environment = process.env, selected, write =
         try { value = JSON.parse(pending.slice(progressPrefix.length)); } catch { /* Keep malformed output only in stderr.txt. */ }
         const record = progressRecord(value, selectedSet);
         if (record) {
-          report(progressPrefix + JSON.stringify(record) + '\n');
+          // Ordinary test progress is already preserved in stderr.txt. Keep
+          // the live console usable through all selected files in a full run.
+          if (record.kind === 'file' || !['start', 'passed'].includes(record.event)) {
+            report(progressPrefix + JSON.stringify(record) + '\n');
+          }
           // A reporter's failed progress alone is insufficient: require the
           // immediate observer's explicit native completion confirmation.
           if (value.passed === false && record.kind === 'file' && record.event === 'failed'
@@ -140,7 +145,7 @@ export function argumentsFor(argv) {
     const argument = argv[index];
     if (argument === '--') { options.tests = argv.slice(index + 1); break; }
     if (argument === '--preflight-only') options.preflightOnly = true;
-    else if (['--profile', '--output', '--config', '--concurrency'].includes(argument)) {
+    else if (['--profile', '--output', '--config', '--concurrency', '--full-shard'].includes(argument)) {
       const value = argv[++index];
       if (!value) throw new Error(`Missing value for ${argument}.`);
       options[argument.slice(2)] = value;
@@ -149,6 +154,13 @@ export function argumentsFor(argv) {
   if (!['base', 'full'].includes(options.profile)) throw new Error('Profile must be base or full.');
   if (options.profile === 'full' && options.tests.length) {
     throw new Error('The full profile cannot be combined with an explicit test subset.');
+  }
+  if (options['full-shard'] !== undefined) {
+    if (options.profile !== 'full' || !/^[1-5]$/u.test(options['full-shard'])) {
+      throw new Error(`A full shard must be between 1 and ${fullShardCount} and requires the full profile.`);
+    }
+    options.fullShard = Number(options['full-shard']);
+    delete options['full-shard'];
   }
   options.concurrency = Number(options.concurrency);
   if (!Number.isInteger(options.concurrency) || options.concurrency < 1) throw new Error('Concurrency must be a positive integer.');
@@ -172,21 +184,39 @@ async function readConfig(filename) {
 export async function preflight(testPaths, dependencies, environment, { fullProfile = false } = {}) {
   const selected = dependencyClosure(dependencies, testPaths);
   const requiredServices = [...new Set(selected.flatMap(entry => entry.services))].sort();
+  const needsLifecyclePostgres = ['win32', 'darwin'].includes(process.platform)
+    && selected.some(entry => entry.path === 'tests/core/system-lifecycle-process.test.js');
+  if (needsLifecyclePostgres) requiredServices.push('lifecyclePostgres');
   const services = [];
   for (const name of requiredServices) {
-    const variable = dependencyVariables[name];
+    const lifecyclePostgres = name === 'lifecyclePostgres';
+    const variable = lifecyclePostgres ? 'MEDIAMANAGER_TEST_LIFECYCLE_POSTGRES' : dependencyVariables[name];
     const value = environment[variable];
     let result = { name, variable, configured: Boolean(value), available: false };
-    if (value && name === 'postgres') {
+    if (value && (name === 'postgres' || lifecyclePostgres)) {
       const { default: pg } = await import('pg');
       const client = new pg.Client({ connectionString: value, connectionTimeoutMillis: 5000 });
       try {
         await client.connect();
         const response = await client.query('SELECT version() AS version, current_database() AS database, current_user AS role, '
           + 'inet_server_addr()::text AS address, inet_server_port() AS port, pg_postmaster_start_time() AS started_at');
-        result.available = true;
         result.version = response.rows[0].version;
         result.identity = response.rows[0];
+        if (needsLifecyclePostgres) {
+          const { rows: [cluster] } = await client.query(`SELECT system_identifier::text,
+            current_setting('server_version_num')::integer AS server_version_num,
+            current_setting('fsync') AS fsync, current_setting('synchronous_commit') AS synchronous_commit,
+            current_setting('full_page_writes') AS full_page_writes FROM pg_control_system()`);
+          Object.assign(result.identity, cluster);
+          if (lifecyclePostgres && (Math.trunc(cluster.server_version_num / 10000) !== 17
+            || [cluster.fsync, cluster.synchronous_commit, cluster.full_page_writes].some(value => value !== 'on')
+            || !/^127\.0\.0\.1(?:\/32)?$/u.test(result.identity.address ?? '')
+            || cluster.system_identifier === services.find(service => service.name === 'postgres')?.identity?.system_identifier)) {
+            throw Object.assign(new Error('The lifecycle fixture requires an independent durable loopback PostgreSQL 17 cluster.'),
+              { code: 'lifecycle-postgres-isolation-required' });
+          }
+        }
+        result.available = true;
       } catch (error) { result.errorCode = error.code || error.name; }
       finally { await client.end().catch(() => {}); }
     } else if (value && name === 'dvdReference') {
@@ -307,8 +337,9 @@ export async function main(argv = process.argv.slice(2)) {
   await mkdir(output);
   const candidateBeforeInventory = await phase('prepare candidate identity', () => candidateIdentity());
   const dependencies = await phase('prepare dependency inventory', () => inventory(environment));
-  const discovered = dependencies.entries.filter(entry => entry.test).map(entry => entry.path);
-  const selected = (options.tests.length ? options.tests : options.profile === 'full' ? discovered : baseTests)
+  const discovered = dependencies.entries.filter(entry => entry.test).map(entry => entry.path).sort();
+  const partition = options.fullShard ? fullPartition(discovered, options.fullShard) : null;
+  const selected = (partition ? partition.assigned : options.tests.length ? options.tests : options.profile === 'full' ? discovered : baseTests)
     .map(filename => path.relative(repositoryRoot, path.resolve(repositoryRoot, filename)).replaceAll('\\', '/'));
   if (selected.length === 0 || selected.some(filename => !discovered.includes(filename))) throw new Error('Every selected path must name a discovered .test.js file.');
   const notSelected = discovered.filter(filename => !selected.includes(filename));
@@ -321,11 +352,12 @@ export async function main(argv = process.argv.slice(2)) {
     .map(entry => entry.path.replaceAll('\\', '/'));
   const missingTests = expectedTests.filter(filename => !discovered.includes(filename));
   const allDiscoveredSelected = notSelected.length === 0;
-  const scopeComplete = options.profile !== 'full' || allDiscoveredSelected && missingTests.length === 0
+  const scopeComplete = options.profile !== 'full' || (allDiscoveredSelected || partition !== null) && missingTests.length === 0
     && candidatePreparationStable && inventoryDifferences.length === 0;
   const record = { schemaVersion: 1, startedAt: new Date().toISOString(), profile: options.profile,
     outcome: 'incomplete', executed: false, phaseAcceptance: false, selected, notSelected,
     allDiscoveredSelected, missingTests, candidatePreparationStable, inventoryDifferences, scopeComplete,
+    fullPartition: partition, testConcurrency: options.concurrency,
     node: process.version, executable: process.execPath, platform: process.platform, architecture: process.arch,
     timezone: environment.TZ || Intl.DateTimeFormat().resolvedOptions().timeZone,
     configuration: Object.fromEntries(Object.entries(environment).filter(([key]) => key === 'TZ' || key.startsWith('MEDIAMANAGER_'))

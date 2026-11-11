@@ -130,7 +130,21 @@ try {
     Copy-Item -LiteralPath (Join-Path $source 'LICENSE') -Destination (Join-Path $offer 'LICENSE')
     Copy-Item -LiteralPath (Join-Path $receipts 'source-before.json') -Destination (Join-Path $offer 'source-manifest.json')
     $receipt.sourceOffer = @(Tree-Files $offer | ForEach-Object { $_.path = 'source-offer/' + $_.path; $_ })
-    Run 'npm-ci' $node @($npm, 'ci', '--no-audit') 600
+
+    # Fetch the locked GitHub tarball from its final download URL, then let npm
+    # use the verified content by integrity during the regular locked install.
+    $lock = Get-Content -LiteralPath (Join-Path $source 'package-lock.json') -Raw | ConvertFrom-Json -AsHashtable
+    $classList = $lock.packages['node_modules/classlist.js']
+    $classListUrl = 'https://codeload.github.com/eligrey/classList.js/tar.gz/refs/tags/1.2.20180112'
+    $classListArchive = Join-Path $receipts 'classlist.js-1.2.20180112.tar.gz'
+    $receipt.classListArchive = [ordered]@{ lockedUrl = $classList.resolved; downloadUrl = $classListUrl; integrity = $classList.integrity }
+    Invoke-WebRequest -Uri $classListUrl -OutFile $classListArchive -TimeoutSec 30 -MaximumRetryCount 2 -RetryIntervalSec 2
+    $archiveHash = (Get-FileHash -LiteralPath $classListArchive -Algorithm SHA512).Hash
+    $archiveIntegrity = 'sha512-' + [Convert]::ToBase64String([Convert]::FromHexString($archiveHash))
+    if ($archiveIntegrity -cne $classList.integrity) { throw 'The classList.js archive does not match the designated lockfile.' }
+    $receipt.classListArchive.file = Describe $classListArchive 'receipts/classlist.js-1.2.20180112.tar.gz'
+    Run 'npm-cache-classlist' $node @($npm, 'cache', 'add', $classListArchive)
+    Run 'npm-ci' $node @($npm, 'ci', '--no-audit', '--prefer-offline') 600
     # The unmodified upstream production command emits its static assets outside
     # the source tree. Do not apply upstream CI's demo-server config rewrite.
     Run 'build' $node @($npm, 'run', 'build:production', '--', '--output-path', $runtime) 900

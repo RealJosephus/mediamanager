@@ -52,6 +52,8 @@ export async function jellyfinWebInputs(environment = process.env) {
   const builder = fileURLToPath(new URL('../ci/build-jellyfin-web.ps1', import.meta.url));
   if (receipt.builder?.path !== builder) throw new Error('Jellyfin Web producer binding is missing.');
   await bind(builder, receipt.builder);
+  const archive = receipt.classListArchive?.file;
+  await bind(member(output, archive?.path), archive);
   const readReceipt = descriptor => json(member(output, descriptor?.path), descriptor);
   const before = await readReceipt(receipt.sourceBefore), after = await readReceipt(receipt.sourceAfter);
   if (before.head !== head || after.head !== head || !Array.isArray(before.files) || before.files.length !== 1226

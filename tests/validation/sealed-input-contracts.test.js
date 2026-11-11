@@ -7,6 +7,8 @@ import { captureInputIdentity, executionManifestContract, executionManifestRefer
 import { dependencyClosure, inventory } from '../../tools/validation/inventory.js';
 import { repositoryRoot } from '../../tools/validation/paths.js';
 
+const dependencies = await inventory();
+
 const entry = (filename, imports = []) => ({ path: filename, test: filename.endsWith('.test.js'), imports,
   importedFiles: [], declaredReferences: [], fixtureReferences: [], services: [], tools: [], unresolvedImports: [] });
 
@@ -43,7 +45,7 @@ test('metadata search uses a tracked current profile and same-run Native referen
   ]);
   assert.ok(references.every(reference => /^[a-f0-9]{64}$/u.test(reference.sha256)));
 
-  const dependencies = await inventory(), closure = dependencyClosure(dependencies, [consumer]);
+  const closure = dependencyClosure(dependencies, [consumer]);
   const testEntry = closure.find(value => value.path === consumer);
   assert.deepEqual(testEntry.services, ['dotnet', 'jellyfinDll', 'postgres']);
   for (const filename of ['tests/helpers/current-oracle.js', 'tools/validation/oracle.js']) {
@@ -102,7 +104,6 @@ test('parental-rating core and PostgreSQL consumers share one tracked current Na
     'tests/core/fixtures/parental-rating-unicode/current/Program.cs',
     'tests/core/fixtures/parental-rating-unicode/input.json',
   ];
-  const dependencies = await inventory();
   const suppliedRoot = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-rating-current-'));
   t.after(() => rm(suppliedRoot, { recursive: true, force: true }));
   for (const directory of ['host', 'shared', 'sdk', 'runtime']) await mkdir(path.join(suppliedRoot, directory));
@@ -175,7 +176,6 @@ test('password reset PIN files use a tracked same-run Node-to-Native public-prov
   const references = executionManifestReferences(contract, profile, profileFilename);
   assert.deepEqual(references.map(reference => path.relative(repositoryRoot, reference.filename).replaceAll('\\', '/')).sort(),
     expectedReferences);
-  const dependencies = await inventory();
   const closure = dependencyClosure(dependencies, [consumer]);
   assert.deepEqual(closure.find(value => value.path === consumer).services, ['dotnet', 'jellyfinDll']);
   for (const filename of ['src/users/password-reset-service.js', 'tools/validation/oracle.js']) {
@@ -297,7 +297,7 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
     'tests/Directory.Build.props', fixture + '/' + oraclePath + 'Oracle.csproj', fixture + '/' + oraclePath + 'Program.cs', fixture + '/' + inputPath,
     ...additionalInputs.map(filename => fixture + '/' + filename),
   ].map(filename => path.posix.normalize(filename)).sort());
-  const dependencies = await inventory(), closure = dependencyClosure(dependencies, [consumer]);
+  const closure = dependencyClosure(dependencies, [consumer]);
   assert.deepEqual(closure.find(value => value.path === consumer).services, services);
   const root = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-reader-current-'));
   t.after(() => rm(root, { recursive: true, force: true }));
@@ -355,7 +355,6 @@ test('deletion HTTP, PostgreSQL and DTO consumers use tracked current profiles w
       'tests/library/fixtures/delete-dto-permission/input.json',
     ],
   }];
-  const dependencies = await inventory();
   const suppliedRoot = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-delete-current-'));
   t.after(() => rm(suppliedRoot, { recursive: true, force: true }));
   for (const directory of ['host', 'shared', 'sdk', 'runtime']) await mkdir(path.join(suppliedRoot, directory));

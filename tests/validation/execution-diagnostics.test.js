@@ -4,6 +4,21 @@ import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { observeExecutionPhase } from '../../tools/validation/execution-diagnostics.js';
+import { errorObservation } from '../helpers/error-observation.js';
+
+test('cleanup error arrays preserve original causes when the observer is used as a map callback', () => {
+  const primary = Object.assign(new Error('original operation failure', { cause: false }), { code: 'E_IO', status: 503 });
+  const cleanup = new AggregateError([primary, undefined, null], 'cleanup failed', { cause: primary });
+  cleanup.errors.push(cleanup);
+  const observed = [primary, cleanup, false, 0, '', null, undefined].map(errorObservation);
+  assert.equal(observed[0].message, primary.message);
+  assert.equal(observed[0].code, 'E_IO'); assert.equal(observed[0].status, 503); assert.equal(observed[0].cause, false);
+  assert.equal(observed[1].errors[0].message, primary.message);
+  assert.equal(observed[1].errors[1], undefined); assert.equal(observed[1].errors[2], null);
+  assert.deepEqual(observed[1].cause, observed[0]);
+  assert.deepEqual(observed.slice(2), [false, 0, '', null, undefined]);
+  assert.doesNotThrow(() => JSON.stringify(observed));
+});
 
 async function workspace(t) {
   const root = await mkdtemp(path.join(tmpdir(), 'mediamanager-execution-diagnostics-'));

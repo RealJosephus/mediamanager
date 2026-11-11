@@ -105,11 +105,11 @@ export async function main(argv = process.argv.slice(2)) {
   const sharding = partitionSelection(classification, environment, full ? 'full' : 'ci-available', request.requested);
   const scope = { schemaVersion: 1, profile: full ? 'full' : 'ci-available', phaseAcceptance: false, createdAt: new Date().toISOString(),
     platform: process.platform, node: process.version, testConcurrency: ciTestConcurrency(environment), planOnly, releasePair, requested: request.requested, impact, sharding,
-    selectionPolicy: full ? 'Full retains every discovered test, regardless of input availability or change scope, and invokes the strict full profile without an explicit subset. Missing inputs, skipped tests and narrowing environments cannot pass.'
+    selectionPolicy: full ? 'Full retains every discovered test regardless of input availability or change scope. Release pairs execute predetermined disjoint partitions; only the cross-platform aggregate can certify complete coverage. Missing inputs, skipped tests and narrowing environments cannot pass.'
       : 'Manual empty input selects all available tests; an exact request retains its required files. Push/PR narrow only added/modified test sources with declared source/input owners or reviewed documentation with no consumers; production, resource, global and unresolved changes fall back to all available tests. Unavailable affected tests fail the attempt. Scope freezes before execution; test failures never narrow it. Release full-profile acceptance remains separate.',
     nativeReference: environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true',
-    provisionedServices: provisionedServicesFor(environment), provisionedTools, discovered: classification.records.map(record => record.path),
-    selected: classification.records.filter(record => record.selected).map(record => record.path),
+    provisionedServices: provisionedServicesFor(environment), provisionedTools, discovered: classification.records.map(record => record.path).sort(),
+    selected: classification.records.filter(record => record.selected).map(record => record.path).sort(),
     excluded: classification.records.filter(record => !record.selected),
     records: classification.records, infrastructureErrors, currentInputEntriesSha256: identity?.entriesSha256 ?? null,
     currentReleaseInputReady: identity?.currentReleaseInputReady ?? null,

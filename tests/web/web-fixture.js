@@ -215,10 +215,17 @@ export async function createWebServerFixture({ populated = false, resumePlayback
       MEDIAMANAGER_INSTANCE: instanceDirectory, MEDIAMANAGER_POSTGRES: process.env.MEDIAMANAGER_TEST_POSTGRES,
       MEDIAMANAGER_POSTGRES_SCHEMA: database.schemaName,
       ...(populated ? { MEDIAMANAGER_STORAGE: path.join(directory, 'storage.json') } : {}) };
-    const onRuntimeError = (error, at = new Date().toISOString()) => {
+    const onRuntimeError = (error, context) => {
       errors.push(error?.message ?? String(error));
       const observed = errorObservation(error);
-      preparation.runtimeErrors.push({ at, ...(observed && typeof observed === 'object' ? observed : { reason: observed }) });
+      const at = typeof context === 'string' ? context : new Date().toISOString();
+      const request = context?.request;
+      preparation.runtimeErrors.push({
+        ...(observed && typeof observed === 'object' ? observed : { reason: observed }),
+        at,
+        ...(typeof context?.phase === 'string' && { phase: context.phase }),
+        ...(typeof request?.url === 'string' && { request: { method: request.method, path: request.url.split('?', 1)[0] } }),
+      });
     };
     const start = () => {
       signal?.throwIfAborted();

@@ -9,7 +9,7 @@ export function ciSummary(scope, result) {
       ...(scope.impact.fallbackReasons.length > 12 ? ['- Further comparison details are in impact.json.'] : []), ''] : []),
     ...(scope.impact.mode === 'not-applicable' ? ['No tests executed: every changed file is on the documentation allowlist and has no declared consumer.', ''] : []),
     `Outcome: **${result.outcome}**. ${scope.releasePair
-      ? `Strict full pair acceptance on this platform: **${result.strictPairAcceptance === true}**. The cross-platform aggregation must verify all three artifacts; release acceptance remains false.`
+      ? `This shard pair verified: **${result.shardPairAcceptance === true}**. Full acceptance requires all fifteen shard artifacts and complete disjoint coverage on every platform; release acceptance remains false.`
       : scope.profile === 'full'
       ? 'The strict full profile retains every discovered test. Release acceptance still requires two independent runs of the same candidate and current release inputs.'
       : 'This is an explicit available-input subset; release full-profile acceptance remains separate.'}`, '',
