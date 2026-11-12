@@ -47,6 +47,26 @@ function Read-Postmaster {
     }
 }
 
+function Test-MacOSPostmasterRemains($postmaster) {
+    # A post-stop lookup can return a process whose start time is already unavailable.
+    for ($probe = 0; $probe -lt 20; $probe++) {
+        if ($probe -gt 0) { Start-Sleep -Milliseconds 100 }
+        $remaining = Get-Process -Id $postmaster.id -ErrorAction SilentlyContinue
+        if ($null -eq $remaining) { return $false }
+        try {
+            if ($remaining.HasExited -eq $true) { return $false }
+            $startedAt = $remaining.StartTime
+            if ($null -ne $startedAt -and $startedAt.ToUniversalTime().ToString('o') -cne $postmaster.startedAt) {
+                return $false
+            }
+        } finally {
+            $remaining.Dispose()
+        }
+    }
+    if ($null -eq $startedAt) { throw 'Cannot verify that the lifecycle postmaster exited.' }
+    return $true
+}
+
 function Read-Cluster {
     $sql = @'
 SELECT json_build_object(
@@ -116,16 +136,11 @@ try {
             throw 'The lifecycle postmaster changed process identity.'
         }
         Invoke-PostgresTool 'pg_ctl' @('-D', $data, '-m', 'fast', '-w', 'stop')
-        $sameProcessRemains = $false
         if ($IsWindows) {
             $remaining = Get-CimInstance -ClassName Win32_Process -Filter "ProcessId = $($postmaster.id)"
             $sameProcessRemains = $remaining -and $remaining.CreationDate.ToUniversalTime().ToString('o') -eq $postmaster.startedAt
         } else {
-            $remaining = Get-Process -Id $postmaster.id -ErrorAction SilentlyContinue
-            if ($remaining) {
-                try { $sameProcessRemains = $remaining.StartTime.ToUniversalTime().ToString('o') -eq $postmaster.startedAt }
-                finally { $remaining.Dispose() }
-            }
+            $sameProcessRemains = Test-MacOSPostmasterRemains $postmaster
         }
         if ((Test-Path -LiteralPath $pidFile) -or $sameProcessRemains) {
             throw 'The lifecycle postmaster remains after its stop command.'
