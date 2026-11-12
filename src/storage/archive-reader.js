@@ -2,21 +2,12 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { Worker } from 'node:worker_threads';
+import { operationFailure, withCleanup } from '../core/operation-failure.js';
 
 const unavailable = message => Object.assign(new Error(message), { code: 'not-supported', status: 503 });
 const closedError = () => Object.assign(new Error('The archive reader is closed.'), { code: 'closed' });
 const startArchiveWorker = workerData => new Worker(new URL('./archive-worker.js', import.meta.url), { workerData, trackUnmanagedFds: true });
-const operationFailure = errors => errors.length === 1 ? errors[0]
-  : Object.assign(new AggregateError(errors, errors[0]?.message ?? 'Archive cleanup failed.', { cause: errors[0] }),
-    Object.fromEntries(['code', 'status', 'statusCode'].filter(key => errors[0]?.[key] !== undefined).map(key => [key, errors[0][key]])));
-async function withCleanup(operation, cleanups) {
-  let value;
-  const errors = [];
-  try { value = await operation(); } catch (error) { errors.push(error); }
-  for (const cleanup of cleanups) try { await cleanup(); } catch (error) { errors.push(error); }
-  if (errors.length) throw operationFailure(errors);
-  return value;
-}
+const cleanupMessage = 'Archive cleanup failed.';
 
 /** Operation-owned archive access. Only the selected entry is decoded into memory. */
 export class BookArchiveService {
@@ -49,7 +40,7 @@ export class BookArchiveService {
         try { await fs.unlink(spool); } catch (error) { if (error.code !== 'ENOENT') throw error; }
       }));
       const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
-      if (errors.length) throw operationFailure(errors);
+      if (errors.length) throw operationFailure(errors, cleanupMessage);
     };
     let destination, source, worker, size = 0, lease;
     const cleanup = async operation => {
@@ -92,7 +83,7 @@ export class BookArchiveService {
           fail(reason);
           signal.removeEventListener('abort', onAbort);
           lifetime.removeEventListener('abort', onLifetimeAbort);
-          closing = Promise.resolve().then(() => withCleanup(() => worker.terminate(), [removeSpools]))
+          closing = Promise.resolve().then(() => withCleanup(() => worker.terminate(), [removeSpools], cleanupMessage))
             .finally(() => owner.#leases.delete(lease));
           return closing;
         },
@@ -125,7 +116,7 @@ export class BookArchiveService {
       return lease;
     } catch (error) {
       return withCleanup(() => { throw error; }, lease ? [() => lease.close(error)]
-        : [() => cleanup(() => worker?.terminate()), closeSource, closeDestination, () => cleanup(removeSpools)]);
+        : [() => cleanup(() => worker?.terminate()), closeSource, closeDestination, () => cleanup(removeSpools)], cleanupMessage);
     }
   }
   close() {
@@ -137,7 +128,7 @@ export class BookArchiveService {
       const results = await Promise.allSettled(readers.map(lease => lease.close()));
       const errors = [...openings.flatMap(opening => opening.cleanupErrors),
         ...results.filter(result => result.status === 'rejected').map(result => result.reason)];
-      if (errors.length) throw operationFailure(errors);
+      if (errors.length) throw operationFailure(errors, cleanupMessage);
     })();
     return this.#close;
   }
