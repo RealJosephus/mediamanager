@@ -4,6 +4,8 @@ import path from 'node:path';
 import { StorageError, checkAbort } from '@mediamanager/plugin-sdk/storage/errors';
 import { isWithin, joinPath, validateName } from '@mediamanager/plugin-sdk/storage/paths';
 
+const directoryIdentity = info => `${info.dev}:${info.ino}:${info.birthtimeNs}`;
+
 // Use one non-recursive OS watcher per directory so recursive watching never
 // follows a symlink or junction. Events are invalidations, not a file snapshot.
 export async function watchDirectory(root, { signal, onChange, onError, resolve, failure,
@@ -29,6 +31,21 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
   };
   const sameNativePath = (left, right) => path.win32.toNamespacedPath(left).toLowerCase()
     === path.win32.toNamespacedPath(right).toLowerCase();
+  const namesWatchedDirectory = (name, target) => {
+    const basename = path.basename(target);
+    return process.platform === 'darwin'
+      ? name.normalize('NFC').toLowerCase() === basename.normalize('NFC').toLowerCase()
+      : name === basename;
+  };
+  const hasDirectoryIdentity = async (filename, identity) => {
+    try {
+      const info = await fs.lstat(await resolve(filename), { bigint: true });
+      return info.isDirectory() && directoryIdentity(info) === identity;
+    } catch (error) {
+      if (missing(error) || denied(error)) return false;
+      throw error;
+    }
+  };
   let closed = false, tail = Promise.resolve();
   const report = (error, terminal) => {
     if (closed && !terminal) return;
@@ -94,7 +111,7 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
       if (initial || filename === root) throw new StorageError('not-directory', 'A storage watch requires a directory.');
       return;
     }
-    const identity = `${info.dev}:${info.ino}:${info.birthtimeNs}`;
+    const identity = directoryIdentity(info);
     if (watchers.has(filename) && watchers.get(filename).identity !== identity) remove(filename);
     if (!watchers.has(filename)) {
       let watcher;
@@ -114,6 +131,13 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
           if (windows && type === 'rename' && path.win32.isAbsolute(value) && sameNativePath(value, target)) {
             if (filename === root) throw new StorageError('not-found', 'The watched storage directory was deleted.');
             remove(filename); changed({ path: filename, type }); return;
+          }
+          // POSIX backends can use the watched directory's basename for a
+          // self-notification. A child can have that same name while the
+          // directory still owns the watch.
+          if (!windows && namesWatchedDirectory(value, target) && !await hasDirectoryIdentity(filename, identity)) {
+            if (await inspect(filename)) changed({ path: filename, type });
+            return;
           }
           let parts;
           try { parts = relativeParts(value); }
@@ -140,16 +164,15 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
         if (watchers.get(filename)?.watcher !== watcher) return;
         // Removing a watched child can report an OS error on its own handle.
         // Its parent still watches the namespace and must remain subscribed.
-        if (filename !== root) {
-          try { await fs.lstat(await resolve(filename)); }
-          catch (statError) {
-            if (missing(statError)) {
-              remove(filename); changed({ path: filename, type: 'rename' }); return;
-            }
-            if (rejectSubtree(filename, statError)) return;
+        try { await fs.lstat(await resolve(filename)); }
+        catch (statError) {
+          if (missing(statError)) {
+            if (filename === root) throw statError;
+            remove(filename); changed({ path: filename, type: 'rename' }); return;
           }
-          if (rejectSubtree(filename, error)) return;
+          if (rejectSubtree(filename, statError)) return;
         }
+        if (rejectSubtree(filename, error)) return;
         throw error;
       }));
       watchers.set(filename, { watcher, identity });
