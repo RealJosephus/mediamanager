@@ -5,6 +5,8 @@ import path from 'node:path';
 import { Worker } from 'node:worker_threads';
 import { createHash } from 'node:crypto';
 import { setImmediate as immediate } from 'node:timers/promises';
+import { createBookComicPlugin } from '../../src/metadata/book-comic-provider.js';
+import { createBookEpubPlugin } from '../../src/metadata/book-epub-provider.js';
 import { BookArchiveService } from '../../src/storage/archive-reader.js';
 import { IdentityAccessMap } from '../../src/storage/identity-mapping.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
@@ -45,7 +47,7 @@ async function fixture(t) {
   await fs.writeFile(path.join(files, 'source.bin'), sourceBytes);
   await fs.copyFile(new URL('../metadata/fixtures/book-opf-epub/assets/archive/local-central-name-mismatch.zip', import.meta.url), path.join(files, 'valid.zip'));
   const identityMap = new IdentityAccessMap(); identityMap.bind('source', '/source.bin'); identityMap.bind('valid', '/valid.zip');
-  const item = name => ({ Id: name, Path: 'Z:\\OriginalBooks\\' + name + '.zip' });
+  const item = (name, extension = '.zip') => ({ Id: name, Path: 'Z:\\OriginalBooks\\' + name + extension });
   const sources = [], workers = [], operations = [];
   let selectedSource, selectedWorker;
   const vfs = { async openRead(access, { signal } = {}) {
@@ -102,7 +104,13 @@ async function fixture(t) {
     await fs.rm(files, { recursive: true });
   });
   return {
-    service, sources, workers, spool, item,
+    service, vfs, files, sources, workers, spool, item,
+    async addArchive(name, extension, bytes) {
+      const filename = name + extension;
+      await fs.writeFile(path.join(files, filename), bytes);
+      identityMap.bind(name, '/' + filename);
+      return item(name, extension);
+    },
     selectSource(state) { selectedSource = { ...state, opened: Promise.withResolvers() }; return selectedSource.opened.promise; },
     selectWorker(state) { selectedWorker = { ...state, opened: Promise.withResolvers() }; return selectedWorker.opened.promise; },
     track(promise) { const pending = outcome(promise); operations.push(pending); return pending; },
@@ -119,6 +127,116 @@ async function fixture(t) {
     },
   };
 }
+
+test('book providers keep primary failures when the actual archive spools cannot be unlinked', { timeout: 90000 }, async t => {
+  const current = await fixture(t);
+  const epub = await fs.readFile(new URL('../metadata/fixtures/book-opf-epub/assets/epub/malformed-container.epub', import.meta.url));
+  const storedKey = Buffer.from('META-INF\\container.xml');
+  const hostKey = Buffer.from(path.join('META-INF', 'container.xml'));
+  const local = epub.indexOf(storedKey);
+  const central = epub.indexOf(storedKey, local + storedKey.length);
+  assert.ok(local >= 0 && central > local);
+  if (!hostKey.equals(storedKey)) {
+    // Both ZIP headers use the host lookup key. The entry data and CRC stay intact.
+    hostKey.copy(epub, local);
+    hostKey.copy(epub, central);
+  }
+  const comic = await fs.readFile(path.join(current.files, 'valid.zip'));
+  const openArchive = current.service.openArchive;
+  const [metadata, cover] = createBookEpubPlugin({ openArchive }).providers;
+  const logs = [];
+  const [, comicCover] = createBookComicPlugin({ openArchive, logger: { error: (error, message) => logs.push({ error, message }) } }).providers;
+  for (const [name, extension, bytes, run] of [
+    ['epub-metadata', '.epub', epub, item => metadata.getMetadata(item, { fileSystemMetadata: async () => ({ kind: 'file' }) })],
+    ['epub-cover', '.epub', epub, item => cover.getImage(item)],
+    ['comic-cover', '.cbz', comic, item => comicCover.getImage(item)],
+  ]) await t.test(name, async () => {
+    const item = await current.addArchive(name, extension, bytes);
+    const opened = current.selectWorker({ blockSpools: true });
+    const pending = current.track(run(item));
+    const owner = await opened;
+    await owner.entered.promise;
+    await pendingBeforeRelease(pending);
+    const copied = await fs.readFile(owner.workerData.filename);
+    assert.deepEqual(copied, bytes);
+    const source = current.sources.at(-1);
+    assert.equal(source.closed, true);
+    await assert.rejects(source.file.stat(), { code: 'EBADF' });
+    owner.release.resolve();
+    const result = await pending;
+    let failure;
+    if (extension === '.epub') {
+      assert.equal(result.failed, true);
+      failure = result.error;
+      assert.equal(failure.code, 'invalid-book-xml');
+      assert.ok(failure.cause instanceof SyntaxError);
+    } else {
+      assert.deepEqual(result, { failed: false, value: null });
+      assert.equal(logs.length, 1);
+      assert.equal(logs[0].message, 'Could not load comic cover.');
+      failure = logs[0].error;
+      assert.equal(failure.cause?.message, 'No supported comic cover found.');
+    }
+    assert.ok(failure instanceof AggregateError);
+    assert.equal(failure.errors.length, 2);
+    assert.equal(failure.cause, failure.errors[0]);
+    assert.equal(failure.message, failure.cause.message);
+    assert.equal(owner.worker.threadId, -1);
+    const cleanup = failure.errors[1];
+    assert.ok(cleanup instanceof AggregateError);
+    assert.equal(cleanup.errors.length, 2);
+    for (const [index, suffix] of ['', '.entry'].entries()) {
+      const filename = owner.workerData.filename + suffix;
+      assert.equal(cleanup.errors[index].syscall, 'unlink');
+      assert.equal(cleanup.errors[index].path, filename);
+      assert.equal((await fs.stat(filename)).isDirectory(), true);
+      await fs.rmdir(filename);
+    }
+    await current.recovery();
+    await current.record('book-consumer-' + name, { failure, result, logs, sourceClosed: true, workerStopped: true,
+      spoolEmpty: true, recovered: true, archiveBytes: copied.length, archiveSha256: digest(copied) }, copied);
+  });
+});
+
+test('ComicInfo sidecar diagnostics preserve actual file read and close failures', { timeout: 30000 }, async t => {
+  const current = await fixture(t);
+  const sidecar = 'valid.xml';
+  await fs.writeFile(path.join(current.files, sidecar), sourceBytes);
+  const item = current.item('valid');
+  const lookupSidecar = identity => {
+    assert.equal(identity, path.win32.join(path.win32.dirname(item.Path), sidecar));
+    return path.join(current.files, sidecar);
+  };
+  const logs = [];
+  const [metadata] = createBookComicPlugin({ openArchive: current.service.openArchive,
+    fileSystem: { stat: identity => fs.stat(lookupSidecar(identity)) }, logger: { warn: (error, message) => logs.push({ error, message }) } }).providers;
+  const readFailure = structured('The sidecar reader failed after yielding bytes.');
+  const closeFailure = structured('The sidecar handle failed after closing.');
+  const opened = current.selectSource({ readFailure, closeFailure });
+  const pending = current.track(metadata.getMetadata(item, {
+    fileSystemMetadata: async () => ({ kind: (await fs.stat(path.join(current.files, 'valid.zip'))).isFile() ? 'file' : 'directory' }),
+    imageAssets: { openRead(identity) { lookupSidecar(identity); return current.vfs.openRead('/' + sidecar); } },
+  }));
+  const source = await opened;
+  await source.entered.promise;
+  await pendingBeforeRelease(pending);
+  const copied = Buffer.alloc(prefix.length);
+  assert.equal((await source.file.read(copied, 0, copied.length, 0)).bytesRead, prefix.length);
+  assert.deepEqual(copied, prefix);
+  source.release.resolve();
+  const result = await pending;
+  assert.deepEqual(result, { failed: false, value: { HasMetadata: false } });
+  assert.equal(logs.length, 1);
+  assert.equal(logs[0].message, 'Could not load external ComicInfo XML.');
+  const failure = logs[0].error;
+  assert.ok(failure instanceof AggregateError);
+  ordered(failure, [readFailure, closeFailure]);
+  assert.equal(failure.cause, readFailure);
+  assert.equal(failure.errors[1], closeFailure);
+  await assert.rejects(source.file.stat(), { code: 'EBADF' });
+  await current.recovery();
+  await current.record('book-consumer-comic-sidecar', { result, logs, sourceClosed: source.closed, spoolEmpty: true, recovered: true }, copied);
+});
 
 test('archive spooling retains source and cancellation failures while draining the real source and destination', { timeout: 90000 }, async t => {
   const current = await fixture(t);
@@ -146,6 +264,55 @@ test('archive spooling retains source and cancellation failures while draining t
       await current.recovery();
     });
   }
+});
+
+test('archive spooling keeps real read and close failures when primary diagnostics throw', { timeout: 90000 }, async t => {
+  const current = await fixture(t);
+  const diagnostics = { message: 'The archive source was rejected.', code: 'ARCHIVE_SOURCE', status: 503, statusCode: 509 };
+  for (const field of ['message', 'code', 'status', 'statusCode', 'message-coercion']) await t.test(field, async () => {
+    let reads = 0;
+    const unreadable = () => { reads++; throw new Error('The archive diagnostic is unavailable.'); };
+    const reason = { ...diagnostics };
+    if (field === 'message-coercion') reason.message = Object.freeze({ [Symbol.toPrimitive]: unreadable });
+    else Object.defineProperty(reason, field, { get: unreadable });
+    Object.freeze(reason);
+    const cleanup = structured('The archive source failed after closing its file.');
+    const opened = current.selectSource({ readFailure: reason, closeFailure: cleanup });
+    const pending = current.track(current.service.openArchive(current.item('source'), { zipOnly: true }));
+    const owner = await opened;
+    await owner.entered.promise;
+    await owner.file.stat();
+    await pendingBeforeRelease(pending);
+    const spools = await fs.readdir(current.spool);
+    assert.equal(spools.length, 1);
+    const copied = await fs.readFile(path.join(current.spool, spools[0]));
+    assert.deepEqual(copied, prefix);
+    owner.release.resolve();
+    const result = await pending;
+    assert.equal(result.failed, true);
+    assert.ok(result.error instanceof AggregateError);
+    assert.equal(result.error.cause, reason);
+    assert.equal(result.error.errors.length, 2);
+    assert.equal(result.error.errors[0], reason);
+    assert.equal(result.error.errors[1], cleanup);
+    const expectedMessage = field.startsWith('message') ? 'Archive cleanup failed.' : diagnostics.message;
+    assert.equal(result.error.message, expectedMessage);
+    for (const key of ['code', 'status', 'statusCode']) {
+      assert.equal(Object.hasOwn(result.error, key), key !== field);
+      assert.equal(result.error[key], key === field ? undefined : diagnostics[key]);
+    }
+    assert.equal(reads, field === 'message-coercion' ? 0 : 1);
+    await assert.rejects(owner.file.stat(), { code: 'EBADF' });
+    assert.deepEqual(await fs.readdir(current.spool), []);
+    await current.recovery();
+    await current.record('diagnostic-read-close-' + field, {
+      field, reads, message: result.error.message,
+      code: result.error.code, status: result.error.status, statusCode: result.error.statusCode,
+      causePreserved: result.error.cause === reason,
+      failuresPreserved: result.error.errors[0] === reason && result.error.errors[1] === cleanup,
+      sourceClosed: owner.closed, copiedBytes: copied.length, copiedSha256: digest(copied), spoolEmpty: true, recovered: true,
+    }, copied);
+  });
 });
 
 test('archive opening preserves a real worker initialization failure through termination failures', { timeout: 90000 }, async t => {

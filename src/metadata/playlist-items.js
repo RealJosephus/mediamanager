@@ -10,6 +10,7 @@ import { MetadataImageAssets } from './image-assets.js';
 import { StorageError } from '../storage/errors.js';
 import {parsePlaylistMemberRelation} from './playlist-member-source.js';
 import {releaseNativeItemLinks} from '../library/native-item-entity.js';
+import { operationFailure } from '../core/operation-failure.js';
 
 const playlistNativeType = 'MediaBrowser.Controller.Playlists.Playlist';
 export const playlistFileExtensions = Object.freeze(['.m3u', '.m3u8', '.pls', '.wpl', '.zpl']);
@@ -203,14 +204,40 @@ export function createPlaylistItemsPlugin({ fileSystem, vfs,linkedChildren,spool
       || typeof context.findMetadataItemByPath !== 'function') throw new TypeError('Playlist item metadata requires authoritative library path context.');
     const roots=await context.playlistLibraryRoots();
     const handle=await(context.localPath?localAssets(context).openRead(context.localPath):media().openRead(accessPath));
-    try{return await linkedChildren.withSession(async session=>{
-      const parsed=await parsePlaylistMemberRelation(handle.stream,{extension:itemExtension,linkedChildren,session,parentId:resultItem.Id,spoolRoot:context.spoolRoot??spoolRoot,fileSystem:context.fileSystem??fileSystem});
-      const writer=await linkedChildren.createWriter({session,parentId:resultItem.Id});
-      try{for await(const page of linkedChildren.pages(parsed,{session}))for(const row of page){const linked=await resolvePlaylistPath(row.Path,item.Path,roots,context);if(linked)await writer.append(linked);}
-        const count=writer.count;if(count){resultItem.LinkedChildren=await writer.finish();return{Item:resultItem,HasMetadata:true};}await writer.abort();
-      }catch(error){await writer.abort();releaseNativeItemLinks(resultItem);throw error;}finally{await linkedChildren.release(parsed,{session});}
-      return{Item:resultItem,HasMetadata:false};
-    });}finally{await handle.close();await linkedChildren.flushReleases();}
+    const errors = [];
+    let hasMetadata = false;
+    try {
+      await linkedChildren.withSession(async session => {
+        let parsed, writer, finishing = false;
+        try {
+          parsed = await parsePlaylistMemberRelation(handle.stream, { extension: itemExtension, linkedChildren, session,
+            parentId: resultItem.Id, spoolRoot: context.spoolRoot ?? spoolRoot, fileSystem: context.fileSystem ?? fileSystem });
+          writer = await linkedChildren.createWriter({ session, parentId: resultItem.Id });
+          for await (const page of linkedChildren.pages(parsed, { session })) for (const row of page) {
+            const linked = await resolvePlaylistPath(row.Path, item.Path, roots, context);
+            if (linked) await writer.append(linked);
+          }
+          if (writer.count) { finishing = true; resultItem.LinkedChildren = await writer.finish(); hasMetadata = true; }
+        } catch (error) { errors.push(error); }
+        finally {
+          if (!finishing) try { await writer?.abort(); } catch (error) { errors.push(error); }
+          try { if (parsed !== undefined) await linkedChildren.release(parsed, { session }); } catch (error) { errors.push(error); }
+        }
+      });
+    } catch (error) { errors.push(error); }
+    try { await handle.close(); } catch (error) { errors.push(error); }
+    if (errors.length) try { releaseNativeItemLinks(resultItem); } catch (error) { errors.push(error); }
+    try { await linkedChildren.flushReleases(); }
+    catch (error) {
+      const undelivered = errors.length === 0;
+      errors.push(error);
+      if (undelivered) {
+        try { releaseNativeItemLinks(resultItem); } catch (error) { errors.push(error); }
+        try { await linkedChildren.flushReleases(); } catch (error) { errors.push(error); }
+      }
+    }
+    if (errors.length) throw operationFailure(errors, 'The playlist metadata operation failed.');
+    return { Item: resultItem, HasMetadata: hasMetadata };
   };
   const provider = {
     id: 'PlaylistItemsProvider', name: 'Playlist Item Provider', kind: 'local', itemTypes: ['Playlist'],

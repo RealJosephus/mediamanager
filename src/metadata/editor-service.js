@@ -189,6 +189,11 @@ export class MetadataEditorService {
 
   async close() { this.#closed = true; await Promise.allSettled([...this.#pending]); }
 
+  externalIdInfos(item) {
+    return externalIds.filter(provider => provider.supports(item)).map(({ Name, Key, Type }) => ({ Name, Key, Type })).concat(
+      (this.library.options.externalUrlRegistry?.discover({ item, kind: 'externalId' }) ?? []).map(provider => provider.getExternalIdInfo()));
+  }
+
   async get(itemId, { user = null } = {}) {
     return this.library.store.run(async database => {
       const state = await this.library.load(database, user, {
@@ -206,9 +211,7 @@ export class MetadataEditorService {
         ParentalRatingOptions: this.localizationData.parentalRatings(this.configuration.MetadataCountryCode || 'US'),
         Countries: structuredClone(this.localizationData.countries),
         Cultures: structuredClone(this.localizationData.cultures(this.localization.context.culture)),
-        ExternalIdInfos: externalIds.filter(provider => provider.supports(item))
-          .map(({ Name, Key, Type }) => ({ Name, Key, Type })).concat(
-            (this.library.options.externalUrlRegistry?.discover({item,kind:'externalId'}) ?? []).map(provider => provider.getExternalIdInfo())),
+        ExternalIdInfos: this.externalIdInfos(item),
         ContentType: fields.ContentType,
         ContentTypeOptions: fields.ContentTypeOptions
       };

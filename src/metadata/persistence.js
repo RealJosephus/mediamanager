@@ -114,7 +114,7 @@ export async function persistPeopleCredits(store, loaded, people) {
   });
 }
 
-export async function persistImageMetadata(store, loaded, images) {
+export async function persistImageMetadata(store, loaded, images, { preserveIndexOrder = false } = {}) {
   const id = loaded.item.Id;
   return ensureSerializedWrites(store, async () => {
     // Native SaveImagesAsync executes its delete before SaveChanges' insert
@@ -123,7 +123,9 @@ export async function persistImageMetadata(store, loaded, images) {
     const rows = await store.transaction(async db => {
       if (!(await db.rows('BaseItems', { where: { Id: id } })).length) return [];
       const imageRows = images.map(image => imageRow(id, image));
-      await insertNativeImageBatch(db, imageRows);
+      // Image routes expose the live sequence as indexes across separate requests.
+      if (preserveIndexOrder) await db.insertBatch('BaseItemImageInfos', imageRows);
+      else await insertNativeImageBatch(db, imageRows);
       return db.rows('BaseItemImageInfos', { where: { ItemId: id } });
     });
     loaded.relationships ??= {};

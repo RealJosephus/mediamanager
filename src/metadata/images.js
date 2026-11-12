@@ -1,6 +1,7 @@
 import { imagePathApi, imageIdentityPath } from './image-assets.js';
 import { imageSavePaths, internalImagePath, multipleImages, containingImageFolder } from './image-paths.js';
-import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
+import { ordinalIgnoreCaseEquals, ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
+import { clrTrim } from './whitespace.js';
 import { nativeDate } from '../sessions/user-data.js';
 import { ImageProcessor } from '../images/processor.js';
 import { normalizeProbeFileDate } from '../storage/probe-lifecycle.js';
@@ -46,10 +47,10 @@ function imageOption(loaded, type) {
   const fallback = defaultImageOptions[loaded.item.Type]?.[type] ?? [1, 0];
   return { limit: fallback[0], minWidth: fallback[1] };
 }
-function orderRemoteImages(images, requestedLanguage) {
-  requestedLanguage = requestedLanguage?.trim() || 'en';
-  const score = image => image.Language?.toLowerCase() === requestedLanguage.toLowerCase() ? 4
-    : image.Language?.toLowerCase() === 'en' ? 3 : emptyLanguage(image.Language) ? 2 : 0;
+export function orderRemoteImages(images, requestedLanguage) {
+  if (!requestedLanguage || !clrTrim(requestedLanguage)) requestedLanguage = 'en';
+  const score = image => ordinalIgnoreCaseEquals(image.Language, requestedLanguage) ? 4
+    : ordinalIgnoreCaseEquals(image.Language, 'en') ? 3 : emptyLanguage(image.Language) ? 2 : 0;
   const rating = image => roundEven(Number(image.CommunityRating ?? 0) * 10) / 10;
   return [...images].sort((a, b) => score(b) - score(a) || rating(b) - rating(a) || Number(b.VoteCount ?? 0) - Number(a.VoteCount ?? 0));
 }

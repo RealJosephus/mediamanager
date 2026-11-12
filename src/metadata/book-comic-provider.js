@@ -1,4 +1,5 @@
 import { imagePathApi } from './image-assets.js';
+import { withCleanup } from '../core/operation-failure.js';
 import { nativeFileNameWithoutExtension } from '../library/native-path.js';
 import { dateTicks, MIN_DATE } from '../library/records.js';
 import { formatUtcTicks } from '../syncplay/time.js';
@@ -10,6 +11,7 @@ const missing = error => ['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].inc
 const comicExtensions = new Set(['.cb7', '.cbr', '.cbt', '.cbz']);
 const coverExtensions = ['.png', '.jpeg', '.jpg', '.webp', '.bmp', '.gif'];
 const mimeTypes = { '.png': 'image/png', '.jpeg': 'image/jpeg', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.bmp': 'image/bmp', '.gif': 'image/gif' };
+const archiveCleanupMessage = 'Comic archive cleanup failed.';
 const entryExtension = key => {
   if (typeof key !== 'string') return '';
   const dot = key.lastIndexOf('.'), separator = Math.max(key.lastIndexOf('/'), process.platform === 'win32' ? key.lastIndexOf('\\') : -1);
@@ -42,11 +44,11 @@ export function createBookComicPlugin({ fileSystem, openArchive, logger = {}, cu
     if (!await cbzFile(item, context)) { log('debug', null, 'No ComicBookInfo metadata found.'); return noMetadata(); }
     try {
       const archive = await openArchive(item, { signal: context.signal, zipOnly: true });
-      try {
+      return await withCleanup(() => {
         const comment = Buffer.from(archive.comment).toString('utf8');
         if (!comicHasText(comment)) { log('debug', null, 'Missing ComicBookInfo in archive comment.'); return noMetadata(); }
         return readComicBookInfo(comment);
-      } finally { await archive.close(); }
+      }, [() => archive.close()], archiveCleanupMessage);
     } catch (error) { log(error instanceof SyntaxError ? 'debug' : 'error', error, 'Could not read ComicBookInfo.'); return noMetadata(); }
   };
   const externalMetadata = async (item, context) => {
@@ -58,12 +60,12 @@ export function createBookComicPlugin({ fileSystem, openArchive, logger = {}, cu
       if (context.imageAssets?.openRead) {
         // XmlReader.Create opens the sidecar before XDocument observes cancellation.
         const handle = await context.imageAssets.openRead(file.path);
-        try {
+        bytes = await withCleanup(async () => {
           context.signal?.throwIfAborted();
           const chunks = [];
           for await (const chunk of handle.stream) { context.signal?.throwIfAborted(); chunks.push(Buffer.from(chunk)); }
-          bytes = Buffer.concat(chunks);
-        } finally { await handle.close(); }
+          return Buffer.concat(chunks);
+        }, [() => handle.close()], 'Comic sidecar cleanup failed.');
       } else bytes = await fileSystem.readFile(file.path, { signal: context.signal });
       context.signal?.throwIfAborted();
       document = parseComicInfoXml(bytes);
@@ -75,14 +77,15 @@ export function createBookComicPlugin({ fileSystem, openArchive, logger = {}, cu
     let document;
     try {
       const archive = await openArchive(item, { signal: context.signal, zipOnly: true });
-      try {
+      document = await withCleanup(async () => {
         const entry = archive.findEntry('ComicInfo.xml');
-        if (!entry) { log('debug', null, 'No internal ComicInfo metadata found.'); return noMetadata(); }
+        if (!entry) { log('debug', null, 'No internal ComicInfo metadata found.'); return null; }
         const bytes = await archive.read(entry, { signal: context.signal });
         context.signal?.throwIfAborted();
-        document = parseComicInfoXml(bytes, { allowDtd: true, preserveWhitespace: false });
-      } finally { await archive.close(); }
+        return parseComicInfoXml(bytes, { allowDtd: true, preserveWhitespace: false });
+      }, [() => archive.close()], archiveCleanupMessage);
     } catch (error) { log('error', error, 'Could not load internal ComicInfo XML.'); log('debug', null, 'No internal ComicInfo metadata found.'); return noMetadata(); }
+    if (document === null) return noMetadata();
     return readComicInfo(document);
   };
   const metadataProvider = { id: 'comic-metadata', name: 'Comic Provider', kind: 'local', itemTypes: ['Book'],
@@ -109,7 +112,7 @@ export function createBookComicPlugin({ fileSystem, openArchive, logger = {}, cu
       if (typeof item.Path !== 'string' || !comicExtensions.has(imagePathApi(item.Path).extname(item.Path).toLowerCase())) return null;
       try {
         const archive = await openArchive(item, { signal });
-        try {
+        return await withCleanup(async () => {
           let cover = null;
           for (const extension of coverExtensions) { cover = archive.findEntry('cover' + extension); if (cover) break; }
           if (!cover) {
@@ -120,7 +123,7 @@ export function createBookComicPlugin({ fileSystem, openArchive, logger = {}, cu
           if (!cover) throw new Error('No supported comic cover found.');
           const bytes = await archive.read(cover, { signal });
           return { bytes, mimeType: mimeTypes[entryExtension(cover.key)] };
-        } finally { await archive.close(); }
+        }, [() => archive.close()], archiveCleanupMessage);
       } catch (error) { log('error', error, 'Could not load comic cover.'); return null; }
     }
   };

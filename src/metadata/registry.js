@@ -1,3 +1,5 @@
+import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
+
 export function validateMetadataExtension(plugin) {
     if (!plugin?.id || !plugin.name || !Array.isArray(plugin.providers)) throw new TypeError('A metadata plugin must declare its identity and providers.');
     const ids = new Set();
@@ -25,20 +27,30 @@ export class MetadataRegistry {
 
   plugins() { return [...this.#plugins.values(), ...this.extensions()]; }
 
-  discover({ item, kind, libraryOptions = {}, globalOptions = {}, includeDisabled = false, forceEnableInternetMetadata = false,
-    imageRefreshMode = 'Default', isMetadataFetcherEnabled, isImageFetcherEnabled } = {}) {
+  discover({ item, kind, providerType = item.Type, libraryOptions = {}, globalOptions = {}, includeDisabled = false, forceEnableInternetMetadata = false,
+    imageRefreshMode = 'Default', isMetadataFetcherEnabled, isImageFetcherEnabled, onSupportError } = {}) {
     const typeOptions = libraryOptions.TypeOptions?.find((options) => options.Type === item.Type);
+    const configured = globalOptions.MetadataOptions?.find(options => ordinalIgnoreCaseEquals(options.ItemType, item.Type)) ?? globalOptions;
     const providers = this.plugins().flatMap((plugin) => plugin.enabled === false ? [] : plugin.providers)
-      .filter((provider) => (!kind || provider.kind === kind) && (provider.itemTypes.includes(item.Type) || provider.itemTypes.includes('*')) && (!provider.supports || provider.supports(item)));
-    const orderFor = (provider) => provider.kind === 'local' ? libraryOptions.LocalMetadataReaderOrder ?? globalOptions.LocalMetadataReaderOrder ?? []
-      : provider.kind === 'image' ? typeOptions?.ImageFetcherOrder ?? globalOptions.ImageFetcherOrder ?? []
-        : provider.kind === 'remote' ? typeOptions?.MetadataFetcherOrder ?? globalOptions.MetadataFetcherOrder ?? [] : [];
+      .filter(provider => (!kind || provider.kind === kind) && (provider.itemTypes.includes(providerType) || provider.itemTypes.includes('*')))
+      .filter(provider => {
+        if (!provider.supports) return true;
+        try { return provider.supports(item); }
+        catch (error) {
+          if (!onSupportError) throw error;
+          onSupportError(provider, error);
+          return false;
+        }
+      });
+    const orderFor = (provider) => provider.kind === 'local' ? libraryOptions.LocalMetadataReaderOrder ?? configured.LocalMetadataReaderOrder ?? []
+      : provider.kind === 'image' ? typeOptions?.ImageFetcherOrder ?? configured.ImageFetcherOrder ?? []
+        : provider.kind === 'remote' ? typeOptions?.MetadataFetcherOrder ?? configured.MetadataFetcherOrder ?? [] : [];
     const enabled = (capability, name) => {
       if (item.Type === 'Channel') return true;
       if (item.SourceType === 'Channel') return !item.EnableMediaSourceDisplay;
       const names = typeOptions?.[capability + 'Fetchers'];
       if (typeOptions) return (names ?? []).some((entry) => entry.toLowerCase() === name.toLowerCase());
-      return !(globalOptions['Disabled' + capability + 'Fetchers'] ?? []).some((entry) => entry.toLowerCase() === name.toLowerCase());
+      return !(configured['Disabled' + capability + 'Fetchers'] ?? []).some(entry => ordinalIgnoreCaseEquals(entry, name));
     };
     return providers.filter((provider) => {
       if (provider.kind === 'local' && item.SupportsLocalMetadata === false) return false;

@@ -1,4 +1,5 @@
-import { newNativeItemEntity } from '../library/native-item-entity.js';
+import { newNativeItemEntity, releaseNativeItemLinks } from '../library/native-item-entity.js';
+import { operationFailure } from '../core/operation-failure.js';
 import { nativeGuid } from '../users/native.js';
 import { ordinalIgnoreCaseEquals, ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { parseInvariantDate } from '../core/invariant-date-parse.js';
@@ -78,6 +79,7 @@ function shareFromNode(node) {
  * result retains observable partial assignments when XmlReader throws. */
 export async function parseLocalXml(xml, { type, externalIdInfos = [], signal, result, linkedChildren, session } = {}) {
   if (!nativeTypes[type]) throw new TypeError(`Unsupported local XML parser type: ${type}`);
+  const suppliedResult = result != null;
   result ??= { Item: newNativeItemEntity(nativeTypes[type]), HasMetadata: false };
   result.People = [];
   const item = result.Item, providerIds = new Map();
@@ -88,7 +90,7 @@ export async function parseLocalXml(xml, { type, externalIdInfos = [], signal, r
   }
   providerIds.set(ordinalIgnoreCaseKey('IMDB'), 'Imdb');
   const buffered = new Map();
-  const memberWriters = new Map();
+  const memberWriters = new Map(), errors = [];
   if (!linkedChildren || !session) throw new TypeError('Native XML members require their runtime SQL importer session.');
   // Provider names are ordinal-ignore-case, but all built-in XML nodes are exact.
   const names = name => scalarNames.has(name) || type === 'Playlist' && name === 'PlaylistMediaType'
@@ -106,7 +108,23 @@ export async function parseLocalXml(xml, { type, externalIdInfos = [], signal, r
       if (step.name === 'Tags') item.Tags = [...new Set(entries)];
       else if (step.name === 'Shares') item.Shares = entries;
       else if (['CollectionItems', 'PlaylistItems'].includes(step.name)) {
-        item.LinkedChildren = await memberWriters.get(step.name).finish(); memberWriters.delete(step.name);
+        const writer = memberWriters.get(step.name);
+        if (!suppliedResult) {
+          // The prior container has no external owner and is about to be
+          // replaced. Release it before finish can retire a failed session.
+          releaseNativeItemLinks(item);
+          await linkedChildren.flushReleases({ session });
+        }
+        // finish owns both publication and cleanup once it starts.
+        memberWriters.delete(step.name);
+        const links = await writer.finish();
+        try { item.LinkedChildren = links; }
+        catch (error) {
+          const assignmentErrors = [error];
+          if (item.LinkedChildren !== links) try { await linkedChildren.release(links, { session }); }
+          catch (cleanup) { assignmentErrors.push(cleanup); }
+          throw operationFailure(assignmentErrors, 'Native XML member assignment failed.');
+        }
         await linkedChildren.flushReleases({ session });
       }
       buffered.delete(step.name); continue;
@@ -152,15 +170,21 @@ export async function parseLocalXml(xml, { type, externalIdInfos = [], signal, r
     else if (node.name === 'PlaylistMediaType' && type === 'Playlist') { const mediaType = tryParseClrInt32Enum(value, mediaTypes); if (mediaType != null) item.PlaylistMediaType = mediaType; }
     else if (providerIds.has(ordinalIgnoreCaseKey(node.name))) trySetProviderId(item, providerIds.get(ordinalIgnoreCaseKey(node.name)), value);
   }
-  } finally {
-    for (const writer of memberWriters.values()) await writer.abort();
+  } catch (error) { errors.push(error); }
+  if (errors.length && !suppliedResult) {
+    // An abort may retire this session after a failed DROP. Relinquish any
+    // earlier internal result while its publishing connection is still usable.
+    try { releaseNativeItemLinks(item); } catch (error) { errors.push(error); }
+    try { await linkedChildren.flushReleases({ session }); } catch (error) { errors.push(error); }
   }
+  for (const writer of memberWriters.values()) try { await writer.abort(); }
+  catch (error) { errors.push(error); }
+  if (errors.length) throw operationFailure(errors, 'Native XML member import failed.');
   result.HasMetadata = true;
   return result;
 }
 
 export async function fetchLocalXml(read, options) {
-  const result = options.result ?? { Item: newNativeItemEntity(nativeTypes[options.type]), HasMetadata: false };
-  result.People = [];
-  return parseLocalXml(await read(), { ...options, result });
+  if (options.result != null) options.result.People = [];
+  return parseLocalXml(await read(), options);
 }

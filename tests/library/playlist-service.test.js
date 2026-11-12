@@ -85,8 +85,11 @@ function observePlaylistFiles() {
     catch (error) { entry.failure = queuedFailure(error); throw error; }
     finally { entry.finishedAt = new Date().toISOString(); entry.finishedMilliseconds = performance.now(); }
   };
-  const files = new Proxy(testFileSystem, { get(target, property) {
+  const observeFiles = fileSystem => new Proxy(fileSystem, { get(target, property) {
     const value = Reflect.get(target, property, target);
+    if (['retainDirectory', 'retainDirectories'].includes(property)) return (...args) => {
+      const owner = value.apply(target, args); return { ...owner, fileSystem: observeFiles(owner.fileSystem) };
+    };
     if (typeof value !== 'function') return value;
     if (!['open', 'lstat', 'rename', 'copyFile', 'rm'].includes(property)) return value.bind(target);
     return async (...args) => {
@@ -109,7 +112,7 @@ function observePlaylistFiles() {
   } });
   // Observation reads share the replacement boundary so this fixture does not
   // hold a Windows target handle across the saver operation it is observing.
-  return { files, operations, read: (filename, ...args) => observeWithoutOverlap(() =>
+  return { files: observeFiles(testFileSystem), operations, read: (filename, ...args) => observeWithoutOverlap(() =>
     observe('readFile', filename, () => readFile(filename, ...args))) };
 }
 

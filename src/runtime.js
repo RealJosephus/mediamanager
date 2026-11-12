@@ -593,7 +593,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   if (collectionPostScanTask) libraryScanLifecycle.postScanTasks.splice(
     libraryScanLifecycle.postScanTasks.indexOf(collectionPosterVerifyPostScanTask) + 1, 0, collectionPostScanTask);
   if (collections) rollback.push(() => collections.close());
-  const images = new ImageService({ fileSystem, store, library, vfs, identityMap:metadataIdentityMap, mediaIdentityMap:identityMap, processor: imageProcessor, metadataImages, metadataUpdates, loadContext,
+  const images = new ImageService({ fileSystem, store, library, users, vfs, identityMap:metadataIdentityMap, mediaIdentityMap:identityMap, processor: imageProcessor, metadataImages, metadataUpdates, loadContext,
     get metadataPath() { return applicationPaths.metadataPath; }, logger,
     userImagePath: imageOptions.userImagePath ?? (configurationDirectoryPath && path.join(configurationDirectoryPath, 'users')) });
   library.options.getImageDimensions = (item, image) => images.getImageDimensions(item, image);

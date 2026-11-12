@@ -1,7 +1,10 @@
 import { guidValue, httpError, notFound, noContent, queryValue } from './binding.js';
 import { bindItemUpdate } from './item-update-binding.js';
+import { registerItemLookupRoutes } from './item-lookup-routes.js';
 
-export function registerMetadataEditorRoutes(add, { metadataEditor, itemUpdates } = {}) {
+export function registerMetadataEditorRoutes(add, services = {}) {
+  const { metadataEditor, itemUpdates } = services;
+  registerItemLookupRoutes(add, services);
   add('POST', '/Items/{itemId}/ContentType', async context => {
     if (!metadataEditor?.updateContentType) throw httpError(501, 'Content-type editing is not configured.');
     try {

@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { withCleanup } from '../core/operation-failure.js';
 import { imagePathApi } from './image-assets.js';
 import { parseOpfDocument, readOpfMetadata, readOpfCoverPath, readEpubContentPath } from './opf-reader.js';
 
@@ -18,6 +19,7 @@ const directoryName = filename => {
 // Native archive entry lookup uses host Path.Combine, independently of the
 // identity style used to access the EPUB file through the storage mapping.
 const containerKey = path.join('META-INF', 'container.xml');
+const archiveCleanupMessage = 'EPUB archive cleanup failed.';
 
 export function createBookEpubPlugin({ openArchive, logger = { error() {} } } = {}) {
   if (typeof openArchive !== 'function') throw new TypeError('Book EPUB requires original-media archive access.');
@@ -29,13 +31,13 @@ export function createBookEpubPlugin({ openArchive, logger = { error() {} } } = 
       // The synchronous native metadata prefix does not use the request token.
       // Cancellation is first checked by OpfReader after XML loading.
       const archive = await openArchive(item, { zipOnly: true });
-      try {
+      return withCleanup(async () => {
         const container = archive.findEntry(containerKey); if (!container) return noMetadata();
         const filename = readEpubContentPath(parseOpfDocument(await archive.read(container)));
         if (filename == null) return noMetadata();
         const entry = archive.findEntry(filename); if (!entry) return noMetadata();
         return readOpfMetadata(parseOpfDocument(await archive.read(entry)), { signal: context.signal, logger });
-      } finally { await archive.close(); }
+      }, [() => archive.close()], archiveCleanupMessage);
     }
   };
   const cover = { id: 'book-epub-cover', name: 'EPUB Metadata', kind: 'image', imageSource: 'dynamic', order: 50,
@@ -44,7 +46,7 @@ export function createBookEpubPlugin({ openArchive, logger = { error() {} } } = 
       if (!isEpub(item)) return null;
       signal?.throwIfAborted();
       const archive = await openArchive(item, { signal, zipOnly: true });
-      try {
+      return withCleanup(async () => {
         const container = archive.findEntry(containerKey); if (!container) return null;
         const filename = readEpubContentPath(parseOpfDocument(await archive.read(container)));
         if (filename == null) return null;
@@ -54,7 +56,7 @@ export function createBookEpubPlugin({ openArchive, logger = { error() {} } } = 
         if (!reference) return null;
         const image = archive.findEntry(reference.path); if (!image) return null;
         return { bytes: await archive.read(image, { signal }), mimeType: formatMimeType(reference.mimeType) };
-      } finally { await archive.close(); }
+      }, [() => archive.close()], archiveCleanupMessage);
     }
   };
   return { id: 'builtin-book-epub', name: 'Book EPUB', providers: [metadata, cover] };

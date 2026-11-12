@@ -1,6 +1,7 @@
 import { nativeGuid, wireGuid } from '../users/native.js';
 import { escapeXml, XmlError } from '../core/xml.js';
 import { clrTrim } from './whitespace.js';
+import { operationFailure } from '../core/operation-failure.js';
 
 export const localXmlPageSize = 128;
 export const localXmlBufferSize = 8192;
@@ -140,24 +141,29 @@ async function linkedNodes(item, context, writer, type) {
   // Preparation resolves the complete native batch before opening the plural
   // node. SQL stores IDs, duplicate order and resolved paths, not Node maps.
   const snapshot = await context.prepareLinkedXmlItems(item, { pageSize: localXmlPageSize });
-  if (!snapshot || typeof snapshot.pages !== 'function' || typeof snapshot.close !== 'function') {
-    throw new TypeError('A linked XML snapshot requires pages() and close().');
-  }
+  const errors = [];
   try {
+    if (!snapshot || typeof snapshot.pages !== 'function' || typeof snapshot.close !== 'function') {
+      throw new TypeError('A linked XML snapshot requires pages() and close().');
+    }
     const count = BigInt(snapshot.manualCount);
     if (count < 0n) throw new TypeError('Manual XML link count cannot be negative.');
-    if (!count) return;
-    await writer.start(type === 'BoxSet' ? 'CollectionItems' : 'PlaylistItems');
-    for await (const page of snapshot.pages({ limit: localXmlPageSize })) {
-      if (!Array.isArray(page) || page.length > localXmlPageSize) throw new TypeError('Linked XML pages must contain at most 128 rows.');
-      for (const row of page) {
-        if (typeof row.Path !== 'string' || !clrTrim(row.Path)) continue;
-        await writer.start(type === 'BoxSet' ? 'CollectionItem' : 'PlaylistItem');
-        await writer.element('Path', row.Path, true); await writer.end();
+    if (count) {
+      await writer.start(type === 'BoxSet' ? 'CollectionItems' : 'PlaylistItems');
+      for await (const page of snapshot.pages({ limit: localXmlPageSize })) {
+        if (!Array.isArray(page) || page.length > localXmlPageSize) throw new TypeError('Linked XML pages must contain at most 128 rows.');
+        for (const row of page) {
+          if (typeof row.Path !== 'string' || !clrTrim(row.Path)) continue;
+          await writer.start(type === 'BoxSet' ? 'CollectionItem' : 'PlaylistItem');
+          await writer.element('Path', row.Path, true); await writer.end();
+        }
       }
+      await writer.end();
     }
-    await writer.end();
-  } finally { await snapshot.close(); }
+  } catch (error) { errors.push(error); }
+  try { if (typeof snapshot?.close === 'function') await snapshot.close(); }
+  catch (error) { errors.push(error); }
+  if (errors.length) throw operationFailure(errors, 'The linked XML members could not be written.');
 }
 
 /** The only serialization API writes to one asynchronous byte sink. It never
@@ -166,6 +172,7 @@ export async function streamLocalXml(item, sink, context = {}) {
   const type = typeOf(item);
   if (!['BoxSet', 'Playlist'].includes(type)) throw new TypeError(`Unsupported local XML saver type: ${type}`);
   const writer = new XmlWriter(sink, context.newLine ?? '\r\n');
+  const errors = [];
   try {
     await writer.begin();
     if (item.OfficialRating) await writer.element('ContentRating', item.OfficialRating);
@@ -225,5 +232,7 @@ export async function streamLocalXml(item, sink, context = {}) {
         : item.PlaylistMediaType == null ? 'Unknown' : String(item.PlaylistMediaType).split('.').at(-1);
       if (mediaType !== 'Unknown') await writer.element('PlaylistMediaType', mediaType);
     }
-  } finally { await writer.finish(); }
+  } catch (error) { errors.push(error); }
+  try { await writer.finish(); } catch (error) { errors.push(error); }
+  if (errors.length) throw operationFailure(errors, 'The local XML document could not be written.');
 }

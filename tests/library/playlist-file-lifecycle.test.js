@@ -17,11 +17,13 @@ const emptySelection = { count: async () => 0n, page: async () => ({ entries: []
 async function spoolFixture(t, { closeFailure, removeFailure, beforeRemove } = {}) {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'playlist-file-lifecycle-'));
   t.after(() => fs.rm(root, { recursive: true, force: true }));
-  let handle;
+  const handles = [];
   const fileSystem = {
     async open(filename, flags) {
-      handle = await testFileSystem.open(filename, flags);
+      const handle = await testFileSystem.open(filename, flags);
+      handles.push(handle);
       return {
+        read: (...args) => handle.read(...args),
         write: (...args) => handle.write(...args),
         async close() {
           await handle.close();
@@ -36,7 +38,10 @@ async function spoolFixture(t, { closeFailure, removeFailure, beforeRemove } = {
       await testFileSystem.rm(...args);
     },
   };
-  return { root, fileSystem, assertClosed: () => assert.rejects(async () => handle.stat(), { code: 'closed' }) };
+  return { root, fileSystem, assertClosed: async () => {
+    assert.ok(handles.length > 0);
+    for (const handle of handles) await assert.rejects(async () => handle.stat(), { code: 'closed' });
+  } };
 }
 
 test('playlist preparation removes its actual spool after a selection and handle-close failure', async t => {
@@ -46,7 +51,8 @@ test('playlist preparation removes its actual spool after a selection and handle
   await assert.rejects(preparePlaylistFile(path.join(f.root, 'mix.m3u'), {
     ...emptySelection, count: async () => { throw selected; },
   }, { fileSystem: f.fileSystem, spoolRoot: f.root }), error => {
-    assert.deepEqual(failureValue(error), failureValue(new AggregateError([selected, closed], selected.message, { cause: selected })));
+    assert.deepEqual(failureValue(error), failureValue(Object.assign(
+      new AggregateError([selected, closed], selected.message, { cause: selected }), { code: selected.code, status: selected.status })));
     return true;
   });
   await f.assertClosed();
@@ -61,7 +67,8 @@ test('playlist preparation preserves selection, close and removal failure values
   await assert.rejects(preparePlaylistFile(path.join(f.root, 'mix.m3u'), {
     ...emptySelection, count: async () => { throw selected; },
   }, { fileSystem: f.fileSystem, spoolRoot: f.root }), error => {
-    assert.deepEqual(failureValue(error), failureValue(new AggregateError([selected, closed, removed], selected.message, { cause: selected })));
+    assert.deepEqual(failureValue(error), failureValue(Object.assign(
+      new AggregateError([selected, closed, removed], selected.message, { cause: selected }), { code: selected.code, status: selected.status })));
     return true;
   });
   await f.assertClosed();
@@ -94,7 +101,8 @@ test('external playlist delivery retains its network failure when spool removal 
   const writer = new PlaylistFileWriter({ fileSystem: f.fileSystem, spoolRoot: f.root,
     vfs: { async write(_filename, stream) { for await (const _part of stream) { /* Consume the real spool. */ } throw delivered; } } });
   await assert.rejects(writer.write({ identityPath: path.join(f.root, 'mix.m3u'), accessPath: '/external/mix.m3u' }, emptySelection), error => {
-    assert.deepEqual(failureValue(error), failureValue(new AggregateError([delivered, removed], delivered.message, { cause: delivered })));
+    assert.deepEqual(failureValue(error), failureValue(Object.assign(
+      new AggregateError([delivered, removed], delivered.message, { cause: delivered }), { code: delivered.code, status: delivered.status })));
     return true;
   });
   await f.assertClosed();

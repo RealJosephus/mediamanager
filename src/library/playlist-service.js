@@ -22,6 +22,8 @@ import {playlistStoredLinksPlan,insertPlaylistLinks,emptyPlaylistLinks,movePlayl
 import {quoteIdentifier as q} from '../database/model.js';
 import {nativeTextBytes,decodeNativeTextBytes} from '../database/native-text.js';
 import {nativeTextSql} from '../database/native-text-sql.js';
+import { ownStorageDirectories } from '../storage/ownership.js';
+import { operationFailure } from '../core/operation-failure.js';
 
 export const playlistNativeType = 'MediaBrowser.Controller.Playlists.Playlist';
 const playlistsFolderNativeType = 'Emby.Server.Implementations.Playlists.PlaylistsFolder';
@@ -84,6 +86,7 @@ export class PlaylistService {
   #tail = Promise.resolve();
   #refreshTail = Promise.resolve();
   #resources = new AsyncLocalStorage();
+  #fileSystem;
 
   constructor(options = {}) {
     const { store, library, programDataPath, dataPath, fileSystem = library?.options.fileSystem,
@@ -111,6 +114,17 @@ export class PlaylistService {
   }
 
   get configuration() { const { configuration = {} } = this.options; return configuration; }
+  get fileSystem() { return this.#resources.getStore()?.fileSystem ?? this.#fileSystem; }
+  set fileSystem(value) { this.#fileSystem = value; }
+
+  #retainManagedFiles() {
+    const resources = this.#resources.getStore();
+    if (!resources) throw new Error('A playlist operation owner is required.');
+    if (!resources.fileSystem) {
+      const owner = this.#own(ownStorageDirectories(this.#fileSystem, [this.playlistsPath, this.spoolRoot]), value => value.close());
+      resources.fileSystem = owner.fileSystem;
+    }
+  }
 
   #enqueue(operation) {
     if (this.#closed) return Promise.reject(libraryError(503, 'The playlist service is closed.'));
@@ -153,7 +167,7 @@ export class PlaylistService {
 
   async #expand(itemIds, user, { deferRelatedNameAccess = false } = {}) {
     const children=await this.#cohort();let ordinal=0n,mediaType=null;
-    const links=await this.store.run(async session=>{const writer=await this.linkedChildren.createWriter({session});
+    const links=await this.store.run(async session=>{const writer=await this.linkedChildren.createWriter({session});let finishing=false;
     const add=async item=>{await writer.append({ItemId:item.Id,Type:0});await children.capture(item,{ordinal:++ordinal});if(mediaType==null&&item.MediaType&&item.MediaType!=='Unknown')mediaType=item.MediaType;};
     try{
     for (const value of itemIds) await this.library.store.run(async db => {
@@ -186,7 +200,9 @@ export class PlaylistService {
       if(page.length<128)break;start+=page.length;}
       }finally{await localState.dispose({session:db});}
     });
-    return writer.finish();}catch(error){await writer.abort();throw error;}});
+    finishing=true;return await writer.finish();}catch(error){const errors=[error];
+      if(!finishing)try{await writer.abort();}catch(cleanup){errors.push(cleanup);}
+      throw operationFailure(errors,'Playlist expansion cleanup failed.');}});
     return {links:this.#ownLinks(links),children,count:ordinal,mediaType};
   }
 
@@ -277,6 +293,7 @@ export class PlaylistService {
 
   async #managedDirectory(value) {
     if (typeof value !== 'string') throw libraryError(409, 'The playlist path is not a managed directory.');
+    this.#retainManagedFiles();
     const root = await this.fileSystem.realpath(this.playlistsPath);
     const candidate = path.resolve(value);
     const info = await this.fileSystem.lstat(candidate);
@@ -290,53 +307,68 @@ export class PlaylistService {
 
   async #replaceFile(filename, contents) {
     const temporary = path.join(path.dirname(filename), `.playlist-${randomUUID()}.tmp`);
+    const errors = [];
+    let file;
     try {
-      const file=await this.fileSystem.open(temporary,'wx');
-      try{for await(const bytes of contents.stream())for(let offset=0;offset<bytes.length;){const written=await file.write(bytes,offset,bytes.length-offset);if(!written.bytesWritten)throw new Error('The playlist XML write made no progress.');offset+=written.bytesWritten;}}
-      finally{await file.close();}
-      await this.fileSystem.rename(temporary, filename);
-    } catch (error) {
-      try { await this.fileSystem.rm(temporary, { force: true }); }
-      catch { /* Preserve the primary sidecar failure. */ }
-      throw error;
+      file = await this.fileSystem.open(temporary, 'wx');
+      for await (const bytes of contents.stream()) for (let offset = 0; offset < bytes.length;) {
+        const written = await file.write(bytes, offset, bytes.length - offset);
+        if (!written.bytesWritten) throw new Error('The playlist XML write made no progress.');
+        offset += written.bytesWritten;
+      }
+    } catch (error) { errors.push(error); }
+    try { await file?.close(); } catch (error) { errors.push(error); }
+    if (!errors.length) try { await this.fileSystem.rename(temporary, filename); } catch (error) { errors.push(error); }
+    if (errors.length) {
+      // An exclusive open failure never gives us ownership of an existing name.
+      if (file) try { await this.fileSystem.rm(temporary, { force: true }); } catch (error) { errors.push(error); }
+      if (errors.length === 1) throw errors[0];
+      throw new AggregateError(errors, errors[0]?.message ?? 'The playlist sidecar failed to close.', { cause: errors[0] });
     }
   }
 
   async #writeXml(playlist) {
     const directory = await this.#managedDirectory(playlist.Path);
     const filename = path.join(directory, 'playlist.xml');
-    let previous = null;
+    let previous = null, info;
     try {
-      const info = await this.fileSystem.lstat(filename);
-      if (!info.isFile() || info.isSymbolicLink()) throw libraryError(409, 'The playlist metadata path is not a regular file.');
-      previous=path.join(this.spoolRoot,`playlist-backup-${randomUUID()}.tmp`);await this.fileSystem.copyFile(filename,previous);
+      info = await this.fileSystem.lstat(filename);
     }
     catch (error) { if (error?.code !== 'ENOENT') throw error; }
+    if (info) {
+      if (!info.isFile() || info.isSymbolicLink()) throw libraryError(409, 'The playlist metadata path is not a regular file.');
+      previous = this.#own(path.join(this.spoolRoot, `playlist-backup-${randomUUID()}.tmp`), value => this.fileSystem.rm(value, { force: true }));
+      await this.fileSystem.copyFile(filename, previous);
+    }
     const restore = async () => {
       if (previous == null) await this.fileSystem.rm(filename, { force: true });
       else await this.fileSystem.copyFile(previous,filename);
     };
-    if(previous)this.#own(previous,value=>this.fileSystem.rm(value,{force:true}));
     const owner = acquireNativeItemLinkOwner(playlist);
-    let contents;
+    let contents, replacing = false;
+    const errors = [];
     try {
-    contents = await serializeLocalXml(playlist, { fileSystem: this.fileSystem,
-      playlistFile:false,spoolRoot:this.spoolRoot,getPeople:()=>this.library.itemCreation.loadContext.withContext(playlist.Id,{draft:playlist,includeChildren:false},loaded=>loaded.context.getPeople(playlist)),
-      prepareLinkedXmlItems:async item=>{const prepared=await this.linkedChildren.xmlPaths(item.LinkedChildren,{parentId:item.Id,expandPath:this.library.options.expandPath});
-        return{manualCount:prepared.manualCount,pages:options=>this.linkedChildren.pages(prepared.paths,options),close:()=>this.linkedChildren.release(prepared.paths)};}
-    });
-    try { await this.#replaceFile(filename, contents); }
-    catch (error) {
-      try { await restore(); }
-      catch (restoreError) {
-        throw new AggregateError([error, restoreError], 'Playlist metadata could not be written or restored.', { cause: error });
-      }
-      throw error;
+      contents = await serializeLocalXml(playlist, { fileSystem: this.fileSystem,
+        playlistFile: false, spoolRoot: this.spoolRoot, getPeople: () => this.library.itemCreation.loadContext.getPeople(playlist),
+        prepareLinkedXmlItems: async item => {
+          const prepared = await this.linkedChildren.xmlPaths(item.LinkedChildren, { parentId: item.Id, expandPath: this.library.options.expandPath });
+          return { manualCount: prepared.manualCount, pages: options => this.linkedChildren.pages(prepared.paths, options),
+            close: () => this.linkedChildren.release(prepared.paths) };
+        }
+      });
+      replacing = true;
+      await this.#replaceFile(filename, contents);
+    } catch (error) { errors.push(error); }
+    try { await contents?.close(); } catch (error) { errors.push(error); }
+    try { owner.release(); } catch (error) { errors.push(error); }
+    // The caller cannot receive its rollback callback until all XML resources
+    // have closed. A failure after rename still requires filesystem rollback.
+    if (errors.length) {
+      if (replacing) try { await restore(); } catch (error) { errors.push(error); }
+      if (errors.length === 1) throw errors[0];
+      throw new AggregateError(errors, errors[0]?.message ?? 'Playlist metadata could not be written or restored.', { cause: errors[0] });
     }
     return restore;
-    } finally {
-      try { await contents?.close(); } finally { owner.release(); }
-    }
   }
 
   async #childrenSnapshot(db,links,{manualOnly=false}={}){
@@ -435,6 +467,7 @@ export class PlaylistService {
       const shares = normalizeShares(users);
       mediaType = normalizeMediaType(mediaType);
       await this.fileSystem.mkdir(this.playlistsPath, { recursive: true });
+      this.#retainManagedFiles();
       const root = await this.fileSystem.realpath(this.playlistsPath);
       let candidate = path.join(root, folderName);
       if (!directChild(root, candidate)) throw libraryError(400, 'The playlist path is outside the managed playlist directory.');
@@ -726,11 +759,12 @@ export class PlaylistService {
           const currentLinks=await this.#currentLinks(db,playlist.Id);
           const target = String(entryId).toLowerCase();
           const visibility=buildPostgresPlaylistVisibility(await loadPostgresNavigationRows(db),user,this.library.options.libraryOptions);
-          const writer=await this.linkedChildren.createWriter({session:db,parentId:playlist.Id});let accessible;
+          const writer=await this.linkedChildren.createWriter({session:db,parentId:playlist.Id});let accessible,finishing=false;
           try{for(let startIndex=0;;){const page=await queryPostgresPlaylistPage(db,playlist.Id,{visibility,startIndex,limit:128});
             for(const row of page.links)await writer.append({ItemId:row.ChildId,Type:Number(row.ChildType)});
-            if(page.links.length<128)break;startIndex+=page.links.length;}accessible=this.#ownLinks(await writer.finish());}
-          catch(error){await writer.abort();throw error;}
+            if(page.links.length<128)break;startIndex+=page.links.length;}finishing=true;accessible=this.#ownLinks(await writer.finish());}
+          catch(error){const errors=[error];if(!finishing)try{await writer.abort();}catch(cleanup){errors.push(cleanup);}
+            throw operationFailure(errors,'Playlist move cleanup failed.');}
           const current=this.linkedChildren.plan(currentLinks),visible=this.linkedChildren.plan(accessible);
           const rebase=visible.text.replace(/\$(\d+)\b/gu,(_,value)=>'$'+(Number(value)+current.values.length));
           const values=[...current.values,...visible.values,target,Math.max(newIndex-1,0)+1],targetParameter='$'+(values.length-1),priorParameter='$'+values.length;
