@@ -1,5 +1,6 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { acquirePostgresWriteLock, releasePostgresWriteLock } from './postgres-write-lock.js';
+import { operationFailure } from '../core/operation-failure.js';
 
 const postgresOperationAdmission = Symbol('postgres-operation-admission');
 
@@ -15,7 +16,7 @@ async function withPostgresWriteLock(database, scope, operation, options) {
   catch (releaseError) {
     database.discardConnection(releaseError);
     if (operationFailed) {
-      throw new AggregateError([operationError, releaseError], operationError?.message ?? 'PostgreSQL write and lock release failed.', { cause: operationError });
+      throw operationFailure([operationError, releaseError], 'PostgreSQL write and lock release failed.');
     }
     throw releaseError;
   }

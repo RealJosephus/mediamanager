@@ -4,6 +4,7 @@ import { nativeTextFunctionStatements, nativeTextFunctionsSha256, assertNativeTe
 import pg from 'pg';
 import { createHash } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
+import { operationFailure } from '../core/operation-failure.js';
 import { setTimeout as delay } from 'node:timers/promises';
 import { nativeModel, postgresStorageModel, quoteIdentifier as q, tableDefinition, columnDefinition, createTableSql, createIndexSql, dependencyOrder } from './model.js';
 import { parseNativeEnvelope, serializeNativeEnvelope } from './native-envelope.js';
@@ -965,10 +966,13 @@ export class PostgresDatabase {
             try { await this.client.query('ROLLBACK'); }
             catch (rollbackError) {
               this.discardConnection(rollbackError);
-              throw new AggregateError([error, rollbackError], error?.message ?? 'PostgreSQL transaction and rollback failed.', { cause: error });
+              throw operationFailure([error, rollbackError], 'PostgreSQL transaction and rollback failed.');
             }
           }
-          if (locking && error?.code === '55P03') {
+          let retryLock = false;
+          if (locking) try { retryLock = error?.code === '55P03'; }
+          catch { /* A diagnostic getter cannot replace the rejected lock operation. */ }
+          if (retryLock) {
             signal?.throwIfAborted();
             const remaining = lockDeadline === undefined ? lockRetryMs : lockDeadline - Date.now();
             if (remaining <= 0) throw tableLockTimeout(error);
