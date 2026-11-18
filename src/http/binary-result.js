@@ -23,7 +23,9 @@ export function contentDisposition(filename) {
   return `attachment; filename=${token}; filename*=UTF-8''${encoded}`;
 }
 
-export function vfsStreamResult(vfs, accessPath, { contentType, filename, requestHeaders, preserveErrorHeaders = [] } = {}) {
+export function vfsStreamResult(vfs, accessPath, {
+  contentType, filename, requestHeaders, preserveErrorHeaders = [], physicalFile = false, ranges = true, attachment = false,
+} = {}) {
   return new BinaryResult(async (request, response) => {
     const controller = new AbortController();
     const abort = () => controller.abort();
@@ -40,12 +42,29 @@ export function vfsStreamResult(vfs, accessPath, { contentType, filename, reques
     try {
       // The pinned proxy uses GET even for HEAD; opening then closing preserves
       // upstream range metadata without consuming the media body.
-      handle = await vfs.openResponse(accessPath, { rangeHeader: request.headers.range,
-        ifRange: request.headers['if-range'], requestHeaders, signal: controller.signal });
+      handle = await vfs.openResponse(accessPath, { rangeHeader: ranges ? request.headers.range : undefined,
+        ifRange: ranges ? request.headers['if-range'] : undefined, requestHeaders, signal: controller.signal });
       checkAbort(controller.signal);
       response.statusCode = handle.statusCode;
-      for (const [name, value] of Object.entries(handle.headers)) setHeader(name, value);
-      if (!response.hasHeader('Content-Type')) setHeader('Content-Type', contentType ?? 'application/octet-stream');
+      if (attachment) setHeader('Content-Disposition', 'attachment');
+      if (physicalFile && handle.modified) {
+        const modified = Math.floor(Date.parse(handle.modified) / 1000) * 1000;
+        if (Number.isFinite(modified)) {
+          setHeader('Last-Modified', new Date(modified).toUTCString());
+          const since = Date.parse(request.headers['if-modified-since']), unmodified = Date.parse(request.headers['if-unmodified-since']);
+          const now = Date.now();
+          const validUnmodified = Number.isFinite(unmodified) && unmodified <= now;
+          if (validUnmodified && modified > unmodified) { response.statusCode = 412; response.end(); return; }
+          if (!validUnmodified && Number.isFinite(since) && since <= now && modified <= since) {
+            response.statusCode = 304; response.end(); return;
+          }
+        }
+      }
+      for (const [name, value] of Object.entries(handle.headers)) {
+        if (!ranges && ['accept-ranges', 'content-range'].includes(name.toLowerCase())) continue;
+        setHeader(name, value);
+      }
+      if (physicalFile || !response.hasHeader('Content-Type')) setHeader('Content-Type', contentType ?? 'application/octet-stream');
       if (filename) setHeader('Content-Disposition', contentDisposition(filename));
       if (request.method === 'HEAD') { response.end(); return; }
       let written = 0n;

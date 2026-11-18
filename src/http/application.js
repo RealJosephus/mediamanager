@@ -5,6 +5,7 @@ import { stringifyNativeJson } from '../core/json.js';
 import { HttpResult, BindingError, readBody, queryValue } from './binding.js';
 import { registerDomainRoutes } from './routes.js';
 import { registerPlaybackRoutes } from './playback-routes.js';
+import { registerTrickplayRoutes } from './trickplay-routes.js';
 import { BinaryResult } from './binary-result.js';
 import { registerClientNetworkRoutes } from './client-network-routes.js';
 import { registerClientDiscoveryRoutes } from './client-discovery-routes.js';
@@ -115,6 +116,7 @@ export async function createApplication(services = {}) {
   registerPluginRoutes(add, services);
   registerDomainRoutes(add, services);
   registerPlaybackRoutes(add, services);
+  registerTrickplayRoutes(add, services);
   registerSessionControlRoutes(add, services);
   registerMetadataRoutes(add, services);
   registerImageRoutes(add, services);

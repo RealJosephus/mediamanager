@@ -51,6 +51,24 @@ const conditionReasons = { AudioBitrate: 'AudioBitrateNotSupported', AudioChanne
   VideoBitDepth: 'VideoBitDepthNotSupported', AudioBitDepth: 'AudioBitDepthNotSupported', VideoBitrate: 'VideoBitrateNotSupported', VideoCodecTag: 'VideoCodecTagNotSupported',
   VideoFramerate: 'VideoFramerateNotSupported', VideoLevel: 'VideoLevelNotSupported', VideoProfile: 'VideoProfileNotSupported', VideoRangeType: 'VideoRangeTypeNotSupported', VideoRotation: 'VideoRotationNotSupported' };
 
+function audioContainerRemuxProfile(source, profiles, audio) {
+  return profiles.find(entry => !containsContainer(get(entry, 'Container'), source.Container)
+    && (equal(get(entry, 'AudioCodec'), audio.Codec) || equal(get(entry, 'Container'), audio.Codec)));
+}
+
+export function universalAudioHlsCopyContainer(source, profile, maxBitrate, requestedContainer) {
+  if (!source.SupportsDirectStream || !source.IsRemote && (source.Bitrate ?? 40000000) > (maxBitrate > 0 ? maxBitrate : 2147483647)) return;
+  const streams = source.MediaStreams.filter(stream => stream.Type === 'Audio');
+  const audio = streams.find(stream => stream.IsDefault) ?? streams[0];
+  if (!audio?.Codec) return;
+  const profiles = profile.DirectPlayProfiles;
+  if (profiles.some(entry => containsContainer(entry.Container, source.Container) && containsContainer(entry.AudioCodec, audio.Codec))) return;
+  const remux = audioContainerRemuxProfile(source, profiles, audio);
+  if (!remux) return;
+  const container = remux.Container.toLowerCase();
+  return ['ts', 'mp4'].includes(container) ? container : requestedContainer;
+}
+
 export function conditionSatisfied(condition, value) {
   const property = conditionProperty(condition);
   if (value == null || value === '' || property === 'VideoRangeType' && value === 'Unknown') return !get(condition, 'IsRequired', true);
@@ -280,9 +298,8 @@ function selectRemux(source, item, profile, options, audio, video, subtitle, mas
   let entries = get(profile, 'TranscodingProfiles', []).filter(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), item.MediaType)
     && ['http', 'hls', 0, 1].includes(get(entry, 'Protocol', 'http')) && ['Streaming', 0].includes(get(entry, 'Context', 'Streaming')));
   // Native audio direct-stream selection falls back to MPEG-TS when no transcode container is set.
-  const audioDirectProfile = !isVideo && get(profile, 'DirectPlayProfiles', []).find(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), 'Audio')
-    && !containsContainer(get(entry, 'Container'), source.Container)
-    && (equal(get(entry, 'AudioCodec'), audio?.Codec) || equal(get(entry, 'Container'), audio?.Codec)));
+  const audioDirectProfile = !isVideo && audio && audioContainerRemuxProfile(source,
+    get(profile, 'DirectPlayProfiles', []).filter(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), 'Audio')), audio);
   const flacAudioMp4 = equal(audio?.Codec, 'flac') && !source.MediaStreams.some(stream => stream.Type === 'Video')
     && audioDirectProfile && equal(get(audioDirectProfile, 'Container'), 'mp4') && equal(get(audioDirectProfile, 'AudioCodec'), 'flac');
   if (source.SupportsDirectStream && flacAudioMp4) entries = [{ Container: get(audioDirectProfile, 'Container'), Protocol: source.TranscodingSubProtocol ?? 'http', AudioDirectStream: true }];

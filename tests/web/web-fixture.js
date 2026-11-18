@@ -112,7 +112,8 @@ export async function serveWebClient(root) {
 }
 
 /** Import the current native database, then use the production entry and public APIs. */
-export async function createWebServerFixture({ populated = false, resumePlayback = false, legacyAuthorization = true, preparation = {}, signal } = {}) {
+export async function createWebServerFixture({ populated = false, audioFixture, resumePlayback = false,
+  legacyAuthorization = true, preparation = {}, signal } = {}) {
   signal?.throwIfAborted();
   const supplied = await currentNativeSqliteInputs();
   const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), 'mediamanager-web-')));
@@ -164,7 +165,14 @@ export async function createWebServerFixture({ populated = false, resumePlayback
     const mediaRoot = path.join(directory, 'media');
     const style = process.platform === 'win32' ? 'windows' : 'posix';
     let media, mountContract = supplied.receipt.mountContract;
-    if (populated) {
+    if (audioFixture) {
+      await mkdir(mediaRoot);
+      const name = 'Universal Audio Fixture.flac', filename = path.join(mediaRoot, name);
+      await copyFile(audioFixture, filename);
+      const bytes = await readFile(filename);
+      media = { name, libraryName: 'Universal Audio', filename,
+        files: { [name]: { bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') } } };
+    } else if (populated) {
       const movieDirectory = path.join(mediaRoot, 'Web feature (2026)');
       await mkdir(movieDirectory, { recursive: true });
       const filename = path.join(movieDirectory, 'Web feature (2026).mp4');
@@ -177,6 +185,8 @@ export async function createWebServerFixture({ populated = false, resumePlayback
         files[name] = { bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };
       }
       media = { name: 'Web feature', libraryName: 'Web Movies', files, preparation: mediaPreparation };
+    }
+    if (media) {
       mountContract = { mounts: [{ mountId: 'web-media', identityRoot: mediaRoot, accessRoot: '/web-media',
         pathStyle: style, caseSensitive: style !== 'windows', returnPolicy: 'required' }] };
       const filesystemRoot = path.parse(mediaRoot).root;
@@ -214,7 +224,7 @@ export async function createWebServerFixture({ populated = false, resumePlayback
     const environment = { ...process.env,
       MEDIAMANAGER_INSTANCE: instanceDirectory, MEDIAMANAGER_POSTGRES: process.env.MEDIAMANAGER_TEST_POSTGRES,
       MEDIAMANAGER_POSTGRES_SCHEMA: database.schemaName,
-      ...(populated ? { MEDIAMANAGER_STORAGE: path.join(directory, 'storage.json') } : {}) };
+      ...(media ? { MEDIAMANAGER_STORAGE: path.join(directory, 'storage.json') } : {}) };
     const onRuntimeError = (error, context) => {
       errors.push(error?.message ?? String(error));
       const observed = errorObservation(error);
@@ -245,7 +255,8 @@ export async function createWebServerFixture({ populated = false, resumePlayback
     if (media) {
       // The controlled NFO/image consumer has no external metadata dependency.
       assert.equal((await administratorRequest('/Plugins/tmdb/Enabled', { method: 'POST', body: { enabled: false } })).status, 200);
-      assert.equal((await administratorRequest(`/Library/VirtualFolders?name=${encodeURIComponent(media.libraryName)}&collectionType=movies&refreshLibrary=false`, {
+      const collectionType = audioFixture ? 'music' : 'movies';
+      assert.equal((await administratorRequest(`/Library/VirtualFolders?name=${encodeURIComponent(media.libraryName)}&collectionType=${collectionType}&refreshLibrary=false`, {
         method: 'POST', body: { LibraryOptions: { PathInfos: [{ Path: mediaRoot }], EnableRealtimeMonitor: false,
           EnableInternetProviders: false, PreferredMetadataLanguage: 'en-US' } }
       })).status, 204);
@@ -255,13 +266,18 @@ export async function createWebServerFixture({ populated = false, resumePlayback
       assert.equal(Result.Id, refreshLibraryTaskId);
       assert.equal(Result.Status, 'Completed', Result.ErrorMessage);
       await application.metadata.drain();
-      const discovered = await administratorRequest('/Items?IncludeItemTypes=Movie&Recursive=true&Fields=MediaSources,Overview,Path');
+      const discovered = await administratorRequest(audioFixture
+        ? '/Items?IncludeItemTypes=Audio&Recursive=true&Fields=Path,MediaStreams'
+        : '/Items?IncludeItemTypes=Movie&Recursive=true&Fields=MediaSources,Overview,Path');
       assert.equal(discovered.status, 200);
-      const movies = (await discovered.json()).Items;
-      assert.equal(movies.length, 1);
-      assert.equal(movies[0].Name, media.name);
-      assert.ok(movies[0].ImageTags.Primary, 'The real scan must discover the controlled local image.');
-      media.item = movies[0];
+      const items = (await discovered.json()).Items;
+      assert.equal(items.length, 1);
+      media.item = items[0];
+      if (audioFixture) assert.equal(media.item.Path, media.filename);
+      else {
+        assert.equal(media.item.Name, media.name);
+        assert.ok(media.item.ImageTags.Primary, 'The real scan must discover the controlled local image.');
+      }
       media.scan = Result;
       const status = await administratorRequest('/Storage/Status');
       assert.equal(status.status, 200);
