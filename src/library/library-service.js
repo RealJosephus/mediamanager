@@ -63,7 +63,7 @@ import { queryPostgresProgramRecordingInfo, queryPostgresSeriesTimerProgramFilte
 import { queryPostgresRecordingFolderSources, orderPostgresRecordingFolders, createPostgresRecordingQuery } from './postgres-live-tv-recordings-query.js';
 import { recordingSourceVisibleWithoutUser, recordingFoldersMissingUser } from './live-tv-recording-folders-access.js';
 import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
-import { dtoItemCountKinds, queryPostgresDtoItemCounts } from './postgres-dto-item-counts-query.js';
+import { dtoItemCountKinds, queryPostgresDtoItemCounts, queryPostgresLibraryCounts } from './postgres-dto-item-counts-query.js';
 import { queryPostgresItemFilters } from './postgres-item-filters-query.js';
 import { querySuggestions } from './suggestions.js';
 import { queryYears } from './years.js';
@@ -1668,6 +1668,25 @@ export class LibraryService extends EventEmitter {
     const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
       ...visibility } = await this.#postgresVisibility(state, user) ?? {};
     return { scope, topParentIds, visibility: user ? visibility : undefined };
+  }
+
+  queryItemCounts({ isFavorite } = {}, { user = null } = {}) {
+    if (!user && isFavorite !== undefined) throw libraryError(500, 'A favorite item count requires a user.');
+    return this.#runWithStates(async db => {
+      let visibility;
+      if (user) {
+        const state = await this.load(db, user, { includeUserData: false, baseRows: await loadPostgresNavigationRows(db) });
+        visibility = await this.#postgresUserViewVisibility(state, user);
+      }
+      return queryPostgresLibraryCounts(db, { userId: user?.Id, isFavorite, visibility });
+    }, { channelViews: Boolean(user) });
+  }
+
+  async #postgresUserViewVisibility(state, user) {
+    const views = await this.userViews.views(state, user, { includeHidden: true });
+    const roots = await this.navigationChildren(state, user);
+    const topParentIds = views.flatMap(item => queryTopParentIds(item, state, user, roots));
+    return { ...await this.#postgresVisibility(state, user), topParentIds };
   }
 
   querySuggestions(input = {}, { user = null, signal } = {}) {

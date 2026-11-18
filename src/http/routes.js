@@ -551,6 +551,10 @@ export function registerDomainRoutes(add, services) {
     try { return await library.getAncestors(guid(context, 'itemId'), { user: await optionalRequestUser(context) }); }
     catch (error) { if (error.status === 404) return notFound(); throw error; }
   });
+  add('GET', '/Items/Counts', async context => {
+    const isFavorite = boolean(context, 'isFavorite');
+    return library.queryItemCounts({ isFavorite }, { user: await optionalRequestUser(context) });
+  });
   add('GET', ['/Items/{itemId}', '/Users/{userId}/Items/{itemId}'], async context => {
     try {
       const itemId = guid(context, 'itemId'), user = await requestUser(context, { required: false });

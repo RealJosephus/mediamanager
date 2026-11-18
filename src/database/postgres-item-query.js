@@ -183,6 +183,7 @@ export function buildPostgresItemPageQuery(database, query, {
   includeOwnedItems = false,
   includeAlternateVersions = false,
   includePlaceholderRows = false,
+  countByType = false,
   groupByPresentationKey = false,
   includeOrdinal = false,
   nameAccessTypes = [],
@@ -2220,6 +2221,10 @@ export function buildPostgresItemPageQuery(database, query, {
   ctes.push(postCollapsePredicates.length
     ? `selected AS ${selectedMaterialization}(SELECT i.* FROM collapsed i WHERE ${postCollapsePredicates.join('\n    AND ')})`
     : `selected AS ${selectedMaterialization}(SELECT * FROM collapsed)`);
+  if (countByType) {
+    return Object.freeze({ text: `WITH RECURSIVE ${ctes.join(',\n')}
+SELECT "Type", count(*)::integer AS "Count" FROM selected GROUP BY "Type"`, values: Object.freeze(values) });
+  }
   if (useMemoryInsertion) {
     ctes.push(`memory_sort_input AS (
       SELECT memory_source.*, row_number() OVER (ORDER BY ${memoryInsertionSourceOrder.join(', ')}) AS "__input_ordinal",
