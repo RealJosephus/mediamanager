@@ -428,8 +428,19 @@ export async function restoreRemoteAssets(options) {
     progress.complete = true;
     return progress;
   } catch (thrown) {
-    const error = normalizeThrown(thrown, 'Remote restore failed');
-    error.remoteRestoreProgress = progress;
-    throw error;
+    let message = typeof thrown === 'string' ? thrown : 'Remote restore failed';
+    try {
+      const diagnostic = thrown?.message;
+      if (typeof diagnostic === 'string') message = diagnostic;
+    } catch { /* Diagnostic getters cannot replace the restore failure. */ }
+    const failure = new Error(message, { cause: thrown });
+    for (const key of ['code', 'status', 'statusCode', 'errors']) {
+      try {
+        const value = thrown?.[key];
+        if (value !== undefined) failure[key] = value;
+      } catch { /* The original rejection is available in cause. */ }
+    }
+    failure.remoteRestoreProgress = progress;
+    throw failure;
   }
 }
