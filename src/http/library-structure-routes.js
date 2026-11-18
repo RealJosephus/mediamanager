@@ -1,5 +1,6 @@
 import { BindingError, HttpResult, booleanValue, noContent, notFound, httpError, queryValue } from './binding.js';
 import { bindJsonModel, validateJsonModel } from './json-model-binding.js';
+import { registerLibraryNotificationRoutes } from './library-notification-routes.js';
 import { defaultLibraryOptions } from '../library/options.js';
 import { parseCollectionTypeOption } from '../library/collection-type-options.js';
 import { availableLibraryOptions } from '../library/available-library-options.js';
@@ -77,6 +78,7 @@ function pathValues(query) {
 
 export function registerLibraryStructureRoutes(add, services) {
   const { libraryConfiguration } = services;
+  registerLibraryNotificationRoutes(add, services);
   const service = () => {
     if (!libraryConfiguration) throw httpError(501, 'Library management requires persistent application paths.');
     return libraryConfiguration;
