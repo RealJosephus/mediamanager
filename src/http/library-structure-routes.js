@@ -4,6 +4,7 @@ import { registerLibraryNotificationRoutes } from './library-notification-routes
 import { defaultLibraryOptions } from '../library/options.js';
 import { parseCollectionTypeOption } from '../library/collection-type-options.js';
 import { availableLibraryOptions } from '../library/available-library-options.js';
+import { libraryMediaFolders, libraryPhysicalPaths } from '../library/postgres-library-folders.js';
 import { clrTrim, clrWhitespace } from '../metadata/whitespace.js';
 
 const text = { type: 'string', clrType: 'System.String', nullable: true };
@@ -77,13 +78,25 @@ function pathValues(query) {
 }
 
 export function registerLibraryStructureRoutes(add, services) {
-  const { libraryConfiguration } = services;
+  const { library, libraryConfiguration, libraryScanHost, libraryOptionsStore } = services;
   registerLibraryNotificationRoutes(add, services);
   const service = () => {
     if (!libraryConfiguration) throw httpError(501, 'Library management requires persistent application paths.');
     return libraryConfiguration;
   };
   const policy = 'FirstTimeSetupOrElevated', prefix = '/Library/VirtualFolders';
+  const scanHost = () => {
+    if (!libraryScanHost) throw httpError(501, 'Library folders require persistent application paths.');
+    return libraryScanHost;
+  };
+  add('GET', '/Library/PhysicalPaths', ({ signal }) => libraryPhysicalPaths(library, scanHost(), signal), { policy: 'RequiresElevation' });
+  add('GET', '/Library/MediaFolders', ({ queryInput, signal }) =>
+    libraryMediaFolders(library, scanHost(), libraryOptionsStore, queryInput, signal), {
+    policy: 'RequiresElevation', bindQuery: query => {
+      const value = queryValue(query, 'isHidden');
+      return value == null || clrTrim(value) === '' ? undefined : booleanValue(value, 'isHidden');
+    },
+  });
   add('GET', '/Libraries/AvailableOptions', ({ query, queryInput, signal }) => availableLibraryOptions(services, {
     collectionType: queryValue(query, 'libraryContentType'), newLibrary: queryInput, signal,
   }), { policy: 'FirstTimeSetupOrDefault', bindQuery: query => {
