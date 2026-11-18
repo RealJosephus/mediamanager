@@ -607,17 +607,17 @@ export function registerDomainRoutes(add, services) {
     try { return await library.getAdditionalParts(itemId, { user, userRoot: Boolean(userId && !/^0{32}$/.test(userId)) }); }
     catch (error) { if (error.status === 404) return notFound(); throw error; }
   });
-  add('GET', ['/Items/{itemId}/LocalTrailers', '/Users/{userId}/Items/{itemId}/LocalTrailers'], async context => {
-    const itemId = guid(context, 'itemId');
-    let userId = guid(context, 'userId', context.auth.UserId);
-    if (/^0{32}$/.test(userId ?? '')) userId = context.auth.UserId;
-    // UserLibraryController calls GetUserById even for an API key. Its empty
-    // user selector is an argument failure, while a missing real user is 404.
-    if (!userId || /^0{32}$/.test(userId)) throw httpError(400, 'Error processing request.');
-    const user = await optionalRequestUser(context);
-    try { return await library.getLocalTrailers(itemId, { user }); }
-    catch (error) { if (error.status === 404) return notFound(); throw error; }
-  });
+  for (const [endpoint, method] of [['LocalTrailers', 'getLocalTrailers'], ['SpecialFeatures', 'getSpecialFeatures']]) {
+    add('GET', [`/Items/{itemId}/${endpoint}`, `/Users/{userId}/Items/{itemId}/${endpoint}`], async context => {
+      const itemId = guid(context, 'itemId');
+      const userId = optionalRequestUserId(context);
+      // Both actions require a real user selector even for an API key.
+      if (!userId || /^0{32}$/.test(userId)) throw httpError(400, 'Error processing request.');
+      const user = await users.getUser(userId);
+      try { return await library[method](itemId, { user }); }
+      catch (error) { if (error.status === 404) return notFound(); throw error; }
+    });
+  }
   for (const [endpoint, kind] of [['ThemeSongs', 'songs'], ['ThemeVideos', 'videos'], ['ThemeMedia', 'all']]) {
     add('GET', `/Items/{itemId}/${endpoint}`, async context => {
       const itemId = guid(context, 'itemId');

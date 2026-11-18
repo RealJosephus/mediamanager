@@ -1,13 +1,14 @@
 import { quoteIdentifier as q } from '../database/model.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { nativeTextBytes } from '../database/native-text.js';
-import { buildPostgresItemPageQuery, queryPostgresItemPage } from '../database/postgres-item-query.js';
+import { buildPostgresItemPageQuery, queryPostgresItemPage, visitPostgresItemPlanPages } from '../database/postgres-item-query.js';
 import { nativeItemDescriptor, nativeItemTypes } from './native-item-entity.js';
 import { resolvePostgresSearchCollation } from './postgres-search-provider.js';
 import { idKey, VIDEO_TYPES } from './records.js';
 
 const videoTypes = () => nativeItemTypes.filter(type => nativeItemDescriptor(type).family === 'video');
 const table = database => `${q(database.schemaName)}.${q('BaseItems')}`;
+const displayExtraTypes = [0, 1, 3, 4, 5, 6, 7, 10, 11];
 export const ownedExtraCountKey = owner => JSON.stringify([idKey(owner.Id), owner.NativeType,
   owner.PrimaryVersionId == null ? null : idKey(owner.PrimaryVersionId)]);
 
@@ -87,17 +88,33 @@ function extraMemberships(database, source, types) {
 }
 
 /** BaseItem.GetExtras/Video.GetExtraOwnerIds: repository selection over the complete actual version family. */
-export function queryPostgresLocalTrailers(database, ownerId, { userId, visibility } = {}) {
+export function visitPostgresOwnedExtras(database, ownerId, { userId, visibility, kind, seriesKey }, visit) {
   const sql = nativeTextSql(database.schemaName);
   const { topParentIds: _topParents, ...extraVisibility } = visibility;
+  const values = [idKey(ownerId), videoTypes().map(nativeTextBytes)];
+  const seriesScope = seriesKey
+    ? ` OR ("Type" = $3::bytea AND "PresentationUniqueKey" = $4::bytea)`
+    : '';
+  if (seriesKey) values.push(nativeTextBytes('MediaBrowser.Controller.Entities.TV.Series'), nativeTextBytes(seriesKey));
   const source = `SELECT "Id" AS owner_id, "Id", "Type", "PrimaryVersionId" FROM ${table(database)}
-    WHERE ${sql.guidKey('"Id"')} = $1::text`;
+    WHERE ${sql.guidKey('"Id"')} = $1::text${seriesScope}`;
   const ownerPlan = `WITH ${extraMemberships(database, source, '$2::bytea[]')}
-    SELECT "Id" FROM owned_extra_memberships WHERE "ExtraType" = 2`;
-  return queryPostgresItemPage(database, { sortby: ['sortname'], sortorder: ['ascending'] }, {
+    SELECT "Id" FROM owned_extra_memberships${kind === 'trailers' ? ' WHERE "ExtraType" = 2' : ''}`;
+  const options = {
     userId, visibility: extraVisibility, includeOwnedItems: true,
-    itemIdsPlan: { text: ownerPlan, values: [idKey(ownerId), videoTypes().map(nativeTextBytes)] },
-  });
+    groupByPresentationKey: Boolean(userId), includeOrdinal: true,
+    itemIdsPlan: { text: ownerPlan, values },
+  };
+  const plan = buildPostgresItemPageQuery(database, { sortby: ['sortname'], sortorder: ['ascending'] }, options);
+  if (kind === 'trailers') return visitPostgresItemPlanPages(database, plan, options, visit);
+  // The native controller keeps the display types after the repository has
+  // selected and grouped all of the owner's extras.
+  return visitPostgresItemPlanPages(database, {
+    ...plan, values: [...plan.values, displayExtraTypes],
+    text: `SELECT selected."Id", selected."TotalRecordCount"
+      FROM (${plan.text}) selected JOIN ${table(database)} extra ON extra."Id" = selected."Id"
+      WHERE extra."ExtraType" = ANY($${plan.values.length + 1}::int[]) ORDER BY selected."__ordinal"`,
+  }, options, visit);
 }
 
 /** DTO counts use GetExtras without a user; selected owners share one bounded SQL version frame. */
@@ -113,7 +130,7 @@ export async function queryPostgresOwnedExtraCounts(database, owners) {
     eligible AS (${eligibleText})
     SELECT source.owner_id AS "Ordinal",
       count(*) FILTER (WHERE eligible."Id" IS NOT NULL AND member."ExtraType" = 2) AS trailers,
-      count(*) FILTER (WHERE eligible."Id" IS NOT NULL AND member."ExtraType" IN (0,1,3,4,5,6,7,10,11)) AS features
+      count(*) FILTER (WHERE eligible."Id" IS NOT NULL AND member."ExtraType" IN (${displayExtraTypes.join(',')})) AS features
     FROM source LEFT JOIN owned_extra_memberships member ON member.owner_id = source.owner_id
     LEFT JOIN eligible ON ${sql.guidKey('eligible."Id"')} = ${sql.guidKey('member."Id"')}
     GROUP BY source.owner_id`, values: [selected.map(item => nativeTextBytes(item.Id)),

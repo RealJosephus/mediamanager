@@ -36,7 +36,7 @@ import { prepareItemsController, itemsDispatch } from './items-dispatch.js';
 import { boxSetDisplayOrder, isLegacyBoxSet } from './boxset-state.js';
 import { collectionType, groupedMediaFolders, eligibleForGrouping } from './user-view-query.js';
 import { UserViewService } from './user-view-service.js';
-import { createVirtualPathExpander, createVirtualPathReverser } from './options.js';
+import { createVirtualPathExpander, createVirtualPathReverser, defaultLibraryOptions } from './options.js';
 import { nextUpTopParentIds } from './next-up.js';
 import { childCountSourceIds } from './child-counts.js';
 import { postgresParentalRatingContext, comparisonItemRating, preferredMetadataCountryBeforeFolders } from './parental-rating.js';
@@ -70,7 +70,7 @@ import { querySuggestions } from './suggestions.js';
 import { queryYears } from './years.js';
 import { createYearSpecialChildren } from './year-user-view-source.js';
 import { queryPostgresThemeItems } from './postgres-theme-items-query.js';
-import { orderPostgresVideoPartOccurrences, queryPostgresLocalTrailers, queryPostgresVideoParts } from './postgres-owned-media-query.js';
+import { orderPostgresVideoPartOccurrences, visitPostgresOwnedExtras, queryPostgresVideoParts } from './postgres-owned-media-query.js';
 import { createPostgresItemCollectionsQuery } from './postgres-item-collections-query.js';
 import { loadLocalizationData } from '../core/localization-data.js';
 import { queryPostgresUserViewChildPresence } from './postgres-user-views-query.js';
@@ -3543,6 +3543,14 @@ export class LibraryService extends EventEmitter {
   }
 
   async getLocalTrailers(id, { user } = {}) {
+    return this.#getOwnedExtras(id, user, 'trailers');
+  }
+
+  async getSpecialFeatures(id, { user } = {}) {
+    return this.#getOwnedExtras(id, user, 'features');
+  }
+
+  async #getOwnedExtras(id, user, kind) {
     if (!user) throw libraryError(404, 'User not found.');
     const normalized = guid(id);
     return this.#runWithStates(async db => {
@@ -3553,15 +3561,28 @@ export class LibraryService extends EventEmitter {
         && !await this.#postgresStandaloneVisible(db, owner, user, initial)) {
         throw libraryError(404, 'Item not found.');
       }
-      // GetExtras uses repository visibility and the actual media-version
-      // owners. AdditionalParts are not media versions and cannot lend their
-      // extras to a primary which does not own them.
-      const page = await queryPostgresLocalTrailers(db, owner.Id, { userId: user.Id,
-        visibility: await this.#postgresVisibility(initial, user) });
-      const state = await this.#loadPostgresItemState(db, [owner.Id, ...page.rows.map(row => row.Id)], user);
-      const items = page.rows.map(row => state.byId.get(idKey(row.Id))), options = dtoOptions({}, true), result = [];
-      await this.#prefetchPostgresDtos(items, state, user, options, { artistBatch: false });
-      for (const item of items) result.push(await projectItem(item, state, user, options, { ...this.options, owner }));
+      let seriesKey;
+      if (owner.Type === 'Series') {
+        const collectionFolders = await this.getCollectionFolders(owner, initial);
+        const folder = collectionFolders.find(item => item.Type === 'CollectionFolder');
+        const configured = this.options.libraryOptions;
+        const libraryOptions = (configured instanceof Map ? configured.get(idKey(folder?.Id)) : configured?.[idKey(folder?.Id)])
+          ?? defaultLibraryOptions();
+        if (libraryOptions.EnableAutomaticSeriesGrouping) {
+          seriesKey = owner.PresentationUniqueKey ?? createPresentationUniqueKey(owner, { libraryOptions, collectionFolders });
+        }
+      }
+      const result = [], options = dtoOptions({}, true);
+      await visitPostgresOwnedExtras(db, owner.Id, { kind, userId: user.Id, seriesKey,
+        visibility: await this.#postgresVisibility(initial, user) }, async ({ rows }) => {
+        if (!rows.length) return;
+        const state = await this.#loadPostgresItemState(db, [owner.Id, ...rows.map(row => row.Id)], user);
+        await withCleanup(async () => {
+          const items = rows.map(row => state.byId.get(idKey(row.Id)));
+          await this.#prefetchPostgresDtos(items, state, user, options, { artistBatch: false });
+          for (const item of items) result.push(await projectItem(item, state, user, options, { ...this.options, owner }));
+        }, [() => state.dispose({ session: db })], 'Owned extra page cleanup failed.');
+      });
       return result;
     }, { channelItems: true });
   }
