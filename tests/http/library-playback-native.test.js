@@ -5,7 +5,7 @@ import { createServer } from 'node:http';
 import { copyFile, cp, mkdir, readFile, realpath, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
-import { getNewItemId } from '../../src/core/identity.js';
+import { getNewItemId, md5Guid } from '../../src/core/identity.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { readInstanceConfiguration } from '../../src/configuration.js';
 import { idKey } from '../../src/library/records.js';
@@ -47,6 +47,10 @@ async function seed(referenceRoot, current) {
   const resolveId = (filename, type) => nativeGuid(getNewItemId(filename, type, { programDataPath,
     enableCaseSensitiveItemIds: settings.configuration.EnableCaseSensitiveItemIds }));
   const folderId = resolveId(physical, nativeType('Folder')), collectionId = resolveId(collection, nativeType('CollectionFolder'));
+  const groupingLibraries = [['Zulu Films', 'movies'], ['Alpha TV', 'tvshows']].map(([Name, type]) => {
+    const Path = path.join(rootPath, Name);
+    return { Name, type, Path, Id: resolveId(Path, nativeType('CollectionFolder')) };
+  });
   const tileDir = path.join(dataPath, 'trickplay', movies[0].slice(0, 2).toLowerCase(), movies[0].toLowerCase(), '320 - 2x2');
   await mkdir(physical, { recursive: true });
   await mkdir(collection, { recursive: true });
@@ -54,6 +58,11 @@ async function seed(referenceRoot, current) {
   await writeFile(path.join(collection, 'music.collection'), '');
   await writeFile(path.join(collection, 'media.mblink'), physical);
   await writeFile(path.join(collection, 'options.xml'), '<LibraryOptions><EnableRealtimeMonitor>false</EnableRealtimeMonitor></LibraryOptions>');
+  for (const library of groupingLibraries) {
+    await mkdir(library.Path);
+    await writeFile(path.join(library.Path, library.type + '.collection'), '');
+    await writeFile(path.join(library.Path, 'options.xml'), '<LibraryOptions><EnableRealtimeMonitor>false</EnableRealtimeMonitor></LibraryOptions>');
+  }
   await copyFile(audioFixture, audio);
   const tile = path.join(tileDir, '0.jpg');
   await copyFile(tileFixture, tile);
@@ -75,6 +84,10 @@ async function seed(referenceRoot, current) {
     database.transaction(() => {
       if (!userRoot) addItem({ Id: rootId, Type: nativeType('UserRootFolder'), Name: 'default', Path: rootPath,
         IsFolder: true, Data: '{"IsRoot":true}' });
+      for (const { Id, Name, Path, type } of groupingLibraries) {
+        addItem({ Id, Name, Path, ParentId: rootId, Type: nativeType('CollectionFolder'), IsFolder: true,
+          Data: JSON.stringify({ CollectionType: type, PhysicalFolderIds: [], PhysicalLocationsList: [] }) });
+      }
       addItem({ Id: collectionId, ParentId: rootId, Type: nativeType('CollectionFolder'), Name: 'Contract Media', Path: collection,
         IsFolder: true, Data: JSON.stringify({ CollectionType: 'music', PhysicalFolderIds: [folderId], PhysicalLocationsList: [physical] }) });
       addItem({ Id: folderId, ParentId: aggregate.Id, TopParentId: folderId, Type: nativeType('Folder'),
@@ -135,7 +148,7 @@ async function seed(referenceRoot, current) {
     });
     database.preflight();
   } finally { database.close(); }
-  return { settings, databasePath, folderId, apiKey, audio, tile, people };
+  return { settings, databasePath, folderId, apiKey, audio, tile, people, groupingLibraries };
 }
 
 function portAvailable(port) {
@@ -214,6 +227,9 @@ test('existing playback assets, date ticks, counts and search hints match the de
       'Emby.Server.Implementations/Library/Search/SqlSearchProvider.cs',
       'Jellyfin.Api/Controllers/PersonsController.cs', 'Jellyfin.Server.Implementations/Item/PeopleRepository.cs',
       'Jellyfin.Api/Controllers/UserLibraryController.cs', 'MediaBrowser.Controller/Entities/BaseItem.cs',
+      'Jellyfin.Api/Controllers/UserViewsController.cs', 'MediaBrowser.Controller/Entities/UserView.cs',
+      'Jellyfin.Api/Controllers/LiveTvController.cs', 'src/Jellyfin.LiveTv/LiveTvManager.cs',
+      'src/Jellyfin.LiveTv/DefaultLiveTvService.cs',
     ]);
     await cp(current.sourceRoot, referenceRoot, { recursive: true });
     await current.prepareClone(referenceRoot, port);
@@ -237,6 +253,8 @@ test('existing playback assets, date ticks, counts and search hints match the de
     const externalAudio = (item, source, stream) => `/Videos/${item}/${source}/Audios/${stream}/Stream.aac`;
     const trickplay = `/Videos/${ids[0]}/Trickplay/320`;
     const datePath = '/Items?Recursive=true&EnableImages=false&EnableUserData=false&SortBy=SortName&Ids=' + ids.join(',');
+    const tunerService = md5Guid('Jellyfin.LiveTv.DefaultLiveTvService');
+    const tunerReset = tuner => '/LiveTv/Tuners/' + tuner + '/Reset';
     const samples = [
       { name: 'universal audio', route: audio, status: 200 },
       { name: 'universal audio HEAD', route: audio, method: 'HEAD', status: 200 },
@@ -283,6 +301,14 @@ test('existing playback assets, date ticks, counts and search hints match the de
       { name: 'legacy item special features', route: '/Users/' + idKey(current.userId) + '/Items/' + ids[0] + '/SpecialFeatures', status: 200 },
       { name: 'features requires a user with API key', route: '/Items/' + ids[0] + '/SpecialFeatures', status: 400, apiKey: true },
       { name: 'features of a missing owner', route: '/Items/' + idKey(id(999)) + '/SpecialFeatures', status: 404 },
+      { name: 'eligible user view groups', route: '/UserViews/GroupingOptions', status: 200 },
+      { name: 'legacy eligible user view groups', route: '/Users/' + idKey(current.userId) + '/GroupingOptions', status: 200 },
+      { name: 'user view groups require a user with API key', route: '/UserViews/GroupingOptions', status: 400, apiKey: true },
+      { name: 'built-in tuner reset completes', route: tunerReset(tunerService.toUpperCase() + '_fixture_tuner'), method: 'POST', status: 204 },
+      { name: 'tuner reset requires authentication', route: tunerReset(tunerService + '_fixture_tuner'), method: 'POST', status: 401, anonymous: true },
+      { name: 'unknown tuner service', route: tunerReset('unknown_fixture'), method: 'POST', status: 400 },
+      { name: 'tuner reset requires the separator', route: tunerReset(tunerService), method: 'POST', status: 500 },
+      { name: 'missing active recording stream', route: '/LiveTv/LiveRecordings/fixture/stream', status: 404, anonymous: true },
     ];
     native = current.start({ referenceRoot, outputRoot: root, label: 'native', origin: nativeOrigin });
     await native.ready();
@@ -319,6 +345,8 @@ test('existing playback assets, date ticks, counts and search hints match the de
     assert.equal(observed('person detail resolves the normalized name').Id, idKey(fixture.people['Ada Ledger'].Id));
     assert.deepEqual(observed('item special features').map(item => item.Id), features.map(idKey));
     assert.deepEqual(observed('legacy item special features'), observed('item special features'));
+    assert.deepEqual(observed('eligible user view groups'), [...fixture.groupingLibraries].reverse().map(({ Id, Name }) => ({ Id: idKey(Id), Name })));
+    assert.deepEqual(observed('legacy eligible user view groups'), observed('eligible user view groups'));
     for (const name of ['MinPremiereDate', 'MaxPremiereDate', 'MinDateLastSaved', 'MinDateLastSavedForUser']) {
       assert.equal(observed(name).TotalRecordCount, 2, name);
     }

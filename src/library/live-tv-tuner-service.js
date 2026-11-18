@@ -2,8 +2,10 @@ import { clrTrim } from '../metadata/whitespace.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { libraryError } from './records.js';
 import { validateNativeLiveTvSource } from '../plugins/live-tv-contract.js';
+import { md5Guid } from '../core/identity.js';
 
 const unimplemented = () => Object.assign(libraryError(500, 'The method or operation is not implemented.'), { code: 'not-implemented' });
+const defaultServiceId = md5Guid('Jellyfin.LiveTv.DefaultLiveTvService');
 
 /** Retained default-service readers and owned original-stream consumers. */
 export class LiveTvTunerService {
@@ -50,6 +52,16 @@ export class LiveTvTunerService {
 
   getChannels({ enableCache = false, signal } = {}) {
     return this.#run(signal, combined => this.#channels(enableCache, combined));
+  }
+
+  resetTuner(id) {
+    return this.#run(undefined, () => {
+      const separator = id.indexOf('_');
+      const serviceId = separator < 0 ? id : id.slice(0, separator);
+      if (!ordinalIgnoreCaseEquals(serviceId, defaultServiceId)) throw libraryError(400, 'Error processing request.');
+      if (separator < 0) throw libraryError(500, 'Error processing request.');
+      // The default native service completes without resetting the host or its streams.
+    });
   }
 
   getPrograms(channelId, startDateUtc, endDateUtc, { signal } = {}) {

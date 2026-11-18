@@ -559,6 +559,12 @@ export function registerDomainRoutes(add, services) {
   });
   add('GET', ['/UserViews', '/Users/{userId}/Views'], async context => library.getViews({ includeHidden: boolean(context, 'includeHidden', false),
     includeExternalContent: boolean(context, 'includeExternalContent'), presetViews: bindUserViewPresets(context.query) }, { user: await requestUser(context) }));
+  add('GET', ['/UserViews/GroupingOptions', '/Users/{userId}/GroupingOptions'], async context => {
+    const userId = optionalRequestUserId(context);
+    if (!userId || /^0{32}$/.test(userId)) throw httpError(400, 'Error processing request.');
+    const user = await users.getUser(userId);
+    return user ? library.getViewGroupingOptions(user) : notFound();
+  });
   add('GET', ['/Items/Root', '/Users/{userId}/Items/Root'], async context => library.getRoot({ user: await requestUser(context) }));
   add('GET', '/Items/{itemId}/Ancestors', async context => {
     try { return await library.getAncestors(guid(context, 'itemId'), { user: await optionalRequestUser(context) }); }

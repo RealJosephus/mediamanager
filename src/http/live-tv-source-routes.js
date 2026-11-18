@@ -1,11 +1,11 @@
 import { createHash } from 'node:crypto';
-import { booleanValue, noContent, queryValue } from './binding.js';
+import { BindingError, booleanValue, noContent, queryValue } from './binding.js';
 import { BinaryResult } from './binary-result.js';
 import { bindListingsProviderInfo, bindSetChannelMapping, bindTunerHostInfo } from './live-tv-source-binding.js';
 import { defaultListingsProviderInfo } from '../library/live-tv-sources-service.js';
 import { clrTrim } from '../metadata/whitespace.js';
 
-export function registerLiveTvSourceRoutes(add, { liveTvSources }) {
+export function registerLiveTvSourceRoutes(add, { liveTvSources, liveTvTuners }) {
   if (!liveTvSources) return;
   const elevated = { policy: 'RequiresElevation' }, access = { policy: 'LiveTvAccess' };
   const query = (context, name) => queryValue(context.query, name);
@@ -17,6 +17,12 @@ export function registerLiveTvSourceRoutes(add, { liveTvSources }) {
   add('GET', '/LiveTv/TunerHosts/Types', () => liveTvSources.getTunerHostTypes(), access);
   for (const route of ['/LiveTv/Tuners/Discover', '/LiveTv/Tuners/Discvover']) add('GET', route,
     context => liveTvSources.discoverTuners(booleanValue(query(context, 'newDevicesOnly'), 'newDevicesOnly', false)), elevated);
+  if (liveTvTuners) add('POST', '/LiveTv/Tuners/{tunerId}/Reset', async context => {
+    const { tunerId } = context.params;
+    if (!clrTrim(tunerId)) throw new BindingError('tunerId', 'The tunerId field is required.');
+    await liveTvTuners.resetTuner(tunerId);
+    return noContent();
+  }, elevated);
   add('GET', '/LiveTv/ListingProviders/Default', () => defaultListingsProviderInfo(), access);
   add('POST', '/LiveTv/ListingProviders', context => {
     const password = nullable(context, 'pw');

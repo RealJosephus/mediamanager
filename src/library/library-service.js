@@ -3881,6 +3881,16 @@ export class LibraryService extends EventEmitter {
     }, { channelViews: query.includeexternalcontent !== false });
   }
 
+  async getViewGroupingOptions(user) {
+    return this.#runWithStates(async db => {
+      const state = await this.load(db, user, { baseRows: await loadPostgresNavigationRows(db), includeUserData: false });
+      const folders = await this.navigationChildren(state, user);
+      const compare = new Intl.Collator(this.options.localization?.context?.culture ?? 'en-US').compare;
+      return folders.filter(eligibleForGrouping).map(folder => ({ Id: dtoId(folder.Id), Name: folder.Name }))
+        .sort((left, right) => compare(left.Name, right.Name));
+    });
+  }
+
   withChannelEntity(id, project) {
     const normalized = nativeGuid(id);
     if (!nonemptyId(normalized)) return Promise.reject(libraryError(400, "Guid can't be empty (Parameter 'id')"));
