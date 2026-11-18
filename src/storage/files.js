@@ -133,6 +133,7 @@ export class StorageFileSystem {
       isDirectory: () => value.kind === 'directory', isFile: () => value.kind === 'file', isSymbolicLink: () => false };
   }); }
   lstat(identity, options) { return this.stat(identity, options); }
+  getSpace(identity, options) { return this.vfs.getSpace(this.accessPath(identity), options); }
   async realpath(identity) {
     // Validate access and let the storage adapter reject links before returning
     // a normalized identity. The backing storage path is never an identity.

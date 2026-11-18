@@ -23,7 +23,11 @@ export function contentDisposition(filename) {
   return `attachment; filename=${token}; filename*=UTF-8''${encoded}`;
 }
 
-export function vfsStreamResult(vfs, accessPath, {
+export function vfsStreamResult(vfs, accessPath, options) {
+  return binaryStreamResult(readOptions => vfs.openResponse(accessPath, readOptions), options);
+}
+
+export function binaryStreamResult(openResponse, {
   contentType, filename, requestHeaders, preserveErrorHeaders = [], physicalFile = false, ranges = true, attachment = false,
 } = {}) {
   return new BinaryResult(async (request, response) => {
@@ -42,7 +46,7 @@ export function vfsStreamResult(vfs, accessPath, {
     try {
       // The pinned proxy uses GET even for HEAD; opening then closing preserves
       // upstream range metadata without consuming the media body.
-      handle = await vfs.openResponse(accessPath, { rangeHeader: ranges ? request.headers.range : undefined,
+      handle = await openResponse({ rangeHeader: ranges ? request.headers.range : undefined,
         ifRange: ranges ? request.headers['if-range'] : undefined, requestHeaders, signal: controller.signal });
       checkAbort(controller.signal);
       response.statusCode = handle.statusCode;

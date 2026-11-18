@@ -34,6 +34,9 @@ function validateAdapter(instance) {
   if (instance.openResponse !== undefined && typeof instance.openResponse !== 'function') {
     throw new TypeError('The storage response reader must be a function.');
   }
+  if (instance.getSpace !== undefined && typeof instance.getSpace !== 'function') {
+    throw new TypeError('The storage capacity reader must be a function.');
+  }
   const capabilities = instance.capabilities;
   if (!capabilities || typeof capabilities !== 'object' || Array.isArray(capabilities)
     || !Object.isFrozen(capabilities)

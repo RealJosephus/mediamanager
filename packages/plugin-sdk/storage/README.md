@@ -7,6 +7,12 @@ object. Write and watch capabilities require their corresponding methods.
 Every declared default mount supplies its own capabilities; a default does not
 implicitly acquire write access.
 
+An adapter may implement `getSpace(path, { signal })` to report the capacity
+of the filesystem or quota that owns a mapped directory. It returns
+`{ freeBytes, usedBytes, deviceId, storageType }` or `null` if capacity is
+unavailable. Both byte counts are nonnegative integers, using `bigint` for
+exact large values. Device and storage descriptions are optional.
+
 Identity prefixes may use `posix`, `windows`, or `uri` style. URI prefixes select
 the longest matching scheme, origin and path prefix. The complete stored URI,
 including its query spelling, remains the identity. The helpers exported from
