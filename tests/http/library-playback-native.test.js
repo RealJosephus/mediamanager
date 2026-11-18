@@ -51,6 +51,10 @@ async function seed(referenceRoot, current) {
     const Path = path.join(rootPath, Name);
     return { Name, type, Path, Id: resolveId(Path, nativeType('CollectionFolder')) };
   });
+  const disabledPath = path.join(rootPath, 'Disabled Photos');
+  const disabledLibrary = { Name: 'Disabled Photos', type: 'photos', Path: disabledPath,
+    Id: resolveId(disabledPath, nativeType('CollectionFolder')), disabled: true };
+  const configuredLibraries = [...groupingLibraries, disabledLibrary];
   const tileDir = path.join(dataPath, 'trickplay', movies[0].slice(0, 2).toLowerCase(), movies[0].toLowerCase(), '320 - 2x2');
   await mkdir(physical, { recursive: true });
   await mkdir(collection, { recursive: true });
@@ -58,10 +62,10 @@ async function seed(referenceRoot, current) {
   await writeFile(path.join(collection, 'music.collection'), '');
   await writeFile(path.join(collection, 'media.mblink'), physical);
   await writeFile(path.join(collection, 'options.xml'), '<LibraryOptions><EnableRealtimeMonitor>false</EnableRealtimeMonitor></LibraryOptions>');
-  for (const library of groupingLibraries) {
+  for (const library of configuredLibraries) {
     await mkdir(library.Path);
     await writeFile(path.join(library.Path, library.type + '.collection'), '');
-    await writeFile(path.join(library.Path, 'options.xml'), '<LibraryOptions><EnableRealtimeMonitor>false</EnableRealtimeMonitor></LibraryOptions>');
+    await writeFile(path.join(library.Path, 'options.xml'), `<LibraryOptions><EnableRealtimeMonitor>false</EnableRealtimeMonitor><Enabled>${!library.disabled}</Enabled></LibraryOptions>`);
   }
   await copyFile(audioFixture, audio);
   const tile = path.join(tileDir, '0.jpg');
@@ -84,7 +88,7 @@ async function seed(referenceRoot, current) {
     database.transaction(() => {
       if (!userRoot) addItem({ Id: rootId, Type: nativeType('UserRootFolder'), Name: 'default', Path: rootPath,
         IsFolder: true, Data: '{"IsRoot":true}' });
-      for (const { Id, Name, Path, type } of groupingLibraries) {
+      for (const { Id, Name, Path, type } of configuredLibraries) {
         addItem({ Id, Name, Path, ParentId: rootId, Type: nativeType('CollectionFolder'), IsFolder: true,
           Data: JSON.stringify({ CollectionType: type, PhysicalFolderIds: [], PhysicalLocationsList: [] }) });
       }
@@ -161,7 +165,7 @@ async function seed(referenceRoot, current) {
     });
     database.preflight();
   } finally { database.close(); }
-  return { settings, databasePath, folderId, apiKey, audio, tile, people, groupingLibraries };
+  return { settings, databasePath, folderId, apiKey, audio, tile, people, groupingLibraries, physical };
 }
 
 function portAvailable(port) {
@@ -188,6 +192,22 @@ function comparable(result) {
   const { body, headers, status } = result;
   return { status, headers, body: body && /(?:^application\/json|\+json)/u.test(headers['content-type'] ?? '')
     ? projectProblemTrace(parseLosslessJson(body), status) : body };
+}
+
+function availableOptionsDefaults(body) {
+  // Provider installations differ. Compare the representative items, shared
+  // native image defaults and the built-in local similarity provider exactly.
+  return body.TypeOptions.map(({ Type, DefaultImageOptions, SimilarItemProviders }) => ({ Type, DefaultImageOptions,
+    LocalSimilarity: SimilarItemProviders.filter(provider => provider.Name === 'Local Genre/Tag') }));
+}
+
+function comparableMediaFolders(body) {
+  return { ...body, Items: body.Items.map(item => {
+    if (typeof item.DateCreated !== 'string') return item;
+    // Native can omit trailing fractional zeros. Keep every 100 ns digit
+    // that changes the instant while comparing these DTOs.
+    return { ...item, DateCreated: item.DateCreated.replace(/(\.\d*?[1-9])0+Z$/u, '$1Z').replace(/\.0+Z$/u, 'Z') };
+  }) };
 }
 
 function hlsSelection(response, route) {
@@ -291,6 +311,9 @@ test('existing playback assets, date ticks, counts and search hints match the de
       'Jellyfin.Api/Controllers/VideosController.cs', 'MediaBrowser.Controller/Entities/Video.cs',
       'Emby.Server.Implementations/Library/SimilarItems/SimilarItemsManager.cs',
       'Emby.Server.Implementations/Library/SimilarItems/MovieSimilarItemsProvider.cs',
+      'MediaBrowser.Controller/Entities/AggregateFolder.cs', 'MediaBrowser.Controller/Entities/CollectionFolder.cs',
+      'Emby.Server.Implementations/Playlists/PlaylistsFolder.cs', 'MediaBrowser.Controller/Dto/DtoOptions.cs',
+      'Jellyfin.Api/ModelBinders/NullableEnumModelBinder.cs', 'MediaBrowser.Model/Configuration/TypeOptions.cs',
     ]);
     await cp(current.sourceRoot, referenceRoot, { recursive: true });
     await current.prepareClone(referenceRoot, port);
@@ -365,6 +388,17 @@ test('existing playback assets, date ticks, counts and search hints match the de
       { name: 'eligible user view groups', route: '/UserViews/GroupingOptions', status: 200 },
       { name: 'legacy eligible user view groups', route: '/Users/' + idKey(current.userId) + '/GroupingOptions', status: 200 },
       { name: 'user view groups require a user with API key', route: '/UserViews/GroupingOptions', status: 400, apiKey: true },
+      { name: 'physical library paths', route: '/Library/PhysicalPaths', status: 200 },
+      { name: 'physical library paths require elevation', route: '/Library/PhysicalPaths', status: 401, anonymous: true },
+      { name: 'available media folders', route: '/Library/MediaFolders', status: 200, mediaFolders: true },
+      { name: 'hidden media folders', route: '/Library/MediaFolders?IsHidden=true', status: 200, mediaFolders: true },
+      { name: 'visible media folders', route: '/Library/MediaFolders?IsHidden=false', status: 200, mediaFolders: true },
+      { name: 'media folders nullable filter', route: '/Library/MediaFolders?IsHidden=%20', status: 200, mediaFolders: true },
+      { name: 'media folders rejects malformed filter', route: '/Library/MediaFolders?isHidden=invalid', status: 400 },
+      { name: 'media folders authorize before binding', route: '/Library/MediaFolders?isHidden=invalid', status: 401, anonymous: true },
+      { name: 'new movie library defaults', route: '/Libraries/AvailableOptions?libraryContentType=1&isNewLibrary=true', status: 200, libraryOptions: true },
+      { name: 'television library defaults', route: '/Libraries/AvailableOptions?libraryContentType=TVShows', status: 200, libraryOptions: true },
+      { name: 'unknown content type uses mixed defaults', route: '/Libraries/AvailableOptions?libraryContentType=invalid', status: 200, libraryOptions: true },
       { name: 'built-in tuner reset completes', route: tunerReset(tunerService.toUpperCase() + '_fixture_tuner'), method: 'POST', status: 204 },
       { name: 'tuner reset requires authentication', route: tunerReset(tunerService + '_fixture_tuner'), method: 'POST', status: 401, anonymous: true },
       { name: 'unknown tuner service', route: tunerReset('unknown_fixture'), method: 'POST', status: 400 },
@@ -399,6 +433,14 @@ test('existing playback assets, date ticks, counts and search hints match the de
           const expected = { path: `/Audio/${idKey(audioId)}/main.m3u8`, container: 'mp4', audioCodec: 'copy', codecs: 'fLaC' };
           assert.deepEqual(hlsSelection(entry.native, entry.sample.route), expected);
           assert.deepEqual(hlsSelection(entry.node, entry.sample.route), expected);
+        } else if (entry.sample.libraryOptions) {
+          const native = comparable(entry.native), node = comparable(entry.node);
+          assert.deepEqual({ ...node, body: availableOptionsDefaults(node.body) },
+            { ...native, body: availableOptionsDefaults(native.body) });
+        } else if (entry.sample.mediaFolders) {
+          const native = comparable(entry.native), node = comparable(entry.node);
+          assert.deepEqual({ ...node, body: comparableMediaFolders(node.body) },
+            { ...native, body: comparableMediaFolders(native.body) });
         } else assert.deepEqual(comparable(entry.node), comparable(entry.native));
       } catch (error) { report.differences.push({ name: entry.sample.name, message: error.message }); }
     }
@@ -420,6 +462,15 @@ test('existing playback assets, date ticks, counts and search hints match the de
     assert.deepEqual(observed('legacy item special features'), observed('item special features'));
     assert.deepEqual(observed('eligible user view groups'), [...fixture.groupingLibraries].reverse().map(({ Id, Name }) => ({ Id: idKey(Id), Name })));
     assert.deepEqual(observed('legacy eligible user view groups'), observed('eligible user view groups'));
+    assert.ok(observed('physical library paths').includes(fixture.physical));
+    const visibleLibraries = ['Alpha TV', 'Contract Media', 'Zulu Films'];
+    assert.deepEqual(observed('visible media folders').Items.map(item => item.Name), visibleLibraries);
+    assert.deepEqual(observed('hidden media folders').Items.map(item => [item.Name, item.Type]), [['Playlists', 'ManualPlaylistsFolder']]);
+    assert.deepEqual(observed('available media folders').Items.map(item => item.Name), ['Alpha TV', 'Contract Media', 'Playlists', 'Zulu Films']);
+    assert.deepEqual(observed('media folders nullable filter'), observed('available media folders'));
+    assert.deepEqual(observed('new movie library defaults').TypeOptions.map(type => type.Type), ['Movie']);
+    assert.deepEqual(observed('television library defaults').TypeOptions.map(type => type.Type), ['Series', 'Season', 'Episode']);
+    assert.deepEqual(observed('unknown content type uses mixed defaults').TypeOptions.map(type => type.Type), ['Series', 'Season', 'Episode', 'Movie']);
     const recommended = observed('movie recommendation category and item order');
     assert.deepEqual(recommended.map(category => [category.RecommendationType, category.CategoryId, category.Items.map(item => item.Id)]), [
       ['SimilarToRecentlyPlayed', ids[1], [ids[2], ids[0]]],

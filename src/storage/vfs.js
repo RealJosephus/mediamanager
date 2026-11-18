@@ -80,6 +80,12 @@ export class VirtualFileSystem {
     return { ...await resolved.adapter.stat(resolved.path, options), name: baseName(path) };
   }
 
+  async getSpace(path, options = {}) {
+    checkAbort(options.signal);
+    const resolved = this.resolve(path);
+    return await resolved.adapter.getSpace?.(resolved.path, options) ?? null;
+  }
+
   // No partial result escapes this method. Consumers must finish enumeration before deleting old records.
   async list(path, options = {}) {
     checkAbort(options.signal);

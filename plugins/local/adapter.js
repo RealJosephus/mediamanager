@@ -5,6 +5,7 @@ import { randomUUID, createHash } from 'node:crypto';
 import { StorageError, checkAbort, requireCapability } from '@mediamanager/plugin-sdk/storage/errors';
 import { normalizePath } from '@mediamanager/plugin-sdk/storage/paths';
 import { resolveRange } from '@mediamanager/plugin-sdk/storage/range';
+import { hostFolderCapacity } from '@mediamanager/plugin-sdk/storage/host-capacity';
 import { watchDirectory } from './watch.js';
 
 const codes = { ENOENT: 'not-found', ENOTDIR: 'not-directory', EISDIR: 'is-directory',
@@ -145,6 +146,9 @@ export class LocalAdapter {
   openFile(value, flags, options = {}) { return this.#operation(options, signal => this.#file(value, flags, { signal })); }
   fileStat(value, options = {}) { return this.#operation(options, async () => creationStat(await fs.lstat(await this.#target(value), options))); }
   stat(value, options = {}) { return this.#operation(options, async () => entry(path.posix.basename(value), await fs.lstat(await this.#target(value), { bigint: true }))); }
+  getSpace(value, options = {}) {
+    return this.#operation(options, async signal => hostFolderCapacity(await this.#target(value), { signal }));
+  }
   listPage(value, options = {}) {
     return this.#operation(options, async signal => {
       if (options.cursor != null) throw new StorageError('invalid-response', 'Local directory cursor is invalid.');

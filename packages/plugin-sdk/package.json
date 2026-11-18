@@ -6,6 +6,7 @@
   "exports": {
     "./storage/errors": "./storage/errors.js",
     "./storage/paths": "./storage/paths.js",
+    "./storage/host-capacity": "./storage/host-capacity.js",
     "./storage/range": "./storage/range.js",
     "./storage/uri": "./storage/uri.js",
     "./library/native-item-value": "./library/native-item-value.js",

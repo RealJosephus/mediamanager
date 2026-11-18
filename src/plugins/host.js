@@ -23,7 +23,7 @@ const detachedProviders = {
 };
 const signals = { getMetadata:1, search:1, fetch:1, hasChanged:1, save:1, prepareSave:1, validateSave:1, preflight:1,
   getImages:1, getImage:1, getImageResponse:1, getIntros:1, getReferences:2, run:0, enrich:1, handle:0, create:1 };
-const storageSignals = {stat:1,listPage:1,openRead:1,openResponse:1,write:2,mkdir:1,delete:1,rename:2,health:0,fileStat:1,openFile:2};
+const storageSignals = {stat:1,getSpace:1,listPage:1,openRead:1,openResponse:1,write:2,mkdir:1,delete:1,rename:2,health:0,fileStat:1,openFile:2};
 
 function resourceFailure(failures,message) {
   const primary=failures[0];

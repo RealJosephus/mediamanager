@@ -646,6 +646,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   services.branding = branding;
   services.libraryOptionsStore = libraryOptionsStore;
   services.libraryConfiguration = libraryConfiguration;
+  services.mediaStorage = { vfs, identityMap };
   services.collections = collections;
   services.collectionPostScanTask = collectionPostScanTask;
   services.linkedChildren = linkedChildren;

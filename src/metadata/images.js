@@ -22,7 +22,7 @@ const downloadFailure = (reason, code = reason?.code ?? 'http-error') => Object.
 const extensions = ['.png', '.jpg', '.jpeg', '.webp', '.tbn', '.gif', '.svg'];
 const singular = ['Primary', 'Art', 'Banner', 'Box', 'BoxRear', 'Disc', 'Logo', 'Menu', 'Thumb'];
 const allImageTypes = [...singular, 'Backdrop', 'Screenshot', 'Chapter', 'Profile'];
-const defaultImageOptions = {
+export const defaultImageOptions = {
   Movie: { Backdrop: [1, 1280], Art: [0, 0], Disc: [0, 0], Primary: [1, 0], Banner: [0, 0], Thumb: [1, 0], Logo: [1, 0] },
   MusicVideo: { Backdrop: [1, 1280], Art: [0, 0], Disc: [0, 0], Primary: [1, 0], Banner: [0, 0], Thumb: [1, 0], Logo: [1, 0] },
   Series: { Backdrop: [1, 1280], Art: [0, 0], Primary: [1, 0], Banner: [1, 0], Thumb: [1, 0], Logo: [1, 0] },

@@ -1,7 +1,10 @@
 import { BindingError, HttpResult, booleanValue, noContent, notFound, httpError, queryValue } from './binding.js';
 import { bindJsonModel, validateJsonModel } from './json-model-binding.js';
+import { registerLibraryNotificationRoutes } from './library-notification-routes.js';
 import { defaultLibraryOptions } from '../library/options.js';
 import { parseCollectionTypeOption } from '../library/collection-type-options.js';
+import { availableLibraryOptions } from '../library/available-library-options.js';
+import { libraryMediaFolders, libraryPhysicalPaths } from '../library/postgres-library-folders.js';
 import { clrTrim, clrWhitespace } from '../metadata/whitespace.js';
 
 const text = { type: 'string', clrType: 'System.String', nullable: true };
@@ -74,12 +77,33 @@ function pathValues(query) {
   return (values.length > 1 ? values : values[0]?.split(',').filter(value => value !== '') ?? []).map(clrTrim);
 }
 
-export function registerLibraryStructureRoutes(add, { libraryConfiguration }) {
+export function registerLibraryStructureRoutes(add, services) {
+  const { library, libraryConfiguration, libraryScanHost, libraryOptionsStore } = services;
+  registerLibraryNotificationRoutes(add, services);
   const service = () => {
     if (!libraryConfiguration) throw httpError(501, 'Library management requires persistent application paths.');
     return libraryConfiguration;
   };
   const policy = 'FirstTimeSetupOrElevated', prefix = '/Library/VirtualFolders';
+  const scanHost = () => {
+    if (!libraryScanHost) throw httpError(501, 'Library folders require persistent application paths.');
+    return libraryScanHost;
+  };
+  add('GET', '/Library/PhysicalPaths', ({ signal }) => libraryPhysicalPaths(library, scanHost(), signal), { policy: 'RequiresElevation' });
+  add('GET', '/Library/MediaFolders', ({ queryInput, signal }) =>
+    libraryMediaFolders(library, scanHost(), libraryOptionsStore, queryInput, signal), {
+    policy: 'RequiresElevation', bindQuery: query => {
+      const value = queryValue(query, 'isHidden');
+      return value == null || clrTrim(value) === '' ? undefined : booleanValue(value, 'isHidden');
+    },
+  });
+  add('GET', '/Libraries/AvailableOptions', ({ query, queryInput, signal }) => availableLibraryOptions(services, {
+    collectionType: queryValue(query, 'libraryContentType'), newLibrary: queryInput, signal,
+  }), { policy: 'FirstTimeSetupOrDefault', bindQuery: query => {
+    const value = queryValue(query, 'isNewLibrary');
+    if (value !== undefined && clrTrim(value) === '') throw new BindingError('isNewLibrary', `The value '${value}' is invalid.`);
+    return booleanValue(value, 'isNewLibrary', false);
+  } });
   add('GET', prefix, () => service().getVirtualFolders(true), { policy });
   add('POST', prefix, async context => {
     const { name, refresh } = context.queryInput;

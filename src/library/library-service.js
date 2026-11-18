@@ -3609,6 +3609,18 @@ export class LibraryService extends EventEmitter {
     return this.getItem(item.Id, { user, ...query });
   }
 
+  async projectMediaFolderPage(db, items) {
+    const rows = await loadPostgresRowsByIds(db, items.map(item => item.Id));
+    const state = await this.load(db, null, { baseRows: await loadPostgresPageGraph(db, rows), includeUserData: false });
+    return withCleanup(async () => {
+      const selected = dtoOptions({}, true), result = [];
+      for (const item of items) this.adoptLiveItem(state, item);
+      await this.#prefetchPostgresDtos(items, state, null, selected);
+      for (const item of items) result.push(await projectItem(item, state, null, selected, this.options));
+      return result;
+    }, [() => state.dispose({ session: db })], 'Media folder DTO page cleanup failed.');
+  }
+
   async getAdditionalParts(id, { user = null, userRoot = Boolean(user) } = {}) {
     const normalized = guid(id);
     return this.#runWithStates(async db => {

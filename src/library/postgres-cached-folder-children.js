@@ -192,8 +192,23 @@ async function build({ session, library, item, children }, entry) {
       if (!owners.has(child)) owners.set(child, acquireNativeItemLinkBranch(child));
       materialized.set(slot, child);
     };
+    const withSlots = async (view, current, slots, retainItems, operation) => {
+      const pageOwners = [];
+      let failure;
+      try {
+        const items = await view.withSlots(slots, (child, slot) => {
+          pageOwners.push(acquireNativeItemLinkOwner(child));
+          if (retainItems) retainItem(slot, child);
+          return child;
+        });
+        return await operation(items);
+      } catch (error) { failure = error; throw error; }
+      finally { await releaseAll(failure, 'Cached Folder page ownership release failed.',
+        [...pageOwners.map(owner => () => owner.release()), () => links.flushReleases({ session: current })]); }
+    };
     const snapshot = {
       retain: () => retainView(held, () => binding.retain(), links),
+      withSlots,
       withRetainedSlot: (view, slot, operation) => view.withSlot(slot, child => {
         retainItem(slot, child); return operation(child);
       }),
@@ -204,18 +219,10 @@ async function build({ session, library, item, children }, entry) {
         const plan = view.orderedPlan(), offset = plan.values.length;
         const rows = (await current.client.query({ text: `SELECT source."Ordinal",source."SlotKey" FROM (${plan.text}) source
           WHERE source."Ordinal">$${offset + 1} ORDER BY source."Ordinal" LIMIT $${offset + 2}`, values: [...plan.values, after, limit] })).rows;
-        const page = [], pageOwners = [];
-        let failure;
-        try {
-          for (const row of rows) await view.withSlot(row.SlotKey, child => {
-            pageOwners.push(acquireNativeItemLinkOwner(child));
-            if (retainItems) retainItem(row.SlotKey, child);
-            page.push(Object.freeze({ ordinal: BigInt(row.Ordinal), slot: row.SlotKey, item: child }));
-          });
-          return await operation(Object.freeze({ entries: Object.freeze(page), after: page.at(-1)?.ordinal ?? after }));
-        } catch (error) { failure = error; throw error; }
-        finally { await releaseAll(failure, 'Cached Folder page ownership release failed.',
-          [...pageOwners.map(owner => () => owner.release()), () => links.flushReleases({ session: current })]); }
+        return withSlots(view, current, rows.map(row => row.SlotKey), retainItems, items => {
+          const entries = rows.map((row, index) => Object.freeze({ ordinal: BigInt(row.Ordinal), slot: row.SlotKey, item: items[index] }));
+          return operation(Object.freeze({ entries: Object.freeze(entries), after: entries.at(-1)?.ordinal ?? after }));
+        });
       },
     };
     if (entry.invalidated) { binding.unbind(); return null; }
@@ -261,6 +268,7 @@ export async function withPostgresCachedFolderChildren({ session, library, item 
         const frame = current => Object.freeze({
           retain: () => frame(current.retain()), release: () => current.release(),
           withPage: (options, callback) => current.run(borrowed => borrowedSession(db => source.withPage(borrowed, db, options, callback))),
+          withSlots: (slots, callback) => current.run(borrowed => borrowedSession(db => source.withSlots(borrowed, db, slots, false, callback))),
           pages: async function* () {
             const held = current.retain();
             try {
