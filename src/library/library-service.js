@@ -59,7 +59,7 @@ import { NativeItemJsonError } from './native-item-data.js';
 import { postgresUpcomingScope, queryPostgresSeriesSeasonPage, queryPostgresUpcomingEpisodePage } from './postgres-shows-query.js';
 import { queryPostgresNextUpPage } from './postgres-next-up-query.js';
 import { queryPostgresLatestItems } from './postgres-latest-items-query.js';
-import { queryPostgresRecommendedPrograms, queryPostgresPrograms, queryPostgresChannels, queryPostgresCurrentPrograms } from './postgres-live-tv-query.js';
+import { visitPostgresRecommendedPrograms, visitPostgresPrograms, queryPostgresChannels, queryPostgresCurrentPrograms } from './postgres-live-tv-query.js';
 import { queryPostgresProgramRecordingInfo, queryPostgresSeriesTimerProgramFilter } from './postgres-live-tv-state-query.js';
 import { queryPostgresRecordingFolderSources, orderPostgresRecordingFolders, createPostgresRecordingQuery } from './postgres-live-tv-recordings-query.js';
 import { recordingSourceVisibleWithoutUser, recordingFoldersMissingUser } from './live-tv-recording-folders-access.js';
@@ -1395,28 +1395,32 @@ export class LibraryService extends EventEmitter {
           query.externalseriesid = external;
         }
       }
-      const page = await (recommended ? queryPostgresRecommendedPrograms : queryPostgresPrograms)(db, query, {
-        rootId: root.Id, userId: user?.Id, visibility, configuration: this.options.configuration,
-      });
-      const rows = page.rows ?? await loadPostgresRowsByIds(db, page.ids);
-      const byId = new Map(rows.map(row => [idKey(row.Id), row]));
-      const orderedRows = page.ids ? page.ids.map(id => byId.get(idKey(id))).filter(Boolean) : rows;
-      const channels = await loadPostgresRowsByIds(db, [...new Set(orderedRows.map(row => row.ChannelId).filter(nonemptyId))]);
-      const state = await this.load(db, user, {
-        baseRows: await loadPostgresPageGraph(db, orderedRows, [...navigationRows, ...channels]),
-      });
       const options = dtoOptions(input);
       for (const field of ['candelete', 'candownload', 'displaypreferencesid', 'etag']) options.fields.delete(field);
       if (user?.Policy.AllowedTags?.length) options.fields.add('tags');
-      const selected = orderedRows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
-      // Native DTO visibility follows the manager's recommendation Take. Its
-      // result can be smaller than the repository window without changing count.
-      const visible = await this.#filterPostgresStandalonePage(db, selected, user, state);
-      await this.#prefetchPostgresDtos(visible, state, user, options);
+      const visitPrograms = recommended ? visitPostgresRecommendedPrograms : visitPostgresPrograms;
       const items = [];
-      for (const item of visible) items.push(await projectItem(item, state, user, options, this.options));
+      let selectedCount = 0;
+      const { total } = await visitPrograms(db, query, {
+        rootId: root.Id, userId: user?.Id, visibility, configuration: this.options.configuration,
+      }, async ({ rows }) => {
+        if (!rows.length) return;
+        selectedCount += rows.length;
+        const channels = await loadPostgresRowsByIds(db, [...new Set(rows.map(row => row.ChannelId).filter(nonemptyId))]);
+        const state = await this.load(db, user, {
+          baseRows: await loadPostgresPageGraph(db, rows, [...navigationRows, ...channels]),
+        });
+        await withCleanup(async () => {
+          const selected = rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
+          // DTO visibility follows the manager's Take. Filtering can shorten
+          // the response without changing the repository count.
+          const visible = await this.#filterPostgresStandalonePage(db, selected, user, state);
+          await this.#prefetchPostgresDtos(visible, state, user, options);
+          for (const item of visible) items.push(await projectItem(item, state, user, options, this.options));
+        }, [() => state.dispose({ session: db })], 'Live TV program page cleanup failed.');
+      });
       return { Items: items, TotalRecordCount: (!recommended || input.isairing !== true) && input.enabletotalrecordcount === false
-        ? orderedRows.length : page.total, StartIndex: input.startindex ?? 0 };
+        ? selectedCount : total, StartIndex: input.startindex ?? 0 };
     });
   }
 

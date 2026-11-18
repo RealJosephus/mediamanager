@@ -2333,6 +2333,7 @@ function readPostgresItemPlan(database, plan, options) {
     let selected;
     try { selected = (await session.client.query({ text: plan.text, values: plan.values, signal: options.signal })).rows; }
     catch (error) { throw itemQueryError(error); }
+    options.validateSelection?.(selected[0]);
     return { ...await hydrateItemPage(session, selected, options), total: itemCount(selected), startIndex: plan.startIndex, plan };
   });
 }
@@ -2368,6 +2369,7 @@ export async function visitPostgresItemPlanPages(session, plan, options, visit) 
     })).rows;
     let selected = await fetch();
     const total = itemCount(selected);
+    options.validateSelection?.(selected[0]);
     while (selected.length) {
       await visit(await hydrateItemPage(session, selected, options));
       if (selected.length < itemPageSize) break;
