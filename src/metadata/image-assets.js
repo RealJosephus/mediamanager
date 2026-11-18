@@ -1,7 +1,9 @@
 // Identity-preserving asset access. Both instance metadata and media sidecars use storage plugins.
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { StorageFileSystem } from '../storage/files.js';
 import { fileURLToPath } from 'node:url';
+import { operationFailure } from '../core/operation-failure.js';
 
 export const imagePathApi = value => /^[A-Za-z]:[\\/]|^\\\\|^\/\//.test(value ?? '') ? path.win32 : path.posix;
 export function imageIdentityPath(value) {
@@ -17,6 +19,31 @@ const modifiedDate = value => {
   const seconds = (value.mtimeNs - fraction) / 1000000000n;
   return new Date(Number(seconds * 1000n)).toISOString().replace('.000Z', `.${String(fraction / 100n).padStart(7, '0')}Z`);
 };
+
+async function swapStoragePaths(vfs, left, right, signal) {
+  const directory = path.posix.join(path.posix.dirname(left), '.image-swap-' + randomUUID());
+  const staged = path.posix.join(directory, 'original');
+  await vfs.mkdir(directory, { signal });
+  const move = (source, target) => vfs.rename(source, target, { overwrite: false });
+  const undo = [], errors = [];
+  try {
+    await move(left, staged);
+    undo.push(() => move(staged, left));
+    await move(right, left);
+    undo.push(() => move(left, right));
+    await move(staged, right);
+    undo.length = 0;
+  } catch (error) { errors.push(error); }
+  while (undo.length) {
+    try { await undo.pop()(); }
+    catch (error) { errors.push(error); break; }
+  }
+  // A failed undo may leave the only copy in this directory. Nonrecursive
+  // cleanup removes an empty staging directory and preserves a surviving file.
+  try { await vfs.delete(directory, { recursive: false }); }
+  catch (error) { errors.push(error); }
+  if (errors.length) throw operationFailure(errors, 'Image swap or recovery failed.');
+}
 
 export class MetadataImageAssets {
   #options;
@@ -165,14 +192,40 @@ export class MetadataImageAssets {
     for (const identity of [first, second]) {
       const location = await this.resolve(identity);
       const vfs = location.accessPath ? this.vfs : this.fileSystem.vfs;
-      if (vfs) vfs.resolveFileHandle(location.accessPath ?? this.fileSystem.accessPath(location.localPath), 'w');
-      const { modified } = await this.stat(identity, options);
-      entries.push({ identity, modified: modified ?? undefined, bytes: await this.read(identity, options) });
+      const accessPath = location.accessPath ?? (vfs && this.fileSystem.accessPath(location.localPath));
+      const resolved = vfs?.resolveFileHandle(accessPath, 'w');
+      const entry = await this.stat(identity, options);
+      if (entry.kind !== 'file') throw Object.assign(new Error('Only files can be swapped as image assets.'), { code: 'not-found' });
+      entries.push({ identity, vfs, accessPath, resolved, modified: entry.modified ?? undefined });
     }
     const [a, b] = entries;
-    const updatedFirst = await this.write(a.identity, b.bytes, { ...options, modified: b.modified });
-    const updatedSecond = await this.write(b.identity, a.bytes, { ...options, modified: a.modified });
-    return [updatedFirst, updatedSecond];
+    if (a.vfs && a.vfs === b.vfs && a.resolved.mount === b.resolved.mount) {
+      if (a.resolved.path === b.resolved.path) throw new Error('The image paths must be different.');
+      if (['rename', 'mkdir', 'delete'].every(capability => a.resolved.capabilities[capability])) {
+        await swapStoragePaths(a.vfs, a.accessPath, b.accessPath, options.signal);
+        return Promise.all(entries.map(entry => this.stat(entry.identity, options)));
+      }
+    }
+    const originalBytes = await Promise.all(entries.map(entry => this.read(entry.identity, options)));
+    const attempted = [], swapped = [];
+    try {
+      for (const [index, entry] of entries.entries()) {
+        options.signal?.throwIfAborted();
+        attempted.push(index);
+        const other = 1 - index;
+        swapped.push(await this.write(entry.identity, originalBytes[other], { ...options, modified: entries[other].modified }));
+      }
+      return swapped;
+    } catch (error) {
+      const errors = [error];
+      // A write can publish its bytes before it rejects. Restore each attempted file even after cancellation.
+      for (const index of attempted.reverse()) {
+        const { identity, modified } = entries[index];
+        try { await this.write(identity, originalBytes[index], { modified }); }
+        catch (failure) { errors.push(failure); }
+      }
+      throw operationFailure(errors, 'Image swap or recovery failed.');
+    }
   }
   async delete(identity, options = {}) {
     try { const location = await this.resolve(identity); options.signal?.throwIfAborted();
