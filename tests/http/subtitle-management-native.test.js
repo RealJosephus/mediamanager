@@ -5,9 +5,10 @@ import path from 'node:path';
 import test from 'node:test';
 import { setTimeout as delay } from 'node:timers/promises';
 import { readInstanceConfiguration } from '../../src/configuration.js';
-import { getNewItemId } from '../../src/core/identity.js';
+import { getNewItemId, md5Guid } from '../../src/core/identity.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { idKey } from '../../src/library/records.js';
+import { getMimeType } from '../../src/http/mime-types.js';
 import { transferDatabase } from '../../src/migration/database-transfer.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
@@ -165,6 +166,14 @@ test('Native and Node upload and remove external subtitles through real storage 
       await setPermission(false);
       assert.equal((await request('ordinary upload denied', 'POST', route, { body: upload(primary), token: managerToken })).status, 403);
       await setPermission(true);
+      const search = await request('search with no subtitle extension', 'GET', '/Items/' + item + '/RemoteSearch/Subtitles/eng',
+        { token: managerToken });
+      assert.equal(search.status, 200);
+      assert.deepEqual(JSON.parse(search.body), []);
+      assert.equal((await request('unknown subtitle provider bytes', 'GET', '/Providers/Subtitles/Subtitles/unknown_id',
+        { token: managerToken })).status, 500);
+      assert.equal((await request('unknown subtitle download settles', 'POST', '/Items/' + item + '/RemoteSearch/Subtitles/unknown_id',
+        { token: managerToken })).status, 204);
       await send('permitted subtitle manager upload', primary, managerToken);
       const initial = await waitFor(1);
       assert.deepEqual(flags(initial[0]), [true, true, true]);
@@ -209,6 +218,60 @@ test('Native and Node upload and remove external subtitles through real storage 
     const nodeOrigin = 'http://127.0.0.1:' + runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port;
     await execute(nodeOrigin, report.node, () => database.rows('MediaStreamInfos', { where }));
     assert.deepEqual(report.node, report.native);
+
+    const addon = path.join(output.root, 'subtitle-extension');
+    const addonId = 'subtitle-fixture';
+    await mkdir(addon);
+    await writeFile(path.join(addon, 'package.json'), JSON.stringify({
+      name: addonId, version: '1.0.0', type: 'module', license: 'GPL-3.0-only',
+      mediamanager: { id: addonId, name: 'Fixture Subtitles', entry: 'index.js' },
+    }));
+    await writeFile(path.join(addon, 'index.js'), [
+      'export async function activate(context) {',
+      '  await context.register("subtitle", { name: "Fixture Subtitles", supportedMediaTypes: ["Movie"],',
+      '    async search(request, { signal }) {',
+      '      signal.throwIfAborted();',
+      '      if (request.TwoLetterISOLanguageName !== "ja" || !request.IsPerfectMatch) throw new Error("Incorrect lookup.");',
+      '      return [{ id: "matched_track", Format: "srt", Name: request.Name, ThreeLetterISOLanguageName: "jpn", IsHashMatch: true }];',
+      '    },',
+      '    async getSubtitles(id, { signal }) {',
+      '      signal.throwIfAborted();',
+      '      if (id !== "matched_track") throw new Error("Incorrect subtitle.");',
+      '      return { format: "srt", language: "ja", bytes: Buffer.from("' + primary.toString('base64') + '", "base64") };',
+      '    },',
+      '  });',
+      '}',
+      '',
+    ].join('\n'));
+    assert.equal((await runtime.plugins.install(addon)).status, 'active');
+    report.provider = { installed: true };
+    const providerBase = '/Items/' + idKey(movieId) + '/RemoteSearch/Subtitles/';
+    const ownedFetch = (route, method = 'GET') => fetch(nodeOrigin + route, { method,
+      headers: { Authorization: authorization + ', Token="' + current.accessToken + '"' },
+      signal: AbortSignal.any([t.signal, AbortSignal.timeout(30000)]) });
+    const found = await ownedFetch(providerBase + 'jpn?isPerfectMatch=true');
+    report.provider.searchStatus = found.status;
+    assert.equal(found.status, 200);
+    const result = await found.json();
+    report.provider.search = result;
+    const addonTrack = md5Guid('fixture subtitles') + '_matched_track';
+    const [savedMovie] = await database.rows('BaseItems', { where: { Id: movieId }, columns: ['Name'] });
+    assert.deepEqual(result, [{ Id: addonTrack, ProviderName: 'Fixture Subtitles', Name: savedMovie.Name,
+      Format: 'srt', ThreeLetterISOLanguageName: 'jpn', IsHashMatch: true }]);
+    const preview = await ownedFetch('/Providers/Subtitles/Subtitles/' + addonTrack);
+    report.provider.preview = preview.status;
+    assert.equal(preview.status, 200);
+    assert.equal(preview.headers.get('content-type'), getMimeType('file.srt'));
+    assert.equal(sha(Buffer.from(await preview.arrayBuffer())), sha(primary));
+    const download = await ownedFetch(providerBase + addonTrack, 'POST');
+    await download.arrayBuffer();
+    report.provider.download = download.status;
+    assert.equal(download.status, 204);
+    report.provider.sidecarSha256 = sha(await readFile(path.join(media, 'Title.ja.srt')));
+    assert.equal(report.provider.sidecarSha256, sha(primary));
+    await runtime.plugins.setEnabled(addonId, false);
+    assert.deepEqual(await (await ownedFetch(providerBase + 'jpn?isPerfectMatch=true')).json(), []);
+    report.provider.disabled = true;
   } catch (error) { primaryError = output.publicError(error); throw primaryError; }
   finally {
     const failures = [];

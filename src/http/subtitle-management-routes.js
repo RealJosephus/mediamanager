@@ -1,4 +1,4 @@
-import { BindingError, guidValue, integerValue, httpError, noContent, notFound } from './binding.js';
+import { BindingError, booleanValue, guidValue, integerValue, httpError, noContent, notFound, queryValue } from './binding.js';
 import { bindJsonModel, validateJsonModel } from './json-model-binding.js';
 import { decodeBase64Body } from './base64-body.js';
 import { withCleanup } from '../core/operation-failure.js';
@@ -9,6 +9,10 @@ import { defaultLibraryOptions } from '../library/options.js';
 import { internalImagePath } from '../metadata/image-paths.js';
 import { imagePathApi } from '../metadata/image-assets.js';
 import { StorageFileSystem } from '../storage/files.js';
+import { clrTrim } from '../metadata/whitespace.js';
+import { searchRemoteSubtitles, readRemoteSubtitle } from '../playback/remote-subtitles.js';
+import { BinaryResult } from './binary-result.js';
+import { getMimeType } from './mime-types.js';
 
 const formats = new Set(['ass', 'mks', 'sami', 'smi', 'srt', 'ssa', 'sub', 'sup', 'vtt']);
 const dto = 'Jellyfin.Api.Models.SubtitleDtos.UploadSubtitleDto';
@@ -90,6 +94,11 @@ function queueRefresh(metadata, item, onError) {
   void metadata.queue(item.Id, refreshOptions, 0).catch(onError);
 }
 
+function requiredRouteValue(value, name) {
+  if (!value || !clrTrim(value)) throw new BindingError(name, 'The ' + name + ' field is required.');
+  return value;
+}
+
 export function registerSubtitleManagementRoutes(add, services) {
   const { store, library, metadata, playback, storage, libraryMonitor, libraryMonitorHost, onError = () => {} } = services;
   if (!library) return;
@@ -97,6 +106,7 @@ export function registerSubtitleManagementRoutes(add, services) {
   const fileSystem = vfs && identityMap ? new StorageFileSystem({ vfs, identityMap }) : services.fileSystem;
   const path = '/Videos/{itemId}/Subtitles', policy = 'SubtitleManagement';
   const itemId = (_query, params) => guidValue(params.itemId, 'itemId');
+  const providers = () => services.plugins?.entries('subtitle') ?? [];
   add('POST', path, context => withVisibleItem(library, context.queryInput, context.auth, async item => {
     if (!fileSystem || !metadata) throw httpError(503, 'Subtitle storage is unavailable.');
     const upload = context.body, format = lowerInvariant(upload.Format);
@@ -126,4 +136,32 @@ export function registerSubtitleManagementRoutes(add, services) {
   }), { policy: 'RequiresElevation', bindQuery: (query, params) => ({
     itemId: itemId(query, params), index: integerValue(params.index, 'index'),
   }) });
+
+  const remote = '/Items/{itemId}/RemoteSearch/Subtitles';
+  add('GET', remote + '/{language}', context => withVisibleItem(library, context.queryInput.itemId, context.auth, async item => {
+    const active = providers();
+    if (!active.length) return [];
+    return searchRemoteSubtitles(active, item, context.queryInput, await libraryOptions(library, item),
+      { signal: context.signal, onError });
+  }, { video: true }), { policy, bindQuery: (query, params) => ({ itemId: itemId(query, params),
+    language: requiredRouteValue(params.language, 'language'), isPerfectMatch: booleanValue(queryValue(query, 'isPerfectMatch'), 'isPerfectMatch'),
+  }) });
+  add('POST', remote + '/{subtitleId}', context => withVisibleItem(library, context.queryInput.itemId, context.auth, async item => {
+    try {
+      const subtitle = await readRemoteSubtitle(providers(), context.queryInput.subtitleId, context.signal);
+      const format = lowerInvariant(subtitle.format);
+      if (!formats.has(format)) throw new Error('Invalid subtitle format: ' + format);
+      await saveSubtitle({ library, fileSystem, libraryMonitor, libraryMonitorHost }, item, {
+        Language: subtitle.language, IsForced: subtitle.forced, IsHearingImpaired: subtitle.hearingImpaired,
+      }, format, subtitle.bytes, context.signal);
+      queueRefresh(metadata, item, onError);
+    } catch (error) { onError(error); }
+    return noContent();
+  }, { video: true }), { policy, bindQuery: (query, params) => ({ itemId: itemId(query, params),
+    subtitleId: requiredRouteValue(params.subtitleId, 'subtitleId'),
+  }) });
+  add('GET', '/Providers/Subtitles/Subtitles/{subtitleId}', async context => {
+    const result = await readRemoteSubtitle(providers(), context.queryInput, context.signal);
+    return BinaryResult.bytes(result.bytes, getMimeType('file.' + result.format));
+  }, { policy, bindQuery: (_query, params) => requiredRouteValue(params.subtitleId, 'subtitleId') });
 }

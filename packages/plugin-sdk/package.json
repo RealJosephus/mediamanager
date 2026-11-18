@@ -53,6 +53,7 @@
     "./live-tv/raw-input": "./live-tv/raw-input.js",
     "./core/json-tokens": "./core/json-tokens.js",
     "./core/json": "./core/json.js",
-    "./lyrics/contract": "./lyrics/contract.js"
+    "./lyrics/contract": "./lyrics/contract.js",
+    "./subtitles/contract": "./subtitles/contract.js"
   }
 }

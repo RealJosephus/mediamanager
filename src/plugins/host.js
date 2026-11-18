@@ -10,12 +10,17 @@ import { liveTvSignalPositions, validateLiveTvExtension, validateLiveTvResult, v
 import { inspectPackage, stagePackage, verifyRelease, physicalDirectory, officialPackagesPath, validPluginId } from './package.js';
 import { createConfigurationBinding } from '../../packages/plugin-sdk/configuration.js';
 import { lyricSignalPositions, validateLyricExtension, copyLyricProviderResult } from '../lyrics/contract.js';
+import { subtitleSignalPositions, validateSubtitleExtension, copySubtitleProviderResult } from '../playback/remote-subtitles.js';
 import { storageOwnership } from '../storage/ownership.js';
 
 const error = (status,message) => Object.assign(new Error(message),{status,statusCode:status});
 const object = value => value !== null && typeof value==='object' && !Array.isArray(value);
 const clone = value => JSON.parse(JSON.stringify(value));
-const kinds = new Set(['metadata','similar','intro','storage','task','route','context','imagePaths','tuner','listings','channel','lyric']);
+const kinds = new Set(['metadata','similar','intro','storage','task','route','context','imagePaths','tuner','listings','channel','lyric','subtitle']);
+const detachedProviders = {
+  lyric: { positions: lyricSignalPositions, copy: copyLyricProviderResult },
+  subtitle: { positions: subtitleSignalPositions, copy: copySubtitleProviderResult },
+};
 const signals = { getMetadata:1, search:1, fetch:1, hasChanged:1, save:1, prepareSave:1, validateSave:1, preflight:1,
   getImages:1, getImage:1, getImageResponse:1, getIntros:1, getReferences:2, run:0, enrich:1, handle:0, create:1 };
 const storageSignals = {stat:1,getSpace:1,listPage:1,openRead:1,openResponse:1,write:2,mkdir:1,delete:1,rename:2,health:0,fileStat:1,openFile:2};
@@ -146,6 +151,7 @@ class PluginScope {
   }
   wrap(value,kind) {
     const scope=this, wrappers=new Map(), liveTv=liveTvSignalPositions[kind];let proxy;
+    const detachedProvider = detachedProviders[kind];
     return proxy=new Proxy(Object.create(liveTv?null:Object.getPrototypeOf(value)),{get(_target,key){
       const target=value;
       if(kind==='adapter'&&key===storageOwnership)return ()=>{
@@ -164,13 +170,13 @@ class PluginScope {
       if(liveTvSignalPositions[kind]&&!Object.hasOwn(liveTvSignalPositions[kind],key))return undefined;
       if((kind==='adapter'||kind==='resource')&&key==='close')return property.bind(target);
       if(!wrappers.has(key))wrappers.set(key,(...args)=>{
-        if(kind==='lyric'&&Object.hasOwn(lyricSignalPositions,key)) {
-          const callerSignal=args[lyricSignalPositions[key]]?.signal;
-          const result=scope.call(target,key,args,lyricSignalPositions,false);
+        if(detachedProvider&&Object.hasOwn(detachedProvider.positions,key)) {
+          const callerSignal=args[detachedProvider.positions[key]]?.signal;
+          const result=scope.call(target,key,args,detachedProvider.positions,false);
           return scope.track(Promise.resolve(result).then(result=>{
             if(!scope.active||!scope.admitted)throw error(503,'The plugin is unavailable.');
             scope.controller.signal.throwIfAborted();callerSignal?.throwIfAborted();
-            return copyLyricProviderResult(key,result);
+            return detachedProvider.copy(key,result);
           }));
         }
         const positions=liveTvSignalPositions[kind];
@@ -337,6 +343,7 @@ export class PluginHost {
         if(kind==='metadata')validateMetadataExtension(value);
         if(kind==='intro'&&typeof value.getIntros!=='function')throw new TypeError('An intro provider requires getIntros.');
         if(kind==='lyric')validateLyricExtension(value);
+        if(kind==='subtitle')validateSubtitleExtension(value);
         if(liveTvSignalPositions[kind])validateLiveTvExtension(kind,value);
         const wrapped=scope.wrap(value,kind),entry={kind,value:wrapped};
         active.entries.push(entry);
