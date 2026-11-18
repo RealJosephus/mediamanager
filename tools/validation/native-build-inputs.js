@@ -164,6 +164,13 @@ function descriptorIndex(files, label) {
   return exact;
 }
 
+function producerTriggerAllowed({ job, eventName, ref }) {
+  if (eventName === 'workflow_dispatch') return /^refs\/(?:heads|tags)\//u.test(ref);
+  if (job !== 'validate') return false;
+  if (eventName === 'push') return ref === 'refs/heads/main';
+  return eventName === 'pull_request' && /^refs\/pull\/[1-9][0-9]*\/merge$/u.test(ref);
+}
+
 function validateProducer(receipt, environment) {
   const contract = producerContracts[receipt.producer?.job];
   if (!contract || receipt.producer.workflow !== contract.workflow || receipt.producer.workflow !== environment.GITHUB_WORKFLOW
@@ -171,7 +178,7 @@ function validateProducer(receipt, environment) {
     || receipt.producer.workflowSha !== environment.GITHUB_WORKFLOW_SHA
     || receipt.producer.eventName !== environment.GITHUB_EVENT_NAME || receipt.producer.ref !== environment.GITHUB_REF
     || receipt.producer.job !== environment.GITHUB_JOB
-    || receipt.producer.eventName !== 'workflow_dispatch' || !/^refs\/(?:heads|tags)\//u.test(receipt.producer.ref)
+    || !producerTriggerAllowed(receipt.producer)
     || receipt.producer.workflowRef !== `${designatedJellyfinRepository}/.github/workflows/${contract.workflowFile}@${receipt.producer.ref}`
     || !commit(receipt.producer.workflowSha)) {
     throw new Error('Native reference evidence is not from the designated producer workflow, job, event and ref.');

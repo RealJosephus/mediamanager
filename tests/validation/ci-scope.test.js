@@ -817,6 +817,20 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   await assert.rejects(capture([ownPath], { GITHUB_RUN_ID: 'different-run' }), /workflow run: runId/u);
   await assert.rejects(capture([ownPath], { GITHUB_JOB: 'build' }), /producer workflow/u);
   await assert.rejects(capture([ownPath], { GITHUB_WORKFLOW: 'Different workflow' }), /producer workflow/u);
+  const producerFile = path.join(root, 'receipts', 'build-receipt.json');
+  const verifyTrigger = async (eventName, ref) => {
+    const workflowRef = `${designatedJellyfinRepository}/.github/workflows/ci.yml@${ref}`;
+    await writeFile(producerFile, JSON.stringify({ ...receipt, producer: { ...receipt.producer, eventName, ref, workflowRef } }));
+    return nativeBuildInputs({ ...environment, GITHUB_EVENT_NAME: eventName, GITHUB_REF: ref, GITHUB_WORKFLOW_REF: workflowRef });
+  };
+  try {
+    await verifyTrigger('push', 'refs/heads/main');
+    await verifyTrigger('pull_request', 'refs/pull/35/merge');
+    await assert.rejects(verifyTrigger('push', 'refs/heads/other'), /producer workflow/u);
+    await assert.rejects(verifyTrigger('pull_request_target', 'refs/heads/main'), /producer workflow/u);
+  } finally {
+    await writeFile(producerFile, JSON.stringify(receipt));
+  }
   await assert.rejects(capture([ownPath], { MEDIAMANAGER_CHECKOUT_TREE: 'd'.repeat(40) }), /checkout HEAD and tree/u);
   await assert.rejects(capture([ownPath], { MEDIAMANAGER_CI_MATRIX_OS: matrixOs === 'windows-2025' ? 'ubuntu-24.04' : 'windows-2025' }), /runner platform/u);
   const mismatchedSnapshot = JSON.stringify({ ...JSON.parse(snapshot), files: designated.manifest.files.map((file, index) => ({
