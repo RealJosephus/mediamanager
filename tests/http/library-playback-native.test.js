@@ -93,6 +93,11 @@ async function seed(referenceRoot, current) {
         ItemId: audioId, StreamIndex: 0, StreamType: 0, Codec: 'flac', SampleRate: 44100, BitDepth: 16,
         Channels: 1, BitRate: 192000, IsDefault: true,
       }));
+      for (const [StreamIndex, Path] of [[1, audio], [2, null], [3, path.join(physical, 'Missing Track.flac')]]) {
+        database.insert('MediaStreamInfos', postgresTestRow('MediaStreamInfos', {
+          ItemId: movies[0], StreamIndex, StreamType: 0, Codec: 'flac', Path, IsExternal: Path !== null,
+        }));
+      }
       addItem({ Id: artistId, Type: artistType, IsFolder: true, Name: 'Related Musician' });
       addItem({ Id: orphanArtistId, Type: artistType, IsFolder: true, Name: 'Detached Musician' });
       database.insert('ItemValues', { ItemValueId: id(26), Type: 0, Value: 'Related Musician', CleanValue: 'related musician' });
@@ -135,6 +140,17 @@ function comparable(result) {
     ? projectProblemTrace(parseLosslessJson(body), status) : body };
 }
 
+function hlsSelection(response, route) {
+  assert.equal(response.headers['content-type'], 'application/vnd.apple.mpegurl');
+  assert.equal(Number(response.headers['content-length']), Buffer.byteLength(response.body));
+  const lines = response.body.split(/\r?\n/u).filter(Boolean);
+  assert.equal(lines[0], '#EXTM3U');
+  const variant = new URL(lines.find(line => !line.startsWith('#')), 'http://127.0.0.1' + route);
+  const query = new Map([...variant.searchParams].map(([name, value]) => [name.toLowerCase(), value]));
+  return { path: variant.pathname, container: query.get('segmentcontainer'), audioCodec: query.get('audiocodec'),
+    codecs: /\bCODECS="([^"]+)"/u.exec(lines.find(line => line.startsWith('#EXT-X-STREAM-INF:')))?.[1] };
+}
+
 test('existing playback assets, date ticks, counts and search hints match the designated Native HTTP host', {
   skip: !enabled, timeout: 300000,
 }, nativeCase((t, port) => mediaLease.run(async () => {
@@ -164,7 +180,9 @@ test('existing playback assets, date ticks, counts and search hints match the de
     report.reference = current.preparation;
     report.sources = await current.sourceBindings([
       'Jellyfin.Api/Controllers/UniversalAudioController.cs', 'Jellyfin.Api/Helpers/AudioHelper.cs',
+      'Jellyfin.Api/Helpers/DynamicHlsHelper.cs', 'MediaBrowser.Model/Dlna/StreamBuilder.cs',
       'Jellyfin.Api/Helpers/FileStreamResponseHelpers.cs', 'MediaBrowser.Controller/IO/LocalMediaProxy.cs',
+      'Jellyfin.Api/Controllers/SubtitleController.cs', 'Emby.Server.Implementations/Library/MediaSourceManager.cs',
       'Jellyfin.Api/Controllers/TrickplayController.cs',
       'Jellyfin.Server.Implementations/Trickplay/TrickplayManager.cs', 'Jellyfin.Api/Controllers/ItemsController.cs',
       'Jellyfin.Api/Controllers/LibraryController.cs', 'Jellyfin.Server.Implementations/Item/ItemCountService.cs',
@@ -188,7 +206,9 @@ test('existing playback assets, date ticks, counts and search hints match the de
       } });
     } finally { snapshot.close(); }
 
-    const ids = movies.map(idKey), audio = `/Audio/${idKey(audioId)}/universal?Container=flac%7Cflac&MaxStreamingBitrate=8000000`;
+    const ids = movies.map(idKey), audioRoute = `/Audio/${idKey(audioId)}/universal`;
+    const audio = audioRoute + '?Container=flac%7Cflac&MaxStreamingBitrate=8000000';
+    const externalAudio = (item, source, stream) => `/Videos/${item}/${source}/Audios/${stream}/Stream.aac`;
     const trickplay = `/Videos/${ids[0]}/Trickplay/320`;
     const datePath = '/Items?Recursive=true&EnableImages=false&EnableUserData=false&SortBy=SortName&Ids=' + ids.join(',');
     const samples = [
@@ -216,6 +236,15 @@ test('existing playback assets, date ticks, counts and search hints match the de
       ...['MinPremiereDate', 'MaxPremiereDate', 'MinDateLastSaved', 'MinDateLastSavedForUser'].map(name => ({
         name, route: datePath + '&' + name + '=' + encodeURIComponent('2026-10-01T08:00:00.1234567+08:00'), status: 200,
       })),
+      { name: 'external audio uses the file MIME', route: externalAudio(ids[0], ids[0], 1), status: 200 },
+      { name: 'external audio range', route: externalAudio(ids[0], ids[0], 1), headers: { Range: 'bytes=7-31' }, status: 206 },
+      { name: 'external audio anonymous', route: externalAudio(ids[0], ids[0], 1), anonymous: true, status: 401 },
+      { name: 'external audio unknown item', route: externalAudio(idKey(id(999)), ids[0], 1), status: 404 },
+      { name: 'external audio unknown source', route: externalAudio(ids[0], ids[1], 1), status: 404 },
+      { name: 'external audio unknown stream', route: externalAudio(ids[0], ids[0], 9), status: 404 },
+      { name: 'external audio pathless stream', route: externalAudio(ids[0], ids[0], 2), status: 404 },
+      { name: 'external audio absent file', route: externalAudio(ids[0], ids[0], 3), status: 404 },
+      { name: 'universal FLAC container copy', route: audioRoute + '?Container=mp4%7Cflac&TranscodingProtocol=hls&TranscodingContainer=mp4', status: 200, hls: true },
     ];
     native = current.start({ referenceRoot, outputRoot: root, label: 'native', origin: nativeOrigin });
     await native.ready();
@@ -230,7 +259,12 @@ test('existing playback assets, date ticks, counts and search hints match the de
       entry.node = await readResponse(nodeOrigin, entry.sample, token(entry.sample), t.signal);
       try {
         assert.equal(entry.native.status, entry.sample.status);
-        assert.deepEqual(comparable(entry.node), comparable(entry.native));
+        assert.equal(entry.node.status, entry.sample.status);
+        if (entry.sample.hls) {
+          const expected = { path: `/Audio/${idKey(audioId)}/main.m3u8`, container: 'mp4', audioCodec: 'copy', codecs: 'fLaC' };
+          assert.deepEqual(hlsSelection(entry.native, entry.sample.route), expected);
+          assert.deepEqual(hlsSelection(entry.node, entry.sample.route), expected);
+        } else assert.deepEqual(comparable(entry.node), comparable(entry.native));
       } catch (error) { report.differences.push({ name: entry.sample.name, message: error.message }); }
     }
     const observed = name => comparable(report.cases.find(entry => entry.sample.name === name).native).body;
@@ -244,10 +278,13 @@ test('existing playback assets, date ticks, counts and search hints match the de
       assert.equal(observed(name).TotalRecordCount, 2, name);
     }
     assert.equal(sha(Buffer.from(observed('universal audio'), 'base64')), sha(await readFile(fixture.audio)));
+    assert.equal(observed('external audio uses the file MIME'), observed('universal audio'));
+    assert.equal(observed('external audio range'), observed('universal audio range'));
     assert.equal(sha(Buffer.from(observed('tile JPEG'), 'base64')), sha(await readFile(fixture.tile)));
     assert.deepEqual(proxy.report.errors, []);
     assert.deepEqual(proxy.report.requests.map(({ method, range, status }) => [method, range, status]),
-      [['GET', null, 200], ['GET', null, 200], ['GET', 'bytes=7-31', 206]]);
+      [['GET', null, 200], ['GET', null, 200], ['GET', 'bytes=7-31', 206],
+        ['GET', null, 200], ['GET', 'bytes=7-31', 206], ['GET', null, 404]]);
     assert.deepEqual(report.differences.map(difference => difference.name), [], 'See the recorded Native and PostgreSQL responses.');
   } catch (error) { primary = output.publicError(error); throw primary; }
   finally {

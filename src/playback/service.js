@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { negotiateSource } from './profile.js';
+import { negotiateSource, universalAudioHlsCopyContainer } from './profile.js';
 import { decodeSubtitle, convertSubtitle } from './subtitles.js';
 import { normalizeSubtitleBytes } from './subtitle-charset.js';
 import { isExternalSubtitleFallback, subtitleInputFormat } from './subtitle-source.js';
@@ -122,7 +122,14 @@ export class PlaybackService {
     const limit = user.RemoteClientBitrateLimit > 0 ? user.RemoteClientBitrateLimit : this.configuration.RemoteClientBitrateLimit;
     const maxBitrate = limit > 0 && this.isLocalNetwork && !this.isLocalNetwork(remoteEndPoint)
       ? Math.min(options.MaxStreamingBitrate ?? limit, limit) : options.MaxStreamingBitrate;
+    const hls = options.TranscodingProtocol === 'hls';
+    const requestedContainer = options.TranscodingContainer?.toLowerCase();
+    const requestedSegmentContainer = requestedContainer === 'mp4' ? 'mp4' : 'ts';
+    const hlsCopyContainers = new Map();
     for (const source of sources) {
+      if (hls && item.MediaType === 'Audio') {
+        hlsCopyContainers.set(source, universalAudioHlsCopyContainer(source, profile, maxBitrate ?? 8000000, requestedSegmentContainer));
+      }
       negotiateSource(source, item, profile, { MaxStreamingBitrate: maxBitrate, MaxAudioChannels: options.MaxAudioChannels,
         EnableTranscoding: false });
       if (source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) {
@@ -149,12 +156,11 @@ export class PlaybackService {
       || source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) {
       throw httpError(400, 'No compatible audio stream is available.');
     }
-    const hls = options.TranscodingProtocol === 'hls';
-    const requestedContainer = options.TranscodingContainer?.toLowerCase();
-    const container = hls ? requestedContainer === 'mp4' ? 'mp4' : 'ts' : requestedContainer ?? 'mp3';
+    const copyContainer = hlsCopyContainers.get(source);
+    const container = hls ? copyContainer ?? requestedSegmentContainer : requestedContainer ?? 'mp3';
     const stream = {
       MediaType: 'Audio', MediaSourceId: source.Id, Container: container, SegmentContainer: hls ? container : undefined,
-      AudioCodec: options.AudioCodec ?? 'mp3', AudioSampleRate: options.MaxAudioSampleRate,
+      AudioCodec: copyContainer ? 'copy' : options.AudioCodec ?? 'mp3', AudioSampleRate: options.MaxAudioSampleRate,
       AudioBitRate: options.AudioBitRate ?? maxBitrate, MaxAudioChannels: options.MaxAudioChannels,
       AudioChannels: hls ? undefined : options.MaxAudioChannels,
       TranscodingMaxAudioChannels: options.TranscodingAudioChannels, MaxAudioBitDepth: options.MaxAudioBitDepth,
@@ -416,6 +422,35 @@ export class PlaybackService {
   }
 
   async stopHls(deviceId, playSessionId) { await this.hls?.stop(deviceId, playSessionId); }
+
+  async externalAudio(itemId, mediaSourceId, index, { user } = {}) {
+    if (!nonemptyId(itemId)) throw httpError(400, "Guid can't be empty. (Parameter 'id')");
+    let item;
+    try { item = await this.library.getItemRecord(itemId, { user }); }
+    catch (error) {
+      if (error?.status === 404) return new HttpResult(404, 'Item not found.', { text: true });
+      throw error;
+    }
+    const source = (await this.library.getMediaSources(item.Id)).find(candidate => candidate.Id === mediaSourceId);
+    if (!source) return new HttpResult(404, 'Media source not found.', { text: true });
+    const stream = source.MediaStreams.find(candidate => candidate.Type === 'Audio' && candidate.Index === index);
+    if (!stream) return new HttpResult(404, 'Audio stream not found.', { text: true });
+    if (!stream.Path) return new HttpResult(404, 'Audio stream file not found.', { text: true });
+
+    const contentType = getMimeType(stream.Path);
+    const result = vfsStreamResult(this.vfs, this.accessPath(item, stream.Path, false), {
+      contentType, requestHeaders: { 'User-Agent': `Jellyfin-Server/${this.serverVersion}` },
+    });
+    return new BinaryResult(async (request, response) => {
+      try { await result.send(request, response); }
+      catch (error) {
+        if (!(error instanceof StorageError) || error.code !== 'not-found' || response.headersSent) throw error;
+        response.statusCode = 404;
+        response.setHeader('Accept-Ranges', 'none');
+        await BinaryResult.bytes(Buffer.alloc(0), contentType).send(request, response);
+      }
+    });
+  }
 
   canDeliverHlsSubtitle(source, stream) {
     if (!stream.IsTextSubtitleStream) return false;

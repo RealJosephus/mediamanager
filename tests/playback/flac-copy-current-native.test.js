@@ -145,7 +145,7 @@ test('existing mono FLAC copies through current Native audio admission and forma
     assert.deepEqual(audioStreams(probe.raw), audioStreams(expected.probe.raw), label + ': Native audio stream parameters');
     return probe;
   };
-  const positive = async label => {
+  const positive = async (label, { universal = false } = {}) => {
     const selection = await request(`/Items/${id}/PlaybackInfo`, { method: 'POST', body: {
       UserId: userId,
       DeviceProfile: { MaxStreamingBitrate: 1000000000, DirectPlayProfiles: [{ Type: 'Audio', Container: 'mp4', AudioCodec: 'flac' }], TranscodingProfiles: [] } } });
@@ -157,9 +157,17 @@ test('existing mono FLAC copies through current Native audio admission and forma
     assert.equal(direct.headers['content-type'], nativeDirect.mime);
     await comparePayload(label + '-progressive', direct.raw, nativeDirect);
     const query = `MediaSourceId=${id}&AudioCodec=copy&SegmentContainer=mp4&SegmentLength=3&DeviceId=flac-copy-device&PlaySessionId=${label}`;
-    const master = await request(`/Audio/${id}/master.m3u8?${query}`); assert.equal(master.status, 200);
+    const masterRoute = universal
+      ? `/Audio/${id}/universal?UserId=${userId}&Container=mp4%7Cflac&TranscodingProtocol=hls&TranscodingContainer=mp4&DeviceId=flac-copy-device`
+      : `/Audio/${id}/master.m3u8?${query}`;
+    const master = await request(masterRoute); assert.equal(master.status, 200);
     assert.ok(master.raw.toString().includes(`CODECS="${captured.native.cases.find(row => row.name === 'hls-copy').manifestAudioCodec}"`));
-    const mainRoute = `/Audio/${id}/main.m3u8?${query}`, main = await request(mainRoute); assert.equal(main.status, 200);
+    const variant = master.raw.toString().split(/\r?\n/u).find(line => line && !line.startsWith('#'));
+    const mainUrl = new URL(variant, origin + masterRoute);
+    assert.equal(mainUrl.searchParams.get('AudioCodec'), 'copy');
+    assert.equal(mainUrl.searchParams.get('SegmentContainer'), 'mp4');
+    const mainRoute = mainUrl.pathname + mainUrl.search;
+    const main = await request(mainRoute); assert.equal(main.status, 200);
     const text = main.raw.toString(), initialization = /#EXT-X-MAP:URI="([^"]+)"/u.exec(text)?.[1]; assert.ok(initialization);
     const parts = [initialization, ...text.split(/\r?\n/u).filter(line => line && !line.startsWith('#'))], payloads = [];
     for (const part of parts) {
@@ -167,7 +175,9 @@ test('existing mono FLAC copies through current Native audio admission and forma
       assert.equal(response.status, 200); payloads.push(response.raw);
     }
     await comparePayload(label + '-hls', Buffer.concat(payloads), captured.native.cases.find(row => row.name === 'hls-copy'));
-    const stop = await request(`/Videos/ActiveEncodings?deviceId=flac-copy-device&playSessionId=${label}`, { method: 'DELETE' }); assert.equal(stop.status, 204);
+    const session = mainUrl.searchParams.get('PlaySessionId');
+    assert.ok(session);
+    const stop = await request(`/Videos/ActiveEncodings?deviceId=flac-copy-device&playSessionId=${session}`, { method: 'DELETE' }); assert.equal(stop.status, 204);
     await releasedLeases(); await removedHlsCaches();
   };
   try {
@@ -179,13 +189,19 @@ test('existing mono FLAC copies through current Native audio admission and forma
     report.actualProbeRefresh = await runtime.probe.refresh(id, { force: true, signal: t.signal });
     report.warmStreams = await database.rows('MediaStreamInfos', { where: { ItemId: Id } });
     assert.ok(report.warmStreams.some(stream => stream.Codec === 'flac' && stream.Channels === 1));
-    await positive('warm');
+    await positive('warm', { universal: true });
     const differentSampleRate = report.warmStreams.find(stream => stream.Codec === 'flac').SampleRate === 8000 ? 16000 : 8000;
     for (const parameters of ['AudioCodec=aac', 'AllowAudioStreamCopy=false', 'AudioChannels=2', `AudioSampleRate=${differentSampleRate}`]) {
       const before = report.readers.length, response = await request(`/Audio/${id}/stream.mp4?${parameters}`);
       assert.equal(response.status, 400, parameters); assert.equal(report.readers.length, before, 'A rejected transform never opens the original reader.');
     }
     assert.equal((await request(`/Audio/${id}/master.m3u8?MediaSourceId=${id}&SegmentContainer=ts&AudioCodec=copy`)).status, 400);
+    for (const container of ['mp4%7Caac&AudioCodec=aac', 'ts%7Cflac']) {
+      const before = report.readers.length;
+      const response = await request(`/Audio/${id}/universal?UserId=${userId}&TranscodingProtocol=hls&TranscodingContainer=mp4&Container=${container}`);
+      assert.equal(response.status, 400, container);
+      assert.equal(report.readers.length, before);
+    }
     const orderedProfile = await request(`/Items/${id}/PlaybackInfo`, { method: 'POST', body: { UserId: userId, DeviceProfile: {
       MaxStreamingBitrate: 1000000000, DirectPlayProfiles: [{ Type: 'Audio', Container: 'ts', AudioCodec: 'flac' }, { Type: 'Audio', Container: 'mp4', AudioCodec: 'flac' }], TranscodingProfiles: [] } } });
     assert.equal(orderedProfile.status, 200); assert.equal(JSON.parse(orderedProfile.raw).MediaSources[0].SupportsTranscoding, false);

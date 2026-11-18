@@ -175,6 +175,11 @@ export function registerPlaybackRoutes(add, { playback, users }) {
       return playback.hlsStream(itemId(context), 'segment', options);
     });
   }
+  add('GET', '/Videos/{routeItemId}/{routeMediaSourceId}/Audios/{routeIndex}/Stream.{routeFormat}', context => {
+    const { routeItemId, routeMediaSourceId, routeIndex } = context.params;
+    return playback.externalAudio(guidValue(routeItemId, 'routeItemId'), routeMediaSourceId,
+      integerValue(routeIndex, 'routeIndex'), { user: context.auth.User });
+  });
   add('GET', '/Videos/{itemId}/{mediaSourceId}/Subtitles/{index}/subtitles.m3u8', context => {
     integerValue(context.params.index, 'index');
     const segmentLength = integerValue(query(context, 'segmentLength'), 'segmentLength');
