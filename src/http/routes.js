@@ -28,28 +28,26 @@ const itemSortNames = ['Default', 'AiredEpisodeOrder', 'Album', 'AlbumArtist', '
   'CommunityRating', 'ProductionYear', 'PlayCount', 'CriticRating', 'IsFolder', 'IsUnplayed', 'IsPlayed',
   'SeriesSortName', 'VideoBitRate', 'AirTime', 'Studio', 'IsFavoriteOrLiked', 'DateLastContentAdded',
   'SeriesDatePlayed', 'ParentIndexNumber', 'IndexNumber'];
+const itemFilterNames = ['', 'IsFolder', 'IsNotFolder', 'IsUnplayed', 'IsPlayed', 'IsFavorite', '',
+  'IsResumable', 'Likes', 'Dislikes', 'IsFavoriteOrLikes'];
 export function registerDomainRoutes(add, services) {
   const { authentication, users, devices, library, channels, liveTv, playlists, sessions, userData, hls, metadata, onError } = services;
   const query = (context, name) => queryValue(context.query, name);
   const boolean = (context, name, fallback) => booleanValue(query(context, name), name, fallback);
   const integer = (context, name, fallback) => integerValue(query(context, name), name, fallback);
   const guid = (context, name, fallback) => guidValue(context.params[name] ?? query(context, name), name, fallback);
-  const commaEnums = (context, name, names) => {
+  const commaValues = (context, name) => {
     const values = [...context.query].filter(([key]) => key.toLowerCase() === name.toLowerCase()).map(([, value]) => value);
-    const entries = values.length > 1 ? values : values[0]?.split(',').filter(Boolean) ?? [];
-    return entries.flatMap(value => {
-      try { return [enumName(value.trim(), names)]; }
-      catch { return []; }
-    });
+    return values.length > 1 ? values : values[0]?.split(',').filter(Boolean) ?? [];
   };
-  const commaGuids = (context, name) => {
-    const values = [...context.query].filter(([key]) => key.toLowerCase() === name.toLowerCase()).map(([, value]) => value);
-    const entries = values.length > 1 ? values : values[0]?.split(',').filter(Boolean) ?? [];
-    return entries.flatMap(value => {
-      try { return [guidValue(value.trim(), name)]; }
-      catch { return []; }
-    });
-  };
+  const commaEnums = (context, name, names) => commaValues(context, name).flatMap(value => {
+    try { return [enumName(value.trim(), names)]; }
+    catch { return []; }
+  });
+  const commaGuids = (context, name) => commaValues(context, name).flatMap(value => {
+    try { return [guidValue(value.trim(), name)]; }
+    catch { return []; }
+  });
   const namedDetailName = (context, parameterName) => {
     const name = context.params.name;
     if (name == null || !clrTrim(name)) throw new BindingError(parameterName, `The ${parameterName} field is required.`);
@@ -468,6 +466,21 @@ export function registerDomainRoutes(add, services) {
   });
   add('GET', '/Studios/{name}', async context => library.getStudioDto(namedDetailName(context, 'name'),
     { user: await optionalRequestUser(context) }));
+  add('GET', '/Persons', async context => {
+    const input = {
+      ...controllerDtoOptions(context), startIndex: integer(context, 'startIndex'), limit: integer(context, 'limit'),
+      searchTerm: query(context, 'searchTerm'), nameStartsWith: query(context, 'nameStartsWith'),
+      nameLessThan: query(context, 'nameLessThan'), nameStartsWithOrGreater: query(context, 'nameStartsWithOrGreater'),
+      personTypes: commaValues(context, 'personTypes').map(clrTrim), excludePersonTypes: commaValues(context, 'excludePersonTypes').map(clrTrim),
+      parentId: guid(context, 'parentId'), appearsInItemId: guid(context, 'appearsInItemId'),
+    };
+    const favorite = commaEnums(context, 'filters', itemFilterNames).includes('IsFavorite');
+    input.isFavorite = boolean(context, 'isFavorite', favorite ? true : undefined);
+    requireSupportedDtoFields(input, 'Persons', ['ItemCounts']);
+    return library.queryPeople(input, { user: await optionalRequestUser(context), signal: context.signal });
+  });
+  add('GET', '/Persons/{name}', async context => await library.getNamedItemDto('Person', namedDetailName(context, 'name'),
+    { user: await optionalRequestUser(context) }) ?? notFound());
   const namedList = async (context, kind, { artist = false, albumArtists = false, autoMusicGenre = false } = {}) => {
     const input = {
       ...controllerDtoOptions(context, { userData: artist }),

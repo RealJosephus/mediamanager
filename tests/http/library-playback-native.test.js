@@ -9,6 +9,7 @@ import { getNewItemId } from '../../src/core/identity.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { readInstanceConfiguration } from '../../src/configuration.js';
 import { idKey } from '../../src/library/records.js';
+import { nativePersonIdentity } from '../../src/library/identity.js';
 import { transferDatabase } from '../../src/migration/database-transfer.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
@@ -30,6 +31,7 @@ const id = number => nativeGuid('25220000-0000-0000-0000-' + String(number).padS
 const movieType = nativeType('Movies.Movie'), audioType = nativeType('Audio.Audio');
 const audioId = id(20), movies = [id(21), id(22), id(23)];
 const artistType = nativeType('Audio.MusicArtist'), artistId = id(24), orphanArtistId = id(25);
+const features = [id(34), id(35)];
 const fixedDate = '2026-10-01 00:00:00';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const authorization = token => `MediaBrowser Client="Contract fixture", Device="Isolated", DeviceId="fixture-oracle", Version="1", Token="${token}"`;
@@ -59,6 +61,7 @@ async function seed(referenceRoot, current) {
   const databasePath = path.join(dataPath, 'jellyfin.db');
   const database = new SqliteDatabase(databasePath, { requireMigrationHistory: true });
   const apiKey = randomUUID().replaceAll('-', '');
+  const people = Object.fromEntries(['Ada Ledger', 'Bela Ledger'].map(name => [name, nativePersonIdentity(name, settings)]));
   try {
     const aggregate = database.rows('BaseItems', { where: { Type: nativeType('AggregateFolder') } })[0];
     assert.ok(aggregate, 'The frozen instance must contain its actual aggregate root.');
@@ -89,6 +92,24 @@ async function seed(referenceRoot, current) {
       for (const ItemId of [audioId, ...movies]) for (const ParentItemId of [folderId, aggregate.Id]) {
         database.insert('AncestorIds', { ItemId, ParentItemId });
       }
+      for (const [Name, person] of Object.entries(people)) {
+        addItem({ Id: person.Id, Type: nativeType('Person'), Name, Path: person.Path, Overview: Name + ' biography' });
+      }
+      for (const [index, Name, PersonType] of [
+        [30, 'Ada Ledger', 'Actor'], [31, 'ada ledger', 'GuestStar'], [32, 'Bela Ledger', 'Writer'], [33, 'Missing credit', 'Actor'],
+      ]) {
+        const PeopleId = id(index);
+        database.insert('Peoples', postgresTestRow('Peoples', { Id: PeopleId, Name, PersonType }));
+        database.insert('PeopleBaseItemMap', postgresTestRow('PeopleBaseItemMap', {
+          ItemId: index === 32 ? movies[1] : movies[0], PeopleId, ListOrder: index - 30,
+        }));
+      }
+      for (const [Id, Name, ExtraType] of [
+        [features[0], 'A look backstage', 3], [features[1], 'Shorter story', 11], [id(36), 'Theme clip', 9],
+      ]) {
+        addItem({ Id, Type: nativeType('Video'), Name, ExtraType, OwnerId: movies[0], TopParentId: folderId,
+          Path: path.join(physical, Name + '.mkv'), MediaType: 'Video', Data: '{"VideoType":"VideoFile","Container":"mkv"}' });
+      }
       database.insert('MediaStreamInfos', postgresTestRow('MediaStreamInfos', {
         ItemId: audioId, StreamIndex: 0, StreamType: 0, Codec: 'flac', SampleRate: 44100, BitDepth: 16,
         Channels: 1, BitRate: 192000, IsDefault: true,
@@ -107,11 +128,14 @@ async function seed(referenceRoot, current) {
       database.insert('UserData', postgresTestRow('UserData', {
         ItemId: movies[0], UserId: current.userId, CustomDataKey: '', IsFavorite: true,
       }));
+      database.insert('UserData', postgresTestRow('UserData', {
+        ItemId: people['Ada Ledger'].Id, UserId: current.userId, CustomDataKey: '', IsFavorite: true,
+      }));
       database.insert('ApiKeys', { AccessToken: apiKey, Name: 'Contract read fixture', DateCreated: fixedDate, DateLastActivity: fixedDate });
     });
     database.preflight();
   } finally { database.close(); }
-  return { settings, databasePath, folderId, apiKey, audio, tile };
+  return { settings, databasePath, folderId, apiKey, audio, tile, people };
 }
 
 function portAvailable(port) {
@@ -188,6 +212,8 @@ test('existing playback assets, date ticks, counts and search hints match the de
       'Jellyfin.Api/Controllers/LibraryController.cs', 'Jellyfin.Server.Implementations/Item/ItemCountService.cs',
       'Jellyfin.Api/Controllers/SearchController.cs', 'Emby.Server.Implementations/Library/Search/SearchManager.cs',
       'Emby.Server.Implementations/Library/Search/SqlSearchProvider.cs',
+      'Jellyfin.Api/Controllers/PersonsController.cs', 'Jellyfin.Server.Implementations/Item/PeopleRepository.cs',
+      'Jellyfin.Api/Controllers/UserLibraryController.cs', 'MediaBrowser.Controller/Entities/BaseItem.cs',
     ]);
     await cp(current.sourceRoot, referenceRoot, { recursive: true });
     await current.prepareClone(referenceRoot, port);
@@ -245,6 +271,18 @@ test('existing playback assets, date ticks, counts and search hints match the de
       { name: 'external audio pathless stream', route: externalAudio(ids[0], ids[0], 2), status: 404 },
       { name: 'external audio absent file', route: externalAudio(ids[0], ids[0], 3), status: 404 },
       { name: 'universal FLAC container copy', route: audioRoute + '?Container=mp4%7Cflac&TranscodingProtocol=hls&TranscodingContainer=mp4', status: 200, hls: true },
+      { name: 'people search deduplicates credit roles', route: '/Persons?SearchTerm=ledger&Fields=Overview,ItemCounts', status: 200 },
+      { name: 'people pagination and credit role', route: '/Persons?SearchTerm=ledger&PersonTypes=Writer,Actor&StartIndex=1&Limit=1&EnableUserData=false', status: 200 },
+      { name: 'people derive scope from credited media', route: '/Persons?ParentId=' + idKey(fixture.folderId) + '&AppearsInItemId=' + ids[0], status: 200 },
+      { name: 'people uses favorite data', route: '/Persons?Filters=IsFavorite&SearchTerm=ledger', status: 200 },
+      { name: 'people counts the missing credited entity', route: '/Persons?SearchTerm=missing%20credit', status: 200, apiKey: true },
+      { name: 'person detail resolves the normalized name', route: '/Persons/ada%20ledger', status: 200 },
+      { name: 'missing person is not created', route: '/Persons/Missing%20credit', status: 404 },
+      { name: 'people requires authentication', route: '/Persons', status: 401, anonymous: true },
+      { name: 'item special features', route: '/Items/' + ids[0] + '/SpecialFeatures', status: 200 },
+      { name: 'legacy item special features', route: '/Users/' + idKey(current.userId) + '/Items/' + ids[0] + '/SpecialFeatures', status: 200 },
+      { name: 'features requires a user with API key', route: '/Items/' + ids[0] + '/SpecialFeatures', status: 400, apiKey: true },
+      { name: 'features of a missing owner', route: '/Items/' + idKey(id(999)) + '/SpecialFeatures', status: 404 },
     ];
     native = current.start({ referenceRoot, outputRoot: root, label: 'native', origin: nativeOrigin });
     await native.ready();
@@ -274,6 +312,13 @@ test('existing playback assets, date ticks, counts and search hints match the de
     assert.equal(observed('parented hints').SearchHints.length, 4);
     assert.deepEqual(observed('associated artist hint').SearchHints.map(hint => hint.Id), [idKey(artistId)]);
     assert.equal(observed('detached artist hint').TotalRecordCount, 0);
+    assert.deepEqual(observed('people search deduplicates credit roles').Items.map(item => item.Name), ['Ada Ledger', 'Bela Ledger']);
+    assert.deepEqual(observed('people pagination and credit role').Items.map(item => item.Name), ['Bela Ledger']);
+    assert.deepEqual(observed('people uses favorite data').Items.map(item => item.Name), ['Ada Ledger']);
+    assert.deepEqual(observed('people counts the missing credited entity'), { Items: [], StartIndex: 0, TotalRecordCount: 1 });
+    assert.equal(observed('person detail resolves the normalized name').Id, idKey(fixture.people['Ada Ledger'].Id));
+    assert.deepEqual(observed('item special features').map(item => item.Id), features.map(idKey));
+    assert.deepEqual(observed('legacy item special features'), observed('item special features'));
     for (const name of ['MinPremiereDate', 'MaxPremiereDate', 'MinDateLastSaved', 'MinDateLastSavedForUser']) {
       assert.equal(observed(name).TotalRecordCount, 2, name);
     }
