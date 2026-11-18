@@ -20,6 +20,7 @@ import { readItemImageRows } from '../library/image-order.js';
 import { isFileProtocol } from '../library/owned-items.js';
 import { clrTrim } from '../metadata/whitespace.js';
 import { normalizeProbeFileDate } from '../storage/probe-lifecycle.js';
+import { listRemoteImages, remoteImageProviders } from '../metadata/remote-image-catalog.js';
 
 const remote = image => /^http/i.test(image.Path);
 const missing = () => Object.assign(new Error('Image item not found.'), { status: 404, code: 'image-item-missing' });
@@ -225,6 +226,33 @@ export class ImageService {
         image.DateModified = file.modified ? nativeDate(normalizeProbeFileDate(file.modified)) : MIN_DATE;
         image.Width = image.Height = 0;
       }
+      return true;
+    });
+  }
+  remoteImages(itemId, { auth, signal }, query) {
+    return this.#track(async () => {
+      const loaded = await this.load(itemId, auth.User);
+      const registry = this.metadataUpdates.registry;
+      const read = async context => {
+        const options = { ...query, logger: this.logger, signal };
+        if (query) return listRemoteImages(registry, context, options);
+        return (await remoteImageProviders(registry, context, options)).map(value => value.info);
+      };
+      return this.loadContext ? this.loadContext.withContext(loaded.item.Id, { includeChildren: false }, read) : read(loaded);
+    });
+  }
+  downloadRemoteItem({ itemId, imageUrl, type }, context) {
+    return this.#editItem(itemId, context, async signal => {
+      if (!imageUrl || !clrTrim(imageUrl)) throw httpError(400, 'Image URL is required.');
+      try { return await this.metadataImages.download(imageUrl, signal); }
+      catch (error) {
+        if (error?.code !== 'http-error') throw error;
+        throw new Error('The remote image download failed.', { cause: error });
+      }
+    }, async (loaded, metadata, signal, source) => {
+      const index = multipleImages(type) ? loaded.images.filter(image => image.Type === type).length : 0;
+      await this.metadataImages.saveRemote(metadata, loaded.images, { Type: type, Url: imageUrl }, { signal, index, download: async () => source });
+      if (type === 'Chapter') throw httpError(400, 'Cannot set chapter images using SetImagePath.');
       return true;
     });
   }

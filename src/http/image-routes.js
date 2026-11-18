@@ -1,6 +1,6 @@
 import { MIMEType } from 'node:util';
 import { decodeBase64Body } from './base64-body.js';
-import { BindingError, queryValue, HttpResult, notFound, noContent, httpError } from './binding.js';
+import { BindingError, queryValue, HttpResult, notFound, noContent, httpError, booleanValue } from './binding.js';
 import { nativeGuid, wireGuid } from '../users/native.js';
 import { enumName } from '../sessions/binding.js';
 import { clrTrim } from '../metadata/whitespace.js';
@@ -122,6 +122,23 @@ export function registerImageRoutes(add, { images }) {
     await images.updateProfile(profileMutationUser(context), context);
     return noContent();
   }));
+  const remotePath = '/Items/{itemId}/RemoteImages';
+  const remoteItemId = context => guid(context.params.itemId, 'itemId');
+  add('GET', remotePath, context => handled(() => {
+    const query = name => queryValue(context.query, name);
+    return images.remoteImages(remoteItemId(context), context, {
+      type: enumeration(query('type'), 'type', imageTypes), startIndex: number(query('startIndex'), 'startIndex'),
+      limit: number(query('limit'), 'limit'), providerName: query('providerName'),
+      includeAllLanguages: booleanValue(query('includeAllLanguages'), 'includeAllLanguages', false),
+    });
+  }));
+  add('GET', remotePath + '/Providers', context => handled(() => images.remoteImages(remoteItemId(context), context)));
+  add('POST', remotePath + '/Download', context => handled(async () => {
+    const type = enumeration(queryValue(context.query, 'type'), 'type', imageTypes);
+    if (type === undefined) throw new BindingError('type', 'The type field is required.');
+    await images.downloadRemoteItem({ itemId: remoteItemId(context), type, imageUrl: queryValue(context.query, 'imageUrl') }, context);
+    return noContent();
+  }), elevation);
   for (const method of ['GET', 'HEAD']) {
     add(method, [...itemPaths,
       '/Items/{itemId}/Images/{imageType}/{imageIndex}/{tag}/{format}/{maxWidth}/{maxHeight}/{percentPlayed}/{unplayedCount}'],
