@@ -96,10 +96,9 @@ export class AuthenticationService extends EventEmitter {
     if (policy === 'LiveTvAccess' && !auth.IsAdministrator && !auth.User.Policy.EnableLiveTvAccess) throw domainError(403, '');
     if (policy === 'LiveTvManagement' && !auth.IsAdministrator && !auth.User.Policy.EnableLiveTvManagement) throw domainError(403, '');
     if (policy === 'CollectionManagement' && !auth.IsAdministrator && !auth.User.Policy.EnableCollectionManagement) throw domainError(403, '');
-    // Native's policy projection omits this flag; authorization reads the
-    // persisted permission rather than the public UserPolicy DTO default.
-    if (policy === 'LyricManagement' && !auth.IsAdministrator
-      && !auth.User.Permissions.some(permission => permission.Kind === permissionNames.indexOf('EnableLyricManagement') && permission.Value)) throw domainError(403, '');
+    // Native's policy projection omits these flags. Use persisted permissions.
+    if (['LyricManagement', 'SubtitleManagement'].includes(policy) && !auth.IsAdministrator
+      && !auth.User.Permissions.some(permission => permission.Kind === permissionNames.indexOf('Enable' + policy) && permission.Value)) throw domainError(403, '');
     if (policy === 'Download' && !auth.IsAdministrator && !auth.User.Policy.EnableContentDownloading) throw domainError(403, '');
     if (policy === 'FirstTimeSetupOrElevated' && !auth.IsAdministrator) throw domainError(403, '');
     if (requiredPermission && !auth.User.Permissions.some(permission => permission.Value && permission.Kind === requiredPermission)) throw domainError(403, '');
