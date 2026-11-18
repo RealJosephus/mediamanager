@@ -100,7 +100,11 @@ async function seed(referenceRoot, current) {
         const tick = fixedDate + '.123456' + (6 + index);
         addItem({ Id: movies[index], ParentId: folderId, TopParentId: folderId, Type: movieType, IsMovie: true,
           Name, Path: path.join(physical, Name + '.mkv'), MediaType: 'Video', PremiereDate: tick, DateLastSaved: tick,
-          ProductionYear: 2026, Data: '{"VideoType":"VideoFile"}' });
+          ProductionYear: 2026, Data: index === 0 ? '{"VideoType":"VideoFile"}'
+            : '{"VideoType":"VideoFile","DefaultVideoStreamIndex":0,"Container":"mkv"}' });
+        if (index !== 0) database.insert('MediaStreamInfos', postgresTestRow('MediaStreamInfos', {
+          ItemId: movies[index], StreamIndex: 0, StreamType: 1, Codec: 'h264', Width: index === 1 ? 1280 : 1920, Height: 1080,
+        }));
       }
       for (const ItemId of [audioId, ...movies]) for (const ParentItemId of [folderId, aggregate.Id]) {
         database.insert('AncestorIds', { ItemId, ParentItemId });
@@ -197,6 +201,50 @@ function hlsSelection(response, route) {
     codecs: /\bCODECS="([^"]+)"/u.exec(lines.find(line => line.startsWith('#EXT-X-STREAM-INF:')))?.[1] };
 }
 
+async function changeVideoVersions(origin, token, readState, signal, evidence) {
+  const [, lower, higher] = movies.map(idKey);
+  const request = (method, route, accessToken = token) => readResponse(origin, { method, route }, accessToken, signal);
+  const merge = '/Videos/MergeVersions?Ids=' + lower + ',' + higher;
+  const split = '/Videos/' + lower + '/AlternateSources';
+  assert.equal((await request('POST', merge, null)).status, 401);
+  assert.equal((await request('POST', '/Videos/MergeVersions?Ids=' + lower)).status, 400);
+  evidence.merge = await request('POST', merge);
+  assert.equal(evidence.merge.status, 204, JSON.stringify(evidence.merge));
+  evidence.merged = await readState();
+  assert.deepEqual(evidence.merged, {
+    items: [{ id: lower, primary: higher, key: higher }, { id: higher, primary: null, key: higher }],
+    links: [{ parent: higher, child: lower, type: 3, position: 0 }],
+  });
+  const requestSources = async () => {
+    const result = await request('GET', '/Items/' + higher + '/PlaybackInfo');
+    assert.equal(result.status, 200);
+    return JSON.parse(result.body).MediaSources.map(source => [source.Id, source.Type]);
+  };
+  evidence.mergedSources = await requestSources();
+  assert.deepEqual(evidence.mergedSources, [[higher, 'Default'], [lower, 'Grouping']]);
+  evidence.split = await request('DELETE', split);
+  assert.equal(evidence.split.status, 204, JSON.stringify(evidence.split));
+  evidence.separate = await readState();
+  assert.deepEqual(evidence.separate, {
+    items: [{ id: lower, primary: null, key: lower }, { id: higher, primary: null, key: higher }], links: [],
+  });
+  evidence.separateSources = await requestSources();
+  assert.deepEqual(evidence.separateSources, [[higher, 'Default']]);
+}
+
+async function readVersionState(db) {
+  const ids = movies.slice(1);
+  const items = [], links = [];
+  for (const Id of ids) {
+    const [row] = await db.rows('BaseItems', { where: { Id } });
+    items.push({ id: idKey(row.Id), primary: row.PrimaryVersionId ? idKey(row.PrimaryVersionId) : null, key: row.PresentationUniqueKey });
+    for (const link of await db.rows('LinkedChildren', { where: { ParentId: Id } })) {
+      links.push({ parent: idKey(link.ParentId), child: idKey(link.ChildId), type: link.ChildType, position: link.SortOrder });
+    }
+  }
+  return { items, links };
+}
+
 test('existing playback assets, date ticks, counts and search hints match the designated Native HTTP host', {
   skip: !enabled, timeout: 300000,
 }, nativeCase((t, port) => mediaLease.run(async () => {
@@ -240,6 +288,7 @@ test('existing playback assets, date ticks, counts and search hints match the de
       'Jellyfin.Api/Controllers/LiveTvController.cs', 'src/Jellyfin.LiveTv/LiveTvManager.cs',
       'src/Jellyfin.LiveTv/DefaultLiveTvService.cs',
       'Jellyfin.Api/Controllers/MoviesController.cs',
+      'Jellyfin.Api/Controllers/VideosController.cs', 'MediaBrowser.Controller/Entities/Video.cs',
       'Emby.Server.Implementations/Library/SimilarItems/SimilarItemsManager.cs',
       'Emby.Server.Implementations/Library/SimilarItems/MovieSimilarItemsProvider.cs',
     ]);
@@ -331,6 +380,11 @@ test('existing playback assets, date ticks, counts and search hints match the de
     await native.ready();
     const token = sample => sample.anonymous ? null : sample.apiKey ? fixture.apiKey : current.accessToken;
     for (const sample of samples) report.cases.push({ sample, native: await readResponse(nativeOrigin, sample, token(sample), t.signal) });
+    report.versions = { native: {}, node: {} };
+    await changeVideoVersions(nativeOrigin, current.accessToken, async () => {
+      const sqlite = new SqliteDatabase(fixture.databasePath, { readOnly: true, requireMigrationHistory: true });
+      try { return await readVersionState(sqlite); } finally { sqlite.close(); }
+    }, t.signal, report.versions.native);
     await stopNative();
     await writeFile(path.join(referenceRoot, 'config/network.xml'), '<NetworkConfiguration><InternalHttpPort>0</InternalHttpPort><AutoDiscovery>false</AutoDiscovery><LocalNetworkAddresses><string>127.0.0.1</string></LocalNetworkAddresses></NetworkConfiguration>');
     runtime = await createTestRuntime({ ...await readInstanceConfiguration(referenceRoot), database,
@@ -348,6 +402,8 @@ test('existing playback assets, date ticks, counts and search hints match the de
         } else assert.deepEqual(comparable(entry.node), comparable(entry.native));
       } catch (error) { report.differences.push({ name: entry.sample.name, message: error.message }); }
     }
+    await changeVideoVersions(nodeOrigin, current.accessToken, () => readVersionState(database), t.signal, report.versions.node);
+    assert.deepEqual(report.versions.node, report.versions.native);
     const observed = name => comparable(report.cases.find(entry => entry.sample.name === name).native).body;
     assert.equal(observed('specified favorite counts').MovieCount, 1);
     assert.equal(observed('global hints').SearchHints.length, 4);
