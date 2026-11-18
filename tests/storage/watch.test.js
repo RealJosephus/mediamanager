@@ -203,8 +203,11 @@ test('deleting a watched root ends the subscription after accepting a child with
   operation('write after recreating the root');
   const count = recorded.events.length;
   await fs.mkdir(root);
-  await fs.writeFile(path.join(root, 'after-root-deletion.txt'), 'closed');
-  await delay(30);
+  const fresh = recorder();
+  const replacement = await adapter.watch('/', { ...fresh, signal: t.signal });
+  t.after(() => replacement.close());
+  await observeWrite(t, root, fresh, '/after-root-deletion.txt');
+  await replacement.close();
   assert.equal(recorded.events.length, count);
   await subscription.close();
   t.diagnostic(JSON.stringify({ watchRootDeleted: true, code: failure.code, terminal: true,
@@ -212,9 +215,9 @@ test('deleting a watched root ends the subscription after accepting a child with
   operation('complete');
 });
 
-async function controlledWatch(t) {
+async function controlledWatch(t, { windows = true } = {}) {
   const { root, adapter } = await local(t), handles = [], resolved = [], recorded = recorder();
-  const subscription = await watchDirectory('/', { ...recorded, windows: true, failure: error => error,
+  const subscription = await watchDirectory('/', { ...recorded, windows, failure: error => error,
     resolve: async filename => {
       resolved.push(filename);
       try { await adapter.stat(filename); }
@@ -231,6 +234,52 @@ async function controlledWatch(t) {
   t.after(() => subscription.close());
   return { root, handles, resolved, recorded, subscription };
 }
+
+test('a queued root notification cannot retarget a watch after immediate replacement', { timeout: 10000 }, async t => {
+  const f = await controlledWatch(t, { windows: false });
+  const sameName = path.basename(f.root);
+  await fs.writeFile(path.join(f.root, sameName), 'original');
+  const changed = f.recorded.next(event => event.path === `/${sameName}`);
+  f.handles[0].change('rename', sameName);
+  await changed;
+
+  await fs.unlink(path.join(f.root, sameName));
+  await fs.rmdir(f.root);
+  await fs.mkdir(f.root);
+  await fs.writeFile(path.join(f.root, sameName), 'replacement');
+  const count = f.recorded.events.length;
+  const next = f.recorded.next(() => true);
+  f.handles[0].change('rename', sameName);
+  await assert.rejects(next, { code: 'not-found' });
+  assert.equal(f.recorded.events.length, count);
+  assert.deepEqual(f.recorded.errorStates, [{ terminal: true }]);
+  assert.ok(f.handles[0].closed);
+});
+
+test('an old child watch only invalidates the directory after replacement', { timeout: 10000 }, async t => {
+  const f = await controlledWatch(t, { windows: false });
+  const child = path.join(f.root, 'child');
+  await fs.mkdir(child);
+  const created = f.recorded.next(event => event.path === '/child');
+  f.handles[0].change('rename', 'child');
+  await created;
+  const original = f.handles.find(handle => handle.target === child);
+  await fs.rename(child, path.join(f.root, 'detached'));
+  await fs.mkdir(child);
+  await fs.writeFile(path.join(child, 'child'), 'replacement');
+  const invalidated = f.recorded.next(() => true);
+  original.change('rename', 'child');
+  assert.deepEqual(await invalidated, { path: '/child', type: 'rename' });
+  assert.ok(original.closed);
+
+  const replacement = f.handles.findLast(handle => handle.target === child);
+  assert.notEqual(replacement, original);
+  const changed = f.recorded.next(() => true);
+  original.change('change', 'stale');
+  replacement.change('change', 'child');
+  assert.deepEqual(await changed, { path: '/child/child', type: 'change' });
+  assert.deepEqual(f.recorded.errors, []);
+});
 
 test('Windows descendant and DeletePending callbacks retain sibling watches and reject stale owners', { timeout: 10000 }, async t => {
   const f = await controlledWatch(t), rootWatch = f.handles[0];
@@ -262,7 +311,7 @@ test('ambiguous native callback names rescan only the held directory and retain 
     '\\\\server\\share\\file', '/outside', 'child//file', 'bad\0name']) {
     const after = f.resolved.length, change = f.recorded.next(event => event.path === '/');
     rootWatch.change('rename', name); await change;
-    assert.deepEqual(f.resolved.slice(after), ['/']);
+    assert.deepEqual([...new Set(f.resolved.slice(after))], ['/']);
     assert.equal(f.recorded.errors.at(-1).details.callbackName, name);
     assert.equal(f.recorded.errors.at(-1).details.watchPath, '/');
     assert.deepEqual(f.recorded.errorStates.at(-1), { terminal: false });

@@ -31,12 +31,6 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
   };
   const sameNativePath = (left, right) => path.win32.toNamespacedPath(left).toLowerCase()
     === path.win32.toNamespacedPath(right).toLowerCase();
-  const namesWatchedDirectory = (name, target) => {
-    const basename = path.basename(target);
-    return process.platform === 'darwin'
-      ? name.normalize('NFC').toLowerCase() === basename.normalize('NFC').toLowerCase()
-      : name === basename;
-  };
   const hasDirectoryIdentity = async (filename, identity) => {
     try {
       const info = await fs.lstat(await resolve(filename), { bigint: true });
@@ -46,7 +40,11 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
       throw error;
     }
   };
-  let closed = false, tail = Promise.resolve();
+  const rootDeleted = () => new StorageError('not-found', 'The watched storage directory was deleted.');
+  let closed = false, tail = Promise.resolve(), rootIdentity;
+  const assertRootIdentity = async () => {
+    if (!await hasDirectoryIdentity(root, rootIdentity)) throw rootDeleted();
+  };
   const report = (error, terminal) => {
     if (closed && !terminal) return;
     try { void Promise.resolve(onError(failure(error), Object.freeze({ terminal }))).catch(() => {}); }
@@ -87,6 +85,19 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
     try { await inspectDirectory(filename, initial); return true; }
     catch (error) { if (rejectSubtree(filename, error)) return false; throw error; }
   };
+  const checkWatchedDirectory = async (filename, identity) => {
+    await assertRootIdentity();
+    if (filename === root || await hasDirectoryIdentity(filename, identity)) return true;
+    // The parent still owns the path. Reconcile the replacement namespace,
+    // but never attribute a descendant event on the old handle to it.
+    if (watchers.get(filename)?.identity === identity) {
+      remove(filename);
+      if (!await inspect(filename)) return false;
+    }
+    await assertRootIdentity();
+    changed({ path: filename, type: 'rename' });
+    return false;
+  };
   const inspectDirectory = async (filename, initial) => {
     checkAbort(signal);
     if (closed) return;
@@ -112,6 +123,8 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
       return;
     }
     const identity = directoryIdentity(info);
+    if (initial) rootIdentity = identity;
+    else if (filename === root && rootIdentity !== identity) throw rootDeleted();
     if (watchers.has(filename) && watchers.get(filename).identity !== identity) remove(filename);
     if (!watchers.has(filename)) {
       let watcher;
@@ -120,8 +133,9 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
         // replaced. They must not remove or reconcile the replacement owner.
         if (watchers.get(filename)?.watcher !== watcher) return;
         try {
+          if (!await checkWatchedDirectory(filename, identity)) return;
           if (name == null || name.length === 0) {
-            if (await inspect(filename)) changed({ path: filename, type });
+            if (await inspect(filename) && await checkWatchedDirectory(filename, identity)) changed({ path: filename, type });
             return;
           }
           const value = String(name);
@@ -129,15 +143,8 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
           // handle is DeletePending (deps/uv/src/win/fs-event.c). Interpret only
           // that already-owned identity; never resolve an absolute callback.
           if (windows && type === 'rename' && path.win32.isAbsolute(value) && sameNativePath(value, target)) {
-            if (filename === root) throw new StorageError('not-found', 'The watched storage directory was deleted.');
+            if (filename === root) throw rootDeleted();
             remove(filename); changed({ path: filename, type }); return;
-          }
-          // POSIX backends can use the watched directory's basename for a
-          // self-notification. A child can have that same name while the
-          // directory still owns the watch.
-          if (!windows && namesWatchedDirectory(value, target) && !await hasDirectoryIdentity(filename, identity)) {
-            if (await inspect(filename)) changed({ path: filename, type });
-            return;
           }
           let parts;
           try { parts = relativeParts(value); }
@@ -145,7 +152,7 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
             report(callbackFailure(error, filename, name), false);
             // Unknown native names are invalidations of the held directory,
             // never paths to normalize, follow, or resolve outside that owner.
-            if (await inspect(filename)) changed({ path: filename, type });
+            if (await inspect(filename) && await checkWatchedDirectory(filename, identity)) changed({ path: filename, type });
             return;
           }
           const child = joinPath(filename, parts.join('/'));
@@ -153,7 +160,7 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
           // directory's own event. Install that subtree before exposing it.
           if (parts.length > 1 && !await inspect(joinPath(filename, parts[0]))) return;
           // A change can restore access to a previously rejected directory.
-          if (await inspect(child)) changed({ path: child, type });
+          if (await inspect(child) && await checkWatchedDirectory(filename, identity)) changed({ path: child, type });
         } catch (error) { throw callbackFailure(error, filename, name); }
       })); }
       catch (error) {
@@ -162,16 +169,7 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
       }
       watcher.on('error', error => enqueue(async () => {
         if (watchers.get(filename)?.watcher !== watcher) return;
-        // Removing a watched child can report an OS error on its own handle.
-        // Its parent still watches the namespace and must remain subscribed.
-        try { await fs.lstat(await resolve(filename)); }
-        catch (statError) {
-          if (missing(statError)) {
-            if (filename === root) throw statError;
-            remove(filename); changed({ path: filename, type: 'rename' }); return;
-          }
-          if (rejectSubtree(filename, statError)) return;
-        }
+        if (!await checkWatchedDirectory(filename, identity)) return;
         if (rejectSubtree(filename, error)) return;
         throw error;
       }));
@@ -206,7 +204,7 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
   try {
     checkAbort(signal);
     // Reserve the serial tail before OS events can enqueue reconciliation.
-    tail = inspect(root, true);
+    tail = inspect(root, true).then(assertRootIdentity);
     await tail;
     checkAbort(signal);
     return Object.freeze({ close });
