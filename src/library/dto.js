@@ -23,6 +23,7 @@ import { readChannelStaticMediaSources } from './channel-static-media-sources.js
 import { nativeGuid } from '../users/native.js';
 import { resolveSeries } from './series-reference.js';
 import { ownedExtraCountKey, queryPostgresOwnedExtraCounts } from './postgres-owned-media-query.js';
+import { parentChainForItem } from './collection-membership.js';
 
 export const itemFields = ['CanDelete', 'CanDownload', 'Chapters', 'Trickplay', 'ChildCount', 'CumulativeRunTimeTicks',
   'CustomRating', 'DateCreated', 'DateLastMediaAdded', 'DisplayPreferencesId', 'Etag', 'ExternalUrls', 'Genres', 'ItemCounts',
@@ -548,14 +549,81 @@ export async function projectUserData(item, state, user, ownData = null) {
   return dto;
 }
 
+function publicItemKind(item) {
+  return item.IsFolder && item.SourceType === 'Channel' && !['Channel', 'Season', 'Series'].includes(item.Type) ? 'ChannelFolderItem'
+    : item.Type === 'PlaylistsFolder' ? 'ManualPlaylistsFolder'
+      : item.Type === 'LiveTvProgram' ? 'Program' : item.Type === 'LiveTvChannel' ? 'TvChannel' : item.Type;
+}
+
+async function primaryImageAspectRatio(item, primary, options) {
+  if (item.Type === 'Photo' && primary) {
+    let size;
+    if (!/^http/iu.test(primary.Path)) try {
+      size = options.getImageDimensions ? await options.getImageDimensions(item, primary) : primary;
+    } catch (error) { options.logger?.error?.(error, 'Could not read the primary image dimensions.'); }
+    if (size?.Width > 0 && size.Height > 0) return size.Width / size.Height;
+    const rotated = ['LeftBottom', 'LeftTop', 'RightBottom', 'RightTop'].includes(item.Orientation);
+    return item.Width !== 0 && item.Height !== 0 ? rotated ? item.Height / item.Width : item.Width / item.Height : 0;
+  }
+  if (primary?.Width > 0 && primary.Height > 0) return primary.Width / primary.Height;
+}
+
+export async function projectSearchHints(items, state, options) {
+  const entries = items.map(item => ({ item, parents: parentChainForItem(item, state) }));
+  const images = uniqueItems(entries.flatMap(({ item, parents }) => [item, ...parents]));
+  for (let offset = 0; offset < images.length; offset += 128) {
+    await prefetchImageRows(state, images.slice(offset, offset + 128));
+  }
+  const output = [];
+  for (const { item, parents } of entries) {
+    const id = dtoId(item.Id);
+    const hint = { ItemId: id, Id: id, Name: item.Name, Type: publicItemKind(item), MediaType: item.MediaType,
+      IndexNumber: item.IndexNumber, ParentIndexNumber: item.ParentIndexNumber, ProductionYear: item.ProductionYear,
+      RunTimeTicks: item.RunTimeTicks, EndDate: dateText(item.EndDate), IsFolder: item.IsFolder ? true : undefined,
+      Artists: [], ChannelId: nonemptyId(item.ChannelId) ? dtoId(item.ChannelId) : null };
+    if (hint.ChannelId) hint.ChannelName = state.byId.get(idKey(item.ChannelId))?.Name;
+    const tag = (owner, image) => md5Guid(`${owner.Path ?? ''}${dateTicks(image.DateModified)}`);
+    const primary = (await itemImageRows(state, item)).find(row => row.ImageType === 0);
+    if (primary) {
+      hint.PrimaryImageTag = tag(item, primary);
+      hint.PrimaryImageAspectRatio = await primaryImageAspectRatio(item, primary, options);
+    }
+    for (const [type, candidates] of [
+      ['Thumb', item.Type === 'Episode' ? [item, ...parents.filter(parent => parent.Type === 'Series'), ...parents] : [item, ...parents]],
+      ['Backdrop', [item, ...parents]],
+    ]) {
+      for (const owner of candidates) {
+        const image = (await itemImageRows(state, owner)).find(row => itemImageTypes[row.ImageType] === type);
+        if (!image) continue;
+        hint[type + 'ImageTag'] = tag(owner, image);
+        hint[type + 'ImageItemId'] = dtoId(owner.Id);
+        break;
+      }
+    }
+    if (['Episode', 'Season', 'AudioBook', 'Book'].includes(item.Type)) hint.Series = item.SeriesName;
+    else if (item.Type === 'Series') hint.Status = item.Status;
+    else if (item.Type === 'LiveTvProgram') hint.StartDate = dateText(item.StartDate);
+    else if (item.Type === 'MusicAlbum') {
+      hint.Artists = item.Artists;
+      hint.AlbumArtist = item.AlbumArtist ?? item.AlbumArtists?.[0];
+    } else if (item.Type === 'Audio') {
+      hint.Artists = item.Artists;
+      hint.AlbumArtist = item.AlbumArtists?.[0];
+      const album = parents.find(parent => parent.Type === 'MusicAlbum');
+      hint.Album = album ? album.Name : item.Album;
+      if (album) hint.AlbumId = dtoId(album.Id);
+    }
+    output.push(withNativeNulls(hint, ['ChannelId']));
+  }
+  return output;
+}
+
 export async function projectItem(item, state, user, selected, options) {
   const has = field => selected.fields.has(field.toLowerCase());
   const dto = { Name: item.Name, ServerId: options.serverId, Id: dtoId(item.Id), Container: item.Container, EndDate: dateText(item.EndDate), IndexNumber: item.IndexNumber, ParentIndexNumber: item.ParentIndexNumber,
     MediaType: item.MediaType, CriticRating: item.CriticRating, OfficialRating: item.OfficialRating, OriginalLanguage: item.OriginalLanguage,
     PremiereDate: dateText(item.PremiereDate), ProductionYear: item.ProductionYear, RunTimeTicks: item.RunTimeTicks,
-    Type: item.IsFolder && item.SourceType === 'Channel' && !['Channel', 'Season', 'Series'].includes(item.Type) ? 'ChannelFolderItem'
-      : item.Type === 'PlaylistsFolder' ? 'ManualPlaylistsFolder'
-      : item.Type === 'LiveTvProgram' ? 'Program' : item.Type === 'LiveTvChannel' ? 'TvChannel' : item.Type,
+    Type: publicItemKind(item),
     ImageBlurHashes: new Map(), ChannelId: nonemptyId(item.ChannelId) ? dtoId(item.ChannelId) : null };
   if (item.Type !== 'LiveTvProgram') dto.LocationType = item.LocationType;
   if (item.Type === 'LiveTvProgram') {
@@ -735,19 +803,8 @@ export async function projectItem(item, state, user, selected, options) {
     }
   }
   if (has('PrimaryImageAspectRatio')) {
-    const primary = images.find(row => row.ImageType === 0);
-    if (item.Type === 'Photo' && primary) {
-      let size;
-      if (!/^http/iu.test(primary.Path)) try {
-        size = options.getImageDimensions ? await options.getImageDimensions(item, primary) : primary;
-      } catch (error) { options.logger?.error?.(error, 'Could not read the primary image dimensions.'); }
-      if (size?.Width > 0 && size.Height > 0) dto.PrimaryImageAspectRatio = size.Width / size.Height;
-      else {
-        const rotated = ['LeftBottom', 'LeftTop', 'RightBottom', 'RightTop'].includes(item.Orientation);
-        dto.PrimaryImageAspectRatio = item.Width !== 0 && item.Height !== 0
-          ? rotated ? item.Height / item.Width : item.Width / item.Height : 0;
-      }
-    } else if (primary?.Width > 0 && primary.Height > 0) dto.PrimaryImageAspectRatio = primary.Width / primary.Height;
+    const ratio = await primaryImageAspectRatio(item, images.find(row => row.ImageType === 0), options);
+    if (ratio !== undefined) dto.PrimaryImageAspectRatio = ratio;
   }
   await addInheritedImages(dto, item, state, selected, options, parent => itemImageRows(state, parent));
   if (['Audio', 'AudioBook'].includes(item.Type)) {

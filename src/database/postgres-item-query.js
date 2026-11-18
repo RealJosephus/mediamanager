@@ -2325,6 +2325,10 @@ function executeItemSelection(database, options, execute) {
 /** Execute a relational item selection and hydrate only its requested window. */
 export async function queryPostgresItemPage(database, query, options = {}) {
   const plan = buildPostgresItemPageQuery(database, query, options);
+  return readPostgresItemPlan(database, plan, options);
+}
+
+function readPostgresItemPlan(database, plan, options) {
   return executeItemSelection(database, options, async session => {
     let selected;
     try { selected = (await session.client.query({ text: plan.text, values: plan.values, signal: options.signal })).rows; }
@@ -2335,14 +2339,17 @@ export async function queryPostgresItemPage(database, query, options = {}) {
 
 /** Visit the same SQL-selected window in small batches, including when Limit is omitted. */
 export async function visitPostgresItemPages(session, query, options, visit) {
-  const limit = query.limit;
+  return visitPostgresItemPlanPages(session, buildPostgresItemPageQuery(session, query, options), options, visit);
+}
+
+export async function visitPostgresItemPlanPages(session, plan, options, visit) {
+  const { limit } = plan;
   if (limit >= 0 && limit <= itemPageSize && !(options.resumableMode === 'memory' && limit === 0)) {
-    const page = await queryPostgresItemPage(session, query, options);
+    const page = await readPostgresItemPlan(session, plan, options);
     await visit(page);
     return { total: page.total, startIndex: page.startIndex };
   }
 
-  const plan = buildPostgresItemPageQuery(session, query, options);
   const cursor = q('mm_item_page_' + randomUUID().replaceAll('-', ''));
   const hold = !session.inTransaction;
   const declare = db => executeItemSelection(db, options, current => current.client.query({

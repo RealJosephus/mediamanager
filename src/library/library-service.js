@@ -12,7 +12,7 @@ import { parentChainForItem, userRootItem } from './collection-membership.js';
 import { canDeleteItem, hasFileProtocol } from './delete-permission.js';
 import { requireNativeList } from './item-relations.js';
 import { parseQuery, resolveOfficialRatingRanges, binaryCompare } from './query.js';
-import { dtoOptions, prefetchPostgresDtoRelations, projectItem, projectUserData, mediaSources } from './dto.js';
+import { dtoOptions, prefetchPostgresDtoRelations, projectItem, projectUserData, projectSearchHints, mediaSources } from './dto.js';
 import { sortMediaSources } from './media-versions.js';
 import { selectDefaultTracks } from './media-streams.js';
 import { nativeContainsSubPath, nativePathWithin, sameNativePath } from './native-path.js';
@@ -47,7 +47,8 @@ import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { createPresentationUniqueKey } from './presentation-key.js';
 import { SimilarItemsManager } from './similar-items.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
-import { buildPostgresItemPageQuery, queryPostgresDtoChildCounts, queryPostgresItemPage, visitPostgresItemPages } from '../database/postgres-item-query.js';
+import { buildPostgresItemPageQuery, queryPostgresDtoChildCounts, queryPostgresItemPage, visitPostgresItemPages,
+  visitPostgresItemPlanPages } from '../database/postgres-item-query.js';
 import { queryPostgresLibraryStatement } from '../database/postgres.js';
 import { loadPostgresItemGraph, loadPostgresNavigationRows, loadPostgresPageGraph, loadPostgresRowsByIds, queryPostgresFolderStats,
   countPostgresNullVideoTypeRows, queryPostgresAlbumSelectorIds, queryPostgresArtistSelectorId,
@@ -76,6 +77,7 @@ import { queryPostgresUserViewChildPresence } from './postgres-user-views-query.
 import { channelCatalogRange, createPostgresChannelFeatureQuery, createPostgresChannelCatalog, orderPostgresChannelProviders } from './postgres-channel-query.js';
 import { createPostgresChannelItemsQuery, createPostgresStaleChannelItemQuery } from './postgres-channel-items-query.js';
 import { queryPostgresBuiltInSearch, resolvePostgresSearchCollation } from './postgres-search-provider.js';
+import { buildSearchHintsPlan } from './search-hints.js';
 import { matchesPostgresUserViewGenre, queryPostgresUserViewGenrePage } from './postgres-user-view-genre-query.js';
 import { queryPostgresSeriesEpisodePage } from './postgres-series-episodes-query.js';
 import { filterPostgresSimilarAccessRows, hasPostgresVisibleArtistRelation, localGenreTagSimilarQuery, queryPostgresLocalSimilarRows,
@@ -1687,6 +1689,27 @@ export class LibraryService extends EventEmitter {
     const roots = await this.navigationChildren(state, user);
     const topParentIds = views.flatMap(item => queryTopParentIds(item, state, user, roots));
     return { ...await this.#postgresVisibility(state, user), topParentIds };
+  }
+
+  querySearchHints(input, { user = null, signal } = {}) {
+    return this.#runWithStates(async db => {
+      const navigationRows = await loadPostgresNavigationRows(db, input.parentId);
+      const navigation = user ? await this.load(db, user, { includeUserData: false, baseRows: navigationRows }) : null;
+      const visibility = user ? await this.#postgresUserViewVisibility(navigation, user) : undefined;
+      const plan = buildSearchHintsPlan(db, input, { userId: user?.Id, visibility });
+      const SearchHints = [];
+      if (!plan) return { SearchHints, TotalRecordCount: 0 };
+      const { total } = await visitPostgresItemPlanPages(db, plan, { signal }, async page => {
+        if (!page.rows.length) return;
+        const baseRows = await loadPostgresPageGraph(db, page.rows, navigationRows);
+        const state = await this.load(db, user, { baseRows, includeUserData: false });
+        await withCleanup(async () => {
+          const items = page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
+          SearchHints.push(...await projectSearchHints(items, state, this.options));
+        }, [() => state.dispose({ session: db })], 'Search hint page cleanup failed.');
+      });
+      return { SearchHints, TotalRecordCount: total };
+    }, { channelViews: Boolean(user), signal });
   }
 
   querySuggestions(input = {}, { user = null, signal } = {}) {
