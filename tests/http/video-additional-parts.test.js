@@ -77,7 +77,8 @@ test('owned video HTTP reads use actual part identities, version extras, visibil
   const ids = Object.fromEntries(Object.entries(sourcePaths).map(([key, filename]) => [key, nativeGuid(getNewItemId(filename,
     'MediaBrowser.Controller.Entities.Video', { programDataPath, enableCaseSensitiveItemIds: true }))]));
   for (const key of ['movie', 'hiddenMovie', 'book', 'decoy', 'alternate', 'partOnlyMovie',
-    'trailerAlpha', 'trailerZeta', 'trailerHidden', 'trailerPart', 'trailerAlphaHidden']) ids[key] = nativeGuid(randomUUID());
+    'trailerAlpha', 'trailerZeta', 'trailerHidden', 'trailerPart', 'trailerAlphaHidden',
+    'feature', 'featureHidden', 'featureAlternate', 'featurePart', 'theme', 'uncategorized']) ids[key] = nativeGuid(randomUUID());
   const paths = [sourcePaths.zeta, sourcePaths.missing, sourcePaths.wrongType, sourcePaths.alpha,
     sourcePaths.zeta, sourcePaths.hidden, sourcePaths.tieSecond, sourcePaths.tieFirst];
   const row = (key, type, values = {}) => postgresTestRow('BaseItems', {
@@ -105,11 +106,17 @@ test('owned video HTTP reads use actual part identities, version extras, visibil
     row('partOnly', 'Video', { OwnerId: ids.partOnlyMovie }),
     row('trailerPart', 'Trailer', { OwnerId: ids.partOnly, ExtraType: 2 }),
     row('trailerAlphaHidden', 'Trailer', { OwnerId: ids.alpha, ExtraType: 2, Tags: 'hidden' }),
+    row('feature', 'Video', { OwnerId: ids.movie, ExtraType: 0, SortName: 'a feature', Overview: 'A complete feature' }),
+    row('featureHidden', 'Video', { OwnerId: ids.movie, ExtraType: 4, SortName: 'b feature', Tags: 'hidden' }),
+    row('featureAlternate', 'Video', { OwnerId: ids.alternate, ExtraType: 11, SortName: 'c feature' }),
+    row('featurePart', 'Video', { OwnerId: ids.partOnly, ExtraType: 10 }),
+    row('theme', 'Video', { OwnerId: ids.movie, ExtraType: 9 }),
+    row('uncategorized', 'Video', { OwnerId: ids.movie }),
   ]) await database.insert('BaseItems', item);
   await database.insert('LinkedChildren', { ParentId: ids.movie, ChildId: ids.alternate, ChildType: 2, SortOrder: 0 });
   const hiddenTagId = nativeGuid(randomUUID());
   await database.insert('ItemValues', { ItemValueId: hiddenTagId, Type: 4, Value: 'hidden', CleanValue: 'hidden' });
-  for (const key of ['hidden', 'hiddenMovie', 'trailerHidden', 'trailerAlphaHidden']) {
+  for (const key of ['hidden', 'hiddenMovie', 'trailerHidden', 'trailerAlphaHidden', 'featureHidden']) {
     await database.insert('ItemValuesMap', { ItemId: ids[key], ItemValueId: hiddenTagId });
   }
   await database.insert('BaseItemImageInfos', postgresTestRow('BaseItemImageInfos', {
@@ -120,7 +127,9 @@ test('owned video HTTP reads use actual part identities, version extras, visibil
   const origin = `http://127.0.0.1:${runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port}`;
   const request = async (name, itemId = ids.movie, { identity = 'admin', suffix = '', method = 'GET', endpoint = 'parts' } = {}) => {
     const token = identity === 'anonymous' ? undefined : identity === 'invalid' ? 'invalid-parts-token' : tokens[identity];
-    const route = (endpoint === 'parts' ? '/Videos/' + itemId + '/AdditionalParts' : '/Items/' + itemId + '/LocalTrailers') + suffix;
+    const routes = { parts: '/Videos/' + itemId + '/AdditionalParts', trailers: '/Items/' + itemId + '/LocalTrailers',
+      features: '/Items/' + itemId + '/SpecialFeatures', legacyFeatures: '/Users/' + users[identity]?.Id + '/Items/' + itemId + '/SpecialFeatures' };
+    const route = routes[endpoint] + suffix;
     const response = await fetch(origin + route, { method, signal: AbortSignal.any([t.signal, AbortSignal.timeout(30000)]),
       headers: { Accept: 'application/json', ...(token ? { Authorization: `MediaBrowser Token="${token}"` } : {}) } });
     const text = await response.text(), headers = Object.fromEntries(response.headers);
@@ -212,6 +221,23 @@ test('owned video HTTP reads use actual part identities, version extras, visibil
   ]) assert.equal((await trailerRequest(name, itemId, options)).status, status, name);
   const trailerRoot = await trailerRequest('trailer empty GUID selects actual user root', '0'.repeat(32));
   assert.equal(trailerRoot.status, 200); assert.deepEqual(trailerRoot.body, []);
+  const featureRequest = (name, itemId, options = {}) => request(name, itemId, { endpoint: 'features', ...options });
+  const features = await featureRequest('displayable features across the real video version family', ids.movie);
+  assert.equal(features.status, 200);
+  assert.deepEqual(features.body.map(item => item.Id), [ids.feature, ids.featureHidden, ids.featureAlternate].map(idKey));
+  assert.deepEqual(features.body.map(item => item.ExtraType), ['Unknown', 'DeletedScene', 'Short']);
+  assert.equal(features.body[0].Overview, 'A complete feature');
+  assert.ok(features.body.every(item => item.ParentLogoItemId === idKey(ids.movie)));
+  const readerFeatures = await featureRequest('features obey reader tags', ids.movie, { identity: 'reader' });
+  assert.equal(readerFeatures.status, 200);
+  assert.deepEqual(readerFeatures.body.map(item => item.Id), [ids.feature, ids.featureAlternate].map(idKey));
+  const legacyFeatures = await featureRequest('legacy path resolves the same reader and extras', ids.movie,
+    { identity: 'reader', endpoint: 'legacyFeatures' });
+  assert.equal(legacyFeatures.status, 200); assert.deepEqual(legacyFeatures.body, readerFeatures.body);
+  assert.equal((await featureRequest('features require a real user', ids.movie, { identity: 'apiKey' })).status, 400);
+  assert.equal((await featureRequest('features require a visible owner', ids.hiddenMovie, { identity: 'reader' })).status, 404);
+  assert.deepEqual((await featureRequest('primary cannot borrow a part feature', ids.partOnlyMovie)).body, []);
+  assert.deepEqual((await featureRequest('part retains ownership of its feature', ids.partOnly)).body.map(item => item.Id), [idKey(ids.featurePart)]);
   await runtime.library.store.run(async session => {
     const state = await runtime.library.load(session, null, { baseRows: await loadPostgresItemGraph(session, [ids.movie, ids.partOnly]) });
     let cohort, failed = false, failure;

@@ -2333,7 +2333,6 @@ function readPostgresItemPlan(database, plan, options) {
     let selected;
     try { selected = (await session.client.query({ text: plan.text, values: plan.values, signal: options.signal })).rows; }
     catch (error) { throw itemQueryError(error); }
-    options.validateSelection?.(selected[0]);
     return { ...await hydrateItemPage(session, selected, options), total: itemCount(selected), startIndex: plan.startIndex, plan };
   });
 }
@@ -2343,12 +2342,29 @@ export async function visitPostgresItemPages(session, query, options, visit) {
   return visitPostgresItemPlanPages(session, buildPostgresItemPageQuery(session, query, options), options, visit);
 }
 
-export async function visitPostgresItemPlanPages(session, plan, options, visit) {
-  const { limit } = plan;
+export function visitPostgresItemPlanPages(session, plan, options, visit) {
+  return visitPostgresRowPlanPages(session, plan, options, async (rows, total) => {
+    await visit({ ...await hydrateItemPage(session, rows, options), total, startIndex: plan.startIndex, plan });
+  });
+}
+
+/** Retain SQL selection and ordering while consuming a bounded batch at a time. */
+export async function visitPostgresRowPlanPages(session, plan, options, visit) {
+  const { limit, startIndex } = plan;
+  const verifySelection = rows => {
+    options.validateSelection?.(rows[0]);
+    return itemCount(rows);
+  };
   if (limit >= 0 && limit <= itemPageSize && !(options.resumableMode === 'memory' && limit === 0)) {
-    const page = await readPostgresItemPlan(session, plan, options);
-    await visit(page);
-    return { total: page.total, startIndex: page.startIndex };
+    let rows;
+    try {
+      rows = await executeItemSelection(session, options, async db => (await db.client.query({
+        text: plan.text, values: plan.values, signal: options.signal,
+      })).rows);
+    } catch (error) { throw itemQueryError(error); }
+    const total = verifySelection(rows);
+    await visit(rows, total);
+    return { total, startIndex };
   }
 
   const cursor = q('mm_item_page_' + randomUUID().replaceAll('-', ''));
@@ -2368,14 +2384,13 @@ export async function visitPostgresItemPlanPages(session, plan, options, visit) 
       text: `FETCH FORWARD ${itemPageSize} FROM ${cursor}`, signal: options.signal,
     })).rows;
     let selected = await fetch();
-    const total = itemCount(selected);
-    options.validateSelection?.(selected[0]);
+    const total = verifySelection(selected);
     while (selected.length) {
-      await visit(await hydrateItemPage(session, selected, options));
+      await visit(selected, total);
       if (selected.length < itemPageSize) break;
       selected = await fetch();
     }
-    return { total, startIndex: plan.startIndex };
+    return { total, startIndex };
   } catch (error) {
     failed = true;
     primary = itemQueryError(error);

@@ -5,10 +5,11 @@ import { createServer } from 'node:http';
 import { copyFile, cp, mkdir, readFile, realpath, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
-import { getNewItemId } from '../../src/core/identity.js';
+import { getNewItemId, md5Guid } from '../../src/core/identity.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { readInstanceConfiguration } from '../../src/configuration.js';
 import { idKey } from '../../src/library/records.js';
+import { nativePersonIdentity } from '../../src/library/identity.js';
 import { transferDatabase } from '../../src/migration/database-transfer.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
@@ -30,6 +31,7 @@ const id = number => nativeGuid('25220000-0000-0000-0000-' + String(number).padS
 const movieType = nativeType('Movies.Movie'), audioType = nativeType('Audio.Audio');
 const audioId = id(20), movies = [id(21), id(22), id(23)];
 const artistType = nativeType('Audio.MusicArtist'), artistId = id(24), orphanArtistId = id(25);
+const features = [id(34), id(35)];
 const fixedDate = '2026-10-01 00:00:00';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const authorization = token => `MediaBrowser Client="Contract fixture", Device="Isolated", DeviceId="fixture-oracle", Version="1", Token="${token}"`;
@@ -45,6 +47,10 @@ async function seed(referenceRoot, current) {
   const resolveId = (filename, type) => nativeGuid(getNewItemId(filename, type, { programDataPath,
     enableCaseSensitiveItemIds: settings.configuration.EnableCaseSensitiveItemIds }));
   const folderId = resolveId(physical, nativeType('Folder')), collectionId = resolveId(collection, nativeType('CollectionFolder'));
+  const groupingLibraries = [['Zulu Films', 'movies'], ['Alpha TV', 'tvshows']].map(([Name, type]) => {
+    const Path = path.join(rootPath, Name);
+    return { Name, type, Path, Id: resolveId(Path, nativeType('CollectionFolder')) };
+  });
   const tileDir = path.join(dataPath, 'trickplay', movies[0].slice(0, 2).toLowerCase(), movies[0].toLowerCase(), '320 - 2x2');
   await mkdir(physical, { recursive: true });
   await mkdir(collection, { recursive: true });
@@ -52,6 +58,11 @@ async function seed(referenceRoot, current) {
   await writeFile(path.join(collection, 'music.collection'), '');
   await writeFile(path.join(collection, 'media.mblink'), physical);
   await writeFile(path.join(collection, 'options.xml'), '<LibraryOptions><EnableRealtimeMonitor>false</EnableRealtimeMonitor></LibraryOptions>');
+  for (const library of groupingLibraries) {
+    await mkdir(library.Path);
+    await writeFile(path.join(library.Path, library.type + '.collection'), '');
+    await writeFile(path.join(library.Path, 'options.xml'), '<LibraryOptions><EnableRealtimeMonitor>false</EnableRealtimeMonitor></LibraryOptions>');
+  }
   await copyFile(audioFixture, audio);
   const tile = path.join(tileDir, '0.jpg');
   await copyFile(tileFixture, tile);
@@ -59,6 +70,7 @@ async function seed(referenceRoot, current) {
   const databasePath = path.join(dataPath, 'jellyfin.db');
   const database = new SqliteDatabase(databasePath, { requireMigrationHistory: true });
   const apiKey = randomUUID().replaceAll('-', '');
+  const people = Object.fromEntries(['Ada Ledger', 'Bela Ledger'].map(name => [name, nativePersonIdentity(name, settings)]));
   try {
     const aggregate = database.rows('BaseItems', { where: { Type: nativeType('AggregateFolder') } })[0];
     assert.ok(aggregate, 'The frozen instance must contain its actual aggregate root.');
@@ -72,6 +84,10 @@ async function seed(referenceRoot, current) {
     database.transaction(() => {
       if (!userRoot) addItem({ Id: rootId, Type: nativeType('UserRootFolder'), Name: 'default', Path: rootPath,
         IsFolder: true, Data: '{"IsRoot":true}' });
+      for (const { Id, Name, Path, type } of groupingLibraries) {
+        addItem({ Id, Name, Path, ParentId: rootId, Type: nativeType('CollectionFolder'), IsFolder: true,
+          Data: JSON.stringify({ CollectionType: type, PhysicalFolderIds: [], PhysicalLocationsList: [] }) });
+      }
       addItem({ Id: collectionId, ParentId: rootId, Type: nativeType('CollectionFolder'), Name: 'Contract Media', Path: collection,
         IsFolder: true, Data: JSON.stringify({ CollectionType: 'music', PhysicalFolderIds: [folderId], PhysicalLocationsList: [physical] }) });
       addItem({ Id: folderId, ParentId: aggregate.Id, TopParentId: folderId, Type: nativeType('Folder'),
@@ -84,10 +100,38 @@ async function seed(referenceRoot, current) {
         const tick = fixedDate + '.123456' + (6 + index);
         addItem({ Id: movies[index], ParentId: folderId, TopParentId: folderId, Type: movieType, IsMovie: true,
           Name, Path: path.join(physical, Name + '.mkv'), MediaType: 'Video', PremiereDate: tick, DateLastSaved: tick,
-          ProductionYear: 2026, Data: '{"VideoType":"VideoFile"}' });
+          ProductionYear: 2026, Data: index === 0 ? '{"VideoType":"VideoFile"}'
+            : '{"VideoType":"VideoFile","DefaultVideoStreamIndex":0,"Container":"mkv"}' });
+        if (index !== 0) database.insert('MediaStreamInfos', postgresTestRow('MediaStreamInfos', {
+          ItemId: movies[index], StreamIndex: 0, StreamType: 1, Codec: 'h264', Width: index === 1 ? 1280 : 1920, Height: 1080,
+        }));
       }
       for (const ItemId of [audioId, ...movies]) for (const ParentItemId of [folderId, aggregate.Id]) {
         database.insert('AncestorIds', { ItemId, ParentItemId });
+      }
+      for (const [Name, person] of Object.entries(people)) {
+        addItem({ Id: person.Id, Type: nativeType('Person'), Name, Path: person.Path, Overview: Name + ' biography' });
+      }
+      for (const [index, Name, PersonType] of [
+        [30, 'Ada Ledger', 'Actor'], [31, 'ada ledger', 'GuestStar'], [32, 'Bela Ledger', 'Writer'], [33, 'Missing credit', 'Actor'],
+      ]) {
+        const PeopleId = id(index);
+        database.insert('Peoples', postgresTestRow('Peoples', { Id: PeopleId, Name, PersonType }));
+        database.insert('PeopleBaseItemMap', postgresTestRow('PeopleBaseItemMap', {
+          ItemId: index === 32 ? movies[1] : movies[0], PeopleId, ListOrder: index - 30,
+        }));
+      }
+      database.insert('Peoples', postgresTestRow('Peoples', { Id: id(37), Name: 'Cora Vale', PersonType: 'Director' }));
+      for (const ItemId of movies.slice(1)) {
+        for (const [ListOrder, PeopleId] of [[4, id(30)], [5, id(37)]]) {
+          database.insert('PeopleBaseItemMap', postgresTestRow('PeopleBaseItemMap', { ItemId, PeopleId, ListOrder }));
+        }
+      }
+      for (const [Id, Name, ExtraType] of [
+        [features[0], 'A look backstage', 3], [features[1], 'Shorter story', 11], [id(36), 'Theme clip', 9],
+      ]) {
+        addItem({ Id, Type: nativeType('Video'), Name, ExtraType, OwnerId: movies[0], TopParentId: folderId,
+          Path: path.join(physical, Name + '.mkv'), MediaType: 'Video', Data: '{"VideoType":"VideoFile","Container":"mkv"}' });
       }
       database.insert('MediaStreamInfos', postgresTestRow('MediaStreamInfos', {
         ItemId: audioId, StreamIndex: 0, StreamType: 0, Codec: 'flac', SampleRate: 44100, BitDepth: 16,
@@ -107,11 +151,17 @@ async function seed(referenceRoot, current) {
       database.insert('UserData', postgresTestRow('UserData', {
         ItemId: movies[0], UserId: current.userId, CustomDataKey: '', IsFavorite: true,
       }));
+      database.insert('UserData', postgresTestRow('UserData', {
+        ItemId: movies[1], UserId: current.userId, CustomDataKey: '', Played: true, PlayCount: 1, LastPlayedDate: fixedDate,
+      }));
+      database.insert('UserData', postgresTestRow('UserData', {
+        ItemId: people['Ada Ledger'].Id, UserId: current.userId, CustomDataKey: '', IsFavorite: true,
+      }));
       database.insert('ApiKeys', { AccessToken: apiKey, Name: 'Contract read fixture', DateCreated: fixedDate, DateLastActivity: fixedDate });
     });
     database.preflight();
   } finally { database.close(); }
-  return { settings, databasePath, folderId, apiKey, audio, tile };
+  return { settings, databasePath, folderId, apiKey, audio, tile, people, groupingLibraries };
 }
 
 function portAvailable(port) {
@@ -151,6 +201,50 @@ function hlsSelection(response, route) {
     codecs: /\bCODECS="([^"]+)"/u.exec(lines.find(line => line.startsWith('#EXT-X-STREAM-INF:')))?.[1] };
 }
 
+async function changeVideoVersions(origin, token, readState, signal, evidence) {
+  const [, lower, higher] = movies.map(idKey);
+  const request = (method, route, accessToken = token) => readResponse(origin, { method, route }, accessToken, signal);
+  const merge = '/Videos/MergeVersions?Ids=' + lower + ',' + higher;
+  const split = '/Videos/' + lower + '/AlternateSources';
+  assert.equal((await request('POST', merge, null)).status, 401);
+  assert.equal((await request('POST', '/Videos/MergeVersions?Ids=' + lower)).status, 400);
+  evidence.merge = await request('POST', merge);
+  assert.equal(evidence.merge.status, 204, JSON.stringify(evidence.merge));
+  evidence.merged = await readState();
+  assert.deepEqual(evidence.merged, {
+    items: [{ id: lower, primary: higher, key: higher }, { id: higher, primary: null, key: higher }],
+    links: [{ parent: higher, child: lower, type: 3, position: 0 }],
+  });
+  const requestSources = async () => {
+    const result = await request('GET', '/Items/' + higher + '/PlaybackInfo');
+    assert.equal(result.status, 200);
+    return JSON.parse(result.body).MediaSources.map(source => [source.Id, source.Type]);
+  };
+  evidence.mergedSources = await requestSources();
+  assert.deepEqual(evidence.mergedSources, [[higher, 'Default'], [lower, 'Grouping']]);
+  evidence.split = await request('DELETE', split);
+  assert.equal(evidence.split.status, 204, JSON.stringify(evidence.split));
+  evidence.separate = await readState();
+  assert.deepEqual(evidence.separate, {
+    items: [{ id: lower, primary: null, key: lower }, { id: higher, primary: null, key: higher }], links: [],
+  });
+  evidence.separateSources = await requestSources();
+  assert.deepEqual(evidence.separateSources, [[higher, 'Default']]);
+}
+
+async function readVersionState(db) {
+  const ids = movies.slice(1);
+  const items = [], links = [];
+  for (const Id of ids) {
+    const [row] = await db.rows('BaseItems', { where: { Id } });
+    items.push({ id: idKey(row.Id), primary: row.PrimaryVersionId ? idKey(row.PrimaryVersionId) : null, key: row.PresentationUniqueKey });
+    for (const link of await db.rows('LinkedChildren', { where: { ParentId: Id } })) {
+      links.push({ parent: idKey(link.ParentId), child: idKey(link.ChildId), type: link.ChildType, position: link.SortOrder });
+    }
+  }
+  return { items, links };
+}
+
 test('existing playback assets, date ticks, counts and search hints match the designated Native HTTP host', {
   skip: !enabled, timeout: 300000,
 }, nativeCase((t, port) => mediaLease.run(async () => {
@@ -188,6 +282,15 @@ test('existing playback assets, date ticks, counts and search hints match the de
       'Jellyfin.Api/Controllers/LibraryController.cs', 'Jellyfin.Server.Implementations/Item/ItemCountService.cs',
       'Jellyfin.Api/Controllers/SearchController.cs', 'Emby.Server.Implementations/Library/Search/SearchManager.cs',
       'Emby.Server.Implementations/Library/Search/SqlSearchProvider.cs',
+      'Jellyfin.Api/Controllers/PersonsController.cs', 'Jellyfin.Server.Implementations/Item/PeopleRepository.cs',
+      'Jellyfin.Api/Controllers/UserLibraryController.cs', 'MediaBrowser.Controller/Entities/BaseItem.cs',
+      'Jellyfin.Api/Controllers/UserViewsController.cs', 'MediaBrowser.Controller/Entities/UserView.cs',
+      'Jellyfin.Api/Controllers/LiveTvController.cs', 'src/Jellyfin.LiveTv/LiveTvManager.cs',
+      'src/Jellyfin.LiveTv/DefaultLiveTvService.cs',
+      'Jellyfin.Api/Controllers/MoviesController.cs',
+      'Jellyfin.Api/Controllers/VideosController.cs', 'MediaBrowser.Controller/Entities/Video.cs',
+      'Emby.Server.Implementations/Library/SimilarItems/SimilarItemsManager.cs',
+      'Emby.Server.Implementations/Library/SimilarItems/MovieSimilarItemsProvider.cs',
     ]);
     await cp(current.sourceRoot, referenceRoot, { recursive: true });
     await current.prepareClone(referenceRoot, port);
@@ -211,6 +314,8 @@ test('existing playback assets, date ticks, counts and search hints match the de
     const externalAudio = (item, source, stream) => `/Videos/${item}/${source}/Audios/${stream}/Stream.aac`;
     const trickplay = `/Videos/${ids[0]}/Trickplay/320`;
     const datePath = '/Items?Recursive=true&EnableImages=false&EnableUserData=false&SortBy=SortName&Ids=' + ids.join(',');
+    const tunerService = md5Guid('Jellyfin.LiveTv.DefaultLiveTvService');
+    const tunerReset = tuner => '/LiveTv/Tuners/' + tuner + '/Reset';
     const samples = [
       { name: 'universal audio', route: audio, status: 200 },
       { name: 'universal audio HEAD', route: audio, method: 'HEAD', status: 200 },
@@ -245,11 +350,41 @@ test('existing playback assets, date ticks, counts and search hints match the de
       { name: 'external audio pathless stream', route: externalAudio(ids[0], ids[0], 2), status: 404 },
       { name: 'external audio absent file', route: externalAudio(ids[0], ids[0], 3), status: 404 },
       { name: 'universal FLAC container copy', route: audioRoute + '?Container=mp4%7Cflac&TranscodingProtocol=hls&TranscodingContainer=mp4', status: 200, hls: true },
+      { name: 'people search deduplicates credit roles', route: '/Persons?SearchTerm=ledger&Fields=Overview,ItemCounts', status: 200 },
+      { name: 'people pagination and credit role', route: '/Persons?SearchTerm=ledger&PersonTypes=Writer,Actor&StartIndex=1&Limit=1&EnableUserData=false', status: 200 },
+      { name: 'people derive scope from credited media', route: '/Persons?ParentId=' + idKey(fixture.folderId) + '&AppearsInItemId=' + ids[0], status: 200 },
+      { name: 'people uses favorite data', route: '/Persons?Filters=IsFavorite&SearchTerm=ledger', status: 200 },
+      { name: 'people counts the missing credited entity', route: '/Persons?SearchTerm=missing%20credit', status: 200, apiKey: true },
+      { name: 'person detail resolves the normalized name', route: '/Persons/ada%20ledger', status: 200 },
+      { name: 'missing person is not created', route: '/Persons/Missing%20credit', status: 404 },
+      { name: 'people requires authentication', route: '/Persons', status: 401, anonymous: true },
+      { name: 'item special features', route: '/Items/' + ids[0] + '/SpecialFeatures', status: 200 },
+      { name: 'legacy item special features', route: '/Users/' + idKey(current.userId) + '/Items/' + ids[0] + '/SpecialFeatures', status: 200 },
+      { name: 'features requires a user with API key', route: '/Items/' + ids[0] + '/SpecialFeatures', status: 400, apiKey: true },
+      { name: 'features of a missing owner', route: '/Items/' + idKey(id(999)) + '/SpecialFeatures', status: 404 },
+      { name: 'eligible user view groups', route: '/UserViews/GroupingOptions', status: 200 },
+      { name: 'legacy eligible user view groups', route: '/Users/' + idKey(current.userId) + '/GroupingOptions', status: 200 },
+      { name: 'user view groups require a user with API key', route: '/UserViews/GroupingOptions', status: 400, apiKey: true },
+      { name: 'built-in tuner reset completes', route: tunerReset(tunerService.toUpperCase() + '_fixture_tuner'), method: 'POST', status: 204 },
+      { name: 'tuner reset requires authentication', route: tunerReset(tunerService + '_fixture_tuner'), method: 'POST', status: 401, anonymous: true },
+      { name: 'unknown tuner service', route: tunerReset('unknown_fixture'), method: 'POST', status: 400 },
+      { name: 'tuner reset requires the separator', route: tunerReset(tunerService), method: 'POST', status: 500 },
+      { name: 'missing active recording stream', route: '/LiveTv/LiveRecordings/fixture/stream', status: 404, anonymous: true },
+      { name: 'movie recommendation category and item order', route: '/Movies/Recommendations?CategoryLimit=4&ItemLimit=2&Fields=Overview,MediaSourceCount', status: 200 },
+      { name: 'movie recommendations respect category and item limits', route: '/Movies/Recommendations?CategoryLimit=1&ItemLimit=1&ParentId=' + idKey(fixture.folderId), status: 200 },
+      { name: 'movie recommendations allow zero categories', route: '/Movies/Recommendations?CategoryLimit=0', status: 200 },
+      { name: 'movie recommendations allow zero items', route: '/Movies/Recommendations?ItemLimit=0', status: 200 },
+      { name: 'movie recommendations require a user with API key', route: '/Movies/Recommendations', status: 400, apiKey: true },
     ];
     native = current.start({ referenceRoot, outputRoot: root, label: 'native', origin: nativeOrigin });
     await native.ready();
     const token = sample => sample.anonymous ? null : sample.apiKey ? fixture.apiKey : current.accessToken;
     for (const sample of samples) report.cases.push({ sample, native: await readResponse(nativeOrigin, sample, token(sample), t.signal) });
+    report.versions = { native: {}, node: {} };
+    await changeVideoVersions(nativeOrigin, current.accessToken, async () => {
+      const sqlite = new SqliteDatabase(fixture.databasePath, { readOnly: true, requireMigrationHistory: true });
+      try { return await readVersionState(sqlite); } finally { sqlite.close(); }
+    }, t.signal, report.versions.native);
     await stopNative();
     await writeFile(path.join(referenceRoot, 'config/network.xml'), '<NetworkConfiguration><InternalHttpPort>0</InternalHttpPort><AutoDiscovery>false</AutoDiscovery><LocalNetworkAddresses><string>127.0.0.1</string></LocalNetworkAddresses></NetworkConfiguration>');
     runtime = await createTestRuntime({ ...await readInstanceConfiguration(referenceRoot), database,
@@ -267,6 +402,8 @@ test('existing playback assets, date ticks, counts and search hints match the de
         } else assert.deepEqual(comparable(entry.node), comparable(entry.native));
       } catch (error) { report.differences.push({ name: entry.sample.name, message: error.message }); }
     }
+    await changeVideoVersions(nodeOrigin, current.accessToken, () => readVersionState(database), t.signal, report.versions.node);
+    assert.deepEqual(report.versions.node, report.versions.native);
     const observed = name => comparable(report.cases.find(entry => entry.sample.name === name).native).body;
     assert.equal(observed('specified favorite counts').MovieCount, 1);
     assert.equal(observed('global hints').SearchHints.length, 4);
@@ -274,6 +411,27 @@ test('existing playback assets, date ticks, counts and search hints match the de
     assert.equal(observed('parented hints').SearchHints.length, 4);
     assert.deepEqual(observed('associated artist hint').SearchHints.map(hint => hint.Id), [idKey(artistId)]);
     assert.equal(observed('detached artist hint').TotalRecordCount, 0);
+    assert.deepEqual(observed('people search deduplicates credit roles').Items.map(item => item.Name), ['Ada Ledger', 'Bela Ledger']);
+    assert.deepEqual(observed('people pagination and credit role').Items.map(item => item.Name), ['Bela Ledger']);
+    assert.deepEqual(observed('people uses favorite data').Items.map(item => item.Name), ['Ada Ledger']);
+    assert.deepEqual(observed('people counts the missing credited entity'), { Items: [], StartIndex: 0, TotalRecordCount: 1 });
+    assert.equal(observed('person detail resolves the normalized name').Id, idKey(fixture.people['Ada Ledger'].Id));
+    assert.deepEqual(observed('item special features').map(item => item.Id), features.map(idKey));
+    assert.deepEqual(observed('legacy item special features'), observed('item special features'));
+    assert.deepEqual(observed('eligible user view groups'), [...fixture.groupingLibraries].reverse().map(({ Id, Name }) => ({ Id: idKey(Id), Name })));
+    assert.deepEqual(observed('legacy eligible user view groups'), observed('eligible user view groups'));
+    const recommended = observed('movie recommendation category and item order');
+    assert.deepEqual(recommended.map(category => [category.RecommendationType, category.CategoryId, category.Items.map(item => item.Id)]), [
+      ['SimilarToRecentlyPlayed', ids[1], [ids[2], ids[0]]],
+      ['SimilarToLikedItem', ids[0], [ids[2]]],
+      ['HasDirectorFromRecentlyPlayed', md5Guid('Cora Vale'), [ids[2]]],
+      ['HasActorFromRecentlyPlayed', md5Guid('Ada Ledger'), [ids[0], ids[2]]],
+    ]);
+    const capped = observed('movie recommendations respect category and item limits');
+    assert.equal(capped.length, 1);
+    assert.deepEqual(capped[0].Items.map(item => item.Id), [ids[2]]);
+    assert.deepEqual(observed('movie recommendations allow zero categories'), []);
+    assert.deepEqual(observed('movie recommendations allow zero items'), []);
     for (const name of ['MinPremiereDate', 'MaxPremiereDate', 'MinDateLastSaved', 'MinDateLastSavedForUser']) {
       assert.equal(observed(name).TotalRecordCount, 2, name);
     }

@@ -6,6 +6,7 @@ import { HttpResult, BindingError, readBody, queryValue } from './binding.js';
 import { registerDomainRoutes } from './routes.js';
 import { registerPlaybackRoutes } from './playback-routes.js';
 import { registerSubtitleManagementRoutes } from './subtitle-management-routes.js';
+import { registerVideoVersionRoutes } from './video-version-routes.js';
 import { registerTrickplayRoutes } from './trickplay-routes.js';
 import { BinaryResult } from './binary-result.js';
 import { registerClientNetworkRoutes } from './client-network-routes.js';
@@ -118,6 +119,7 @@ export async function createApplication(services = {}) {
   registerDomainRoutes(add, services);
   registerPlaybackRoutes(add, services);
   registerSubtitleManagementRoutes(add, services);
+  registerVideoVersionRoutes(add, services);
   registerTrickplayRoutes(add, services);
   registerSessionControlRoutes(add, services);
   registerMetadataRoutes(add, services);

@@ -650,6 +650,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   services.collectionPostScanTask = collectionPostScanTask;
   services.linkedChildren = linkedChildren;
   services.runWithContext = loadContext && (operation => loadContext.withScope(operation));
+  services.loadContext = loadContext;
   // Event delivery outlives its producer. Give notifier SQL and metadata work
   // their own scopes before timers or immediate batch sends can inherit a
   // request's read-only transaction, writer connection or release boundary.

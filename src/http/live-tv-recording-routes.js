@@ -1,6 +1,7 @@
 import { BindingError, HttpResult, booleanValue, guidValue, httpError, integerValue, noContent, notFound, queryValue } from './binding.js';
 import { enumName } from '../sessions/binding.js';
 import { itemImageTypes } from '../library/dto.js';
+import { clrTrim } from '../metadata/whitespace.js';
 
 const itemFields = ['AirTime', 'CanDelete', 'CanDownload', 'ChannelInfo', 'Chapters', 'Trickplay', 'ChildCount',
   'CumulativeRunTimeTicks', 'CustomRating', 'DateCreated', 'DateLastMediaAdded', 'DisplayPreferencesId', 'Etag',
@@ -50,6 +51,12 @@ function bindQuery(context, { series = false } = {}) {
 
 export function registerLiveTvRecordingRoutes(add, { liveTvRecordings, users }) {
   if (!liveTvRecordings) return;
+  add('GET', '/LiveTv/LiveRecordings/{recordingId}/stream', context => {
+    if (!clrTrim(context.params.recordingId)) throw new BindingError('recordingId', 'The recordingId field is required.');
+    // Active built-in recordings have no backing stream. Existing files are
+    // available through the normal recording-item and video playback routes.
+    return notFound();
+  }, { public: true });
   const options = { policy: 'LiveTvAccess' };
   const userById = id => {
     if (!users) throw httpError(501, 'Recording access requires the authoritative user service.');

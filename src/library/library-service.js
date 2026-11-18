@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { availableParallelism } from 'node:os';
 import { EventEmitter } from 'node:events';
-import { getNewItemId } from '../core/identity.js';
+import { getNewItemId, md5Guid } from '../core/identity.js';
 import { withCleanup } from '../core/operation-failure.js';
 import { loadLibrary, mapRecord, dtoId, idKey, sameId, nonemptyId, guid, cleanValue, dateText, dateTicks, libraryError, unsupported, repositoryCleanName, repositoryTopParentId, repositoryValue, repositoryIdPresent, NAME_TYPES, VIDEO_TYPES, MIN_DATE, EMPTY_ID } from './records.js';
 import { visibleItem, visibleLibrary } from './permissions.js';
@@ -16,7 +16,7 @@ import { dtoOptions, prefetchPostgresDtoRelations, projectItem, projectUserData,
 import { sortMediaSources } from './media-versions.js';
 import { selectDefaultTracks } from './media-streams.js';
 import { nativeContainsSubPath, nativePathWithin, sameNativePath } from './native-path.js';
-import { nativeArtistIdentity, nativeGenreIdentity, nativeMusicGenreIdentity, nativeStudioIdentity, nativeUserSubviewIdentity } from './identity.js';
+import { nativeArtistIdentity, nativeGenreIdentity, nativeMusicGenreIdentity, nativePersonIdentity, nativeStudioIdentity, nativeUserSubviewIdentity } from './identity.js';
 import { nativeYearIdentity } from './year-identity.js';
 import { nativeDateFromUnixNanoseconds, nativeGuid } from '../users/native.js';
 import { newNativeItemEntity, nativeItemDescriptor, nativeItemTypes, isNativeItemEntity, acquireNativeItemLinkOwner, bindNativeItemChannelAccess, bindNativeItemRecordingAccess } from './native-item-entity.js';
@@ -24,7 +24,7 @@ import { BoundedItemCache } from './bounded-item-cache.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
 import { prepareUserRootNavigation } from './user-root-navigation.js';
 import { withPostgresCachedFolderChildren } from './postgres-cached-folder-children.js';
-import { nativeTextBytes } from '../database/native-text.js';
+import { decodeNativeTextBytes, nativeTextBytes } from '../database/native-text.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { createPostgresFolderLinksQuery } from './postgres-folder-links-query.js';
 import { createPostgresFolderCollectionCollapse } from './postgres-folder-collection-collapse.js';
@@ -36,7 +36,7 @@ import { prepareItemsController, itemsDispatch } from './items-dispatch.js';
 import { boxSetDisplayOrder, isLegacyBoxSet } from './boxset-state.js';
 import { collectionType, groupedMediaFolders, eligibleForGrouping } from './user-view-query.js';
 import { UserViewService } from './user-view-service.js';
-import { createVirtualPathExpander, createVirtualPathReverser } from './options.js';
+import { createVirtualPathExpander, createVirtualPathReverser, defaultLibraryOptions } from './options.js';
 import { nextUpTopParentIds } from './next-up.js';
 import { childCountSourceIds } from './child-counts.js';
 import { postgresParentalRatingContext, comparisonItemRating, preferredMetadataCountryBeforeFolders } from './parental-rating.js';
@@ -64,13 +64,15 @@ import { queryPostgresProgramRecordingInfo, queryPostgresSeriesTimerProgramFilte
 import { queryPostgresRecordingFolderSources, orderPostgresRecordingFolders, createPostgresRecordingQuery } from './postgres-live-tv-recordings-query.js';
 import { recordingSourceVisibleWithoutUser, recordingFoldersMissingUser } from './live-tv-recording-folders-access.js';
 import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
+import { visitPostgresPeople } from './postgres-people-query.js';
+import { visitPostgresMovieRecommendations } from './postgres-movie-recommendations.js';
 import { dtoItemCountKinds, queryPostgresDtoItemCounts, queryPostgresLibraryCounts } from './postgres-dto-item-counts-query.js';
 import { queryPostgresItemFilters } from './postgres-item-filters-query.js';
 import { querySuggestions } from './suggestions.js';
 import { queryYears } from './years.js';
 import { createYearSpecialChildren } from './year-user-view-source.js';
 import { queryPostgresThemeItems } from './postgres-theme-items-query.js';
-import { orderPostgresVideoPartOccurrences, queryPostgresLocalTrailers, queryPostgresVideoParts } from './postgres-owned-media-query.js';
+import { orderPostgresVideoPartOccurrences, visitPostgresOwnedExtras, queryPostgresVideoParts } from './postgres-owned-media-query.js';
 import { createPostgresItemCollectionsQuery } from './postgres-item-collections-query.js';
 import { loadLocalizationData } from '../core/localization-data.js';
 import { queryPostgresUserViewChildPresence } from './postgres-user-views-query.js';
@@ -1729,6 +1731,60 @@ export class LibraryService extends EventEmitter {
     }), { channelViews: Boolean(user), channelItems: true });
   }
 
+  queryMovieRecommendations(input, { user, signal } = {}) {
+    if (!user) throw libraryError(400, 'Error processing request.');
+    return this.#runWithStates(async db => {
+      const parentId = nonemptyId(input.parentId) ? input.parentId : undefined;
+      const navigationRows = await loadPostgresNavigationRows(db, parentId);
+      const state = await this.load(db, user, { baseRows: navigationRows, includeUserData: false });
+      const visibility = await this.#postgresUserViewVisibility(state, user);
+      const { topParentIds, libraryTopParentIds: _libraryTopParentIds, ...baselineVisibility } = visibility;
+      let baselineScope = { topParentIds };
+      if (parentId !== undefined) {
+        const parent = state.byId.get(idKey(parentId));
+        if (!parent) baselineScope = { parentId };
+        else if (['CollectionFolder', 'UserView'].includes(parent.Type)) {
+          const roots = await this.navigationChildren(state, user);
+          const ids = queryTopParentIds(parent, state, user, roots);
+          baselineScope = ids.length ? { topParentIds: ids } : { ancestorId: parent.Type === 'UserView'
+            ? [parent.DisplayParentId, parent.ParentId, parent.Id].find(nonemptyId) : parent.Id };
+        } else if (['BoxSet', 'Playlist'].includes(parent.Type)
+          && (await queryPostgresLinkTypes(db, [parent.Id])).has(idKey(parent.Id))) {
+          baselineScope = { boxSetRepositoryId: parent.Id };
+        } else baselineScope = { ancestorId: parent.Id };
+      }
+      const options = dtoOptions(input);
+      const types = ['SimilarToRecentlyPlayed', 'SimilarToLikedItem', 'HasDirectorFromRecentlyPlayed', 'HasActorFromRecentlyPlayed'];
+      const categories = new Map();
+      await visitPostgresMovieRecommendations(db, input, {
+        userId: user.Id, visibility, baselineScope, baselineVisibility,
+        enableExternalContent: this.options.configuration.EnableExternalContentInSuggestions ?? true, signal,
+      }, async (rows, baselineNames) => {
+        const ids = rows.map(row => decodeNativeTextBytes(row.Id));
+        const page = await this.#loadPostgresItemState(db, ids, user, { navigationRows });
+        await withCleanup(async () => {
+          const items = ids.map(id => page.byId.get(idKey(id)));
+          const visible = await this.#filterPostgresStandalonePage(db, [...new Set(items.filter(Boolean))], user, page);
+          await this.#prefetchPostgresDtos(visible, page, user, options);
+          const allowed = new Set(visible);
+          for (const [index, row] of rows.entries()) {
+            const key = decodeNativeTextBytes(row.CategoryKey);
+            const identity = row.Kind + ':' + key;
+            let category = categories.get(identity);
+            if (!category) {
+              category = { CategoryId: row.Kind < 2 ? idKey(key) : md5Guid(key),
+                BaselineItemName: row.Kind < 2 ? baselineNames.get(idKey(key)) : key,
+                RecommendationType: types[row.Kind], Items: [] };
+              categories.set(identity, category);
+            }
+            if (allowed.has(items[index])) category.Items.push(await projectItem(items[index], page, user, options, this.options));
+          }
+        }, [() => page.dispose({ session: db })], 'Movie recommendation page cleanup failed.');
+      });
+      return [...categories.values()];
+    }, { channelViews: true, channelItems: requestsItemField(input, 'CanDelete'), signal });
+  }
+
   async queryItemFilters(input = {}, { user = null, legacy = false } = {}) {
     const types = input.includeItemTypes ?? [];
     const bypassParent = types.length === 1 && ['Trailer', 'Program'].includes(types[0]);
@@ -1811,6 +1867,36 @@ export class LibraryService extends EventEmitter {
 
   async getStudioDto(name, { user = null } = {}) {
     return this.getNamedItemDto('Studio', name, { user });
+  }
+
+  queryPeople(input, { user = null, signal } = {}) {
+    return this.#runWithStates(async db => {
+      const navigationRows = await loadPostgresNavigationRows(db);
+      const navigation = await this.load(db, user, { baseRows: navigationRows, includeUserData: false });
+      const policy = user?.Policy;
+      const restricted = policy && (policy.EnableAllFolders !== true || policy.BlockedMediaFolders?.length
+        || (user.MaxParentalRatingScore ?? policy.MaxParentalRatingScore ?? policy.MaxParentalRating) != null
+        || policy.BlockedTags?.length || policy.AllowedTags?.length || policy.BlockUnratedItems?.length);
+      const visibility = restricted ? await this.#postgresUserViewVisibility(navigation, user) : undefined;
+      // The by-name list has no tagged-item counts. Its repository count is
+      // taken before dropping missing or invisible Person entities.
+      const options = dtoOptions({ ...input, fields: input.fields.filter(field => field.toLowerCase() !== 'itemcounts') });
+      const Items = [];
+      const { total, startIndex } = await visitPostgresPeople(db, input, {
+        userId: user?.Id, visibility, culture: this.options.localization?.context?.culture, signal,
+      }, async names => {
+        if (!names.length) return;
+        const ids = names.map(name => nativePersonIdentity(name, this.options).Id);
+        const state = await this.#loadPostgresItemState(db, ids, user, { navigationRows });
+        await withCleanup(async () => {
+          const items = ids.map(id => state.byId.get(idKey(id))).filter(item => item?.Type === 'Person');
+          const visible = await this.#filterPostgresStandalonePage(db, items, user, state, { skipRelatedNameCheck: true });
+          await this.#prefetchPostgresDtos(visible, state, user, options);
+          for (const item of visible) Items.push(await projectItem(item, state, user, options, this.options));
+        }, [() => state.dispose({ session: db })], 'People query page cleanup failed.');
+      });
+      return { Items, TotalRecordCount: total, StartIndex: startIndex };
+    }, { channelViews: Boolean(user), signal });
   }
 
   queryYears(input = {}, { user = null, hasUser = Boolean(user), signal } = {}) {
@@ -1940,7 +2026,7 @@ export class LibraryService extends EventEmitter {
 
   async getNamedItemDto(kind, name, { user = null } = {}) {
     return this.#runWithStates(async () => {
-    const factories = { Studio: 'getStudio', Genre: 'getGenre', MusicGenre: 'getMusicGenre', MusicArtist: 'getArtist' };
+    const factories = { Studio: 'getStudio', Genre: 'getGenre', MusicGenre: 'getMusicGenre', MusicArtist: 'getArtist', Person: 'getPerson' };
     if (!Object.hasOwn(factories, kind)) throw new TypeError('Unsupported named item kind.');
     let named;
     if (['Genre', 'MusicGenre'].includes(kind) && name.includes('-')) {
@@ -1951,7 +2037,7 @@ export class LibraryService extends EventEmitter {
         named = newNativeItemEntity('MediaBrowser.Controller.Entities.Genre');
       }
     } else named = await this[factories[kind]](name);
-    return this.#projectNamedItemDto(named, user);
+    return named ? this.#projectNamedItemDto(named, user) : null;
     }, { channelViews: Boolean(user) });
   }
 
@@ -3116,6 +3202,17 @@ export class LibraryService extends EventEmitter {
     return this.#getItemByName(name, nativeGenreIdentity, 'Genre', 'MediaBrowser.Controller.Entities.Genre');
   }
 
+  getPerson(name) {
+    const { Id } = nativePersonIdentity(name, this.options);
+    return this.store.run(async db => {
+      const person = this.itemCreation ? await this.itemCreation.getItemById(Id)
+        : mapRecord((await loadPostgresRowsByIds(db, [Id]))[0]);
+      if (person?.Type !== 'Person') return null;
+      person.Path = this.options.expandPath?.(person.Path) ?? person.Path;
+      return person;
+    });
+  }
+
   getStudio(name) {
     return this.#getItemByName(name, nativeStudioIdentity, 'Studio', 'MediaBrowser.Controller.Entities.Studio');
   }
@@ -3543,6 +3640,14 @@ export class LibraryService extends EventEmitter {
   }
 
   async getLocalTrailers(id, { user } = {}) {
+    return this.#getOwnedExtras(id, user, 'trailers');
+  }
+
+  async getSpecialFeatures(id, { user } = {}) {
+    return this.#getOwnedExtras(id, user, 'features');
+  }
+
+  async #getOwnedExtras(id, user, kind) {
     if (!user) throw libraryError(404, 'User not found.');
     const normalized = guid(id);
     return this.#runWithStates(async db => {
@@ -3553,15 +3658,28 @@ export class LibraryService extends EventEmitter {
         && !await this.#postgresStandaloneVisible(db, owner, user, initial)) {
         throw libraryError(404, 'Item not found.');
       }
-      // GetExtras uses repository visibility and the actual media-version
-      // owners. AdditionalParts are not media versions and cannot lend their
-      // extras to a primary which does not own them.
-      const page = await queryPostgresLocalTrailers(db, owner.Id, { userId: user.Id,
-        visibility: await this.#postgresVisibility(initial, user) });
-      const state = await this.#loadPostgresItemState(db, [owner.Id, ...page.rows.map(row => row.Id)], user);
-      const items = page.rows.map(row => state.byId.get(idKey(row.Id))), options = dtoOptions({}, true), result = [];
-      await this.#prefetchPostgresDtos(items, state, user, options, { artistBatch: false });
-      for (const item of items) result.push(await projectItem(item, state, user, options, { ...this.options, owner }));
+      let seriesKey;
+      if (owner.Type === 'Series') {
+        const collectionFolders = await this.getCollectionFolders(owner, initial);
+        const folder = collectionFolders.find(item => item.Type === 'CollectionFolder');
+        const configured = this.options.libraryOptions;
+        const libraryOptions = (configured instanceof Map ? configured.get(idKey(folder?.Id)) : configured?.[idKey(folder?.Id)])
+          ?? defaultLibraryOptions();
+        if (libraryOptions.EnableAutomaticSeriesGrouping) {
+          seriesKey = owner.PresentationUniqueKey ?? createPresentationUniqueKey(owner, { libraryOptions, collectionFolders });
+        }
+      }
+      const result = [], options = dtoOptions({}, true);
+      await visitPostgresOwnedExtras(db, owner.Id, { kind, userId: user.Id, seriesKey,
+        visibility: await this.#postgresVisibility(initial, user) }, async ({ rows }) => {
+        if (!rows.length) return;
+        const state = await this.#loadPostgresItemState(db, [owner.Id, ...rows.map(row => row.Id)], user);
+        await withCleanup(async () => {
+          const items = rows.map(row => state.byId.get(idKey(row.Id)));
+          await this.#prefetchPostgresDtos(items, state, user, options, { artistBatch: false });
+          for (const item of items) result.push(await projectItem(item, state, user, options, { ...this.options, owner }));
+        }, [() => state.dispose({ session: db })], 'Owned extra page cleanup failed.');
+      });
       return result;
     }, { channelItems: true });
   }
@@ -3816,6 +3934,16 @@ export class LibraryService extends EventEmitter {
       for (const item of items) dtos.push(await projectItem(item, state, user, options, this.options));
       return { Items: dtos, TotalRecordCount: dtos.length, StartIndex: 0 };
     }, { channelViews: query.includeexternalcontent !== false });
+  }
+
+  async getViewGroupingOptions(user) {
+    return this.#runWithStates(async db => {
+      const state = await this.load(db, user, { baseRows: await loadPostgresNavigationRows(db), includeUserData: false });
+      const folders = await this.navigationChildren(state, user);
+      const compare = new Intl.Collator(this.options.localization?.context?.culture ?? 'en-US').compare;
+      return folders.filter(eligibleForGrouping).map(folder => ({ Id: dtoId(folder.Id), Name: folder.Name }))
+        .sort((left, right) => compare(left.Name, right.Name));
+    });
   }
 
   withChannelEntity(id, project) {
