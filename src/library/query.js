@@ -1,7 +1,8 @@
-import { cleanValue, guid, dateText, libraryError, repositoryCleanName, repositoryValue, unsupported } from './records.js';
+import { cleanValue, guid, libraryError, repositoryCleanName, repositoryValue, unsupported } from './records.js';
 import { BindingError } from '../http/binding.js';
 import { clrTrim, clrWhitespace } from '../metadata/whitespace.js';
 import { lowerInvariant } from '../core/identity.js';
+import { parseInvariantDate } from '../core/invariant-date-parse.js';
 import { getRatingScore } from '../core/localization-data.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { imageTypes as imageTypeNames } from '../metadata/image-paths.js';
@@ -331,9 +332,9 @@ export function parseQuery(input = {}, { allowNegativePaging = false, embyClient
   }
   for (const key of ['ids', 'excludeitemids']) if (query[key]) query[key] = query[key].map(guid);
   for (const key of ['minpremieredate', 'maxpremieredate', 'mindatelastsaved', 'mindatelastsavedforuser']) if (query[key]) {
-    const parsed = new Date(query[key]);
-    if (!Number.isFinite(parsed.getTime())) { delete query[key]; invalid(key); }
-    else query[key] = dateText(parsed.toISOString());
+    const parsed = parseInvariantDate(query[key]);
+    if (parsed === null) { delete query[key]; invalid(key); }
+    else query[key] = parsed;
   }
   if (Object.keys(bindingErrors).length) {
     const error = new BindingError('', 'One or more validation errors occurred.');

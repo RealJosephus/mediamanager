@@ -23,6 +23,7 @@ import { nativePathWithin } from '../../src/library/native-path.js';
 import { queryPostgresFolderStats } from '../../src/library/postgres-library-query.js';
 import { queryPostgresNextUpPage } from '../../src/library/postgres-next-up-query.js';
 import { idKey } from '../../src/library/records.js';
+import { parseQuery } from '../../src/library/query.js';
 import { clrWhitespaceCharacters } from '../../src/metadata/whitespace.js';
 import { createPostgresTestDatabase } from './postgres-fixture.js';
 
@@ -758,15 +759,15 @@ test('real PostgreSQL date boundaries compare native short and ISO strings witho
     }));
   }
   for (const filter of ['minpremieredate', 'mindatelastsaved', 'mindatelastsavedforuser']) {
-    const page = await queryPostgresItemPage(postgres, {
-      ids, [filter]: '2026-10-01T00:00:00.0000001Z', sortby: ['SortName'], limit: 10,
-    });
+    const page = await queryPostgresItemPage(postgres, parseQuery({
+      ids, [filter]: '2026-10-01T08:00:00.0000001+08:00', sortby: ['SortName'], limit: 10,
+    }));
     assert.equal(page.total, 2, filter);
     assert.deepEqual(page.rows.map(row => row.Id), ids.slice(2, 4), filter);
   }
-  const maximum = await queryPostgresItemPage(postgres, {
+  const maximum = await queryPostgresItemPage(postgres, parseQuery({
     ids, maxpremieredate: '2026-10-01T00:00:00.0000001Z', sortby: ['SortName'], limit: 10,
-  });
+  }));
   assert.equal(maximum.total, 3);
   assert.deepEqual(maximum.rows.map(row => row.Id), ids.slice(0, 3));
   const zero = await queryPostgresItemPage(postgres, {
