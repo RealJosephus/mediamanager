@@ -135,7 +135,7 @@ export class MetadataImageAssets {
       if (location.localPath) {
         await this.fileSystem.mkdir(path.dirname(location.localPath), { recursive: true });
         await this.#resolve(identity, undefined, roots);
-        await this.fileSystem.writeFile(location.localPath, bytes, { signal: options.signal });
+        await this.fileSystem.writeFile(location.localPath, bytes, { signal: options.signal, modified: options.modified });
       }
       else {
         const parent = path.posix.dirname(location.accessPath);
@@ -158,6 +158,21 @@ export class MetadataImageAssets {
       }
       return this.#stat(identity, options, roots);
     } catch (error) { throw errorCode(error); }
+  }
+  async swap(first, second, options = {}) {
+    if (first === second) throw new Error('The image paths must be different.');
+    const entries = [];
+    for (const identity of [first, second]) {
+      const location = await this.resolve(identity);
+      const vfs = location.accessPath ? this.vfs : this.fileSystem.vfs;
+      if (vfs) vfs.resolveFileHandle(location.accessPath ?? this.fileSystem.accessPath(location.localPath), 'w');
+      const { modified } = await this.stat(identity, options);
+      entries.push({ identity, modified: modified ?? undefined, bytes: await this.read(identity, options) });
+    }
+    const [a, b] = entries;
+    const updatedFirst = await this.write(a.identity, b.bytes, { ...options, modified: b.modified });
+    const updatedSecond = await this.write(b.identity, a.bytes, { ...options, modified: a.modified });
+    return [updatedFirst, updatedSecond];
   }
   async delete(identity, options = {}) {
     try { const location = await this.resolve(identity); options.signal?.throwIfAborted();

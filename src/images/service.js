@@ -1,8 +1,9 @@
 import { randomUUID } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { once } from 'node:events';
+import path from 'node:path';
 import { BinaryResult } from '../http/binary-result.js';
-import { HttpResult } from '../http/binding.js';
+import { HttpResult, httpError } from '../http/binding.js';
 import { parseInvariantDate } from '../core/invariant-date-parse.js';
 import { dateTicks, dateText, MIN_DATE, nonemptyId, mapRecord } from '../library/records.js';
 import { MetadataImageAssets } from '../metadata/image-assets.js';
@@ -16,8 +17,9 @@ import { roundEven } from './options.js';
 import { ItemUpdateType } from '../metadata/save-manager.js';
 import { nativeDate } from '../sessions/user-data.js';
 import { readItemImageRows } from '../library/image-order.js';
-import { insertNativeImageBatch } from '../database/native-relation-order.js';
 import { isFileProtocol } from '../library/owned-items.js';
+import { clrTrim } from '../metadata/whitespace.js';
+import { normalizeProbeFileDate } from '../storage/probe-lifecycle.js';
 
 const remote = image => /^http/i.test(image.Path);
 const missing = () => Object.assign(new Error('Image item not found.'), { status: 404, code: 'image-item-missing' });
@@ -49,10 +51,10 @@ export class ImageService {
   #active = new Set();
   #itemUpdates = new Map();
   constructor(options) {
-    const { store, library, fileSystem = library?.options.fileSystem, vfs, identityMap, mediaIdentityMap = identityMap,
+    const { store, library, users, fileSystem = library?.options.fileSystem, vfs, identityMap, mediaIdentityMap = identityMap,
       processor, metadataImages, metadataUpdates, loadContext, logger = { error() {} } } = options;
     this.#options = options;
-    Object.assign(this, { store, library, vfs, identityMap, mediaIdentityMap, processor, metadataUpdates, loadContext, logger });
+    Object.assign(this, { store, library, users, vfs, identityMap, mediaIdentityMap, processor, metadataUpdates, loadContext, logger });
     this.metadataImages = metadataImages ?? new MetadataImages({ processor, logger });
     this.metadataUpdates ??= new MetadataUpdateHost({ store, images: this.metadataImages, library, logger });
     this.assets = new MetadataImageAssets({ fileSystem, vfs, identityMap, get metadataPath() { return options.metadataPath; } });
@@ -130,12 +132,11 @@ export class ImageService {
           throw Object.assign(new Error('Image records changed while processing.'), { status: 409, code: 'metadata-conflict' });
         const desired = loaded.images.map(image => {
           image.Id ??= randomUUID().toUpperCase();
-          const row = { ItemId: loaded.item.Id, ImageType: imageTypes.indexOf(image.Type), Path: image.Path, DateModified: image.DateModified ?? MIN_DATE,
+          return { Id: image.Id, ItemId: loaded.item.Id, ImageType: imageTypes.indexOf(image.Type), Path: image.Path, DateModified: image.DateModified ?? MIN_DATE,
             Width: image.Width ?? 0, Height: image.Height ?? 0, Blurhash: image.Blurhash ?? null };
-          return { row: { Id: image.Id, ...row } };
         });
         await db.deleteWhere('BaseItemImageInfos', { ItemId: loaded.item.Id });
-        await insertNativeImageBatch(db, desired.map(entry => entry.row));
+        await db.insertBatch('BaseItemImageInfos', desired);
         if (dateLastSaved) await db.update('BaseItems', { Id: loaded.item.Id }, { DateLastSaved: nativeDate(dateLastSaved) });
         if (context) {
           await insertVideoVersions(db, context, newVersions, { signal });
@@ -151,7 +152,7 @@ export class ImageService {
     await this.store.serializeWrites(async db => {
       if (!isDeepStrictEqual(await readItemImageRows(db, loaded.item.Id), loaded.rows))
         throw Object.assign(new Error('Image records changed while processing.'), { status: 409, code: 'metadata-conflict' });
-      await persistImageMetadata(this.store, context, loaded.images);
+      await persistImageMetadata(this.store, context, loaded.images, { preserveIndexOrder: true });
       loaded.rows = await readItemImageRows(db, loaded.item.Id);
       const available = [...loaded.rows];
       for (const image of loaded.images) {
@@ -165,6 +166,110 @@ export class ImageService {
       signal, persist: (updated, result, options) => this.persist(loaded, { dateLastSaved: updated.item.DateLastSaved, context, ...options }),
       persistImages: updated => this.persistImages(loaded, updated),
     });
+  }
+  #editItem(itemId, { auth, signal }, prepare, change) {
+    return this.#track(() => this.#updateItem(itemId, signal, async activeSignal => {
+      if (prepare) await this.load(itemId, auth.User);
+      const source = prepare && await prepare(activeSignal);
+      return this.store.serializeWrites(async () => {
+        const loaded = await this.load(itemId, auth.User);
+        const edit = async context => {
+          if (!await change(loaded, context, activeSignal, source)) return;
+          context.onImageRemoteChange = () => this.imageUpdate(loaded, context, activeSignal);
+          await this.imageUpdate(loaded, context, activeSignal);
+        };
+        if (this.loadContext) await this.loadContext.withContext(loaded.item.Id, { includeChildren: false }, edit);
+        else await edit(loaded);
+      }, { signal: activeSignal });
+    }));
+  }
+  uploadItem({ itemId, type }, context, upload) {
+    return this.#editItem(itemId, context, async signal => {
+      const source = upload(signal);
+      return { mimeType: source.mimeType, bytes: await source.read(), Type: type };
+    }, async (loaded, metadata, signal, source) => {
+      // Both upload controller aliases append backdrops and ignore the bound index.
+      const index = multipleImages(type) ? loaded.images.filter(image => image.Type === type).length : 0;
+      await this.metadataImages.saveImage(metadata, loaded.images, source, { signal, index });
+      if (type === 'Chapter') throw httpError(400, 'Cannot set chapter images using SetImagePath.');
+      return true;
+    });
+  }
+  deleteItem({ itemId, type, index }, context) {
+    return this.#editItem(itemId, context, undefined, async (loaded, metadata, signal) => {
+      const image = await this.#findImage(loaded, type, index);
+      if (!image) return false;
+      if (!remote(image) && clrTrim(image.Path ?? '') !== '') {
+        try { await metadata.imageAssets.delete(image.Path, { signal }); }
+        catch (error) { if (error?.code !== 'not-found') throw error; }
+      }
+      const position = loaded.images.indexOf(image);
+      if (position >= 0) loaded.images.splice(position, 1);
+      return true;
+    });
+  }
+  reorderItem({ itemId, type, index, newIndex }, context) {
+    return this.#editItem(itemId, context, undefined, async (loaded, metadata, signal) => {
+      if (!multipleImages(type)) {
+        throw httpError(400, 'The change index operation is only applicable to backdrops and screen shots');
+      }
+      const first = await this.#findImage(loaded, type, index), second = await this.#findImage(loaded, type, newIndex);
+      if (!first || !second || remote(first) || remote(second)) return false;
+      let swapped;
+      try { swapped = await metadata.imageAssets.swap(first.Path, second.Path, { signal }); }
+      catch (error) {
+        if (error?.code !== 'not-found') throw error;
+        throw Object.assign(new Error('An image file is missing.', { cause: error }), { status: 404 });
+      }
+      for (const [image, file] of [[first, swapped[0]], [second, swapped[1]]]) {
+        image.DateModified = file.modified ? nativeDate(normalizeProbeFileDate(file.modified)) : MIN_DATE;
+        image.Width = image.Height = 0;
+      }
+      return true;
+    });
+  }
+  updateProfile(userId, { auth, signal }, upload) {
+    return this.#track(() => this.#updateItem(`user:${userId}`, signal, async activeSignal => {
+      const selectUser = async () => {
+        const user = await this.users.getUser(userId);
+        if (!user) throw missing();
+        if (!auth.IsAdministrator && !user.EnableUserPreferenceAccess) {
+          const action = upload ? 'update' : 'delete';
+          throw new HttpResult(403, `User is not allowed to ${action} the image.`, { text: true });
+        }
+        return user;
+      };
+      let source, bytes;
+      if (upload) {
+        await selectUser();
+        source = upload(activeSignal);
+        bytes = await source.read();
+      }
+      await this.store.serializeWrites(async () => {
+        const user = await selectUser();
+        if (!source) {
+          if (!user.ProfileImage) return;
+          try { await this.userAssets.delete(user.ProfileImage.Path, { signal: activeSignal }); }
+          catch (error) {
+            if (!['not-found', 'io', 'EIO', 'unavailable', 'is-directory'].includes(error?.code)) throw error;
+            if (error.code !== 'not-found') this.logger.error(error, 'Error deleting user profile image');
+          }
+          await this.users.setProfileImage(user.Id, null);
+          return;
+        }
+        const root = this.userAssets.metadataPath;
+        if (!root) throw new Error('Profile image storage requires the user configuration directory.');
+        const directory = path.resolve(root, user.Username), relative = path.relative(root, directory);
+        if (!relative || relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+          throw new HttpResult(400, 'Invalid user.', { text: true });
+        }
+        if (user.ProfileImage) await this.users.setProfileImage(user.Id, null);
+        const filename = path.join(directory, 'profile' + source.extension);
+        const lastModified = this.users.now();
+        await this.userAssets.write(filename, bytes, { signal: activeSignal });
+        await this.users.setProfileImage(user.Id, { Path: filename, LastModified: nativeDate(lastModified) });
+      }, { signal: activeSignal });
+    }));
   }
   async localize(loaded, image, index, signal, { reload = false, user } = {}) {
     if (!remote(image)) return image;
@@ -193,13 +298,22 @@ export class ImageService {
     });
   }
   item(options, context) { return this.#track(() => this.#item(options, context)); }
+  named(lookup, name, options, context) {
+    return this.#track(async () => {
+      const item = await this.library[lookup](name);
+      if (!item) throw missing();
+      return this.#item({ ...options, itemId: item.Id }, { ...context, auth: { ...context.auth, User: null } });
+    });
+  }
+  async #findImage(loaded, type, index) {
+    if (index < 0) return undefined;
+    if (type !== 'Chapter') return loaded.images.filter(value => value.Type === type)[index];
+    const chapter = await this.store.run(async db => (await db.rows('Chapters', { where: { ItemId: loaded.item.Id, ChapterIndex: index } }))[0]);
+    return chapter?.ImagePath ? { Path: (this.library.options.expandPath ?? (value => value))(chapter.ImagePath), DateModified: chapter.ImageDateModified, Type: type } : undefined;
+  }
   async #item(options, context) {
     const loaded = await this.load(options.itemId, context.auth.User), index = options.imageIndex ?? 0;
-    let image = index < 0 ? undefined : loaded.images.filter(value => value.Type === options.imageType)[index];
-    if (options.imageType === 'Chapter' && index >= 0) {
-      const chapter = await this.store.run(async db => (await db.rows('Chapters', { where: { ItemId: loaded.item.Id, ChapterIndex: index } }))[0]);
-      image = chapter?.ImagePath ? { Path: (this.library.options.expandPath ?? (value => value))(chapter.ImagePath), DateModified: chapter.ImageDateModified, Type: 'Chapter' } : undefined;
-    }
+    const image = await this.#findImage(loaded, options.imageType, index);
     if (!image) return new HttpResult(404, `${loaded.item.Name} does not have an image of type ${options.imageType}`);
     return this.result({ loaded, image, options, context, index });
   }

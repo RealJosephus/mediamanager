@@ -164,6 +164,15 @@ export class UserService extends EventEmitter {
 
   getUser(id) { return this.store.run(database => this.loadUser(database, id)); }
 
+  async setProfileImage(id, image) {
+    await this.store.transaction(async database => {
+      const user = await this.loadUser(database, id);
+      if (!user) throw domainError(404, 'User not found');
+      if (user.ProfileImage) await database.delete('ImageInfos', { Id: user.ProfileImage.Id });
+      if (image) await database.insert('ImageInfos', { UserId: user.Id, Path: image.Path, LastModified: image.LastModified });
+    });
+  }
+
   getUserByName(name) {
     if (typeof name !== 'string' || clrTrim(name) === '') throw domainError(400, 'Invalid username');
     return this.store.run(async database => {

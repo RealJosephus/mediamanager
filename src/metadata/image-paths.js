@@ -4,7 +4,7 @@ import { nativeContainingFolderPath } from '../library/native-path.js';
 import { mimeToExtension } from '../http/mime-types.js';
 
 export const imageTypes = ['Primary', 'Art', 'Backdrop', 'Banner', 'Logo', 'Thumb', 'Disc', 'Box', 'Screenshot', 'Menu', 'Chapter', 'BoxRear', 'Profile'];
-export const multipleImages = type => ['Backdrop', 'Screenshot'].includes(type);
+export const multipleImages = type => type === 'Backdrop' || type === 'Chapter';
 export function internalImagePath(item, metadataPath) {
   if (!metadataPath) throw Object.assign(new Error('Image storage requires the instance metadata path.'), { code: 'metadata-context-required' });
   const api = imagePathApi(metadataPath), id = item.Id.replaceAll('-', '').toLowerCase();
