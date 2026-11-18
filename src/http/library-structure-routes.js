@@ -2,6 +2,7 @@ import { BindingError, HttpResult, booleanValue, noContent, notFound, httpError,
 import { bindJsonModel, validateJsonModel } from './json-model-binding.js';
 import { defaultLibraryOptions } from '../library/options.js';
 import { parseCollectionTypeOption } from '../library/collection-type-options.js';
+import { availableLibraryOptions } from '../library/available-library-options.js';
 import { clrTrim, clrWhitespace } from '../metadata/whitespace.js';
 
 const text = { type: 'string', clrType: 'System.String', nullable: true };
@@ -74,12 +75,20 @@ function pathValues(query) {
   return (values.length > 1 ? values : values[0]?.split(',').filter(value => value !== '') ?? []).map(clrTrim);
 }
 
-export function registerLibraryStructureRoutes(add, { libraryConfiguration }) {
+export function registerLibraryStructureRoutes(add, services) {
+  const { libraryConfiguration } = services;
   const service = () => {
     if (!libraryConfiguration) throw httpError(501, 'Library management requires persistent application paths.');
     return libraryConfiguration;
   };
   const policy = 'FirstTimeSetupOrElevated', prefix = '/Library/VirtualFolders';
+  add('GET', '/Libraries/AvailableOptions', ({ query, queryInput, signal }) => availableLibraryOptions(services, {
+    collectionType: queryValue(query, 'libraryContentType'), newLibrary: queryInput, signal,
+  }), { policy: 'FirstTimeSetupOrDefault', bindQuery: query => {
+    const value = queryValue(query, 'isNewLibrary');
+    if (value !== undefined && clrTrim(value) === '') throw new BindingError('isNewLibrary', `The value '${value}' is invalid.`);
+    return booleanValue(value, 'isNewLibrary', false);
+  } });
   add('GET', prefix, () => service().getVirtualFolders(true), { policy });
   add('POST', prefix, async context => {
     const { name, refresh } = context.queryInput;

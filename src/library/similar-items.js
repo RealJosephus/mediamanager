@@ -189,12 +189,16 @@ export class SimilarItemsManager {
 
   addParts(providers) { this.providers = [...providers]; }
 
+  discoverProviders(itemType, additionalProviders = []) {
+    return [...additionalProviders, ...this.providers, ...this.extensions()]
+      .filter(provider => ['local', 'remote'].includes(provider.kind) && providerSupports(provider, itemType));
+  }
+
   matchingProviders(itemType, typeOptions, additionalProviders = []) {
-    const all = [...additionalProviders, ...this.providers, ...this.extensions()];
-    const local = all.filter(provider => provider.kind === 'local' && providerSupports(provider, itemType));
+    const all = this.discoverProviders(itemType, additionalProviders);
+    const local = all.filter(provider => provider.kind === 'local');
     const enabled = typeOptions?.SimilarItemProviders ?? [];
-    const remote = enabled.length ? all.filter(provider => provider.kind === 'remote'
-      && providerSupports(provider, itemType) && isRemoteEnabled(provider, enabled)) : [];
+    const remote = enabled.length ? all.filter(provider => provider.kind === 'remote' && isRemoteEnabled(provider, enabled)) : [];
     const matching = [...local, ...remote];
     const order = typeOptions?.SimilarItemProviderOrder?.length
       ? typeOptions.SimilarItemProviderOrder : typeOptions?.SimilarItemProviders;
