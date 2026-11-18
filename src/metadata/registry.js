@@ -10,6 +10,7 @@ export function validateMetadataExtension(plugin) {
       ids.add(provider.id);
     }
 }
+
 export class MetadataRegistry {
   #plugins = new Map();
 
@@ -26,12 +27,12 @@ export class MetadataRegistry {
 
   plugins() { return [...this.#plugins.values(), ...this.extensions()]; }
 
-  discover({ item, kind, libraryOptions = {}, globalOptions = {}, includeDisabled = false, forceEnableInternetMetadata = false,
+  discover({ item, kind, providerType = item.Type, libraryOptions = {}, globalOptions = {}, includeDisabled = false, forceEnableInternetMetadata = false,
     imageRefreshMode = 'Default', isMetadataFetcherEnabled, isImageFetcherEnabled, onSupportError } = {}) {
     const typeOptions = libraryOptions.TypeOptions?.find((options) => options.Type === item.Type);
     const configured = globalOptions.MetadataOptions?.find(options => ordinalIgnoreCaseEquals(options.ItemType, item.Type)) ?? globalOptions;
     const providers = this.plugins().flatMap((plugin) => plugin.enabled === false ? [] : plugin.providers)
-      .filter(provider => (!kind || provider.kind === kind) && (provider.itemTypes.includes(item.Type) || provider.itemTypes.includes('*')))
+      .filter(provider => (!kind || provider.kind === kind) && (provider.itemTypes.includes(providerType) || provider.itemTypes.includes('*')))
       .filter(provider => {
         if (!provider.supports) return true;
         try { return provider.supports(item); }

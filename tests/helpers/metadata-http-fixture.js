@@ -30,6 +30,12 @@ async function startTmdbFixture(signal) {
   const selectedMovie = { id: identifiedTmdbId, title: 'Identified feature', original_title: 'Original feature',
     release_date: '2021-02-03', overview: 'Identification changed this synopsis.', original_language: 'fr',
     poster_path: '/preferred.png', imdb_id: 'tt9876543', images };
+  const searchResponses = {
+    '/3/search/movie': selectedMovie,
+    '/3/search/tv': { id: 703, name: 'Identified series', first_air_date: '2019-01-08', overview: 'Series result', poster_path: '/preferred.png' },
+    '/3/search/collection': { id: 704, name: 'Identified collection', poster_path: '/preferred.png' },
+    '/3/search/person': { id: 705, name: 'Identified person', profile_path: '/preferred.png' },
+  };
   const supportedSizes = ['w45', 'w92', 'w154', 'w185', 'w300', 'w342', 'w500', 'w780', 'w1280', 'h632', 'original'];
   const server = createServer((request, response) => {
     const url = new URL(request.url, origin);
@@ -46,7 +52,7 @@ async function startTmdbFixture(signal) {
         backdrop_sizes: supportedSizes, still_sizes: supportedSizes, logo_sizes: supportedSizes, profile_sizes: supportedSizes } });
     } else if (name === '/3/movie/' + existingTmdbId) json(seedMovie);
     else if (name === '/3/movie/' + identifiedTmdbId) json(selectedMovie);
-    else if (name === '/3/search/movie') json({ page: 1, total_pages: 1, total_results: 1, results: [selectedMovie] });
+    else if (Object.hasOwn(searchResponses, name)) json({ page: 1, total_pages: 1, total_results: 1, results: [searchResponses[name]] });
     else if (name.startsWith('/images/') && posterFiles.some(filename => name.endsWith('/' + filename))) {
       response.setHeader('Content-Type', 'image/png');
       response.end(poster);
@@ -83,8 +89,15 @@ export async function createMetadataHttpFixture(t) {
     Data: '{"VideoType":"VideoFile"}', DateCreated: MIN_DATE, DateModified: MIN_DATE, DateLastSaved: MIN_DATE, DateLastRefreshed: MIN_DATE }));
   await database.insert('BaseItemProviders', { ItemId: metadataMovieId, ProviderId: 'Tmdb', ProviderValue: String(existingTmdbId) });
   await database.insert('BaseItemProviders', { ItemId: metadataMovieId, ProviderId: 'ObsoleteFixture', ProviderValue: 'clear-on-identify' });
+  const storageConfiguration = path.join(root, 'storage.json');
+  await writeFile(storageConfiguration, JSON.stringify({
+    instances: [{ id: 'fixture-media', type: 'local', config: { root: media, writable: true } }],
+    mounts: [{ path: '/fixture-media', instanceId: 'fixture-media', capabilities: { create: true, replace: true, delete: true, mkdir: true, rename: true } }],
+    prefixes: [{ identityRoot: media, accessRoot: '/fixture-media', style: process.platform === 'win32' ? 'windows' : 'posix',
+      purpose: 'library', returnAccess: 'isolated identification media' }],
+  }));
   const errors = [];
-  runtime = await createTestRuntime({ database, programDataPath, configurationDirectoryPath: config, serverId: 'metadata-http',
+  runtime = await createTestRuntime({ database, programDataPath, configurationDirectoryPath: config, storageConfiguration, serverId: 'metadata-http',
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true, PreferredMetadataLanguage: 'fr', MetadataCountryCode: 'FR',
       MetadataOptions: [{ ItemType: 'Movie', DisabledImageFetchers: ['TheMovieDb'], MetadataFetcherOrder: ['TheMovieDb'] }] },
     pluginOptions: { options: { tmdb: { apiKey: credential, baseUrl: upstream.origin + '/3/' } } },

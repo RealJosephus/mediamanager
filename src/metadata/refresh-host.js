@@ -43,6 +43,7 @@ const ownerMetadataRefresh = Symbol('owner metadata refresh');
 const ownedRefreshAncestors = Symbol('owned refresh ancestors');
 const liveSeriesParent = Symbol('live series parent');
 const liveMetadataItem = Symbol('live metadata item');
+const identifiedSearch = Symbol('apply remote search result');
 const snapshotFields = snapshot => ({ ...(itemRequiresJson(snapshot)
   ? typeof snapshot?.Data === 'string' ? parseLosslessJson(snapshot.Data) : snapshot?.Data : {}), ...snapshot });
 
@@ -72,6 +73,11 @@ function applySearchResult(lookup, itemType, result) {
     lookup.Name = result.Name ?? null;
     lookup.Year = result.ProductionYear ?? null;
   }
+}
+
+function setIdentifiedProviderIds(item, providerIds) {
+  item.ProviderIds = {};
+  for (const [name, value] of Object.entries(providerIds ?? {})) trySetProviderId(item, name, value);
 }
 
 function applyLiveSeriesParent(loaded, series) {
@@ -244,6 +250,11 @@ export class MetadataRefreshHost {
     if (!isNativeItemEntity(item)) throw new TypeError('Live metadata refresh requires a branded native entity.');
     return this.refresh(item, { ...options, [liveMetadataItem]: item });
   }
+  applySearchResult(itemId, result, { replaceAllImages = true, signal } = {}) {
+    return this.refresh(itemId, { [identifiedSearch]: true, SearchResult: result, signal,
+      MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'FullRefresh', ReplaceAllMetadata: true,
+      ReplaceAllImages: replaceAllImages, RemoveOldMetadata: true });
+  }
   async refresh(reference, options = {}) {
     options = { ...options };
     // Admitted configuration writes finish their CancellationToken.None root
@@ -399,6 +410,7 @@ export class MetadataRefreshHost {
       || options[validateCollectionLocations] && loaded.item.Type === 'CollectionFolder'
       ? ItemUpdateType.MetadataDownload : ItemUpdateType.MetadataImport;
     await validateMetadataSaves(loaded, possibleWrite, this.registry);
+    if (options[identifiedSearch]) setIdentifiedProviderIds(loaded.item, options.SearchResult.ProviderIds);
     if (loaded.supportsOwnedItems?.() ?? supportsOwnedItems(loaded.item)) {
       await this.ownedLifecycle.validateBeforeRefresh(loaded, options);
       // A new part commits independently before its first provider save. D3
@@ -443,6 +455,7 @@ export class MetadataRefreshHost {
     if (loaded.item.Type === 'Series') {
       await beforeSeriesMetadataRefresh(loaded.item, options, this.seriesLifecycle);
       loaded = applyLiveSeriesParent(await loadContext(reference), options[liveSeriesParent]);
+      if (options[identifiedSearch]) setIdentifiedProviderIds(loaded.item, options.SearchResult.ProviderIds);
     }
     const initialItem = loaded.item;
     const firstRefresh = dateTicks(initialItem.DateLastRefreshed) === 0n;
