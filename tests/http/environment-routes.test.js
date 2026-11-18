@@ -29,7 +29,7 @@ async function fixture(t) {
   for (const name of fileNames) await writeFile(path.join(disk, name), name);
   await mkdir(path.join(disk, 'Z-directory')); await writeFile(path.join(unmapped, 'private-file'), 'Private host file');
   registry.registerType('local', configuration => LocalAdapter.open(configuration));
-  await registry.createInstance('disk', 'local', { root: disk, writable: false });
+  const adapter = await registry.createInstance('disk', 'local', { root: disk, writable: true });
   const vfs = new VirtualFileSystem(registry), identityMap = new IdentityAccessMap();
   const identities = [
     { name: 'posix', root: '/declared/environment', style: 'posix', api: path.posix },
@@ -41,6 +41,9 @@ async function fixture(t) {
     identityMap.addPrefix({ identityRoot: identity.root, accessRoot: '/' + identity.name, style: identity.style,
       returnAccess: 'The declared identity resolves to this isolated local storage only.' });
   }
+  const writableRoot = '/declared/writable';
+  vfs.mount({ path: '/writable', instanceId: 'disk', capabilities: { create: true, replace: true, delete: true, atomicReplace: true } });
+  identityMap.addPrefix({ identityRoot: writableRoot, accessRoot: '/writable', returnAccess: 'Isolated writable storage.' });
   const configuration = { IsStartupWizardCompleted: true };
   const authentication = new AuthenticationService({ store: {}, users: {}, serverId: 'environment-http', isLocalNetwork: () => true });
   authentication.authenticate = async request => {
@@ -54,14 +57,18 @@ async function fixture(t) {
     application.server.listen(0, '127.0.0.1', () => { application.server.off('error', reject); resolve(); });
   });
   const origin = 'http://127.0.0.1:' + application.server.address().port;
-  const request = async (parameters, identity = 'admin') => {
-    const response = await fetch(origin + '/Environment/DirectoryContents?' + new URLSearchParams(parameters), {
-      signal: AbortSignal.any([t.signal, AbortSignal.timeout(30000)]), headers: { Accept: 'application/json', 'X-Identity': identity } });
-    const text = await response.text(); let body;
-    try { body = JSON.parse(text); } catch { body = text; }
-    return { status: response.status, contentType: response.headers.get('content-type'), body };
+  const send = async (route, { parameters, identity = 'admin', body, accept = 'application/json' } = {}) => {
+    const response = await fetch(origin + '/Environment/' + route + (parameters ? '?' + new URLSearchParams(parameters) : ''), {
+      signal: AbortSignal.any([t.signal, AbortSignal.timeout(30000)]), method: body === undefined ? 'GET' : 'POST',
+      headers: { Accept: accept, 'X-Identity': identity, ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    });
+    const text = await response.text();
+    try { return { status: response.status, contentType: response.headers.get('content-type'), body: JSON.parse(text) }; }
+    catch { return { status: response.status, contentType: response.headers.get('content-type'), body: text }; }
   };
-  return { request, configuration, identities, fileNames, unmapped };
+  return { request: (parameters, identity) => send('DirectoryContents', { parameters, identity }),
+    send, configuration, identities, fileNames, unmapped, writableRoot, adapter, disk };
 }
 
 test('environment enumeration retains mapped file identities and never lists an unmapped host directory', async t => {
@@ -103,4 +110,49 @@ test('environment authorization precedes scalar binding and first-time setup per
   assert.equal((await value.request(parameters, 'anonymous')).status, 400);
   const listed = await value.request({ path: value.identities[0].root, includeFiles: 'true' }, 'anonymous');
   assert.equal(listed.status, 200); assert.deepEqual(listed.body.map(entry => entry.Name), value.fileNames);
+});
+
+test('environment browser uses declared roots, navigates identity paths and validates writable storage through a temporary object', async t => {
+  const value = await fixture(t);
+  const { send, writableRoot, adapter, disk, unmapped } = value;
+  const roots = [...value.identities.map(entry => entry.root), writableRoot];
+  assert.deepEqual((await send('Drives')).body, roots.map(root => ({ Name: root, Path: root, Type: 'Directory' })));
+  assert.deepEqual((await send('DefaultDirectoryBrowser')).body, {});
+  for (const { root, api } of value.identities) {
+    assert.equal((await send('ParentPath', { parameters: { path: root } })).status, 204);
+    const child = api.join(root, 'folder', 'file');
+    for (const accept of ['application/json', 'text/plain']) {
+      const result = await send('ParentPath', { parameters: { path: child }, accept });
+      assert.equal(result.status, 200);
+      assert.equal(result.contentType, 'application/json; charset=utf-8');
+      assert.equal(result.body, api.dirname(child));
+    }
+  }
+  assert.equal((await send('ParentPath', { parameters: { path: '\\\\environment-host' } })).status, 204);
+
+  const writes = [], deletions = [], write = adapter.write.bind(adapter), remove = adapter.delete.bind(adapter);
+  adapter.write = async (...args) => { writes.push(args[0]); return write(...args); };
+  adapter.delete = async (...args) => { deletions.push(args[0]); return remove(...args); };
+  const original = (await readdir(disk)).sort();
+  const validate = (body, identity) => send('ValidatePath', { body, identity });
+  assert.equal((await validate({ Path: writableRoot, ValidateWritable: true })).status, 204);
+  assert.equal(writes.length, 1);
+  assert.match(writes[0], /^\/[a-f0-9-]{36}$/u);
+  assert.deepEqual(deletions, writes);
+  assert.deepEqual((await readdir(disk)).sort(), original);
+
+  const readonly = value.identities[0].root, readonlyFile = readonly + '/10-file';
+  assert.equal((await validate({ Path: readonly, ValidateWritable: true })).status, 500);
+  assert.equal((await validate({ Path: readonly, IsFile: false, ValidateWritable: true })).status, 204);
+  assert.equal((await validate({ Path: readonly, ValidateWriteable: true })).status, 204);
+  assert.equal((await validate({ Path: readonlyFile, IsFile: true, ValidateWritable: true })).status, 204);
+  assert.equal((await validate({ Path: readonlyFile, IsFile: false })).status, 404);
+  assert.equal((await validate({ Path: readonly, IsFile: true })).status, 404);
+  assert.equal((await validate({ Path: unmapped })).status, 404);
+  assert.equal((await validate({})).status, 404);
+  assert.equal((await validate({ Path: readonly, ValidateWritable: 'true' })).status, 400);
+  assert.equal((await validate({ Path: writableRoot, ValidateWritable: true }, 'anonymous')).status, 401);
+  assert.equal((await validate({ Path: writableRoot, ValidateWritable: true }, 'regular')).status, 403);
+  assert.equal((await send('Drives', { identity: 'regular' })).status, 403);
+  assert.equal(writes.length, 1);
 });
