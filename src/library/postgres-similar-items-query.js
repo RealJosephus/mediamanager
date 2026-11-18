@@ -90,22 +90,21 @@ export async function queryPostgresLocalSimilarRows(database, {
  * Each source key is distinct, while duplicate matching candidate map rows
  * intentionally contribute repeatedly, as in MovieSimilarItemsProvider.
  */
-export async function queryPostgresMovieSimilarRows(database, {
-  sourceId,
+export function buildPostgresMovieSimilarPlan(database, {
+  sourceIds,
   excludeItemIds = [],
   enableExternalContent = true,
   limit = 50,
   userId,
   visibility,
-  signal,
 } = {}) {
   if (!Number.isInteger(limit) || limit < 0 || limit > 2_147_483_647) {
     throw new TypeError('Movie similar-items limit must be a non-negative Int32.');
   }
-  const source = guid(sourceId);
+  const sources = uniqueIds(sourceIds);
   // LINQ Take receives the unchecked native Int32 multiplication.
   const candidateLimit = Math.max(0, Math.imul(limit, 3));
-  if (!candidateLimit || !limit) return [];
+  if (!sources.length || !candidateLimit) return null;
   const baseItems = table(database, 'BaseItems');
   const maps = table(database, 'ItemValuesMap');
   const itemValues = table(database, 'ItemValues');
@@ -139,28 +138,30 @@ export async function queryPostgresMovieSimilarRows(database, {
     ? 'item."Type", item."TopParentId", item."Id"'
     : 'item."Id"';
   const scoreCtes = `/* movie-similar-weighted-page */
-      WITH source_values AS (
-        SELECT DISTINCT ON (value."Type", value."CleanValue")
-          value."Type", value."CleanValue" AS "CleanValue", value."Value" AS "KeyOrder"
+      WITH sources AS (SELECT * FROM unnest($1::text[]) WITH ORDINALITY AS source("SourceId", "SourceOrder")),
+      source_values AS (
+        SELECT DISTINCT ON (source."SourceId", value."Type", value."CleanValue")
+          source."SourceId", value."Type", value."CleanValue", value."Value" AS "KeyOrder"
         FROM ${maps} source_map
         JOIN ${itemValues} value ON ${nativeTextSql(database.schemaName).guidLower("value.\"ItemValueId\"")} = ${nativeTextSql(database.schemaName).guidLower("source_map.\"ItemValueId\"")}
-        WHERE ${nativeTextSql(database.schemaName).guidLower("source_map.\"ItemId\"")} = $1 AND value."Type" IN (2, 4, 3)
-        ORDER BY value."Type", value."CleanValue", value."Value" ASC NULLS LAST
+        JOIN sources source ON ${nativeTextSql(database.schemaName).guidLower("source_map.\"ItemId\"")} = source."SourceId"
+        WHERE value."Type" IN (2, 4, 3)
+        ORDER BY source."SourceId", value."Type", value."CleanValue", value."Value" ASC NULLS LAST
       ), ordered_values AS (
-        SELECT source_values.*, row_number() OVER (PARTITION BY "Type" ORDER BY "KeyOrder") AS "KeyPosition"
+        SELECT source_values.*, row_number() OVER (PARTITION BY "SourceId", "Type" ORDER BY "KeyOrder") AS "KeyPosition"
         FROM source_values
       ), source_people AS (
-        SELECT DISTINCT ${nativeTextSql(database.schemaName).guidLower("source_map.\"PeopleId\"")} AS "PeopleId",
+        SELECT DISTINCT source."SourceId", ${nativeTextSql(database.schemaName).guidLower("source_map.\"PeopleId\"")} AS "PeopleId",
           CASE ${nativeTextSql(database.schemaName).projection('person."PersonType"')} WHEN 'Director' THEN 50 ELSE 15 END AS "Weight"
         FROM ${peopleMaps} source_map
         JOIN ${people} person ON ${nativeTextSql(database.schemaName).guidLower("person.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("source_map.\"PeopleId\"")}
-        WHERE ${nativeTextSql(database.schemaName).guidLower("source_map.\"ItemId\"")} = $1
-          AND ${nativeTextSql(database.schemaName).projection('person."PersonType"')} COLLATE "C" IN ('Director', 'Actor', 'GuestStar')
+        JOIN sources source ON ${nativeTextSql(database.schemaName).guidLower("source_map.\"ItemId\"")} = source."SourceId"
+        WHERE ${nativeTextSql(database.schemaName).projection('person."PersonType"')} COLLATE "C" IN ('Director', 'Actor', 'GuestStar')
       ), ordered_people AS (
-        SELECT source_people.*, min("PeopleId" COLLATE "C") OVER (PARTITION BY "Weight") AS "WeightOrder"
+        SELECT source_people.*, min("PeopleId" COLLATE "C") OVER (PARTITION BY "SourceId", "Weight") AS "WeightOrder"
         FROM source_people
       ), dimension_matches AS (
-        SELECT ${nativeTextSql(database.schemaName).guidLower("candidate_map.\"ItemId\"")} AS "Id",
+        SELECT source_value."SourceId", ${nativeTextSql(database.schemaName).guidLower("candidate_map.\"ItemId\"")} AS "Id",
           CASE source_value."Type" WHEN 2 THEN 10 ELSE 5 END AS "Weight",
           (CASE source_value."Type" WHEN 2 THEN '0/' WHEN 4 THEN '1/' ELSE '2/' END
             || lpad(source_value."KeyPosition"::text, 20, '0') || '/'
@@ -170,47 +171,60 @@ export async function queryPostgresMovieSimilarRows(database, {
           AND value."CleanValue" = source_value."CleanValue"
         JOIN ${valueOrder} value_sequence ON value_sequence.value_id = value."ItemValueId"
         JOIN ${maps} candidate_map ON ${nativeTextSql(database.schemaName).guidLower("candidate_map.\"ItemValueId\"")} = ${nativeTextSql(database.schemaName).guidLower("value.\"ItemValueId\"")}
-        WHERE ${nativeTextSql(database.schemaName).guidLower("candidate_map.\"ItemId\"")} <> $1 AND ${hiddenVersion}
+        WHERE ${nativeTextSql(database.schemaName).guidLower("candidate_map.\"ItemId\"")} <> source_value."SourceId" AND ${hiddenVersion}
         UNION ALL
-        SELECT ${nativeTextSql(database.schemaName).guidLower("candidate_map.\"ItemId\"")}, source_person."Weight",
+        SELECT source_person."SourceId", ${nativeTextSql(database.schemaName).guidLower("candidate_map.\"ItemId\"")}, source_person."Weight",
           '3/' || source_person."WeightOrder" || '/' || source_person."PeopleId" || '/' || ${nativeTextSql(database.schemaName).guidLower("candidate_map.\"ItemId\"")}
         FROM ordered_people source_person
         JOIN ${peopleMaps} candidate_map ON ${nativeTextSql(database.schemaName).guidLower("candidate_map.\"PeopleId\"")} = source_person."PeopleId"
-        WHERE ${nativeTextSql(database.schemaName).guidLower("candidate_map.\"ItemId\"")} <> $1 AND ${hiddenVersion}
+        WHERE ${nativeTextSql(database.schemaName).guidLower("candidate_map.\"ItemId\"")} <> source_person."SourceId" AND ${hiddenVersion}
       ), similar_scores AS (
-        SELECT "Id", sum("Weight") AS "Score", min("EntryOrder" COLLATE "C") AS "FirstEntry"
-        FROM dimension_matches GROUP BY "Id"
+        SELECT "SourceId", "Id", sum("Weight") AS "Score", min("EntryOrder" COLLATE "C") AS "FirstEntry"
+        FROM dimension_matches GROUP BY "SourceId", "Id"
       ), similar_shortlist AS MATERIALIZED (
-        SELECT "Id", "Score" FROM similar_scores
-        ORDER BY "Score" DESC, "FirstEntry" COLLATE "C" LIMIT $2
+        SELECT DISTINCT "Id" FROM (
+          SELECT "Id", row_number() OVER (PARTITION BY "SourceId"
+            ORDER BY "Score" DESC, "FirstEntry" COLLATE "C") AS "Rank" FROM similar_scores
+        ) ranked_sources WHERE "Rank" <= $2
       )`;
   if (!userId) {
     // A null user only throws after scoring produced a shortlist. Do not
     // confuse a source-only relation with an actual comparison candidate.
-    const candidates = await database.client.query({
+    return {
       text: `${scoreCtes} SELECT EXISTS (SELECT 1 FROM similar_shortlist) AS "HasCandidates"`,
-      values: [source, candidateLimit], signal,
-    });
-    if (candidates.rows[0]?.HasCandidates) throw new TypeError('Movie similar-items IsPlayed filtering requires a user.');
-    return [];
+      values: [sources, candidateLimit],
+    };
   }
-  const result = await database.client.query({
+  return {
     text: `${scoreCtes}, accessible AS (
         ${accessText}
       ), ranked AS (
-        SELECT item."Id", shortlist."Score", item."PrimaryVersionId" IS NOT NULL AS "Alternate",
-          row_number() OVER (ORDER BY ${accessTieOrder}) AS "AccessOrdinal",
-          row_number() OVER (PARTITION BY item."PresentationUniqueKey"
-            ORDER BY shortlist."Score" DESC, item."PrimaryVersionId" IS NOT NULL, ${accessTieOrder}) AS "KeyRank"
+        SELECT item."Id", scores."SourceId", scores."Score", item."PrimaryVersionId" IS NOT NULL AS "Alternate",
+          row_number() OVER (PARTITION BY scores."SourceId" ORDER BY ${accessTieOrder}) AS "AccessOrdinal",
+          row_number() OVER (PARTITION BY scores."SourceId", item."PresentationUniqueKey"
+            ORDER BY scores."Score" DESC, item."PrimaryVersionId" IS NOT NULL, ${accessTieOrder}) AS "KeyRank"
         FROM accessible
         JOIN ${baseItems} item ON ${nativeTextSql(database.schemaName).guidLower("item.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("accessible.\"Id\"")}
-        JOIN similar_shortlist shortlist ON shortlist."Id" = ${nativeTextSql(database.schemaName).guidLower("item.\"Id\"")}
+        JOIN similar_scores scores ON scores."Id" = ${nativeTextSql(database.schemaName).guidLower("item.\"Id\"")}
+      ), picked AS (
+        SELECT "Id", "SourceId", row_number() OVER (PARTITION BY "SourceId"
+          ORDER BY "Score" DESC, "Alternate", "AccessOrdinal") AS "ItemOrder"
+        FROM ranked WHERE "KeyRank" = 1
       )
-      SELECT "Id" FROM ranked WHERE "KeyRank" = 1
-      ORDER BY "Score" DESC, "Alternate", "AccessOrdinal" LIMIT $3`,
-    values: [source, candidateLimit, limit, ...accessPlan.values],
-    signal,
-  });
+      SELECT picked.*, sources."SourceOrder" FROM picked JOIN sources USING ("SourceId")
+      WHERE "ItemOrder" <= $3 ORDER BY "SourceOrder", "ItemOrder"`,
+    values: [sources, candidateLimit, limit, ...accessPlan.values],
+  };
+}
+
+export async function queryPostgresMovieSimilarRows(database, { sourceId, signal, ...options } = {}) {
+  const plan = buildPostgresMovieSimilarPlan(database, { ...options, sourceIds: [sourceId] });
+  if (!plan) return [];
+  const result = await database.client.query({ ...plan, signal });
+  if (!options.userId) {
+    if (result.rows[0]?.HasCandidates) throw new TypeError('Movie similar-items IsPlayed filtering requires a user.');
+    return [];
+  }
   const ids = result.rows.map(row => decodeNativeTextBytes(row.Id));
   const rows = ids.length ? await database.rows('BaseItems', { whereIn: { Id: ids } }) : [];
   const byId = new Map(rows.map(row => [idKey(row.Id), row]));

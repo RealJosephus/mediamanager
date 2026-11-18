@@ -587,6 +587,14 @@ export function registerDomainRoutes(add, services) {
     }
     return library.querySearchHints(input, { user: await optionalRequestUser(context), signal: context.signal });
   });
+  add('GET', '/Movies/Recommendations', async context => {
+    const input = {
+      fields: commaEnums(context, 'fields', controllerItemFields).filter(value => typeof value === 'string'),
+      parentId: guid(context, 'parentId'), categoryLimit: integer(context, 'categoryLimit', 5), itemLimit: integer(context, 'itemLimit', 8),
+    };
+    requireSupportedDtoFields(input, 'Movie recommendations');
+    return library.queryMovieRecommendations(input, { user: await optionalRequestUser(context), signal: context.signal });
+  });
   add('GET', ['/Items/{itemId}', '/Users/{userId}/Items/{itemId}'], async context => {
     try {
       const itemId = guid(context, 'itemId'), user = await requestUser(context, { required: false });

@@ -117,6 +117,12 @@ async function seed(referenceRoot, current) {
           ItemId: index === 32 ? movies[1] : movies[0], PeopleId, ListOrder: index - 30,
         }));
       }
+      database.insert('Peoples', postgresTestRow('Peoples', { Id: id(37), Name: 'Cora Vale', PersonType: 'Director' }));
+      for (const ItemId of movies.slice(1)) {
+        for (const [ListOrder, PeopleId] of [[4, id(30)], [5, id(37)]]) {
+          database.insert('PeopleBaseItemMap', postgresTestRow('PeopleBaseItemMap', { ItemId, PeopleId, ListOrder }));
+        }
+      }
       for (const [Id, Name, ExtraType] of [
         [features[0], 'A look backstage', 3], [features[1], 'Shorter story', 11], [id(36), 'Theme clip', 9],
       ]) {
@@ -140,6 +146,9 @@ async function seed(referenceRoot, current) {
         Interval: 1501, ThumbnailCount: 5, TileWidth: 2, TileHeight: 2 });
       database.insert('UserData', postgresTestRow('UserData', {
         ItemId: movies[0], UserId: current.userId, CustomDataKey: '', IsFavorite: true,
+      }));
+      database.insert('UserData', postgresTestRow('UserData', {
+        ItemId: movies[1], UserId: current.userId, CustomDataKey: '', Played: true, PlayCount: 1, LastPlayedDate: fixedDate,
       }));
       database.insert('UserData', postgresTestRow('UserData', {
         ItemId: people['Ada Ledger'].Id, UserId: current.userId, CustomDataKey: '', IsFavorite: true,
@@ -230,6 +239,9 @@ test('existing playback assets, date ticks, counts and search hints match the de
       'Jellyfin.Api/Controllers/UserViewsController.cs', 'MediaBrowser.Controller/Entities/UserView.cs',
       'Jellyfin.Api/Controllers/LiveTvController.cs', 'src/Jellyfin.LiveTv/LiveTvManager.cs',
       'src/Jellyfin.LiveTv/DefaultLiveTvService.cs',
+      'Jellyfin.Api/Controllers/MoviesController.cs',
+      'Emby.Server.Implementations/Library/SimilarItems/SimilarItemsManager.cs',
+      'Emby.Server.Implementations/Library/SimilarItems/MovieSimilarItemsProvider.cs',
     ]);
     await cp(current.sourceRoot, referenceRoot, { recursive: true });
     await current.prepareClone(referenceRoot, port);
@@ -309,6 +321,11 @@ test('existing playback assets, date ticks, counts and search hints match the de
       { name: 'unknown tuner service', route: tunerReset('unknown_fixture'), method: 'POST', status: 400 },
       { name: 'tuner reset requires the separator', route: tunerReset(tunerService), method: 'POST', status: 500 },
       { name: 'missing active recording stream', route: '/LiveTv/LiveRecordings/fixture/stream', status: 404, anonymous: true },
+      { name: 'movie recommendation category and item order', route: '/Movies/Recommendations?CategoryLimit=4&ItemLimit=2&Fields=Overview,MediaSourceCount', status: 200 },
+      { name: 'movie recommendations respect category and item limits', route: '/Movies/Recommendations?CategoryLimit=1&ItemLimit=1&ParentId=' + idKey(fixture.folderId), status: 200 },
+      { name: 'movie recommendations allow zero categories', route: '/Movies/Recommendations?CategoryLimit=0', status: 200 },
+      { name: 'movie recommendations allow zero items', route: '/Movies/Recommendations?ItemLimit=0', status: 200 },
+      { name: 'movie recommendations require a user with API key', route: '/Movies/Recommendations', status: 400, apiKey: true },
     ];
     native = current.start({ referenceRoot, outputRoot: root, label: 'native', origin: nativeOrigin });
     await native.ready();
@@ -347,6 +364,18 @@ test('existing playback assets, date ticks, counts and search hints match the de
     assert.deepEqual(observed('legacy item special features'), observed('item special features'));
     assert.deepEqual(observed('eligible user view groups'), [...fixture.groupingLibraries].reverse().map(({ Id, Name }) => ({ Id: idKey(Id), Name })));
     assert.deepEqual(observed('legacy eligible user view groups'), observed('eligible user view groups'));
+    const recommended = observed('movie recommendation category and item order');
+    assert.deepEqual(recommended.map(category => [category.RecommendationType, category.CategoryId, category.Items.map(item => item.Id)]), [
+      ['SimilarToRecentlyPlayed', ids[1], [ids[2], ids[0]]],
+      ['SimilarToLikedItem', ids[0], [ids[2]]],
+      ['HasDirectorFromRecentlyPlayed', md5Guid('Cora Vale'), [ids[2]]],
+      ['HasActorFromRecentlyPlayed', md5Guid('Ada Ledger'), [ids[0], ids[2]]],
+    ]);
+    const capped = observed('movie recommendations respect category and item limits');
+    assert.equal(capped.length, 1);
+    assert.deepEqual(capped[0].Items.map(item => item.Id), [ids[2]]);
+    assert.deepEqual(observed('movie recommendations allow zero categories'), []);
+    assert.deepEqual(observed('movie recommendations allow zero items'), []);
     for (const name of ['MinPremiereDate', 'MaxPremiereDate', 'MinDateLastSaved', 'MinDateLastSavedForUser']) {
       assert.equal(observed(name).TotalRecordCount, 2, name);
     }

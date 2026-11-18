@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { availableParallelism } from 'node:os';
 import { EventEmitter } from 'node:events';
-import { getNewItemId } from '../core/identity.js';
+import { getNewItemId, md5Guid } from '../core/identity.js';
 import { withCleanup } from '../core/operation-failure.js';
 import { loadLibrary, mapRecord, dtoId, idKey, sameId, nonemptyId, guid, cleanValue, dateText, dateTicks, libraryError, unsupported, repositoryCleanName, repositoryTopParentId, repositoryValue, repositoryIdPresent, NAME_TYPES, VIDEO_TYPES, MIN_DATE, EMPTY_ID } from './records.js';
 import { visibleItem, visibleLibrary } from './permissions.js';
@@ -24,7 +24,7 @@ import { BoundedItemCache } from './bounded-item-cache.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
 import { prepareUserRootNavigation } from './user-root-navigation.js';
 import { withPostgresCachedFolderChildren } from './postgres-cached-folder-children.js';
-import { nativeTextBytes } from '../database/native-text.js';
+import { decodeNativeTextBytes, nativeTextBytes } from '../database/native-text.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { createPostgresFolderLinksQuery } from './postgres-folder-links-query.js';
 import { createPostgresFolderCollectionCollapse } from './postgres-folder-collection-collapse.js';
@@ -65,6 +65,7 @@ import { queryPostgresRecordingFolderSources, orderPostgresRecordingFolders, cre
 import { recordingSourceVisibleWithoutUser, recordingFoldersMissingUser } from './live-tv-recording-folders-access.js';
 import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
 import { visitPostgresPeople } from './postgres-people-query.js';
+import { visitPostgresMovieRecommendations } from './postgres-movie-recommendations.js';
 import { dtoItemCountKinds, queryPostgresDtoItemCounts, queryPostgresLibraryCounts } from './postgres-dto-item-counts-query.js';
 import { queryPostgresItemFilters } from './postgres-item-filters-query.js';
 import { querySuggestions } from './suggestions.js';
@@ -1728,6 +1729,60 @@ export class LibraryService extends EventEmitter {
       filterItems: (items, state) => this.#filterPostgresStandalonePage(db, items, user, state),
       prefetchDtos: (items, state, options) => this.#prefetchPostgresDtos(items, state, user, options),
     }), { channelViews: Boolean(user), channelItems: true });
+  }
+
+  queryMovieRecommendations(input, { user, signal } = {}) {
+    if (!user) throw libraryError(400, 'Error processing request.');
+    return this.#runWithStates(async db => {
+      const parentId = nonemptyId(input.parentId) ? input.parentId : undefined;
+      const navigationRows = await loadPostgresNavigationRows(db, parentId);
+      const state = await this.load(db, user, { baseRows: navigationRows, includeUserData: false });
+      const visibility = await this.#postgresUserViewVisibility(state, user);
+      const { topParentIds, libraryTopParentIds: _libraryTopParentIds, ...baselineVisibility } = visibility;
+      let baselineScope = { topParentIds };
+      if (parentId !== undefined) {
+        const parent = state.byId.get(idKey(parentId));
+        if (!parent) baselineScope = { parentId };
+        else if (['CollectionFolder', 'UserView'].includes(parent.Type)) {
+          const roots = await this.navigationChildren(state, user);
+          const ids = queryTopParentIds(parent, state, user, roots);
+          baselineScope = ids.length ? { topParentIds: ids } : { ancestorId: parent.Type === 'UserView'
+            ? [parent.DisplayParentId, parent.ParentId, parent.Id].find(nonemptyId) : parent.Id };
+        } else if (['BoxSet', 'Playlist'].includes(parent.Type)
+          && (await queryPostgresLinkTypes(db, [parent.Id])).has(idKey(parent.Id))) {
+          baselineScope = { boxSetRepositoryId: parent.Id };
+        } else baselineScope = { ancestorId: parent.Id };
+      }
+      const options = dtoOptions(input);
+      const types = ['SimilarToRecentlyPlayed', 'SimilarToLikedItem', 'HasDirectorFromRecentlyPlayed', 'HasActorFromRecentlyPlayed'];
+      const categories = new Map();
+      await visitPostgresMovieRecommendations(db, input, {
+        userId: user.Id, visibility, baselineScope, baselineVisibility,
+        enableExternalContent: this.options.configuration.EnableExternalContentInSuggestions ?? true, signal,
+      }, async (rows, baselineNames) => {
+        const ids = rows.map(row => decodeNativeTextBytes(row.Id));
+        const page = await this.#loadPostgresItemState(db, ids, user, { navigationRows });
+        await withCleanup(async () => {
+          const items = ids.map(id => page.byId.get(idKey(id)));
+          const visible = await this.#filterPostgresStandalonePage(db, [...new Set(items.filter(Boolean))], user, page);
+          await this.#prefetchPostgresDtos(visible, page, user, options);
+          const allowed = new Set(visible);
+          for (const [index, row] of rows.entries()) {
+            const key = decodeNativeTextBytes(row.CategoryKey);
+            const identity = row.Kind + ':' + key;
+            let category = categories.get(identity);
+            if (!category) {
+              category = { CategoryId: row.Kind < 2 ? idKey(key) : md5Guid(key),
+                BaselineItemName: row.Kind < 2 ? baselineNames.get(idKey(key)) : key,
+                RecommendationType: types[row.Kind], Items: [] };
+              categories.set(identity, category);
+            }
+            if (allowed.has(items[index])) category.Items.push(await projectItem(items[index], page, user, options, this.options));
+          }
+        }, [() => page.dispose({ session: db })], 'Movie recommendation page cleanup failed.');
+      });
+      return [...categories.values()];
+    }, { channelViews: true, channelItems: requestsItemField(input, 'CanDelete'), signal });
   }
 
   async queryItemFilters(input = {}, { user = null, legacy = false } = {}) {
