@@ -3,14 +3,14 @@ import path from 'node:path';
 
 const absentCodes = new Set(['ENOENT', 'ENOTDIR', 'EACCES', 'EPERM', 'EINVAL', 'ENAMETOOLONG', 'ELOOP', 'EIO', 'ENODEV', 'ENXIO']);
 
-async function* markerFiles(root, fileSystem) {
+async function* markerFiles(root, fileSystem, followDirectoryLinks) {
   const directories = [root];
   for (let index = 0; index < directories.length; index++) {
     const directory = directories[index];
     for await (const entry of await fileSystem.opendir(directory)) {
       const filename = path.join(directory, entry.name);
       let isDirectory = entry.isDirectory();
-      if (entry.isSymbolicLink()) {
+      if (followDirectoryLinks && entry.isSymbolicLink()) {
         try { isDirectory = (await fileSystem.stat(filename)).isDirectory(); }
         catch (error) { if (!absentCodes.has(error.code)) throw error; }
       }
@@ -30,18 +30,21 @@ export class EncodingPaths {
     Object.assign(this, { applicationPaths, getEncodingOptions, fileSystem });
   }
 
-  async getTranscodePath() {
+  async getTranscodePath({ create = true } = {}) {
     const options = this.getEncodingOptions();
+    const { cachePath } = this.applicationPaths;
     const directory = options.TranscodingTempPath == null || options.TranscodingTempPath === ''
-      ? path.join(this.applicationPaths.cachePath, 'transcodes') : options.TranscodingTempPath;
-    await this.fileSystem.mkdir(directory, { recursive: true });
+      ? cachePath && path.join(cachePath, 'transcodes') : options.TranscodingTempPath;
+    if (create) await this.fileSystem.mkdir(directory, { recursive: true });
+    if (!directory) return null;
     let otherMarker;
     try {
-      for await (const filename of markerFiles(directory, this.fileSystem)) {
+      for await (const filename of markerFiles(directory, this.fileSystem, create)) {
         if (path.basename(filename).toLowerCase() !== '.jellyfin-transcode') { otherMarker = filename; break; }
       }
     } catch { /* Native marker enumeration failures leave marker creation to report its own I/O failure. */ }
     if (otherMarker !== undefined) throw new Error(`Expected to find only .jellyfin-transcode but found marker for ${otherMarker}.`);
+    if (!create) return directory;
     const marker = path.join(directory, '.jellyfin-transcode');
     let exists = false;
     try { exists = (await this.fileSystem.stat(marker)).isFile(); }
