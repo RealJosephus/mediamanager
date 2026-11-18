@@ -18,6 +18,37 @@ import { selectDefaultTracks } from '../library/media-streams.js';
 import { readUserData } from '../sessions/user-data.js';
 import { getMimeType } from '../http/mime-types.js';
 
+function universalAudioProfile(containers, options) {
+  const conditions = [];
+  for (const [property, value] of [['AudioSampleRate', options.MaxAudioSampleRate],
+    ['AudioBitDepth', options.MaxAudioBitDepth], ['AudioChannels', options.MaxAudioChannels]]) {
+    if (value != null) conditions.push({ Condition: 'LessThanEqual', Property: property, Value: String(value), IsRequired: false });
+  }
+  return {
+    DirectPlayProfiles: containers.map(value => {
+      const [Container, ...codecs] = value.split('|').filter(Boolean);
+      if (!Container) throw httpError(500, 'The audio device profile is invalid.');
+      return { Type: 'Audio', Container, AudioCodec: codecs.length ? codecs.join(',') : null };
+    }),
+    CodecProfiles: conditions.length ? [{ Type: 'Audio', Container: containers.join(','), Conditions: conditions }] : [],
+  };
+}
+
+function selectUniversalAudioSource(sources, itemId, bitrate) {
+  const preferred = itemId.replaceAll('-', '').toLowerCase();
+  const order = source => [source.Id.toLowerCase() === preferred ? 0 : 1,
+    source.SupportsDirectPlay && source.Protocol === 'File' ? 0 : 1,
+    source.SupportsDirectPlay || source.SupportsDirectStream ? 0 : 1, source.Protocol === 'File' ? 0 : 1,
+    bitrate != null && source.Bitrate != null ? source.Bitrate <= bitrate ? 0 : 2 : 1];
+  return sources.map(source => ({ source, rank: order(source) })).sort((left, right) => {
+    for (let index = 0; index < left.rank.length; index++) {
+      const difference = left.rank[index] - right.rank[index];
+      if (difference) return difference;
+    }
+    return 0;
+  })[0]?.source;
+}
+
 export class PlaybackService {
   #subtitleOwner = new AbortController();
   #subtitlePreparations = new Set();
@@ -74,6 +105,76 @@ export class PlaybackService {
       sources = await this.library.getMediaSources(item.Id, { user });
     }
     return sources;
+  }
+
+  async universalAudio(itemId, { user, auth, remoteEndPoint, signal, ...options }) {
+    let item;
+    try { item = await this.library.getItemRecord(itemId, { user }); }
+    catch (error) { if (error?.status === 404) return notFound(); throw error; }
+    const profile = universalAudioProfile(options.Containers, options);
+    let sources = await this.sources(item, user, { signal });
+    const requestedId = options.MediaSourceId?.trim() ? options.MediaSourceId : null;
+    if (requestedId) sources = sources.filter(source => source.Id.toLowerCase() === requestedId.toLowerCase());
+    if (!sources.length) throw httpError(500, 'No audio source was selected.');
+    if (!user) throw httpError(404, 'User not found.');
+    if (!user.Policy.EnableMediaPlayback) throw httpError(403, 'Media playback is not allowed.');
+
+    const limit = user.RemoteClientBitrateLimit > 0 ? user.RemoteClientBitrateLimit : this.configuration.RemoteClientBitrateLimit;
+    const maxBitrate = limit > 0 && this.isLocalNetwork && !this.isLocalNetwork(remoteEndPoint)
+      ? Math.min(options.MaxStreamingBitrate ?? limit, limit) : options.MaxStreamingBitrate;
+    for (const source of sources) {
+      negotiateSource(source, item, profile, { MaxStreamingBitrate: maxBitrate, MaxAudioChannels: options.MaxAudioChannels,
+        EnableTranscoding: false });
+      if (source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) {
+        source.SupportsDirectPlay = false;
+        source.SupportsDirectStream = false;
+      }
+    }
+    const source = selectUniversalAudioSource(sources, item.Id, options.MaxStreamingBitrate);
+    if (source.SupportsDirectPlay && source.Protocol === 'Http' && source.IsRemote
+      && options.EnableRedirection !== false && options.EnableRemoteMedia === true) {
+      return new BinaryResult(async (_request, response) => {
+        response.writeHead(302, { Location: source.Path });
+        response.end();
+      });
+    }
+    if (source.SupportsDirectStream) {
+      if (source.Protocol === 'Http') return remoteStaticStreamResult(this.vfs, this.accessPath(item, source.Path, false),
+        { headers: source.RequiredHttpHeaders, serverVersion: this.serverVersion });
+      if (source.Protocol !== 'File') throw httpError(400, `Input protocol ${source.Protocol} cannot be streamed statically`);
+      return vfsStreamResult(this.vfs, this.accessPath(source, source.Path), { contentType: getMimeType(source.Path) });
+    }
+
+    if (!user.Policy.EnableAudioPlaybackTranscoding || !user.Policy.EnablePlaybackRemuxing
+      || source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) {
+      throw httpError(400, 'No compatible audio stream is available.');
+    }
+    const hls = options.TranscodingProtocol === 'hls';
+    const requestedContainer = options.TranscodingContainer?.toLowerCase();
+    const container = hls ? requestedContainer === 'mp4' ? 'mp4' : 'ts' : requestedContainer ?? 'mp3';
+    const stream = {
+      MediaType: 'Audio', MediaSourceId: source.Id, Container: container, SegmentContainer: hls ? container : undefined,
+      AudioCodec: options.AudioCodec ?? 'mp3', AudioSampleRate: options.MaxAudioSampleRate,
+      AudioBitRate: options.AudioBitRate ?? maxBitrate, MaxAudioChannels: options.MaxAudioChannels,
+      AudioChannels: hls ? undefined : options.MaxAudioChannels,
+      TranscodingMaxAudioChannels: options.TranscodingAudioChannels, MaxAudioBitDepth: options.MaxAudioBitDepth,
+      StartTimeTicks: options.StartTimeTicks, CopyTimestamps: !hls,
+      DeviceId: options.DeviceId ?? auth.DeviceId, PlaySessionId: randomUUID().replaceAll('-', ''),
+    };
+    const service = hls ? this.hls : this.remux;
+    if (hls) await this.hls?.initialize();
+    if (!service?.supports(source, stream) || !this.#canResolveSource(source)) {
+      throw httpError(400, 'No compatible audio stream is available.');
+    }
+    if (!hls) return this.#remuxSource(source, stream);
+
+    const query = new URLSearchParams(Object.entries({
+      MediaSourceId: source.Id, ApiKey: auth.Token, DeviceId: stream.DeviceId, PlaySessionId: stream.PlaySessionId,
+      SegmentContainer: container, AudioCodec: 'copy', AudioBitRate: stream.AudioBitRate, AudioSampleRate: stream.AudioSampleRate,
+      MaxAudioChannels: stream.MaxAudioChannels, TranscodingMaxAudioChannels: stream.TranscodingMaxAudioChannels,
+      MaxAudioBitDepth: stream.MaxAudioBitDepth,
+    }).filter(([, value]) => value != null));
+    return this.#hlsPlaylist(source, 'master', { ...stream, QueryString: query.toString() });
   }
 
   async info(itemId, { user, auth, posted = false, remoteEndPoint, request, signal, ...options }) {
@@ -235,6 +336,10 @@ export class PlaybackService {
     const source = options.MediaSourceId ? sources.find(value => value.Id.toLowerCase() === options.MediaSourceId.toLowerCase()) : sources[0];
     if (!source) throw httpError(404, 'Media source not found.');
     if (!this.remux) throw httpError(503, 'Media remuxing has not been configured.');
+    return this.#remuxSource(source, options);
+  }
+
+  #remuxSource(source, options) {
     const accessPath = this.accessPath({ Id: source.Id, Path: source.Path });
     return new BinaryResult(async (request, response) => {
       const controller = new AbortController();
@@ -289,19 +394,24 @@ export class PlaybackService {
           }
         }
         if (kind === 'segment') await this.hls.segment(source, this.accessPath({ Id: source.Id, Path: source.Path }), options, options.SegmentIndex, request, response, { signal: controller.signal });
-        else {
-          const text = kind === 'master' ? masterPlaylist(source, options, options.QueryString) : mainPlaylist(source, options, options.QueryString);
-          const bytes = Buffer.from(kind === 'master' && request.method === 'HEAD' ? '' : text);
-          response.setHeader('Content-Type', 'application/vnd.apple.mpegurl'); response.setHeader('Content-Length', bytes.length);
-          if (kind === 'master') response.setHeader('Expires', '0');
-          response.end(request.method === 'HEAD' ? undefined : bytes);
-        }
+        else await this.#hlsPlaylist(source, kind, options).send(request, response);
       } catch (error) {
         if (response.headersSent || controller.signal.aborted) { response.destroy(); return; }
         error.status ??= ({ 'not-supported': 400, 'invalid-request': 400, 'not-found': 404, 'permission-denied': 403, 'authentication-required': 403, 'version-changed': 412,
           busy: 429, closed: 503, cancelled: 503, unavailable: 503, timeout: 504 })[error.code] ?? 502;
         throw error;
       } finally { request.removeListener('aborted', abort); response.removeListener('close', abort); }
+    });
+  }
+
+  #hlsPlaylist(source, kind, options) {
+    return new BinaryResult(async (request, response) => {
+      const text = kind === 'master' ? masterPlaylist(source, options, options.QueryString) : mainPlaylist(source, options, options.QueryString);
+      const bytes = Buffer.from(kind === 'master' && request.method === 'HEAD' ? '' : text);
+      response.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
+      response.setHeader('Content-Length', bytes.length);
+      if (kind === 'master') response.setHeader('Expires', '0');
+      response.end(request.method === 'HEAD' ? undefined : bytes);
     });
   }
 

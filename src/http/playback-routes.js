@@ -2,6 +2,7 @@ import { HttpResult, BindingError, member, queryValue, booleanValue, integerValu
 import { validatePlaybackBody } from './playback-binding.js';
 import { bindOpenLiveStreamBody, bindOpenLiveStreamQuery, openLiveStreamOptions, bindCloseLiveStreamQuery,
   bindLiveStreamFileContainer } from './live-stream-binding.js';
+import { clrTrim } from '../metadata/whitespace.js';
 
 export function longValue(value, name, fallback) {
   if (value == null || value === '') return fallback;
@@ -56,6 +57,55 @@ export function bindStreaming(context, kind) {
   return options;
 }
 
+function bindUniversalAudioQuery(query) {
+  const errors = {}, options = {};
+  const bind = (name, convert) => {
+    const values = [...query].filter(([key]) => key.toLowerCase() === name.toLowerCase()).map(([, value]) => value);
+    if (!values.length) return;
+    const parameter = name[0].toLowerCase() + name.slice(1);
+    try { options[name] = convert(clrTrim(values[0]), parameter); }
+    catch (error) {
+      if (!(error instanceof BindingError)) throw error;
+      errors[parameter] = [`The value '${values.join(',')}' is ${clrTrim(values[0]) ? 'not valid' : 'invalid'}.`];
+    }
+  };
+  const containers = [...query].filter(([name]) => name.toLowerCase() === 'container').map(([, value]) => value);
+  options.Containers = (containers.length > 1 ? containers : containers[0]?.split(',').filter(Boolean) ?? []).map(clrTrim);
+  for (const name of ['MaxAudioChannels', 'TranscodingAudioChannels', 'MaxStreamingBitrate', 'AudioBitRate', 'MaxAudioSampleRate', 'MaxAudioBitDepth']) bind(name, integerValue);
+  for (const name of ['AudioCodec', 'TranscodingContainer']) {
+    const value = queryValue(query, name);
+    if (value != null && clrTrim(value) !== '') {
+      const parameter = name[0].toLowerCase() + name.slice(1);
+      if (!/^[a-zA-Z0-9._,|\-]{0,40}$/u.test(value)) {
+        errors[parameter] = [`The field ${parameter} must match the regular expression '^[a-zA-Z0-9\\-\\._,|]{0,40}$'.`];
+      } else options[name] = value;
+    }
+  }
+  bind('UserId', guidValue);
+  bind('StartTimeTicks', longValue);
+  bind('EnableRemoteMedia', booleanValue);
+  for (const name of ['EnableRedirection', 'EnableAudioVbrEncoding']) {
+    bind(name, (value, parameter) => {
+      if (!value) throw new BindingError(parameter, 'A boolean value is required.');
+      return booleanValue(value, parameter);
+    });
+  }
+  bind('TranscodingProtocol', (value, parameter) => {
+    if (!value) return undefined;
+    if (/^(http|[+-]?0)$/iu.test(value)) return 'http';
+    if (/^(hls|\+?1)$/iu.test(value)) return 'hls';
+    throw new BindingError(parameter, 'Invalid streaming protocol.');
+  });
+  if (Object.keys(errors).length) {
+    const error = new BindingError('', 'One or more validation errors occurred.');
+    error.errors = errors;
+    throw error;
+  }
+  options.MediaSourceId = queryValue(query, 'mediaSourceId');
+  options.DeviceId = queryValue(query, 'deviceId');
+  return options;
+}
+
 export function registerPlaybackRoutes(add, { playback, users }) {
   if (!playback) return;
   const query = (context, name) => queryValue(context.query, name);
@@ -72,6 +122,11 @@ export function registerPlaybackRoutes(add, { playback, users }) {
     return playback.info(itemId(context), { ...options, auth: context.auth, user: await user(context, options.UserId),
       posted: method === 'POST', remoteEndPoint: context.remoteEndPoint, request: context.request, signal: context.signal });
   }, { body: method === 'POST', optionalBody: true, bindBody: validatePlaybackBody });
+  for (const method of ['GET', 'HEAD']) add(method, '/Audio/{itemId}/universal', async context => {
+    const id = itemId(context), options = context.queryInput;
+    return playback.universalAudio(id, { ...options, auth: context.auth, user: await user(context, options.UserId),
+      remoteEndPoint: context.remoteEndPoint, signal: context.signal });
+  }, { bindQuery: bindUniversalAudioQuery });
   add('POST', '/LiveStreams/Open', async context => {
     const options = openLiveStreamOptions(context);
     return playback.openLiveStream(options, { user: await user(context, options.UserId), auth: context.auth,
