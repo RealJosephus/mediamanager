@@ -5,6 +5,7 @@ import { access, link, mkdir, readFile, readdir, rename, rm, stat, writeFile } f
 import path from 'node:path';
 import { createStatePackage, verifyStatePackage, restoreStatePackage } from '../../src/migration/state-package.js';
 import { discoverInstanceState } from '../../src/migration/instance-state.js';
+import { cloneStoppedInstance } from '../../src/migration/instance-copy.js';
 import { readInstanceConfiguration } from '../../src/configuration.js';
 import { createIsolatedOfflineCopyCaptureSession } from '../../src/migration/capture-session.js';
 import { seedAllTables } from '../database/fixtures.js';
@@ -56,6 +57,59 @@ test('state package captures complete instance roots and unknown assets, then de
 
   await writeFile(path.join(destination, 'files/config/system.xml'), 'tampered');
   await assert.rejects(verifyStatePackage(destination), /checksum/u);
+});
+
+test('Unicode system configuration survives cloning, packaging and restoration', async t => {
+  for (const [encoding, customPaths] of [['utf-16le', false], ['utf-16le', true], ['utf-16be', true]]) {
+    await t.test(`${encoding} with ${customPaths ? 'custom' : 'default'} paths`, async t => {
+      const fixture = await createInstanceFixture(t);
+      const metadata = path.join(fixture.directory, '外部 metadata & state');
+      const cache = path.join(fixture.directory, '外部 cache');
+      if (customPaths) {
+        await mkdir(metadata);
+        await mkdir(cache);
+        await writeFile(path.join(metadata, 'asset.bin'), Buffer.from([0, 255, 2]));
+      }
+      const unknown = '<Extra xmlns="urn:future"><MetadataPath>preserve 中文</MetadataPath></Extra>';
+      const paths = customPaths
+        ? `<MetadataPath >${xml(metadata)}</MetadataPath><CachePath>${xml(cache)}</CachePath>`
+        : '';
+      const content = Buffer.from(`\uFEFF<?xml version="1.0" encoding="utf-16"?><ServerConfiguration>`
+        + `<ServerName>Music 🎧 中文</ServerName>${unknown}${paths}</ServerConfiguration>`, 'utf16le');
+      if (encoding === 'utf-16be') content.swap16();
+      const system = path.join(fixture.root, 'config/system.xml');
+      await writeFile(system, content);
+      const source = await discoverInstanceState({ instanceRoot: fixture.root });
+      assert.equal(source.pathBindings.metadata.configured, customPaths);
+      assert.equal(source.pathBindings.cache.configured, customPaths);
+
+      const clone = path.join(fixture.directory, 'clone $&');
+      await cloneStoppedInstance({ instanceState: source, destination: clone });
+      const packageDirectory = path.join(fixture.directory, 'package');
+      await createStatePackage(await fixture.packageOptions({ destination: packageDirectory }));
+      await verifyStatePackage(packageDirectory);
+      const restored = path.join(fixture.directory, 'restored $1 &');
+      await restoreStatePackage(packageDirectory, restored);
+      for (const destination of [clone, restored]) {
+        const discovered = await discoverInstanceState({ instanceRoot: destination });
+        assert.deepEqual(discovered.pathBindings, source.pathBindings);
+        assert.equal(discovered.identity.serverId, source.identity.serverId);
+        const bytes = await readFile(path.join(destination, 'config/system.xml'));
+        const { configuration } = await readInstanceConfiguration(destination);
+        assert.equal(configuration.ServerName, 'Music 🎧 中文');
+        if (customPaths) {
+          assert.equal(configuration.MetadataPath, path.join(destination, 'metadata-external'));
+          assert.equal(configuration.CachePath, path.join(destination, 'cache-external'));
+          assert.ok(bytes.toString('utf8').includes(unknown));
+          assert.deepEqual(await readFile(path.join(discovered.paths.metadata, 'asset.bin')), Buffer.from([0, 255, 2]));
+        } else {
+          assert.deepEqual(bytes, content);
+        }
+      }
+      assert.deepEqual(await readFile(system), content);
+      assert.deepEqual(await readFile(path.join(packageDirectory, 'files/config/system.xml')), content);
+    });
+  }
 });
 
 test('external metadata and cache restore inside each destination without merging default roots or retaining source paths', async t => {

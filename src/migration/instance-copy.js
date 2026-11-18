@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { copyFile, lstat, mkdir, readFile, readdir, realpath, rename, rm, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { discoverInstanceState, validateInstanceStateSnapshot } from './instance-state.js';
+import { rebaseSystemConfiguration } from './instance-system-configuration.js';
 
 const pathKey = value => process.platform === 'win32' ? path.normalize(value).toLowerCase() : path.normalize(value);
 const pathsOverlap = (left, right) => {
@@ -116,15 +117,6 @@ function clonedBindingPath(destination, roots, binding) {
   return value;
 }
 
-function rewriteConfiguredPath(xml, field, value) {
-  const expression = new RegExp(`<${field}>([\\s\\S]*?)<\\/${field}>`, 'gu');
-  if ([...xml.matchAll(expression)].length !== 1) {
-    throw new Error(`Configured Jellyfin ${field} must have exactly one simple XML element`);
-  }
-  const escaped = value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-  return xml.replace(expression, () => `<${field}>${escaped}</${field}>`);
-}
-
 function assertCloneState(source, cloned, destination, expectedRoots) {
   if (pathKey(cloned.instanceRoot) !== pathKey(destination) || cloned.identity.serverId !== source.identity.serverId) {
     throw new Error('The isolated Jellyfin clone identity does not match its source');
@@ -172,14 +164,15 @@ export async function cloneStoppedInstance(options) {
     for (const [label, sourceRoot] of Object.entries(source.roots)) await copyTree(sourceRoot, temporaryRoots[label]);
 
     const systemPath = path.join(temporaryRoots.config, 'system.xml');
-    let system = await readFile(systemPath, 'utf8'), changed = false;
+    const rebasedPaths = {};
     for (const [name, field] of [['metadata', 'MetadataPath'], ['cache', 'CachePath']]) {
       const binding = source.pathBindings[name];
       if (!binding.configured) continue;
-      system = rewriteConfiguredPath(system, field, clonedBindingPath(destination, finalRoots, binding));
-      changed = true;
+      rebasedPaths[field] = clonedBindingPath(destination, finalRoots, binding);
     }
-    if (changed) await writeFile(systemPath, system, { flag: 'w' });
+    if (Object.keys(rebasedPaths).length) {
+      await writeFile(systemPath, rebaseSystemConfiguration(await readFile(systemPath), rebasedPaths), { flag: 'w' });
+    }
 
     const after = await discoverInstanceState({ instanceRoot: source.instanceRoot });
     if (after.identity.digest !== source.identity.digest) throw new Error('The stopped Jellyfin source state changed while it was copied');

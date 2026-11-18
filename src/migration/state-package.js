@@ -4,7 +4,7 @@ import { mkdir, readdir, lstat, rename, unlink, lutimes, realpath, open, mkdtemp
 import { constants as fsConstants } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { XMLParser, XMLValidator } from 'fast-xml-parser';
+import { parseConfigurationXml } from '../core/configuration-xml.js';
 import { exportCurrentSqlite, databaseDigest, databaseDigestWithProjection, getNativeEnvelope } from './database-transfer.js';
 import { verifyPostgresTransferContract } from '../database/postgres-transfer-contract.js';
 import { SqliteDatabase } from '../database/sqlite.js';
@@ -19,6 +19,7 @@ import { createSqliteExportPathProjector } from './sqlite-export-paths.js';
 import { projectRestoredDatabasePaths } from './state-database-paths.js';
 import { captureLiveTvState, validateLiveTvState } from './live-tv-state.js';
 import { instancePathApi, instancePathKey, instancePathContains } from './instance-paths.js';
+import { rebaseSystemConfiguration } from './instance-system-configuration.js';
 
 const sha256Value = value => createHash('sha256').update(value).digest('hex');
 function preserveFailureFields(error, reason) {
@@ -406,24 +407,27 @@ function validatePackagedStateGeneration(manifest, instanceState) {
   }
 }
 
+async function readVerifiedSystemConfiguration(directory, filename, file, label) {
+  const { buffer } = await readVerifiedRegularFile(directory, filename, controlFileLimits.systemConfiguration,
+    label, { expectedBytes: file.bytes, expectedSha256: file.sha256 });
+  try {
+    const configuration = parseConfigurationXml(buffer, 'server');
+    if (configuration === null) throw new Error('Missing server configuration.');
+    return configuration;
+  }
+  catch (error) { throw new Error(`${label} is invalid XML`, { cause: error }); }
+}
+
 async function validatePackagedPathBindings(directory, instanceState, systemFile) {
   const sourcePath = instancePathApi(instanceState.instanceRoot);
   const filename = path.join(directory, 'files', 'config', 'system.xml');
   if (!systemFile) throw new Error('State package is missing the native system configuration');
-  const xml = (await readVerifiedRegularFile(directory, filename, controlFileLimits.systemConfiguration,
-    'State package native system configuration', { expectedBytes: systemFile.bytes, expectedSha256: systemFile.sha256 })).buffer.toString('utf8');
-  if (XMLValidator.validate(xml) !== true) throw new Error('State package native system configuration is invalid XML');
-  const parsed = new XMLParser({ ignoreAttributes: false, parseTagValue: false, trimValues: false }).parse(xml)?.ServerConfiguration;
-  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('State package native system configuration is invalid');
+  const parsed = await readVerifiedSystemConfiguration(directory, filename, systemFile, 'State package native system configuration');
   for (const [name, field] of [['metadata', 'MetadataPath'], ['cache', 'CachePath']]) {
     const binding = instanceState.pathBindings[name], value = parsed[field];
     const configured = typeof value === 'string' && Boolean(value.trim());
     if (configured !== binding.configured || configured && instancePathKey(value, sourcePath) !== instancePathKey(instanceState.paths[name], sourcePath)) {
       throw new Error(`State package ${field} does not match its discovered path binding`);
-    }
-    if (configured) {
-      const expression = new RegExp(`<${field}>[\\s\\S]*?<\\/${field}>`, 'gu');
-      if ([...xml.matchAll(expression)].length !== 1) throw new Error(`State package configured ${field} is not a single simple XML element`);
     }
   }
 }
@@ -579,14 +583,6 @@ function restoredBindingPath(manifest, destination, name) {
   return path.join(destination, binding.root, ...binding.relativePath.split('/').filter(Boolean));
 }
 
-function rewriteConfiguredPath(xml, tag, value) {
-  const expression = new RegExp(`<${tag}>([\\s\\S]*?)<\\/${tag}>`, 'gu');
-  const matches = [...xml.matchAll(expression)];
-  if (matches.length !== 1) throw new Error(`Configured Jellyfin ${tag} must have exactly one simple XML element`);
-  const escaped = value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-  return xml.replace(expression, () => `<${tag}>${escaped}</${tag}>`);
-}
-
 function restorePreparationBinding(manifest, manifestSha256, destination) {
   return { kind: 'state-package-database-preparation', generation: manifest.generation, manifestSha256, destination,
     sourceSha256: manifest.database.sha256,
@@ -735,17 +731,17 @@ async function createRestorePlan(packageDirectory, manifest, manifestSha256, des
   ];
   const system = files.find(file => file.path === 'config/system.xml');
   if (!system) throw new Error('State package is missing the native system configuration');
-  if (manifest.instanceState.pathBindings.metadata.configured || manifest.instanceState.pathBindings.cache.configured) {
-    let xml = (await readVerifiedRegularFile(packageDirectory, path.join(packageDirectory, ...system.source),
+  const rebasedPaths = {};
+  for (const [name, field] of [['metadata', 'MetadataPath'], ['cache', 'CachePath']]) {
+    if (manifest.instanceState.pathBindings[name].configured) {
+      rebasedPaths[field] = restoredBindingPath(manifest, destination, name);
+    }
+  }
+  if (Object.keys(rebasedPaths).length) {
+    const { buffer } = await readVerifiedRegularFile(packageDirectory, path.join(packageDirectory, ...system.source),
       controlFileLimits.systemConfiguration, 'State package native system configuration',
-      { expectedBytes: system.bytes, expectedSha256: system.sha256 })).buffer.toString('utf8');
-    if (manifest.instanceState.pathBindings.metadata.configured) {
-      xml = rewriteConfiguredPath(xml, 'MetadataPath', restoredBindingPath(manifest, destination, 'metadata'));
-    }
-    if (manifest.instanceState.pathBindings.cache.configured) {
-      xml = rewriteConfiguredPath(xml, 'CachePath', restoredBindingPath(manifest, destination, 'cache'));
-    }
-    system.content = Buffer.from(xml, 'utf8');
+      { expectedBytes: system.bytes, expectedSha256: system.sha256 });
+    system.content = rebaseSystemConfiguration(buffer, rebasedPaths);
     system.bytes = system.content.length;
     system.sha256 = sha256Value(system.content);
   }
@@ -819,15 +815,8 @@ async function validateRestoredPathConfiguration(directory, manifest, destinatio
   const systemFile = plan.files.find(file => file.path === 'config/system.xml');
   const identityFile = plan.files.find(file => file.path === 'data/data/device.txt');
   if (!systemFile || !identityFile) throw new Error('Restored Jellyfin identity controls are incomplete');
-  const systemXml = (await readVerifiedRegularFile(directory, path.join(directory, 'config', 'system.xml'),
-    controlFileLimits.systemConfiguration, 'Restored Jellyfin system configuration',
-    { expectedBytes: systemFile.bytes, expectedSha256: systemFile.sha256 })).buffer.toString('utf8');
-  if (XMLValidator.validate(systemXml) !== true) throw new Error('Restored Jellyfin system configuration is invalid XML');
-  const parsed = new XMLParser({ ignoreAttributes: false, parseTagValue: false, trimValues: false }).parse(systemXml)?.ServerConfiguration;
-  const configuration = parsed === '' ? {} : parsed;
-  if (!configuration || typeof configuration !== 'object' || Array.isArray(configuration)) {
-    throw new Error('Restored Jellyfin system configuration is invalid');
-  }
+  const configuration = await readVerifiedSystemConfiguration(directory, path.join(directory, 'config', 'system.xml'),
+    systemFile, 'Restored Jellyfin system configuration');
   const serverId = decodeServerIdentity((await readVerifiedRegularFile(directory, path.join(directory, 'data', 'data', 'device.txt'), 1024,
     'Restored Jellyfin server identity', { expectedBytes: identityFile.bytes, expectedSha256: identityFile.sha256 })).buffer);
   if (serverId !== manifest.instanceState.identity.serverId) throw new Error('Restored Jellyfin server identity differs from the package');
