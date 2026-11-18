@@ -5,6 +5,7 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { availableParallelism } from 'node:os';
 import { EventEmitter } from 'node:events';
 import { getNewItemId } from '../core/identity.js';
+import { withCleanup } from '../core/operation-failure.js';
 import { loadLibrary, mapRecord, dtoId, idKey, sameId, nonemptyId, guid, cleanValue, dateText, dateTicks, libraryError, unsupported, repositoryCleanName, repositoryTopParentId, repositoryValue, repositoryIdPresent, NAME_TYPES, VIDEO_TYPES, MIN_DATE, EMPTY_ID } from './records.js';
 import { visibleItem, visibleLibrary } from './permissions.js';
 import { parentChainForItem, userRootItem } from './collection-membership.js';
@@ -46,7 +47,7 @@ import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { createPresentationUniqueKey } from './presentation-key.js';
 import { SimilarItemsManager } from './similar-items.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
-import { buildPostgresItemPageQuery, queryPostgresDtoChildCounts, queryPostgresItemPage } from '../database/postgres-item-query.js';
+import { buildPostgresItemPageQuery, queryPostgresDtoChildCounts, queryPostgresItemPage, visitPostgresItemPages } from '../database/postgres-item-query.js';
 import { queryPostgresLibraryStatement } from '../database/postgres.js';
 import { loadPostgresItemGraph, loadPostgresNavigationRows, loadPostgresPageGraph, loadPostgresRowsByIds, queryPostgresFolderStats,
   countPostgresNullVideoTypeRows, queryPostgresAlbumSelectorIds, queryPostgresArtistSelectorId,
@@ -2857,35 +2858,35 @@ export class LibraryService extends EventEmitter {
       return await project(db, buildPostgresItemPageQuery(db, pageQuery, { ...postgresQueryOptions, includeOrdinal: true }),
         owner ? { withSlot: (slot, operation) => owner.withSlot(slot, operation) } : undefined);
     }
-    const page = await queryPostgresItemPage(db, pageQuery, postgresQueryOptions);
-    const graphRows = await loadPostgresPageGraph(db, page.rows, navigationRows);
-    const state = await this.load(db, user, { baseRows: graphRows });
-    const items = [];
-    if (folderLinks) {
-      for (const selected of page.slots) {
-        if (selected.slot) await (folderCollections ?? folderLinks).withSlot(selected.slot,
-          item => items.push(this.adoptLiveItem(state, item)));
-        else { const item = state.byId.get(idKey(selected.id)); if (item) items.push(item); }
-      }
-    } else items.push(...page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean));
-    const start = page.startIndex;
-    state.folderStats = await queryPostgresFolderStats(db,
-      items.filter(item => item.IsFolder).map(item => item.Id), user?.Id);
-    if (!project) return { Items: items, TotalRecordCount: page.total, StartIndex: start };
-    const options = dtoOptions(query);
-    if (user?.Policy.AllowedTags?.length) options.fields.add('tags');
-    const projectionItems = searchScores && user
-      ? await this.#filterPostgresStandalonePage(db, items, user, state, { skipRelatedNameCheck: true })
-      : items;
-    await this.#prefetchPostgresDtos(projectionItems, state, user, options);
-    const dtos = [];
-    for (const item of projectionItems) {
-      dtos.push(await projectItem(item, state, user, options, this.options));
-    }
-    const totalRecordCount = searchScores ? page.total : dispatch.pageResult ? dtos.length
+    const options = project ? dtoOptions(query) : null;
+    if (options && user?.Policy.AllowedTags?.length) options.fields.add('tags');
+    const Items = [];
+    const { total, startIndex } = await visitPostgresItemPages(db, pageQuery, postgresQueryOptions, async page => {
+      const graphRows = await loadPostgresPageGraph(db, page.rows, navigationRows);
+      const state = await this.load(db, user, { baseRows: graphRows });
+      await withCleanup(async () => {
+        const items = [];
+        if (folderLinks) {
+          for (const selected of page.slots) {
+            if (selected.slot) await (folderCollections ?? folderLinks).withSlot(selected.slot,
+              item => items.push(this.adoptLiveItem(state, item)));
+            else { const item = state.byId.get(idKey(selected.id)); if (item) items.push(item); }
+          }
+        } else items.push(...page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean));
+        state.folderStats = await queryPostgresFolderStats(db,
+          items.filter(item => item.IsFolder).map(item => item.Id), user?.Id);
+        if (!options) { Items.push(...items); return; }
+        const projectionItems = searchScores && user
+          ? await this.#filterPostgresStandalonePage(db, items, user, state, { skipRelatedNameCheck: true })
+          : items;
+        await this.#prefetchPostgresDtos(projectionItems, state, user, options);
+        for (const item of projectionItems) Items.push(await projectItem(item, state, user, options, this.options));
+      }, [() => state.dispose({ session: db })], 'Item query page cleanup failed.');
+    });
+    const totalRecordCount = !project || searchScores ? total : dispatch.pageResult ? Items.length
       : query.enabletotalrecordcount === false && dispatch.postFilter ? 0
-        : repositoryQuery && query.enabletotalrecordcount === false ? dtos.length : page.total;
-    return { Items: dtos, TotalRecordCount: totalRecordCount, StartIndex: start };
+        : repositoryQuery && query.enabletotalrecordcount === false ? Items.length : total;
+    return { Items, TotalRecordCount: totalRecordCount, StartIndex: startIndex };
     } catch (error) { primaryError = error; primaryFailed = true; throw error; }
     finally {
       const failures = [];

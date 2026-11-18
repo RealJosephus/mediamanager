@@ -22,6 +22,52 @@ const snapshot = async db => Object.fromEntries(await Promise.all(tableNames.map
 const user = { Id: id(99), Policy: { EnableAllFolders: true, EnabledFolders: [], BlockedMediaFolders: [], BlockedTags: [],
   AllowedTags: [], MaxParentalRating: null, MaxParentalSubRating: null, BlockUnratedItems: [], EnableContentDeletion: false },
 Configuration: { GroupedFolders: [], DisplayMissingEpisodes: false } };
+
+test('recursive Items keeps its SQL order, visibility and count across hydration pages', {
+  skip: !enabled, timeout: 90000,
+}, t => owned(t, async f => {
+  const movies = Array.from({ length: 260 }, (_, index) => ({
+    key: 'movie-' + index, type: 'Movie', Id: id(100 + index), parent: 'physical-a',
+    ancestors: ['aggregate', 'physical-a'], TopParentId: id(3), MediaType: 'Video',
+    PresentationUniqueKey: 'recursive-movie-' + index,
+    Name: 'Movie ' + String(index).padStart(3, '0'), SortName: String(index).padStart(3, '0'),
+    Tags: [2, 128, 259].includes(index) ? ['blocked'] : [],
+  }));
+  await f.seed({ target: 'collection', items: [...roots().map(({ links, ...item }) => item), ...movies] });
+  const viewer = { ...user, Policy: { ...user.Policy, BlockedTags: ['blocked'] } };
+  const request = extra => input({ recursive: true, ...extra });
+  const expected = movies.filter(item => !item.Tags.length).map(item => idKey(item.Id));
+  const output = path.join(validationOutputRoot(), 'recursive-item-pages-' + randomUUID());
+  await mkdir(output);
+  await f.store.run(async db => {
+    const hydration = [], cursors = async () => (await db.client.query('SELECT name FROM pg_cursors ORDER BY name')).rows;
+    const before = await cursors();
+    const rows = db.rows;
+    db.rows = async function(table, options) {
+      const result = await rows.call(this, table, options);
+      if (table === 'BaseItems' && options?.whereIn?.Id) {
+        assert.ok(options.whereIn.Id.length <= 128);
+        assert.ok(result.length <= 128);
+        hydration.push(result.length);
+      }
+      return result;
+    };
+    try {
+      const complete = await f.library.queryItems(request(), { user: viewer });
+      assert.deepEqual(complete.Items.map(item => item.Id), expected);
+      assert.equal(complete.TotalRecordCount, expected.length);
+      assert.equal(complete.StartIndex, 0);
+      assert.ok(hydration.includes(128));
+      const paginated = await f.library.queryItems(request({ startIndex: 126, limit: 130 }), { user: viewer });
+      assert.deepEqual(paginated, { Items: complete.Items.slice(126, 256), StartIndex: 126, TotalRecordCount: expected.length });
+      const empty = await f.library.queryItems(request({ startIndex: expected.length + 1, limit: 10 }), { user: viewer });
+      assert.deepEqual(empty, { Items: [], TotalRecordCount: expected.length, StartIndex: expected.length + 1 });
+      assert.deepEqual(await cursors(), before);
+      await writeFile(path.join(output, 'responses.json'), json({ complete, paginated, empty, hydration,
+        openCursorsAfterRequests: await cursors() }));
+    } finally { db.rows = rows; }
+  });
+}));
 const roots = () => [
   { key: 'aggregate', type: 'AggregateFolder', Id: id(1), Path: 'Z:\\ChildSelection', IsRoot: true },
   { key: 'user-root', type: 'UserRootFolder', Id: id(2), Path: 'Z:\\ChildSelection\\root', IsRoot: true },
