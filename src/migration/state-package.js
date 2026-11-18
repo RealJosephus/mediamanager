@@ -10,7 +10,8 @@ import { verifyPostgresTransferContract } from '../database/postgres-transfer-co
 import { SqliteDatabase } from '../database/sqlite.js';
 import { captureRemoteAssets, inspectRemoteAssets, verifyRemoteGeneration, restoreRemoteAssets, validateRemoteAssetManifest } from './remote-assets.js';
 import { validateMediaAccessPlan } from './media-access.js';
-import { calculateStateGeneration, validateInstanceStateSnapshot, validateWriteBarrier, validateWriteBarrierSnapshot } from './instance-state.js';
+import { calculateStateGeneration, isStateFileMode, stateFileMode,
+  validateInstanceStateSnapshot, validateWriteBarrier, validateWriteBarrierSnapshot } from './instance-state.js';
 import { assertCaptureSessionHeld } from './capture-session.js';
 import { acquireOperationLease } from './operation-lease.js';
 import { assertPortableMountRetarget, canonicalPortableMountContract,
@@ -20,6 +21,7 @@ import { projectRestoredDatabasePaths } from './state-database-paths.js';
 import { captureLiveTvState, validateLiveTvState } from './live-tv-state.js';
 import { instancePathApi, instancePathKey, instancePathContains } from './instance-paths.js';
 import { rebaseSystemConfiguration } from './instance-system-configuration.js';
+import { assertExactStateEntry } from './state-path-name.js';
 
 const sha256Value = value => createHash('sha256').update(value).digest('hex');
 function preserveFailureFields(error, reason) {
@@ -185,6 +187,7 @@ async function inspectOptionalTarget(filename, label) {
   try {
     const metadata = await lstat(filename);
     if (!metadata.isFile() || metadata.isSymbolicLink()) throw new Error(`${label} target is not a regular file`);
+    await assertExactStateEntry(filename, label);
     return metadata;
   } catch (error) {
     if (error.code === 'ENOENT') return undefined;
@@ -192,7 +195,7 @@ async function inspectOptionalTarget(filename, label) {
   }
 }
 
-async function atomicInstall(root, filename, label, writer, { accessedAt, modifiedAt } = {}) {
+async function atomicInstall(root, filename, label, writer, { accessedAt, modifiedAt, mode } = {}) {
   root = path.resolve(root); filename = path.resolve(filename);
   if (!inside(root, filename) || filename === root) throw new Error(`${label} target escapes its trusted root`);
   const parent = path.dirname(filename);
@@ -203,6 +206,7 @@ async function atomicInstall(root, filename, label, writer, { accessedAt, modifi
     handle = await open(temporary, createExclusiveNoFollowFlags, 0o600);
     await writer(handle);
     if (modifiedAt) await handle.utimes(accessedAt ?? modifiedAt, modifiedAt);
+    if (mode != null && process.platform !== 'win32') await handle.chmod(mode);
     await handle.sync();
     await handle.close(); handle = undefined;
     await assertPhysicalDirectory(root, parent, label);
@@ -221,7 +225,7 @@ async function atomicWriteBuffer(root, filename, buffer, label, options) {
 }
 
 async function atomicCopyVerified(sourceRoot, sourceFilename, destinationRoot, destinationFilename, label,
-  { expectedBytes, expectedSha256, accessedAt, modifiedAt } = {}) {
+  { expectedBytes, expectedSha256, accessedAt, modifiedAt, mode } = {}) {
   const source = await openRegularForRead(sourceRoot, sourceFilename, `${label} source`);
   try {
     if (expectedBytes != null && source.metadata.size !== BigInt(expectedBytes)) throw new Error(`${label} source checksum mismatch`);
@@ -234,7 +238,7 @@ async function atomicCopyVerified(sourceRoot, sourceFilename, destinationRoot, d
       if (expectedBytes != null && copied.bytes !== expectedBytes || expectedSha256 != null && copied.sha256 !== expectedSha256) {
         throw new Error(`${label} source checksum mismatch`);
       }
-    }, { accessedAt, modifiedAt });
+    }, { accessedAt, modifiedAt, mode });
     return copied;
   } finally { await source.handle.close(); }
 }
@@ -245,7 +249,10 @@ async function ensurePhysicalDirectory(root, directory, label) {
   if (directory === root) return assertPhysicalDirectory(root, root, label);
   await assertPhysicalDirectory(root, path.dirname(directory), label);
   try { await mkdir(directory, { recursive: false }); }
-  catch (error) { if (error.code !== 'EEXIST') throw error; }
+  catch (error) {
+    if (error.code !== 'EEXIST') throw error;
+    await assertExactStateEntry(directory, label);
+  }
   return assertPhysicalDirectory(root, directory, label);
 }
 
@@ -300,11 +307,9 @@ function validateAssetRestorePaths(assetPaths) {
 function validateDatabaseRestorePath(value, assetPaths = []) {
   if (!safeRelative(value)) throw new Error('Invalid database restore path');
   const key = value.toLowerCase();
-  for (const entry of [...reservedStatePaths, ...assetPaths]) {
-    const other = entry.toLowerCase();
-    if (pathsCollide(key, other))
-      throw new Error(`Database restore path collides with state path: ${entry}`);
-  }
+  const conflict = reservedStatePaths.find(entry => pathsCollide(key, entry.toLowerCase()))
+    ?? assetPaths.find(entry => pathsCollide(value, entry));
+  if (conflict) throw new Error(`Database restore path collides with state path: ${conflict}`);
 }
 function relativeParents(value) {
   const parts = value.split('/'), result = [];
@@ -315,43 +320,43 @@ function validateFileManifest(files, { remote }) {
   if (!Array.isArray(files)) throw new Error('State package file manifest is required');
   const seen = new Set();
   for (const file of files) {
-    const expectedKeys = remote ? 'bytes,modifiedAt,path,remote,sha256' : 'bytes,modifiedAt,path,sha256';
+    const expectedKeys = remote ? 'bytes,modifiedAt,path,remote,sha256' : 'bytes,mode,modifiedAt,path,sha256';
     if (!file || typeof file !== 'object' || Array.isArray(file) || Object.keys(file).sort().join(',') !== expectedKeys
       || !safeRelative(file.path) || !Number.isSafeInteger(file.bytes) || file.bytes < 0
+      || (!remote && !isStateFileMode(file.mode))
       || typeof file.sha256 !== 'string' || !/^[a-f0-9]{64}$/u.test(file.sha256)
       || (file.modifiedAt != null && (typeof file.modifiedAt !== 'string' || Number.isNaN(Date.parse(file.modifiedAt))
         || new Date(file.modifiedAt).toISOString() !== file.modifiedAt))) throw new Error('Invalid state package file declaration');
-    const key = file.path.toLowerCase();
+    const key = file.path;
     if (seen.has(key)) throw new Error('Duplicate state package file path');
     seen.add(key);
   }
 }
 function validateDirectoryManifest(directories, files, databaseRestorePath) {
   if (!Array.isArray(directories)) throw new Error('State package directory manifest is required');
-  const seen = new Set(), filePaths = new Set(files.map(file => file.path.toLowerCase()));
+  const seen = new Set(), filePaths = new Set(files.map(file => file.path));
   for (const directory of directories) {
     if (!directory || typeof directory !== 'object' || Array.isArray(directory)
       || Object.keys(directory).sort().join(',') !== 'modifiedAt,path'
-      || !safeRelative(directory.path) || filePaths.has(directory.path.toLowerCase())
+      || !safeRelative(directory.path) || filePaths.has(directory.path)
       || (directory.modifiedAt != null && (typeof directory.modifiedAt !== 'string'
         || Number.isNaN(Date.parse(directory.modifiedAt)) || new Date(directory.modifiedAt).toISOString() !== directory.modifiedAt))) {
       throw new Error('Invalid state package directory declaration');
     }
-    const key = directory.path.toLowerCase();
-    const databaseKey = databaseRestorePath.toLowerCase();
-    if (key === databaseKey || key.startsWith(`${databaseKey}/`)) throw new Error('State package directory collides with database restore path');
+    const key = directory.path;
+    if (key === databaseRestorePath || key.startsWith(`${databaseRestorePath}/`)) throw new Error('State package directory collides with database restore path');
     if (seen.has(key)) throw new Error('Duplicate state package directory path');
     seen.add(key);
   }
   validateAssetRestorePaths(directories.map(directory => directory.path));
   for (const file of files.filter(file => !file.remote)) for (const parent of relativeParents(file.path)) {
-    if (!seen.has(parent.toLowerCase())) throw new Error(`State package file parent directory is missing: ${parent}`);
+    if (!seen.has(parent)) throw new Error(`State package file parent directory is missing: ${parent}`);
   }
   for (const directory of directories) for (const parent of relativeParents(directory.path)) {
-    if (!seen.has(parent.toLowerCase())) throw new Error(`State package parent directory is missing: ${parent}`);
+    if (!seen.has(parent)) throw new Error(`State package parent directory is missing: ${parent}`);
   }
   for (const parent of relativeParents(databaseRestorePath)) {
-    if (!seen.has(parent.toLowerCase())) throw new Error(`Database restore parent directory is missing: ${parent}`);
+    if (!seen.has(parent)) throw new Error(`Database restore parent directory is missing: ${parent}`);
   }
   return seen;
 }
@@ -394,13 +399,13 @@ function validatePackagedStateGeneration(manifest, instanceState) {
     ...manifest.directories.map(directory => ({ ...stateRecordPath(directory.path, rootLabels), kind: 'directory',
       modifiedAt: directory.modifiedAt })),
     ...manifest.instanceFiles.map(file => ({ ...stateRecordPath(file.path, rootLabels), kind: 'file',
-      bytes: file.bytes.toString(), modifiedAt: file.modifiedAt, sha256: file.sha256 })),
+      bytes: file.bytes.toString(), mode: file.mode, modifiedAt: file.modifiedAt, sha256: file.sha256 })),
   ];
   const { label: databaseLabel, relative: databaseRelative } = sourceDatabaseLocation(instanceState);
   const suffix = { sqlite: '', wal: '-wal', shm: '-shm' };
   for (const file of instanceState.identity.databaseGeneration.files) records.push({ label: databaseLabel,
     path: `${databaseRelative}${suffix[file.role]}`, kind: 'file', bytes: file.bytes,
-    modifiedAt: file.modifiedAt, sha256: file.sha256 });
+    mode: file.mode, modifiedAt: file.modifiedAt, sha256: file.sha256 });
   const actual = calculateStateGeneration(rootLabels, records);
   if (JSON.stringify(actual) !== JSON.stringify(instanceState.identity.stateGeneration)) {
     throw new Error(`State package files do not reconstruct the discovered complete state generation: ${JSON.stringify(actual)} != ${JSON.stringify(instanceState.identity.stateGeneration)}`);
@@ -726,7 +731,7 @@ async function createRestorePlan(packageDirectory, manifest, manifestSha256, des
     throw new Error('State package database restore path differs from the discovered native database path');
   }
   const files = [
-    ...manifest.instanceFiles.map(file => ({ path: file.path, bytes: file.bytes, sha256: file.sha256, modifiedAt: file.modifiedAt,
+    ...manifest.instanceFiles.map(file => ({ path: file.path, bytes: file.bytes, sha256: file.sha256, modifiedAt: file.modifiedAt, mode: file.mode,
       source: ['files', ...file.path.split('/')] })),
   ];
   const system = files.find(file => file.path === 'config/system.xml');
@@ -789,23 +794,23 @@ function validateRestoredState(value, manifest, destination, expectedStage, mani
 
 async function assertRestoreInventory(directory, allowedPaths, allowedDirectories, { atomicTargets = [] } = {}) {
   let inventory = await inventoryUnder(directory);
-  const cleanupTargets = new Set(atomicTargets.map(value => value.toLowerCase()));
+  const cleanupTargets = new Set(atomicTargets);
   const stale = inventory.files.filter(relative => {
     const target = atomicTemporaryTarget(relative);
-    return target && cleanupTargets.has(target.toLowerCase());
+    return target && cleanupTargets.has(target);
   });
   for (const relative of stale) await removeStaleRegularFile(directory, relative.split(path.sep).join('/'),
     `Restore temporary entry ${relative.split(path.sep).join('/')}`);
   if (stale.length) inventory = await inventoryUnder(directory);
   const actual = inventory.files;
-  const allowed = new Set(allowedPaths.map(value => value.toLowerCase()));
+  const allowed = new Set(allowedPaths);
   for (const relative of actual) {
     const normalized = relative.split(path.sep).join('/');
-    if (!allowed.has(normalized.toLowerCase())) throw new Error(`Unexpected file in restore staging directory: ${normalized}`);
+    if (!allowed.has(normalized)) throw new Error(`Unexpected file in restore staging directory: ${normalized}`);
   }
   const directories = inventory.directories.map(value => value.split(path.sep).join('/'));
-  const allowedDirectorySet = new Set(allowedDirectories.map(value => value.toLowerCase()));
-  for (const relative of directories) if (!allowedDirectorySet.has(relative.toLowerCase())) {
+  const allowedDirectorySet = new Set(allowedDirectories);
+  for (const relative of directories) if (!allowedDirectorySet.has(relative)) {
     throw new Error(`Unexpected directory in restore staging directory: ${relative}`);
   }
   return { files: actual.map(value => value.split(path.sep).join('/')), directories };
@@ -831,6 +836,10 @@ async function validateRestoredPathConfiguration(directory, manifest, destinatio
   }
 }
 
+function restoredFileModeMatches(file, metadata) {
+  return file.mode == null || process.platform === 'win32' || file.mode === stateFileMode(metadata);
+}
+
 async function verifyRestoredTree(directory, manifest, destination, expectedStage, manifestSha256, plan,
   { requireCompleteInventory = true } = {}) {
   const state = await readOptionalJson(directory, restoredStatePath, controlFileLimits.restoredState, 'Restored state marker');
@@ -841,14 +850,15 @@ async function verifyRestoredTree(directory, manifest, destination, expectedStag
   const actual = await assertRestoreInventory(directory, allowed, allowedDirectories);
   for (const file of expected) {
     const filename = path.join(directory, ...file.path.split('/'));
-    await inspectRegularFile(directory, filename, `Restored asset ${file.path}`,
+    const inspected = await inspectRegularFile(directory, filename, `Restored asset ${file.path}`,
       { expectedBytes: file.bytes, expectedSha256: file.sha256 });
+    if (!restoredFileModeMatches(file, inspected.metadata)) throw new Error(`Restored asset permissions differ: ${file.path}`);
   }
   if (requireCompleteInventory) {
-    const expectedPaths = new Set([...expected.map(file => file.path), restoredStatePath].map(value => value.toLowerCase()));
-    const expectedDirectories = new Set(allowedDirectories.map(value => value.toLowerCase()));
-    if (actual.files.length !== expectedPaths.size || actual.files.some(value => !expectedPaths.has(value.toLowerCase()))
-      || actual.directories.length !== expectedDirectories.size || actual.directories.some(value => !expectedDirectories.has(value.toLowerCase()))) {
+    const expectedPaths = new Set([...expected.map(file => file.path), restoredStatePath]);
+    const expectedDirectories = new Set(allowedDirectories);
+    if (actual.files.length !== expectedPaths.size || actual.files.some(value => !expectedPaths.has(value))
+      || actual.directories.length !== expectedDirectories.size || actual.directories.some(value => !expectedDirectories.has(value))) {
       throw new Error('Restored state inventory is incomplete');
     }
   }
@@ -1261,6 +1271,7 @@ async function createStatePackageOwned(options, lease) {
         const metadata = inspected.metadata;
         if (metadata.size > BigInt(Number.MAX_SAFE_INTEGER)) throw new Error(`State file is too large to package safely: ${destinationRelative}`);
         manifest.instanceFiles.push({ path: destinationRelative, bytes: Number(metadata.size), sha256: inspected.sha256,
+          mode: stateFileMode(metadata),
           modifiedAt: dateFromNanoseconds(metadata.mtimeNs).toISOString() });
         fileInventory.push({ sourceRoot: resolved, original, path: destinationRelative, hash: inspected.sha256, bytes: Number(metadata.size),
           atime: dateFromNanoseconds(metadata.atimeNs), mtime: dateFromNanoseconds(metadata.mtimeNs) });
@@ -1289,6 +1300,7 @@ async function createStatePackageOwned(options, lease) {
       catch (error) { if (error.code !== 'ENOENT') throw error; }
       if (outputMetadata) {
         if (!outputMetadata.isFile() || outputMetadata.isSymbolicLink()) throw new Error(`State package capture target is not a regular file: ${file.path}`);
+        await assertExactStateEntry(output, `State package capture asset ${file.path}`);
         try {
           await inspectRegularFile(capturedFilesRoot, output, `State package capture target ${file.path}`,
             { expectedBytes: file.bytes, expectedSha256: file.hash });
@@ -1307,7 +1319,7 @@ async function createStatePackageOwned(options, lease) {
     manifest.remoteAssets = remotePlan ? await captureRemoteAssets({ plan: remotePlan, destination: staging, signal }) : [];
     validateMediaAccessStateAssets(mediaAccess, manifest.remoteAssets);
     const allFiles = [...manifest.instanceFiles, ...manifest.remoteAssets];
-    if (new Set(allFiles.map(file => file.path.toLowerCase())).size !== allFiles.length) throw new Error('State files collide under destination path comparison');
+    if (new Set(allFiles.map(file => file.path)).size !== allFiles.length) throw new Error('Duplicate state package file path');
     validateFileManifest(manifest.instanceFiles, { remote: false });
     validateFileManifest(manifest.remoteAssets, { remote: true });
     const assetPaths = manifest.instanceFiles.map(file => file.path);
@@ -1456,24 +1468,25 @@ async function verifyStatePackageDetailed(directory) {
   const actualFiles = actual.files.map(value => value.split(path.sep).join('/'));
   const actualDirectories = actual.directories.map(value => value.split(path.sep).join('/'));
   const allFiles = [...manifest.instanceFiles, ...manifest.remoteAssets];
-  if (actualFiles.length !== allFiles.length) throw new Error('Unlisted files in state package');
-  const expectedDirectories = new Set(manifest.directories.map(entry => entry.path.toLowerCase()));
-  for (const file of allFiles) for (const parent of relativeParents(file.path)) expectedDirectories.add(parent.toLowerCase());
-  if (actualDirectories.length !== expectedDirectories.size || actualDirectories.some(value => !expectedDirectories.has(value.toLowerCase()))) {
+  const expectedPaths = new Set(allFiles.map(file => file.path));
+  if (expectedPaths.size !== allFiles.length) throw new Error('Duplicate state package file path');
+  if (actualFiles.length !== expectedPaths.size || actualFiles.some(value => !expectedPaths.has(value))) {
+    throw new Error('Unlisted files in state package');
+  }
+  const expectedDirectories = new Set(manifest.directories.map(entry => entry.path));
+  for (const file of allFiles) for (const parent of relativeParents(file.path)) expectedDirectories.add(parent);
+  if (actualDirectories.length !== expectedDirectories.size || actualDirectories.some(value => !expectedDirectories.has(value))) {
     throw new Error('Unlisted directories in state package');
   }
-  const seen = new Set();
   for (const file of allFiles) {
-    if (!safeRelative(file.path) || seen.has(file.path.toLowerCase())) throw new Error('Invalid or duplicate package path');
-    seen.add(file.path.toLowerCase());
     const filename = path.join(directory, 'files', file.path);
     await inspectRegularFile(directory, filename, `State asset ${file.path}`,
       { expectedBytes: file.bytes, expectedSha256: file.sha256 });
   }
   await validatePackagedPathBindings(directory, instanceState,
     manifest.instanceFiles.find(file => file.path === 'config/system.xml'));
-  validateAssetRestorePaths([...seen]);
-  validateDatabaseRestorePath(manifest.database.restorePath, [...seen]);
+  validateAssetRestorePaths(expectedPaths);
+  validateDatabaseRestorePath(manifest.database.restorePath, [...expectedPaths]);
   validateMediaAccessStateAssets(manifest.mediaAccess, manifest.remoteAssets);
   if (captureRequestDigest({ sourceSha256, baseline: manifest.baseline,
     extensionState: manifest.extensionState, mediaAccess: manifest.mediaAccess,
@@ -1608,21 +1621,23 @@ async function restorePreparedStatePackage({ directory, manifest, manifestSha256
     catch (error) { if (error.code !== 'ENOENT') throw error; }
     if (metadata) {
       if (!metadata.isFile() || metadata.isSymbolicLink()) throw new Error(`Restore target is not a regular file: ${file.path}`);
+      await assertExactStateEntry(filename, `Restore asset ${file.path}`);
       try {
-        await inspectRegularFile(staging, filename, `Restore target ${file.path}`,
+        const inspected = await inspectRegularFile(staging, filename, `Restore target ${file.path}`,
           { expectedBytes: file.bytes, expectedSha256: file.sha256 });
-        reused = true;
+        reused = restoredFileModeMatches(file, inspected.metadata);
       } catch (error) {
         if (!/checksum mismatch/u.test(error.message)) throw error;
       }
     }
     if (!reused) {
       const modifiedAt = file.modifiedAt ? new Date(file.modifiedAt) : undefined;
-      if (file.content) await atomicWriteBuffer(staging, filename, file.content, `Restore asset ${file.path}`, { modifiedAt });
+      if (file.content) await atomicWriteBuffer(staging, filename, file.content, `Restore asset ${file.path}`, { modifiedAt, mode: file.mode });
       else await atomicCopyVerified(file.sourceRoot ?? directory, path.join(file.sourceRoot ?? directory, ...file.source), staging, filename,
-        `Restore asset ${file.path}`, { expectedBytes: file.bytes, expectedSha256: file.sha256, modifiedAt });
-      await inspectRegularFile(staging, filename, `Restored asset ${file.path}`,
+        `Restore asset ${file.path}`, { expectedBytes: file.bytes, expectedSha256: file.sha256, modifiedAt, mode: file.mode });
+      const inspected = await inspectRegularFile(staging, filename, `Restored asset ${file.path}`,
         { expectedBytes: file.bytes, expectedSha256: file.sha256 });
+      if (!restoredFileModeMatches(file, inspected.metadata)) throw new Error(`Restored asset permissions differ: ${file.path}`);
     } else reusedFiles++;
     if (file.path === manifest.database.restorePath) await plan.dispose();
     completed++;

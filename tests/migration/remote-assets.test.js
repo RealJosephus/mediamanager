@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { writeFile, readFile, access } from 'node:fs/promises';
+import { writeFile, readFile, readdir, access, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { tableDefinition } from '../../src/database/model.js';
@@ -109,6 +109,44 @@ test('remote capture rejects duplicate canonical virtual paths and asset IDs', a
     await assert.rejects(create(), pattern);
     await assert.rejects(access(path.join(destination, 'COMMITTED')));
   });
+});
+
+test('remote package paths keep case-sensitive names and cannot alias identical staged content', async t => {
+  const { source, target, create, destination, options, vfs } = await fixture(t);
+  const parent = path.dirname(destination), probe = path.join(parent, 'Name.probe');
+  await writeFile(probe, 'case probe', { flag: 'wx' });
+  let caseFolds = false;
+  try {
+    await access(path.join(parent, 'name.probe'));
+    caseFolds = true;
+  } catch (error) { if (error.code !== 'ENOENT') throw error; }
+  await unlink(probe);
+
+  await source.write('/another.nfo', nfoBytes);
+  options.remoteState.assets = [
+    { assetId: 'first', virtualPath: '/source/movie.nfo', restorePath: 'Logo.nfo', kind: 'nfo' },
+    { assetId: 'second', virtualPath: '/source/another.nfo', restorePath: 'logo.nfo', kind: 'nfo' },
+  ];
+  if (caseFolds) {
+    await assert.rejects(create(), error => {
+      assert.match(error.message, /target differs from the bound generation/u);
+      assert.match(error.cause.message, /collides with an existing filesystem name/u);
+      return true;
+    });
+    const staging = path.join(captureStagingPath(destination), 'files/remote-assets');
+    assert.deepEqual(await readdir(staging), ['Logo.nfo']);
+    assert.deepEqual(await readFile(path.join(staging, 'Logo.nfo')), nfoBytes);
+    await assert.rejects(access(destination), { code: 'ENOENT' });
+  } else {
+    await create();
+    assert.deepEqual((await readdir(path.join(destination, 'files/remote-assets'))).sort(), ['Logo.nfo', 'logo.nfo']);
+    const result = await restoreRemoteStatePackage(destination, {
+      vfs, targets: { first: '/target/Logo.nfo', second: '/target/logo.nfo' },
+    });
+    assert.equal(result.complete, true);
+    assert.deepEqual(await content(target, '/Logo.nfo'), nfoBytes);
+    assert.deepEqual(await content(target, '/logo.nfo'), nfoBytes);
+  }
 });
 
 test('one remote asset cannot be linked to multiple media access NFO sidecars', async t => {

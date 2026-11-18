@@ -1,6 +1,6 @@
 import { constants } from 'node:fs';
 import { randomUUID } from 'node:crypto';
-import { copyFile, lstat, mkdir, readFile, readdir, realpath, rename, rm, utimes, writeFile } from 'node:fs/promises';
+import { chmod, copyFile, lstat, mkdir, readFile, readdir, realpath, rename, rm, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { discoverInstanceState, validateInstanceStateSnapshot } from './instance-state.js';
 import { rebaseSystemConfiguration } from './instance-system-configuration.js';
@@ -85,20 +85,25 @@ export async function assertIsolatedInstanceOutput(options) {
   return output;
 }
 
-async function copyTree(source, target) {
+async function copyTree(source, target, context) {
   const before = await lstat(source, { bigint: true });
   if (before.isSymbolicLink()) throw new Error(`Stopped Jellyfin instance contains a symbolic link: ${source}`);
   if (!before.isDirectory()) throw new Error(`Stopped Jellyfin instance root must be a directory: ${source}`);
-  await mkdir(target, { recursive: false, mode: Number(before.mode & 0o777n) });
+  await mkdir(target, { recursive: false, mode: 0o700 });
+  if (process.platform !== 'win32') await chmod(target, 0o700);
   const entries = (await readdir(source, { withFileTypes: true }))
     .sort((left, right) => left.name < right.name ? -1 : left.name > right.name ? 1 : 0);
   for (const entry of entries) {
     const sourceChild = path.join(source, entry.name), targetChild = path.join(target, entry.name);
     const childBefore = await lstat(sourceChild, { bigint: true });
     if (childBefore.isSymbolicLink()) throw new Error(`Stopped Jellyfin instance contains a symbolic link: ${sourceChild}`);
-    if (childBefore.isDirectory()) await copyTree(sourceChild, targetChild);
+    if (childBefore.isDirectory()) await copyTree(sourceChild, targetChild, context);
     else if (childBefore.isFile()) {
-      await copyFile(sourceChild, targetChild, constants.COPYFILE_EXCL);
+      if (sourceChild === context.systemPath) {
+        const content = rebaseSystemConfiguration(await readFile(sourceChild), context.rebasedPaths);
+        await writeFile(targetChild, content, { flag: 'wx', mode: 0o600 });
+        await chmod(targetChild, Number(childBefore.mode & 0o777n));
+      } else await copyFile(sourceChild, targetChild, constants.COPYFILE_EXCL);
       const childAfter = await lstat(sourceChild, { bigint: true });
       if (generation(childBefore) !== generation(childAfter)) throw new Error(`Stopped Jellyfin instance changed while it was copied: ${sourceChild}`);
       await utimes(targetChild, Number(childBefore.atimeNs) / 1e9, Number(childBefore.mtimeNs) / 1e9);
@@ -107,6 +112,26 @@ async function copyTree(source, target) {
   const after = await lstat(source, { bigint: true });
   if (generation(before) !== generation(after)) throw new Error(`Stopped Jellyfin instance changed while it was copied: ${source}`);
   await utimes(target, Number(before.atimeNs) / 1e9, Number(before.mtimeNs) / 1e9);
+  if (process.platform !== 'win32') context.directories.push({ filename: target, mode: Number(before.mode & 0o777n) });
+}
+
+async function isOwnedCloneDirectory(directory, identity) {
+  let current;
+  try { current = await lstat(directory, { bigint: true }); }
+  catch (error) { if (error.code === 'ENOENT') return false; throw error; }
+  if (!identity || !current.isDirectory() || current.dev !== identity.dev || current.ino !== identity.ino) {
+    throw new Error(`The isolated clone directory changed before cleanup: ${directory}`);
+  }
+  return true;
+}
+
+async function removeOwnedClone(root, identity, sealedDirectories) {
+  if (!await isOwnedCloneDirectory(root, identity)) return;
+  for (const directory of sealedDirectories.toReversed()) {
+    const filename = path.join(root, directory.relative);
+    if (await isOwnedCloneDirectory(filename, directory.identity)) await chmod(filename, 0o700);
+  }
+  await rm(root, { recursive: true, force: true });
 }
 
 function clonedBindingPath(destination, roots, binding) {
@@ -157,25 +182,30 @@ export async function cloneStoppedInstance(options) {
   const temporary = path.join(parent, `.${path.basename(destination)}.mediamanager-clone-${randomUUID()}`);
   const temporaryRoots = Object.fromEntries(Object.keys(source.roots).map(label => [label, path.join(temporary, label)]));
   const finalRoots = Object.fromEntries(Object.keys(source.roots).map(label => [label, path.join(destination, label)]));
-  let temporaryCreated = false, published = false;
+  let temporaryCreated = false, published = false, temporaryIdentity;
+  const sealedDirectories = [];
   try {
     await mkdir(temporary, { recursive: false });
     temporaryCreated = true;
-    for (const [label, sourceRoot] of Object.entries(source.roots)) await copyTree(sourceRoot, temporaryRoots[label]);
-
-    const systemPath = path.join(temporaryRoots.config, 'system.xml');
+    temporaryIdentity = await lstat(temporary, { bigint: true });
     const rebasedPaths = {};
     for (const [name, field] of [['metadata', 'MetadataPath'], ['cache', 'CachePath']]) {
       const binding = source.pathBindings[name];
       if (!binding.configured) continue;
       rebasedPaths[field] = clonedBindingPath(destination, finalRoots, binding);
     }
-    if (Object.keys(rebasedPaths).length) {
-      await writeFile(systemPath, rebaseSystemConfiguration(await readFile(systemPath), rebasedPaths), { flag: 'w' });
-    }
+    const context = { directories: [], rebasedPaths,
+      systemPath: Object.keys(rebasedPaths).length ? path.join(source.roots.config, 'system.xml') : undefined };
+    for (const [label, sourceRoot] of Object.entries(source.roots)) await copyTree(sourceRoot, temporaryRoots[label], context);
 
     const after = await discoverInstanceState({ instanceRoot: source.instanceRoot });
     if (after.identity.digest !== source.identity.digest) throw new Error('The stopped Jellyfin source state changed while it was copied');
+    for (const { filename, mode } of context.directories) {
+      if ((mode & 0o700) !== 0o700) sealedDirectories.push({
+        relative: path.relative(temporary, filename), identity: await lstat(filename, { bigint: true }),
+      });
+      await chmod(filename, mode);
+    }
     await assertMissing(destination, 'The isolated instance clone destination');
     await rename(temporary, destination);
     published = true;
@@ -185,7 +215,7 @@ export async function cloneStoppedInstance(options) {
     return cloned;
   } catch (error) {
     if (published || temporaryCreated) {
-      try { await rm(published ? destination : temporary, { recursive: true, force: true }); }
+      try { await removeOwnedClone(published ? destination : temporary, temporaryIdentity, sealedDirectories); }
       catch (cleanupError) {
         throw new AggregateError([error, cleanupError], 'Stopped Jellyfin instance clone failed and its partial output could not be removed', { cause: error });
       }

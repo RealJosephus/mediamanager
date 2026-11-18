@@ -11,6 +11,8 @@ const sha256Pattern = /^[a-f0-9]{64}$/u;
 
 const sha256 = value => createHash('sha256').update(value).digest('hex');
 const timestampFromNanoseconds = value => new Date(Number(value / 1_000_000n)).toISOString();
+export const stateFileMode = metadata => process.platform === 'win32' ? null : Number(metadata.mode & 0o777n);
+export const isStateFileMode = mode => mode === null || (Number.isInteger(mode) && mode >= 0 && mode <= 0o777);
 const fileSha256 = async filename => {
   const hash = createHash('sha256');
   for await (const chunk of createReadStream(filename)) hash.update(chunk);
@@ -98,7 +100,8 @@ async function databaseGeneration(sqlitePath) {
     const before = await lstat(filename, { bigint: true }), digest = await fileSha256(filename), after = await lstat(filename, { bigint: true });
     const generation = metadata => [metadata.dev, metadata.ino, metadata.size, metadata.mtimeNs, metadata.ctimeNs].join(':');
     if (generation(before) !== generation(after)) throw new Error(`Jellyfin SQLite ${role} file changed while its generation was hashed`);
-    files.push({ role, bytes: before.size.toString(), modifiedAt: timestampFromNanoseconds(before.mtimeNs), sha256: digest });
+    files.push({ role, bytes: before.size.toString(), mode: stateFileMode(before),
+      modifiedAt: timestampFromNanoseconds(before.mtimeNs), sha256: digest });
   }
   return { algorithm: 'sha256', digest: sha256(canonicalJson(files)), files };
 }
@@ -129,10 +132,12 @@ export function calculateStateGeneration(rootLabels, records) {
       directories.add(key);
       normalized.push({ label: value.label, path: value.path, kind: 'directory', modifiedAt: value.modifiedAt, parts });
     } else {
-      exactKeys(value, ['label', 'path', 'kind', 'bytes', 'modifiedAt', 'sha256'], 'Jellyfin state generation file');
-      if (!/^(?:0|[1-9]\d*)$/u.test(value.bytes) || !sha256Pattern.test(value.sha256)) throw new Error('Invalid Jellyfin state generation file');
+      exactKeys(value, ['label', 'path', 'kind', 'bytes', 'mode', 'modifiedAt', 'sha256'], 'Jellyfin state generation file');
+      if (!/^(?:0|[1-9]\d*)$/u.test(value.bytes) || !sha256Pattern.test(value.sha256) || !isStateFileMode(value.mode)) {
+        throw new Error('Invalid Jellyfin state generation file');
+      }
       normalized.push({ label: value.label, path: value.path, kind: 'file', bytes: value.bytes,
-        modifiedAt: value.modifiedAt, sha256: value.sha256, parts });
+        mode: value.mode, modifiedAt: value.modifiedAt, sha256: value.sha256, parts });
     }
   }
   for (const label of roots) if (!directories.has(`${label}\0`)) throw new Error(`Missing Jellyfin state generation root: ${label}`);
@@ -184,7 +189,7 @@ async function stateGeneration(roots) {
       else if (metadata.isFile()) {
         const digest = await fileSha256(filename), after = await lstat(filename, { bigint: true });
         if (generation(metadata) !== generation(after)) throw new Error(`Jellyfin state file changed during generation capture: ${filename}`);
-        records.push({ label, path: childRelative.split(path.sep).join('/'), kind: 'file', bytes: metadata.size.toString(),
+        records.push({ label, path: childRelative.split(path.sep).join('/'), kind: 'file', bytes: metadata.size.toString(), mode: stateFileMode(metadata),
           modifiedAt: timestampFromNanoseconds(metadata.mtimeNs), sha256: digest });
       } else throw new Error(`Jellyfin state contains an unsupported filesystem entry: ${filename}`);
     }
@@ -294,7 +299,7 @@ function identityPayload(state) {
       algorithm: state.identity.databaseGeneration.algorithm,
       digest: state.identity.databaseGeneration.digest,
       files: state.identity.databaseGeneration.files.map(file => ({ role: file.role, bytes: file.bytes,
-        modifiedAt: file.modifiedAt, sha256: file.sha256 })),
+        mode: file.mode, modifiedAt: file.modifiedAt, sha256: file.sha256 })),
     },
     controlGeneration: {
       algorithm: state.identity.controlGeneration.algorithm,
@@ -365,8 +370,8 @@ function assertDiscoveredState(state) {
   if (generation.algorithm !== 'sha256' || !sha256Pattern.test(generation.digest) || !Array.isArray(generation.files)
     || generation.files.length < 1 || generation.files[0]?.role !== 'sqlite'
     || new Set(generationRoles).size !== generationRoles.length || roleOrder.some((order, index) => order < 0 || (index && order <= roleOrder[index - 1]))
-    || generation.files.some(file => !file || Object.keys(file).sort().join(',') !== 'bytes,modifiedAt,role,sha256'
-      || !/^(?:0|[1-9]\d*)$/u.test(file.bytes) || !sha256Pattern.test(file.sha256)
+    || generation.files.some(file => !file || Object.keys(file).sort().join(',') !== 'bytes,mode,modifiedAt,role,sha256'
+      || !/^(?:0|[1-9]\d*)$/u.test(file.bytes) || !sha256Pattern.test(file.sha256) || !isStateFileMode(file.mode)
       || typeof file.modifiedAt !== 'string' || Number.isNaN(Date.parse(file.modifiedAt))
       || new Date(file.modifiedAt).toISOString() !== file.modifiedAt)
     || generation.digest !== sha256(canonicalJson(generation.files))) throw new Error('Invalid discovered Jellyfin database generation');

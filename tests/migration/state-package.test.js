@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { access, link, mkdir, readFile, readdir, rename, rm, stat, writeFile } from 'node:fs/promises';
+import { constants } from 'node:fs';
+import { access, chmod, link, mkdir, readFile, readdir, rename, rm, stat, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { createStatePackage, verifyStatePackage, restoreStatePackage } from '../../src/migration/state-package.js';
 import { discoverInstanceState } from '../../src/migration/instance-state.js';
@@ -57,6 +58,98 @@ test('state package captures complete instance roots and unknown assets, then de
 
   await writeFile(path.join(destination, 'files/config/system.xml'), 'tampered');
   await assert.rejects(verifyStatePackage(destination), /checksum/u);
+});
+
+test('state restore repairs staged permission drift and restores execute access', async t => {
+  const fixture = await createInstanceFixture(t);
+  const plugin = path.join(fixture.root, 'config/plugins');
+  const helper = 'config/plugins/helper';
+  const script = '#!/bin/sh\nprintf "%s\\n" "restored plugin helper"\n';
+  const posix = process.platform !== 'win32';
+  await mkdir(plugin);
+  await writeFile(path.join(fixture.root, helper), script);
+  await writeFile(path.join(plugin, 'private.dat'), 'private data');
+  await writeFile(path.join(plugin, 'group.dat'), 'group-readable data');
+  if (posix) {
+    await chmod(path.join(fixture.root, helper), 0o750);
+    await chmod(path.join(plugin, 'private.dat'), 0o600);
+    await chmod(path.join(plugin, 'group.dat'), 0o640);
+    t.diagnostic(`Exercising POSIX restore permissions as uid ${process.getuid()}`);
+    const stale = await fixture.packageOptions({ destination: path.join(fixture.directory, 'stale') });
+    await chmod(path.join(fixture.root, helper), 0o640);
+    await assert.rejects(createStatePackage(stale), /complete state generation is no longer current/u);
+    await chmod(path.join(fixture.root, helper), 0o750);
+  }
+  const packageDirectory = path.join(fixture.directory, 'package');
+  const manifest = await createStatePackage(await fixture.packageOptions({ destination: packageDirectory }));
+  const destination = path.join(fixture.directory, 'restored');
+  const staging = path.join(fixture.directory, `.restored.mediamanager-restore-${manifest.generation}`);
+  const controller = new AbortController();
+  await assert.rejects(restoreStatePackage(packageDirectory, destination, {
+    signal: controller.signal,
+    onProgress: ({ path: relative }) => { if (relative === helper) controller.abort(); },
+  }), /abort/iu);
+  if (posix) await chmod(path.join(staging, helper), 0o600);
+
+  const restored = await restoreStatePackage(packageDirectory, destination);
+  assert.equal(restored.resumed, true);
+  assert.equal(await readFile(path.join(destination, helper), 'utf8'), script);
+  assert.equal(await readFile(path.join(destination, 'config/plugins/private.dat'), 'utf8'), 'private data');
+  assert.equal(await readFile(path.join(destination, 'config/plugins/group.dat'), 'utf8'), 'group-readable data');
+  if (posix) {
+    for (const [file, mode] of [[helper, 0o750], ['config/plugins/private.dat', 0o600],
+      ['config/plugins/group.dat', 0o640], ['data/data/jellyfin.db', 0o600]]) {
+      assert.equal((await stat(path.join(destination, file))).mode & 0o777, mode);
+    }
+    await access(path.join(destination, helper), constants.X_OK);
+    await chmod(path.join(destination, helper), 0o600);
+    await assert.rejects(restoreStatePackage(packageDirectory, destination), /Restored asset permissions differ/u);
+  }
+});
+
+test('state packages preserve distinct filesystem spellings and never overwrite a case alias', async t => {
+  const fixture = await createInstanceFixture(t);
+  const metadata = path.join(fixture.root, 'data/metadata');
+  await writeFile(path.join(metadata, 'Logo.png'), 'upper image');
+  let distinctNames = true;
+  try { await writeFile(path.join(metadata, 'logo.png'), 'lower image', { flag: 'wx' }); }
+  catch (error) { if (error.code !== 'EEXIST') throw error; distinctNames = false; }
+  if (distinctNames) {
+    for (const directory of ['People', 'people']) {
+      await mkdir(path.join(metadata, directory));
+      await writeFile(path.join(metadata, directory, 'photos.bin'), directory);
+    }
+  }
+  const packageDirectory = path.join(fixture.directory, 'package');
+  const manifest = await createStatePackage(await fixture.packageOptions({ destination: packageDirectory }));
+  await verifyStatePackage(packageDirectory);
+  const destination = path.join(fixture.directory, 'restored');
+  const restored = await restoreStatePackage(packageDirectory, destination);
+  assert.equal(await readFile(path.join(restored.destination, 'data/metadata/Logo.png'), 'utf8'), 'upper image');
+  if (distinctNames) {
+    assert.deepEqual((await readdir(path.join(restored.destination, 'data/metadata'))).sort(), ['Logo.png', 'People', 'logo.png', 'people']);
+    assert.equal(await readFile(path.join(restored.destination, 'data/metadata/logo.png'), 'utf8'), 'lower image');
+    for (const directory of ['People', 'people']) {
+      assert.equal(await readFile(path.join(restored.destination, 'data/metadata', directory, 'photos.bin'), 'utf8'), directory);
+    }
+  } else {
+    const target = path.join(fixture.directory, 'collision');
+    const staging = path.join(fixture.directory, `.collision.mediamanager-restore-${manifest.generation}`);
+    const alias = path.join(staging, 'data/metadata/logo.png');
+    await assert.rejects(restoreStatePackage(packageDirectory, target, {
+      onProgress: async ({ path: relative }) => {
+        if (relative === manifest.database.restorePath) await writeFile(alias, 'independent image', { flag: 'wx' });
+      },
+    }), /collides with an existing filesystem name/u);
+    assert.deepEqual(await readdir(path.dirname(alias)), ['logo.png']);
+    assert.equal(await readFile(alias, 'utf8'), 'independent image');
+    await assert.rejects(access(target), { code: 'ENOENT' });
+    await unlink(alias);
+    const retried = await restoreStatePackage(packageDirectory, target);
+    assert.equal(retried.resumed, true);
+    assert.deepEqual(await readdir(path.join(target, 'data/metadata')), ['Logo.png']);
+    assert.equal(await readFile(path.join(target, 'data/metadata/Logo.png'), 'utf8'), 'upper image');
+  }
 });
 
 test('Unicode system configuration survives cloning, packaging and restoration', async t => {

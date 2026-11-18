@@ -4,6 +4,7 @@ import { constants as fsConstants } from 'node:fs';
 import path from 'node:path';
 import { StorageError, checkAbort } from '../storage/errors.js';
 import { normalizePath } from '../storage/paths.js';
+import { assertExactStateEntry } from './state-path-name.js';
 
 const kinds = new Set(['nfo', 'subtitle', 'lyric', 'image', 'playlist', 'attachment', 'plugin-state']);
 const remotePlans = new WeakMap();
@@ -52,6 +53,7 @@ async function bindDirectoryChain(root, parts, { create = false, label }) {
     }
     const binding = await bindDirectory(current, label);
     if (!inside(root.physical, binding.physical)) throw new Error(`${label} escapes its bound root.`);
+    await assertExactStateEntry(current, label);
     bindings.push(binding);
   }
   await assertDirectoryBindings(bindings);
@@ -90,7 +92,7 @@ export function validateRemoteAssetManifest(files) {
       || typeof remote.version !== 'string' || !remote.version) throw new Error('Invalid remote state asset declaration.');
     const assetId = remote.assetId;
     const virtualPath = normalizePath(remote.virtualPath);
-    const localPath = file.path.toLowerCase();
+    const localPath = file.path;
     if (virtualPath !== remote.virtualPath || assetIds.has(assetId)) throw new Error('Duplicate or non-canonical remote state asset ID.');
     if (virtualPaths.has(virtualPath)) throw new Error('Duplicate remote state virtual path.');
     if (localPaths.has(localPath)) throw new Error('Duplicate remote state asset path.');
@@ -132,6 +134,7 @@ async function readBoundLocalAsset(filesRootBinding, file, maxAssetBytes) {
   });
   const pathMetadata = await lstat(filename, { bigint: true });
   if (!pathMetadata.isFile() || pathMetadata.isSymbolicLink()) throw new Error('Remote state asset payload is not the declared regular file.');
+  await assertExactStateEntry(filename, 'Remote state asset payload');
   const physical = await realpath(filename);
   if (!inside(filesRootBinding.physical, physical)) {
     throw new Error('Remote state asset path escapes the package files directory.');
@@ -186,7 +189,7 @@ export async function inspectRemoteAssets({ vfs, assets, signal, maxAssetBytes =
       throw new TypeError('Remote assets require only a canonical asset ID, virtual path, sidecar kind and safe restore path.');
     }
     const virtualPath = normalizePath(asset.virtualPath);
-    const restoreKey = asset.restorePath.toLowerCase(), assetKey = asset.assetId;
+    const restoreKey = asset.restorePath, assetKey = asset.assetId;
     if (restorePaths.some(existing => pathsCollide(existing, restoreKey))) throw new Error('Colliding remote asset restore path.');
     if (assetIds.has(assetKey)) throw new Error('Duplicate remote state asset ID.');
     if (virtualPaths.has(virtualPath)) throw new Error('Duplicate remote state virtual path.');

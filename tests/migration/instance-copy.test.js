@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { lstat, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
+import { chmod, lstat, mkdir, mkdtemp, readFile, readdir, rm, symlink, utimes, writeFile } from 'node:fs/promises';
 import { syncBuiltinESMExports } from 'node:module';
 import os from 'node:os';
 import path from 'node:path';
@@ -97,6 +97,65 @@ test('rebases configured absolute paths that stay inside core roots', async t =>
   const settings = await inspectInstanceConfiguration(destination);
   assert.equal(settings.configuration.MetadataPath, cloned.paths.metadata);
   assert.equal(settings.configuration.CachePath, cloned.paths.cache);
+});
+
+test('clones populated read-only directories and removes its sealed stage after a publish collision', async t => {
+  const { parent, root } = await fixture(t);
+  const metadata = path.join(parent, 'external'), config = path.join(root, 'config');
+  const nested = path.join(config, 'nested'), system = path.join(config, 'system.xml');
+  const destination = path.join(parent, 'clone'), collision = path.join(parent, 'collision');
+  const posix = process.platform !== 'win32';
+  await mkdir(metadata);
+  await mkdir(nested);
+  await writeFile(path.join(nested, 'child'), 'nested state');
+  await writeFile(system, `<ServerConfiguration><MetadataPath>${xml(metadata)}</MetadataPath></ServerConfiguration>`);
+  const modified = new Date('2026-01-02T03:04:05.000Z');
+  await utimes(nested, modified, modified);
+  await utimes(config, modified, modified);
+  try {
+    if (posix) {
+      await chmod(nested, 0o550);
+      await chmod(config, 0o555);
+      await chmod(system, 0o440);
+      if (process.getuid() !== 0) {
+        await assert.rejects(mkdir(path.join(nested, 'new')), { code: 'EACCES' });
+        t.diagnostic(`Read-only directory enforced for clone user ${process.getuid()}`);
+      }
+    }
+    const source = await discoverInstanceState({ instanceRoot: root });
+    const cloned = await cloneStoppedInstance({ instanceState: source, destination });
+    assert.equal(cloned.paths.metadata, path.join(destination, 'metadata-external'));
+    assert.equal(await readFile(path.join(destination, 'config/nested/child'), 'utf8'), 'nested state');
+    for (const [relative, mode] of [['config', 0o555], ['config/nested', 0o550], ['config/system.xml', 0o440]]) {
+      const actual = await lstat(path.join(destination, relative));
+      if (posix) assert.equal(actual.mode & 0o777, mode);
+      if (actual.isDirectory()) assert.equal(actual.mtime.toISOString(), modified.toISOString());
+    }
+
+    const originalRename = fs.promises.rename;
+    const rename = t.mock.method(fs.promises, 'rename', async (from, to) => {
+      if (to === collision) {
+        await mkdir(collision);
+        await writeFile(path.join(collision, 'owned-by-caller'), 'keep');
+      }
+      return originalRename(from, to);
+    });
+    syncBuiltinESMExports();
+    try {
+      await assert.rejects(cloneStoppedInstance({ instanceState: source, destination: collision }),
+        error => ['EACCES', 'EEXIST', 'ENOTEMPTY', 'EPERM'].includes(error.code));
+    } finally { rename.mock.restore(); syncBuiltinESMExports(); }
+    assert.deepEqual(await readdir(collision), ['owned-by-caller']);
+    assert.equal(await readFile(path.join(collision, 'owned-by-caller'), 'utf8'), 'keep');
+    assert.deepEqual((await readdir(parent)).sort(), ['clone', 'collision', 'external', 'source']);
+  } finally {
+    if (posix) {
+      for (const directory of [config, nested, path.join(destination, 'config'), path.join(destination, 'config/nested')]) {
+        try { await chmod(directory, 0o700); }
+        catch (error) { if (error.code !== 'ENOENT') throw error; }
+      }
+    }
+  }
 });
 
 test('rejects existing, overlapping, aliased and symbolic-link destinations', async t => {
