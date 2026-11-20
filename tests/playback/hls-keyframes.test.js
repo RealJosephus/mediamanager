@@ -95,7 +95,8 @@ test('PlaybackService reads native KeyframeData only for configured metadata ext
     getItemRecord: async () => ({ Id: itemId, MediaType: 'Video' }),
     getMediaSources: async () => [source]
   };
-  const hls = { getEncodingOptions: () => ({ AllowOnDemandMetadataBasedKeyframeExtractionForExtensions: ['..MKV'] }), initialize: async () => true };
+  const hls = { getEncodingOptions: () => ({ AllowOnDemandMetadataBasedKeyframeExtractionForExtensions: ['..MKV'] }),
+    initialize: async () => true, plan: hlsPlan, mediaTools: () => undefined };
   const playback = new PlaybackService({ library, hls, getEncodingOptions: () => defaultConfiguration('encoding') });
   const result = await playback.hlsStream(itemId, 'main', { ...options, QueryString: 'MediaSourceId=' + sourceId + '&SegmentContainer=ts' });
   const server = http.createServer((request, response) => result.send(request, response));

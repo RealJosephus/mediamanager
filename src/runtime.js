@@ -86,6 +86,7 @@ import { LibraryOptionsStore } from './library/library-options-store.js';
 import { LibraryConfigurationService } from './library/library-configuration-service.js';
 import { refreshLibraryTaskId } from './tasks/refresh-library-task.js';
 import { RefreshGuideTaskWorker, refreshGuideTaskId } from './tasks/refresh-guide-task.js';
+import { KeyframeExtractionTaskWorker } from './tasks/keyframe-extraction-task.js';
 import { DisplayPreferencesService } from './users/display-preferences-service.js';
 import { StartupService } from './users/startup-service.js';
 import { clrTrim } from './metadata/whitespace.js';
@@ -500,6 +501,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const libraryScanner = libraryScanLifecycle ? new LibraryScanService({ lifecycle: libraryScanLifecycle, onError }) : undefined;
   if (libraryScanner) rollback.push(() => libraryScanner.close());
   const tasks = new ScheduledTaskManager({ scanner: libraryScanner, localization, onError, programDataPath, configurationDirectoryPath, dataPath });
+  if (probe) await tasks.register({ create: options => new KeyframeExtractionTaskWorker({ ...options, playback }) });
   await plugins.bind('task', extension => tasks.register(extension));
   rollback.push(() => tasks.close());
   const libraryConfiguration = libraryScanLifecycle && libraryOptionsStore ? new LibraryConfigurationService({ fileSystem,

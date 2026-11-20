@@ -10,6 +10,7 @@ import { vfsStreamResult, BinaryResult } from '../http/binary-result.js';
 import { remoteStaticStreamResult } from './remote-static.js';
 import { StorageError, checkAbort } from '../storage/errors.js';
 import { masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlaylist } from './hls.js';
+import { probeKeyframes } from '../media-execution/keyframes.js';
 import { MatroskaKeyframeService } from './matroska-keyframes.js';
 import { guid, nonemptyId } from '../library/records.js';
 import { canDownloadItem } from '../library/download-permission.js';
@@ -74,7 +75,10 @@ export class PlaybackService {
     if (typeof getEncodingOptions !== 'function') throw new TypeError('Playback requires current encoding configuration.');
     Object.assign(this, { library, vfs, identityMap, sessions, activities, getEncodingOptions, getNetworkConfiguration, getSmartApiUrl, serverVersion, isLocalNetwork, probe, extraction, remux, hls, getLiveTvMediaSources, getLiveStreams });
     Object.defineProperty(this, 'configuration', { get() { const { configuration: current = configuration } = options; return current; } });
-    this.keyframes = keyframes ?? (library?.store && vfs ? new MatroskaKeyframeService({ store: library.store, vfs, onError: error => hls?.onError?.(error) }) : undefined);
+    this.keyframes = keyframes ?? (library?.store && vfs ? new MatroskaKeyframeService({
+      store: library.store, vfs, onError: error => hls?.onError?.(error),
+      probe: probe && ((access, source, options) => probeKeyframes(probe.mediaEncoder, probe.bridge, access, source, options)),
+    }) : undefined);
   }
 
   accessPath(item, identityPath = item.Path, bindItem = true) {
