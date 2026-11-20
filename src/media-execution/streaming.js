@@ -1,16 +1,15 @@
 import path from 'node:path';
 import { StorageError } from '../storage/errors.js';
-import { subtitleInputIndex } from '../playback/extraction.js';
 import { encoderVersionAtLeast } from '../playback/media-encoder.js';
 import { audioArguments, audioStreamPlan } from './audio.js';
 import { videoArguments, videoStreamPlan } from './video.js';
-import { mediaSeekTime, nativeInputFormat } from './input.js';
+import { mediaSeekTime, nativeInputFormat, streamInputIndex } from './input.js';
 
 const failure = (code, message) => new StorageError(code, message);
 
 const containers = {
   mp4: { muxer: 'mp4', mime: 'video/mp4', video: ['h264', 'hevc', 'av1', 'vp9', 'mpeg4'], audio: ['aac', 'ac3', 'eac3', 'mp3', 'alac'], subtitle: ['mov_text'] },
-  mkv: { muxer: 'matroska', mime: 'video/x-matroska', video: ['h264', 'hevc', 'av1', 'vp8', 'vp9', 'mpeg1video', 'mpeg2video', 'mpeg4', 'mjpeg'], audio: ['aac', 'ac3', 'eac3', 'mp3', 'flac', 'alac', 'opus', 'vorbis', 'dts', 'truehd', 'pcm_s16le', 'pcm_s24le', 'pcm_s32le'], subtitle: ['subrip', 'srt', 'ass', 'ssa', 'pgssub', 'dvdsub'] },
+  mkv: { muxer: 'matroska', mime: 'video/x-matroska', video: ['h264', 'hevc', 'av1', 'vp8', 'vp9', 'mpeg1video', 'mpeg2video', 'mpeg4', 'mjpeg'], audio: ['aac', 'ac3', 'eac3', 'mp3', 'flac', 'alac', 'opus', 'vorbis', 'dts', 'truehd', 'pcm_s16le', 'pcm_s24le', 'pcm_s32le'], subtitle: ['subrip', 'srt', 'ass', 'ssa', 'webvtt', 'pgssub', 'dvdsub'] },
   ts: { muxer: 'mpegts', mime: 'video/mp2t', video: ['h264', 'hevc', 'mpeg1video', 'mpeg2video', 'mpeg4'], audio: ['aac', 'ac3', 'eac3', 'mp2', 'mp3'], subtitle: ['dvbsub'] },
   webm: { muxer: 'webm', mime: 'video/webm', video: ['vp8', 'vp9', 'av1'], audio: ['opus', 'vorbis'], subtitle: ['webvtt'] },
   m4a: { muxer: 'mp4', mime: 'audio/mp4', audio: ['aac', 'alac', 'ac3', 'eac3', 'mp3'] },
@@ -20,10 +19,13 @@ const containers = {
   ogg: { muxer: 'ogg', mime: 'audio/ogg', audio: ['vorbis', 'opus', 'flac'] },
   wav: { muxer: 'wav', mime: 'audio/wav', audio: ['pcm_s16le', 'pcm_s24le', 'pcm_s32le', 'pcm_u8', 'pcm_f32le', 'pcm_f64le'] },
 };
-const matches = (requested, actual) => !requested || requested.toLowerCase().split(',').includes(actual?.toLowerCase()) || requested.toLowerCase() === 'copy';
 const openclOutput = 'hwmap=derive_device=d3d11va:mode=write:reverse=1';
 const vaapiUpload = /^(?:hwupload_vaapi|hwupload=derive_device=vaapi)$/u;
 const videoReadback = /^(?:hwdownload|hwmap(?:=mode=read)?)$/u;
+const privateUrl = /^http:\/\/127\.0\.0\.1:\d+\/[a-f0-9]{64}$/u;
+const privateSubtitleUrl = /^http:\/\/127\.0\.0\.1:\d+\/[a-f0-9]{64}(?:\.[a-z]+|\/[^/?#\\]+)?$/u;
+const subtitleCodec = codec => ({ hdmv_pgs_subtitle: 'pgssub', dvd_subtitle: 'dvdsub', vobsub: 'dvdsub',
+  dvb_subtitle: 'dvbsub', vtt: 'webvtt' })[codec] ?? codec;
 
 function hardwareSubtitles(video, bitmap, capabilities) {
   const surface = video.hardware.decoder.surface;
@@ -51,6 +53,18 @@ function bitmapInputArguments(subtitles, overlay, seek, probe = []) {
   if (!subtitles?.bitmap) return [];
   const { filename, format } = subtitles.bitmap;
   return ['-protocol_whitelist', 'file', ...probe, ...seek, ...overlay.canvas, '-f', format, '-i', filename];
+}
+
+function externalAudioArguments(plan, url, seek) {
+  if (!plan.externalAudio) return [];
+  if (!privateUrl.test(url)) throw new TypeError('External audio requires a private VFS input.');
+  return ['-protocol_whitelist', 'http,tcp', ...seek, '-i', url];
+}
+
+function streamMap(stream, plan, subtitles) {
+  if (stream.type === 'Audio' && plan.externalAudio) return `${subtitles?.bitmap || plan.externalSubtitle ? 2 : 1}:${plan.externalAudio.index}`;
+  if (stream.type === 'Subtitle' && plan.externalSubtitle) return `1:${stream.index}`;
+  return `0:${stream.index}`;
 }
 
 function subtitleOverlay(plan, subtitles, ticks, shift) {
@@ -99,10 +113,12 @@ function subtitleOverlay(plan, subtitles, ticks, shift) {
   return { canvas, graph: prepared + base + `${base ? '[main]' : video}${subtitle}${overlay}=eof_action=pass:repeatlast=0${outputOptions}${output}[video]` };
 }
 
-export function remuxPlan(source, options = {}, { capabilities, configuration, version, subtitleBurn } = {}) {
+export function remuxPlan(source, options = {}, { capabilities, configuration, version, subtitleBurn, canOpenSidecar } = {}) {
   options = { ...options };
+  const discInput = source.VideoType === 'Dvd' || source.VideoType === 'BluRay';
   if (!options.LiveInput && (source.IsInfiniteStream || source.RequiresOpening || source.RequiresClosing)
-    || source.VideoType && !['VideoFile', 'Iso'].includes(source.VideoType)
+    || source.VideoType && !discInput && !['VideoFile', 'Iso'].includes(source.VideoType)
+    || discInput && source.Protocol !== 'File'
     || /^(?:hls|applehttp|dash)$/i.test(source.Container)) throw failure('not-supported', 'Streaming requires an opened media input.');
   const container = options.Container?.toLowerCase();
   const output = containers[container];
@@ -112,6 +128,7 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
   const video = options.MediaType === 'Audio' ? undefined : select('Video', options.VideoStreamIndex);
   const audio = options.AudioStreamIndex === -1 ? undefined : select('Audio', options.AudioStreamIndex);
   const selectedSubtitle = options.SubtitleStreamIndex >= 0 ? select('Subtitle', options.SubtitleStreamIndex) : undefined;
+  if (options.SubtitleMethod === 'Embed' && selectedSubtitle?.Codec?.toLowerCase() === 'dvbsub') options.SubtitleMethod = 'Encode';
   const burnsByDelivery = options.SubtitleMethod == null || options.SubtitleMethod === 'Encode';
   options.BurnSubtitle = Boolean(selectedSubtitle && burnsByDelivery);
   const separateHlsSubtitle = options.HlsManifest === true && options.SubtitleMethod === 'Hls';
@@ -128,7 +145,7 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
   }
   const burnSubtitle = selectedSubtitle && videoOutput?.encoder !== 'copy'
     && (burnsByDelivery || options.AlwaysBurnInSubtitleWhenTranscoding) ? selectedSubtitle : undefined;
-  const bitmapIndex = burnSubtitle && !burnSubtitle.IsTextSubtitleStream ? subtitleInputIndex(source, burnSubtitle) : undefined;
+  const bitmapIndex = burnSubtitle && !burnSubtitle.IsTextSubtitleStream ? streamInputIndex(source, burnSubtitle) : undefined;
   const hasFilter = name => capabilities?.filters?.includes(name);
   const subtitleHardware = burnSubtitle && videoOutput ? hardwareSubtitles(videoOutput, bitmapIndex != null, capabilities) : undefined;
   if (burnSubtitle && !subtitleHardware && videoOutput?.encoder.endsWith('_vaapi')
@@ -142,14 +159,25 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
   }
   const subtitle = !burnSubtitle && options.SubtitleMethod === 'Embed' ? selectedSubtitle : undefined;
   if (options.SubtitleStreamIndex >= 0 && options.SubtitleMethod === 'Embed' && !selectedSubtitle) throw failure('not-found', 'The selected subtitle stream does not exist.');
-  if (subtitle && (subtitle.IsExternal || subtitle.Path || !output.subtitle?.includes(subtitle.Codec?.toLowerCase())
-    || !matches(options.SubtitleCodec, subtitle.Codec))) throw failure('not-supported', 'The selected subtitle cannot be copied into this container.');
-  let audioOutput;
+  let subtitleEncoder, externalSubtitle;
+  if (subtitle) {
+    const input = subtitle.Codec?.toLowerCase();
+    const requested = options.SubtitleCodec?.split(',')[0]?.trim().toLowerCase();
+    subtitleEncoder = !requested || requested === input || requested === 'copy' ? 'copy' : subtitleCodec(requested);
+    const outputCodec = subtitleEncoder === 'copy' ? subtitleCodec(input) : subtitleEncoder;
+    if (!output.subtitle?.includes(outputCodec) || subtitleEncoder !== 'copy' && !capabilities?.encoders?.includes(subtitleEncoder)
+      || (subtitle.IsExternal ? !subtitle.Path || !canOpenSidecar : Boolean(subtitle.Path))) {
+      throw failure('not-supported', 'The selected subtitle cannot be embedded into this container.');
+    }
+    if (subtitle.IsExternal) externalSubtitle = subtitle;
+  }
+  let audioOutput, externalAudio;
   if (audio) {
     const allowed = [...output.audio];
     if (container === 'mp4' && options.HlsManifest) allowed.push('flac', 'opus', 'dts', 'truehd');
     if (container === 'mp4' && options.MediaType === 'Audio' && !source.MediaStreams.some(stream => stream.Type === 'Video')) allowed.push('flac');
-    if (!audio.IsExternal && !audio.Path) {
+    if (audio.IsExternal && audio.Path && canOpenSidecar) externalAudio = { path: audio.Path, index: streamInputIndex(source, audio) };
+    if (externalAudio || !audio.IsExternal && !audio.Path) {
       audioOutput = audioStreamPlan(audio, options, allowed, capabilities, { videoCopy: videoOutput && videoOutput.encoder === 'copy',
         hls: options.HlsManifest === true, configuration });
     }
@@ -164,26 +192,33 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
   }
   const inputFormat = video && configuration?.HardwareAccelerationType && configuration.HardwareAccelerationType !== 'none'
     && source.VideoType === 'VideoFile' ? nativeInputFormat(source.Container) : undefined;
-  return { container, ...output, inputVideo: video, inputFormat, videoOutput, audioOutput, burnSubtitle, bitmapIndex, subtitleHardware,
-    streams: [video, audio, subtitle].filter(Boolean).map(stream => ({ type: stream.Type, codec: stream.Codec, index: stream.Type === 'Subtitle' ? subtitleInputIndex(source, stream) : stream.Index })),
+  return { container, ...output, inputVideo: video, inputFormat, discInput, videoOutput, audioOutput, externalAudio, burnSubtitle,
+    bitmapIndex, subtitleHardware, subtitleEncoder, externalSubtitle,
+    streams: [video, audio, subtitle].filter(Boolean).map(stream => ({ type: stream.Type, codec: stream.Codec, index: stream.Type === 'Subtitle' ? streamInputIndex(source, stream) : stream.Index })),
     start, seek: BigInt(options.StartTimeTicks ?? 0) > 0n, copyTimestamps: options.CopyTimestamps === true, m2ts: options.EnableMpegtsM2TsMode === true, mediaType: options.MediaType ?? 'Video' };
 }
 
-export function remuxArguments(url, plan, threads, version, subtitles) {
-  if (!/^http:\/\/127\.0\.0\.1:\d+\/[a-f0-9]{64}$/.test(url)) throw new TypeError('Remuxing requires a private VFS input.');
+export function remuxArguments(url, plan, threads, version, subtitles, audioUrl, subtitleUrl) {
+  if (!privateUrl.test(url)) throw new TypeError('Remuxing requires a private VFS input.');
   const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-protocol_whitelist', 'http,tcp'];
   const seek = plan.seek ? ['-ss', mediaSeekTime(plan.start)] : [];
   args.push(...seek);
   if (plan.videoOutput?.encoder === 'copy') args.push('-fflags', '+genpts');
-  if (plan.inputFormat) args.push('-f', plan.inputFormat);
+  if (plan.discInput) args.push('-f', 'concat', '-safe', '0');
+  else if (plan.inputFormat) args.push('-f', plan.inputFormat);
   const shift = subtitles?.filter && !plan.copyTimestamps ? Math.round(Number(plan.start) / 10000000) : null;
   const overlay = subtitleOverlay(plan, subtitles, plan.start, shift);
   args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []), '-i', url,
     ...bitmapInputArguments(subtitles, overlay, seek));
+  if (plan.externalSubtitle) {
+    if (!privateSubtitleUrl.test(subtitleUrl)) throw new TypeError('Embedding a subtitle requires a private VFS input.');
+    args.push('-protocol_whitelist', 'http,tcp', ...seek, '-i', subtitleUrl);
+  }
+  args.push(...externalAudioArguments(plan, audioUrl, seek));
   if (plan.videoOutput?.hardware?.decoder.args.length) args.push('-noautoscale');
   args.push('-threads', String(threads));
   if (overlay) args.push('-filter_complex', overlay.graph);
-  for (const stream of plan.streams) args.push('-map', overlay && stream.type === 'Video' ? '[video]' : `0:${stream.index}`);
+  for (const stream of plan.streams) args.push('-map', overlay && stream.type === 'Video' ? '[video]' : streamMap(stream, plan, subtitles));
   args.push('-map_metadata', '-1', '-map_chapters', '-1', '-c', 'copy');
   if (plan.videoOutput && plan.videoOutput.encoder !== 'copy') {
     const filters = overlay ? [] : [...plan.videoOutput.filters];
@@ -196,6 +231,7 @@ export function remuxArguments(url, plan, threads, version, subtitles) {
     if (shift !== null) filters.push(`asetpts=PTS-${shift}/TB`);
     args.push(...audioArguments({ ...plan.audioOutput, filters }));
   }
+  if (plan.subtitleEncoder) args.push('-codec:s:0', plan.subtitleEncoder, '-disposition:s:0', 'default');
   const audioCodec = plan.audioOutput?.codec;
   if (['opus', 'dts', 'truehd'].includes(audioCodec) || audioCodec === 'flac' && !encoderVersionAtLeast(version, 6)) args.push('-strict', '-2');
   if (!plan.streams.some(stream => stream.type === 'Video')) args.push('-vn');
@@ -213,8 +249,8 @@ export function remuxArguments(url, plan, threads, version, subtitles) {
   return args;
 }
 
-export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks = 0n, { threads, version, maxMuxingQueueSize }, subtitles, eventId) {
-  if (!/^http:\/\/127\.0\.0\.1:\d+\/[a-f0-9]{64}$/.test(url)) throw new TypeError('HLS requires a private VFS input.');
+export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks = 0n, { threads, version, maxMuxingQueueSize }, subtitles, eventId, audioUrl) {
+  if (!privateUrl.test(url)) throw new TypeError('HLS requires a private VFS input.');
   if (eventId != null && !/^[a-f0-9]{32}$/u.test(eventId)) throw new TypeError('Invalid HLS event playlist identity.');
   const prefix = eventId ?? 'segment';
   const analyzeDuration = plan.analyzeDurationMs > 0 ? String(plan.analyzeDurationMs * 1000) : '200M';
@@ -234,16 +270,17 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
   const inputFlags = [plan.ignoreDts && '+igndts', plan.ignoreIndex && '+ignidx',
     (plan.genPts || plan.videoOutput?.encoder === 'copy') && '+genpts', plan.discardCorrupt && '+discardcorrupt'].filter(Boolean);
   if (inputFlags.length) args.push('-fflags', inputFlags.join(''));
-  if (plan.inputFormat) args.push('-f', plan.inputFormat);
+  if (plan.discInput) args.push('-f', 'concat', '-safe', '0');
+  else if (plan.inputFormat) args.push('-f', plan.inputFormat);
   const overlay = subtitleOverlay(plan, subtitles, runtimeTicks > 0n ? runtimeTicks : plan.start, null);
   args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []), '-i', url,
-    ...bitmapInputArguments(subtitles, overlay, seek, probe));
+    ...bitmapInputArguments(subtitles, overlay, seek, probe), ...externalAudioArguments(plan, audioUrl, seek));
   if (plan.videoOutput?.hardware?.decoder.args.length) args.push('-noautoscale');
   args.push('-map_metadata', '-1', '-map_chapters', '-1', '-threads', String(threads));
   if (overlay) args.push('-filter_complex', overlay.graph);
   if (plan.streams.some(stream => stream.index < 0)) args.push('-sn');
   else {
-    for (const stream of plan.streams) args.push('-map', overlay && stream.type === 'Video' ? '[video]' : `0:${stream.index}`);
+    for (const stream of plan.streams) args.push('-map', overlay && stream.type === 'Video' ? '[video]' : streamMap(stream, plan, subtitles));
     args.push('-map', '-0:s');
   }
   if (plan.video) {

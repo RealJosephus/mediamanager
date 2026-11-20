@@ -1,4 +1,5 @@
 import { startMediaProcess } from '../media-execution/process.js';
+import { streamInputIndex as subtitleInputIndex } from '../media-execution/input.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -38,14 +39,7 @@ export function subtitleExtractionFormat(stream) {
   return vobSub(stream.Codec) ? ['mks', 'matroska'] : undefined;
 }
 
-export function subtitleInputIndex(source, stream) {
-  let index = 0;
-  for (const current of source.MediaStreams) {
-    if (current === stream) return index;
-    if ((current.Path ?? null) === (stream.Path ?? null)) index++;
-  }
-  throw failure('not-found', 'The subtitle does not belong to this media source.');
-}
+export { subtitleInputIndex };
 
 function privateInput(url) {
   const value = new URL(url);

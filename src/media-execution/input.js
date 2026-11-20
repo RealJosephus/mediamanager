@@ -1,4 +1,15 @@
+import { StorageError } from '../storage/errors.js';
+
 const ambiguousInputFormats = new Set(['m2ts', 'wmv', 'mts', 'vob', 'mpg', 'mpeg', 'rec', 'dvr-ms', 'ogm', 'divx', 'tp', 'rmvb', 'rtp', 'm4v', 'strm', 'iso']);
+
+export function streamInputIndex(source, stream) {
+  let index = 0;
+  for (const current of source.MediaStreams) {
+    if (current === stream) return index;
+    if ((current.Path ?? null) === (stream.Path ?? null)) index++;
+  }
+  throw new StorageError('not-found', 'The stream does not belong to this media source.');
+}
 
 export function nativeInputFormat(container) {
   container = container?.toLowerCase();

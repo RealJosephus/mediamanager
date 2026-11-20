@@ -13,3 +13,9 @@ const label = original ? 'the complete original Blu-ray' : 'the compact BDMV fix
 test(`${label} survives actual Native and Node VFS probing, fresh scans, SQLite continuation and cold PostgreSQL`, {
   skip: !enabled, timeout: 900000,
 }, run);
+
+const runPlayback = createBlurayScanExchange({ enabled, playback: true, movieName: 'Playable Compact Blu-ray (2010)',
+  prepareInput: ({ root, signal }) => prepareBlurayInput({ root, signal, playback: true }) });
+test('a two-clip Blu-ray with matching track declarations decodes the same HTTP and HLS frames as Native', {
+  skip: !enabled, timeout: 900000,
+}, runPlayback);

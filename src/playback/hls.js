@@ -10,6 +10,7 @@ import { StorageError, checkAbort } from '../storage/errors.js';
 import { BinaryResult, singleRange } from '../http/binary-result.js';
 import { videoColorRange } from '../library/media-streams.js';
 import { remuxPlan, RemuxService } from './remux.js';
+import { leaseDiscInput, resolveDiscInput } from '../media-execution/disc-input.js';
 import { getEncodingThreadCount } from './media-encoder.js';
 import { hlsArguments } from '../media-execution/streaming.js';
 import { stageSubtitleBurn } from '../media-execution/subtitle-burn.js';
@@ -39,6 +40,7 @@ const cachePlan = plan => ({
   keyframeSegments: plan.keyframeSegments,
   streams: plan.streams.map(stream => [stream.type, stream.index]),
   audio: plan.audioOutput,
+  externalAudio: plan.externalAudio,
   videoOutput: plan.videoOutput,
   subtitle: plan.burnSubtitle?.Index,
   video: plan.video ? [lower(plan.video.Codec), String(plan.video.NalLengthSize ?? '')] : null,
@@ -454,7 +456,8 @@ export class HlsService {
     }
   }
   mediaTools(configuration = this.getEncodingOptions()) {
-    return { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version, subtitleBurn: this.remux.subtitleBurn };
+    return { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version,
+      subtitleBurn: this.remux.subtitleBurn, canOpenSidecar: this.remux.canOpenSidecar };
   }
   plan(source, options, configuration = this.getEncodingOptions()) {
     return hlsPlan(source, options, this.mediaTools(configuration));
@@ -524,10 +527,10 @@ export class HlsService {
     return job.removing;
   }
   async stop(deviceId, playSessionId) { await this.jobs.stop(deviceId, playSessionId); }
-  #createJob({ key, plan, options, source, virtualPath, version, cacheDirectory, openRead, eventId }) {
+  #createJob({ key, plan, options, source, virtualPath, version, cacheDirectory, openRead, eventId, disc }) {
     if (this.#closed) throw failure('closed', 'HLS is closed.');
     if ([...this.#jobs.values()].filter(value => !value.exited && !matchesJob(value, options.DeviceId, options.PlaySessionId)).length >= this.maxConcurrentJobs) throw failure('busy', 'The HLS concurrency limit has been reached.');
-    const job = { key, plan, options, source, virtualPath, version, cacheDirectory, openRead, eventId,
+    const job = { key, plan, options, source, virtualPath, version, cacheDirectory, openRead, eventId, disc,
       controller: new AbortController(), readers: 0, pendingReaders: new Set(), tail: Promise.resolve() };
     job.directory = mkdtemp(path.join(cacheDirectory, 'mediamanager-hls-')).then(async directory => {
       try { await writeFile(path.join(directory, 'owner.json'), json({ kind: 'mediamanager-hls', pid: process.pid, id: this.#owner })); return directory; }
@@ -575,14 +578,18 @@ export class HlsService {
       const { directory: cacheDirectory, available } = await this.#initialize();
       if (!available) throw failure('unavailable', 'The HLS process is unavailable.');
       let version;
-      if (!openRead) {
-        const info = await this.vfs.stat(virtualPath, { signal: this.#lifetime.signal });
-        if (this.vfs.capabilities(virtualPath).reliableVersion && !plan.burnSubtitle?.Path) version = info.version;
+      const disc = !openRead && plan.discInput ? await resolveDiscInput(this.vfs, source.VideoType, virtualPath, this.#lifetime.signal) : undefined;
+      if (!openRead && !plan.burnSubtitle?.Path && !plan.externalAudio) {
+        if (disc) version = disc.version;
+        else {
+          const info = await this.vfs.stat(virtualPath, { signal: this.#lifetime.signal });
+          if (this.vfs.capabilities(virtualPath).reliableVersion) version = info.version;
+        }
       }
       const key = createHash('sha256').update(json(['event', cacheDirectory, source.LiveStreamId ? [source.LiveStreamId, source.Path] : virtualPath,
         version, request.headers['user-agent'], options.DeviceId, options.PlaySessionId, cachePlan(plan)])).digest('hex');
       const current = this.#jobs.get(key);
-      const job = current ?? this.#createJob({ key, plan, options, source, virtualPath, version, cacheDirectory, openRead,
+      const job = current ?? this.#createJob({ key, plan, options, source, virtualPath, version, cacheDirectory, openRead, disc,
         eventId: randomUUID().replaceAll('-', '') });
       await this.#withEventReader(job, request, response, async signal => {
         const directory = await job.directory, playlist = path.join(directory, 'main.m3u8');
@@ -640,8 +647,10 @@ export class HlsService {
     if (!Number.isSafeInteger(index) || index < -1 || index === -1 && plan.container !== 'mp4' || runtimeTicks < 0n) throw failure('invalid-request', 'The HLS segment is invalid.');
     const { directory: cacheDirectory, available } = await this.#initialize();
     if (!available) throw failure('unavailable', 'The HLS process is unavailable.');
-    const before = await this.vfs.stat(virtualPath, { signal }); checkAbort(signal);
-    const version = this.vfs.capabilities(virtualPath).reliableVersion === true && !plan.burnSubtitle?.Path ? before.version : null;
+    const disc = plan.discInput ? await resolveDiscInput(this.vfs, source.VideoType, virtualPath, signal) : undefined;
+    const before = disc ? undefined : await this.vfs.stat(virtualPath, { signal }); checkAbort(signal);
+    const inputVersion = disc ? disc.version : this.vfs.capabilities(virtualPath).reliableVersion === true ? before.version : null;
+    const version = plan.burnSubtitle?.Path || plan.externalAudio ? null : inputVersion;
     // The native cache identity uses the source, user agent, device and play session.
     // Pin the VFS version and byte-producing plan so a changed object, selected stream,
     // segment length, muxer or segment-number timeline cannot reuse earlier output.
@@ -649,7 +658,7 @@ export class HlsService {
     const canonicalStart = index >= 0 && plan.keyframeStarts?.[index] != null ? plan.keyframeStarts[index] : BigInt(Math.max(index, 0)) * plan.playlistSegmentTicks;
     const timelineOffset = runtimeTicks - canonicalStart;
     const key = createHash('sha256').update(json([cacheDirectory, virtualPath, version, request.headers['user-agent'], options.DeviceId, options.PlaySessionId, cachePlan(plan), timelineOffset])).digest('hex');
-    const job = this.#jobs.get(key) ?? this.#createJob({ key, plan, options, source, virtualPath, version, cacheDirectory });
+    const job = this.#jobs.get(key) ?? this.#createJob({ key, plan, options, source, virtualPath, version, cacheDirectory, disc });
     job.readers++; if (!job.options.PlaySessionId?.trim()) clearTimeout(job.idle);
     let finishReader;
     const finished = new Promise(resolve => { finishReader = resolve; }); job.pendingReaders.add(finished);
@@ -736,15 +745,17 @@ export class HlsService {
     const controller = new AbortController(); job.processController = controller;
     const signal = AbortSignal.any([job.controller.signal, controller.signal]);
     const timer = setTimeout(() => controller.abort(failure('timeout', 'HLS processing timed out.')), this.timeoutMs); timer.unref();
-    let lease, child, subtitles;
+    let lease, child, subtitles, externalAudio;
     try {
       if (job.plan.live && job.source.BufferMs > 0) await delay(job.source.BufferMs, undefined, { signal });
       if (job.openRead) {
         this.#liveBridge ??= new LiveStreamReadBridge();
         lease = await this.#liveBridge.lease(job.openRead, { signal });
-      } else lease = await this.remux.bridge.lease(job.virtualPath, { version: job.version, signal, expiresInMs: this.timeoutMs });
+      } else if (job.disc) lease = await leaseDiscInput(this.remux.bridge, job.disc, this.mediaEncoder, { signal, expiresInMs: this.timeoutMs });
+      else lease = await this.remux.bridge.lease(job.virtualPath, { version: job.version, signal, expiresInMs: this.timeoutMs });
       subtitles = await stageSubtitleBurn(this.remux.subtitleBurn, job.source, job.plan.burnSubtitle, job.virtualPath, signal);
-      const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution, subtitles, job.eventId);
+      if (job.plan.externalAudio) externalAudio = await this.remux.leaseSidecar(job.plan.externalAudio.path, { signal, expiresInMs: this.timeoutMs });
+      const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution, subtitles, job.eventId, externalAudio?.url);
       checkAbort(signal);
       const overrides = job.plan.videoOutput?.hardware?.environment;
       const environment = overrides ? { ...(this.mediaEncoder.environment ?? process.env), ...overrides } : this.mediaEncoder.environment;
@@ -764,10 +775,15 @@ export class HlsService {
       };
       child.stderr.on('data', bytes => consume(decoder.write(bytes)));
       try {
-        this.onProcess({ pid: child.pid, args: args.map(value => value === lease.url ? '[private source]' : value) });
+        this.onProcess({ pid: child.pid, args: args.map(value => value === lease.url || value === externalAudio?.url ? '[private source]' : value) });
         const code = await done; const finalText = decoder.end(); diagnostics = (diagnostics + finalText).slice(-8192); progressParser.end(finalText); checkAbort(signal);
-        if (code !== 0) throw new StorageError('invalid-response', 'The HLS streams could not be processed.', { exitCode: code, diagnostic: diagnostics.replaceAll(lease.url, '[private source]') });
-        if (job.version != null && (await this.vfs.stat(job.virtualPath, { signal })).version !== job.version) throw failure('version-changed', 'The HLS source changed.');
+        if (code !== 0) {
+          let diagnostic = lease.redact?.(diagnostics) ?? diagnostics.replaceAll(lease.url, '[private source]');
+          if (externalAudio) diagnostic = diagnostic.replaceAll(externalAudio.url, '[private source]');
+          throw new StorageError('invalid-response', 'The HLS streams could not be processed.', { exitCode: code, diagnostic });
+        }
+        if (job.disc) await job.disc.verify(signal);
+        else if (job.version != null && (await this.vfs.stat(job.virtualPath, { signal })).version !== job.version) throw failure('version-changed', 'The HLS source changed.');
       } finally { signal.removeEventListener('abort', abort); child.kill(); await done.catch(() => {}); }
     } catch (error) { job.error = signal.aborted ? signal.reason ?? failure('cancelled', 'HLS was cancelled.') : error; }
     finally {
@@ -775,6 +791,7 @@ export class HlsService {
       const errors = [];
       try { await job.cleaning; } catch (error) { errors.push(error); }
       try { await subtitles?.release(); } catch (error) { errors.push(error); }
+      try { await externalAudio?.release(); } catch (error) { errors.push(error); }
       try { await lease?.release(); } catch (error) { errors.push(error); }
       job.exited = true;
       if (job.eventId) this.#touch(job);

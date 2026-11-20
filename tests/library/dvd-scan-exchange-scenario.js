@@ -18,6 +18,7 @@ import { describeFile, sha256 } from '../../tools/validation/inventory.js';
 import { validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { declareFileTestResource } from '../helpers/file-test-resource.js';
+import { captureDiscPlayback } from '../helpers/disc-playback.js';
 import { databaseFilename, idKey, installStoppedExport, portAvailable, removeSyntheticPreparation,
   stoppedDatabase, unusedPort } from '../helpers/library-exchange-state.js';
 import { orderedExchangeSnapshot } from '../helpers/ordered-exchange-snapshot.js';
@@ -48,9 +49,10 @@ async function runDvdScanExchange(t, { fixture, original, movieName, prepareInpu
       candidate: 'Independent first PostgreSQL scan, Local read-only VFS media and separately writable instance metadata.',
       exchange: 'All native business tables and insertion sequences at each SQLite/PostgreSQL transfer boundary.',
       dto: 'Declared technical Movie/source fields and full stream/chapter values, metadata edits and user favorite state.',
-      excluded: ['full Movie DTO parity', 'Blu-ray', 'DVD navigation or decoded playback', 'production scale', 'full instance packaging'] },
+      excluded: ['full Movie DTO parity', 'Blu-ray', 'DVD menu navigation', ...(original ? ['original disc decoding'] : []),
+        'production scale', 'full instance packaging'] },
     requests: [], scans: [], snapshots: {}, rows: {}, shutdowns: [], nodeProbes: [], runtimeErrors: [], cleanup: {} };
-  let current, native, runtime, database, returned, sqlite, supply, proxy, token, itemId, failed = false, failure, stage = 'prepare';
+  let current, native, runtime, database, returned, sqlite, supply, proxy, token, itemId, nativePlayback, failed = false, failure, stage = 'prepare';
   const setStage = value => { stage = value; if (proxy) proxy.report.phase = value; };
   const request = async (route, { method = 'GET', body, cleanup = false } = {}) => {
     const observed = { stage, route, method, ...(body === undefined ? {} : { body }) }; report.requests.push(observed);
@@ -135,7 +137,8 @@ async function runDvdScanExchange(t, { fixture, original, movieName, prepareInpu
     report.sourceBindings = await current.sourceBindings(['MediaBrowser.MediaEncoding/Encoder/MediaEncoder.cs',
       'MediaBrowser.Providers/MediaInfo/FFProbeVideoInfo.cs', 'Emby.Server.Implementations/Library/Resolvers/Movies/MovieResolver.cs',
       'Emby.Server.Implementations/Library/LibraryManager.cs', 'Jellyfin.Api/Controllers/LibraryController.cs',
-      'Jellyfin.Api/Controllers/ItemUpdateController.cs', 'MediaBrowser.Controller/Entities/Video.cs', 'MediaBrowser.Controller/IO/LocalMediaProxy.cs']);
+      'Jellyfin.Api/Controllers/ItemUpdateController.cs', 'MediaBrowser.Controller/Entities/Video.cs', 'MediaBrowser.Controller/IO/LocalMediaProxy.cs',
+      'MediaBrowser.Controller/MediaEncoding/EncodingHelper.cs']);
     await cp(current.sourceRoot, instanceRoot, { recursive: true, force: false, errorOnExist: true });
     await current.prepareClone(instanceRoot, port); report.syntheticPreparation = removeSyntheticPreparation(instanceRoot);
     await mkdir(mediaRoot);
@@ -193,7 +196,13 @@ async function runDvdScanExchange(t, { fixture, original, movieName, prepareInpu
     for (const file of component.selections[0].files) assert.ok(report.proxy.requests.some(request =>
       request.phase === 'native-original-dvd-scan' && request.file === file && request.method === 'GET'
       && request.readBytes > 0 && request.handleClosed === true), 'The Native scan must read every selected VOB.');
-    await startNative('native-dvd-public'); report.native = await detail('native-original-dvd-detail'); await stopNative('native-baseline-complete');
+    await startNative('native-dvd-public'); report.native = await detail('native-original-dvd-detail');
+    if (!original) {
+      report.playback = { native: {}, node: {} };
+      nativePlayback = await captureDiscPlayback({ origin, token, itemId: idKey(itemId), detail: report.native.value,
+        root, label: 'native-disc', report: report.playback.native, signal: t.signal });
+    }
+    await stopNative('native-baseline-complete');
     await rename(instanceRoot, path.join(root, 'retained-native-instance'));
     await cp(emptyInstance, instanceRoot, { recursive: true, force: false, errorOnExist: true });
     assert.deepEqual((await describeFile(path.join(instanceRoot, 'config'))).entries, report.emptyConfiguration.entries);
@@ -212,6 +221,11 @@ async function runDvdScanExchange(t, { fixture, original, movieName, prepareInpu
     report.rows.node = await discRows(database, disc); assert.equal(idKey(report.rows.node.row.Id), idKey(itemId));
     assert.deepEqual(report.rows.node.technical, report.rows.native.technical);
     report.node = await detail('node-original-dvd-detail'); assert.deepEqual(report.node.technical, report.native.technical);
+    if (nativePlayback) {
+      const nodePlayback = await captureDiscPlayback({ origin, token, itemId: idKey(itemId), detail: report.node.value,
+        root, label: 'node-disc', report: report.playback.node, signal: t.signal });
+      assert.deepEqual(nodePlayback, nativePlayback);
+    }
     const actualProbes = report.nodeProbes.filter(probe => probe.stage === 'node-original-dvd-first-scan');
     assert.equal(actualProbes.length, component.probes.length, 'The fresh Node scan must probe every selected VOB.');
     for (const [index, probe] of actualProbes.entries()) {
