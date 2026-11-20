@@ -67,14 +67,14 @@ function probeArguments(input, {
 
 // Returns raw probe data explicitly. Native normalization and persistence are separate required stages.
 export async function probeRaw(bridge, virtualPath, {
-  executable, environment, signal, timeoutMs = 60000, maxOutputBytes = 32 * 1024 * 1024, relatedPaths = [], ...probeOptions
+  executable, environment, signal, timeoutMs = 60000, maxOutputBytes = 32 * 1024 * 1024, relatedPaths = [], version, ...probeOptions
 } = {}) {
   requireExecutable(executable);
   checkAbort(signal);
   for (const limit of [timeoutMs, maxOutputBytes]) {
     if (!Number.isSafeInteger(limit) || limit < 1) throw new TypeError('Probe limits must be positive safe integers.');
   }
-  const lease = await bridge.lease(virtualPath, { signal, expiresInMs: timeoutMs + 1000, relatedPaths });
+  const lease = await bridge.lease(virtualPath, { signal, expiresInMs: timeoutMs + 1000, relatedPaths, version });
   let result, primary;
   try {
     result = await runProbe(buildHttpProbeArguments(lease.url, probeOptions), lease.url,

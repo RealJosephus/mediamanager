@@ -3,6 +3,7 @@ import { once } from 'node:events';
 import { ProbeReadBridge } from '../storage/probe-bridge.js';
 import { StorageError } from '../storage/errors.js';
 import { getEncodingThreadCount } from './media-encoder.js';
+import { leaseDiscInput, resolveDiscInput } from '../media-execution/disc-input.js';
 import { remuxArguments, remuxPlan } from '../media-execution/streaming.js';
 import { stageSubtitleBurn } from '../media-execution/subtitle-burn.js';
 import { TranscodeJobs, transcodingInfo } from './transcode-jobs.js';
@@ -64,8 +65,11 @@ export class RemuxService {
   }
   async #stream(source, virtualPath, plan, threads, response, job) {
     const { signal } = job.controller;
-    const before = await this.vfs.stat(virtualPath, { signal });
-    const lease = await this.bridge.lease(virtualPath, { signal, version: before.version, expiresInMs: this.timeoutMs });
+    const disc = plan.discInput ? await resolveDiscInput(this.vfs, source.VideoType, virtualPath, signal) : undefined;
+    const before = disc ? undefined : await this.vfs.stat(virtualPath, { signal });
+    const lifetime = { signal, expiresInMs: this.timeoutMs };
+    const lease = disc ? await leaseDiscInput(this.bridge, disc, this.mediaEncoder, lifetime)
+      : await this.bridge.lease(virtualPath, { ...lifetime, version: before.version });
     let child, done, failed, primary, killTimer, subtitles;
     const cleanupErrors = [];
     const kill = () => { try { child?.kill(); } catch (error) { cleanupErrors.push(error); } };
@@ -104,8 +108,11 @@ export class RemuxService {
         await done;
         if (failed) throw failed;
         if (child.exitCode !== 0 || !received) throw failure('invalid-response', 'The selected streams could not be processed.');
-        const after = await this.vfs.stat(virtualPath, { signal });
-        if (before.version != null && before.version !== after.version) throw failure('version-changed', 'The source changed during remuxing.');
+        if (disc) await disc.verify(signal);
+        else {
+          const after = await this.vfs.stat(virtualPath, { signal });
+          if (before.version != null && before.version !== after.version) throw failure('version-changed', 'The source changed during remuxing.');
+        }
         response.end();
       } finally {
         if (child.exitCode === null && child.signalCode === null) {

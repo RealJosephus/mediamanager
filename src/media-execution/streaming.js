@@ -101,8 +101,10 @@ function subtitleOverlay(plan, subtitles, ticks, shift) {
 
 export function remuxPlan(source, options = {}, { capabilities, configuration, version, subtitleBurn } = {}) {
   options = { ...options };
+  const discInput = source.VideoType === 'Dvd' || source.VideoType === 'BluRay';
   if (!options.LiveInput && (source.IsInfiniteStream || source.RequiresOpening || source.RequiresClosing)
-    || source.VideoType && !['VideoFile', 'Iso'].includes(source.VideoType)
+    || source.VideoType && !discInput && !['VideoFile', 'Iso'].includes(source.VideoType)
+    || discInput && source.Protocol !== 'File'
     || /^(?:hls|applehttp|dash)$/i.test(source.Container)) throw failure('not-supported', 'Streaming requires an opened media input.');
   const container = options.Container?.toLowerCase();
   const output = containers[container];
@@ -164,7 +166,7 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
   }
   const inputFormat = video && configuration?.HardwareAccelerationType && configuration.HardwareAccelerationType !== 'none'
     && source.VideoType === 'VideoFile' ? nativeInputFormat(source.Container) : undefined;
-  return { container, ...output, inputVideo: video, inputFormat, videoOutput, audioOutput, burnSubtitle, bitmapIndex, subtitleHardware,
+  return { container, ...output, inputVideo: video, inputFormat, discInput, videoOutput, audioOutput, burnSubtitle, bitmapIndex, subtitleHardware,
     streams: [video, audio, subtitle].filter(Boolean).map(stream => ({ type: stream.Type, codec: stream.Codec, index: stream.Type === 'Subtitle' ? subtitleInputIndex(source, stream) : stream.Index })),
     start, seek: BigInt(options.StartTimeTicks ?? 0) > 0n, copyTimestamps: options.CopyTimestamps === true, m2ts: options.EnableMpegtsM2TsMode === true, mediaType: options.MediaType ?? 'Video' };
 }
@@ -175,7 +177,8 @@ export function remuxArguments(url, plan, threads, version, subtitles) {
   const seek = plan.seek ? ['-ss', mediaSeekTime(plan.start)] : [];
   args.push(...seek);
   if (plan.videoOutput?.encoder === 'copy') args.push('-fflags', '+genpts');
-  if (plan.inputFormat) args.push('-f', plan.inputFormat);
+  if (plan.discInput) args.push('-f', 'concat', '-safe', '0');
+  else if (plan.inputFormat) args.push('-f', plan.inputFormat);
   const shift = subtitles?.filter && !plan.copyTimestamps ? Math.round(Number(plan.start) / 10000000) : null;
   const overlay = subtitleOverlay(plan, subtitles, plan.start, shift);
   args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []), '-i', url,
@@ -234,7 +237,8 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
   const inputFlags = [plan.ignoreDts && '+igndts', plan.ignoreIndex && '+ignidx',
     (plan.genPts || plan.videoOutput?.encoder === 'copy') && '+genpts', plan.discardCorrupt && '+discardcorrupt'].filter(Boolean);
   if (inputFlags.length) args.push('-fflags', inputFlags.join(''));
-  if (plan.inputFormat) args.push('-f', plan.inputFormat);
+  if (plan.discInput) args.push('-f', 'concat', '-safe', '0');
+  else if (plan.inputFormat) args.push('-f', plan.inputFormat);
   const overlay = subtitleOverlay(plan, subtitles, runtimeTicks > 0n ? runtimeTicks : plan.start, null);
   args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []), '-i', url,
     ...bitmapInputArguments(subtitles, overlay, seek, probe));

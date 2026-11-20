@@ -5,6 +5,12 @@ import { StorageError } from './errors.js';
 import { normalizePath, baseName, parentPath } from './paths.js';
 
 const checkAbort = signal => { if (signal?.aborted) throw Object.assign(new StorageError('cancelled', 'Probe transport was cancelled.'), { cause: signal.reason }); };
+function checkLifetime(signal, expiresInMs) {
+  checkAbort(signal);
+  if (expiresInMs === null ? !signal : !Number.isSafeInteger(expiresInMs) || expiresInMs < 1) {
+    throw new TypeError('A lease requires a positive lifetime or an owning cancellation signal.');
+  }
+}
 const failureStatuses = new Map([
   ['not-found', 404], ['permission-denied', 403], ['authentication-required', 403],
   ['version-changed', 412], ['range-not-satisfiable', 416], ['cancelled', 499], ['timeout', 504],
@@ -69,10 +75,7 @@ export class ProbeReadBridge {
   }
 
   async lease(path, { signal, expiresInMs = 60000, version, relatedPaths = [], extensionHint = '' } = {}) {
-    checkAbort(signal);
-    if (expiresInMs === null ? !signal : !Number.isSafeInteger(expiresInMs) || expiresInMs < 1) {
-      throw new TypeError('A lease requires a positive lifetime or an owning cancellation signal.');
-    }
+    checkLifetime(signal, expiresInMs);
     path = normalizePath(path);
     if (!['', '.smi', '.sami', '.srt', '.subrip', '.ass', '.ssa', '.vtt', '.webvtt'].includes(extensionHint)) {
       throw new TypeError('A probe filename hint must be a supported text subtitle extension.');
@@ -89,6 +92,14 @@ export class ProbeReadBridge {
     }
   }
 
+  async leaseBuffer(bytes, { signal, expiresInMs = 60000 } = {}) {
+    if (!Buffer.isBuffer(bytes)) throw new TypeError('A private buffer lease requires bytes.');
+    checkLifetime(signal, expiresInMs);
+    await this.start();
+    this.#checkAcquisition(signal);
+    return this.#registerLease(new Map([['', { bytes: Buffer.from(bytes) }]]), { signal, expiresInMs });
+  }
+
   #checkAcquisition(signal) {
     checkAbort(signal);
     if (this.#closed) throw new StorageError('closed', 'The probe bridge is closed.');
@@ -101,11 +112,9 @@ export class ProbeReadBridge {
     this.#checkAcquisition(signal);
     if (info.kind !== 'file') throw new StorageError('is-directory', 'A probe lease requires a file.');
     if (version != null && info.version !== version) throw new StorageError('version-changed', 'The leased object changed before it was opened.');
-    const token = randomBytes(32).toString('hex');
-    const expiresAt = expiresInMs === null ? null : Date.now() + expiresInMs;
     const objects = new Map();
-    const object = { path, version: version ?? info.version };
-    objects.set(relatedPaths.length ? encodeURIComponent(baseName(path)) : '', object);
+    const filename = relatedPaths.length ? encodeURIComponent(baseName(path)) : '';
+    objects.set(filename, { path, version: version ?? info.version });
     for (const related of relatedPaths) {
       const relatedPath = normalizePath(related);
       if (parentPath(relatedPath) !== parentPath(path)) throw new StorageError('invalid-path', 'Related probe objects must share their directory.');
@@ -114,7 +123,13 @@ export class ProbeReadBridge {
       if (relatedInfo.kind !== 'file') throw new StorageError('is-directory', 'Related probe objects must be files.');
       objects.set(encodeURIComponent(baseName(relatedPath)), { path: relatedPath, version: relatedInfo.version });
     }
-    const lease = { ...object, objects, expiresAt, extensionHint, reads: new Set(), operations: new Set(), cleanupErrors: [], release: null };
+    return this.#registerLease(objects, { signal, expiresInMs, extensionHint, filename });
+  }
+
+  async #registerLease(objects, { signal, expiresInMs, extensionHint = '', filename = '' }) {
+    const token = randomBytes(32).toString('hex');
+    const expiresAt = expiresInMs === null ? null : Date.now() + expiresInMs;
+    const lease = { objects, expiresAt, extensionHint, reads: new Set(), operations: new Set(), cleanupErrors: [], release: null };
     let timer, releasing;
     const release = () => {
       if (releasing) return releasing;
@@ -137,8 +152,8 @@ export class ProbeReadBridge {
     signal?.addEventListener('abort', onAbort, { once: true });
     if (expiresInMs !== null) { timer = setTimeout(onAbort, expiresInMs); timer.unref(); }
     if (signal?.aborted) { await release(); checkAbort(signal); }
-    return { url: `${this.#origin}/${token}${extensionHint}${relatedPaths.length ? '/' + encodeURIComponent(baseName(path)) : ''}`, expiresAt, release,
-      consistency: lease.version ? 'version-precondition' : 'unversioned' };
+    return { url: `${this.#origin}/${token}${extensionHint}${filename ? '/' + filename : ''}`, expiresAt, release,
+      consistency: objects.get(filename).version ? 'version-precondition' : 'unversioned' };
   }
 
   async #serve(request, response) {
@@ -162,6 +177,14 @@ export class ProbeReadBridge {
       request.once('aborted', stop);
       response.once('close', stop);
       response.setHeader('Cache-Control', 'no-store');
+      if (object.bytes) {
+        response.setHeader('Content-Type', 'application/octet-stream');
+        response.setHeader('Content-Length', String(object.bytes.length));
+        response.setHeader('Accept-Ranges', 'none');
+        response.writeHead(200);
+        response.end(request.method === 'HEAD' ? undefined : object.bytes);
+        return;
+      }
       if (request.method === 'HEAD') {
         const info = await this.#vfs.stat(object.path, { signal: controller.signal });
         if (object.version && object.version !== info.version) throw new StorageError('version-changed', 'The leased object changed.');
