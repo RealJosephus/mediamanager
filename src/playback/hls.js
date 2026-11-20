@@ -270,7 +270,6 @@ export function hlsPlan(source, options = {}, tools) {
   const externalHlsFormat = stream => ['srt', 'subrip', 'vtt', 'webvtt', 'ass', 'ssa', 'smi'].includes(lower(path.win32.extname(stream.Path ?? '').slice(1) || stream.Codec));
   const deliverable = stream => options.CanDeliverHlsSubtitle?.(stream) ?? (stream.IsExternal && externalHlsFormat(stream));
   if (!audioOnly && (!video || !['h264', 'hevc', 'av1', 'vp9'].includes(plan.videoOutput?.codec)) || plan.streams.some(stream => stream.type === 'Subtitle')
-    || plan.videoOutput?.encoder === 'copy' && (video?.DvProfile != null || container === 'ts' && (video?.Rotation ?? 0) !== 0)
     || options.SubtitleMethod === 'Hls' && (!selectedSubtitle?.IsTextSubtitleStream || !deliverable(selectedSubtitle))
     || subtitleGroup && options.SubtitleMethod !== 'Drop' && textSubtitles.some(stream => !deliverable(stream))) throw failure('not-supported', 'This HLS stream requires an unavailable manifest or processing branch.');
   const rate = plan.videoOutput?.frameRate;
@@ -300,9 +299,27 @@ const adaptiveBitrateSteps = [
   [1000000, 300000], [600000, 200000], [400000, 100000],
 ];
 
+function playlistVideoCodec(codec, profile, level, bitDepth = 8) {
+  if (!level) return '';
+  if (codec === 'h264') {
+    const prefix = ({ high: '6400', main: '4D40', baseline: '42E0' })[lower(profile)] ?? '4240';
+    return `avc1.${prefix}${level.toString(16).toUpperCase().padStart(2, '0')}`;
+  }
+  if (codec === 'hevc') return `hvc1.${['main10', 'main 10'].includes(lower(profile)) ? '2' : '1'}.4.L${level}.B0`;
+  if (codec === 'av1') return `av01.0.${String(level).padStart(2, '0')}M.${String(bitDepth).padStart(2, '0')}`;
+  return '';
+}
+
 export function masterPlaylist(source, options = {}, query = '', tools) {
   const plan = hlsPlan(source, options, tools), { video, videoOutput, audio, audioOutput } = plan;
   const parameters = [...new URLSearchParams(query)];
+  const videoCopied = videoOutput?.encoder === 'copy';
+  if (videoCopied && plan.container === 'ts' && video.Rotation) {
+    // MPEG-TS cannot carry the display matrix used by the original file.
+    const allowCopy = parameters.find(([name]) => lower(name) === 'allowvideostreamcopy');
+    if (allowCopy) allowCopy[1] = 'false'; else parameters.push(['AllowVideoStreamCopy', 'false']);
+    if (!parameters.some(([name]) => lower(name) === 'videocodec')) parameters.push(['VideoCodec', options.VideoCodec || 'h264']);
+  }
   if (audioOutput) {
     const audioKey = parameters.find(entry => lower(entry[0]) === 'audiocodec');
     const codec = audioOutput.encoder === 'copy' ? 'copy' : audioOutput.codec;
@@ -311,15 +328,9 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
   if (options.SegmentContainer && !parameters.some(([key]) => lower(key) === 'segmentcontainer')) parameters.push(['SegmentContainer', options.SegmentContainer]);
   const variantUrl = entries => (plan.live ? 'live.m3u8?' : 'main.m3u8?')
     + entries.map(([key, value]) => `${encode(key)}=${encodeQueryValue(value, Boolean(video))}`).join('&');
-  const videoCopied = videoOutput?.encoder === 'copy';
   const profile = lower(videoOutput?.profile ?? (videoCopied ? undefined : 'high'));
   const level = videoOutput?.level ?? (videoCopied ? undefined : { h264: 41, hevc: 120, av1: 8 }[videoOutput?.codec]);
-  const suffix = level?.toString(16).toUpperCase().padStart(2, '0');
-  const videoCodec = !level ? '' : ({
-    h264: `avc1.${({ high: '6400', main: '4D40', baseline: '42E0' })[profile] ?? '4240'}${suffix}`,
-    hevc: `hvc1.${['main10', 'main 10'].includes(profile) ? '2' : '1'}.4.L${level}.B0`,
-    av1: `av01.0.${String(level).padStart(2, '0')}M.08`,
-  })[videoOutput.codec];
+  const videoCodec = playlistVideoCodec(videoOutput?.codec, profile, level, videoCopied ? video.BitDepth ?? 8 : 8);
   const audioCodec = audioOutput && ({
     aac: audioOutput.encoder === 'copy' && lower(audio.Profile) === 'he-aac' ? 'mp4a.40.5' : 'mp4a.40.2',
     mp3: 'mp4a.40.34', ac3: 'ac-3', eac3: 'ec-3', alac: 'alac', flac: 'fLaC', opus: 'opus', dts: 'dtsc', truehd: 'mlpa',
@@ -331,15 +342,19 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
   const selected = source.MediaStreams.find(stream => stream.Type === 'Subtitle' && stream.Index === options.SubtitleStreamIndex);
   const subtitleGroup = subtitles.length > 0 && options.SubtitleMethod === 'Hls'
     && !(selected && options.SubtitleMethod === 'Encode') ? 'subs' : null;
+  const videoRange = range === 'HDR' ? rangeType.includes('HLG') || video.ColorTransfer === 'arib-std-b67' ? 'HLG' : 'PQ' : range;
   let attributes = '';
-  if (range !== 'Unknown') attributes += `,VIDEO-RANGE=${range === 'SDR' ? 'SDR' : rangeType.includes('HLG') || video.ColorTransfer === 'arib-std-b67' ? 'HLG' : 'PQ'}`;
-  const codecs = [videoCodec, audioCodec].filter(Boolean).join(',');
-  if (codecs) attributes += `,CODECS="${codecs}"`;
   if (videoOutput?.width && videoOutput?.height) attributes += `,RESOLUTION=${videoOutput.width}x${videoOutput.height}`;
   const frameRate = video && (options.Framerate ?? (options.MaxFramerate != null ? Math.min(options.MaxFramerate, video.RealFrameRate ?? options.MaxFramerate) : video.RealFrameRate));
   if (frameRate) attributes += `,FRAME-RATE=${round(frameRate * 1000) / 1000}`;
   if (subtitleGroup) attributes += `,SUBTITLES="${subtitleGroup}"`;
-  const streamInfo = bandwidth => `#EXT-X-STREAM-INF:BANDWIDTH=${bandwidth},AVERAGE-BANDWIDTH=${bandwidth}${attributes}`;
+  const streamInfo = (bandwidth, range = videoRange, codec = videoCodec, supplemental) => {
+    const rangeField = range === 'Unknown' ? '' : `,VIDEO-RANGE=${range}`;
+    const codecs = [codec, audioCodec].filter(Boolean).join(',');
+    const codecsField = codecs ? `,CODECS="${codecs}"` : '';
+    const supplementalField = supplemental ? `,SUPPLEMENTAL-CODECS="${supplemental}"` : '';
+    return `#EXT-X-STREAM-INF:BANDWIDTH=${bandwidth},AVERAGE-BANDWIDTH=${bandwidth}${rangeField}${codecsField}${supplementalField}${attributes}`;
+  };
   const lines = ['#EXTM3U'];
   const token = options.AccessToken ?? parameters.find(([key]) => lower(key) === 'apikey')?.[1] ?? '';
   const mediaSourceId = options.MediaSourceId ?? source.Id;
@@ -347,7 +362,27 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
     const selectedIndex = options.SubtitleMethod === 'Hls' ? selected?.Index : undefined;
     for (const stream of subtitles) lines.push(`#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="${stream.DisplayTitle ?? ''}",DEFAULT=${stream.Index === selectedIndex ? 'YES' : 'NO'},FORCED=${stream.IsForced ? 'YES' : 'NO'},AUTOSELECT=YES,URI="${mediaSourceId}/Subtitles/${stream.Index}/subtitles.m3u8?SegmentLength=30&ApiKey=${token}",LANGUAGE="${stream.Language ?? 'Unknown'}"`);
   }
-  lines.push(streamInfo(bitrate), variantUrl(parameters));
+  const hdr = videoOutput?.hdr;
+  if (hdr?.standaloneDoviCodec) lines.push(streamInfo(bitrate, 'PQ', hdr.standaloneDoviCodec), variantUrl(parameters));
+  const supplemental = hdr?.supplementalDoviCodec ?? (hdr?.supplementalHdr10Plus && videoCodec ? `${videoCodec}/cdm4` : undefined);
+  lines.push(streamInfo(bitrate, videoRange, videoCodec, supplemental), variantUrl(parameters));
+  if (videoCopied && range === 'HDR' && options.PermitVideoEncoding !== false) {
+    const { AllowAv1Encoding, AllowHevcEncoding } = tools?.configuration ?? {};
+    const copyCodec = videoOutput.codec;
+    const sameCodecSdr = copyCodec === 'hevc' && AllowHevcEncoding || copyCodec === 'av1' && AllowAv1Encoding;
+    for (const codec of sameCodecSdr ? [copyCodec, 'h264'] : ['h264']) {
+      const variants = new URLSearchParams(parameters);
+      const settings = { VideoCodec: codec, AllowVideoStreamCopy: 'false' };
+      if (codec !== 'h264') settings[`${codec}-profile`] = 'main';
+      for (const [key, value] of Object.entries(settings)) {
+        const existing = [...variants.keys()].find(name => lower(name) === lower(key));
+        variants.set(existing ?? key, value);
+      }
+      const variantProfile = options.StreamOptions?.[`${codec}-profile`]?.split(/[|,]/u)[0];
+      const variantLevel = Number(options.StreamOptions?.[`${codec}-level`]) || { h264: 41, hevc: 120, av1: 19 }[codec];
+      lines.push(streamInfo(bitrate, 'SDR', playlistVideoCodec(codec, variantProfile, variantLevel)), variantUrl([...variants]));
+    }
+  }
   if (options.EnableAdaptiveBitrateStreaming && options.RemoteClient && !plan.live && source.Path?.trim()
     && videoOutput && !videoCopied && audioOutput?.encoder !== 'copy' && options.VideoBitRate != null) {
     const variation = adaptiveBitrateSteps.find(([threshold]) => bitrate >= threshold)?.[1] ?? 50000;

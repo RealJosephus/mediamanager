@@ -217,6 +217,15 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
     start, seek: BigInt(options.StartTimeTicks ?? 0) > 0n, copyTimestamps: options.CopyTimestamps === true, m2ts: options.EnableMpegtsM2TsMode === true, mediaType: options.MediaType ?? 'Video' };
 }
 
+function copiedVideoBitstream(plan) {
+  const output = plan.videoOutput;
+  if (output?.encoder !== 'copy') return [];
+  const annexB = !plan.live && plan.inputVideo?.NalLengthSize !== '0' && ['h264', 'hevc'].includes(output.codec)
+    ? `${output.codec}_mp4toannexb` : undefined;
+  const filters = [annexB, output.hdr?.filter].filter(Boolean);
+  return filters.length ? ['-bsf:v', filters.join(',')] : [];
+}
+
 export function remuxArguments(url, plan, threads, version, subtitles, audioUrl, subtitleUrl) {
   if (!privateUrl.test(url)) throw new TypeError('Remuxing requires a private VFS input.');
   const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-protocol_whitelist', 'http,tcp'];
@@ -262,8 +271,7 @@ export function remuxArguments(url, plan, threads, version, subtitles, audioUrl,
   if (autoMap || !plan.streams.some(stream => stream.type === 'Subtitle')) args.push('-sn');
   args.push('-dn');
   if (plan.container === 'ts') {
-    const video = plan.streams.find(stream => stream.type === 'Video');
-    if (!plan.live && plan.videoOutput?.encoder === 'copy' && ['h264', 'hevc'].includes(video?.codec)) args.push('-bsf:v', `${video.codec}_mp4toannexb`);
+    args.push(...copiedVideoBitstream(plan));
     if (plan.m2ts) args.push('-mpegts_m2ts_mode', '1');
   }
   if (plan.copyTimestamps) args.push('-copyts', '-avoid_negative_ts', 'disabled', '-start_at_zero');
@@ -303,12 +311,10 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
     const output = { ...plan.videoOutput, filters: overlay ? [] : [...(plan.videoOutput.filters ?? [])] };
     if (!overlay && subtitles?.filter) insertTextSubtitle(output.filters, subtitles.filter);
     args.push(...videoArguments(output, { hls: true, event: eventId != null, segmentLength: plan.segmentLength, version }));
-    if (plan.videoOutput.codec === 'hevc') args.push('-tag:v:0', 'hvc1');
+    if (output.hdr?.doviTag) args.push('-tag:v:0', output.hdr.doviTag, '-strict', '-2');
+    else if (output.codec === 'hevc') args.push('-tag:v:0', 'hvc1');
     if (plan.videoOutput.encoder === 'copy') {
-      if (!plan.live && ['h264', 'hevc'].includes(plan.videoOutput.codec) && plan.video.NalLengthSize !== '0') {
-        args.push('-bsf:v', plan.videoOutput.codec + '_mp4toannexb');
-      }
-      args.push('-start_at_zero');
+      args.push(...copiedVideoBitstream(plan), '-start_at_zero');
     }
     if (subtitles?.filter) args.push('-start_at_zero');
     if (eventId && plan.container === 'ts') args.push('-flags', '-global_header');

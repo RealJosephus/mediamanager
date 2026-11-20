@@ -37,7 +37,46 @@ export function outputVideoBitrate(video, request, codec) {
   return Math.min(scaleBitrate(bitrate, video.Codec, codec), request.VideoBitRate, 400000000);
 }
 
-function canCopy(video, source, request, codecs) {
+function copyHdrMetadata(video, codec, colorRange, rangeType, requested, capabilities) {
+  if (codec !== 'hevc' && codec !== 'av1') return;
+  const dovi = rangeType.startsWith('dovi');
+  const hdr10Plus = rangeType.endsWith('hdr10plus');
+  if (!dovi && !hdr10Plus) return;
+  const supportsDovi = requested.includes('dovi');
+  let removeDovi = false, removeHdr10Plus = false;
+  if (requested.length && (colorRange === 'HDR' || rangeType === 'doviinvalid')) {
+    const supportsEnhancementLayer = requested.includes('doviwithel');
+    removeDovi = rangeType === 'doviwithel' && !supportsEnhancementLayer && requested.includes('hdr10')
+      || rangeType === 'doviinvalid' && supportsDovi;
+    if (rangeType === 'doviwithelhdr10plus') {
+      removeHdr10Plus = supportsEnhancementLayer && !requested.includes('doviwithelhdr10plus');
+      removeDovi = !removeHdr10Plus;
+    }
+    removeHdr10Plus ||= rangeType === 'doviwithhdr10plus' && supportsDovi;
+  }
+  const filters = capabilities.bitstreamOptions ?? {};
+  let filter;
+  if (removeDovi) {
+    if (codec === 'hevc' ? filters.HevcMetadataRemoveDovi : filters.Av1MetadataRemoveDovi) filter = `${codec}_metadata=remove_dovi=1`;
+    else if (filters.DoviRpuStrip) filter = 'dovi_rpu=strip=1';
+  } else if (removeHdr10Plus && (codec === 'hevc' ? filters.HevcMetadataRemoveHdr10Plus : filters.Av1MetadataRemoveHdr10Plus)) {
+    filter = `${codec}_metadata=remove_hdr10plus=1`;
+  }
+  const doviRetained = dovi && !removeDovi;
+  const doviTag = doviRetained && supportsDovi
+    ? codec === 'av1' ? 'dav1' : rangeType === 'doviwithhlg' ? 'hvc1' : 'dvh1'
+    : undefined;
+  const doviCodec = doviRetained && video.DvProfile != null && video.DvLevel != null
+    ? `${codec === 'av1' ? 'dav1' : 'dvh1'}.${String(video.DvProfile).padStart(2, '0')}.${String(video.DvLevel).padStart(2, '0')}`
+    : undefined;
+  const compatibility = ({ doviwithhdr10: 'db1p', doviwithhdr10plus: 'db1p', doviwithhlg: 'db4h' })[rangeType];
+  return { supported: !(removeDovi || removeHdr10Plus) || Boolean(filter), filter, doviTag,
+    standaloneDoviCodec: rangeType === 'dovi' && supportsDovi ? doviCodec : undefined,
+    supplementalDoviCodec: doviCodec && compatibility ? `${doviCodec}/${compatibility}` : undefined,
+    supplementalHdr10Plus: hdr10Plus && !doviRetained && !removeHdr10Plus };
+}
+
+function canCopy(video, source, request, codecs, range, requestedRanges) {
   const codec = normalizeCodec(video.Codec);
   if (!codec || request.BurnSubtitle || codecs.length > 0 && !codecs.includes(codec)
     || request.EnableAutoStreamCopy === false || request.AllowVideoStreamCopy === false) return false;
@@ -66,12 +105,11 @@ function canCopy(video, source, request, codecs) {
   if (rotations.length && video.Rotation && !rotations.includes(String(video.Rotation))) return false;
   const tag = option(request, codec, 'codectag');
   if (tag && !list(tag).includes(lower(video.CodecTag))) return false;
-  const ranges = list(option(request, codec, 'rangetype'));
-  if (ranges.length) {
-    const range = lower(video.VideoRangeType ?? videoColorRange(video)[1]);
+  if (requestedRanges.length) {
     const fallback = ({ hdr10plus: 'hdr10', doviwithhdr10: 'hdr10', doviwithhlg: 'hlg', doviwithsdr: 'sdr' })[range];
-    if (range === 'unknown' || ranges.length === 1 && ranges[0] === 'sdr' && range !== 'sdr'
-      || !ranges.includes(range) && !ranges.includes(fallback)) return false;
+    const doviWithBase = (codec === 'hevc' || codec === 'av1') && range.startsWith('dovi') && range !== 'dovi';
+    if (range === 'unknown' || requestedRanges.length === 1 && requestedRanges[0] === 'sdr' && range !== 'sdr'
+      || !requestedRanges.includes(range) && !requestedRanges.includes(fallback) && !doviWithBase) return false;
   }
   return !(lower(source.Container) === 'avi' && codec === 'h264');
 }
@@ -455,9 +493,13 @@ export function videoStreamPlan(video, source, request, allowed, { configuration
   const inputCodec = normalizeCodec(video.Codec);
   const codecs = list(request.VideoCodec).map(normalizeCodec);
   const bitrate = outputVideoBitrate(video, request, codecs[0]);
-  if (allowed.includes(inputCodec) && (codecs[0] === 'copy' || canCopy(video, source, request, codecs))) {
+  const [colorRange, range] = videoColorRange(video);
+  const rangeType = lower(video.VideoRangeType ?? range);
+  const ranges = lower(request.VideoRangeType || option(request, inputCodec, 'rangetype')).split(/[|,]/u).filter(Boolean);
+  const hdr = copyHdrMetadata(video, inputCodec, colorRange, rangeType, ranges, capabilities);
+  if (hdr?.supported !== false && allowed.includes(inputCodec) && (codecs[0] === 'copy' || canCopy(video, source, request, codecs, rangeType, ranges))) {
     return { codec: inputCodec, encoder: 'copy', width: video.Width, height: video.Height, frameRate: frameRate(video), bitrate,
-      profile: video.Profile, level: video.Level };
+      profile: video.Profile, level: video.Level, hdr };
   }
   const codec = codecs.find(name => allowed.includes(name) && ['h264', 'hevc', 'av1', 'vp8', 'vp9', 'mpeg4', 'mpeg2video'].includes(name));
   if (!codec || request.PermitVideoEncoding === false || video.IsExternal || video.Path) return;
