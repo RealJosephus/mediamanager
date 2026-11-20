@@ -443,13 +443,10 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   const nugetConfig = path.join(sourceRoot, 'nuget.config');
   const configSource = designated.manifest.files.find(file => file.path === 'nuget.config');
   assert.ok(configSource);
-  const sourceOffer = [];
-  for (const descriptor of designated.sourceOffer) {
-    const attachment = Object.values(designated.attachments).find(value => value.descriptor.path === descriptor.path);
-    const copied = await write('source-offer', descriptor.path, await readFile(attachment.filename));
-    assert.deepEqual(copied, descriptor);
+  for (const { descriptor, bytes } of designated.sourceOfferAttachments) {
+    assert.deepEqual(await write('source-offer', descriptor.path, bytes), descriptor);
   }
-  sourceOffer.push(...designated.sourceOffer);
+  const sourceOffer = designated.sourceOffer;
   const dotnet = path.join(root, 'sdk', dotnetName);
   const commandOutput = {
     versionOut: await write('receipts', 'sdk-version.stdout.txt', '10.0.401\n'),
@@ -799,6 +796,10 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   await write('receipts', 'build-receipt.json', JSON.stringify({ ...receipt,
     sourceOffer: [...receipt.sourceOffer.slice(0, 3), receipt.sourceOffer[0]] }));
   await assert.rejects(capture([ownPath]), /source offer is incomplete/u);
+  const sealedManifest = designated.attachments.sourceManifest.descriptor;
+  await write('receipts', 'build-receipt.json', JSON.stringify({ ...receipt,
+    sourceOffer: receipt.sourceOffer.map(file => file.path === sealedManifest.path ? sealedManifest : file) }));
+  await assert.rejects(capture([ownPath]), /source offer differs/u);
   await write('receipts', 'build-receipt.json', JSON.stringify({ ...receipt,
     restoreIsolation: { ...receipt.restoreIsolation, config: { ...receipt.restoreIsolation.config, sha256: '0'.repeat(64) } } }));
   await assert.rejects(capture([ownPath]), /restore isolation/u);
