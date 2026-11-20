@@ -198,6 +198,7 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   };
   const direct = scenario === 'direct';
   const event = scenario === 'event';
+  const adaptive = scenario === 'adaptive';
   const externalBitmap = scenario === 'bitmapExternal';
   const embedPgs = scenario === 'embedPgs';
   const embedSrt = scenario === 'embedSrt';
@@ -209,8 +210,8 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   const audioIndex = externalAudio ? 5 : hdr ? 1 : 2;
   const burned = scenario === 'burn' || scenario === 'bitmap' || externalBitmap;
   const subtitleIndex = burned || embed ? externalBitmap || embedPgs ? 5 : 3 : -1;
-  const scaled = scenario === 'scale' || bitmap || burned || hdr;
-  const codec = direct || scaled || externalAudio || embed ? 'ac3' : 'aac';
+  const scaled = scenario === 'scale' || adaptive || bitmap || burned || hdr;
+  const codec = !adaptive && (direct || scaled || externalAudio || embed) ? 'ac3' : 'aac';
   const profile = {
     MaxStreamingBitrate: 8000000,
     DirectPlayProfiles: [{ Type: 'Video', Container: 'ts', VideoCodec: 'h264', AudioCodec: codec }],
@@ -241,7 +242,7 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   const url = new URL(source.TranscodingUrl, origin);
   assert.equal(url.searchParams.get('VideoCodec'), 'h264');
   assert.equal(url.searchParams.get('AudioCodec'), codec);
-  if (!bitmap && !hdr && !externalAudio && !embed) assert.equal(url.searchParams.get('TranscodeReasons'), burned ? 'SubtitleCodecNotSupported,VideoResolutionNotSupported'
+  if (!adaptive && !bitmap && !hdr && !externalAudio && !embed) assert.equal(url.searchParams.get('TranscodeReasons'), burned ? 'SubtitleCodecNotSupported,VideoResolutionNotSupported'
     : scaled ? 'VideoResolutionNotSupported' : 'AudioCodecNotSupported');
   if (burned || embed) {
     assert.equal(url.searchParams.get('SubtitleStreamIndex'), String(subtitleIndex));
@@ -249,29 +250,52 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   }
   if (embed) assert.equal(url.searchParams.get('SubtitleCodec'), profile.SubtitleProfiles[0].Format);
   if (scaled) assert.equal(url.searchParams.get('MaxWidth'), '360');
+  const remote = adaptive ? { headers: { 'X-Forwarded-For': '203.0.113.42' } } : undefined;
+  if (adaptive) {
+    const endpoint = await request('/System/Endpoint', remote);
+    assert.equal(endpoint.status, 200);
+    assert.equal(JSON.parse(endpoint.bytes).IsInNetwork, false);
+    const disabled = await request(url, remote);
+    assert.equal(disabled.status, 200);
+    assert.equal(linesWithUris(disabled.bytes.toString()).length, 1);
+    url.searchParams.set('EnableAdaptiveBitrateStreaming', 'true');
+    const local = await request(url);
+    assert.equal(local.status, 200);
+    assert.equal(linesWithUris(local.bytes.toString()).length, 1);
+  }
   const head = await request(url, { method: 'HEAD' });
   report.head = { status: head.status, mime: head.mime, length: head.bytes.length };
   assert.equal(head.status, 200); assert.equal(head.bytes.length, 0);
   let mediaUrl = url;
   if (protocol === 'hls') {
-    const master = await request(url);
+    const master = await request(url, remote);
     assert.equal(master.status, 200, master.bytes.toString()); report.master = master.bytes.toString();
     if (scaled) {
       assert.match(report.master, /RESOLUTION=360x240/u);
-      assert.match(report.master, /CODECS="avc1\.[^,"]+,ac-3"/u);
+      assert.match(report.master, adaptive ? /CODECS="avc1\.[^,"]+,mp4a\.40\.2"/u : /CODECS="avc1\.[^,"]+,ac-3"/u);
     } else if (externalAudio) assert.match(report.master, /CODECS="avc1\.[^,"]+,ac-3"/u);
     else assert.match(report.master, /CODECS="avc1\.[^,"]+,mp4a\.40\.2"/u);
-    const variant = new URL(linesWithUris(report.master)[0], url);
+    const variants = linesWithUris(report.master).map(uri => new URL(uri, url));
+    if (adaptive) {
+      assert.equal(variants.length, 3);
+      const rates = [...report.master.matchAll(/^#EXT-X-STREAM-INF:BANDWIDTH=(\d+),AVERAGE-BANDWIDTH=\1,/gmu)].map(match => Number(match[1]));
+      assert.equal(rates.length, variants.length);
+      report.adaptive = variants.map((uri, index) => ({ bandwidth: rates[index], videoBitrate: Number(uri.searchParams.get('VideoBitrate')) }));
+      assert.ok(rates[0] > rates[1] && rates[1] > rates[2]);
+      assert.equal(rates[0] - rates[1], rates[1] - rates[2]);
+      assert.equal(report.adaptive[0].videoBitrate - report.adaptive[2].videoBitrate, rates[0] - rates[2]);
+    }
+    const variant = adaptive ? variants.at(-1) : variants[0];
     if (event) {
       variant.pathname = variant.pathname.replace(/\/main\.m3u8$/u, '/live.m3u8');
       variant.searchParams.set('MinSegments', '1');
     }
-    const playlist = await request(variant);
+    const playlist = await request(variant, remote);
     assert.equal(playlist.status, 200, playlist.bytes.toString()); report.playlist = playlist.bytes.toString();
     if (event) assert.match(report.playlist, /#EXT-X-PLAYLIST-TYPE:EVENT/u);
     mediaUrl = new URL(linesWithUris(report.playlist)[0], variant);
   }
-  const media = await request(mediaUrl);
+  const media = await request(mediaUrl, remote);
   assert.equal(media.status, 200, media.bytes.subarray(0, 150).toString());
   report.stream = { mime: media.mime, size: media.bytes.length, sha256: sha256(media.bytes) };
   if (scenario === 'http') {
@@ -290,7 +314,7 @@ async function playback(origin, authorization, protocol, scenario, report, signa
     report.sessions = sessions;
     report.transcodingInfo = sessions.find(value => value.DeviceId === deviceId)?.TranscodingInfo;
     assert.ok(report.transcodingInfo);
-    assert.equal(report.transcodingInfo.IsAudioDirect, scaled || externalAudio);
+    assert.equal(report.transcodingInfo.IsAudioDirect, !adaptive && (scaled || externalAudio));
     assert.equal(report.transcodingInfo.IsVideoDirect, !scaled);
   }
   const stop = '/Videos/ActiveEncodings?' + new URLSearchParams({ deviceId, playSessionId: info.PlaySessionId });
@@ -337,7 +361,7 @@ for (const backend of backends) test(backend === 'software'
   const hardware = backend !== 'software';
   const burns = [['hls', 'burn'], ['hls', 'bitmapScale'], ['hls', 'bitmap'], ['hls', 'bitmapExternal']];
   const scenarios = hardware ? [['hls', 'direct'], ['hls', 'hls'], ['hls', 'scale'], ...burns]
-    : [['hls', 'direct'], ['hls', 'hls'], ['http', 'http'], ['hls', 'scale'], ['hls', 'event'], ...burns, ['hls', 'hdr'],
+    : [['hls', 'direct'], ['hls', 'hls'], ['http', 'http'], ['hls', 'scale'], ['hls', 'adaptive'], ['hls', 'event'], ...burns, ['hls', 'hdr'],
       ['http', 'externalAudioHttp'], ['hls', 'externalAudioHls'], ['http', 'embedSrt'], ['http', 'embedPgs']];
   if (backend === 'nvenc' || backend === 'videotoolbox') scenarios.push(['hls', 'hdr']);
   let current, native, proxy, nodeMedia, database, runtime, authorization, failure;
@@ -366,8 +390,8 @@ for (const backend of backends) test(backend === 'software'
         await writeFile(filename, bytes);
         result.probe = await probe(filename, evidence, t.signal);
         const audio = result.probe.streams.find(stream => stream.codec_type === 'audio');
-        const scaled = ['scale', 'burn', 'bitmapScale', 'bitmap', 'bitmapExternal', 'hdr'].includes(scenario);
-        assert.equal(audio.codec_name, scaled || embedded || scenario.startsWith('externalAudio') ? 'ac3' : 'aac');
+        const scaled = ['scale', 'adaptive', 'burn', 'bitmapScale', 'bitmap', 'bitmapExternal', 'hdr'].includes(scenario);
+        assert.equal(audio.codec_name, scenario !== 'adaptive' && (scaled || embedded || scenario.startsWith('externalAudio')) ? 'ac3' : 'aac');
         assert.equal(audio.channels, 2);
         assert.equal(audio.sample_rate, '48000');
         if (scaled) {
@@ -419,10 +443,16 @@ for (const backend of backends) test(backend === 'software'
     authorization = `MediaBrowser Client="Mixed transcode fixture", Device="Isolated", DeviceId="${deviceId}", Version="1", Token="${current.accessToken}"`;
     evidence.reference = current.preparation;
     evidence.sourceBindings = await current.sourceBindings(['Jellyfin.Api/Helpers/MediaInfoHelper.cs',
-      'Jellyfin.Api/Helpers/StreamingHelpers.cs', 'Jellyfin.Api/Controllers/DynamicHlsController.cs',
+      'Jellyfin.Api/Helpers/StreamingHelpers.cs', 'Jellyfin.Api/Helpers/DynamicHlsHelper.cs', 'Jellyfin.Api/Controllers/DynamicHlsController.cs',
       'Jellyfin.Api/Helpers/FileStreamResponseHelpers.cs', 'MediaBrowser.Controller/MediaEncoding/EncodingHelper.cs']);
     await cp(current.sourceRoot, referenceRoot, { recursive: true });
     await current.prepareClone(referenceRoot, port);
+    const remoteFixture = hardware ? {} : { KnownProxies: ['127.0.0.1'], EnableRemoteAccess: true };
+    if (!hardware) {
+      const filename = path.join(referenceRoot, 'config', 'network.xml');
+      const { value, node } = readConfigurationDocument(await readFile(filename), 'network');
+      await writeConfigurationFile(filename, 'network', { ...value, ...remoteFixture }, { source: node });
+    }
     if (hardware) {
       const filename = path.join(referenceRoot, 'config', 'encoding.xml');
       const { value, node } = readConfigurationDocument(await readFile(filename), 'encoding');
@@ -479,7 +509,9 @@ for (const backend of backends) test(backend === 'software'
     identityMap.bind(itemId, '/dual-avc.m2ts');
     identityMap.bind(bitmapItemId, '/bitmap.mkv');
     identityMap.bind(hdrItemId, '/hdr.mkv');
-    runtime = await createTestRuntime({ ...await readInstanceConfiguration(referenceRoot), database,
+    const nodeConfiguration = await readInstanceConfiguration(referenceRoot);
+    runtime = await createTestRuntime({ ...nodeConfiguration, database,
+      networkConfiguration: { ...nodeConfiguration.networkConfiguration, ...remoteFixture },
       vfs: nodeMedia.vfs, identityMap,
       hlsOptions: { onProcess: entry => evidence.nodeProcesses.push(entry) },
       remuxOptions: { onProcess: entry => evidence.nodeProcesses.push(entry) },
@@ -510,15 +542,16 @@ for (const backend of backends) test(backend === 'software'
         return copy;
       };
       assert.deepEqual(normalize(actual.playbackInfo), normalize(expected.playbackInfo), protocol);
+      if (protocol === 'adaptive') assert.deepEqual(actual.adaptive, expected.adaptive, 'The remote master advertises the same bandwidths and video bitrate requests.');
       if (protocol === 'direct') continue;
       assert.deepEqual(actual.head, expected.head, protocol);
       if (protocol === 'event') {
         const project = value => value.replace(/hls\/([a-f0-9]{32})\/\1/g, 'hls/<playlist>/<playlist>');
         assert.equal(project(actual.playlist), project(expected.playlist));
       }
-      if (['scale', 'burn', 'bitmapScale', 'bitmap', 'bitmapExternal', 'hdr'].includes(protocol)) {
+      if (['scale', 'adaptive', 'burn', 'bitmapScale', 'bitmap', 'bitmapExternal', 'hdr'].includes(protocol)) {
         assert.equal(actual.decoded, expected.decoded, protocol + ' video frames and decoded timestamps');
-        assert.deepEqual(packets(actual.probe, 'audio'), packets(expected.probe, 'audio'), 'Copied audio payload and timeline');
+        assert.deepEqual(packets(actual.probe, 'audio'), packets(expected.probe, 'audio'), protocol + ' audio payload and timeline');
         continue;
       }
       assert.deepEqual(packets(actual.probe, 'video'), packets(expected.probe, 'video'), protocol + ' video payload and timeline');

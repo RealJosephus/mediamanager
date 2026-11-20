@@ -293,6 +293,11 @@ function audioBitrate(audio, options) {
   return ['aac', 'mp3', 'opus', 'vorbis', 'ac3', 'eac3', ''].includes(lower(options.AudioCodec)) ? Math.min(options.AudioBitRate ?? 2147483647, channels >= 6 ? 640000 : channels * 128000) : ['alac', 'flac', 'truehd'].includes(lower(options.AudioCodec)) ? audio.BitRate ?? 0 : channels * 128000;
 }
 
+const adaptiveBitrateSteps = [
+  [10000000, 2000000], [5000000, 1500000], [3000000, 1000000], [2000000, 500000],
+  [1000000, 300000], [600000, 200000], [400000, 100000],
+];
+
 export function masterPlaylist(source, options = {}, query = '', tools) {
   const plan = hlsPlan(source, options, tools), { video, videoOutput, audio, audioOutput } = plan;
   const parameters = [...new URLSearchParams(query)];
@@ -302,7 +307,8 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
     if (audioKey) audioKey[1] = codec; else parameters.push(['AudioCodec', codec]);
   }
   if (options.SegmentContainer && !parameters.some(([key]) => lower(key) === 'segmentcontainer')) parameters.push(['SegmentContainer', options.SegmentContainer]);
-  const variant = (plan.live ? 'live.m3u8?' : 'main.m3u8?') + parameters.map(([key, value]) => `${encode(key)}=${encodeQueryValue(value, Boolean(video))}`).join('&');
+  const variantUrl = entries => (plan.live ? 'live.m3u8?' : 'main.m3u8?')
+    + entries.map(([key, value]) => `${encode(key)}=${encodeQueryValue(value, Boolean(video))}`).join('&');
   const videoCopied = videoOutput?.encoder === 'copy';
   const profile = lower(videoOutput?.profile ?? (videoCopied ? undefined : 'high'));
   const level = videoOutput?.level ?? (videoCopied ? undefined : { h264: 41, hevc: 120, av1: 8 }[videoOutput?.codec]);
@@ -323,14 +329,15 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
   const selected = source.MediaStreams.find(stream => stream.Type === 'Subtitle' && stream.Index === options.SubtitleStreamIndex);
   const subtitleGroup = subtitles.length > 0 && options.SubtitleMethod === 'Hls'
     && !(selected && options.SubtitleMethod === 'Encode') ? 'subs' : null;
-  let line = `#EXT-X-STREAM-INF:BANDWIDTH=${bitrate},AVERAGE-BANDWIDTH=${bitrate}`;
-  if (range !== 'Unknown') line += `,VIDEO-RANGE=${range === 'SDR' ? 'SDR' : rangeType.includes('HLG') || video.ColorTransfer === 'arib-std-b67' ? 'HLG' : 'PQ'}`;
+  let attributes = '';
+  if (range !== 'Unknown') attributes += `,VIDEO-RANGE=${range === 'SDR' ? 'SDR' : rangeType.includes('HLG') || video.ColorTransfer === 'arib-std-b67' ? 'HLG' : 'PQ'}`;
   const codecs = [videoCodec, audioCodec].filter(Boolean).join(',');
-  if (codecs) line += `,CODECS="${codecs}"`;
-  if (videoOutput?.width && videoOutput?.height) line += `,RESOLUTION=${videoOutput.width}x${videoOutput.height}`;
+  if (codecs) attributes += `,CODECS="${codecs}"`;
+  if (videoOutput?.width && videoOutput?.height) attributes += `,RESOLUTION=${videoOutput.width}x${videoOutput.height}`;
   const frameRate = video && (options.Framerate ?? (options.MaxFramerate != null ? Math.min(options.MaxFramerate, video.RealFrameRate ?? options.MaxFramerate) : video.RealFrameRate));
-  if (frameRate) line += `,FRAME-RATE=${round(frameRate * 1000) / 1000}`;
-  if (subtitleGroup) line += `,SUBTITLES="${subtitleGroup}"`;
+  if (frameRate) attributes += `,FRAME-RATE=${round(frameRate * 1000) / 1000}`;
+  if (subtitleGroup) attributes += `,SUBTITLES="${subtitleGroup}"`;
+  const streamInfo = bandwidth => `#EXT-X-STREAM-INF:BANDWIDTH=${bandwidth},AVERAGE-BANDWIDTH=${bandwidth}${attributes}`;
   const lines = ['#EXTM3U'];
   if (subtitleGroup && options.SubtitleMethod !== 'Drop') {
     const token = options.AccessToken ?? parameters.find(([key]) => lower(key) === 'apikey')?.[1] ?? '';
@@ -338,7 +345,21 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
     const selectedIndex = options.SubtitleMethod === 'Hls' ? selected?.Index : undefined;
     for (const stream of subtitles) lines.push(`#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="${stream.DisplayTitle ?? ''}",DEFAULT=${stream.Index === selectedIndex ? 'YES' : 'NO'},FORCED=${stream.IsForced ? 'YES' : 'NO'},AUTOSELECT=YES,URI="${mediaSourceId}/Subtitles/${stream.Index}/subtitles.m3u8?SegmentLength=30&ApiKey=${token}",LANGUAGE="${stream.Language ?? 'Unknown'}"`);
   }
-  lines.push(line, variant, '');
+  lines.push(streamInfo(bitrate), variantUrl(parameters));
+  if (options.EnableAdaptiveBitrateStreaming && options.RemoteClient && !plan.live && source.Path?.trim()
+    && videoOutput && !videoCopied && audioOutput?.encoder !== 'copy' && options.VideoBitRate != null) {
+    const variation = adaptiveBitrateSteps.find(([threshold]) => bitrate >= threshold)?.[1] ?? 50000;
+    const variants = parameters.filter(([key]) => lower(key) !== 'videobitrate');
+    const index = parameters.findIndex(([key]) => lower(key) === 'videobitrate');
+    const key = index < 0 ? 'VideoBitrate' : parameters[index][0];
+    const position = index < 0 ? variants.length : index;
+    for (const reduction of [variation, 2 * variation]) {
+      const entries = variants.slice();
+      entries.splice(position, 0, [key, String(options.VideoBitRate - reduction)]);
+      lines.push(streamInfo(bitrate - reduction), variantUrl(entries));
+    }
+  }
+  lines.push('');
   return lines.join('\r\n');
 }
 

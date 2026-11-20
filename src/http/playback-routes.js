@@ -165,7 +165,9 @@ export function registerPlaybackRoutes(add, { playback, users }) {
   for (const kind of ['Videos', 'Audio']) for (const method of ['GET', 'HEAD']) {
     for (const playlist of method === 'HEAD' ? ['master'] : ['master', 'main']) add(method, `/${kind}/{itemId}/${playlist}.m3u8`, async context => {
       if (kind === 'Audio' && playlist === 'master' && !query(context, 'mediaSourceId')?.trim()) throw new BindingError('mediaSourceId', 'The mediaSourceId field is required.');
-      return playback.hlsStream(itemId(context), playlist, { ...bindStreaming(context, kind), user: context.auth.User,
+      const options = bindStreaming(context, kind);
+      if (playlist === 'master') options.EnableAdaptiveBitrateStreaming = booleanValue(query(context, 'enableAdaptiveBitrateStreaming'), 'enableAdaptiveBitrateStreaming', false);
+      return playback.hlsStream(itemId(context), playlist, { ...options, user: context.auth.User, remoteEndPoint: context.remoteEndPoint,
         AccessToken: context.auth.Token, UserAgent: context.request.headers['user-agent'], QueryString: context.url.search.slice(1) });
     });
     if (method === 'HEAD') continue;
