@@ -4,6 +4,7 @@ import { ProbeReadBridge } from '../storage/probe-bridge.js';
 import { StorageError } from '../storage/errors.js';
 import { getEncodingThreadCount } from './media-encoder.js';
 import { remuxArguments, remuxPlan } from '../media-execution/streaming.js';
+import { stageSubtitleBurn } from '../media-execution/subtitle-burn.js';
 import { TranscodeJobs, transcodingInfo } from './transcode-jobs.js';
 
 export { remuxArguments, remuxPlan };
@@ -18,15 +19,16 @@ export class RemuxService {
   #closing;
   #jobs = new Set();
   #cleanupErrors = [];
-  constructor({ vfs, bridge, mediaEncoder, jobs = new TranscodeJobs(), timeoutMs = 21600000, maxConcurrentRemuxes = 4, onProcess = () => {} }) {
+  constructor({ vfs, bridge, mediaEncoder, subtitleBurn, jobs = new TranscodeJobs(), timeoutMs = 21600000, maxConcurrentRemuxes = 4, onProcess = () => {} }) {
     if (!vfs) throw new TypeError('Remuxing requires VFS.');
     if (!mediaEncoder) throw new TypeError('Remuxing requires its startup media encoder.');
     if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || !Number.isSafeInteger(maxConcurrentRemuxes) || maxConcurrentRemuxes < 1) throw new TypeError('Positive remux limits are required.');
-    Object.assign(this, { vfs, bridge: bridge ?? new ProbeReadBridge(vfs), ownsBridge: !bridge, mediaEncoder, jobs, timeoutMs, maxConcurrentRemuxes, onProcess });
+    Object.assign(this, { vfs, bridge: bridge ?? new ProbeReadBridge(vfs), ownsBridge: !bridge, mediaEncoder, subtitleBurn,
+      jobs, timeoutMs, maxConcurrentRemuxes, onProcess });
   }
   get available() { return this.mediaEncoder.ready; }
   plan(source, options, configuration = this.mediaEncoder.getEncodingOptions()) {
-    return remuxPlan(source, options, { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version });
+    return remuxPlan(source, options, { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version, subtitleBurn: this.subtitleBurn });
   }
   supports(source, options) {
     if (!this.available || this.#closed) return false;
@@ -56,24 +58,25 @@ export class RemuxService {
       },
     });
     const timer = setTimeout(() => controller.abort(failure('timeout', 'Remuxing timed out.')), this.timeoutMs); timer.unref();
-    job.done = this.#stream(virtualPath, plan, threads, response, job);
+    job.done = this.#stream(source, virtualPath, plan, threads, response, job);
     try { await job.done; }
     finally { clearTimeout(timer); signal?.removeEventListener('abort', abort); this.#jobs.delete(job); this.jobs.unregister(job); }
   }
-  async #stream(virtualPath, plan, threads, response, job) {
+  async #stream(source, virtualPath, plan, threads, response, job) {
     const { signal } = job.controller;
     const before = await this.vfs.stat(virtualPath, { signal });
     const lease = await this.bridge.lease(virtualPath, { signal, version: before.version, expiresInMs: this.timeoutMs });
-    let child, done, failed, primary, killTimer;
+    let child, done, failed, primary, killTimer, subtitles;
     const cleanupErrors = [];
     const kill = () => { try { child?.kill(); } catch (error) { cleanupErrors.push(error); } };
     const abort = () => { failed ??= signal.reason?.code === 'timeout' ? signal.reason : failure('cancelled', 'Remuxing was cancelled.', signal.reason); kill(); };
     try {
       checkAbort(signal);
-      const args = remuxArguments(lease.url, plan, threads, this.mediaEncoder.version);
+      subtitles = await stageSubtitleBurn(this.subtitleBurn, source, plan.burnSubtitle, virtualPath, signal);
+      const args = remuxArguments(lease.url, plan, threads, this.mediaEncoder.version, subtitles);
       const overrides = plan.videoOutput?.hardware?.environment;
       const environment = overrides ? { ...(this.mediaEncoder.environment ?? process.env), ...overrides } : this.mediaEncoder.environment;
-      try { child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment }); }
+      try { child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment, cwd: subtitles?.cwd }); }
       catch (error) { throw failure('unavailable', 'The remux process could not start.', error); }
       const started = Promise.withResolvers();
       done = new Promise(resolve => {
@@ -114,6 +117,7 @@ export class RemuxService {
     finally {
       clearTimeout(killTimer); signal.removeEventListener('abort', abort);
       if (done) await done;
+      try { await subtitles?.release(); } catch (error) { cleanupErrors.push(error); }
       try { await lease.release(); } catch (error) { cleanupErrors.push(error); }
       this.#cleanupErrors.push(...cleanupErrors);
     }

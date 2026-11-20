@@ -421,7 +421,7 @@ export class PlaybackService {
 
   #hlsPlaylist(source, kind, options) {
     return new BinaryResult(async (request, response) => {
-      const tools = { configuration: this.hls.getEncodingOptions(), capabilities: this.hls.mediaEncoder.capabilities, version: this.hls.mediaEncoder.version };
+      const tools = this.hls.mediaTools();
       const text = kind === 'master' ? masterPlaylist(source, options, options.QueryString, tools) : mainPlaylist(source, options, options.QueryString, tools);
       const bytes = Buffer.from(kind === 'master' && request.method === 'HEAD' ? '' : text);
       response.setHeader('Content-Type', 'application/vnd.apple.mpegurl');

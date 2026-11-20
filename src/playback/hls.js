@@ -12,6 +12,7 @@ import { videoColorRange } from '../library/media-streams.js';
 import { remuxPlan, RemuxService } from './remux.js';
 import { getEncodingThreadCount } from './media-encoder.js';
 import { hlsArguments } from '../media-execution/streaming.js';
+import { stageSubtitleBurn } from '../media-execution/subtitle-burn.js';
 import { outputVideoBitrate } from '../media-execution/video.js';
 import { matchesTranscodeJob as matchesJob, transcodingInfo } from './transcode-jobs.js';
 
@@ -37,6 +38,7 @@ const cachePlan = plan => ({
   streams: plan.streams.map(stream => [stream.type, stream.index]),
   audio: plan.audioOutput,
   videoOutput: plan.videoOutput,
+  subtitle: plan.burnSubtitle?.Index,
   video: plan.video ? [lower(plan.video.Codec), String(plan.video.NalLengthSize ?? '')] : null,
 });
 
@@ -262,7 +264,7 @@ export function hlsPlan(source, options = {}, tools) {
   const externalHlsFormat = stream => ['srt', 'subrip', 'vtt', 'webvtt', 'ass', 'ssa', 'smi'].includes(lower(path.win32.extname(stream.Path ?? '').slice(1) || stream.Codec));
   const deliverable = stream => options.CanDeliverHlsSubtitle?.(stream) ?? (stream.IsExternal && externalHlsFormat(stream));
   if (!audioOnly && (!video || !['h264', 'hevc', 'av1', 'vp9'].includes(plan.videoOutput?.codec)) || plan.streams.some(stream => stream.type === 'Subtitle')
-    || video?.DvProfile != null || container === 'ts' && plan.videoOutput?.encoder === 'copy' && (video?.Rotation ?? 0) !== 0
+    || plan.videoOutput?.encoder === 'copy' && (video?.DvProfile != null || container === 'ts' && (video?.Rotation ?? 0) !== 0)
     || options.SubtitleMethod === 'Hls' && (!selectedSubtitle?.IsTextSubtitleStream || !deliverable(selectedSubtitle))
     || subtitleGroup && options.SubtitleMethod !== 'Drop' && textSubtitles.some(stream => !deliverable(stream))) throw failure('not-supported', 'This HLS stream requires an unavailable manifest or processing branch.');
   const segmentLength = options.SegmentLength ?? (audioOnly ? 3 : 6);
@@ -311,7 +313,7 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
   })[audioOutput.codec];
   const bitrate = outputVideoBitrate(video, options, videoOutput?.codec) + (audioOutput?.encoder === 'copy'
     ? audioBitrate(audio, video ? options : { ...options, AudioCodec: 'copy' }) : audioOutput?.bitrate ?? 0);
-  const [range, rangeType] = video ? videoColorRange(video) : ['Unknown', 'Unknown'];
+  const [range, rangeType] = video ? videoCopied ? videoColorRange(video) : ['SDR', 'SDR'] : ['Unknown', 'Unknown'];
   const subtitles = source.MediaStreams.filter(stream => stream.Type === 'Subtitle' && stream.IsTextSubtitleStream);
   const selected = source.MediaStreams.find(stream => stream.Type === 'Subtitle' && stream.Index === options.SubtitleStreamIndex);
   const subtitleGroup = subtitles.length > 0 && options.SubtitleMethod === 'Hls'
@@ -442,8 +444,11 @@ export class HlsService {
       } catch (error) { if (error.code !== 'ENOENT' && !(error instanceof SyntaxError)) this.onError(error); }
     }
   }
+  mediaTools(configuration = this.getEncodingOptions()) {
+    return { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version, subtitleBurn: this.remux.subtitleBurn };
+  }
   plan(source, options, configuration = this.getEncodingOptions()) {
-    return hlsPlan(source, options, { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version });
+    return hlsPlan(source, options, this.mediaTools(configuration));
   }
   supports(source, options) { if (!this.remux.available || this.#closed) return false; try { this.plan(source, options); return true; } catch { return false; } }
   get jobs() { return this.remux.jobs; }
@@ -520,7 +525,7 @@ export class HlsService {
     const { directory: cacheDirectory, available } = await this.#initialize();
     if (!available) throw failure('unavailable', 'The HLS process is unavailable.');
     const before = await this.vfs.stat(virtualPath, { signal }); checkAbort(signal);
-    const version = this.vfs.capabilities(virtualPath).reliableVersion === true ? before.version : null;
+    const version = this.vfs.capabilities(virtualPath).reliableVersion === true && !plan.burnSubtitle?.Path ? before.version : null;
     // The native cache identity uses the source, user agent, device and play session.
     // Pin the VFS version and byte-producing plan so a changed object, selected stream,
     // segment length, muxer or segment-number timeline cannot reuse earlier output.
@@ -532,7 +537,7 @@ export class HlsService {
     if (!job) {
       if (this.#closed) throw failure('closed', 'HLS is closed.');
       if ([...this.#jobs.values()].filter(value => !value.exited && !matchesJob(value, options.DeviceId, options.PlaySessionId)).length >= this.maxConcurrentJobs) throw failure('busy', 'The HLS concurrency limit has been reached.');
-      job = { key, plan, options, virtualPath, version, cacheDirectory, controller: new AbortController(), readers: 0, pendingReaders: new Set(), tail: Promise.resolve() };
+      job = { key, plan, options, source, virtualPath, version, cacheDirectory, controller: new AbortController(), readers: 0, pendingReaders: new Set(), tail: Promise.resolve() };
       job.directory = mkdtemp(path.join(cacheDirectory, 'mediamanager-hls-')).then(async directory => {
         try { await writeFile(path.join(directory, 'owner.json'), json({ kind: 'mediamanager-hls', pid: process.pid, id: this.#owner })); return directory; }
         catch (error) {
@@ -634,14 +639,15 @@ export class HlsService {
     const controller = new AbortController(); job.processController = controller;
     const signal = AbortSignal.any([job.controller.signal, controller.signal]);
     const timer = setTimeout(() => controller.abort(failure('timeout', 'HLS processing timed out.')), this.timeoutMs); timer.unref();
-    let lease, child;
+    let lease, child, subtitles;
     try {
       lease = await this.remux.bridge.lease(job.virtualPath, { version: job.version, signal, expiresInMs: this.timeoutMs });
-      const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution);
+      subtitles = await stageSubtitleBurn(this.remux.subtitleBurn, job.source, job.plan.burnSubtitle, job.virtualPath, signal);
+      const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution, subtitles);
       checkAbort(signal);
       const overrides = job.plan.videoOutput?.hardware?.environment;
       const environment = overrides ? { ...(this.mediaEncoder.environment ?? process.env), ...overrides } : this.mediaEncoder.environment;
-      child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment, output: 'ignore' });
+      child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment, cwd: subtitles?.cwd, output: 'ignore' });
       if (job.plan.video && job.plan.runtime >= 3000000000n) {
         job.cleaner = setInterval(() => {
           if (job.cleaning || job.exited) return;
@@ -668,6 +674,7 @@ export class HlsService {
       clearTimeout(timer); clearTimeout(job.idle); clearInterval(job.cleaner);
       const errors = [];
       try { await job.cleaning; } catch (error) { errors.push(error); }
+      try { await subtitles?.release(); } catch (error) { errors.push(error); }
       try { await lease?.release(); } catch (error) { errors.push(error); }
       job.exited = true;
       try { this.#reportProgress(job, undefined, 'exit'); } catch (error) { errors.push(error); }

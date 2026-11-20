@@ -64,7 +64,7 @@ function supportsScaling(video, request, maxRatio) {
   });
 }
 
-function videoBitDepth(video) {
+export function videoBitDepth(video) {
   const pixel = lower(video.PixelFormat);
   return video.BitDepth ?? (/^yuv(?:420|422|444)p(10|12)le$/u.exec(pixel) ? Number(pixel.slice(-4, -2)) : 8);
 }

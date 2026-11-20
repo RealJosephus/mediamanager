@@ -10,6 +10,7 @@ import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { probeStreamRow } from '../../src/library/probe-service.js';
 import { transferDatabase } from '../../src/migration/database-transfer.js';
 import { normalizeProbe } from '../../src/storage/probe-normalizer.js';
+import { IdentityAccessMap } from '../../src/storage/identity-mapping.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { keyframeExtractionTaskId } from '../../src/tasks/keyframe-extraction-task.js';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
@@ -23,6 +24,7 @@ import { runMediaTool } from '../helpers/media-tool.js';
 import { declareNativeHttpTestFile } from '../helpers/native-http-test-file.js';
 import { projectHlsRequestIdentities } from '../helpers/playback-transport-projection.js';
 import { createTestRuntime } from '../helpers/runtime.js';
+import { extractionFixture } from './extraction-fixture.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const enabled = Boolean(process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MEDIAMANAGER_TEST_POSTGRES);
@@ -51,8 +53,11 @@ async function seed(referenceRoot, evidence, signal) {
   const asset = await readFrozenAv('dual-avc.m2ts', { signal });
   const mediaFolder = path.join(referenceRoot, 'transcode-fixture');
   const filename = path.join(mediaFolder, 'dual-avc.m2ts');
+  const subtitle = path.join(mediaFolder, 'dual-avc.en.srt');
+  const subtitleBytes = Buffer.from('1\n00:00:00,350 --> 00:00:01,300\nTimed subtitle\n');
   await mkdir(mediaFolder);
   await writeFile(filename, asset.bytes);
+  await writeFile(subtitle, subtitleBytes);
   const raw = await probe(filename, evidence, signal);
   assert.equal(raw.streams.filter(stream => stream.codec_type === 'video').length, 2);
   const media = normalizeProbe(raw, { path: filename, protocol: 'File' });
@@ -86,9 +91,12 @@ async function seed(referenceRoot, evidence, signal) {
         }
         database.insert('MediaStreamInfos', probeStreamRow(item, stream));
       }
+      database.insert('MediaStreamInfos', probeStreamRow(item, {
+        Type: 'Subtitle', Codec: 'subrip', Index: 3, Language: 'eng', IsExternal: true, Path: subtitle,
+      }));
     });
   } finally { database.close(); }
-  return { filename, databasePath, serverId, asset: asset.source, raw };
+  return { filename, subtitle, subtitleBytes, databasePath, serverId, asset: asset.source, raw };
 }
 
 function portAvailable(port) {
@@ -106,7 +114,8 @@ async function playback(origin, authorization, protocol, scenario, report, signa
     return { status: response.status, mime: response.headers.get('content-type'), bytes: Buffer.from(await response.arrayBuffer()) };
   };
   const direct = scenario === 'direct';
-  const scaled = scenario === 'scale';
+  const burned = scenario === 'burn';
+  const scaled = scenario === 'scale' || burned;
   const codec = direct || scaled ? 'ac3' : 'aac';
   const profile = {
     MaxStreamingBitrate: 8000000,
@@ -115,12 +124,13 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   };
   if (scaled) profile.CodecProfiles = [{ Type: 'Video', Codec: 'h264',
     Conditions: [{ Property: 'Width', Condition: 'LessThanEqual', Value: '360' }] }];
+  if (burned) profile.SubtitleProfiles = [{ Format: 'srt', Method: 'Encode' }];
   if (direct) {
     const capabilities = await request('/Sessions/Capabilities?PlayableMediaTypes=Video', { method: 'POST' });
     assert.equal(capabilities.status, 204, capabilities.bytes.toString());
   }
   const response = await request(`/Items/${itemId}/PlaybackInfo`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ MediaSourceId: itemId, AudioStreamIndex: 2, DeviceProfile: profile }) });
+    body: JSON.stringify({ MediaSourceId: itemId, AudioStreamIndex: 2, SubtitleStreamIndex: burned ? 3 : -1, DeviceProfile: profile }) });
   assert.equal(response.status, 200, response.bytes.toString());
   const info = JSON.parse(response.bytes);
   report.playbackInfo = info;
@@ -136,7 +146,12 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   const url = new URL(source.TranscodingUrl, origin);
   assert.equal(url.searchParams.get('VideoCodec'), 'h264');
   assert.equal(url.searchParams.get('AudioCodec'), codec);
-  assert.equal(url.searchParams.get('TranscodeReasons'), scaled ? 'VideoResolutionNotSupported' : 'AudioCodecNotSupported');
+  assert.equal(url.searchParams.get('TranscodeReasons'), burned ? 'SubtitleCodecNotSupported,VideoResolutionNotSupported'
+    : scaled ? 'VideoResolutionNotSupported' : 'AudioCodecNotSupported');
+  if (burned) {
+    assert.equal(url.searchParams.get('SubtitleStreamIndex'), '3');
+    assert.equal(url.searchParams.get('SubtitleMethod'), 'Encode');
+  }
   if (scaled) assert.equal(url.searchParams.get('MaxWidth'), '360');
   const head = await request(url, { method: 'HEAD' });
   report.head = { status: head.status, mime: head.mime, length: head.bytes.length };
@@ -192,7 +207,7 @@ async function extractKeyframes(origin, authorization, signal) {
   assert.fail('The keyframe extraction task did not complete.');
 }
 
-test('PlaybackInfo, progressive, HLS scaling and scheduled keyframes match the designated server', {
+test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes match the designated server', {
   skip: !enabled, timeout: 300000,
 }, nativeCase((t, port) => mediaLease.run(async () => {
   const output = await createPrivateFilterOutput(path.join(validationOutputRoot(), 'mixed-transcode-' + randomUUID()));
@@ -200,7 +215,7 @@ test('PlaybackInfo, progressive, HLS scaling and scheduled keyframes match the d
   const referenceRoot = path.join(root, 'reference');
   const nativeOrigin = 'http://127.0.0.1:' + port;
   const evidence = { commands: [], native: {}, node: {}, nodeProcesses: [], diagnostics: [], scenarioErrors: [] };
-  let current, native, proxy, database, runtime, authorization, failure;
+  let current, native, proxy, nodeMedia, database, runtime, authorization, failure;
   async function stopNative() {
     if (!native) return;
     const instance = native;
@@ -216,7 +231,7 @@ test('PlaybackInfo, progressive, HLS scaling and scheduled keyframes match the d
   }
   async function capture(origin, label) {
     const results = evidence[label];
-    for (const [protocol, scenario] of [['hls', 'direct'], ['hls', 'hls'], ['http', 'http'], ['hls', 'scale']]) {
+    for (const [protocol, scenario] of [['hls', 'direct'], ['hls', 'hls'], ['http', 'http'], ['hls', 'scale'], ['hls', 'burn']]) {
       const result = results[scenario] = {};
       try {
         const bytes = await playback(origin, authorization, protocol, scenario, result, t.signal);
@@ -225,10 +240,11 @@ test('PlaybackInfo, progressive, HLS scaling and scheduled keyframes match the d
         await writeFile(filename, bytes);
         result.probe = await probe(filename, evidence, t.signal);
         const audio = result.probe.streams.find(stream => stream.codec_type === 'audio');
-        assert.equal(audio.codec_name, scenario === 'scale' ? 'ac3' : 'aac');
+        const scaled = scenario === 'scale' || scenario === 'burn';
+        assert.equal(audio.codec_name, scaled ? 'ac3' : 'aac');
         assert.equal(audio.channels, 2);
         assert.equal(audio.sample_rate, '48000');
-        if (scenario === 'scale') {
+        if (scaled) {
           const video = result.probe.streams.find(stream => stream.codec_type === 'video');
           assert.deepEqual([video.codec_name, video.width, video.height, video.pix_fmt], ['h264', 360, 240, 'yuv420p']);
           result.decoded = (await runMediaTool('ffmpeg', ['-v', 'error', '-i', filename, '-map', '0:v:0',
@@ -256,7 +272,11 @@ test('PlaybackInfo, progressive, HLS scaling and scheduled keyframes match the d
     await current.prepareClone(referenceRoot, port);
     const fixture = await seed(referenceRoot, evidence, t.signal);
     evidence.source = fixture.asset;
-    proxy = await startOwnedMediaProxy([{ filename: fixture.filename, contentType: 'video/mp2t', expected: fixture.asset }]);
+    proxy = await startOwnedMediaProxy([
+      { filename: fixture.filename, contentType: 'video/mp2t', expected: fixture.asset },
+      { filename: fixture.subtitle, contentType: 'application/x-subrip',
+        expected: { bytes: fixture.subtitleBytes.length, sha256: sha256(fixture.subtitleBytes) } },
+    ]);
     database = await createPostgresTestDatabase(null, 'mixed_transcode');
     const snapshot = new SqliteDatabase(fixture.databasePath, { readOnly: true, requireMigrationHistory: true });
     try {
@@ -280,7 +300,13 @@ test('PlaybackInfo, progressive, HLS scaling and scheduled keyframes match the d
     }
     await writeFile(path.join(referenceRoot, 'config/network.xml'),
       '<NetworkConfiguration><InternalHttpPort>0</InternalHttpPort><AutoDiscovery>false</AutoDiscovery></NetworkConfiguration>');
+    nodeMedia = await extractionFixture({ '/dual-avc.m2ts': await readFile(fixture.filename), '/dual-avc.en.srt': fixture.subtitleBytes });
+    const identityMap = new IdentityAccessMap();
+    identityMap.addPrefix({ identityRoot: path.dirname(fixture.filename), accessRoot: '/',
+      style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Isolated transcode media.' });
+    identityMap.bind(itemId, '/dual-avc.m2ts');
     runtime = await createTestRuntime({ ...await readInstanceConfiguration(referenceRoot), database,
+      vfs: nodeMedia.vfs, identityMap,
       hlsOptions: { onProcess: entry => evidence.nodeProcesses.push(entry) },
       remuxOptions: { onProcess: entry => evidence.nodeProcesses.push(entry) },
       onError: error => evidence.diagnostics.push({ message: error.message, details: error.details }),
@@ -291,7 +317,8 @@ test('PlaybackInfo, progressive, HLS scaling and scheduled keyframes match the d
     evidence.node.keyframes = (await database.rows('KeyframeData', { where: { ItemId: itemKey } }))[0];
     assert.deepEqual(evidence.node.keyframes, evidence.native.keyframes);
     assert.deepEqual(evidence.scenarioErrors, []);
-    for (const protocol of ['direct', 'hls', 'http', 'scale']) {
+    assert.notEqual(evidence.native.burn.decoded, evidence.native.scale.decoded, 'The timed cue changed decoded video frames.');
+    for (const protocol of ['direct', 'hls', 'http', 'scale', 'burn']) {
       const expected = evidence.native[protocol], actual = evidence.node[protocol];
       const normalize = info => {
         const copy = structuredClone(info);
@@ -303,8 +330,8 @@ test('PlaybackInfo, progressive, HLS scaling and scheduled keyframes match the d
       assert.deepEqual(normalize(actual.playbackInfo), normalize(expected.playbackInfo), protocol);
       if (protocol === 'direct') continue;
       assert.deepEqual(actual.head, expected.head, protocol);
-      if (protocol === 'scale') {
-        assert.equal(actual.decoded, expected.decoded, 'Scaled video frames and decoded timestamps');
+      if (protocol === 'scale' || protocol === 'burn') {
+        assert.equal(actual.decoded, expected.decoded, protocol + ' video frames and decoded timestamps');
         assert.deepEqual(packets(actual.probe, 'audio'), packets(expected.probe, 'audio'), 'Copied audio payload and timeline');
         continue;
       }
@@ -313,7 +340,7 @@ test('PlaybackInfo, progressive, HLS scaling and scheduled keyframes match the d
       assert.deepEqual(packets(actual.probe, 'video').map(packet => packet.hash), packets(fixture.raw, 'video').map(packet => packet.hash),
         protocol + ' original video payloads');
     }
-    assert.equal(evidence.nodeProcesses.length, 3);
+    assert.equal(evidence.nodeProcesses.length, 4);
     for (const { args } of evidence.nodeProcesses) {
       assert.ok(!args.includes('-hwaccel') && !args.includes('-init_hw_device'));
       if (args.includes('-vf')) assert.equal(args[args.indexOf('-codec:v:0') + 1], 'libx264');
@@ -322,7 +349,7 @@ test('PlaybackInfo, progressive, HLS scaling and scheduled keyframes match the d
   } catch (error) { failure = output.publicError(error); evidence.error = failure.message; }
   finally {
     const errors = failure ? [failure] : [];
-    for (const cleanup of [stopNative, () => runtime?.close(), () => proxy?.close(), () => dropPostgresTestDatabase(database)]) {
+    for (const cleanup of [stopNative, () => runtime?.close(), () => proxy?.close(), () => nodeMedia?.close(), () => dropPostgresTestDatabase(database)]) {
       try { await cleanup(); } catch (error) { errors.push(output.publicError(error)); }
     }
     try { await writeFile(path.join(root, 'capture.json'), JSON.stringify(evidence, (_key, value) => typeof value === 'bigint' ? value.toString() : value)); }
