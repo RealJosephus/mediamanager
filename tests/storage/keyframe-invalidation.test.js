@@ -20,6 +20,7 @@ import { createMetadataContextLoader } from '../../src/library/metadata-context.
 import { MetadataRefreshHost } from '../../src/metadata/refresh-host.js';
 import { MetadataRegistry } from '../../src/metadata/registry.js';
 import { ItemUpdateType } from '../../src/metadata/save-manager.js';
+import { hlsPlan } from '../../src/playback/hls.js';
 import { PlaybackService } from '../../src/playback/service.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
@@ -109,11 +110,17 @@ async function keyframes(database, itemId) {
 }
 
 async function renderManifest(t, result) {
-  const server = http.createServer((request, response) => result.send(request, response));
+  const served = Promise.withResolvers();
+  const server = http.createServer((request, response) => {
+    result.send(request, response).then(served.resolve, error => {
+      served.reject(error);
+      response.destroy();
+    });
+  });
   server.listen(0, '127.0.0.1');
   await once(server, 'listening');
   t.after(() => new Promise(resolve => server.close(resolve)));
-  const response = await fetch(`http://127.0.0.1:${server.address().port}/main.m3u8`);
+  const [response] = await Promise.all([fetch(`http://127.0.0.1:${server.address().port}/main.m3u8`, { signal: t.signal }), served.promise]);
   assert.equal(response.status, 200);
   return response.text();
 }
@@ -247,14 +254,16 @@ test('confirmed video refresh invalidates stored keyframes on PostgreSQL', {
   const source = structuredClone(hlsReference.source);
   source.Id = videoId.replaceAll('-', '');
   source.Path = 'Z:\\media\\video.mkv';
+  const encoding = { ...defaultConfiguration('encoding'), AllowOnDemandMetadataBasedKeyframeExtractionForExtensions: ['mkv'] };
+  const mediaTools = () => ({ configuration: encoding });
   const playback = new PlaybackService({
-    getEncodingOptions: () => defaultConfiguration('encoding'),
+    getEncodingOptions: () => encoding,
     library: {
       store: fixture.store,
       getItemRecord: async () => ({ Id: videoId, MediaType: 'Video' }),
       getMediaSources: async () => [source]
     },
-    hls: { getEncodingOptions: () => ({ AllowOnDemandMetadataBasedKeyframeExtractionForExtensions: ['mkv'] }), initialize: async () => true }
+    hls: { getEncodingOptions: () => encoding, initialize: async () => true, mediaTools, plan: (source, options) => hlsPlan(source, options, mediaTools()) }
   });
   const sourceId = source.Id;
   const manifest = await renderManifest(t, await playback.hlsStream(videoId, 'main', { MediaSourceId: sourceId, VideoCodec: 'copy', AudioCodec: 'copy',

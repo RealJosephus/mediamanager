@@ -50,11 +50,12 @@ export async function stoppedDatabase(filename) {
 
 // Only the two documented seed rows are removed before the private first boot.
 // Every library entity in an exchange is created by an actual scanner.
-export function removeSyntheticPreparation(instanceRoot) {
+export function removeSyntheticPreparation(instanceRoot, { allowAbsent = false } = {}) {
   const database = new SqliteDatabase(databaseFilename(instanceRoot), { requireMigrationHistory: true });
   try {
     const movie = database.rows('BaseItems', { where: { Id: '22222222-2222-2222-2222-222222222222' } });
     const folder = database.rows('BaseItems', { where: { Id: '11111111-1111-1111-1111-111111111111' } });
+    if (allowAbsent && !movie.length && !folder.length) return { beforeFirstNativeStartup: true, removed: [] };
     assert.equal(movie.length, 1); assert.equal(folder.length, 1);
     assert.equal(movie[0].Path, 'Z:\\SyntheticMedia\\feature.mkv');
     assert.equal(folder[0].Path, 'Z:\\SyntheticMedia');

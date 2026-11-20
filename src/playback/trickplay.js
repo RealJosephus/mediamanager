@@ -8,6 +8,17 @@ import { nativeGuid, wireGuid } from '../users/native.js';
 const readInfo = (store, itemId, width, signal) => store.run(async db =>
   (await db.rows('TrickplayInfos', { where: { ItemId: nativeGuid(itemId), Width: width }, limit: 1 }))[0], { signal });
 
+export function trickplayDirectory(item, dataPath, saveWithMedia) {
+  if (saveWithMedia) {
+    const folder = nativeContainingFolderPath(item), name = nativeFileName(item.Path);
+    if (!folder || !name) return;
+    return imagePathApi(folder).join(folder, nativeFileNameWithoutExtension(name) + '.trickplay');
+  }
+  if (!dataPath) return;
+  const id = nativeGuid(item.Id).toLowerCase();
+  return imagePathApi(dataPath).join(dataPath, 'trickplay', id.slice(0, 2), id);
+}
+
 export async function trickplayPlaylist(store, itemId, width, { token, signal }) {
   const info = await readInfo(store, itemId, width, signal);
   if (!info || info.ThumbnailCount <= 0) return notFound();
@@ -38,17 +49,8 @@ export async function trickplayTile({ library, store, fileSystem }, itemId, widt
   const options = library.options.libraryOptions;
   const libraryOptions = folderId && (options instanceof Map ? options.get(wireGuid(folderId)) ?? options.get(folderId)
     : options?.[folderId] ?? options?.[wireGuid(folderId)]);
-  let directory;
-  if (libraryOptions?.SaveTrickplayWithMedia) {
-    const containing = nativeContainingFolderPath(item), name = nativeFileName(item.Path);
-    if (!containing || !name) return notFound();
-    directory = imagePathApi(containing).join(containing, nativeFileNameWithoutExtension(name) + '.trickplay');
-  } else {
-    const root = library.options.dataPath;
-    if (!root) return notFound();
-    const id = nativeGuid(item.Id).toLowerCase();
-    directory = imagePathApi(root).join(root, 'trickplay', id.slice(0, 2), id);
-  }
+  const directory = trickplayDirectory(item, library.options.dataPath, libraryOptions?.SaveTrickplayWithMedia);
+  if (!directory) return notFound();
   const filename = imagePathApi(directory).join(directory, `${info.Width} - ${info.TileWidth}x${info.TileHeight}`, `${index}.jpg`);
   const vfs = fileSystem.vfs, accessPath = fileSystem.accessPath(filename);
   try { if ((await vfs.stat(accessPath, { signal })).kind !== 'file') return notFound(); }
