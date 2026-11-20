@@ -151,7 +151,7 @@ async function expected(root, descriptor) {
   return { filename, bytes, descriptor: { path: descriptor.path, bytes: bytes.length, sha256: descriptor.sha256 } };
 }
 
-/** Read and byte-verify the complete designated Jellyfin source package and current source offer. */
+/** Verify the sealed Jellyfin source package and prepare its publishable attachments. */
 export async function verifyDesignatedJellyfinSourcePackage(filename = packageFilename) {
   const root = path.dirname(path.resolve(filename));
   const resolvedPackage = await ordinary(root, path.basename(filename)), packageBytes = await readFile(resolvedPackage);
@@ -168,7 +168,19 @@ export async function verifyDesignatedJellyfinSourcePackage(filename = packageFi
   const packageSha256 = hash(packageBytes);
   const inputs = [{ filename: resolvedPackage, bytes: packageBytes.length, sha256: packageSha256 },
     ...Object.values(attachments).map(value => ({ filename: value.filename, bytes: value.descriptor.bytes, sha256: value.descriptor.sha256 }))];
-  const sourceOffer = sourceOfferNames.map(name => attachments[name].descriptor);
-  return { package: sourcePackage, manifest, modifications, attachments, inputs, sourceOffer,
+  const source = 'designated-jellyfin-source';
+  const publicDocuments = {
+    sourceManifest: { ...manifest, source },
+    localModifications: { ...modifications, original: source, copy: 'sealed-source-tree' },
+  };
+  const sourceOfferAttachments = sourceOfferNames.map(name => {
+    const attachment = attachments[name];
+    const document = publicDocuments[name];
+    if (!document) return { bytes: attachment.bytes, descriptor: attachment.descriptor };
+    const bytes = Buffer.from(JSON.stringify(document, null, 2) + '\n');
+    return { bytes, descriptor: { path: attachment.descriptor.path, bytes: bytes.length, sha256: hash(bytes) } };
+  });
+  const sourceOffer = sourceOfferAttachments.map(({ descriptor }) => descriptor);
+  return { package: sourcePackage, manifest, modifications, attachments, inputs, sourceOffer, sourceOfferAttachments,
     packageFilename: resolvedPackage, packageSha256 };
 }

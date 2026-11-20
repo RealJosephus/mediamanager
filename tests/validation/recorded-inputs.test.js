@@ -83,6 +83,19 @@ test('the recorded GPL assembly includes its complete designated source and lice
     'LICENSE-Jellyfin.txt', 'jellyfin-local-modifications.json',
     'jellyfin-source-208c278b75ab.zip', 'jellyfin-source-manifest.json',
   ]);
+  const published = new Map(verified.sourceOfferAttachments.map(({ descriptor, bytes }) => [descriptor.path, bytes]));
+  const expectedDocuments = {
+    sourceManifest: { ...verified.manifest, source: 'designated-jellyfin-source' },
+    localModifications: { ...verified.modifications, original: 'designated-jellyfin-source', copy: 'sealed-source-tree' },
+  };
+  for (const [name, document] of Object.entries(expectedDocuments)) {
+    const bytes = published.get(verified.attachments[name].descriptor.path);
+    assert.ok(bytes.equals(Buffer.from(JSON.stringify(document, null, 2) + '\n')), 'public evidence uses source labels');
+  }
+  for (const name of ['archive', 'license']) {
+    const sealed = verified.attachments[name];
+    assert.ok(published.get(sealed.descriptor.path).equals(sealed.bytes), 'public source and license bytes match the seal');
+  }
 });
 
 test('the designated Jellyfin source rejects drift in either direction of every authority link', async () => {

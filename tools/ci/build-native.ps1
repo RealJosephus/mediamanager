@@ -162,13 +162,10 @@ try {
     if (-not $before.allMatched) { throw 'Extracted source does not match its manifest.' }
     $receipt.restoreIsolation.config = Describe $nugetConfig 'nuget.config'
     $sourceVerified = $true
-    $offer = Join-Path $output 'source-offer'; [IO.Directory]::CreateDirectory($offer) | Out-Null
-    foreach ($name in @($archiveIdentity.path, $manifestIdentity.path, 'jellyfin-local-modifications.json', 'LICENSE-Jellyfin.txt')) {
-        Copy-Item -LiteralPath (Join-Path $bundle $name) -Destination (Join-Path $offer $name)
-    }
+    $offer = Join-Path $output 'source-offer'
+    & node (Join-Path $repository 'tools/ci/stage-native-source-offer.js') $offer
+    if ($LASTEXITCODE -ne 0) { throw 'Could not stage the public source offer.' }
     $receipt.sourceOffer = @(Get-ChildItem -LiteralPath $offer -File | Sort-Object Name | ForEach-Object { Describe $_.FullName $_.Name })
-    if (($receipt.sourceOffer | Where-Object path -eq 'jellyfin-local-modifications.json').sha256 -ne $package.localModifications.sha256 -or
-        ($receipt.sourceOffer | Where-Object path -eq 'LICENSE-Jellyfin.txt').sha256 -ne ($manifest.files | Where-Object path -eq 'LICENSE').sha256) { throw 'Source offer attachments changed.' }
     $sdkBefore = Tree-Snapshot $env:MEDIAMANAGER_CI_DOTNET_ROOT 'dotnet-sdk'
     if ($sdkBefore.files.Count -eq 0) { throw 'The isolated .NET SDK tree is empty.' }
     $receipt.sdkBefore = Write-Record 'sdk-before.json' $sdkBefore
