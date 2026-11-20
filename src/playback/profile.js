@@ -202,7 +202,10 @@ const vobSubMksProfile = (profile, stream) => vobSubMksDeliveryProfile(profile) 
 export function subtitleProfile(source, stream, profile, container = source.Container, options = {}) {
   const profiles = get(profile, 'SubtitleProfiles', []).filter(entry => !get(entry, 'Language') || containsContainer(get(entry, 'Language'), stream.Language || 'und'));
   const exact = entry => equal(get(entry, 'Format'), stream.Codec);
-  if (!stream.IsExternal) {
+  const transcode = options.PlayMethod === 'Transcode';
+  const canEmbed = transcode ? !equal(options.TranscodingSubProtocol, 'hls')
+    && !containsContainer('ts,mpegts,mp4', container, false) && containsContainer('mkv,matroska', container, false) : !stream.IsExternal;
+  if (canEmbed) {
     const embedded = profiles.filter(entry => equal(enumName(get(entry, 'Method', 'Encode'), subtitleMethods), 'Embed') && containsContainer(get(entry, 'Container'), container));
     const embed = embedded.find(entry => textStream(stream) === isTextFormat(get(entry, 'Format')) && exact(entry)) ?? embedded.find(entry => canConvert(stream, get(entry, 'Format')));
     if (embed) return { Method: 'Embed', Format: get(embed, 'Format') };
@@ -303,7 +306,8 @@ export function negotiateSource(source, item, profile, options = {}) {
   source.DefaultAudioStreamIndex = video ? audio?.Index : undefined;
   source.DefaultSubtitleStreamIndex = video ? subtitleIndex : undefined;
   for (const stream of subtitles) {
-    const delivery = subtitleProfile(source, stream, profile, transcode?.container ?? source.Container, { ...options, PlayMethod: transcode ? 'Transcode' : 'DirectPlay' });
+    const delivery = subtitleProfile(source, stream, profile, transcode?.container ?? source.Container, {
+      ...options, PlayMethod: transcode ? 'Transcode' : 'DirectPlay', TranscodingSubProtocol: transcode?.protocol });
     stream.DeliveryMethod = delivery.Method;
     if (delivery.Method === 'External') {
       // VobSub/DVDSub is negotiated by codec name but delivered as a Matroska
@@ -371,7 +375,8 @@ function selectTranscode(source, item, profile, options, audio, video, subtitle,
     const directAudio = isVideo && matching && !audioFailures && !exceedsChannels && !(mask & reasons.ContainerBitrateExceedsLimit) ? matching : undefined;
     if (directAudio) audioCodecs = [directAudio.Codec];
     const selected = directAudio ?? audio;
-    const delivery = subtitle ? subtitleProfile(source, subtitle, profile, container, { ...options, PlayMethod: 'Transcode' }) : { Method: 'Encode' };
+    const delivery = subtitle ? subtitleProfile(source, subtitle, profile, container, {
+      ...options, PlayMethod: 'Transcode', TranscodingSubProtocol: protocol }) : { Method: 'Encode' };
     const projected = { AudioSampleRate: directAudio?.SampleRate, MaxFramerate: video?.ReferenceFrameRate ?? video?.AverageFrameRate ?? video?.RealFrameRate,
       StreamOptions: new Map(), MaxAudioChannels: maxChannels };
     const qualify = (stream, name, value) => { if (value != null && value !== '') projected.StreamOptions.set(`${stream.Codec}-${name}`, value); };

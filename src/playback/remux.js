@@ -2,6 +2,8 @@ import { startMediaProcess } from '../media-execution/process.js';
 import { once } from 'node:events';
 import { ProbeReadBridge } from '../storage/probe-bridge.js';
 import { StorageError } from '../storage/errors.js';
+import { identityPathStyle } from '../storage/uri.js';
+import { subtitleExtensionHint } from './subtitle-source.js';
 import { getEncodingThreadCount } from './media-encoder.js';
 import { leaseDiscInput, resolveDiscInput } from '../media-execution/disc-input.js';
 import { remuxArguments, remuxPlan } from '../media-execution/streaming.js';
@@ -20,16 +22,34 @@ export class RemuxService {
   #closing;
   #jobs = new Set();
   #cleanupErrors = [];
-  constructor({ vfs, bridge, mediaEncoder, subtitleBurn, jobs = new TranscodeJobs(), timeoutMs = 21600000, maxConcurrentRemuxes = 4, onProcess = () => {} }) {
+  constructor({ vfs, bridge, identityMap, mediaEncoder, subtitleBurn, jobs = new TranscodeJobs(), timeoutMs = 21600000, maxConcurrentRemuxes = 4, onProcess = () => {} }) {
     if (!vfs) throw new TypeError('Remuxing requires VFS.');
     if (!mediaEncoder) throw new TypeError('Remuxing requires its startup media encoder.');
     if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || !Number.isSafeInteger(maxConcurrentRemuxes) || maxConcurrentRemuxes < 1) throw new TypeError('Positive remux limits are required.');
-    Object.assign(this, { vfs, bridge: bridge ?? new ProbeReadBridge(vfs), ownsBridge: !bridge, mediaEncoder, subtitleBurn,
+    Object.assign(this, { vfs, bridge: bridge ?? new ProbeReadBridge(vfs), ownsBridge: !bridge, identityMap, mediaEncoder, subtitleBurn,
       jobs, timeoutMs, maxConcurrentRemuxes, onProcess });
   }
   get available() { return this.mediaEncoder.ready; }
+  get canOpenSidecar() { return Boolean(this.identityMap); }
   plan(source, options, configuration = this.mediaEncoder.getEncodingOptions()) {
-    return remuxPlan(source, options, { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version, subtitleBurn: this.subtitleBurn });
+    return remuxPlan(source, options, { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version,
+      subtitleBurn: this.subtitleBurn, canOpenSidecar: this.canOpenSidecar });
+  }
+  #sidecarPath(identityPath) {
+    return this.identityMap.resolve({ identityPath, style: identityPathStyle(identityPath) });
+  }
+  leaseSidecar(identityPath, lifetime) {
+    return this.bridge.lease(this.#sidecarPath(identityPath), lifetime);
+  }
+  async #leaseEmbeddedSubtitle(stream, lifetime) {
+    const identity = stream.Path;
+    if (!stream.IsTextSubtitleStream && /\.(idx|sub)$/iu.test(identity) && /(?:dvd_?sub|vobsub)/iu.test(stream.Codec ?? '')) {
+      const index = /\.idx$/iu.test(identity) ? identity : identity.replace(/\.sub$/iu, '.idx');
+      const data = /\.sub$/iu.test(identity) ? identity : identity.replace(/\.idx$/iu, '.sub');
+      try { return await this.leaseSidecar(index, { ...lifetime, relatedPaths: [this.#sidecarPath(data)] }); }
+      catch (error) { if (index === identity || error.code !== 'not-found') throw error; }
+    }
+    return this.leaseSidecar(identity, { ...lifetime, extensionHint: subtitleExtensionHint(stream) });
   }
   supports(source, options) {
     if (!this.available || this.#closed) return false;
@@ -70,14 +90,16 @@ export class RemuxService {
     const lifetime = { signal, expiresInMs: this.timeoutMs };
     const lease = disc ? await leaseDiscInput(this.bridge, disc, this.mediaEncoder, lifetime)
       : await this.bridge.lease(virtualPath, { ...lifetime, version: before.version });
-    let child, done, failed, primary, killTimer, subtitles;
+    let child, done, failed, primary, killTimer, subtitles, externalAudio, externalSubtitle;
     const cleanupErrors = [];
     const kill = () => { try { child?.kill(); } catch (error) { cleanupErrors.push(error); } };
     const abort = () => { failed ??= signal.reason?.code === 'timeout' ? signal.reason : failure('cancelled', 'Remuxing was cancelled.', signal.reason); kill(); };
     try {
       checkAbort(signal);
       subtitles = await stageSubtitleBurn(this.subtitleBurn, source, plan.burnSubtitle, virtualPath, signal);
-      const args = remuxArguments(lease.url, plan, threads, this.mediaEncoder.version, subtitles);
+      if (plan.externalSubtitle) externalSubtitle = await this.#leaseEmbeddedSubtitle(plan.externalSubtitle, lifetime);
+      if (plan.externalAudio) externalAudio = await this.leaseSidecar(plan.externalAudio.path, lifetime);
+      const args = remuxArguments(lease.url, plan, threads, this.mediaEncoder.version, subtitles, externalAudio?.url, externalSubtitle?.url);
       const overrides = plan.videoOutput?.hardware?.environment;
       const environment = overrides ? { ...(this.mediaEncoder.environment ?? process.env), ...overrides } : this.mediaEncoder.environment;
       try { child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment, cwd: subtitles?.cwd }); }
@@ -99,7 +121,8 @@ export class RemuxService {
         checkAbort(signal);
         job.active = true;
         this.jobs.activate(job);
-        this.onProcess({ pid: child.pid, args: args.map(value => value === lease.url ? '[private source]' : value) });
+        const inputUrls = new Set([lease.url, externalSubtitle?.url, externalAudio?.url]);
+        this.onProcess({ pid: child.pid, args: args.map(value => inputUrls.has(value) ? '[private source]' : value) });
         let received = false;
         for await (const bytes of child.stdout) {
           checkAbort(signal); received = true;
@@ -125,6 +148,8 @@ export class RemuxService {
       clearTimeout(killTimer); signal.removeEventListener('abort', abort);
       if (done) await done;
       try { await subtitles?.release(); } catch (error) { cleanupErrors.push(error); }
+      try { await externalSubtitle?.release(); } catch (error) { cleanupErrors.push(error); }
+      try { await externalAudio?.release(); } catch (error) { cleanupErrors.push(error); }
       try { await lease.release(); } catch (error) { cleanupErrors.push(error); }
       this.#cleanupErrors.push(...cleanupErrors);
     }

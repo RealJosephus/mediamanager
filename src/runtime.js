@@ -361,7 +361,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     subtitleCache: new SubtitleCache({ fileSystem, dataPath, onError }) }) : undefined;
   if (extraction) rollback.push(() => extraction.close());
   const subtitleBurn = extraction && new SubtitleBurnSource({ vfs, identityMap, extraction });
-  const remux = probe ? new RemuxService({ vfs, bridge:probe.bridge, ...remuxOptions, mediaEncoder, subtitleBurn }) : undefined;
+  const remux = probe ? new RemuxService({ vfs, bridge:probe.bridge, identityMap, ...remuxOptions, mediaEncoder, subtitleBurn }) : undefined;
   if (remux) rollback.push(() => remux.close());
   const hls = probe ? new HlsService({ vfs, bridge: probe.bridge, remux, onError, ...hlsOptions,
     mediaEncoder, getEncodingOptions, getCacheDirectory: () => encodingPaths.getTranscodePath(),

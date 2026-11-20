@@ -45,15 +45,15 @@ async function probe(filename, evidence, signal) {
     '-show_data_hash', 'sha256', '-of', 'json', filename], evidence.commands, signal));
 }
 
-function packets(result, type) {
-  const stream = result.streams.find(value => value.codec_type === type);
+function packets(result, type, ordinal = 0) {
+  const stream = result.streams.filter(value => value.codec_type === type)[ordinal];
   assert.ok(stream, type);
   return result.packets.filter(packet => packet.stream_index === stream.index).map(packet => ({
     hash: packet.data_hash, pts: packet.pts_time, dts: packet.dts_time, duration: packet.duration_time,
   }));
 }
 
-function bitmapCue() {
+function bitmapCue(x = 80) {
   const segment = (time, type, payload = Buffer.alloc(0)) => {
     const header = Buffer.alloc(13);
     header.write('PG'); header.writeUInt32BE(time, 2); header.writeUInt32BE(time, 6);
@@ -64,7 +64,7 @@ function bitmapCue() {
     const bytes = Buffer.alloc(count ? 19 : 11);
     bytes.writeUInt16BE(720); bytes.writeUInt16BE(480, 2); bytes[4] = 0x10;
     bytes.writeUInt16BE(sequence, 5); bytes[7] = count ? 0x80 : 0; bytes[10] = count;
-    if (count) { bytes.writeUInt16BE(80, 15); bytes.writeUInt16BE(408, 17); }
+    if (count) { bytes.writeUInt16BE(x, 15); bytes.writeUInt16BE(408, 17); }
     return bytes;
   };
   const windows = Buffer.from([1, 0, 0, 0, 0, 0, 0x02, 0xd0, 0x01, 0xe0]);
@@ -91,6 +91,14 @@ async function seed(referenceRoot, evidence, signal) {
   await mkdir(mediaFolder);
   await writeFile(filename, asset.bytes);
   await writeFile(subtitle, subtitleBytes);
+  const externalAudio = path.join(mediaFolder, 'dual-avc.audio.mka');
+  await runMediaTool('ffmpeg', ['-v', 'error', '-f', 'lavfi', '-i', 'sine=frequency=520:sample_rate=48000:duration=2',
+    '-f', 'lavfi', '-i', 'sine=frequency=940:sample_rate=48000:duration=2', '-map', '0:a:0', '-map', '1:a:0',
+    '-c:a', 'ac3', '-ac', '2', externalAudio], evidence.commands, signal);
+  const externalAudioRaw = await probe(externalAudio, evidence, signal);
+  const externalAudioStreams = normalizeProbe(externalAudioRaw, { path: externalAudio, isAudio: true }).MediaStreams;
+  assert.equal(externalAudioStreams.length, 2);
+  const externalAudioBytes = await readFile(externalAudio);
   const raw = await probe(filename, evidence, signal);
   assert.equal(raw.streams.filter(stream => stream.codec_type === 'video').length, 2);
   const media = normalizeProbe(raw, { path: filename, protocol: 'File' });
@@ -103,9 +111,11 @@ async function seed(referenceRoot, evidence, signal) {
   const embeddedBitmap = bitmapMedia.MediaStreams.find(value => value.Type === 'Subtitle');
   assert.ok(embeddedBitmap && !embeddedBitmap.IsTextSubtitleStream && embeddedBitmap.Index === 3);
   const bitmapBytes = await readFile(bitmapFilename);
-  const sidecar = path.join(mediaFolder, 'dual-avc.pgs.mks');
-  await runMediaTool('ffmpeg', ['-v', 'error', '-f', 'sup', '-i', sup, '-map', '0:s:0', '-map', '0:s:0',
+  const sidecar = path.join(mediaFolder, 'dual-avc.pgs.mks'), secondCue = path.join(evidence.privateRoot, 'cue-second.sup');
+  await writeFile(secondCue, bitmapCue(160));
+  await runMediaTool('ffmpeg', ['-v', 'error', '-f', 'sup', '-i', sup, '-f', 'sup', '-i', secondCue, '-map', '0:s:0', '-map', '1:s:0',
     '-c', 'copy', '-f', 'matroska', sidecar], evidence.commands, signal);
+  const sidecarRaw = await probe(sidecar, evidence, signal);
   const sidecarBytes = await readFile(sidecar);
   const hdrFilename = path.join(mediaFolder, 'hdr.mkv');
   await runMediaTool('ffmpeg', ['-v', 'error', '-i', filename, '-map', '0:v:0', '-map', '0:a:0', '-c:a', 'copy', '-c:v', 'libx265',
@@ -150,6 +160,9 @@ async function seed(referenceRoot, evidence, signal) {
       database.insert('MediaStreamInfos', probeStreamRow(item, {
         Type: 'Subtitle', Codec: 'subrip', Index: 3, Language: 'eng', IsExternal: true, Path: subtitle,
       }));
+      for (const [index, stream] of externalAudioStreams.entries()) {
+        database.insert('MediaStreamInfos', probeStreamRow(item, { ...stream, Index: 4 + index, IsExternal: true, Path: externalAudio }));
+      }
       for (const [id, name, filename, media] of [[bitmapItemId, 'Bitmap subtitle fixture', bitmapFilename, bitmapMedia],
         [hdrItemId, 'HDR10 fixture', hdrFilename, hdrMedia]]) {
         const Id = nativeGuid(id);
@@ -166,7 +179,7 @@ async function seed(referenceRoot, evidence, signal) {
     });
   } finally { database.close(); }
   return { filename, subtitle, subtitleBytes, databasePath, serverId, asset: asset.source, raw, bitmapFilename, bitmapBytes,
-    sidecar, sidecarBytes, hdrFilename, hdrBytes };
+    sidecar, sidecarBytes, sidecarRaw, hdrFilename, hdrBytes, externalAudio, externalAudioBytes, externalAudioRaw };
 }
 
 function portAvailable(port) {
@@ -186,22 +199,27 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   const direct = scenario === 'direct';
   const event = scenario === 'event';
   const externalBitmap = scenario === 'bitmapExternal';
+  const embedPgs = scenario === 'embedPgs';
+  const embedSrt = scenario === 'embedSrt';
+  const embed = embedPgs || embedSrt;
   const bitmap = scenario === 'bitmap' || scenario === 'bitmapScale' || externalBitmap;
   const hdr = scenario === 'hdr';
-  const target = bitmap ? bitmapItemId : hdr ? hdrItemId : itemId;
-  const audioIndex = hdr ? 1 : 2;
+  const externalAudio = scenario.startsWith('externalAudio') || embedSrt;
+  const target = bitmap || embedPgs ? bitmapItemId : hdr ? hdrItemId : itemId;
+  const audioIndex = externalAudio ? 5 : hdr ? 1 : 2;
   const burned = scenario === 'burn' || scenario === 'bitmap' || externalBitmap;
-  const subtitleIndex = burned ? externalBitmap ? 5 : 3 : -1;
+  const subtitleIndex = burned || embed ? externalBitmap || embedPgs ? 5 : 3 : -1;
   const scaled = scenario === 'scale' || bitmap || burned || hdr;
-  const codec = direct || scaled ? 'ac3' : 'aac';
+  const codec = direct || scaled || externalAudio || embed ? 'ac3' : 'aac';
   const profile = {
     MaxStreamingBitrate: 8000000,
     DirectPlayProfiles: [{ Type: 'Video', Container: 'ts', VideoCodec: 'h264', AudioCodec: codec }],
-    TranscodingProfiles: [{ Type: 'Video', Context: 'Streaming', Protocol: protocol, Container: 'ts', VideoCodec: 'h264', AudioCodec: codec }],
+    TranscodingProfiles: [{ Type: 'Video', Context: 'Streaming', Protocol: protocol, Container: embed ? 'mkv' : 'ts', VideoCodec: 'h264', AudioCodec: codec }],
   };
   if (scaled) profile.CodecProfiles = [{ Type: 'Video', Codec: 'h264',
     Conditions: [{ Property: 'Width', Condition: 'LessThanEqual', Value: '360' }] }];
   if (burned) profile.SubtitleProfiles = [{ Format: bitmap ? 'pgssub' : 'srt', Method: 'Encode' }];
+  if (embed) profile.SubtitleProfiles = [{ Format: embedPgs ? 'pgssub' : 'srt', Method: 'Embed', Container: 'mkv' }];
   if (direct) {
     const capabilities = await request('/Sessions/Capabilities?PlayableMediaTypes=Video', { method: 'POST' });
     assert.equal(capabilities.status, 204, capabilities.bytes.toString());
@@ -223,12 +241,13 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   const url = new URL(source.TranscodingUrl, origin);
   assert.equal(url.searchParams.get('VideoCodec'), 'h264');
   assert.equal(url.searchParams.get('AudioCodec'), codec);
-  if (!bitmap && !hdr) assert.equal(url.searchParams.get('TranscodeReasons'), burned ? 'SubtitleCodecNotSupported,VideoResolutionNotSupported'
+  if (!bitmap && !hdr && !externalAudio && !embed) assert.equal(url.searchParams.get('TranscodeReasons'), burned ? 'SubtitleCodecNotSupported,VideoResolutionNotSupported'
     : scaled ? 'VideoResolutionNotSupported' : 'AudioCodecNotSupported');
-  if (burned) {
+  if (burned || embed) {
     assert.equal(url.searchParams.get('SubtitleStreamIndex'), String(subtitleIndex));
-    assert.equal(url.searchParams.get('SubtitleMethod'), 'Encode');
+    assert.equal(url.searchParams.get('SubtitleMethod'), embed ? 'Embed' : 'Encode');
   }
+  if (embed) assert.equal(url.searchParams.get('SubtitleCodec'), profile.SubtitleProfiles[0].Format);
   if (scaled) assert.equal(url.searchParams.get('MaxWidth'), '360');
   const head = await request(url, { method: 'HEAD' });
   report.head = { status: head.status, mime: head.mime, length: head.bytes.length };
@@ -240,7 +259,8 @@ async function playback(origin, authorization, protocol, scenario, report, signa
     if (scaled) {
       assert.match(report.master, /RESOLUTION=360x240/u);
       assert.match(report.master, /CODECS="avc1\.[^,"]+,ac-3"/u);
-    } else assert.match(report.master, /CODECS="avc1\.[^,"]+,mp4a\.40\.2"/u);
+    } else if (externalAudio) assert.match(report.master, /CODECS="avc1\.[^,"]+,ac-3"/u);
+    else assert.match(report.master, /CODECS="avc1\.[^,"]+,mp4a\.40\.2"/u);
     const variant = new URL(linesWithUris(report.master)[0], url);
     if (event) {
       variant.pathname = variant.pathname.replace(/\/main\.m3u8$/u, '/live.m3u8');
@@ -261,7 +281,7 @@ async function playback(origin, authorization, protocol, scenario, report, signa
     report.sessions = sessions;
     report.transcodingInfo = sessions.find(value => value.DeviceId === deviceId)?.TranscodingInfo;
     assert.ok(report.transcodingInfo);
-    assert.equal(report.transcodingInfo.IsAudioDirect, scaled);
+    assert.equal(report.transcodingInfo.IsAudioDirect, scaled || externalAudio);
     assert.equal(report.transcodingInfo.IsVideoDirect, !scaled);
   }
   const stop = '/Videos/ActiveEncodings?' + new URLSearchParams({ deviceId, playSessionId: info.PlaySessionId });
@@ -308,7 +328,8 @@ for (const backend of backends) test(backend === 'software'
   const hardware = backend !== 'software';
   const burns = [['hls', 'burn'], ['hls', 'bitmapScale'], ['hls', 'bitmap'], ['hls', 'bitmapExternal']];
   const scenarios = hardware ? [['hls', 'direct'], ['hls', 'hls'], ['hls', 'scale'], ...burns]
-    : [['hls', 'direct'], ['hls', 'hls'], ['http', 'http'], ['hls', 'scale'], ['hls', 'event'], ...burns, ['hls', 'hdr']];
+    : [['hls', 'direct'], ['hls', 'hls'], ['http', 'http'], ['hls', 'scale'], ['hls', 'event'], ...burns, ['hls', 'hdr'],
+      ['http', 'externalAudioHttp'], ['hls', 'externalAudioHls'], ['http', 'embedSrt'], ['http', 'embedPgs']];
   if (backend === 'nvenc' || backend === 'videotoolbox') scenarios.push(['hls', 'hdr']);
   let current, native, proxy, nodeMedia, database, runtime, authorization, failure;
   async function stopNative() {
@@ -331,12 +352,13 @@ for (const backend of backends) test(backend === 'software'
       try {
         const bytes = await playback(origin, authorization, protocol, scenario, result, t.signal);
         if (!bytes) continue;
-        const filename = path.join(root, label + '-' + scenario + '.ts');
+        const embedded = scenario.startsWith('embed');
+        const filename = path.join(root, label + '-' + scenario + (embedded ? '.mkv' : '.ts'));
         await writeFile(filename, bytes);
         result.probe = await probe(filename, evidence, t.signal);
         const audio = result.probe.streams.find(stream => stream.codec_type === 'audio');
         const scaled = ['scale', 'burn', 'bitmapScale', 'bitmap', 'bitmapExternal', 'hdr'].includes(scenario);
-        assert.equal(audio.codec_name, scaled ? 'ac3' : 'aac');
+        assert.equal(audio.codec_name, scaled || embedded || scenario.startsWith('externalAudio') ? 'ac3' : 'aac');
         assert.equal(audio.channels, 2);
         assert.equal(audio.sample_rate, '48000');
         if (scaled) {
@@ -345,6 +367,15 @@ for (const backend of backends) test(backend === 'software'
           if (scenario === 'hdr') assert.deepEqual([video.color_space, video.color_transfer, video.color_primaries], ['bt709', 'bt709', 'bt709']);
           result.decoded = (await runMediaTool('ffmpeg', ['-v', 'error', '-i', filename, '-map', '0:v:0',
             '-f', 'framemd5', '-'], evidence.commands, t.signal)).toString('utf8');
+        }
+        if (embedded) {
+          const [subtitle] = result.probe.streams.filter(stream => stream.codec_type === 'subtitle');
+          assert.equal(subtitle.codec_name, scenario === 'embedPgs' ? 'hdmv_pgs_subtitle' : 'subrip');
+          assert.equal(subtitle.disposition.default, 1);
+          if (scenario === 'embedSrt') {
+            result.subtitleText = (await runMediaTool('ffmpeg', ['-v', 'error', '-i', filename, '-map', '0:s:0', '-f', 'srt', '-'], evidence.commands, t.signal)).toString('utf8');
+            assert.match(result.subtitleText, /Timed subtitle/u);
+          }
         }
         await runMediaTool('ffmpeg', ['-v', 'error', '-i', filename, '-map', '0:v', '-map', '0:a', '-f', 'null', '-'], evidence.commands, t.signal);
       } catch (error) {
@@ -402,6 +433,8 @@ for (const backend of backends) test(backend === 'software'
         expected: { bytes: fixture.sidecarBytes.length, sha256: sha256(fixture.sidecarBytes) } },
       { filename: fixture.hdrFilename, contentType: 'video/x-matroska',
         expected: { bytes: fixture.hdrBytes.length, sha256: sha256(fixture.hdrBytes) } },
+      { filename: fixture.externalAudio, contentType: 'audio/x-matroska',
+        expected: { bytes: fixture.externalAudioBytes.length, sha256: sha256(fixture.externalAudioBytes) } },
     ]);
     database = await createPostgresTestDatabase(null, 'mixed_transcode');
     const snapshot = new SqliteDatabase(fixture.databasePath, { readOnly: true, requireMigrationHistory: true });
@@ -429,7 +462,8 @@ for (const backend of backends) test(backend === 'software'
     await writeFile(path.join(referenceRoot, 'config/network.xml'),
       '<NetworkConfiguration><InternalHttpPort>0</InternalHttpPort><AutoDiscovery>false</AutoDiscovery></NetworkConfiguration>');
     nodeMedia = await extractionFixture({ '/dual-avc.m2ts': await readFile(fixture.filename), '/dual-avc.en.srt': fixture.subtitleBytes,
-      '/bitmap.mkv': fixture.bitmapBytes, '/dual-avc.pgs.mks': fixture.sidecarBytes, '/hdr.mkv': fixture.hdrBytes });
+      '/bitmap.mkv': fixture.bitmapBytes, '/dual-avc.pgs.mks': fixture.sidecarBytes, '/hdr.mkv': fixture.hdrBytes,
+      '/dual-avc.audio.mka': fixture.externalAudioBytes });
     const identityMap = new IdentityAccessMap();
     identityMap.addPrefix({ identityRoot: path.dirname(fixture.filename), accessRoot: '/',
       style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Isolated transcode media.' });
@@ -479,7 +513,24 @@ for (const backend of backends) test(backend === 'software'
         continue;
       }
       assert.deepEqual(packets(actual.probe, 'video'), packets(expected.probe, 'video'), protocol + ' video payload and timeline');
-      assert.deepEqual(packets(actual.probe, 'audio'), packets(expected.probe, 'audio'), protocol + ' AAC payload and timeline');
+      assert.deepEqual(packets(actual.probe, 'audio'), packets(expected.probe, 'audio'), protocol + ' audio payload and timeline');
+      if (protocol.startsWith('externalAudio') || protocol === 'embedSrt') {
+        const firstTrack = new Set(packets(fixture.externalAudioRaw, 'audio').map(packet => packet.hash));
+        const secondTrack = new Set(packets(fixture.externalAudioRaw, 'audio', 1).map(packet => packet.hash));
+        const hashes = packets(actual.probe, 'audio').map(packet => packet.hash);
+        assert.ok(hashes.length > 10 && hashes.every(hash => secondTrack.has(hash)) && hashes.some(hash => !firstTrack.has(hash)),
+          'The output copied packets from the selected second sidecar track.');
+      }
+      if (protocol.startsWith('embed')) {
+        assert.deepEqual(packets(actual.probe, 'subtitle'), packets(expected.probe, 'subtitle'), protocol + ' subtitle packets');
+        if (protocol === 'embedSrt') assert.equal(actual.subtitleText, expected.subtitleText);
+        else {
+          const hashes = packets(actual.probe, 'subtitle').map(packet => packet.hash);
+          assert.deepEqual(hashes, packets(fixture.sidecarRaw, 'subtitle', 1).map(packet => packet.hash));
+          assert.notDeepEqual(hashes, packets(fixture.sidecarRaw, 'subtitle', 0).map(packet => packet.hash));
+        }
+        continue;
+      }
       assert.deepEqual(packets(actual.probe, 'video').map(packet => packet.hash), packets(fixture.raw, 'video').map(packet => packet.hash),
         protocol + ' original video payloads');
     }
@@ -516,7 +567,7 @@ for (const backend of backends) test(backend === 'software'
     for (const { args } of evidence.nodeProcesses) {
       assert.ok(!args.includes('-hwaccel') && !args.includes('-init_hw_device'));
       if (args.includes('-vf') || args.includes('-filter_complex')) assert.equal(args[args.indexOf('-codec:v:0') + 1], 'libx264');
-      else assert.notEqual(args[args.indexOf('-codec:a:0') + 1], 'copy');
+      else if (!args.includes('1:1') && !args.includes('-codec:s:0')) assert.notEqual(args[args.indexOf('-codec:a:0') + 1], 'copy');
     }
   } catch (error) { failure = output.publicError(error); evidence.error = failure.message; }
   finally {

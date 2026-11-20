@@ -40,6 +40,7 @@ const cachePlan = plan => ({
   keyframeSegments: plan.keyframeSegments,
   streams: plan.streams.map(stream => [stream.type, stream.index]),
   audio: plan.audioOutput,
+  externalAudio: plan.externalAudio,
   videoOutput: plan.videoOutput,
   subtitle: plan.burnSubtitle?.Index,
   video: plan.video ? [lower(plan.video.Codec), String(plan.video.NalLengthSize ?? '')] : null,
@@ -455,7 +456,8 @@ export class HlsService {
     }
   }
   mediaTools(configuration = this.getEncodingOptions()) {
-    return { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version, subtitleBurn: this.remux.subtitleBurn };
+    return { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version,
+      subtitleBurn: this.remux.subtitleBurn, canOpenSidecar: this.remux.canOpenSidecar };
   }
   plan(source, options, configuration = this.getEncodingOptions()) {
     return hlsPlan(source, options, this.mediaTools(configuration));
@@ -577,11 +579,11 @@ export class HlsService {
       if (!available) throw failure('unavailable', 'The HLS process is unavailable.');
       let version;
       const disc = !openRead && plan.discInput ? await resolveDiscInput(this.vfs, source.VideoType, virtualPath, this.#lifetime.signal) : undefined;
-      if (!openRead) {
-        if (disc) version = plan.burnSubtitle?.Path ? undefined : disc.version;
+      if (!openRead && !plan.burnSubtitle?.Path && !plan.externalAudio) {
+        if (disc) version = disc.version;
         else {
           const info = await this.vfs.stat(virtualPath, { signal: this.#lifetime.signal });
-          if (this.vfs.capabilities(virtualPath).reliableVersion && !plan.burnSubtitle?.Path) version = info.version;
+          if (this.vfs.capabilities(virtualPath).reliableVersion) version = info.version;
         }
       }
       const key = createHash('sha256').update(json(['event', cacheDirectory, source.LiveStreamId ? [source.LiveStreamId, source.Path] : virtualPath,
@@ -648,7 +650,7 @@ export class HlsService {
     const disc = plan.discInput ? await resolveDiscInput(this.vfs, source.VideoType, virtualPath, signal) : undefined;
     const before = disc ? undefined : await this.vfs.stat(virtualPath, { signal }); checkAbort(signal);
     const inputVersion = disc ? disc.version : this.vfs.capabilities(virtualPath).reliableVersion === true ? before.version : null;
-    const version = plan.burnSubtitle?.Path ? null : inputVersion;
+    const version = plan.burnSubtitle?.Path || plan.externalAudio ? null : inputVersion;
     // The native cache identity uses the source, user agent, device and play session.
     // Pin the VFS version and byte-producing plan so a changed object, selected stream,
     // segment length, muxer or segment-number timeline cannot reuse earlier output.
@@ -743,7 +745,7 @@ export class HlsService {
     const controller = new AbortController(); job.processController = controller;
     const signal = AbortSignal.any([job.controller.signal, controller.signal]);
     const timer = setTimeout(() => controller.abort(failure('timeout', 'HLS processing timed out.')), this.timeoutMs); timer.unref();
-    let lease, child, subtitles;
+    let lease, child, subtitles, externalAudio;
     try {
       if (job.plan.live && job.source.BufferMs > 0) await delay(job.source.BufferMs, undefined, { signal });
       if (job.openRead) {
@@ -752,7 +754,8 @@ export class HlsService {
       } else if (job.disc) lease = await leaseDiscInput(this.remux.bridge, job.disc, this.mediaEncoder, { signal, expiresInMs: this.timeoutMs });
       else lease = await this.remux.bridge.lease(job.virtualPath, { version: job.version, signal, expiresInMs: this.timeoutMs });
       subtitles = await stageSubtitleBurn(this.remux.subtitleBurn, job.source, job.plan.burnSubtitle, job.virtualPath, signal);
-      const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution, subtitles, job.eventId);
+      if (job.plan.externalAudio) externalAudio = await this.remux.leaseSidecar(job.plan.externalAudio.path, { signal, expiresInMs: this.timeoutMs });
+      const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution, subtitles, job.eventId, externalAudio?.url);
       checkAbort(signal);
       const overrides = job.plan.videoOutput?.hardware?.environment;
       const environment = overrides ? { ...(this.mediaEncoder.environment ?? process.env), ...overrides } : this.mediaEncoder.environment;
@@ -772,10 +775,13 @@ export class HlsService {
       };
       child.stderr.on('data', bytes => consume(decoder.write(bytes)));
       try {
-        this.onProcess({ pid: child.pid, args: args.map(value => value === lease.url ? '[private source]' : value) });
+        this.onProcess({ pid: child.pid, args: args.map(value => value === lease.url || value === externalAudio?.url ? '[private source]' : value) });
         const code = await done; const finalText = decoder.end(); diagnostics = (diagnostics + finalText).slice(-8192); progressParser.end(finalText); checkAbort(signal);
-        if (code !== 0) throw new StorageError('invalid-response', 'The HLS streams could not be processed.', { exitCode: code,
-          diagnostic: lease.redact?.(diagnostics) ?? diagnostics.replaceAll(lease.url, '[private source]') });
+        if (code !== 0) {
+          let diagnostic = lease.redact?.(diagnostics) ?? diagnostics.replaceAll(lease.url, '[private source]');
+          if (externalAudio) diagnostic = diagnostic.replaceAll(externalAudio.url, '[private source]');
+          throw new StorageError('invalid-response', 'The HLS streams could not be processed.', { exitCode: code, diagnostic });
+        }
         if (job.disc) await job.disc.verify(signal);
         else if (job.version != null && (await this.vfs.stat(job.virtualPath, { signal })).version !== job.version) throw failure('version-changed', 'The HLS source changed.');
       } finally { signal.removeEventListener('abort', abort); child.kill(); await done.catch(() => {}); }
@@ -785,6 +791,7 @@ export class HlsService {
       const errors = [];
       try { await job.cleaning; } catch (error) { errors.push(error); }
       try { await subtitles?.release(); } catch (error) { errors.push(error); }
+      try { await externalAudio?.release(); } catch (error) { errors.push(error); }
       try { await lease?.release(); } catch (error) { errors.push(error); }
       job.exited = true;
       if (job.eventId) this.#touch(job);
