@@ -46,7 +46,7 @@ test('production PG official M3U raw HTTP readers compose with Session HTTP, Web
   const report = { scope: 'production createRuntime with fresh real PostgreSQL; actual HTTP/WS, official M3U, original bytes and real ffprobe',
     input: { bytes: bytes.length, sha256: sha256(bytes), preparation: 'handwritten PCM WAV, served at .ts without an encoder' },
     phases: [], requests: [], observations: [], userData: {}, phaseAcceptance: false, releaseAcceptance: false,
-    actualNativeHttpCompared: false, actualSharedHttpStreamOpenExecuted: false, recordingSpoolOrTranscodeExecuted: false };
+    actualNativeHttpCompared: false, actualSharedHttpStreamOpenExecuted: false, retainedTransportBufferExecuted: false };
   let database, runtime, source, failure, closing, channel, cacheFile, cacheBytes, origin, openToken;
   const mark = async phase => {
     report.phases.push(phase); await appendFile(path.join(output, 'progress.log'), phase + '\n');
@@ -177,13 +177,14 @@ test('production PG official M3U raw HTTP readers compose with Session HTTP, Web
     assertLiveData(await readData(first), 1);
     const firstReader = rawReader(firstSource.Path, 'first raw reader'); readers.push(firstReader);
     await firstReader.waitBytes(source.prefixLength); assert.deepEqual(firstReader.bytes(), bytes.subarray(0, source.prefixLength));
-    const secondReader = rawReader(secondSource.Path, 'later raw reader'); readers.push(secondReader);
+    const secondReader = rawReader(secondSource.Path, 'second raw reader'); readers.push(secondReader);
     await until(() => runtime.liveStreams.snapshot(), values => values.length === 1 && values[0].ReaderCount === 2, 'both HTTP readers');
     observe('both actual HTTP readers admitted');
     await source.write(held.id, source.prefixLength, source.middleEnd);
-    await firstReader.waitBytes(source.middleEnd); await secondReader.waitBytes(source.middleEnd - source.prefixLength);
+    await firstReader.waitBytes(source.middleEnd); await secondReader.waitBytes(source.middleEnd);
     assert.deepEqual(firstReader.bytes(), bytes.subarray(0, source.middleEnd));
-    assert.deepEqual(secondReader.bytes(), bytes.subarray(source.prefixLength, source.middleEnd), 'A later reader consumes current original bytes without historical spool.');
+    assert.deepEqual(secondReader.bytes(), bytes.subarray(0, source.middleEnd), 'Both readers replay the short retained input from its start.');
+    report.retainedTransportBufferExecuted = true;
     for (const reader of readers) { assert.equal(reader.record.status, 200); assert.equal(reader.record.contentType, 'video/mp2t'); assert.equal(reader.record.contentRange, null); }
     await firstReader.cancel();
     await until(() => runtime.liveStreams.snapshot(), values => values.length === 1 && values[0].ReaderCount === 1, 'cancelled reader release');
@@ -200,8 +201,8 @@ test('production PG official M3U raw HTTP readers compose with Session HTTP, Web
     await firstSocket.message('UserDataChanged', value => firstSocket.record.messages.indexOf(value) >= changeCount && value.Data.UserDataList.some(data => data.ItemId === channel.Id));
     const endedBefore = ended.length; await secondSocket.close(); await secondSocketOther.barrier();
     assert.equal(ended.length, endedBefore); assert.equal(observe('first of two WebSockets disconnected')[0].ConsumerCount, 1);
-    await source.write(held.id, source.middleEnd, bytes.length); await secondReader.waitBytes(bytes.length - source.prefixLength);
-    assert.deepEqual(secondReader.bytes(), bytes.subarray(source.prefixLength)); assert.equal(held.closed, false);
+    await source.write(held.id, source.middleEnd, bytes.length); await secondReader.waitBytes(bytes.length);
+    assert.deepEqual(secondReader.bytes(), bytes); assert.equal(held.closed, false);
     assert.equal(secondReader.record.events.includes('response-close'), false); assert.equal(runtime.liveStreams.snapshot()[0].ReaderCount, 1);
     secondReader.record.expectedEnd = 'last session WebSocket disconnect';
     await secondSocketOther.close();
@@ -248,8 +249,10 @@ test('production PG official M3U raw HTTP readers compose with Session HTTP, Web
     }
     report.filesAfterShutdown = await fileSnapshot(root);
     await assert.rejects(readFile(hostLockPath), { code: 'ENOENT' }); report.pluginHostLease.removedAfterShutdown = true;
-    assert.deepEqual(report.filesAfterShutdown, report.filesBeforePlayback.filter(file => file.path !== hostLockRelative),
-      'Shutdown removes its owned plugin-host lock; all persistent bytes remain identical and no media spool is added.');
+    const isRetainedInput = file => /^data\/cache\/livetv\/mediamanager-live-[a-f0-9-]+\.ts$/u.test(file.path);
+    assert.equal(report.filesBeforePlayback.filter(isRetainedInput).length, 1);
+    assert.deepEqual(report.filesAfterShutdown, report.filesBeforePlayback.filter(file => file.path !== hostLockRelative && !isRetainedInput(file)),
+      'Shutdown removes its owned plugin-host lock and retained input and preserves persistent bytes.');
     assert.equal(source.records.every(value => value.closed), true); assert.deepEqual(errors, []);
     for (const client of sockets) assert.deepEqual(client.record.errors, []);
     assert.deepEqual(saved.map(value => value.reason), ['PlaybackStart', 'PlaybackStart', 'PlaybackProgress', 'PlaybackFinished', 'PlaybackStart']);

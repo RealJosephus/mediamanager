@@ -14,14 +14,14 @@ async function releaseResolutionResources(releases, errors) {
 
 /** LibraryManager.FindByPath's default repository query and live final lookup
  * are shared by metadata and UserRoot resolution, independently of the parent. */
-export function findPostgresLinkedChildByPath({ library, store, itemCreation }, identity) {
+export function findPostgresLinkedChildByPath({ library, store, itemCreation }, identity, isFolder) {
   return store.run(async session => {
     const stored = library.options?.reversePath?.(identity) ?? identity;
     const result = await queryPostgresItemPage(session,
       { sortby: ['DateCreated'], sortorder: ['Descending'], limit: 1, enabletotalrecordcount: false },
       { groupByPresentationKey: false, itemIdsPlan: {
-        text: `SELECT "Id" FROM ${q(session.schemaName)}."BaseItems" WHERE "Path"=$1`,
-        values: [nativeTextBytes(stored)],
+        text: `SELECT "Id" FROM ${q(session.schemaName)}."BaseItems" WHERE "Path"=$1${isFolder === undefined ? '' : ' AND "IsFolder"=$2'}`,
+        values: isFolder === undefined ? [nativeTextBytes(stored)] : [nativeTextBytes(stored), isFolder],
       } });
     return result.rows.length ? itemCreation.getItemById(result.rows[0].Id) : null;
   }, { readOnly: true });

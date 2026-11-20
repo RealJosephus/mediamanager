@@ -19,6 +19,8 @@ import { nativeContainsSubPath, nativePathWithin, sameNativePath } from './nativ
 import { nativeArtistIdentity, nativeGenreIdentity, nativeMusicGenreIdentity, nativePersonIdentity, nativeStudioIdentity, nativeUserSubviewIdentity } from './identity.js';
 import { nativeYearIdentity } from './year-identity.js';
 import { nativeDateFromUnixNanoseconds, nativeGuid } from '../users/native.js';
+import { guideChannelId } from './live-tv-guide-channel.js';
+import { guideProgramId } from './live-tv-guide-program.js';
 import { newNativeItemEntity, nativeItemDescriptor, nativeItemTypes, isNativeItemEntity, acquireNativeItemLinkOwner, bindNativeItemChannelAccess, bindNativeItemRecordingAccess } from './native-item-entity.js';
 import { BoundedItemCache } from './bounded-item-cache.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
@@ -1480,6 +1482,81 @@ export class LibraryService extends EventEmitter {
       const dto = await this.getLiveTvProgram(normalized);
       return { item: Object.fromEntries(['Id', 'Name', 'Overview', 'StartDate', 'EndDate', 'ExternalId', 'IsRepeat']
         .map(name => [name, item[name]])), dto, channel: { Id: channel.Id, Name: channel.Name, ServiceName: channel.ServiceName } };
+    });
+  }
+
+  #recordingMetadata(program, channel, ProgramId, ChannelId) {
+    const providerIds = program.ProviderIds ?? {};
+    const values = providerIds instanceof Map ? [...providerIds] : Object.entries(providerIds);
+    return { ProgramId, ChannelId: channel?.ExternalId || ChannelId, Name: program.Name,
+      StartDate: dateText(program.StartDate), EndDate: dateText(program.EndDate),
+      SeasonNumber: program.ParentIndexNumber, EpisodeNumber: program.IndexNumber, IsMovie: program.IsMovie,
+      ProductionYear: program.ProductionYear, EpisodeTitle: program.EpisodeTitle, OriginalAirDate: dateText(program.PremiereDate),
+      IsProgramSeries: program.IsSeries, IsSeries: program.IsSeries, CommunityRating: program.CommunityRating,
+      Overview: program.Overview, OfficialRating: program.OfficialRating, IsRepeat: program.IsRepeat,
+      SeriesId: program.ExternalSeriesId, ProviderIds: providerIds, Tags: program.Tags,
+      SeriesProviderIds: Object.fromEntries(values.filter(([name]) => /^series/iu.test(name)).map(([name, value]) => [name.slice(6), value])) };
+  }
+
+  resolveRecordingTimer(dto, { series = false } = {}) {
+    return this.store.run(async database => {
+      const load = async (id, type) => {
+        const item = nonemptyId(id) && await this.itemCreation.getItemById(nativeGuid(id));
+        return item?.Type === type ? item : null;
+      };
+      const hasText = value => typeof value === 'string' && Boolean(clrTrim(value));
+      const ChannelId = dto.ExternalChannelId || (await load(dto.ChannelId, 'LiveTvChannel'))?.ExternalId;
+      const ProgramId = dto.ExternalProgramId || (await load(dto.ProgramId, 'LiveTvProgram'))?.ExternalId;
+      let program = hasText(ProgramId) ? await load(guideProgramId(ProgramId), 'LiveTvProgram') : null;
+      if (series) return { ChannelId, ProgramId, ...(program && { SeriesId: program.ExternalSeriesId ?? null }) };
+      const start = Date.parse(dto.StartDate);
+      if (!program && Number.isFinite(start)) {
+        const date = value => new Date(value).toISOString();
+        const { rows } = await queryPostgresItemPage(database, {
+          includeitemtypes: ['LiveTvProgram'], sortby: ['StartDate'], limit: 1, enabletotalrecordcount: false,
+          minstartdate: date(Math.max(start - 180000, Date.parse(MIN_DATE))), maxstartdate: date(start + 180000),
+          ...(hasText(ChannelId) && { channelids: [guideChannelId('Emby', ChannelId)] }),
+        }, { configuration: this.options.configuration });
+        program = rows.length ? await load(rows[0].Id, 'LiveTvProgram') : null;
+      }
+      if (!program) return { ChannelId, ProgramId };
+      const channel = await load(program.ChannelId, 'LiveTvChannel');
+      return this.#recordingMetadata(program, channel, ProgramId, ChannelId);
+    });
+  }
+
+  getRecordingSeriesPrograms(series, now) {
+    return this.store.run(async database => {
+      const query = (input, scope) => queryPostgresItemPage(database, { ...input, enabletotalrecordcount: false },
+        { scope, configuration: this.options.configuration });
+      const { rows } = await query({ includeitemtypes: ['LiveTvProgram'], minenddate: new Date(now).toISOString(),
+        ...(series.SeriesId ? { externalseriesid: series.SeriesId } : { name: series.Name }),
+        ...(!series.RecordAnyChannel && { channelids: [guideChannelId('Emby', series.ChannelId)] }) });
+      const channels = new Map(), seriesIds = new Map(), episodes = new Map(), result = [];
+      for (const row of rows) {
+        const item = await this.itemCreation.getItemById(row.Id);
+        if (item?.Type !== 'LiveTvProgram' || !item.EndDate) continue;
+        const key = idKey(item.ChannelId);
+        if (nonemptyId(item.ChannelId) && !channels.has(key)) channels.set(key, await this.itemCreation.getItemById(item.ChannelId));
+        const channel = channels.get(key);
+        let inLibrary = false;
+        if (series.SkipEpisodesInLibrary && item.IndexNumber != null && item.ParentIndexNumber != null) {
+          if (!seriesIds.has(item.Name)) {
+            const { rows } = await query({ includeitemtypes: ['Series'], name: item.Name });
+            seriesIds.set(item.Name, rows.map(row => row.Id));
+          }
+          const ancestors = seriesIds.get(item.Name), reference = JSON.stringify([item.Name, item.ParentIndexNumber, item.IndexNumber]);
+          if (ancestors.length && !episodes.has(reference)) {
+            const { rows } = await query({ includeitemtypes: ['Episode'], indexnumber: item.IndexNumber,
+              parentindexnumber: item.ParentIndexNumber, ismissing: false, limit: 1 }, { ancestorIds: ancestors });
+            episodes.set(reference, rows.length > 0);
+          }
+          inLibrary = episodes.get(reference) ?? false;
+        }
+        const program = this.#recordingMetadata(item, channel, item.ExternalId, series.RecordAnyChannel ? undefined : series.ChannelId);
+        result.push({ program: { ...program, ShowId: item.ShowId, Genres: [] }, channelHd: Boolean(channel?.IsHD), inLibrary });
+      }
+      return result;
     });
   }
 

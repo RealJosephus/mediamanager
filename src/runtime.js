@@ -3,6 +3,8 @@ import { IntroProviderManager } from './library/intro-providers.js';
 import { initializeLiveTvState } from './database/live-tv-state-import.js';
 import { LiveTvService } from './library/live-tv-service.js';
 import { LiveTvTimersService } from './library/live-tv-timers-service.js';
+import { LiveTvDvr } from './library/live-tv-dvr.js';
+import { saveRecordingAssets } from './library/live-tv-recording-assets.js';
 import { LiveTvRecordingsService } from './library/live-tv-recordings-service.js';
 import { LiveTvRecordingFolders } from './library/live-tv-recording-folders.js';
 import { LiveTvSourcesService } from './library/live-tv-sources-service.js';
@@ -302,7 +304,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(() => sessions.close());
   const liveTvTimers = new LiveTvTimersService({ store, serverId, liveTv, users, sessions, dataPath, onError,
     loadProgramDtos: (_database, ids) => library.loadLiveTvTimerProgramDtos(ids),
-    loadProgram: id => library.loadLiveTvTimerProgram(id) });
+    loadProgram: id => library.loadLiveTvTimerProgram(id), resolveRecordingTimer: (dto, options) => library.resolveRecordingTimer(dto, options),
+    getRecordingSeriesPrograms: (series, now) => library.getRecordingSeriesPrograms(series, now) });
   rollback.push(() => liveTvTimers.close());
   const syncPlay = new SyncPlayService({ sessions, users, library, onError });
   rollback.push(() => syncPlay.close());
@@ -524,6 +527,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   library.configuration = libraryConfiguration;
   const liveTvRecordingFolders = libraryConfiguration && dataPath ? new LiveTvRecordingFolders({ liveTv, libraryConfiguration,
     mediaAssets: libraryConfiguration.mediaAssets, dataPath,
+    onLocations: roots => ignoreRule?.setRecordingRoots(roots),
     runBackground: operation => store.runDetached(() => loadContext.withDetachedScope(operation)),
     queueLibraryScan: () => { void tasks.queueScheduled(refreshLibraryTaskId).catch(onError); }, onError
   }) : undefined;
@@ -532,7 +536,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       ?? new MetadataImageAssets({ fileSystem, vfs, identityMap, get metadataPath() { return applicationPaths.metadataPath; }, stateRoots: [dataPath] }) }) : undefined;
   liveTvRecordingFolders?.start();
   if (liveTvRecordingFolders) rollback.push(() => liveTvRecordingFolders.close());
-  let liveTvSources, liveTvTuners, liveTvGuideImages, liveTvGuide, liveTvCountries, guideTaskConfiguration;
+  let liveTvSources, liveTvTuners, liveTvGuideImages, liveTvGuide, liveTvCountries, guideTaskConfiguration, liveTvDvr;
   if (liveTvRecordingFolders && applicationPaths.cachePath && loadContext && itemCreation && itemDeletion && metadataScanner) {
     liveTvCountries = new LiveTvCountriesClient({ get cachePath() { return applicationPaths.cachePath; }, userAgent: `MediaManager/${serverVersion}` });
     rollback.push(() => liveTvCountries.close());
@@ -560,6 +564,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       } });
     rollback.push(() => liveStreamProbe.close());
     liveStreams = new LiveStreamsService({ tuners: liveTvTuners, library, probe: liveStreamProbe, onError,
+      getRetainedDirectory: () => applicationPaths.cachePath && path.join(applicationPaths.cachePath, 'livetv'),
       getLocalApiUrl: () => {
         const scheme = networkHost.listenWithHttps ? 'https' : 'http';
         const address = network.getBindAddress(null, { skipOverrides: true }).address;
@@ -573,6 +578,17 @@ export async function createRuntime({ database, configuration, serverId, serverN
       } });
     rollback.push(() => liveStreams.close());
     sessions.liveStreams = liveStreams;
+    if (dataPath && fileSystem && liveTvRecordingFolders) {
+      liveTvDvr = new LiveTvDvr({ timers: liveTvTimers, library, dataPath, fileSystem, mediaEncoder, liveStreams, onError,
+        configuration: liveTv.admitRead(), mediaSources: liveTvMediaSources, folders: liveTvRecordingFolders, monitor: libraryMonitor,
+        runBackground: operation => store.runDetached(() => loadContext.withDetachedScope(operation)),
+        saveAssets: options => saveRecordingAssets({ ...options, library, fileSystem, onError,
+          releaseDateFormat: (namedConfiguration?.getCurrentConfiguration('xbmcmetadata') ?? componentNfoConfiguration).ReleaseDateFormat,
+          downloadImage: (url, signal) => metadataImages.download(url, signal) }),
+        queueLibraryScan: () => { void tasks.queueScheduled(refreshLibraryTaskId).catch(onError); } });
+      liveTvTimers.dvr = liveTvDvr;
+      rollback.push(() => liveTvDvr.close());
+    }
     liveTvGuideImages = new LiveTvGuideImages({ store, linkedChildren, loadContext, itemCreation, updates: metadataUpdates,
       images: metadataImages, isImageDailyLimitActive: () => liveTvCountries.isImageDailyLimitActive(), onError,
       runWorker: operation => store.runChild(() => loadContext.withDetachedScope(operation)) });
@@ -580,7 +596,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     const guideServices = () => [liveTvTuners];
     liveTvGuide = new LiveTvGuideService({ liveTv, services: guideServices, recordingFolders: liveTvRecordingFolders,
       sources: liveTvSources, library, store, itemCreation, itemDeletion, linkedChildren, loadContext,
-      updates: metadataUpdates, metadataScanner, images: liveTvGuideImages,
+      updates: metadataUpdates, metadataScanner, images: liveTvGuideImages, refreshSeriesTimers: signal => liveTvTimers.refreshSeriesTimers(signal),
       metadataAssets: new MetadataImageAssets({ fileSystem, vfs: metadataVfs, identityMap: metadataIdentityMap,
         get metadataPath() { return applicationPaths.metadataPath; } }), onError });
     rollback.push(() => liveTvGuide.close());
@@ -640,6 +656,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   services.channels = channels;
   services.liveTv = liveTv;
   services.liveTvTimers = liveTvTimers;
+  services.liveTvDvr = liveTvDvr;
   services.liveTvRecordings = liveTvRecordings;
   services.liveTvRecordingFolders = liveTvRecordingFolders;
   services.liveTvSources = liveTvSources;
@@ -757,7 +774,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
       // An admitted guide can still reach its token-independent image phase
       // after a program COMMIT. Keep that dependency admitted until guide drain.
       const guideImagesClosing = Promise.allSettled([guideClosing]).then(() => liveTvGuideImages?.close());
-      const publicStreamsClosing = liveStreams?.close();
+      const dvrClosing = liveTvDvr && attempt(() => liveTvDvr.close());
+      const publicStreamsClosing = dvrClosing ? dvrClosing.then(() => liveStreams?.close()) : liveStreams?.close();
       const liveProbeClosing = Promise.allSettled([publicStreamsClosing]).then(() => liveStreamProbe?.close());
       const mediaSourcesClosing = Promise.allSettled([publicStreamsClosing]).then(() => liveTvMediaSources?.close());
       const tunerClosing = Promise.allSettled([mediaSourcesClosing]).then(() => liveTvTuners?.close());
@@ -765,7 +783,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       // A poisoned mutation owner can reject immediately. Attach the aggregate
       // handler before another close phase yields so the fatal remains part of
       // this runtime close instead of becoming an unhandled rejection.
-      const timerMutationsClosing = attempt(() => liveTvTimers.close());
+      const timerMutationsClosing = dvrClosing ? dvrClosing.then(() => attempt(() => liveTvTimers.close())) : attempt(() => liveTvTimers.close());
       // Freeze save admission before cancelling metadata. Each already queued
       // save synchronously reserved its recording-folder dependencies; those
       // reservations can finish their own reads and follow-up saves.
@@ -827,6 +845,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
         attempt(() => publicStreamsClosing),
         attempt(() => liveProbeClosing),
         attempt(() => sourcesClosing),
+        dvrClosing,
         timerMutationsClosing,
         attempt(() => channelsClosing),
         attempt(async () => {
@@ -908,6 +927,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
         if (storageReadiness.ready) await libraryMonitor?.start();
         await tasks.initialize();
         if (storageReadiness.ready) await liveTvRecordingFolders?.reconcile();
+        await liveTvDvr?.start();
         networkHost.completeStartup();
         startupReady = true;
         return networkHost.listeners;

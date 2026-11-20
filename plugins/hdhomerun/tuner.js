@@ -4,8 +4,9 @@ import { NativeHttpInput } from '@mediamanager/plugin-sdk/live-tv/raw-input';
 import { ordinalIgnoreCaseEquals } from '@mediamanager/plugin-sdk/storage/ordinal-comparer';
 import { clrTrim } from '@mediamanager/plugin-sdk/metadata/whitespace';
 import { parseModel, parseLineup, parseChannelCache, serializeChannelCache } from './json.js';
-import { createMediaSource, getApiUrl, supportsTranscoding } from './source.js';
+import { advertisedDeviceProfiles, createMediaSource, getApiUrl, supportsTranscoding } from './source.js';
 import { discoverDevices } from './discovery.js';
+import { openLegacyStream } from './legacy.js';
 
 const legacy = Symbol('HDHomeRun legacy channel');
 const blank = value => value == null || clrTrim(value) === '';
@@ -150,12 +151,12 @@ export class HdHomerunTuner {
   getChannelStreamMediaSources(channelId, options) {
     return this.#run(options, async (configuration, signal) => {
       for await (const { info, channel } of this.#matches(configuration, channelId, signal)) try {
-        if (!channel[legacy]) await this.#modelInfo(info, false, signal);
-        const source = { mode: 'native', profile: 'native', mediaSource: createMediaSource(info, channel) };
-        // Model hdtc/AllowHWTranscoding still describe the device. Encoded
-        // profiles are deliberately unavailable under the execution boundary.
+        const model = !channel[legacy] && await this.#modelInfo(info, false, signal);
+        const source = validateNativeLiveTvSource({ mode: 'native', profile: 'native', mediaSource: createMediaSource(info, channel) });
         if (!channel[legacy] && channel.Path) validateNativeLiveTvSource({ ...source, mediaSource: { ...source.mediaSource, Path: channel.Path } });
-        return [validateNativeLiveTvSource(source)];
+        if (!info.AllowHWTranscoding || !supportsTranscoding(model)) return [source];
+        return [...advertisedDeviceProfiles.map(profile => validateNativeLiveTvSource({ mode: 'device', profile,
+          mediaSource: createMediaSource(info, channel, profile) })), source];
       } catch (cause) { if (cause.code === 'not-supported') throw cause; this.#report(cause); }
       return [];
     });
@@ -170,22 +171,27 @@ export class HdHomerunTuner {
   }
   getChannelStream(channelId, streamId, currentLiveStreams, options) {
     return this.#run(options, async (configuration, signal) => {
-      validateNativeLiveTvSource(options?.source);
-      const profile = (streamId ?? '').split('_')[0];
+      const selected = validateNativeLiveTvSource(options?.source);
+      const requestedProfile = (streamId ?? '').split('_')[0];
       if (typeof channelId !== 'string' || !channelId) throw error('The channel identifier cannot be empty.');
       if (!/^hdhr_/iu.test(channelId)) throw error('The channel was not found.', { code: 'ENOENT', status: 404 });
       for (const { info, channel } of await this.#find(configuration, channelId, signal)) try {
         if (info.TunerCount > 0 && currentLiveStreams.filter(value => equals(value.tunerHostId ?? value.TunerHostId, info.Id)).length >= info.TunerCount) throw conflict();
         const model = await this.#modelInfo(info, false, signal); if (model === null) throw nullReference();
-        const effective = supportsTranscoding(model) ? profile : 'native';
-        if (!blank(effective) && !equals(effective, 'native')) throw forbidden('HDHomeRun encoded profiles cannot execute.');
-        const mediaSource = createMediaSource(info, channel, effective);
-        if (mediaSource.Id !== options.source.mediaSource.Id) throw new TypeError('The HDHomeRun source selection changed.');
-        if (channel[legacy]) throw forbidden('Legacy HDHomeRun UDP execution requires an excluded recording/copy path.');
+        const profile = selected.profile ?? 'native';
+        if (supportsTranscoding(model) && !blank(requestedProfile) && !equals(requestedProfile, 'native')
+          && !equals(streamId, selected.mediaSource.Id)) throw forbidden('The requested HDHomeRun profile was not advertised for this input.');
+        if (selected.mode === 'device' && (!supportsTranscoding(model) || !info.AllowHWTranscoding || channel[legacy])) continue;
+        const mediaSource = createMediaSource(info, channel, profile);
+        if (mediaSource.Id !== selected.mediaSource.Id) throw new TypeError('The HDHomeRun source selection changed.');
         if (blank(channel.Path)) throw error('An invalid request URI was provided.');
-        mediaSource.Protocol = 'Http'; mediaSource.Path = channel.Path;
-        const source = validateNativeLiveTvSource({ mode: 'native', profile: 'native', mediaSource }); signal.throwIfAborted();
-        const input = new NativeHttpInput(upstream => this.#request(mediaSource.Path, upstream), value => this.#inputs.delete(value), { primeFirstBytes: true });
+        const isLegacy = channel[legacy];
+        if (!isLegacy) {
+          mediaSource.Protocol = 'Http'; mediaSource.Path = selected.mode === 'device' ? channel.Path + '?transcode=' + profile : channel.Path;
+        }
+        const source = validateNativeLiveTvSource({ mode: selected.mode, profile, mediaSource }); signal.throwIfAborted();
+        const input = new NativeHttpInput(upstream => isLegacy ? openLegacyStream(mediaSource.Path, channel.Path, model.TunerCount, upstream)
+          : this.#request(mediaSource.Path, upstream), value => this.#inputs.delete(value), { primeFirstBytes: true });
         input.tunerHostId = info.Id;
         this.#inputs.add(input); return await this.#owned(input, source, signal);
       } catch (cause) { if (cause.code === 'not-supported') throw cause; this.#report(cause); }

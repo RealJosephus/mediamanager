@@ -17,6 +17,7 @@ const object = value => value !== null && typeof value === 'object' && !Array.is
 const text = value => typeof value === 'string' && value.trim().length > 0;
 const unsupported = message => Object.assign(new Error(message), { status: 400, statusCode: 400, code: 'not-supported' });
 const encodedProfile = value => /^(?:heavy|mobile|internet\d*)(?:_|$)/iu.test(value);
+const deviceProfiles = new Set(['heavy', 'mobile', 'internet240', 'internet360', 'internet480', 'internet540', 'internet720']);
 const executableMembers = new Set(['transcode', 'openTranscoder', 'startTranscoding', 'startRecording', 'record', 'openRecording']);
 
 export function validateLiveTvExtension(kind, extension) {
@@ -58,23 +59,25 @@ export function validateLiveTvExtension(kind, extension) {
 
 /** A source declaration is separate from its untouched native MediaSourceInfo. */
 export function validateNativeLiveTvSource(source, { requireIdentity = true } = {}) {
-  if (!object(source) || source.mode !== 'native' || !object(source.mediaSource)
+  if (!object(source) || !['native', 'device'].includes(source.mode) || !object(source.mediaSource)
     || requireIdentity && (!text(source.mediaSource.Id) || !text(source.mediaSource.Path))) {
-    throw unsupported('A Live TV source requires native mode and an identified original media source.');
-  }
-  if (source.profile !== undefined && (typeof source.profile !== 'string' || source.profile.toLowerCase() !== 'native')) {
-    throw unsupported('Encoded Live TV source profiles are unavailable.');
+    throw unsupported('A Live TV source requires an identified upstream media source.');
   }
   const media = source.mediaSource;
-  if (encodedProfile(media.Id) || text(media.EncoderPath) || text(media.TranscodingUrl) || text(media.TranscodingContainer)) {
-    throw unsupported('Live TV sources cannot advertise an encoder or encoded output.');
+  const profile = typeof source.profile === 'string' && source.profile.toLowerCase();
+  const id = typeof media.Id === 'string' ? media.Id.toLowerCase() : '';
+  const device = source.mode === 'device';
+  if (device ? !deviceProfiles.has(profile) || !id.startsWith(profile + '_')
+    : encodedProfile(media.Id) || source.profile !== undefined && profile !== 'native') {
+    throw unsupported('The Live TV source profile does not match its upstream identity.');
   }
-  // HDHomeRun uses both a profile-prefixed source identity and transcode= in
-  // its HTTP input. Reject that operation itself, not just its DTO flags.
+  if (text(media.EncoderPath) || text(media.TranscodingUrl) || text(media.TranscodingContainer)) {
+    throw unsupported('Live TV sources cannot advertise a server encoder or its output.');
+  }
   try {
     const url = new URL(media.Path);
-    for (const [key, value] of url.searchParams) if (key.toLowerCase() === 'transcode' && value && value.toLowerCase() !== 'native') {
-      throw unsupported('Encoded Live TV source profiles are unavailable.');
+    for (const [key, value] of url.searchParams) if (key.toLowerCase() === 'transcode' && value && value.toLowerCase() !== (device ? profile : 'native')) {
+      throw unsupported('The Live TV source uses a different upstream profile.');
     }
   } catch (cause) { if (cause.code === 'not-supported') throw cause; }
   return source;

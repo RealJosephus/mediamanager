@@ -1,12 +1,12 @@
 import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { reconcileLiveTvStateFiles } from '../database/live-tv-state-import.js';
 import { stageLiveTvStateFile, removeUnpublishedLiveTvStateFiles, liveTvStateFileFailure } from '../database/live-tv-state-files.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
 import { decodeNativeTextBytes } from '../database/native-text.js';
-import { cloneNativeValue } from '../core/json.js';
+import { cloneNativeValue, stringifyNativeJson } from '../core/json.js';
 import { tokenizeJson } from '../core/json-tokens.js';
 import { md5Guid, lowerInvariant } from '../core/identity.js';
 import { quoteIdentifier as q } from '../database/model.js';
@@ -15,15 +15,27 @@ import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { loadPostgresRowsByIds } from './postgres-library-query.js';
 import { queryPostgresLiveTvTimerPage } from './postgres-live-tv-timers-query.js';
 import { imageTagAndBlurHash } from './dto-inherited-images.js';
-import { indexLiveTvDocument, liveTvStateKey } from './live-tv-state.js';
+import { decodeLiveTvDocument, indexLiveTvDocument, liveTvStateKey } from './live-tv-state.js';
+import { guideProgramId } from './live-tv-guide-program.js';
+import { planSeriesEpisodes, recordingPadding as padding, selectTimerFields as select, seriesTimerSettings } from './live-tv-series-schedule.js';
+import { writeNativeDate } from './native-item-data.js';
 import { EMPTY_ID, MIN_DATE, dateText, dateTicks, dtoId, idKey, libraryError, mapRecord } from './records.js';
 import { clrTrim } from '../metadata/whitespace.js';
+import { jsonDateTimeUtcTicks } from '../http/json-date-time.js';
+import { formatUtcTicks } from '../syncplay/time.js';
 
 const text = value => value == null ? null : decodeNativeTextBytes(Buffer.from(value, 'hex'));
 const present = value => value != null && value !== '';
 const timerId = value => md5Guid(lowerInvariant('Emby' + (value ?? '') + '4'));
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const filenames = { timers: 'timers.json', seriesTimers: 'seriestimers.json' };
+const nonblank = value => typeof value === 'string' && clrTrim(value) !== '';
+const timerDate = value => {
+  if (typeof value === 'string') return writeNativeDate(value);
+  const canonical = formatUtcTicks(value.ticks);
+  return writeNativeDate(canonical, { value: canonical, kind: value.kind,
+    offsetMinutes: value.kind === 'Local' ? Number((value.ticks - jsonDateTimeUtcTicks(value)) / 600000000n) : undefined });
+};
 
 const stateText = value => value == null ? null : decodeNativeTextBytes(Buffer.from(value, 'hex'));
 const sha256 = value => createHash('sha256').update(value).digest('hex');
@@ -34,8 +46,9 @@ function stateFailure(message, cause) {
   return error;
 }
 
-function sourceBytes(document, kind) {
+function sourceBytes(document, kind, { allowMissing = false } = {}) {
   const hex = document?.[kind]?.sourceHex, expectedHash = document?.[kind]?.sourceSha256;
+  if (allowMissing && hex === null && expectedHash === null) return Buffer.from('[]');
   if (typeof hex !== 'string' || !/^([a-f0-9]{2})*$/u.test(hex)
     || typeof expectedHash !== 'string' || !/^[a-f0-9]{64}$/u.test(expectedHash)) {
     throw stateFailure(`The authoritative Live TV ${kind} source is unavailable.`);
@@ -45,31 +58,30 @@ function sourceBytes(document, kind) {
   return bytes;
 }
 
-// Rewrite only the public persisted fields affected by cancellation. Every
-// untouched entry and property value remains byte-for-byte opaque, including
-// extension fields that this runtime does not interpret.
-function rewriteDocument(sourceBytesValue, { remove = new Set(), cancel = new Set() } = {}) {
+// Preserve the raw tokens for fields and entries that a mutation does not own.
+function rewriteDocument(sourceBytesValue, { remove = new Set(), changes = new Map(), append = [] } = {}) {
   const source = sourceBytesValue.toString('latin1'), root = tokenizeJson(source);
   if (!root.items) throw stateFailure('The authoritative Live TV state is not an array.');
-  const rewriteTimer = node => {
+  const encode = value => Buffer.from(stringifyNativeJson([value]).slice(1, -1)).toString('latin1');
+  const rewriteTimer = (node, update) => {
     if (!node.properties) throw stateFailure('The authoritative Live TV timer is not an object.');
-    const properties = [];
-    let status = false, manual = false;
+    const properties = [], seen = new Set();
     for (const [name, value, span] of node.properties) {
-      const prefix = source.slice(span.start, value.start);
-      if (name === 'Status') { properties.push(prefix + '"Cancelled"'); status = true; }
-      else if (name === 'IsManual') { properties.push(prefix + 'true'); manual = true; }
-      else properties.push(source.slice(span.start, value.end));
+      seen.add(name);
+      if (!Object.hasOwn(update, name)) properties.push(source.slice(span.start, value.end));
+      else if (update[name] != null) properties.push(source.slice(span.start, value.start) + encode(update[name]));
     }
-    if (!status) properties.push('"Status":"Cancelled"');
-    if (!manual) properties.push('"IsManual":true');
+    for (const [name, value] of Object.entries(update)) {
+      if (!seen.has(name) && value != null) properties.push(JSON.stringify(name) + ':' + encode(value));
+    }
     return '{' + properties.join(',') + '}';
   };
   const entries = [];
   for (const [index, node] of root.items.entries()) {
     if (remove.has(index)) continue;
-    entries.push(cancel.has(index) ? rewriteTimer(node) : source.slice(node.start, node.end));
+    entries.push(changes.has(index) ? rewriteTimer(node, changes.get(index)) : source.slice(node.start, node.end));
   }
+  entries.push(...append.map(encode));
   return Buffer.from('[' + entries.join(',') + ']', 'latin1');
 }
 
@@ -77,6 +89,22 @@ function updatedDocument(previous, kind, bytes) {
   const indexed = indexLiveTvDocument(kind, bytes);
   if (indexed.issue) throw stateFailure(`The updated Live TV ${kind} source is invalid.`);
   return { ...previous, ...indexed, sourceHex: bytes.toString('hex'), sourceSha256: sha256(bytes) };
+}
+
+function timerMutation(document, edits, events = []) {
+  const bytes = rewriteDocument(sourceBytes(document, 'timers', { allowMissing: true }), edits);
+  return { document: { ...document, timers: updatedDocument(document.timers, 'timers', bytes) },
+    files: new Map([['timers', bytes]]), events };
+}
+
+function recordingEntries(document, kind) {
+  const { entries, issue } = decodeLiveTvDocument(kind, sourceBytes(document, kind, { allowMissing: true }));
+  if (issue) throw stateFailure('The authoritative Live TV timer entries are invalid.');
+  return entries;
+}
+
+function recordingTimers(document) {
+  return recordingEntries(document, 'timers').filter(timer => nonblank(timer?.Id));
 }
 
 function sameSources(actual, expected) {
@@ -97,11 +125,9 @@ function planTimerCancellation(document, id) {
   const { index, row } = findTimerRow(document, id);
   if (!row) return null;
   const externalId = stateText(row.id), linked = Boolean(clrTrim(stateText(row.seriesTimerId) ?? ''));
-  const bytes = rewriteDocument(sourceBytes(document, 'timers'), linked
-    ? { cancel: new Set([index]) } : { remove: new Set([index]) });
-  return { document: { ...document, timers: updatedDocument(document.timers, 'timers', bytes) },
-    files: new Map([['timers', bytes]]),
-    events: row.status === 'Cancelled' ? [] : [{ type: 'TimerCancelled', data: { Id: externalId } }] };
+  return timerMutation(document, linked
+    ? { changes: new Map([[index, { Status: 'Cancelled', IsManual: true }]]) } : { remove: new Set([index]) },
+  row.status === 'Cancelled' ? [] : [{ type: 'TimerCancelled', data: { Id: externalId } }]);
 }
 
 function planSeriesTimerCancellation(document, id) {
@@ -142,7 +168,7 @@ export function liveTvDayPattern(values) {
   return null;
 }
 
-/** Read saved timers without starting timer, stream or recording executors. */
+/** PostgreSQL-owned native timer documents and their public DTOs. */
 export class LiveTvTimersService {
   #mutationTail = Promise.resolve();
   #notifications = new Set();
@@ -150,10 +176,10 @@ export class LiveTvTimersService {
   #closePromise;
   #poisoned;
 
-  constructor({ store, serverId, loadProgramDtos, liveTv, loadProgram, users, sessions, dataPath,
+  constructor({ store, serverId, loadProgramDtos, liveTv, loadProgram, resolveRecordingTimer, getRecordingSeriesPrograms, users, sessions, dataPath,
     stateFileSystem = fs, onError = () => {} } = {}) {
     if (!store || typeof loadProgramDtos !== 'function') throw new TypeError('Timer reads require PostgreSQL and program DTO projection.');
-    Object.assign(this, { store, serverId, loadProgramDtos, liveTv, loadProgram, users, sessions, dataPath,
+    Object.assign(this, { store, serverId, loadProgramDtos, liveTv, loadProgram, resolveRecordingTimer, getRecordingSeriesPrograms, users, sessions, dataPath,
       stateFileSystem, onError });
     this.stateDirectory = dataPath && path.join(dataPath, 'livetv');
   }
@@ -176,6 +202,157 @@ export class LiveTvTimersService {
   cancelTimer(id) { return this.#mutate(document => planTimerCancellation(document, id)); }
   cancelSeriesTimer(id) { return this.#mutate(document => planSeriesTimerCancellation(document, id)); }
 
+  async createTimer(dto) {
+    this.#assertRecorder(dto.ServiceName);
+    dto = { ...dto, StartDate: timerDate(dto.StartDate), EndDate: timerDate(dto.EndDate) };
+    const resolved = await this.resolveRecordingTimer(dto);
+    const series = !nonblank(dto.ExternalSeriesTimerId) && nonblank(dto.SeriesTimerId) ? await this.getSeriesTimer(dto.SeriesTimerId) : null;
+    const timer = { ProviderIds: {}, SeriesProviderIds: {}, Tags: [], Genres: [], Id: randomUUID().replaceAll('-', ''),
+      ...select(dto, ['Name', 'Overview', 'StartDate', 'EndDate', 'Status', 'KeepUntil', ...padding]),
+      ...resolved, SeriesTimerId: dto.ExternalSeriesTimerId || series?.ExternalId, IsManual: true, Priority: 0, RetryCount: 0,
+      IsMovie: resolved.IsMovie ?? false, IsSeries: resolved.IsSeries ?? false, IsProgramSeries: resolved.IsProgramSeries ?? false,
+      IsRepeat: resolved.IsRepeat ?? false };
+    return this.#mutate(document => {
+      const index = nonblank(timer.ProgramId) ? document.timers.rows.findIndex(row => row
+        && ordinalIgnoreCaseEquals(stateText(row.programId), timer.ProgramId)) : -1;
+      if (index >= 0) {
+        if (!['Cancelled', 'Completed'].includes(document.timers.rows[index].status)) {
+          throw libraryError(400, 'A scheduled recording already exists for this program.');
+        }
+        return timerMutation(document, { changes: new Map([[index, { Status: 'New', IsManual: true }]]) });
+      }
+      return timerMutation(document, { append: [timer] },
+        [{ type: 'TimerCreated', data: { Id: timer.Id, ProgramId: guideProgramId(timer.ProgramId) } }]);
+    });
+  }
+
+  async updateTimer(dto) {
+    this.#assertRecorder(dto.ServiceName);
+    const existingSeries = !nonblank(dto.ExternalId) && nonblank(dto.Id) ? await this.getSeriesTimer(dto.Id) : null;
+    const id = dto.ExternalId || existingSeries?.ExternalId;
+    return this.#mutate(document => {
+      const index = document.timers.rows.findIndex(row => row && nonblank(id) && ordinalIgnoreCaseEquals(stateText(row.id), id));
+      if (index < 0) throw libraryError(404, 'The Live TV timer was not found.');
+      if (this.dvr.isActive(id)) return { document, files: new Map(), events: [] };
+      return timerMutation(document, { changes: new Map([[index, select(dto, padding)]]) });
+    });
+  }
+
+  async createSeriesTimer(dto) {
+    this.#assertRecorder(dto.ServiceName);
+    const series = await this.#seriesFromDto(dto);
+    if (!Object.hasOwn(series, 'SeriesId')) throw libraryError(500, 'SeriesId for program not found.');
+    Object.assign(series, { Id: randomUUID().replaceAll('-', ''), Priority: 0 });
+    return this.#mutate(async document => {
+      const plan = await this.#seriesEpisodes(document, series, { adopt: true, updateSettings: true });
+      const bytes = rewriteDocument(sourceBytes(document, 'seriesTimers', { allowMissing: true }), { append: [series] });
+      plan.files.set('seriesTimers', bytes);
+      plan.document.seriesTimers = updatedDocument(document.seriesTimers, 'seriesTimers', bytes);
+      plan.events.push({ type: 'SeriesTimerCreated', data: { Id: timerId(series.Id), ProgramId: guideProgramId(series.ProgramId) } });
+      return plan;
+    });
+  }
+
+  async updateSeriesTimer(dto) {
+    this.#assertRecorder(dto.ServiceName);
+    const previous = !nonblank(dto.ExternalId) && nonblank(dto.Id) ? await this.getSeriesTimer(dto.Id) : null;
+    const id = dto.ExternalId || previous?.ExternalId;
+    const updated = select(await this.#seriesFromDto(dto), seriesTimerSettings);
+    return this.#mutate(async document => {
+      const existing = recordingEntries(document, 'seriesTimers');
+      const index = existing.findIndex(series => series && nonblank(id) && ordinalIgnoreCaseEquals(series.Id, id));
+      if (index < 0) return null;
+      const bytes = rewriteDocument(sourceBytes(document, 'seriesTimers'), { changes: new Map([[index, updated]]) });
+      const plan = await this.#seriesEpisodes(document, { ...existing[index], ...updated }, { updateSettings: true, deleteInvalid: true });
+      plan.files.set('seriesTimers', bytes);
+      plan.document.seriesTimers = updatedDocument(document.seriesTimers, 'seriesTimers', bytes);
+      return plan;
+    });
+  }
+
+  async #seriesFromDto(dto) {
+    if (!dto.Days) throw libraryError(400, 'Days are required.');
+    const references = await this.resolveRecordingTimer(dto, { series: true });
+    return { ...select(dto, ['Name', 'Overview', ...seriesTimerSettings]), ...references,
+      StartDate: timerDate(dto.StartDate), EndDate: timerDate(dto.EndDate) };
+  }
+
+  async #seriesEpisodes(document, series, options, signal) {
+    signal?.throwIfAborted();
+    const now = Date.now();
+    const candidates = await this.getRecordingSeriesPrograms(series, now);
+    signal?.throwIfAborted();
+    const { changes, append, events } = planSeriesEpisodes(series, recordingEntries(document, 'timers'), candidates, {
+      ...options, now, isActive: id => this.dvr.isActive(id),
+    });
+    if (!changes.size && !append.length) return { document: { ...document }, files: new Map(), events };
+    return timerMutation(document, { changes, append }, events);
+  }
+
+  refreshSeriesTimers(signal) {
+    if (!this.dvr || signal?.aborted) return Promise.resolve();
+    return this.#mutate(async document => {
+      const seriesTimers = recordingEntries(document, 'seriesTimers').filter(timer => nonblank(timer?.Id));
+      if (!seriesTimers.length) return null;
+      const files = new Map(), events = [];
+      let next = document;
+      for (const series of seriesTimers) {
+        const plan = await this.#seriesEpisodes(next, series, { deleteInvalid: true }, signal);
+        next = plan.document;
+        for (const [kind, bytes] of plan.files) files.set(kind, bytes);
+        events.push(...plan.events);
+      }
+      return files.size ? { document: next, files, events } : null;
+    });
+  }
+
+  #assertRecorder(service) {
+    if (!this.dvr) throw libraryError(409, 'Live TV timer mutation requires a recording provider.');
+    if (!ordinalIgnoreCaseEquals(service, 'Emby')) throw libraryError(404, 'The Live TV service was not found.');
+  }
+
+  #readRecordingState(read) {
+    return this.store.run(async database => {
+      const { rows } = await database.client.query({ text: `SELECT value FROM ${q(database.controlSchema)}.state WHERE key = $1`,
+        values: [liveTvStateKey] });
+      if (rows.length !== 1) throw stateFailure('The authoritative recording timers are unavailable.');
+      return read(JSON.parse(rows[0].value));
+    });
+  }
+
+  readRecordingTimers() { return this.#readRecordingState(recordingTimers); }
+
+  readRecordingRetention(seriesId) {
+    return this.#readRecordingState(document => {
+      const series = recordingEntries(document, 'seriesTimers').find(entry => entry && ordinalIgnoreCaseEquals(entry.Id, seriesId));
+      if (!(series?.KeepUpTo > 0)) return null;
+      return { keepPrevious: series.KeepUpTo - 1, timers: recordingTimers(document).filter(timer => timer.Status === 'Completed'
+        && nonblank(timer.RecordingPath) && ordinalIgnoreCaseEquals(timer.SeriesTimerId, seriesId))
+        .sort((left, right) => {
+          const [a, b] = [dateTicks(left.EndDate), dateTicks(right.EndDate)];
+          return a > b ? -1 : a < b ? 1 : 0;
+        }) };
+    });
+  }
+
+  removeCompletedRecording(timer) {
+    return this.#mutate(document => {
+      const index = recordingEntries(document, 'timers').findIndex(entry => entry?.Status === 'Completed'
+        && ordinalIgnoreCaseEquals(entry.Id, timer.Id) && entry.RecordingPath === timer.RecordingPath);
+      return index < 0 ? null : timerMutation(document, { remove: new Set([index]) });
+    });
+  }
+
+  updateRecordingTimer(timer, change, { finish = false } = {}) {
+    return this.#mutate(document => {
+      const index = document.timers.rows.findIndex(row => row && ordinalIgnoreCaseEquals(stateText(row.id), timer.Id));
+      if (index < 0) return finish ? timerMutation(document, { append: [{ ...timer, ...change }] }) : null;
+      const { status } = document.timers.rows[index];
+      if (status === 'Completed' || status === 'Cancelled' && !finish) return null;
+      return timerMutation(document, change ? { changes: new Map([[index, change]]) } : { remove: new Set([index]) });
+    });
+  }
+
   #mutate(plan) {
     if (this.#poisoned) return Promise.reject(this.#poisoned);
     if (this.#closing) return Promise.reject(libraryError(503, 'Live TV timer persistence is closing.'));
@@ -195,7 +372,7 @@ export class LiveTvTimersService {
             let document;
             try { document = JSON.parse(selected.rows[0].value); }
             catch (error) { throw stateFailure('The authoritative Live TV state is invalid.', error); }
-            const planned = plan(document);
+            const planned = await plan(document);
             if (!planned) return null;
             plannedResult = planned;
             sourcesChanged = !sameSources(document, planned.document);
@@ -246,7 +423,12 @@ export class LiveTvTimersService {
           || !plannedResult || !sameSources(authoritative, plannedResult.document)) throw error;
         result = plannedResult;
       }
-      if (result) this.#queueNotifications(result.events);
+      if (result) {
+        this.#queueNotifications(result.events);
+        if (this.dvr && result.files.has('timers')) {
+          try { this.dvr.syncTimers(recordingTimers(result.document)); } catch (error) { this.#report(error); }
+        }
+      }
       return result !== null;
     });
     this.#mutationTail = operation.catch(() => {});

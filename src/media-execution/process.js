@@ -2,9 +2,9 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { StorageError } from '../storage/errors.js';
 
-export function startMediaProcess(executable, args, { environment, cwd, output = 'pipe' } = {}) {
+export function startMediaProcess(executable, args, { environment, cwd, input = 'ignore', output = 'pipe' } = {}) {
   if (cwd && /[\\/]/u.test(executable) && !path.isAbsolute(executable)) executable = path.resolve(executable);
-  return spawn(executable, args, { shell: false, windowsHide: true, env: environment, cwd, stdio: ['ignore', output, 'pipe'] });
+  return spawn(executable, args, { shell: false, windowsHide: true, env: environment, cwd, stdio: [input, output, 'pipe'] });
 }
 
 const failure = (code, message, cause) => Object.assign(new StorageError(code, message), cause === undefined ? {} : { cause });

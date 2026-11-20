@@ -140,7 +140,7 @@ class PluginScope {
         }));},
         return(value){return scope.track(close().then(()=>({done:true,value})));},
       };
-      const lease=Object.freeze({mode:'native',...(resource.profile===undefined?{}:{profile:resource.profile}),
+      const lease=Object.freeze({mode:resource.mode,...(resource.profile===undefined?{}:{profile:resource.profile}),
         tunerHostId:resource.tunerHostId,mediaSource:structuredClone(resource.mediaSource),...(stream?{stream}:{}),
         ...(resource.sharing?{sharing:scope.sharingCapability(resource.sharing,sourceId,resource.tunerHostId)}:{}),close});
       signal.addEventListener('abort',aborted,{once:true});signal.throwIfAborted();
@@ -192,7 +192,7 @@ class PluginScope {
           signal.throwIfAborted();
           validateLiveTvResult(kind,key,result);
           if(key==='getChannelStreamMediaSources'||key==='getChannelItemMediaInfo') {
-            return result.map(source=>Object.freeze({mode:'native',
+            return result.map(source=>Object.freeze({mode:source.mode,
               ...(source.profile===undefined?{}:{profile:source.profile}),mediaSource:structuredClone(source.mediaSource)}));
           }
           if(kind==='channel'&&(key==='getChannelItems'||key==='getChannelImage'))return structuredClone(result);

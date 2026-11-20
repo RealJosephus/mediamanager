@@ -215,18 +215,31 @@ test('HDHomeRun zero-byte EOF fails opening and close drains a held first-byte r
   late.resolve(new Response(new ReadableStream({ cancel() { canceled++; } }))); await failed; await disabling; assert.equal(canceled, 1);
 });
 
-test('encoded and legacy HDHomeRun inputs retain descriptive schema but reject execution before opening network bytes', { timeout: 30000 }, async t => {
-  let legacy = false, hits = 0;
+test('HDHomeRun opens an advertised device profile and rejects a mismatched source identity', { timeout: 30000 }, async t => {
+  let legacy = false;
+  const requests = [];
   const origin = await server(t, (request, response) => {
     if (request.url === '/discover.json') response.end(JSON.stringify(device(origin, { ModelNumber: 'HDTC-2US' })));
     else if (request.url === '/lineup.json') response.end(JSON.stringify([channel(origin, { URL: legacy ? 'hdhomerun://192.0.2.2/tuner0/v7.1' : origin + '/stream' })]));
-    else { hits++; response.end('must not execute'); }
+    else { requests.push(request.url); response.write('device provided bytes'); }
   });
   const value = await fixture(t); value.configure([defaults({ Url: origin })]); await value.connect(); let chosen = await selected(value);
-  assert.equal((await value.tuner.getChannelStreamMediaSources(chosen.channel.Id, {})).length, 1); assert.equal(chosen.source.mediaSource.SupportsTranscoding, true);
+  const sources = await value.tuner.getChannelStreamMediaSources(chosen.channel.Id, {});
+  assert.deepEqual(sources.map(source => source.profile), ['heavy', 'internet540', 'internet480', 'internet360', 'internet240', 'mobile', 'native']);
+  assert.equal(chosen.source.mediaSource.SupportsTranscoding, true);
   await assert.rejects(value.tuner.getChannelStream(chosen.channel.Id, 'heavy_native', [], { source: chosen.source }), { code: 'not-supported', status: 400 });
-  legacy = true; chosen = await selected(value); assert.equal(chosen.source.mediaSource.Protocol, 'Udp'); await assert.rejects(open(value, chosen), { code: 'not-supported', status: 400 });
-  assert.equal(hits, 0);
+  const internet360 = sources.find(source => source.profile === 'internet360');
+  const lease = await open(value, { ...chosen, source: internet360 });
+  assert.equal(lease.mode, 'device'); assert.equal(lease.mediaSource.Protocol, 'Http');
+  assert.equal((await lease.stream.next()).value.toString(), 'device provided bytes');
+  await lease.close();
+  value.configure([defaults({ Url: origin, AllowHWTranscoding: false })]);
+  assert.deepEqual((await value.tuner.getChannelStreamMediaSources(chosen.channel.Id, {})).map(source => source.profile), ['native']);
+  legacy = true;
+  chosen = await selected(value);
+  assert.equal(chosen.source.mediaSource.Protocol, 'Udp');
+  assert.deepEqual((await value.tuner.getChannelStreamMediaSources(chosen.channel.Id, {})).map(source => source.profile), ['native']);
+  assert.deepEqual(requests, ['/stream?transcode=internet360']);
 });
 
 for (const tunerHostId of ['official-hdhr', null]) test(`official HDHomeRun capacity uses its actual ${tunerHostId === null ? 'null' : 'string'} host identity through the default consumer`, { timeout: 30000 }, async t => {
@@ -282,7 +295,10 @@ function definitions(origin) {
       { name: 'validate-null-failure', infos: [info], actions: [action('validate', { model: 'null' })] },
       { name: 'all-host-dedup', infos: [info, defaults({ Id: 'second', Type: 'HDHOMERUN', Url: origin }), defaults({ Id: 'ignored', Type: 'm3u', Url: origin })], actions: [action('channels', { enabled: false }), action('sources', { channelId: 'hdhr_7.1' })] },
       { name: 'modern-source-and-construction', infos: [info], actions: [action('sources', { channelId: 'hdhr_7.1' }), action('construct', { streamId: 'native_controlled' })] },
-      { name: 'hdtc-retained-native-source', infos: [info], actions: [action('sources', { channelId: 'hdhr_7.1', model: JSON.stringify(device(origin, { ModelNumber: 'HDTC-2US' })) })] },
+      { name: 'hdtc-device-sources', infos: [info], actions: [action('sources', { channelId: 'hdhr_7.1', model: JSON.stringify(device(origin, { ModelNumber: 'HDTC-2US' })) }),
+        action('construct', { streamId: 'internet360_controlled', model: JSON.stringify(device(origin, { ModelNumber: 'HDTC-2US' })) })] },
+      { name: 'hdtc-device-profiles-disabled', infos: [{ ...info, AllowHWTranscoding: false }],
+        actions: [action('sources', { channelId: 'hdhr_7.1', model: JSON.stringify(device(origin, { ModelNumber: 'HDTC-2US' })) })] },
       { name: 'sd-mpeg2-truncated-channel-key', infos: [info], actions: [action('sources', { channelId: 'hdhr_3_4', lineup: JSON.stringify([channel(origin, { GuideNumber: '3_4', HD: 0, VideoCodec: 'MPEG2', AudioCodec: 'aac' })]) })] },
       { name: 'default-lineup-channel-source', infos: [info], actions: [action('sources', { channelId: 'hdhr_', lineup: '[{}]' })] },
       { name: 'legacy-source-and-construction', infos: [info], actions: [action('sources', { channelId: 'hdhr_7.1', lineup: JSON.stringify([channel(origin, { URL: 'hdhomerun://192.0.2.2/tuner0/v7.1' })]) }), action('construct', { streamId: 'native_controlled' })] },
@@ -494,10 +510,7 @@ test('HDHomeRun designated model/lineup/cache/validation/source construction and
       for (const observation of observations) {
         let actual = observation.actual, target = expected.observations[observation.index];
         if (sample.actions[observation.index].kind === 'sources') {
-          report.excludedEncodedProfiles ??= [];
-          const profiles = (target.value ?? []).filter(value => !value.Id.startsWith('native_')).map(value => value.Id.split('_')[0]);
-          if (profiles.length) report.excludedEncodedProfiles.push({ name: sample.name, profiles, reason: 'Recording/transcoding execution is excluded; retained native descriptor is compared.' });
-          target = { ...target, value: (target.value ?? []).filter(value => value.Id.startsWith('native_')).map(projectSource) };
+          target = { ...target, value: (target.value ?? []).map(projectSource) };
           actual = { ...actual, value: (actual.value ?? []).map(projectSource) };
         }
         const actualValues = failureValues(actual), expectedValues = failureValues(target);
@@ -515,6 +528,10 @@ test('HDHomeRun designated model/lineup/cache/validation/source construction and
       assert.deepEqual(observation.value.MediaSource, observation.value.OriginalMediaSource);
       assert.equal(observation.value.MediaSource.Protocol, name.startsWith('legacy') ? 'Udp' : 'Http');
     }
+    const deviceSource = native.results.find(value => value.name === 'hdtc-device-sources').observations.at(-1);
+  assert.equal(deviceSource.error, undefined);
+    assert.equal(deviceSource.value.MediaSource.Protocol, 'Http');
+    assert.equal(deviceSource.value.MediaSource.Path, origin + '/live.ts?transcode=internet360');
     report.nativeConstruction = constructions;
     activeName = 'discovery'; step = 0; const before = opened.length; udp.setPhase('node');
     const found = wire(await controlled.tuner.discoverDevices(input.discoveryDurationMs, {})); await udp.settle(); udp.setPhase('after');
@@ -533,7 +550,7 @@ test('HDHomeRun designated model/lineup/cache/validation/source construction and
     assert.deepEqual(found, native.discovery.devices);
     await controlled.host.close(); await controlled.storage.close(); report.cleanup.pluginAndStorageClosed = true;
     assert.equal(controlled.counters().admitted, controlled.counters().released);
-    assert.ok(requests.every(value => value.method === 'GET')); assert.ok(report.excludedEncodedProfiles.some(value => value.profiles.length === 6));
+    assert.ok(requests.every(value => value.method === 'GET'));
     // Capture both actual safe identities and finish every original consumer
     // and owner before reporting the first new cache-boundary difference.
     for (const comparison of cacheIdentityComparisons) assert.deepEqual(comparison.actualValues, comparison.expectedValues,
