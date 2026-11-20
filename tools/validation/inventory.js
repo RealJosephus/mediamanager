@@ -342,17 +342,15 @@ export function analyzeJavaScriptDependencies(source, { sourcePath } = {}) {
   const environmentVariables = new Set();
   const nodes = [];
   walkSyntax(syntax, (node, parent, ancestors) => nodes.push({ node, parent, ancestors }));
-  const configuredEncoderModules = new Set(['src/playback/extraction.js', 'src/playback/remux.js', 'src/playback/hls.js']);
-  const privateMediaParameters = new WeakSet();
-  if (sourcePath === 'src/storage/ffprobe.js') {
-    const exported = new Set(syntax.body.flatMap(node => node.type === 'ExportNamedDeclaration'
-      ? node.specifiers.map(specifier => specifier.local.name)
-      : node.type === 'ExportDefaultDeclaration' && node.declaration.type === 'Identifier' ? [node.declaration.name] : []));
+  const mediaExecutableArguments = new WeakSet();
+  if (sourcePath === 'src/media-execution/process.js') {
+    const launcher = syntax.body.find(node => node.type === 'ExportNamedDeclaration'
+      && node.declaration?.type === 'FunctionDeclaration' && node.declaration.id.name === 'startMediaProcess')?.declaration;
     for (const { node, ancestors } of nodes) {
       if (node.type !== 'Identifier') continue;
       const owner = ancestors.findLast(parent => ['FunctionDeclaration', 'FunctionExpression', 'ArrowFunctionExpression'].includes(parent.type));
-      if (owner?.type === 'FunctionDeclaration' && syntax.body.includes(owner) && !exported.has(owner.id.name)
-        && owner.params[0]?.type === 'Identifier' && owner.params[0].name === node.name) privateMediaParameters.add(node);
+      if (launcher && owner === launcher && owner.params[0]?.type === 'Identifier'
+        && owner.params[0].name === node.name) mediaExecutableArguments.add(node);
     }
   }
   const shadowedUrl = nodes.some(({ node }) =>
@@ -724,13 +722,8 @@ export function analyzeJavaScriptDependencies(source, { sourcePath } = {}) {
     else parameterDefaults.set(node.left.name, node.right);
   }
   const resolveExecutable = (node, seen = new Set()) => {
-    // These configured paths belong to the four reviewed production media
-    // boundaries. Resolve their tool families without inventing a fallback
-    // executable or granting the same capability to other source modules.
-    if (privateMediaParameters.has(node)) return { resolved: true, tools: ['ffmpeg', 'ffprobe'] };
-    if (configuredEncoderModules.has(sourcePath) && node?.type === 'MemberExpression' && memberName(node) === 'encoderPath'
-      && node.object?.type === 'MemberExpression' && memberName(node.object) === 'mediaEncoder'
-      && node.object.object?.type === 'ThisExpression') return { resolved: true, tools: ['ffmpeg'] };
+    // The reviewed media launcher receives the configured FFmpeg or ffprobe path.
+    if (mediaExecutableArguments.has(node)) return { resolved: true, tools: ['ffmpeg', 'ffprobe'] };
     const literal = staticString(node);
     if (literal && /^[A-Za-z][A-Za-z0-9_.-]*$/u.test(literal)) {
       return { resolved: true, tools: [literal.replace(/\.exe$/iu, '').toLowerCase()] };

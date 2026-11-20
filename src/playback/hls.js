@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { startMediaProcess } from '../media-execution/process.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import { mkdtemp, mkdir, readdir, readFile, writeFile, stat, rm, unlink } from 'node:fs/promises';
@@ -11,7 +11,10 @@ import { StorageError, checkAbort } from '../storage/errors.js';
 import { singleRange } from '../http/binary-result.js';
 import { videoColorRange } from '../library/media-streams.js';
 import { remuxPlan, RemuxService } from './remux.js';
-import { encoderVersionAtLeast, getEncodingThreadCount } from './media-encoder.js';
+import { getEncodingThreadCount } from './media-encoder.js';
+import { hlsArguments } from '../media-execution/streaming.js';
+
+export { hlsArguments };
 
 const failure = (code, message) => new StorageError(code, message);
 const lower = value => String(value ?? '').toLowerCase();
@@ -358,35 +361,6 @@ export function mainPlaylist(source, options = {}, query = '') {
   return lines.join('\r\n');
 }
 
-export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks = 0n, { threads, version, maxMuxingQueueSize }) {
-  if (!/^http:\/\/127\.0\.0\.1:\d+\/[a-f0-9]{64}$/.test(url)) throw new TypeError('HLS requires a private VFS input.');
-  const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-stats', '-stats_period', '0.5', '-protocol_whitelist', 'http,tcp', '-analyzeduration', '200M', '-probesize', '1G'];
-  if (runtimeTicks > 0n) {
-    const maximum = plan.runtime > 50000000n ? plan.runtime - 50000000n : 0n;
-    const seekTicks = runtimeTicks + (plan.video ? 5000000n : 0n);
-    let milliseconds = (seekTicks > maximum ? maximum : seekTicks) / 10000n;
-    args.push('-ss', `${String(milliseconds / 3600000n % 24n).padStart(2, '0')}:${String(milliseconds / 60000n % 60n).padStart(2, '0')}:${String(milliseconds / 1000n % 60n).padStart(2, '0')}.${String(milliseconds % 1000n).padStart(3, '0')}`);
-  }
-  if (plan.video) args.push('-fflags', '+genpts');
-  args.push('-i', url, '-map_metadata', '-1', '-map_chapters', '-1', '-threads', String(threads));
-  for (const stream of plan.streams) args.push('-map', `0:${stream.index}`);
-  args.push('-map', '-0:s');
-  if (plan.video) {
-    args.push('-codec:v:0', 'copy');
-    if (lower(plan.video.Codec) === 'hevc') args.push('-tag:v:0', 'hvc1');
-    if (plan.video.NalLengthSize !== '0') args.push('-bsf:v', `${lower(plan.video.Codec)}_mp4toannexb`);
-    args.push('-start_at_zero');
-  } else args.push('-vn');
-  if (plan.audio) args.push('-codec:a:0', 'copy'); else args.push('-an');
-  if (['opus', 'dts', 'truehd'].includes(lower(plan.audio?.Codec)) || lower(plan.audio?.Codec) === 'flac' && !encoderVersionAtLeast(version, 6)) args.push('-strict', '-2');
-  args.push('-copyts', '-avoid_negative_ts', 'disabled', '-max_muxing_queue_size', String(maxMuxingQueueSize), '-f', 'hls', '-max_delay', '5000000', '-hls_time', String(plan.segmentLength), '-hls_segment_type', plan.container === 'mp4' ? 'fmp4' : 'mpegts');
-  if (plan.container === 'mp4') args.push('-hls_fmp4_init_filename', process.platform === 'win32' ? path.join(directory, 'segment-1.mp4') : 'segment-1.mp4');
-  args.push('-start_number', String(startNumber), '-hls_segment_filename', path.join(directory, `segment%d.${plan.container}`), '-hls_playlist_type', 'vod', '-hls_list_size', '0');
-  if (plan.container === 'mp4' && plan.video) args.push(encoderVersionAtLeast(version, 5) ? '-hls_segment_options' : '-hls_ts_options', 'movflags=+frag_discont+skip_sidx');
-  args.push('-y', path.join(directory, 'main.m3u8'));
-  return args;
-}
-
 const exists = async file => stat(file).catch(error => { if (error.code !== 'ENOENT') throw error; });
 const assertJobDirectory = (root, directory) => {
   if (path.dirname(directory) !== root || !path.basename(directory).startsWith('mediamanager-hls-')) throw new Error('Invalid HLS cache directory.');
@@ -652,7 +626,7 @@ export class HlsService {
       lease = await this.remux.bridge.lease(job.virtualPath, { version: job.version, signal, expiresInMs: this.timeoutMs });
       const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution);
       checkAbort(signal);
-      child = spawn(this.mediaEncoder.encoderPath, args, { windowsHide: true, shell: false, env: this.mediaEncoder.environment, stdio: ['ignore', 'ignore', 'pipe'] });
+      child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment: this.mediaEncoder.environment, output: 'ignore' });
       if (job.plan.video && job.plan.runtime >= 3000000000n) {
         job.cleaner = setInterval(() => {
           if (job.cleaning || job.exited) return;

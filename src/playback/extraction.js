@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { startMediaProcess } from '../media-execution/process.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -262,7 +262,7 @@ export class ExtractionService {
     while (this.#processes.size >= this.maxConcurrentExtractions) await waitFor(Promise.race([...this.#processes]), signal);
     checkAbort(signal);
     let child;
-    try { child = spawn(this.mediaEncoder.encoderPath, args, { shell: false, windowsHide: true, env: this.mediaEncoder.environment, stdio: ['ignore', 'pipe', 'pipe'] }); }
+    try { child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment: this.mediaEncoder.environment }); }
     catch (error) { throw failure(subtitle ? 'subtitle-start-failure' : 'unavailable', 'The ffmpeg extraction process could not start.', error); }
     let failureReason, killTimer, cancelDeadline, outputSize = 0, diagnosticSize = 0;
     const processFailures = [], started = Promise.withResolvers();
