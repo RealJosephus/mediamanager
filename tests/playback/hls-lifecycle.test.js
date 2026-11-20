@@ -25,7 +25,9 @@ test('native HLS StreamBuilder URLs and explicit packet-copy eligibility', () =>
     if (['wrong-codec', 'no-video-copy'].includes(entry.name)) { assert.ok(native.url); assert.equal(source.SupportsTranscoding, false); }
     else assert.equal(source.TranscodingUrl, native.url, entry.name);
   }
-  for (const options of [{ SegmentContainer: 'webm' }, { VideoCodec: 'hevc' }, { AllowVideoStreamCopy: false }, { AudioChannels: 1 }, { AudioSampleRate: 48000 }, { SubtitleStreamIndex: 0, SubtitleMethod: 'Encode' }]) assert.throws(() => hlsPlan(reference.source, options));
+  for (const options of [{ SegmentContainer: 'webm' }, { VideoCodec: 'hevc' }, { AllowVideoStreamCopy: false }, { SubtitleStreamIndex: 0, SubtitleMethod: 'Encode' }]) assert.throws(() => hlsPlan(reference.source, options));
+  assert.equal(hlsPlan(reference.source, { AudioChannels: 1 }).audioOutput.encoder, 'aac');
+  assert.equal(hlsPlan(reference.source, { AudioSampleRate: 48000 }).audioOutput.encoder, 'copy');
   const execution = { threads: 0, version: '8.0', maxMuxingQueueSize: 2048 };
   const plan = hlsPlan(reference.source, { SegmentContainer: 'mp4' }), args = hlsArguments('http://127.0.0.1:1/' + 'a'.repeat(64), plan, tmpdir(), 5, 300000000n, execution);
   assert.equal(args[args.indexOf('-ss') + 1], '00:00:25.021');

@@ -80,7 +80,9 @@ test('native progressive remux HTTP, packet hashes, multi-version access and can
       const beforeHead = processes.length, beforeReads = fixture.requests.length;
       assert.deepEqual(headersOf(await fetch(origin + url, { method: 'HEAD', headers })), expected.head);
       assert.equal(processes.length, beforeHead); assert.equal(fixture.requests.length, beforeReads, 'HEAD must not open the input.');
-      const response = await fetch(origin + url, { headers });
+      const streamUrl = new URL(url, origin);
+      if (entry.mediaType === 'Audio') streamUrl.searchParams.set('AudioCodec', 'copy');
+      const response = await fetch(streamUrl, { headers });
       assert.deepEqual(headersOf(response), expected.headers);
       const file = path.join(directory, expected.name + '.' + body.MediaSources[0].TranscodingContainer);
       await writeFile(file, Buffer.from(await response.arrayBuffer()));
@@ -91,13 +93,13 @@ test('native progressive remux HTTP, packet hashes, multi-version access and can
       assert.equal(createHash('sha256').update(JSON.stringify(packetProjection(result))).digest('hex'), expected.packetHash, expected.name + ' native packet timeline and bytes');
       if (entry.mediaType === 'Audio') await runtime.users.updatePolicy(user.Id, policy);
     }
-    for (const name of ['no-video-copy', 'no-audio-copy', 'wrong-codec', 'bitrate']) {
+    for (const name of ['no-video-copy', 'wrong-codec', 'bitrate']) {
       const body = await info(reference.profiles.find(value => value.name === name));
       assert.equal(body.MediaSources[0].SupportsTranscoding, false, name); assert.equal(body.MediaSources[0].TranscodingUrl, undefined);
     }
     const reads = fixture.requests.length;
     assert.equal((await fetch(origin + `/Videos/${id}/stream.mp4`)).status, 401);
-    for (const parameters of ['VideoCodec=hevc', 'AllowAudioStreamCopy=false', 'MaxWidth=64', 'SubtitleStreamIndex=0&SubtitleMethod=Encode', 'StartTimeTicks=-1', 'h264-level=1', 'aac-profile=HE', 'h264-rangetype=HDR10']) {
+    for (const parameters of ['VideoCodec=hevc', 'MaxWidth=64', 'SubtitleStreamIndex=0&SubtitleMethod=Encode', 'StartTimeTicks=-1', 'h264-level=1', 'h264-rangetype=HDR10']) {
       assert.equal((await fetch(origin + `/Videos/${id}/stream.mp4?${parameters}`, { headers })).status, 400, parameters);
     }
     assert.equal(fixture.requests.length, reads, 'Rejected requests must not reach VFS.');

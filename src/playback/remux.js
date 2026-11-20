@@ -4,6 +4,7 @@ import { ProbeReadBridge } from '../storage/probe-bridge.js';
 import { StorageError } from '../storage/errors.js';
 import { getEncodingThreadCount } from './media-encoder.js';
 import { remuxArguments, remuxPlan } from '../media-execution/streaming.js';
+import { TranscodeJobs, transcodingInfo } from './transcode-jobs.js';
 
 export { remuxArguments, remuxPlan };
 
@@ -17,19 +18,23 @@ export class RemuxService {
   #closing;
   #jobs = new Set();
   #cleanupErrors = [];
-  constructor({ vfs, bridge, mediaEncoder, timeoutMs = 21600000, maxConcurrentRemuxes = 4, onProcess = () => {} }) {
+  constructor({ vfs, bridge, mediaEncoder, jobs = new TranscodeJobs(), timeoutMs = 21600000, maxConcurrentRemuxes = 4, onProcess = () => {} }) {
     if (!vfs) throw new TypeError('Remuxing requires VFS.');
     if (!mediaEncoder) throw new TypeError('Remuxing requires its startup media encoder.');
     if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || !Number.isSafeInteger(maxConcurrentRemuxes) || maxConcurrentRemuxes < 1) throw new TypeError('Positive remux limits are required.');
-    Object.assign(this, { vfs, bridge: bridge ?? new ProbeReadBridge(vfs), ownsBridge: !bridge, mediaEncoder, timeoutMs, maxConcurrentRemuxes, onProcess });
+    Object.assign(this, { vfs, bridge: bridge ?? new ProbeReadBridge(vfs), ownsBridge: !bridge, mediaEncoder, jobs, timeoutMs, maxConcurrentRemuxes, onProcess });
   }
   get available() { return this.mediaEncoder.ready; }
+  plan(source, options, configuration = this.mediaEncoder.getEncodingOptions()) {
+    return remuxPlan(source, options, { configuration, capabilities: this.mediaEncoder.capabilities });
+  }
   supports(source, options) {
     if (!this.available || this.#closed) return false;
-    try { remuxPlan(source, options); return true; } catch { return false; }
+    try { this.plan(source, options); return true; } catch { return false; }
   }
   async stream(source, virtualPath, options, request, response, { signal } = {}) {
-    const plan = remuxPlan(source, options), threads = getEncodingThreadCount(this.mediaEncoder.getEncodingOptions(), options.CpuCoreLimit);
+    const configuration = this.mediaEncoder.getEncodingOptions();
+    const plan = this.plan(source, options, configuration), threads = getEncodingThreadCount(configuration, options.CpuCoreLimit);
     if (!this.available) throw failure('unavailable', 'The ffmpeg remux process is unavailable.');
     if (this.#closed) throw failure('closed', 'Remuxing is closed.');
     checkAbort(signal);
@@ -40,14 +45,23 @@ export class RemuxService {
     const controller = new AbortController();
     const abort = () => controller.abort(signal.reason);
     signal?.addEventListener('abort', abort, { once: true });
-    const job = { controller };
+    const job = { controller, options, active: false };
     this.#jobs.add(job);
+    this.jobs.register(job, {
+      describe: () => transcodingInfo(plan, options, undefined, this.mediaEncoder.getEncodingOptions().HardwareAccelerationType,
+        (plan.inputVideo?.BitRate ?? 0) + (plan.audioOutput?.bitrate ?? 0)),
+      stop: async () => {
+        controller.abort();
+        await Promise.allSettled([job.done]);
+      },
+    });
     const timer = setTimeout(() => controller.abort(failure('timeout', 'Remuxing timed out.')), this.timeoutMs); timer.unref();
-    job.done = this.#stream(virtualPath, plan, threads, response, controller.signal);
+    job.done = this.#stream(virtualPath, plan, threads, response, job);
     try { await job.done; }
-    finally { clearTimeout(timer); signal?.removeEventListener('abort', abort); this.#jobs.delete(job); }
+    finally { clearTimeout(timer); signal?.removeEventListener('abort', abort); this.#jobs.delete(job); this.jobs.unregister(job); }
   }
-  async #stream(virtualPath, plan, threads, response, signal) {
+  async #stream(virtualPath, plan, threads, response, job) {
+    const { signal } = job.controller;
     const before = await this.vfs.stat(virtualPath, { signal });
     const lease = await this.bridge.lease(virtualPath, { signal, version: before.version, expiresInMs: this.timeoutMs });
     let child, done, failed, primary, killTimer;
@@ -73,6 +87,9 @@ export class RemuxService {
       child.stderr.on('data', () => {});
       try {
         await started.promise;
+        checkAbort(signal);
+        job.active = true;
+        this.jobs.activate(job);
         this.onProcess({ pid: child.pid, args: args.map(value => value === lease.url ? '[private source]' : value) });
         let received = false;
         for await (const bytes of child.stdout) {
@@ -81,7 +98,7 @@ export class RemuxService {
         }
         await done;
         if (failed) throw failed;
-        if (child.exitCode !== 0 || !received) throw failure('invalid-response', 'The selected streams could not be remuxed.');
+        if (child.exitCode !== 0 || !received) throw failure('invalid-response', 'The selected streams could not be processed.');
         const after = await this.vfs.stat(virtualPath, { signal });
         if (before.version != null && before.version !== after.version) throw failure('version-changed', 'The source changed during remuxing.');
         response.end();

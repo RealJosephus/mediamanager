@@ -9,7 +9,7 @@ import { HttpResult, httpError, notFound } from '../http/binding.js';
 import { vfsStreamResult, BinaryResult } from '../http/binary-result.js';
 import { remoteStaticStreamResult } from './remote-static.js';
 import { StorageError, checkAbort } from '../storage/errors.js';
-import { hlsPlan, masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlaylist } from './hls.js';
+import { masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlaylist } from './hls.js';
 import { MatroskaKeyframeService } from './matroska-keyframes.js';
 import { guid, nonemptyId } from '../library/records.js';
 import { canDownloadItem } from '../library/download-permission.js';
@@ -152,8 +152,7 @@ export class PlaybackService {
       return vfsStreamResult(this.vfs, this.accessPath(source, source.Path), { contentType: getMimeType(source.Path) });
     }
 
-    if (!user.Policy.EnableAudioPlaybackTranscoding || !user.Policy.EnablePlaybackRemuxing
-      || source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) {
+    if (!user.Policy.EnableAudioPlaybackTranscoding || source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) {
       throw httpError(400, 'No compatible audio stream is available.');
     }
     const copyContainer = hlsCopyContainers.get(source);
@@ -164,7 +163,7 @@ export class PlaybackService {
       AudioBitRate: options.AudioBitRate ?? maxBitrate, MaxAudioChannels: options.MaxAudioChannels,
       AudioChannels: hls ? undefined : options.MaxAudioChannels,
       TranscodingMaxAudioChannels: options.TranscodingAudioChannels, MaxAudioBitDepth: options.MaxAudioBitDepth,
-      StartTimeTicks: options.StartTimeTicks, CopyTimestamps: !hls,
+      StartTimeTicks: options.StartTimeTicks, CopyTimestamps: !hls, EnableAudioVbrEncoding: options.EnableAudioVbrEncoding,
       DeviceId: options.DeviceId ?? auth.DeviceId, PlaySessionId: randomUUID().replaceAll('-', ''),
     };
     const service = hls ? this.hls : this.remux;
@@ -176,9 +175,9 @@ export class PlaybackService {
 
     const query = new URLSearchParams(Object.entries({
       MediaSourceId: source.Id, ApiKey: auth.Token, DeviceId: stream.DeviceId, PlaySessionId: stream.PlaySessionId,
-      SegmentContainer: container, AudioCodec: 'copy', AudioBitRate: stream.AudioBitRate, AudioSampleRate: stream.AudioSampleRate,
+      SegmentContainer: container, AudioCodec: stream.AudioCodec, AudioBitRate: stream.AudioBitRate, AudioSampleRate: stream.AudioSampleRate,
       MaxAudioChannels: stream.MaxAudioChannels, TranscodingMaxAudioChannels: stream.TranscodingMaxAudioChannels,
-      MaxAudioBitDepth: stream.MaxAudioBitDepth,
+      MaxAudioBitDepth: stream.MaxAudioBitDepth, EnableAudioVbrEncoding: stream.EnableAudioVbrEncoding,
     }).filter(([, value]) => value != null));
     return this.#hlsPlaylist(source, 'master', { ...stream, QueryString: query.toString() });
   }
@@ -204,9 +203,14 @@ export class PlaybackService {
       if (limit > 0 && this.isLocalNetwork && !this.isLocalNetwork(remoteEndPoint)) options.MaxStreamingBitrate = Math.min(options.MaxStreamingBitrate ?? limit, limit);
       for (const source of sources) {
         const specific = options.MediaSourceId?.toLowerCase() === source.Id.toLowerCase();
+        const policy = user.Policy;
+        const mediaEncoder = this.hls?.mediaEncoder ?? this.remux?.mediaEncoder;
         negotiateSource(source, item, profile, { ...options, AccessToken: auth.Token, DeviceId: auth.DeviceId, PlaySessionId: result.PlaySessionId,
           EnableSubtitleExtraction: this.getEncodingOptions().EnableSubtitleExtraction,
-          EnableRemuxing: user.Policy.EnablePlaybackRemuxing && user.Policy.EnableMediaPlayback,
+          EnableRemuxing: policy.EnableMediaPlayback && (item.MediaType === 'Audio' ? policy.EnableAudioPlaybackTranscoding
+            : policy.EnablePlaybackRemuxing || policy.EnableAudioPlaybackTranscoding || policy.EnableVideoPlaybackTranscoding),
+          PermitAudioEncoding: policy.EnableAudioPlaybackTranscoding === true, PermitVideoEncoding: policy.EnableVideoPlaybackTranscoding === true,
+          CanEncodeAudio: mediaEncoder?.canEncodeAudio?.bind(mediaEncoder),
           CanRemux: (source, requested) => !source.RequiresOpening && !source.LiveStreamId && this.remux?.supports(source, requested) === true && this.#canResolveSource(source),
           CanHls: (source, requested) => !source.RequiresOpening && !source.LiveStreamId && this.hls?.supports(source, { ...requested,
             CanDeliverHlsSubtitle: stream => this.canDeliverHlsSubtitle(source, stream) }) === true && this.#canResolveSource(source),
@@ -337,7 +341,10 @@ export class PlaybackService {
 
   async remuxStream(itemId, { user, ...options } = {}) {
     const item = await this.library.getItemRecord(itemId, { user });
-    if (user && (!user.Policy.EnableMediaPlayback || !user.Policy.EnablePlaybackRemuxing)) throw httpError(403, 'Media remuxing is not allowed.');
+    if (user && (!user.Policy.EnableMediaPlayback || !user.Policy.EnablePlaybackRemuxing
+      && !user.Policy.EnableAudioPlaybackTranscoding && !user.Policy.EnableVideoPlaybackTranscoding)) throw httpError(403, 'Media remuxing is not allowed.');
+    options.PermitAudioEncoding = user?.Policy.EnableAudioPlaybackTranscoding;
+    options.PermitVideoEncoding = user?.Policy.EnableVideoPlaybackTranscoding;
     const sources = await this.sources(item, user);
     const source = options.MediaSourceId ? sources.find(value => value.Id.toLowerCase() === options.MediaSourceId.toLowerCase()) : sources[0];
     if (!source) throw httpError(404, 'Media source not found.');
@@ -369,6 +376,8 @@ export class PlaybackService {
     const source = options.MediaSourceId ? sources.find(value => value.Id.toLowerCase() === options.MediaSourceId.toLowerCase()) : sources[0];
     if (!source) throw httpError(404, 'Media source not found.');
     if (!this.hls) throw httpError(503, 'HLS has not been configured.');
+    options.PermitAudioEncoding = user?.Policy.EnableAudioPlaybackTranscoding;
+    options.PermitVideoEncoding = user?.Policy.EnableVideoPlaybackTranscoding;
     options.CanDeliverHlsSubtitle = stream => this.canDeliverHlsSubtitle(source, stream);
     let keyframeRequest;
     if (kind !== 'master' && options.MediaSourceId?.trim() && source.MediaStreams.some(stream => stream.Type === 'Video')) {
@@ -385,11 +394,7 @@ export class PlaybackService {
       try {
         if (!await this.hls.initialize()) throw httpError(503, 'The HLS process is unavailable.');
         if (keyframeRequest) {
-          // The native playlist invokes metadata extraction only for a video
-          // remux. Current HLS supports packet copy only, so a successful video
-          // plan is the equivalent gate and prevents failed requests from
-          // reading or persisting source metadata.
-          const plan = hlsPlan(source, options);
+          const plan = this.hls.plan(source, options);
           if (plan.video) {
             const row = await this.library.store.run(async db => (await db.rows('KeyframeData', { where: { ItemId: keyframeRequest.itemId }, limit: 1 }))[0]);
             options.KeyframeData = storedKeyframeData(row);
@@ -412,7 +417,8 @@ export class PlaybackService {
 
   #hlsPlaylist(source, kind, options) {
     return new BinaryResult(async (request, response) => {
-      const text = kind === 'master' ? masterPlaylist(source, options, options.QueryString) : mainPlaylist(source, options, options.QueryString);
+      const tools = { configuration: this.hls.getEncodingOptions(), capabilities: this.hls.mediaEncoder.capabilities };
+      const text = kind === 'master' ? masterPlaylist(source, options, options.QueryString, tools) : mainPlaylist(source, options, options.QueryString, tools);
       const bytes = Buffer.from(kind === 'master' && request.method === 'HEAD' ? '' : text);
       response.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
       response.setHeader('Content-Length', bytes.length);

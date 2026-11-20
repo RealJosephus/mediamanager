@@ -2,6 +2,7 @@ import { availableParallelism } from 'node:os';
 import { parseConfigurationVersion } from '../core/configuration-xml.js';
 import { decodeNativeText } from '../core/native-text.js';
 import { readEncoderVersionOutput } from '../storage/ffprobe.js';
+import { discoverMediaCapabilities } from '../media-execution/capabilities.js';
 
 const minimumLibraries = new Map([
   ['libavutil', [56, 70]], ['libavcodec', [58, 134]], ['libavformat', [58, 76]],
@@ -64,7 +65,7 @@ export function readMediaEncoderStartupOptions({ args = [], environment = {} } =
   return { startupFFmpegPath, skipValidation };
 }
 
-/** One startup selection shared by probing, subtitle extraction and packet copy. */
+/** Startup tool selection and capabilities shared by all media consumers. */
 export class MediaEncoder {
   #initialization;
   #lifetime = new AbortController();
@@ -74,6 +75,7 @@ export class MediaEncoder {
   #probePath = null;
   #probeThreads = 0;
   #version = null;
+  #capabilities = Object.freeze({});
   #ready = false;
   #cleanupErrors = [];
 
@@ -86,7 +88,13 @@ export class MediaEncoder {
   get probePath() { return this.#probePath; }
   get probeThreads() { return this.#probeThreads; }
   get version() { return this.#version; }
+  get capabilities() { return this.#capabilities; }
   get ready() { return this.#ready; }
+  supportsEncoder(name) { return this.#capabilities.encoders?.includes(name?.toLowerCase()) ?? false; }
+  canEncodeAudio(codec) {
+    const name = codec?.toLowerCase();
+    return this.supportsEncoder(({ opus: 'libopus', mp3: 'libmp3lame' })[name] ?? name);
+  }
 
   initialize() {
     if (this.#closed) return Promise.reject(closed());
@@ -113,6 +121,10 @@ export class MediaEncoder {
     // threads after its synchronous observers, even if an observer saves another value.
     await this.saveEncodingOptions(options);
     this.#probePath = deriveProbePath(selected);
+    this.#capabilities = await discoverMediaCapabilities(selected, {
+      signal: this.#lifetime.signal, environment: this.environment, onError: this.onError,
+      onCleanupError: error => this.#cleanupErrors.push(error),
+    });
     let discovered;
     try { discovered = await this.#readVersion(selected); }
     catch (error) {

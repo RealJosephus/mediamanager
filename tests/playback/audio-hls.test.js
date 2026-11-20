@@ -6,15 +6,15 @@ import { negotiateSource } from '../../src/playback/profile.js';
 import reference from './fixtures/audio-hls-reference.json' with { type: 'json' };
 import oracle from './fixtures/audio-hls-oracle.json' with { type: 'json' };
 
-test('audio HLS uses native StreamBuilder URLs and limits execution to packet copy', () => {
+test('audio HLS uses native StreamBuilder URLs and chooses copy or encoding from the request', () => {
   for (const entry of reference.profiles) {
     const source = structuredClone(entry.source);
     negotiateSource(source, { Id: source.Id, MediaType: 'Audio' }, entry.profile, { ...entry.options,
       CanHls: (source, options) => { try { hlsPlan(source, options); return true; } catch { return false; } },
       DeviceId: 'remux-fixture', PlaySessionId: 'fixture-session', AccessToken: 'fixture-token' });
     const native = oracle.find(value => value.name === entry.name);
-    if (['wrong-codec', 'no-audio-copy'].includes(entry.name)) { assert.ok(native.url); assert.equal(source.SupportsTranscoding, false); }
-    else assert.equal(source.TranscodingUrl, native.url, entry.name);
+    assert.equal(source.SupportsTranscoding, true);
+    assert.equal(source.TranscodingUrl, native.url + (entry.name === 'no-audio-copy' ? '&allowAudioStreamCopy=false' : ''), entry.name);
   }
   const plan = hlsPlan(reference.source, { MediaType: 'Audio', AudioStreamIndex: 1, SegmentContainer: 'mp4' });
   assert.equal(plan.audio.Index, 0, 'The native audio request selects its first valid stream independently of AudioStreamIndex.');
@@ -23,5 +23,8 @@ test('audio HLS uses native StreamBuilder URLs and limits execution to packet co
   assert.equal(args[args.indexOf('-ss') + 1], '00:00:06.000');
   assert.ok(args.includes('-vn')); assert.equal(args[args.indexOf('-codec:a:0') + 1], 'copy');
   for (const option of ['-fflags', '-start_at_zero', '-hls_segment_options', '-codec:v:0']) assert.ok(!args.includes(option));
-  for (const options of [{ AudioCodec: 'ac3' }, { AudioBitRate: 128000 }, { AllowAudioStreamCopy: false }, { AudioChannels: 1 }, { AudioSampleRate: 48000 }]) assert.throws(() => hlsPlan(reference.source, { MediaType: 'Audio', ...options }));
+  for (const [options, encoder] of [[{ AudioCodec: 'ac3' }, 'ac3'], [{ AudioBitRate: 128000 }, 'aac'],
+    [{ AllowAudioStreamCopy: false }, 'aac'], [{ AudioChannels: 1 }, 'aac'], [{ AudioSampleRate: 48000 }, 'copy']]) {
+    assert.equal(hlsPlan(reference.source, { MediaType: 'Audio', ...options }).audioOutput.encoder, encoder);
+  }
 });

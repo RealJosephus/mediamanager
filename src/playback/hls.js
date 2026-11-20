@@ -6,13 +6,13 @@ import path from 'node:path';
 import { pipeline } from 'node:stream/promises';
 import { StringDecoder } from 'node:string_decoder';
 import { setTimeout as delay } from 'node:timers/promises';
-import { withNativeFloats } from '../core/json.js';
 import { StorageError, checkAbort } from '../storage/errors.js';
 import { singleRange } from '../http/binary-result.js';
 import { videoColorRange } from '../library/media-streams.js';
 import { remuxPlan, RemuxService } from './remux.js';
 import { getEncodingThreadCount } from './media-encoder.js';
 import { hlsArguments } from '../media-execution/streaming.js';
+import { matchesTranscodeJob as matchesJob, transcodingInfo } from './transcode-jobs.js';
 
 export { hlsArguments };
 
@@ -26,7 +26,6 @@ const doubleBits = Buffer.allocUnsafe(8);
 const encode = value => encodeURIComponent(value).replace(/[!'()*]/g, char => `%${char.charCodeAt(0).toString(16).toUpperCase()}`);
 const encodeQueryValue = (value, preserveComma) => preserveComma ? encode(value).replaceAll('%2C', ',') : encode(value);
 const json = value => JSON.stringify(value, (_, value) => typeof value === 'bigint' ? value.toString() : value);
-const matchesJob = (job, deviceId, playSessionId) => playSessionId?.trim() ? lower(job.options.PlaySessionId) === lower(playSessionId) : lower(job.options.DeviceId) === lower(deviceId);
 const cacheOwners = new Set();
 const processExists = pid => { try { process.kill(pid, 0); return true; } catch (error) { return error.code !== 'ESRCH'; } };
 const cachePlan = plan => ({
@@ -35,6 +34,7 @@ const cachePlan = plan => ({
   runtime: plan.runtime,
   keyframeSegments: plan.keyframeSegments,
   streams: plan.streams.map(stream => [stream.type, stream.index]),
+  audio: plan.audioOutput,
   video: plan.video ? [lower(plan.video.Codec), String(plan.video.NalLengthSize ?? '')] : null,
 });
 
@@ -241,13 +241,13 @@ function keyframeTimeline(keyframeData, segmentLength) {
   return { keyframeSegments, keyframeStarts };
 }
 
-export function hlsPlan(source, options = {}) {
+export function hlsPlan(source, options = {}, tools) {
   const container = lower(options.SegmentContainer ?? options.Container ?? 'ts');
   if (!['ts', 'mp4'].includes(container)) throw failure('not-supported', 'HLS requires MPEG-TS or fragmented MP4 segments.');
   const audioStreams = source.MediaStreams.filter(stream => stream.Type === 'Audio').sort((a, b) => a.Index - b.Index);
   const audioOnly = options.MediaType === 'Audio';
   const audioIndex = (audioOnly ? undefined : audioStreams.find(stream => stream.Index === options.AudioStreamIndex)?.Index) ?? audioStreams.find(stream => stream.Channels > 0)?.Index ?? audioStreams[0]?.Index;
-  const plan = remuxPlan(source, { ...options, AudioStreamIndex: audioIndex, Container: container, StartTimeTicks: 0n, HlsManifest: true });
+  const plan = remuxPlan(source, { ...options, AudioStreamIndex: audioIndex, Container: container, StartTimeTicks: 0n, HlsManifest: true }, tools);
   const video = source.MediaStreams.find(stream => stream.Index === plan.streams.find(stream => stream.type === 'Video')?.index);
   const audio = source.MediaStreams.find(stream => stream.Index === plan.streams.find(stream => stream.type === 'Audio')?.index);
   const textSubtitles = source.MediaStreams.filter(stream => stream.Type === 'Subtitle' && stream.IsTextSubtitleStream);
@@ -286,18 +286,25 @@ function audioBitrate(audio, options) {
   return ['aac', 'mp3', 'opus', 'vorbis', 'ac3', 'eac3', ''].includes(lower(options.AudioCodec)) ? Math.min(options.AudioBitRate ?? 2147483647, channels >= 6 ? 640000 : channels * 128000) : ['alac', 'flac', 'truehd'].includes(lower(options.AudioCodec)) ? audio.BitRate ?? 0 : channels * 128000;
 }
 
-export function masterPlaylist(source, options = {}, query = '') {
-  const plan = hlsPlan(source, options), { video, audio } = plan;
+export function masterPlaylist(source, options = {}, query = '', tools) {
+  const plan = hlsPlan(source, options, tools), { video, audio, audioOutput } = plan;
   const parameters = [...new URLSearchParams(query)];
-  const audioKey = parameters.find(entry => lower(entry[0]) === 'audiocodec');
-  if (audioKey) audioKey[1] = 'copy'; else parameters.push(['AudioCodec', 'copy']);
+  if (audioOutput) {
+    const audioKey = parameters.find(entry => lower(entry[0]) === 'audiocodec');
+    const codec = audioOutput.encoder === 'copy' ? 'copy' : audioOutput.codec;
+    if (audioKey) audioKey[1] = codec; else parameters.push(['AudioCodec', codec]);
+  }
   if (options.SegmentContainer && !parameters.some(([key]) => lower(key) === 'segmentcontainer')) parameters.push(['SegmentContainer', options.SegmentContainer]);
   const variant = 'main.m3u8?' + parameters.map(([key, value]) => `${encode(key)}=${encodeQueryValue(value, Boolean(video))}`).join('&');
   const profile = lower(video?.Profile), level = video?.Level;
   const videoCodec = !level ? '' : lower(video.Codec) === 'h264' ? `avc1.${({ high: '6400', main: '4D40', baseline: '42E0' })[profile] ?? '4240'}${level.toString(16).toUpperCase().padStart(2, '0')}`
     : `hvc1.${['main10', 'main 10'].includes(profile) ? '2' : '1'}.4.L${level}.B0`;
-  const audioCodec = audio && ({ aac: lower(audio.Profile) === 'he-aac' ? 'mp4a.40.5' : 'mp4a.40.2', mp3: 'mp4a.40.34', ac3: 'ac-3', eac3: 'ec-3', alac: 'alac', flac: 'fLaC' })[lower(audio.Codec)];
-  const bitrate = videoBitrate(video, options.VideoBitRate, options.VideoCodec) + audioBitrate(audio, video ? options : { ...options, AudioCodec: 'copy' });
+  const audioCodec = audioOutput && ({
+    aac: audioOutput.encoder === 'copy' && lower(audio.Profile) === 'he-aac' ? 'mp4a.40.5' : 'mp4a.40.2',
+    mp3: 'mp4a.40.34', ac3: 'ac-3', eac3: 'ec-3', alac: 'alac', flac: 'fLaC', opus: 'opus', dts: 'dtsc', truehd: 'mlpa',
+  })[audioOutput.codec];
+  const bitrate = videoBitrate(video, options.VideoBitRate, options.VideoCodec) + (audioOutput?.encoder === 'copy'
+    ? audioBitrate(audio, video ? options : { ...options, AudioCodec: 'copy' }) : audioOutput?.bitrate ?? 0);
   const [range, rangeType] = video ? videoColorRange(video) : ['Unknown', 'Unknown'];
   const subtitles = source.MediaStreams.filter(stream => stream.Type === 'Subtitle' && stream.IsTextSubtitleStream);
   const selected = source.MediaStreams.find(stream => stream.Type === 'Subtitle' && stream.Index === options.SubtitleStreamIndex);
@@ -339,8 +346,8 @@ export function subtitlePlaylist(source, segmentLength, accessToken = '') {
   return lines.join('\r\n');
 }
 
-export function mainPlaylist(source, options = {}, query = '') {
-  const plan = hlsPlan(source, options), length = BigInt(plan.segmentLength) * ticksPerSecond;
+export function mainPlaylist(source, options = {}, query = '', tools) {
+  const plan = hlsPlan(source, options, tools), length = BigInt(plan.segmentLength) * ticksPerSecond;
   const suffix = query ? '?' + query.replace(/^\?/, '') + '&' : '?';
   const segment = (index, start, duration) => `hls1/main/${index}.${plan.container}${suffix}runtimeTicks=${start}&actualSegmentLengthTicks=${duration}`;
   const durations = plan.keyframeSegments ?? Array.from({ length: Number((plan.runtime + length - 1n) / length) }, (_, index) => {
@@ -377,7 +384,6 @@ export class HlsService {
   #lifetime = new AbortController();
   #pending = new Set();
   #launchTail = Promise.resolve();
-  #sequence = 0;
   #cacheReady;
   #initializations = new Set();
   #owner = randomUUID();
@@ -430,21 +436,18 @@ export class HlsService {
       } catch (error) { if (error.code !== 'ENOENT' && !(error instanceof SyntaxError)) this.onError(error); }
     }
   }
-  supports(source, options) { if (!this.remux.available || this.#closed) return false; try { hlsPlan(source, options); return true; } catch { return false; } }
-  hasJob(playSessionId) {
-    if (!playSessionId) return false;
-    return [...this.#jobs.values()].some(job => lower(job.options.PlaySessionId) === lower(playSessionId) && job.active && !job.controller.signal.aborted)
-      || [...this.#activity.values()].some(activity => lower(activity.options.PlaySessionId) === lower(playSessionId));
+  plan(source, options, configuration = this.getEncodingOptions()) {
+    return hlsPlan(source, options, { configuration, capabilities: this.mediaEncoder.capabilities });
   }
-  getTranscodingInfo(deviceId) {
-    if (!deviceId?.trim()) return;
-    const job = [...this.#jobs.values(), ...this.#activity.values()].filter(job => lower(job.options.DeviceId) === lower(deviceId) && (job.active == null || job.active && !job.controller.signal.aborted)).sort((a, b) => b.sequence - a.sequence)[0];
-    if (!job) return;
-    const { video, audio } = job.plan;
-    return withNativeFloats({ AudioCodec: audio?.Codec, VideoCodec: video?.Codec, Container: job.plan.container, IsVideoDirect: Boolean(video), IsAudioDirect: Boolean(audio),
-      Bitrate: job.progress?.Bitrate ?? videoBitrate(video, job.options.VideoBitRate, job.options.VideoCodec) + audioBitrate(audio, job.options),
-      ...(job.progress?.Framerate != null ? { Framerate: job.progress.Framerate } : {}), ...(job.progress?.CompletionPercentage != null ? { CompletionPercentage: job.progress.CompletionPercentage } : {}), Width: video?.Width, Height: video?.Height, AudioChannels: audio?.Channels,
-      HardwareAccelerationType: 'none', TranscodeReasons: job.options.TranscodeReasons?.split(',').filter(Boolean) ?? [] }, ['Framerate']);
+  supports(source, options) { if (!this.remux.available || this.#closed) return false; try { this.plan(source, options); return true; } catch { return false; } }
+  get jobs() { return this.remux.jobs; }
+  hasJob(playSessionId) { return this.jobs.hasJob(playSessionId); }
+  getTranscodingInfo(deviceId) { return this.jobs.getTranscodingInfo(deviceId); }
+  #describe(job) {
+    const { video, audio, audioOutput } = job.plan;
+    const bitrate = videoBitrate(video, job.options.VideoBitRate, job.options.VideoCodec)
+      + (audioOutput?.encoder === 'copy' ? audioBitrate(audio, job.options) : audioOutput?.bitrate ?? 0);
+    return transcodingInfo(job.plan, job.options, job.progress, this.getEncodingOptions().HardwareAccelerationType, bitrate);
   }
 
   #reportProgress(job, progress, phase) {
@@ -452,11 +455,7 @@ export class HlsService {
     try { this.onProgress({ phase, sequence: job.sequence, DeviceId: job.options.DeviceId, PlaySessionId: job.options.PlaySessionId, ...(progress ?? {}) }); }
     catch (error) { this.onError(error); }
   }
-  ping(playSessionId, isPaused) {
-    if (!playSessionId?.trim()) return;
-    for (const job of this.#jobs.values()) if (lower(job.options.PlaySessionId) === lower(playSessionId)) { if (isPaused != null) job.isPaused = isPaused; this.#touch(job); }
-    for (const activity of this.#activity.values()) if (lower(activity.options.PlaySessionId) === lower(playSessionId) && isPaused != null) activity.isPaused = isPaused;
-  }
+  ping(playSessionId, isPaused) { this.jobs.ping(playSessionId, isPaused); }
   #touch(job) {
     clearTimeout(job.idle);
     if (job.exited || !job.active || job.controller.signal.aborted) return;
@@ -468,15 +467,21 @@ export class HlsService {
   }
   #retainActivity(job) {
     const key = this.#activityKey(job.options); if (!key) return;
-    const activity = { plan: job.plan, options: job.options, sequence: job.sequence, isPaused: job.isPaused };
+    if (this.#activity.has(key)) this.#forgetActivity(key);
+    const activity = { active: true, plan: job.plan, options: job.options, sequence: job.sequence };
     this.#activity.set(key, activity);
+    this.jobs.register(activity, { describe: () => this.#describe(activity), stop: () => this.#forgetActivity(key) });
+  }
+  #forgetActivity(key) {
+    this.jobs.unregister(this.#activity.get(key));
+    this.#activity.delete(key);
   }
   #dropActivity(deviceId, playSessionId) {
-    for (const [key, activity] of this.#activity) if (matchesJob(activity, deviceId, playSessionId)) this.#activity.delete(key);
+    for (const [key, activity] of this.#activity) if (matchesJob(activity, deviceId, playSessionId)) this.#forgetActivity(key);
   }
   async #remove(job) {
     if (job.removing) return job.removing;
-    job.controller.abort(); clearTimeout(job.idle); clearInterval(job.cleaner); this.#jobs.delete(job.key);
+    job.controller.abort(); clearTimeout(job.idle); clearInterval(job.cleaner); this.#jobs.delete(job.key); this.jobs.unregister(job);
     const cleanup = {};
     job.removing = (async () => {
       await job.tail; await Promise.all([...job.pendingReaders]);
@@ -493,19 +498,16 @@ export class HlsService {
     job.removing.then(() => this.#cleanup.delete(cleanup), error => { cleanup.error = error; this.onError(error); });
     return job.removing;
   }
-  async stop(deviceId, playSessionId) {
-    this.#dropActivity(deviceId, playSessionId);
-    await Promise.all([...this.#jobs.values()].filter(job => matchesJob(job, deviceId, playSessionId)).map(job => this.#remove(job)));
-  }
+  async stop(deviceId, playSessionId) { await this.jobs.stop(deviceId, playSessionId); }
   segment(source, virtualPath, options, index, request, response, { signal } = {}) {
     const current = this.getEncodingOptions();
     const execution = { threads: getEncodingThreadCount(current, options.CpuCoreLimit), version: this.mediaEncoder.version,
       maxMuxingQueueSize: current.MaxMuxingQueueSize > 128 ? current.MaxMuxingQueueSize : 128 };
-    return this.#track(() => this.#segment(source, virtualPath, options, execution, index, request, response,
+    return this.#track(() => this.#segment(source, virtualPath, options, current, execution, index, request, response,
       AbortSignal.any([this.#lifetime.signal, ...(signal ? [signal] : [])])));
   }
-  async #segment(source, virtualPath, options, execution, index, request, response, signal) {
-    const plan = { ...hlsPlan(source, options), execution };
+  async #segment(source, virtualPath, options, configuration, execution, index, request, response, signal) {
+    const plan = { ...this.plan(source, options, configuration), execution };
     const runtimeTicks = BigInt(options.CurrentRuntimeTicks ?? 0);
     if (BigInt(options.StartTimeTicks ?? 0) > 0n) throw failure('invalid-request', 'StartTimeTicks is not allowed for HLS segments.');
     if (!Number.isSafeInteger(index) || index < -1 || index === -1 && plan.container !== 'mp4' || runtimeTicks < 0n) throw failure('invalid-request', 'The HLS segment is invalid.');
@@ -535,6 +537,10 @@ export class HlsService {
         }
       });
       this.#jobs.set(key, job);
+      this.jobs.register(job, {
+        describe: () => this.#describe(job), stop: () => this.#remove(job),
+        ping: isPaused => { if (isPaused != null) job.isPaused = isPaused; this.#touch(job); },
+      });
     }
     job.readers++; if (!job.options.PlaySessionId?.trim()) clearTimeout(job.idle);
     let finishReader;
@@ -609,7 +615,8 @@ export class HlsService {
       job.processController?.abort(); await job.done;
       if (current != null) await unlink(path.join(await job.directory, `segment${current}.${plan.container}`)).catch(error => { if (error.code !== 'ENOENT') throw error; });
       checkAbort(signal);
-      job.error = undefined; job.exited = false; job.active = true; job.plan = plan; job.options = options; job.startNumber = startNumber; job.sequence = ++this.#sequence;
+      job.error = undefined; job.exited = false; job.active = true; job.plan = plan; job.options = options; job.startNumber = startNumber;
+      this.jobs.activate(job);
       this.#reportProgress(job, undefined, 'start');
       job.done = this.#run(job, startNumber, runtimeTicks);
       // The job owner observes completion even when a resource failure occurs
@@ -644,7 +651,7 @@ export class HlsService {
       try {
         this.onProcess({ pid: child.pid, args: args.map(value => value === lease.url ? '[private source]' : value) });
         const code = await done; const finalText = decoder.end(); diagnostics = (diagnostics + finalText).slice(-8192); progressParser.end(finalText); checkAbort(signal);
-        if (code !== 0) throw new StorageError('invalid-response', 'The HLS streams could not be copied.', { exitCode: code, diagnostic: diagnostics.replaceAll(lease.url, '[private source]') });
+        if (code !== 0) throw new StorageError('invalid-response', 'The HLS streams could not be processed.', { exitCode: code, diagnostic: diagnostics.replaceAll(lease.url, '[private source]') });
         const after = await this.vfs.stat(job.virtualPath, { signal });
         if (job.version != null && after.version !== job.version) throw failure('version-changed', 'The HLS source changed.');
       } finally { signal.removeEventListener('abort', abort); child.kill(); await done.catch(() => {}); }
@@ -702,7 +709,7 @@ export class HlsService {
     if (this.#closing) return this.#closing;
     const completion = Promise.withResolvers(); this.#closing = completion.promise;
     this.#closed = true; this.#lifetime.abort(failure('cancelled', 'Storage operation was cancelled.'));
-    this.#activity.clear();
+    for (const key of this.#activity.keys()) this.#forgetActivity(key);
     void (async () => {
       const errors = [], removing = [...this.#jobs.values()].map(job => this.#remove(job));
       await Promise.allSettled(removing);
