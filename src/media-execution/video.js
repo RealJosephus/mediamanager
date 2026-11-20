@@ -1,6 +1,6 @@
 import { videoColorRange } from '../library/media-streams.js';
 import { encoderVersionAtLeast } from '../playback/media-encoder.js';
-import { fixedHardwareSize, videoHardware } from './video-hardware.js';
+import { fixedHardwareSize, videoBitDepth, videoHardware } from './video-hardware.js';
 
 const codecProfiles = {
   h264: ['constrainedbaseline', 'baseline', 'extended', 'main', 'high', 'progressivehigh', 'constrainedhigh', 'high10'],
@@ -38,7 +38,8 @@ export function outputVideoBitrate(video, request, codec) {
 
 function canCopy(video, source, request, codecs) {
   const codec = normalizeCodec(video.Codec);
-  if (!codec || codecs.length > 0 && !codecs.includes(codec) || request.EnableAutoStreamCopy === false || request.AllowVideoStreamCopy === false) return false;
+  if (!codec || request.BurnSubtitle || codecs.length > 0 && !codecs.includes(codec)
+    || request.EnableAutoStreamCopy === false || request.AllowVideoStreamCopy === false) return false;
   if (request.RequireAvc && codec === 'h264' && video.IsAVC === false || request.RequireNonAnamorphic && video.IsAnamorphic
     || video.IsInterlaced && (request.DeInterlace || lower(option(request, codec, 'deinterlace')) === 'true')) return false;
   const limits = [
@@ -130,6 +131,7 @@ function videoFilters(video, request, options, caps, selected, requestedRate, ne
   if (requestedRate && !needsDeinterlace) filters.push('fps=' + requestedRate);
 
   if (hardware === 'cuda') {
+    filters.push('setparams=color_primaries=bt709:color_trc=bt709:colorspace=bt709');
     if (needsDeinterlace) filters.push((method === 'bwdif' && caps.filters?.includes('bwdif_cuda') ? 'bwdif_cuda=' : 'yadif_cuda=') + deinterlace);
     filters.push(hardwareScale('scale_cuda', 'yuv420p', video, request));
     if (!encoder.endsWith('_nvenc')) filters.push('hwdownload', 'format=yuv420p');
@@ -147,9 +149,23 @@ function videoFilters(video, request, options, caps, selected, requestedRate, ne
     if (!encoder.endsWith('_vaapi')) filters.push('hwdownload', 'format=nv12');
   } else {
     if (hardware) filters.push('hwdownload', 'format=nv12');
+    const [range, rangeType] = videoColorRange(video);
+    const tonemap = range === 'HDR' && videoBitDepth(video) >= 10 && caps.filters?.includes('tonemapx');
+    const transfer = lower(video.ColorTransfer) === 'arib-std-b67' ? 'arib-std-b67' : 'smpte2084';
+    filters.push(tonemap ? 'setparams=color_primaries=bt2020:color_trc=' + transfer + ':colorspace=bt2020nc'
+      : 'setparams=color_primaries=bt709:color_trc=bt709:colorspace=bt709');
     if (needsDeinterlace) filters.push(method + '=' + deinterlace);
     const alignment = encoder === 'h264_v4l2m2m' ? 64 : 2;
-    filters.push(softwareScale(request, alignment), 'format=' + (encoder.endsWith('_vaapi') || decoder.args.length ? 'nv12' : 'yuv420p'));
+    const format = encoder.endsWith('_vaapi') || decoder.args.length ? 'nv12' : 'yuv420p';
+    filters.push(softwareScale(request, alignment));
+    if (tonemap) {
+      const args = ['tonemap=' + (options.TonemappingAlgorithm ?? 'bt2390'), 'desat=' + (options.TonemappingDesat ?? 0),
+        'peak=' + (options.TonemappingPeak ?? 100), 't=bt709', 'm=bt709', 'p=bt709',
+        'format=' + (rangeType === 'DOVI' ? 'yuv420p' : format)];
+      if (options.TonemappingParam) args.push('param=' + options.TonemappingParam);
+      if (options.TonemappingRange === 'tv' || options.TonemappingRange === 'pc') args.push('range=' + options.TonemappingRange);
+      filters.push('tonemapx=' + args.join(':'));
+    } else filters.push('format=' + format);
     if (encoder.endsWith('_vaapi')) filters.push('hwupload');
   }
   if (requestedRate && needsDeinterlace) filters.push('fps=' + requestedRate);
@@ -186,7 +202,8 @@ export function videoStreamPlan(video, source, request, allowed, { configuration
   const crf = codec === 'hevc' ? configuration.H265Crf : configuration.H264Crf;
   return { codec, encoder, ...dimensions(video, resized), frameRate: requestedRate ?? rate, requestedRate, bitrate, profile,
     level: Number.isFinite(level) && level >= 0 ? level : undefined, filters, hardware: selected,
-    preset: configuration.EncoderPreset, crf, crfDefault: codec === 'hevc' ? 28 : 23, realFrameRate: video.RealFrameRate };
+    preset: configuration.EncoderPreset, crf, crfDefault: codec === 'hevc' ? 28 : 23, realFrameRate: video.RealFrameRate,
+    vaapiDriver: capabilities.vaapiDriver };
 }
 
 export function videoArguments(plan, { hls = false, segmentLength, version } = {}) {
@@ -198,8 +215,20 @@ export function videoArguments(plan, { hls = false, segmentLength, version } = {
     args.push('-preset', preset, '-crf', String(plan.crf >= 0 && plan.crf <= 51 ? plan.crf : plan.crfDefault));
   } else if (plan.encoder === 'libsvtav1') args.push('-preset', String(configured.indexOf(preset) + 5));
   if (plan.bitrate > 0) {
-    if (plan.encoder.endsWith('_videotoolbox')) args.push('-b:v', String(plan.bitrate), '-qmin', '-1', '-qmax', '-1');
-    else args.push('-b:v', String(plan.bitrate), '-maxrate', String(plan.bitrate), '-bufsize', String(plan.bitrate * 2));
+    const bitrate = plan.encoder === 'h264_qsv' ? Math.max(1000, plan.bitrate) : plan.bitrate;
+    const rate = String(bitrate), buffer = String(bitrate * 2);
+    if (/^libx26[45]$/u.test(plan.encoder)) args.push('-maxrate', rate, '-bufsize', buffer);
+    else if (plan.encoder === 'libsvtav1') args.push('-b:v', rate, '-bufsize', buffer);
+    else if (plan.encoder.endsWith('_videotoolbox')) args.push('-b:v', rate, '-qmin', '-1', '-qmax', '-1');
+    else if (plan.encoder.endsWith('_qsv')) {
+      if (plan.codec === 'h264' || plan.codec === 'hevc') args.push('-mbbrc', '1');
+      const factor = plan.codec === 'h264' && plan.level != null && plan.level < 51 ? 1 : 2;
+      args.push('-b:v', rate, '-maxrate', String(bitrate + 1), '-rc_init_occupancy', String(bitrate * factor), '-bufsize', String(bitrate * 2 * factor));
+    } else {
+      if (plan.encoder.endsWith('_vaapi')) args.push('-rc_mode', plan.vaapiDriver === 'i965' ? 'CBR' : 'VBR');
+      if (plan.encoder.endsWith('_amf') && plan.codec !== 'av1') args.push('-rc', 'cbr', '-qmin', '0', '-qmax', '32');
+      args.push('-b:v', rate, '-maxrate', rate, '-bufsize', buffer);
+    }
   }
   if (plan.requestedRate) args.push('-r', String(plan.requestedRate));
   if (plan.profile && !['av1_nvenc', 'h264_v4l2m2m'].includes(plan.encoder)) args.push('-profile:v:0', plan.profile);

@@ -441,7 +441,8 @@ function selectTranscode(source, item, profile, options, audio, video, subtitle,
     append('RequireAvc', String(projected.RequireAvc ?? false));
     append('EnableAudioVbrEncoding', String(!audioDirect && get(entry, 'EnableAudioVbrEncoding', true)));
     append('Tag', source.ETag);
-    if (isVideo && source.DefaultSubtitleStreamIndex != null && delivery.Method !== 'External') append('SubtitleMethod', delivery.Method);
+    if (isVideo && (subtitle || options.SubtitleStreamIndex != null || source.DefaultSubtitleStreamIndex != null)
+      && delivery.Method !== 'External') append('SubtitleMethod', delivery.Method);
     if (subtitle && delivery.Method === 'Embed') append('SubtitleCodec', delivery.Format);
     if (!audioDirect) for (const [name, value] of projected.StreamOptions) append(name, String(value).replaceAll(' ', ''));
     append('TranscodeReasons', audioDirect ? 'ContainerNotSupported' : reasonNames.filter(name => mask & reasons[name]).join(','));

@@ -42,6 +42,7 @@ import { copyNativeItemRepositoryFrame, publishNativeItemLinks } from './library
 import { CleanDatabasePostScanTask } from './library/clean-database-post-scan-task.js';
 import { SplashscreenPostScanTask } from './library/splashscreen-post-scan-task.js';
 import { ExtractionService } from './playback/extraction.js';
+import { SubtitleBurnSource } from './playback/subtitle-burn-source.js';
 import { SubtitleCache } from './playback/subtitle-cache.js';
 import { RemuxService } from './playback/remux.js';
 import { MediaEncoder } from './playback/media-encoder.js';
@@ -351,7 +352,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const extraction = probe ? new ExtractionService({ vfs, bridge:probe.bridge, ...extractionOptions, mediaEncoder, getEncodingOptions,
     subtitleCache: new SubtitleCache({ fileSystem, dataPath, onError }) }) : undefined;
   if (extraction) rollback.push(() => extraction.close());
-  const remux = probe ? new RemuxService({ vfs, bridge:probe.bridge, ...remuxOptions, mediaEncoder }) : undefined;
+  const subtitleBurn = extraction && new SubtitleBurnSource({ vfs, identityMap, extraction });
+  const remux = probe ? new RemuxService({ vfs, bridge:probe.bridge, ...remuxOptions, mediaEncoder, subtitleBurn }) : undefined;
   if (remux) rollback.push(() => remux.close());
   const hls = probe ? new HlsService({ vfs, bridge: probe.bridge, remux, onError, ...hlsOptions,
     mediaEncoder, getEncodingOptions, getCacheDirectory: () => encodingPaths.getTranscodePath() }) : undefined;
