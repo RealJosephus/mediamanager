@@ -47,6 +47,12 @@ function insertTextSubtitle(filters, text) {
   else filters.push(text);
 }
 
+function bitmapInputArguments(subtitles, overlay, seek, probe = []) {
+  if (!subtitles?.bitmap) return [];
+  const { filename, format } = subtitles.bitmap;
+  return ['-protocol_whitelist', 'file', ...probe, ...seek, ...overlay.canvas, '-f', format, '-i', filename];
+}
+
 function subtitleOverlay(plan, subtitles, ticks, shift) {
   const hardware = plan.subtitleHardware;
   const bitmap = plan.bitmapIndex != null;
@@ -67,7 +73,9 @@ function subtitleOverlay(plan, subtitles, ticks, shift) {
       : String.raw`scale,scale=-1:${targetHeight}:fast_bilinear,crop,pad=max(${targetWidth}\,iw):max(${targetHeight}\,ih):(ow-iw)/2:(oh-ih)/2:black@0,crop=${targetWidth}:${targetHeight}`;
   }
   const video = `[0:${plan.inputVideo.Index}]`;
-  let subtitle = bitmap ? `[0:${plan.bitmapIndex}]` : '';
+  const external = bitmap && plan.burnSubtitle.IsExternal;
+  if (external && !subtitles?.bitmap) throw new TypeError('An external bitmap overlay requires a staged subtitle.');
+  let subtitle = bitmap ? `[${external ? 1 : 0}:${plan.bitmapIndex}]` : '';
   const subFilters = [scale].filter(Boolean);
   let overlay = 'overlay';
   let outputOptions = hardware?.scaledOverlay && videoWidth > 0 && videoHeight > 0 ? `:w=${videoWidth}:h=${videoHeight}` : '';
@@ -164,12 +172,14 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
 export function remuxArguments(url, plan, threads, version, subtitles) {
   if (!/^http:\/\/127\.0\.0\.1:\d+\/[a-f0-9]{64}$/.test(url)) throw new TypeError('Remuxing requires a private VFS input.');
   const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-protocol_whitelist', 'http,tcp'];
-  if (plan.seek) args.push('-ss', mediaSeekTime(plan.start));
+  const seek = plan.seek ? ['-ss', mediaSeekTime(plan.start)] : [];
+  args.push(...seek);
   if (plan.videoOutput?.encoder === 'copy') args.push('-fflags', '+genpts');
   if (plan.inputFormat) args.push('-f', plan.inputFormat);
-  const shift = subtitles && !plan.copyTimestamps ? Math.round(Number(plan.start) / 10000000) : null;
+  const shift = subtitles?.filter && !plan.copyTimestamps ? Math.round(Number(plan.start) / 10000000) : null;
   const overlay = subtitleOverlay(plan, subtitles, plan.start, shift);
-  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []), '-i', url);
+  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []), '-i', url,
+    ...bitmapInputArguments(subtitles, overlay, seek));
   if (plan.videoOutput?.hardware?.decoder.args.length) args.push('-noautoscale');
   args.push('-threads', String(threads));
   if (overlay) args.push('-filter_complex', overlay.graph);
@@ -177,7 +187,7 @@ export function remuxArguments(url, plan, threads, version, subtitles) {
   args.push('-map_metadata', '-1', '-map_chapters', '-1', '-c', 'copy');
   if (plan.videoOutput && plan.videoOutput.encoder !== 'copy') {
     const filters = overlay ? [] : [...plan.videoOutput.filters];
-    if (!overlay && subtitles) insertTextSubtitle(filters, subtitles.filter);
+    if (!overlay && subtitles?.filter) insertTextSubtitle(filters, subtitles.filter);
     if (!overlay && shift !== null) insertTextSubtitle(filters, `setpts=PTS-${shift}/TB`);
     args.push(...videoArguments({ ...plan.videoOutput, filters }, { version }));
   }
@@ -208,11 +218,14 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
   if (eventId != null && !/^[a-f0-9]{32}$/u.test(eventId)) throw new TypeError('Invalid HLS event playlist identity.');
   const prefix = eventId ?? 'segment';
   const analyzeDuration = plan.analyzeDurationMs > 0 ? String(plan.analyzeDurationMs * 1000) : '200M';
-  const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-stats', '-stats_period', '0.5', '-protocol_whitelist', 'http,tcp', '-analyzeduration', analyzeDuration, '-probesize', '1G'];
+  const probe = ['-analyzeduration', analyzeDuration, '-probesize', '1G'];
+  const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-stats', '-stats_period', '0.5', '-protocol_whitelist', 'http,tcp', ...probe];
+  const seek = [];
   if (runtimeTicks > 0n) {
     const maximum = plan.runtime > 50000000n ? plan.runtime - 50000000n : 0n;
     const seekTicks = runtimeTicks + (plan.videoOutput?.encoder === 'copy' ? 5000000n : 0n);
-    args.push('-ss', mediaSeekTime(seekTicks > maximum ? maximum : seekTicks));
+    seek.push('-ss', mediaSeekTime(seekTicks > maximum ? maximum : seekTicks));
+    args.push(...seek);
   }
   if (plan.readAtNativeFramerate) {
     args.push('-re');
@@ -223,7 +236,8 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
   if (inputFlags.length) args.push('-fflags', inputFlags.join(''));
   if (plan.inputFormat) args.push('-f', plan.inputFormat);
   const overlay = subtitleOverlay(plan, subtitles, runtimeTicks > 0n ? runtimeTicks : plan.start, null);
-  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []), '-i', url);
+  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []), '-i', url,
+    ...bitmapInputArguments(subtitles, overlay, seek, probe));
   if (plan.videoOutput?.hardware?.decoder.args.length) args.push('-noautoscale');
   args.push('-map_metadata', '-1', '-map_chapters', '-1', '-threads', String(threads));
   if (overlay) args.push('-filter_complex', overlay.graph);
@@ -234,7 +248,7 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
   }
   if (plan.video) {
     const output = { ...plan.videoOutput, filters: overlay ? [] : [...(plan.videoOutput.filters ?? [])] };
-    if (!overlay && subtitles) insertTextSubtitle(output.filters, subtitles.filter);
+    if (!overlay && subtitles?.filter) insertTextSubtitle(output.filters, subtitles.filter);
     args.push(...videoArguments(output, { hls: true, event: eventId != null, segmentLength: plan.segmentLength, version }));
     if (plan.videoOutput.codec === 'hevc') args.push('-tag:v:0', 'hvc1');
     if (plan.videoOutput.encoder === 'copy') {
@@ -243,7 +257,7 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
       }
       args.push('-start_at_zero');
     }
-    if (subtitles) args.push('-start_at_zero');
+    if (subtitles?.filter) args.push('-start_at_zero');
     if (eventId && plan.container === 'ts') args.push('-flags', '-global_header');
   } else args.push('-vn');
   args.push(...audioArguments(plan.audioOutput));

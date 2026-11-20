@@ -8,7 +8,8 @@ const textFormats = new Map([
   ['vtt', 'vtt'], ['webvtt', 'vtt'], ['smi', 'smi'], ['sami', 'smi'],
 ]);
 const embedded = stream => !stream.IsExternal || /\.mks$/iu.test(stream.Path ?? '');
-const bitmapFormats = new Set(['pgssub', 'hdmv_pgs_subtitle', 'dvdsub', 'dvd_subtitle', 'dvbsub', 'dvb_subtitle', 'xsub']);
+const bitmapFormats = new Set(['pgssub', 'hdmv_pgs_subtitle', 'sup', 'dvdsub', 'dvd_subtitle', 'vobsub', 'dvbsub', 'dvb_subtitle', 'xsub']);
+const bitmapInputs = new Map([['mks', 'matroska'], ['pgssub', 'sup'], ['idx', 'vobsub'], ['sub', 'vobsub']]);
 
 export class SubtitleBurnSource {
   constructor({ vfs, identityMap, extraction }) {
@@ -16,9 +17,25 @@ export class SubtitleBurnSource {
   }
 
   supports(source, stream) {
-    if (!stream.IsTextSubtitleStream) return !stream.IsExternal && !stream.Path && bitmapFormats.has(stream.Codec?.toLowerCase());
+    if (!stream.IsTextSubtitleStream) {
+      return bitmapFormats.has(stream.Codec?.toLowerCase()) && (stream.IsExternal
+        ? Boolean(stream.Path && bitmapInputs.has(subtitleInputFormat(stream))) : !stream.Path);
+    }
     if (embedded(stream) || isExternalSubtitleFallback(stream)) return Boolean(this.extraction?.supportsSubtitle(source, stream));
     return Boolean(stream.Path && textFormats.has(subtitleInputFormat(stream)));
+  }
+
+  bitmapInput(stream) {
+    const extension = subtitleInputFormat(stream);
+    const format = bitmapInputs.get(extension);
+    if (!stream.Path || !format) throw new StorageError('not-supported', 'This bitmap subtitle cannot be burned into the video.');
+    const style = identityPathStyle(stream.Path);
+    const inputs = format === 'vobsub' ? ['idx', 'sub'].map(part => [part, part === extension ? stream.Path : stream.Path.replace(/\.[^.]+$/u, '.' + part)])
+      : [[format === 'matroska' ? 'mks' : 'sup', stream.Path]];
+    return { format, files: inputs.map(([extension, identityPath]) => ({
+      name: 'subtitle.' + extension,
+      open: signal => this.vfs.openRead(this.identityMap.resolve({ identityPath, style }), { signal }),
+    })) };
   }
 
   async load(source, stream, mediaPath, signal) {
