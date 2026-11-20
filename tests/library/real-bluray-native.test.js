@@ -16,6 +16,6 @@ test(`${label} survives actual Native and Node VFS probing, fresh scans, SQLite 
 
 const runPlayback = createBlurayScanExchange({ enabled, playback: true, movieName: 'Playable Compact Blu-ray (2010)',
   prepareInput: ({ root, signal }) => prepareBlurayInput({ root, signal, playback: true }) });
-test('a two-clip Blu-ray with matching track declarations decodes the same HTTP and HLS frames as Native', {
+test('a two-clip Blu-ray matches Native HTTP and HLS video frames and audio packets', {
   skip: !enabled, timeout: 900000,
 }, runPlayback);

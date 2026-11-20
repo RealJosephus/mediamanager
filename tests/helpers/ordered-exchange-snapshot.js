@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { nativeInsertionOrderedTables, scanNativeRelationRows } from '../../src/database/native-relation-order.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { canonicalCell } from '../../src/database/values.js';
+import { wireDate } from '../../src/users/native.js';
 import { completeSnapshot } from './library-exchange-state.js';
 
 /** All native values and every externally consumed insertion sequence, in bounded reads. */
@@ -39,4 +40,32 @@ export async function orderedExchangeSnapshot(database, { signal, rowTransform, 
   }
   signal?.throwIfAborted();
   return { ...snapshot, insertionOrder };
+}
+
+export async function observeAuthenticatedExchangeRead(database, token, { signal } = {}) {
+  const readDevice = async () => {
+    const [device] = await database.rows('Devices', { where: { AccessToken: token }, columns: ['Id', 'DateLastActivity'],
+      limit: 1, consumer: 'exchange' });
+    assert.ok(device, 'The authenticated reader must have a fixture device.');
+    return device;
+  };
+  const { Id: deviceId, DateLastActivity: before } = await readDevice();
+  const started = Date.now();
+  return async expected => {
+    const { Id: observedId, DateLastActivity: after } = await readDevice();
+    assert.equal(observedId, deviceId);
+    if (after.equals(before)) {
+      const snapshot = await orderedExchangeSnapshot(database, { signal });
+      assert.deepEqual(snapshot, expected);
+      return { snapshot, activity: null };
+    }
+    // Authentication can refresh this device's activity during a cold read.
+    const refreshedAt = Date.parse(wireDate(after.string()));
+    assert.ok(refreshedAt >= started && refreshedAt <= Date.now());
+    assert.ok(refreshedAt - Date.parse(wireDate(before.string())) > 180000);
+    const unchanged = await orderedExchangeSnapshot(database, { signal, rowTransform: (table, row) => table === 'Devices' && row.Id === deviceId
+      ? { ...row, DateLastActivity: before } : row });
+    assert.deepEqual(unchanged, expected);
+    return { snapshot: await orderedExchangeSnapshot(database, { signal }), activity: { before: before.string(), after: after.string() } };
+  };
 }

@@ -21,7 +21,7 @@ import { declareFileTestResource } from '../helpers/file-test-resource.js';
 import { captureDiscPlayback } from '../helpers/disc-playback.js';
 import { databaseFilename, idKey, installStoppedExport, portAvailable, removeSyntheticPreparation,
   stoppedDatabase, unusedPort } from '../helpers/library-exchange-state.js';
-import { orderedExchangeSnapshot } from '../helpers/ordered-exchange-snapshot.js';
+import { observeAuthenticatedExchangeRead, orderedExchangeSnapshot } from '../helpers/ordered-exchange-snapshot.js';
 import { errorObservation } from '../helpers/error-observation.js';
 import { configureStorage, discRows, functionalJson, libraryOptions, materializeDvd,
   probeValues, technicalDto, verifyDvd } from './fixtures/real-dvd-current/scenario.js';
@@ -238,13 +238,16 @@ async function runDvdScanExchange(t, { fixture, original, movieName, prepareInpu
     await stopNode('node-before-cold');
     const schema = database.schemaName; await database.close(); database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema });
     report.snapshots.node = await orderedExchangeSnapshot(database, { signal: t.signal });
+    const verifyColdRead = await observeAuthenticatedExchangeRead(database, token, { signal: t.signal });
     await startNode(database, 'node-dvd-cold'); report.nodeCold = await detail('node-dvd-cold-detail');
     assert.deepEqual(report.nodeCold.technical, report.nodeChanged.technical); assert.equal(report.nodeCold.value.UserData.IsFavorite, true);
     await stopNode('node-cold-stopped');
-    assert.deepEqual(await orderedExchangeSnapshot(database, { signal: t.signal }), report.snapshots.node);
+    const cold = await verifyColdRead(report.snapshots.node);
+    report.snapshots.nodeCold = cold.snapshot;
+    report.deviceActivity = { nodeCold: cold.activity };
     const exported = path.join(root, 'node-export.db'); report.exported = await exportCurrentSqlite(database, exported, { signal: t.signal });
     assert.equal(report.exported.verified, true);
-    await withSqlite(exported, async source => assert.deepEqual(await orderedExchangeSnapshot(source, { signal: t.signal }), report.snapshots.node));
+    await withSqlite(exported, async source => assert.deepEqual(await orderedExchangeSnapshot(source, { signal: t.signal }), report.snapshots.nodeCold));
     await installStoppedExport({ root, instanceRoot, exported });
     await startNative('native-dvd-continuation'); report.nativeImported = await detail('native-imported-dvd');
     assert.deepEqual(report.nativeImported.technical, report.nodeCold.technical); assert.equal(report.nativeImported.value.UserData.IsFavorite, true);
@@ -260,12 +263,15 @@ async function runDvdScanExchange(t, { fixture, original, movieName, prepareInpu
         instanceBinding: report.binding, portableMountContract: storage.mountContract });
     });
     assert.deepEqual(await orderedExchangeSnapshot(returned, { signal: t.signal }), report.snapshots.continued);
+    const verifyReturnedRead = await observeAuthenticatedExchangeRead(returned, token, { signal: t.signal });
     await startNode(returned, 'node-dvd-returned-cold'); report.returnedCold = await detail('node-returned-dvd-detail');
     assert.deepEqual(report.returnedCold.technical, report.nativeContinued.technical); assert.equal(report.returnedCold.value.UserData.IsFavorite, true);
     assert.equal(report.returnedCold.value.Overview, 'Native continued original DVD & 保留');
     await stopNode('node-returned-stopped');
-    assert.deepEqual(await orderedExchangeSnapshot(returned, { signal: t.signal }), report.snapshots.continued);
-    assert.deepEqual(await orderedExchangeSnapshot(database, { signal: t.signal }), report.snapshots.node);
+    const returnedCold = await verifyReturnedRead(report.snapshots.continued);
+    report.snapshots.returnedCold = returnedCold.snapshot;
+    report.deviceActivity.returnedCold = returnedCold.activity;
+    assert.deepEqual(await orderedExchangeSnapshot(database, { signal: t.signal }), report.snapshots.nodeCold);
     report.mediaAfter = await verifyDvd(supply, disc); assert.deepEqual(report.mediaAfter, report.materialized);
     await supply.verifyInputs();
     report[original ? 'originalInputsUnchanged' : 'inputsUnchanged'] = true;

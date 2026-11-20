@@ -8,6 +8,10 @@ import { nativeGuid, wireGuid } from '../users/native.js';
 const readInfo = (store, itemId, width, signal) => store.run(async db =>
   (await db.rows('TrickplayInfos', { where: { ItemId: nativeGuid(itemId), Width: width }, limit: 1 }))[0], { signal });
 
+export function readTrickplayResolutions(store, itemId, { signal } = {}) {
+  return store.run(db => db.rows('TrickplayInfos', { where: { ItemId: nativeGuid(itemId) }, columns: ['Width', 'Height', 'Bandwidth'] }), { signal });
+}
+
 export function trickplayDirectory(item, dataPath, saveWithMedia) {
   if (saveWithMedia) {
     const folder = nativeContainingFolderPath(item), name = nativeFileName(item.Path);

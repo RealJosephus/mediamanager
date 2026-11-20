@@ -82,6 +82,7 @@ test('native progressive remux HTTP, packet hashes, shared output, multi-version
       assert.equal(processes.length, beforeHead); assert.equal(fixture.requests.length, beforeReads, 'HEAD must not open the input.');
       const streamUrl = new URL(url, origin);
       if (entry.mediaType === 'Audio') streamUrl.searchParams.set('AudioCodec', 'copy');
+      else streamUrl.searchParams.set('h264-rangetype', 'HDR10');
       const response = await fetch(streamUrl, { headers });
       assert.deepEqual(headersOf(response), expected.headers);
       const file = path.join(directory, expected.name + '.' + body.MediaSources[0].TranscodingContainer);
@@ -99,7 +100,7 @@ test('native progressive remux HTTP, packet hashes, shared output, multi-version
     }
     const reads = fixture.requests.length;
     assert.equal((await fetch(origin + `/Videos/${id}/stream.mp4`)).status, 401);
-    for (const parameters of ['VideoCodec=hevc', 'MaxWidth=64', 'SubtitleStreamIndex=0&SubtitleMethod=Encode', 'StartTimeTicks=-1', 'h264-level=1', 'h264-rangetype=HDR10']) {
+    for (const parameters of ['VideoCodec=hevc', 'MaxWidth=64', 'SubtitleStreamIndex=0&SubtitleMethod=Encode', 'StartTimeTicks=-1', 'h264-level=1']) {
       assert.equal((await fetch(origin + `/Videos/${id}/stream.mp4?${parameters}`, { headers })).status, 400, parameters);
     }
     assert.equal(fixture.requests.length, reads, 'Rejected requests must not reach VFS.');

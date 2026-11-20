@@ -12,6 +12,7 @@ import { StorageError, checkAbort } from '../storage/errors.js';
 import { masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlaylist } from './hls.js';
 import { probeKeyframes } from '../media-execution/keyframes.js';
 import { MatroskaKeyframeService } from './matroska-keyframes.js';
+import { readTrickplayResolutions } from './trickplay.js';
 import { guid, nonemptyId } from '../library/records.js';
 import { canDownloadItem } from '../library/download-permission.js';
 import { substitutePath } from '../library/path-substitution.js';
@@ -397,7 +398,7 @@ export class PlaybackService {
     });
   }
 
-  async hlsStream(itemId, kind, { user, ...options } = {}) {
+  async hlsStream(itemId, kind, { user, remoteEndPoint, ...options } = {}) {
     // StreamingHelpers resolves the source without a user visibility filter.
     // The HLS controller requires authentication; PlaybackInfo applies policy.
     const item = await this.library.getItemRecord(itemId);
@@ -411,6 +412,9 @@ export class PlaybackService {
     options.PermitVideoEncoding = user?.Policy.EnableVideoPlaybackTranscoding;
     options.CanDeliverHlsSubtitle = stream => this.canDeliverHlsSubtitle(source, stream);
     options.LiveInput = Boolean(liveId);
+    if (options.EnableAdaptiveBitrateStreaming && remoteEndPoint != null) {
+      options.RemoteClient = this.isLocalNetwork?.(remoteEndPoint) === false;
+    }
     if (liveId && source.FallbackMaxStreamingBitrate != null && options.VideoBitRate != null) {
       options.VideoBitRate = Math.min(options.VideoBitRate, source.FallbackMaxStreamingBitrate);
     }
@@ -444,6 +448,9 @@ export class PlaybackService {
                 this.accessPath({ Id: source.Id, Path: source.Path }), { signal: controller.signal });
             }
           }
+        }
+        if (kind === 'master' && request.method !== 'HEAD' && options.EnableTrickplay && !liveId) {
+          options.TrickplayResolutions = await readTrickplayResolutions(this.library.store, source.Id, { signal: controller.signal });
         }
         if (kind === 'segment') await this.hls.segment(source, this.accessPath({ Id: source.Id, Path: source.Path }), options, options.SegmentIndex, request, response, { signal: controller.signal });
         else await this.#hlsPlaylist(source, kind, options).send(request, response);
