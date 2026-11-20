@@ -339,9 +339,9 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
   if (subtitleGroup) attributes += `,SUBTITLES="${subtitleGroup}"`;
   const streamInfo = bandwidth => `#EXT-X-STREAM-INF:BANDWIDTH=${bandwidth},AVERAGE-BANDWIDTH=${bandwidth}${attributes}`;
   const lines = ['#EXTM3U'];
+  const token = options.AccessToken ?? parameters.find(([key]) => lower(key) === 'apikey')?.[1] ?? '';
+  const mediaSourceId = options.MediaSourceId ?? source.Id;
   if (subtitleGroup && options.SubtitleMethod !== 'Drop') {
-    const token = options.AccessToken ?? parameters.find(([key]) => lower(key) === 'apikey')?.[1] ?? '';
-    const mediaSourceId = options.MediaSourceId ?? source.Id;
     const selectedIndex = options.SubtitleMethod === 'Hls' ? selected?.Index : undefined;
     for (const stream of subtitles) lines.push(`#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="${stream.DisplayTitle ?? ''}",DEFAULT=${stream.Index === selectedIndex ? 'YES' : 'NO'},FORCED=${stream.IsForced ? 'YES' : 'NO'},AUTOSELECT=YES,URI="${mediaSourceId}/Subtitles/${stream.Index}/subtitles.m3u8?SegmentLength=30&ApiKey=${token}",LANGUAGE="${stream.Language ?? 'Unknown'}"`);
   }
@@ -358,6 +358,11 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
       entries.splice(position, 0, [key, String(options.VideoBitRate - reduction)]);
       lines.push(streamInfo(bitrate - reduction), variantUrl(entries));
     }
+  }
+  for (const resolution of options.TrickplayResolutions ?? []) {
+    const { Width, Height, Bandwidth } = resolution;
+    const uri = `Trickplay/${Width}/tiles.m3u8?MediaSourceId=${mediaSourceId}&ApiKey=${token}`;
+    lines.push(`#EXT-X-IMAGE-STREAM-INF:BANDWIDTH=${Bandwidth},RESOLUTION=${Width}x${Height},CODECS="jpeg",URI="${uri}"`);
   }
   lines.push('');
   return lines.join('\r\n');

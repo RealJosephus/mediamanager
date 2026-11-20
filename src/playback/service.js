@@ -12,6 +12,7 @@ import { StorageError, checkAbort } from '../storage/errors.js';
 import { masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlaylist } from './hls.js';
 import { probeKeyframes } from '../media-execution/keyframes.js';
 import { MatroskaKeyframeService } from './matroska-keyframes.js';
+import { readTrickplayResolutions } from './trickplay.js';
 import { guid, nonemptyId } from '../library/records.js';
 import { canDownloadItem } from '../library/download-permission.js';
 import { substitutePath } from '../library/path-substitution.js';
@@ -447,6 +448,9 @@ export class PlaybackService {
                 this.accessPath({ Id: source.Id, Path: source.Path }), { signal: controller.signal });
             }
           }
+        }
+        if (kind === 'master' && request.method !== 'HEAD' && options.EnableTrickplay && !liveId) {
+          options.TrickplayResolutions = await readTrickplayResolutions(this.library.store, source.Id, { signal: controller.signal });
         }
         if (kind === 'segment') await this.hls.segment(source, this.accessPath({ Id: source.Id, Path: source.Path }), options, options.SegmentIndex, request, response, { signal: controller.signal });
         else await this.#hlsPlaylist(source, kind, options).send(request, response);

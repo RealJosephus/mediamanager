@@ -77,7 +77,8 @@ test('chapter images and trickplay regenerate, move, and round-trip through Nati
     authorization = `MediaBrowser Client="Chapter image fixture", Device="Isolated", DeviceId="fixture-oracle", Version="1", Token="${current.accessToken}"`;
     evidence.reference = current.preparation;
     evidence.bindings = await current.sourceBindings(['Emby.Server.Implementations/Chapters/ChapterManager.cs',
-      'Emby.Server.Implementations/ScheduledTasks/Tasks/ChapterImagesTask.cs', 'MediaBrowser.MediaEncoding/Encoder/MediaEncoder.cs']);
+      'Emby.Server.Implementations/ScheduledTasks/Tasks/ChapterImagesTask.cs', 'MediaBrowser.MediaEncoding/Encoder/MediaEncoder.cs',
+      'Jellyfin.Api/Helpers/DynamicHlsHelper.cs', 'Jellyfin.Server.Implementations/Trickplay/TrickplayManager.cs']);
     await cp(current.sourceRoot, referenceRoot, { recursive: true }); await current.prepareClone(referenceRoot, port);
     removeSyntheticPreparation(referenceRoot, { allowAbsent: true });
     await mkdir(mediaRoot);
@@ -110,6 +111,36 @@ test('chapter images and trickplay regenerate, move, and round-trip through Nati
       const playlist = await request(trickplayRoute + 'tiles.m3u8');
       const tile = await request(trickplayRoute + '0.jpg');
       return { playlist: playlist.bytes.toString('utf8'), playlistType: playlist.type, type: tile.type, bytes: tile.bytes.length, sha256: sha256(tile.bytes) };
+    };
+    const readAdvertisedTrickplay = async (request, expected) => {
+      const info = await request(`/Items/${item.Id}/PlaybackInfo`, { method: 'POST', body: JSON.stringify({
+        EnableDirectPlay: false, EnableDirectStream: false, DeviceProfile: { MaxStreamingBitrate: 8000000,
+          TranscodingProfiles: [{ Type: 'Video', Context: 'Streaming', Protocol: 'hls', Container: 'ts', VideoCodec: 'h264', AudioCodec: 'ac3' }] },
+      }) });
+      const [source] = info.MediaSources;
+      assert.match(source.TranscodingUrl, /\/master\.m3u8\?/u);
+      const masterRoute = source.TranscodingUrl;
+      const disabled = await request(masterRoute + '&EnableTrickplay=false');
+      assert.doesNotMatch(disabled.bytes.toString(), /^#EXT-X-IMAGE-STREAM-INF:/mu);
+      const ordinary = await request(masterRoute);
+      const imageLine = /^#EXT-X-IMAGE-STREAM-INF:BANDWIDTH=(\d+),RESOLUTION=(\d+)x(\d+),CODECS="jpeg",URI="([^"]+)"/mu;
+      const line = imageLine.exec(ordinary.bytes.toString());
+      assert.ok(line, 'The master playlist must advertise the generated preview stream.');
+      const enabled = await request(masterRoute + '&EnableTrickplay=true');
+      assert.equal(imageLine.exec(enabled.bytes.toString())?.[0], line[0]);
+      const base = new URL(masterRoute, 'http://fixture.invalid');
+      const playlistUrl = new URL(line[4], base);
+      assert.equal(playlistUrl.origin, base.origin);
+      assert.equal(nativeGuid(playlistUrl.searchParams.get('MediaSourceId')), nativeGuid(item.Id));
+      const playlist = await request(playlistUrl.pathname + playlistUrl.search);
+      assert.equal(playlist.type, expected.playlistType);
+      assert.equal(playlist.bytes.toString('utf8'), expected.playlist);
+      const tileUrl = new URL(expected.playlist.split(/\r?\n/u).find(entry => entry && !entry.startsWith('#')), playlistUrl);
+      assert.equal(tileUrl.origin, base.origin);
+      const tile = await request(tileUrl.pathname + tileUrl.search);
+      assert.deepEqual({ type: tile.type, bytes: tile.bytes.length, sha256: sha256(tile.bytes) },
+        { type: expected.type, bytes: expected.bytes, sha256: expected.sha256 });
+      return { bandwidth: Number(line[1]), width: Number(line[2]), height: Number(line[3]) };
     };
     await closeNative();
     const configuration = await readInstanceConfiguration(referenceRoot), sqlitePath = path.join(configuration.dataPath, 'jellyfin.db');
@@ -179,6 +210,7 @@ test('chapter images and trickplay regenerate, move, and round-trip through Nati
     evidence.native.trickplayTask = await execute(request, trickplayImagesTaskId);
     evidence.native.trickplay = await readTrickplay(request);
     assert.match(evidence.native.trickplay.playlist, /LAYOUT=3x2/u);
+    evidence.native.imageStream = await readAdvertisedTrickplay(request, evidence.native.trickplay);
     await setTrickplayOptions(request, true);
     await moveTiles(request, evidence.native.trickplay, true);
     await refreshTiles(request, evidence.native.trickplay);
@@ -190,6 +222,8 @@ test('chapter images and trickplay regenerate, move, and round-trip through Nati
       [evidence.native.trickplayRow] = currentStore.rows('TrickplayInfos', { where: { ItemId: itemId } });
     }
     finally { currentStore.close(); }
+    assert.deepEqual(evidence.native.imageStream, { bandwidth: evidence.native.trickplayRow.Bandwidth,
+      width: evidence.native.trickplayRow.Width, height: evidence.native.trickplayRow.Height });
     const generated = evidence.native.chapter.ImagePath;
     assert.equal(path.dirname(generated).startsWith(configuration.metadataPath + path.sep), true);
     assert.match(path.basename(generated), /^\d+_5000000\.jpg$/u);
@@ -211,6 +245,8 @@ test('chapter images and trickplay regenerate, move, and round-trip through Nati
     [evidence.node.trickplayRow] = await database.rows('TrickplayInfos', { where: { ItemId: itemId } });
     assert.deepEqual(evidence.node.trickplayRow, evidence.native.trickplayRow);
     assert.deepEqual(evidence.node.trickplay, evidence.native.trickplay);
+    evidence.node.imageStream = await readAdvertisedTrickplay(nodeRequest, evidence.node.trickplay);
+    assert.deepEqual(evidence.node.imageStream, evidence.native.imageStream);
     await setTrickplayOptions(nodeRequest, true);
     await moveTiles(nodeRequest, evidence.node.trickplay, true);
     await refreshTiles(nodeRequest, evidence.node.trickplay);
@@ -239,6 +275,8 @@ test('chapter images and trickplay regenerate, move, and round-trip through Nati
     const coldRequest = requestAt('http://127.0.0.1:' + runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port);
     evidence.node.readAfterExchange = await readTrickplay(coldRequest);
     assert.deepEqual(evidence.node.readAfterExchange, evidence.native.readAfterExchange);
+    evidence.node.imageStreamAfterExchange = await readAdvertisedTrickplay(coldRequest, evidence.node.readAfterExchange);
+    assert.deepEqual(evidence.node.imageStreamAfterExchange, evidence.native.imageStream);
     assert.deepEqual(await returned.rows('TrickplayInfos', { where: { ItemId: itemId } }), [evidence.node.trickplayRow]);
     await current.finish();
   } catch (error) { failure = output.publicError(error); evidence.error = failure.message; }
