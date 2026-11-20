@@ -121,20 +121,69 @@ function hardwareScale(filter, format, video, request) {
   return args.length ? filter + '=' + args.join(':') : undefined;
 }
 
-function videoFilters(video, request, options, caps, selected, requestedRate, needsDeinterlace) {
+function hardwareTonemap(type, format, options, version, stillImage) {
+  const algorithm = options.TonemappingAlgorithm ?? 'bt2390';
+  const args = [`tonemap_${type}=format=${format}:p=bt709:t=bt709:m=bt709:tonemap=${algorithm}`,
+    `peak=${options.TonemappingPeak ?? 100}`, `desat=${options.TonemappingDesat ?? 0}`];
+  const mode = options.TonemappingMode;
+  if (['max', 'rgb'].includes(mode) && encoderVersionAtLeast(version, 5, 1, 3)
+    || ['lum', 'itp'].includes(mode) && encoderVersionAtLeast(version, 7, 0, 1)) args.push('tonemap_mode=' + mode);
+  if (options.TonemappingParam) args.push('param=' + options.TonemappingParam);
+  const range = stillImage ? 'pc' : options.TonemappingRange;
+  if (range === 'pc' || range === 'tv') args.push('range=' + range);
+  return args.join(':');
+}
+
+function videoFilters(video, request, options, caps, selected, requestedRate, needsDeinterlace, version) {
   const { encoder, decoder } = selected;
   const hardware = selected.inputArgs.includes('-hwaccel_output_format') ? decoder.surface : undefined;
   const filters = [];
   const method = options.DeinterlaceMethod === 'yadif' ? 'yadif' : 'bwdif';
   const doubleRate = Boolean(options.DeinterlaceDoubleRate && frameRate(video) <= 30);
   const deinterlace = doubleRate ? '1:-1:0' : '0:-1:0';
+  const [range, rangeType] = videoColorRange(video);
+  const hdr = range === 'HDR' && videoBitDepth(video) >= 10;
+  const transfer = lower(video.ColorTransfer) === 'arib-std-b67' ? 'arib-std-b67' : 'smpte2084';
+  const hdrColors = `setparams=color_primaries=bt2020:color_trc=${transfer}:colorspace=bt2020nc`;
+  const sdrColors = 'setparams=color_primaries=bt709:color_trc=bt709:colorspace=bt709';
+  const cuda = hardware === 'cuda' || encoder.endsWith('_nvenc') && selected.inputArgs.includes('cuda=cu:0') && caps.filters?.includes('alphasrc');
+  const amd = options.HardwareAccelerationType === 'amf' && selected.inputArgs.includes('opencl=ocl@dx11') && caps.filters?.includes('alphasrc');
+  const convertHdr = options.EnableTonemapping && hdr;
+  const stillImage = encoder.includes('mjpeg');
   if (requestedRate && !needsDeinterlace) filters.push('fps=' + requestedRate);
 
-  if (hardware === 'cuda') {
-    filters.push('setparams=color_primaries=bt709:color_trc=bt709:colorspace=bt709');
-    if (needsDeinterlace) filters.push((method === 'bwdif' && caps.filters?.includes('bwdif_cuda') ? 'bwdif_cuda=' : 'yadif_cuda=') + deinterlace);
-    filters.push(hardwareScale('scale_cuda', 'yuv420p', video, request));
-    if (!encoder.endsWith('_nvenc')) filters.push('hwdownload', 'format=yuv420p');
+  if (cuda) {
+    const tonemap = convertHdr && !decoder.args.includes('hevc_cuvid');
+    filters.push(tonemap ? hdrColors : sdrColors);
+    if (hardware === 'cuda') {
+      if (needsDeinterlace) filters.push((method === 'bwdif' && caps.filters?.includes('bwdif_cuda') ? 'bwdif_cuda=' : 'yadif_cuda=') + deinterlace);
+      const format = tonemap ? /^yuv(?:422|444)p/u.test(lower(video.PixelFormat)) ? 'p010' : undefined : 'yuv420p';
+      filters.push(hardwareScale('scale_cuda', format, video, request));
+    } else {
+      if (needsDeinterlace) filters.push(method + '=' + deinterlace);
+      filters.push(softwareScale(request, 2), tonemap ? 'format=p010le' : 'format=yuv420p');
+      if (tonemap) filters.push('hwupload=derive_device=cuda');
+    }
+    if (tonemap) filters.push(hardwareTonemap('cuda', 'yuv420p', options, version, stillImage));
+    if (hardware === 'cuda' && !encoder.endsWith('_nvenc')) filters.push('hwdownload', 'format=yuv420p');
+  } else if (amd && (hardware === 'd3d11' || convertHdr)) {
+    filters.push(convertHdr ? hdrColors : sdrColors);
+    if (hardware === 'd3d11') {
+      filters.push('hwmap=derive_device=opencl:mode=read');
+      if (needsDeinterlace && caps.filters?.includes('yadif_opencl') && caps.filters?.includes('bwdif_opencl')) filters.push(method + '_opencl=' + deinterlace);
+      const rotation = { 90: 'cclock', '-90': 'clock', 180: 'reversal', '-180': 'reversal' }[video.Rotation];
+      const useRotation = rotation && caps.filterOptions?.TransposeOpenclReversal;
+      if (useRotation) filters.push('transpose_opencl=dir=' + rotation);
+      const size = useRotation && Math.abs(video.Rotation) === 90 ? { ...video, Width: video.Height, Height: video.Width } : video;
+      filters.push(hardwareScale('scale_opencl', convertHdr ? undefined : 'nv12', size, request));
+    } else {
+      if (needsDeinterlace) filters.push(method + '=' + deinterlace);
+      filters.push(softwareScale(request, 2), 'format=yuv420p10le', 'hwupload=derive_device=d3d11va:extra_hw_frames=24',
+        'format=d3d11', 'hwmap=derive_device=opencl:mode=read');
+    }
+    if (convertHdr) filters.push(hardwareTonemap('opencl', 'nv12', options, version, stillImage));
+    if (hardware === 'd3d11' && !encoder.endsWith('_amf')) filters.push('hwmap=mode=read', 'format=nv12');
+    else filters.push('hwmap=derive_device=d3d11va:mode=write:reverse=1', 'format=d3d11');
   } else if (hardware === 'videotoolbox_vld' && caps.filters?.includes('alphasrc')) {
     if (needsDeinterlace) filters.push('yadif_videotoolbox=' + deinterlace);
     filters.push(hardwareScale('scale_vt', video.PixelFormat === 'yuv420p' ? undefined : 'nv12', video, request));
@@ -149,11 +198,8 @@ function videoFilters(video, request, options, caps, selected, requestedRate, ne
     if (!encoder.endsWith('_vaapi')) filters.push('hwdownload', 'format=nv12');
   } else {
     if (hardware) filters.push('hwdownload', 'format=nv12');
-    const [range, rangeType] = videoColorRange(video);
-    const tonemap = range === 'HDR' && videoBitDepth(video) >= 10 && caps.filters?.includes('tonemapx');
-    const transfer = lower(video.ColorTransfer) === 'arib-std-b67' ? 'arib-std-b67' : 'smpte2084';
-    filters.push(tonemap ? 'setparams=color_primaries=bt2020:color_trc=' + transfer + ':colorspace=bt2020nc'
-      : 'setparams=color_primaries=bt709:color_trc=bt709:colorspace=bt709');
+    const tonemap = hdr && caps.filters?.includes('tonemapx');
+    filters.push(tonemap ? hdrColors : sdrColors);
     if (needsDeinterlace) filters.push(method + '=' + deinterlace);
     const alignment = encoder === 'h264_v4l2m2m' ? 64 : 2;
     const format = encoder.endsWith('_vaapi') || decoder.args.length ? 'nv12' : 'yuv420p';
@@ -198,7 +244,7 @@ export function videoStreamPlan(video, source, request, allowed, { configuration
   if (codec === 'av1' && profile && profile !== 'main') profile = 'main';
   const level = Number(request.Level ?? option(request, codec, 'level'));
   const deinterlace = Boolean(video.IsInterlaced && (request.DeInterlace || lower(option(request, codec, 'deinterlace')) === 'true'));
-  const filters = videoFilters(video, resized, configuration, capabilities, selected, requestedRate, deinterlace);
+  const filters = videoFilters(video, resized, configuration, capabilities, selected, requestedRate, deinterlace, version);
   const crf = codec === 'hevc' ? configuration.H265Crf : configuration.H264Crf;
   return { codec, encoder, ...dimensions(video, resized), frameRate: requestedRate ?? rate, requestedRate, bitrate, profile,
     level: Number.isFinite(level) && level >= 0 ? level : undefined, filters, hardware: selected,
@@ -218,6 +264,7 @@ export function videoArguments(plan, { hls = false, event = false, segmentLength
   else if (plan.encoder.endsWith('_nvenc')) args.push('-preset', 'p' + (presetIndex < 0 ? 1 : Math.max(1, 7 - presetIndex)));
   else if (plan.encoder.endsWith('_qsv')) args.push('-preset', presetIndex >= 0 && presetIndex < 7 ? preset : 'veryfast');
   else if (plan.encoder.endsWith('_vaapi') && plan.vaapiDriver === 'iHD' && presetIndex >= 0) args.push('-compression_level', String(Math.min(7, 1 + presetIndex)));
+  else if (plan.encoder.endsWith('_videotoolbox')) args.push('-prio_speed', presetIndex >= 0 && presetIndex <= 3 ? '0' : '1');
   else if (plan.encoder.endsWith('_amf')) {
     args.push('-quality', presetIndex < 0 || presetIndex > 3 ? 'speed' : presetIndex === 3 ? 'balanced' : 'quality');
     if (plan.codec === 'hevc' || plan.codec === 'av1') args.push('-header_insertion_mode', 'gop');

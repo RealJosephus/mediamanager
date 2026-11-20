@@ -53,7 +53,7 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
     && (burnsByDelivery || options.AlwaysBurnInSubtitleWhenTranscoding) ? selectedSubtitle : undefined;
   if (burnSubtitle && (!videoOutput || !capabilities?.filters?.includes('subtitles') || !subtitleBurn?.supports(source, burnSubtitle)
     || videoOutput.encoder.endsWith('_vaapi')
-    || videoOutput.hardware.decoder.surface && !videoOutput.filters.includes('hwdownload'))) {
+    || videoOutput.hardware.decoder.surface && !videoOutput.filters.some(filter => filter === 'hwdownload' || filter === 'hwmap=mode=read'))) {
     throw failure('not-supported', 'The selected subtitle requires an unavailable video filter.');
   }
   const subtitle = !burnSubtitle && options.SubtitleMethod === 'Embed' ? selectedSubtitle : undefined;

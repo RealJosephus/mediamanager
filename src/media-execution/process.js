@@ -69,5 +69,6 @@ export async function captureMediaProcess(executable, args, { signal, environmen
     throw error;
   }
   // All started processes have emitted close before their result is exposed.
-  return { stdout: Buffer.concat(stdout), stderr: Buffer.concat(stderr), exitCode: child.exitCode, pid: child.pid };
+  return { stdout: Buffer.concat(stdout), stderr: Buffer.concat(stderr), exitCode: child.exitCode,
+    signal: child.signalCode, pid: child.pid };
 }

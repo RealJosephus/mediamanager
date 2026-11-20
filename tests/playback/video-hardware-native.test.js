@@ -6,6 +6,7 @@ import { machine, release } from 'node:os';
 import path from 'node:path';
 import { defaultConfiguration } from '../../src/core/configuration-xml.js';
 import { discoverMediaCapabilities } from '../../src/media-execution/capabilities.js';
+import { captureMediaProcess } from '../../src/media-execution/process.js';
 import { videoHardware } from '../../src/media-execution/video-hardware.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
@@ -33,9 +34,38 @@ const scope = (name, type, { options, video, caps, output = 'h264', videoType = 
   Capabilities: { ...capabilities, ...caps },
 });
 
-test('the real FFmpeg listing yields the scale, format, and libass filters', async t => {
-  const tools = await discoverMediaCapabilities(validationExecutable('ffmpeg'), { signal: t.signal, onError: error => { throw error; } });
+test('the real FFmpeg listing and host encode probes distinguish tool support from usable hardware', { timeout: 90000 }, async t => {
+  const executable = validationExecutable('ffmpeg');
+  const tools = await discoverMediaCapabilities(executable, { signal: t.signal, onError: error => { throw error; } });
   for (const filter of ['scale', 'format', 'subtitles']) assert.ok(tools.filters.includes(filter), filter);
+  const platform = process.platform;
+  const windows = platform === 'win32', linux = platform === 'linux';
+  const init = value => ['-init_hw_device', value];
+  const adapters = [
+    ...(windows || linux ? [
+      { name: 'nvenc', input: init('cuda=cu:0'), output: [] },
+      { name: 'qsv', input: [...init(windows ? 'd3d11va=dx11:,vendor=0x8086' : 'vaapi=va:,vendor_id=0x8086,driver=iHD'),
+        ...init('qsv=qs@' + (windows ? 'dx11' : 'va')), '-filter_hw_device', 'qs'], output: ['-vf', 'format=nv12,hwupload=extra_hw_frames=16'] },
+    ] : []),
+    ...(windows ? [{ name: 'amf', input: init('d3d11va=dx11:,vendor=0x1002'), output: [] }] : []),
+    ...(linux ? [{ name: 'vaapi', input: [...init('vaapi=va'), '-filter_hw_device', 'va'], output: ['-vf', 'format=nv12,hwupload'] },
+      { name: 'rkmpp', input: init('rkmpp=rk'), output: ['-pix_fmt', 'nv12'] }, { name: 'v4l2m2m', input: [], output: [] }] : []),
+    ...(platform === 'darwin' ? [{ name: 'videotoolbox', input: init('videotoolbox=vt'), output: ['-allow_sw', '0'] }] : []),
+  ];
+  const probes = [];
+  for (const { name, input, output } of adapters) {
+    const encoder = `h264_${name}`;
+    if (!tools.encoders.includes(encoder)) { probes.push({ name, encoder, installed: false }); continue; }
+    const { stdout, exitCode, signal: terminationSignal } = await captureMediaProcess(executable, ['-nostdin', '-hide_banner', '-loglevel', 'error',
+      ...input, '-f', 'lavfi', '-i', 'testsrc2=size=128x72:rate=24', ...output, '-frames:v', '2', '-c:v', encoder,
+      '-f', 'h264', 'pipe:1'], { signal: t.signal, timeoutMs: 15000, maxOutputBytes: 4 * 1024 * 1024 });
+    assert.ok(Number.isInteger(exitCode) || terminationSignal, name);
+    if (exitCode === 0) assert.ok(stdout.length > 4 && stdout.readUInt32BE() === 1, name + ' produced H.264');
+    probes.push({ name, encoder, installed: true, exitCode, terminationSignal, bytes: stdout.length });
+  }
+  const root = path.join(validationOutputRoot(), 'video-hardware-host-' + randomUUID());
+  await mkdir(root, { recursive: true });
+  await writeFile(path.join(root, 'host-encode-probes.json'), JSON.stringify({ platform, architecture: machine(), release: release(), probes }, null, 2));
 });
 
 test('the designated EncodingHelper selects hardware encode, decode and input devices independently', { skip: !enabled, timeout: 180000 }, async () => {
