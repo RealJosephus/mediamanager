@@ -1,6 +1,7 @@
 import { videoColorRange } from '../library/media-streams.js';
 import { encoderVersionAtLeast } from '../playback/media-encoder.js';
-import { fixedHardwareSize, qsvOpenclTonemap, qsvPreferredPipeline, videoBitDepth, videoHardware } from './video-hardware.js';
+import { fixedHardwareSize, hardwareTonemapAvailable, qsvPreferredPipeline, rkmppPreferredPipeline, supportsScaling, vaapiPreferredPipeline,
+  videoBitDepth, videoHardware, videotoolboxPreferredPipeline } from './video-hardware.js';
 
 const codecProfiles = {
   h264: ['constrainedbaseline', 'baseline', 'extended', 'main', 'high', 'progressivehigh', 'constrainedhigh', 'high10'],
@@ -139,6 +140,9 @@ function hardwareTonemap(type, format, options, version, stillImage) {
 }
 
 const transposeDirection = { 90: 'cclock', '-90': 'clock', 180: 'reversal', '-180': 'reversal' };
+const hevcRext = video => normalizeCodec(video.Codec) === 'hevc' && (lower(video.Profile) === 'rext'
+  || /^(?:yuv420p12le|yuv(?:422|444)p(?:10le|12le)?)$/u.test(lower(video.PixelFormat)));
+const hdr10Compatible = range => ['HDR10', 'HDR10Plus', 'DOVIWithHDR10', 'DOVIWithHDR10Plus', 'DOVIWithEL', 'DOVIWithELHDR10Plus'].includes(range);
 
 function qsvVideoFilters(video, request, options, selected, { hardware, hdrColors, sdrColors, method, deinterlace, doubleRate, needsDeinterlace, version }) {
   const { decoder, encoder } = selected;
@@ -149,7 +153,7 @@ function qsvVideoFilters(video, request, options, selected, { hardware, hdrColor
   const [range, rangeType] = videoColorRange(video);
   const vppTonemap = options.EnableVppTonemapping && range === 'HDR' && videoBitDepth(video) >= 10
     && lower(video.ColorTransfer) === 'smpte2084' && rangeType !== 'DOVI' && (linux || encoderVersionAtLeast(version, 7, 0, 1));
-  const openclTonemap = !vppTonemap && qsvOpenclTonemap(video, options, decoder);
+  const openclTonemap = !vppTonemap && hardwareTonemapAvailable(video, options, decoder, version);
   const tonemap = vppTonemap || openclTonemap;
   const transpose = transposeDirection[video.Rotation];
   const swap = Math.abs(video.Rotation) === 90;
@@ -162,8 +166,7 @@ function qsvVideoFilters(video, request, options, selected, { hardware, hdrColor
       'format=' + (openclTonemap ? 'yuv420p10le' : 'nv12'));
     if (openclTonemap) filters.push('hwupload=derive_device=opencl');
   } else {
-    const rext = normalizeCodec(video.Codec) === 'hevc' && (lower(video.Profile) === 'rext'
-      || /^(?:yuv420p12le|yuv(?:422|444)p(?:10le|12le)?)$/u.test(lower(video.PixelFormat)));
+    const rext = hevcRext(video);
     const brightness = options.VppTonemappingBrightness;
     const contrast = options.VppTonemappingContrast;
     const procamp = [];
@@ -207,6 +210,159 @@ function qsvVideoFilters(video, request, options, selected, { hardware, hdrColor
   } else if (hardware && openclTonemap) {
     filters.push('hwmap=derive_device=qsv:mode=write:reverse=1' + (linux ? ':extra_hw_frames=16' : ''), 'format=qsv');
   } else if (vaapi && hardwareEncoder) filters.push('hwmap=derive_device=qsv', 'format=qsv');
+  return filters;
+}
+
+function vulkanVaapiVideoFilters(video, request, options, selected, { hardware, hdrColors, sdrColors, method, deinterlace, doubleRate,
+  needsDeinterlace, version, caps }) {
+  const encoding = selected.encoder.endsWith('_vaapi'), mjpeg = selected.encoder.includes('mjpeg');
+  const tonemap = options.EnableTonemapping && videoColorRange(video)[0] === 'HDR' && videoBitDepth(video) === 10;
+  const rotation = hardware && transposeDirection[video.Rotation];
+  const swap = Math.abs(video.Rotation) === 90 && (!hardware || rotation);
+  const size = swap ? { ...video, Width: video.Height, Height: video.Width } : video;
+  const filters = [tonemap ? hdrColors : sdrColors];
+  const deint = 'deinterlace_vaapi=rate=' + (doubleRate ? 'field' : 'frame');
+  if (!hardware) {
+    if (needsDeinterlace) filters.push(method + '=' + deinterlace);
+    if (tonemap) filters.push('hwupload=derive_device=vulkan', 'format=vulkan');
+    else filters.push(softwareScale(request, 2), 'format=nv12');
+  } else if (tonemap || rotation) {
+    const modernInterop = encoderVersionAtLeast(version, 7, 0, 1);
+    if (modernInterop) filters.push('hwmap=derive_device=drm', 'format=drm_prime');
+    if (!modernInterop || rotation || !caps.vaapiVulkanModifier) {
+      filters.push('hwmap=derive_device=vulkan', 'format=vulkan');
+      if (modernInterop && !caps.vaapiVulkanModifier) filters.push('scale_vulkan');
+    }
+  } else {
+    if (needsDeinterlace) filters.push(deint);
+    const scale = hardwareScale('scale_vaapi', 'nv12', video, request);
+    filters.push(mjpeg ? scale + ':out_range=pc:mode=hq' : scale);
+  }
+  if (rotation) filters.push(rotation === 'reversal' ? 'flip_vulkan' : 'transpose_vulkan=dir=' + rotation);
+  if (tonemap) {
+    const scale = hardwareScale('libplacebo', undefined, size, request)?.slice('libplacebo='.length);
+    const name = options.TonemappingAlgorithm;
+    const algorithm = name === 'bt2390' || !name ? 'bt.2390' : name === 'none' ? 'clip' : name;
+    filters.push(['libplacebo=upscaler=none:downscaler=none', scale, 'format=bgra', 'tonemapping=' + algorithm, 'peak_detect=0',
+      'color_primaries=bt709', 'color_trc=bt709', 'colorspace=bt709', 'range=pc'].filter(Boolean).join(':'), 'format=vulkan');
+    filters.push('hwmap=derive_device=vaapi', 'format=vaapi',
+      'scale_vaapi=format=nv12' + (mjpeg || options.TonemappingRange === 'pc' ? '' : ':out_range=tv'));
+    if (needsDeinterlace) filters.push(deint);
+  } else if (rotation) {
+    filters.push('hwmap=derive_device=vaapi', 'format=vaapi', hardwareScale('scale_vaapi', 'nv12', size, request));
+    if (needsDeinterlace) filters.push(deint);
+  }
+  if (!encoding && (tonemap || hardware)) filters.push('hwdownload', 'format=nv12');
+  if (!hardware && encoding && !tonemap) filters.push('hwupload_vaapi');
+  return filters;
+}
+
+function vaapiVideoFilters(video, request, options, selected, context) {
+  if (selected.inputArgs.includes('vulkan=vk@dr')) return vulkanVaapiVideoFilters(video, request, options, selected, context);
+  const { hardware, hdrColors, sdrColors, method, deinterlace, doubleRate, needsDeinterlace, version, caps } = context;
+  const encoding = selected.encoder.endsWith('_vaapi'), mjpeg = selected.encoder.includes('mjpeg');
+  const iHD = caps.vaapiDriver === 'iHD', i965 = caps.vaapiDriver === 'i965';
+  const [range, rangeType] = videoColorRange(video);
+  const vpp = hardware && iHD && options.EnableVppTonemapping && range === 'HDR' && videoBitDepth(video) >= 10 && hdr10Compatible(rangeType);
+  const opencl = !vpp && hardwareTonemapAvailable(video, options, selected.decoder, version);
+  const filters = [vpp || opencl ? hdrColors : sdrColors];
+  if (hardware) {
+    const rotation = iHD && transposeDirection[video.Rotation];
+    const size = rotation && Math.abs(video.Rotation) === 90 ? { ...video, Width: video.Height, Height: video.Width } : video;
+    if (needsDeinterlace) filters.push('deinterlace_vaapi=rate=' + (doubleRate ? 'field' : 'frame'));
+    if (rotation) filters.push('transpose_vaapi=dir=' + rotation);
+    const format = vpp || opencl ? (iHD && hevcRext(video) ? 'p010' : undefined) : 'nv12';
+    let scale = hardwareScale('scale_vaapi', format, size, request);
+    if (scale) {
+      if (mjpeg) scale += (opencl ? '' : ':out_range=pc') + ':mode=hq';
+      filters.push(scale + ':extra_hw_frames=24');
+    }
+    if (vpp) {
+      const { VppTonemappingBrightness: brightness, VppTonemappingContrast: contrast } = options;
+      const procamp = [brightness && brightness >= -100 && brightness <= 100 && 'b=' + brightness,
+        contrast > 1 && contrast <= 10 && 'c=' + contrast].filter(Boolean);
+      const filter = 'tonemap_vaapi=format=nv12:p=bt709:t=bt709:m=bt709:extra_hw_frames=32';
+      filters.push(procamp.length ? 'procamp_vaapi=' + procamp.join(':') + ',' + filter : filter);
+    }
+    if (opencl) {
+      if (iHD || i965) filters.push('hwmap=derive_device=opencl' + (iHD ? ':mode=read' : ''));
+      else filters.push('hwdownload', 'format=p010le', 'hwupload=derive_device=opencl');
+    }
+  } else {
+    if (needsDeinterlace) filters.push(method + '=' + deinterlace);
+    const scale = softwareScale(request, 2);
+    filters.push(mjpeg && !opencl ? (scale ? scale + ':' : 'scale=') + 'out_range=pc' : scale,
+      'format=' + (opencl ? 'yuv420p10le' : 'nv12'));
+    if (opencl) filters.push('hwupload=derive_device=opencl');
+  }
+  if (opencl) filters.push(hardwareTonemap('opencl', 'nv12', options, version, mjpeg));
+  const upload = opencl && (!hardware || !iHD && !i965);
+  if (hardware && encoding && opencl && !upload) {
+    filters.push('hwmap=derive_device=vaapi:' + (iHD ? 'mode=write:' : '') + 'reverse=1', 'format=vaapi');
+  }
+  if (hardware && !encoding || upload) {
+    filters.push(upload && (!iHD || encoding) ? 'hwdownload' : iHD ? 'hwmap=mode=read' : 'hwmap', 'format=nv12');
+  }
+  if (encoding && (!hardware || upload)) filters.push('hwupload_vaapi');
+  return filters;
+}
+
+function rkmppVideoFilters(video, request, options, selected, { hardware, hdrColors, sdrColors, method, deinterlace, needsDeinterlace, version }) {
+  const { decoder, encoder } = selected;
+  const hardwareEncoder = encoder.endsWith('_rkmpp');
+  const mjpeg = encoder.includes('mjpeg');
+  const tonemap = hardwareTonemapAvailable(video, options, decoder, version);
+  const filters = [tonemap ? hdrColors : sdrColors];
+  if (hardware) {
+    const format = tonemap ? 'p010' : 'nv12';
+    const transpose = transposeDirection[video.Rotation], swap = Math.abs(video.Rotation) === 90;
+    const size = swap ? { ...video, Width: video.Height, Height: video.Width } : video;
+    const scaling = hardwareScale('vpp_rkrga', undefined, size, request, swap);
+    const onePass = supportsScaling(video, request, 8);
+    if (scaling && !onePass) {
+      const intermediate = tonemap ? 'nv15' : mjpeg ? 'bgra' : format;
+      filters.push(`scale_rkrga=w=iw/7.9:h=ih/7.9:format=${intermediate}:force_original_aspect_ratio=increase:force_divisible_by=4:afbc=1`);
+    } else if (mjpeg && !tonemap) filters.push('vpp_rkrga=format=bgra:afbc=1');
+    let scale = hardwareScale('vpp_rkrga', format, size, request, swap);
+    if (transpose) scale += ':transpose=' + transpose;
+    if (!tonemap && /^(h264|hevc)_rkmpp$/u.test(encoder)) scale += ':afbc=1';
+    filters.push(scale);
+    if (tonemap) filters.push('hwmap=derive_device=opencl');
+  } else {
+    if (needsDeinterlace) filters.push(method + '=' + deinterlace);
+    let scale = softwareScale(request, 2);
+    if (mjpeg && !tonemap) scale = scale ? scale + ':out_range=pc' : 'scale=out_range=pc';
+    if (scale) filters.push(scale + ':flags=fast_bilinear');
+    filters.push(tonemap ? 'format=yuv420p10le' : 'format=nv12');
+    if (tonemap) filters.push('hwupload=derive_device=opencl');
+  }
+  if (tonemap) filters.push(hardwareTonemap('opencl', 'nv12', options, version, mjpeg));
+  if (hardware && !hardwareEncoder || !hardware && tonemap) filters.push('hwdownload', 'format=nv12');
+  else if (hardware && tonemap) filters.push('hwmap=derive_device=rkmpp:reverse=1', 'format=drm_prime');
+  return filters;
+}
+
+function videotoolboxVideoFilters(video, request, options, caps, { encoder, decoder }, hardware, needsDeinterlace, method, deinterlace, version) {
+  const [range, type] = videoColorRange(video);
+  const vtTonemap = options.EnableVideoToolboxTonemapping && range === 'HDR' && videoBitDepth(video) >= 10
+    && (hdr10Compatible(type) || ['HLG', 'DOVIInvalid'].includes(type));
+  const metalTonemap = !vtTonemap && hardwareTonemapAvailable(video, options, decoder, version);
+  const rotation = caps.filters.includes('transpose_vt') && transposeDirection[video.Rotation];
+  const size = rotation && Math.abs(video.Rotation) === 90 ? { ...video, Width: video.Height, Height: video.Width } : video;
+  const pixelFormat = lower(video.PixelFormat);
+  const format = pixelFormat === 'yuv420p' ? undefined : metalTonemap ? pixelFormat === 'yuv420p10le' ? undefined : 'p010le' : 'nv12';
+  let scale = hardwareScale('scale_vt', format, size, request);
+  if (vtTonemap) scale = (scale ? scale + ':' : 'scale_vt=') + 'color_matrix=bt709:color_primaries=bt709:color_transfer=bt709';
+  const filters = [];
+  if (needsDeinterlace) {
+    const filter = method === 'bwdif' && caps.filters.includes('bwdif_videotoolbox') ? 'bwdif' : 'yadif';
+    filters.push(filter + '_videotoolbox=' + deinterlace);
+  }
+  if (rotation) filters.push('transpose_vt=dir=' + rotation);
+  if (scale) filters.push(scale);
+  if (metalTonemap) filters.push(hardwareTonemap('videotoolbox', 'nv12', options, version, encoder.includes('mjpeg')));
+  if (!hardware && filters.length) filters.unshift('format=nv12|p010le|videotoolbox_vld', 'hwupload');
+  if ((hardware || filters.length) && !encoder.endsWith('_videotoolbox')) filters.push('hwdownload', 'format=nv12');
   return filters;
 }
 
@@ -263,18 +419,16 @@ function videoFilters(video, request, options, caps, selected, requestedRate, ne
   } else if (options.HardwareAccelerationType === 'qsv' && (hardware || encoder.endsWith('_qsv')) && qsvPreferredPipeline(video, caps)) {
     filters.push(...qsvVideoFilters(video, request, options, selected, { hardware, hdrColors, sdrColors, method,
       deinterlace, doubleRate, needsDeinterlace, version }));
-  } else if (hardware === 'videotoolbox_vld' && caps.filters?.includes('alphasrc')) {
-    if (needsDeinterlace) filters.push('yadif_videotoolbox=' + deinterlace);
-    filters.push(hardwareScale('scale_vt', video.PixelFormat === 'yuv420p' ? undefined : 'nv12', video, request));
-    if (!encoder.endsWith('_videotoolbox')) filters.push('hwdownload', 'format=nv12');
+  } else if (options.HardwareAccelerationType === 'rkmpp' && process.platform === 'linux' && (hardware || encoder.endsWith('_rkmpp'))
+    && rkmppPreferredPipeline(caps)) {
+    filters.push(...rkmppVideoFilters(video, request, options, selected, { hardware, hdrColors, sdrColors, method, deinterlace, needsDeinterlace, version }));
+  } else if (options.HardwareAccelerationType === 'videotoolbox' && process.platform === 'darwin'
+    && (hardware === 'videotoolbox_vld' || encoder.endsWith('_videotoolbox')) && videotoolboxPreferredPipeline(caps, version)) {
+    filters.push(...videotoolboxVideoFilters(video, request, options, caps, selected, hardware, needsDeinterlace, method, deinterlace, version));
   } else if (options.HardwareAccelerationType === 'vaapi' && (hardware === 'vaapi' || encoder.endsWith('_vaapi'))
-    && caps.filters?.includes('scale_vaapi')) {
-    if (!hardware) {
-      if (needsDeinterlace) filters.push(method + '=' + deinterlace);
-      filters.push('format=nv12', 'hwupload');
-    } else if (needsDeinterlace) filters.push('deinterlace_vaapi=rate=' + (doubleRate ? 'field' : 'frame'));
-    filters.push(hardwareScale('scale_vaapi', 'nv12', video, request));
-    if (!encoder.endsWith('_vaapi')) filters.push('hwdownload', 'format=nv12');
+    && vaapiPreferredPipeline(video, caps)) {
+    filters.push(...vaapiVideoFilters(video, request, options, selected, { hardware, hdrColors, sdrColors, method,
+      deinterlace, doubleRate, needsDeinterlace, version, caps }));
   } else {
     if (hardware) filters.push('hwdownload', 'format=nv12');
     const tonemap = hdr && caps.filters?.includes('tonemapx');
@@ -291,7 +445,7 @@ function videoFilters(video, request, options, caps, selected, requestedRate, ne
       if (options.TonemappingRange === 'tv' || options.TonemappingRange === 'pc') args.push('range=' + options.TonemappingRange);
       filters.push('tonemapx=' + args.join(':'));
     } else filters.push('format=' + format);
-    if (encoder.endsWith('_vaapi')) filters.push('hwupload');
+    if (encoder.endsWith('_vaapi')) filters.push('hwupload=derive_device=vaapi');
   }
   if (requestedRate && needsDeinterlace) filters.push('fps=' + requestedRate);
   return filters.filter(Boolean);
@@ -327,6 +481,7 @@ export function videoStreamPlan(video, source, request, allowed, { configuration
   const crf = codec === 'hevc' ? configuration.H265Crf : configuration.H264Crf;
   return { codec, encoder, ...dimensions(video, resized), frameRate: requestedRate ?? rate, requestedRate, bitrate, profile,
     level: Number.isFinite(level) && level >= 0 ? level : undefined, filters, hardware: selected,
+    hardwareSize: selected.decoder.surface ? fixedHardwareSize(video, resized) : undefined,
     preset: configuration.EncoderPreset, crf, crfDefault: codec === 'hevc' ? 28 : 23, realFrameRate: video.RealFrameRate,
     vaapiDriver: capabilities.vaapiDriver };
 }

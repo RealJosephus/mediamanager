@@ -26,19 +26,25 @@ export function qsvPreferredPipeline(video, caps, platform = process.platform) {
   return nativeDecoder && supports(caps, 'hwaccels', 'qsv') && openclAvailable(caps) && allFilters(caps, 'alphasrc');
 }
 
-export function qsvOpenclTonemap(video, options, decoder) {
+export function hardwareTonemapAvailable(video, options, decoder, version) {
   const [range, type] = videoColorRange(video);
   return Boolean(options.EnableTonemapping && range === 'HDR' && videoBitDepth(video) >= 10
-    && (type !== 'DOVI' || !decoder.args.length || ['d3d11va', 'vaapi'].includes(decoder.accelerator)));
+    && (type !== 'DOVI' || !decoder.args.length || ['cuda', 'd3d11va', 'vaapi', 'videotoolbox'].includes(decoder.accelerator)
+      || decoder.accelerator === 'rkmpp' && canonicalCodec(video.Codec) === 'hevc' && encoderVersionAtLeast(version, 7, 1, 1)));
 }
+
+const rkmppAvailable = caps => supports(caps, 'hwaccels', 'rkmpp') && allFilters(caps, 'scale_rkrga', 'vpp_rkrga', 'overlay_rkrga');
+export const rkmppPreferredPipeline = caps => rkmppAvailable(caps) && openclAvailable(caps) && allFilters(caps, 'alphasrc');
 
 function cudaAvailable(caps) {
   return supports(caps, 'hwaccels', 'cuda') && allFilters(caps, 'yadif_cuda', 'overlay_cuda', 'hwupload_cuda')
     && allOptions(caps, 'ScaleCudaFormat', 'TonemapCudaName');
 }
 
-function vaapiSurfaces(caps) {
-  return supports(caps, 'hwaccels', 'drm') && allOptions(caps, 'OverlayVaapiFrameSync') && openclAvailable(caps)
+export function vaapiPreferredPipeline(video, caps, platform = process.platform) {
+  return platform === 'linux' && canonicalCodec(video.Codec) !== 'mpeg4'
+    && supports(caps, 'hwaccels', 'vaapi') && supports(caps, 'hwaccels', 'drm')
+    && allOptions(caps, 'OverlayVaapiFrameSync') && openclAvailable(caps)
     && allFilters(caps, 'alphasrc', 'scale_vaapi', 'deinterlace_vaapi', 'tonemap_vaapi', 'procamp_vaapi', 'transpose_vaapi', 'hwupload_vaapi');
 }
 
@@ -46,6 +52,9 @@ function videotoolboxSurfaces(caps, version) {
   return encoderVersionAtLeast(version, 7, 0, 1)
     && allFilters(caps, 'yadif_videotoolbox', 'overlay_videotoolbox', 'tonemap_videotoolbox', 'scale_vt');
 }
+
+export const videotoolboxPreferredPipeline = (caps, version) => supports(caps, 'hwaccels', 'videotoolbox')
+  && allFilters(caps, 'alphasrc') && videotoolboxSurfaces(caps, version);
 
 export function videoEncoder(codec, videoType, options = {}, caps = {}) {
   codec = canonicalCodec(codec) || 'copy';
@@ -69,7 +78,7 @@ export function fixedHardwareSize(video, request) {
   return { width: 2 * Math.trunc(Math.round(width * scale) / 2), height: 2 * Math.trunc(Math.round(height * scale) / 2) };
 }
 
-function supportsScaling(video, request, maxRatio) {
+export function supportsScaling(video, request, maxRatio) {
   const size = fixedHardwareSize(video, request);
   return [[size.width, video.Width], [size.height, video.Height]].every(([out, input]) => {
     const ratio = out / input;
@@ -155,7 +164,7 @@ export function videoDecoder(video, videoType, outputCodec, request, options, ca
   if (type === 'vaapi' && vaapi && hwaccelAllowed
     && (common8 && yuv8 || common10 && (yuv8 || yuv10) || codec === 'hevc' && (yuv8 || yuv10 || yuv12 || expanded))) {
     accelerator = 'vaapi';
-    if (vaapiSurfaces(caps)) surface = 'vaapi';
+    if (vaapiPreferredPipeline(video, caps, platform)) surface = 'vaapi';
   }
   if (type === 'videotoolbox' && mac && supports(caps, 'hwaccels', 'videotoolbox')
     && (codec === 'vp8' && yuv8 || ['h264', 'vp9'].includes(codec) && (yuv8 || yuv10)
@@ -164,9 +173,8 @@ export function videoDecoder(video, videoType, outputCodec, request, options, ca
     accelerator = 'videotoolbox';
     if (videotoolboxSurfaces(caps, version)) surface = 'videotoolbox_vld';
   }
-  if (type === 'rkmpp' && linux && hwaccelAllowed && supports(caps, 'hwaccels', 'rkmpp')
-    && allFilters(caps, 'scale_rkrga', 'vpp_rkrga', 'overlay_rkrga') && supportsScaling(video, request, 16)) {
-    const keepSurfaces = opencl && alpha;
+  if (type === 'rkmpp' && linux && hwaccelAllowed && rkmppAvailable(caps) && supportsScaling(video, request, 16)) {
+    const keepSurfaces = rkmppPreferredPipeline(caps);
     const modernCodec = ['h264', 'hevc', 'vp9', 'av1'].includes(codec);
     if (modernCodec && (yuv8 || yuv10 && keepSurfaces) || yuv8 && ['mpeg1video', 'mpeg2video', 'mpeg4', 'vp8'].includes(codec)) {
       accelerator = 'rkmpp';
@@ -234,7 +242,7 @@ export function videoHardware(video, videoType, outputCodec, request, options, c
       args.push(...deviceArg('d3d11va=dx11:' + adapter), ...deviceArg('qsv=qs@dx11'));
     }
     let filterDevice = 'qs';
-    if ((available('vaapi') || available('d3d11va')) && openclAvailable(caps) && qsvOpenclTonemap(video, options, decoder)) {
+    if ((available('vaapi') || available('d3d11va')) && openclAvailable(caps) && hardwareTonemapAvailable(video, options, decoder)) {
       args.push(...deviceArg('opencl=ocl@' + (linux ? 'va' : 'dx11')));
       if (!retained) filterDevice = 'ocl';
     }
@@ -243,9 +251,11 @@ export function videoHardware(video, videoType, outputCodec, request, options, c
   if (type === 'vaapi') {
     if (!linux || !available('vaapi') || !retained && !encoding) return empty;
     const input = options.VaapiDevice && device(options.VaapiDevice) ? options.VaapiDevice : '';
+    const opencl = openclAvailable(caps) && hardwareTonemapAvailable(video, options, decoder, host.version ?? caps.version);
     if (['iHD', 'i965'].includes(caps.vaapiDriver)) {
       args.push(...deviceArg('vaapi=va:' + input + ',driver=' + caps.vaapiDriver));
       if (caps.vaapiDriver === 'i965') environment = { LIBVA_DRIVER_NAME: 'i965', LIBVA_DRIVER_NAME_JELLYFIN: 'i965' };
+      if (opencl && decoder.accelerator !== 'vaapi') args.push(...deviceArg('opencl=ocl@va'), '-filter_hw_device', 'ocl');
     } else if (caps.vaapiDriver === 'amd') {
       environment = { AMD_DEBUG: 'noefc' };
       const vulkan = available('vulkan') && allFilters(caps, 'libplacebo', 'scale_vulkan', 'transpose_vulkan', 'flip_vulkan')
@@ -254,12 +264,19 @@ export function videoHardware(video, videoType, outputCodec, request, options, c
       if (vulkan) {
         args.push(...deviceArg('drm=dr:' + (options.VaapiDevice ?? '/dev/dri/renderD128')),
           ...deviceArg('vaapi=va@dr'), ...deviceArg('vulkan=vk@dr'), '-filter_hw_device', 'vk');
-      } else args.push(...deviceArg('vaapi=va' + (input ? ':' + input : '')), '-filter_hw_device', 'va');
-    }
+      } else {
+        args.push(...deviceArg('vaapi=va' + (input ? ':' + input : '')));
+        if (opencl) args.push(...deviceArg('opencl=ocl:.0,device_vendor=Advanced Micro Devices'));
+        args.push('-filter_hw_device', opencl ? 'ocl' : 'va');
+      }
+    } else if (opencl) args.push(...deviceArg('opencl=ocl:0.0'), '-filter_hw_device', 'ocl');
   }
   if (type === 'rkmpp') {
     if (!linux || !available('rkmpp') || !retained && !encoding) return empty;
     args.push(...deviceArg('rkmpp=rk'));
+    if (!retained && openclAvailable(caps) && hardwareTonemapAvailable(video, options, decoder, host.version ?? caps.version)) {
+      args.push(...deviceArg('opencl=ocl@rk'), '-filter_hw_device', 'ocl');
+    }
   }
   return { encoder, decoder, inputArgs: [...args, ...decoder.args], environment };
 }
