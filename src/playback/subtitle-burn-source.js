@@ -8,6 +8,7 @@ const textFormats = new Map([
   ['vtt', 'vtt'], ['webvtt', 'vtt'], ['smi', 'smi'], ['sami', 'smi'],
 ]);
 const embedded = stream => !stream.IsExternal || /\.mks$/iu.test(stream.Path ?? '');
+const bitmapFormats = new Set(['pgssub', 'hdmv_pgs_subtitle', 'dvdsub', 'dvd_subtitle', 'dvbsub', 'dvb_subtitle', 'xsub']);
 
 export class SubtitleBurnSource {
   constructor({ vfs, identityMap, extraction }) {
@@ -15,7 +16,7 @@ export class SubtitleBurnSource {
   }
 
   supports(source, stream) {
-    if (!stream.IsTextSubtitleStream) return false;
+    if (!stream.IsTextSubtitleStream) return !stream.IsExternal && !stream.Path && bitmapFormats.has(stream.Codec?.toLowerCase());
     if (embedded(stream) || isExternalSubtitleFallback(stream)) return Boolean(this.extraction?.supportsSubtitle(source, stream));
     return Boolean(stream.Path && textFormats.has(subtitleInputFormat(stream)));
   }

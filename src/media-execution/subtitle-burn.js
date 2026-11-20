@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 export async function stageSubtitleBurn(subtitles, source, stream, mediaPath, signal) {
-  if (!stream) return;
+  if (!stream?.IsTextSubtitleStream) return;
   const root = path.resolve(tmpdir());
   const cwd = await mkdtemp(path.join(root, 'mediamanager-burn-'));
   const release = async () => {

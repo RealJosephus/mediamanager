@@ -22,6 +22,25 @@ const containers = {
 };
 const matches = (requested, actual) => !requested || requested.toLowerCase().split(',').includes(actual?.toLowerCase()) || requested.toLowerCase() === 'copy';
 
+function bitmapOverlay(plan) {
+  if (plan.bitmapIndex == null) return null;
+  const { Width: width, Height: height, Codec } = plan.burnSubtitle;
+  const { width: targetWidth, height: targetHeight, filters } = plan.videoOutput;
+  const knownSize = width > 0 && height > 0;
+  const canvas = knownSize && !/^dvb_?sub(?:title)?$/iu.test(Codec ?? '') ? ['-canvas_size', `${width}x${height}`] : [];
+  let scale = '';
+  if (targetWidth > 0 && targetHeight > 0) {
+    const closeAspect = knownSize && Math.abs(targetWidth / targetHeight - width / height) < 0.01;
+    scale = closeAspect ? `scale,scale=${targetWidth}:${targetHeight}:fast_bilinear`
+      : String.raw`scale,scale=-1:${targetHeight}:fast_bilinear,crop,pad=max(${targetWidth}\,iw):max(${targetHeight}\,ih):(ow-iw)/2:(oh-ih)/2:black@0,crop=${targetWidth}:${targetHeight}`;
+  }
+  const video = `[0:${plan.inputVideo.Index}]`;
+  const subtitle = `[0:${plan.bitmapIndex}]`;
+  const base = filters.length ? `${video}${filters.join(',')}[main];` : '';
+  const scaledSubtitle = scale ? `${subtitle}${scale}[sub];` : '';
+  return { canvas, graph: scaledSubtitle + base + `${base ? '[main]' : video}${scale ? '[sub]' : subtitle}overlay=eof_action=pass:repeatlast=0[video]` };
+}
+
 export function remuxPlan(source, options = {}, { capabilities, configuration, version, subtitleBurn } = {}) {
   options = { ...options };
   if (!options.LiveInput && (source.IsInfiniteStream || source.RequiresOpening || source.RequiresClosing)
@@ -51,7 +70,9 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
   }
   const burnSubtitle = selectedSubtitle && videoOutput?.encoder !== 'copy'
     && (burnsByDelivery || options.AlwaysBurnInSubtitleWhenTranscoding) ? selectedSubtitle : undefined;
-  if (burnSubtitle && (!videoOutput || !capabilities?.filters?.includes('subtitles') || !subtitleBurn?.supports(source, burnSubtitle)
+  const bitmapIndex = burnSubtitle && !burnSubtitle.IsTextSubtitleStream ? subtitleInputIndex(source, burnSubtitle) : undefined;
+  if (burnSubtitle && (!videoOutput || !capabilities?.filters?.includes(bitmapIndex == null ? 'subtitles' : 'overlay')
+    || bitmapIndex != null && video.Index < 0 || !subtitleBurn?.supports(source, burnSubtitle)
     || videoOutput.encoder.endsWith('_vaapi')
     || videoOutput.hardware.decoder.surface && !videoOutput.filters.some(filter => filter === 'hwdownload' || filter === 'hwmap=mode=read'))) {
     throw failure('not-supported', 'The selected subtitle requires an unavailable video filter.');
@@ -80,7 +101,7 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
   }
   const inputFormat = video && configuration?.HardwareAccelerationType && configuration.HardwareAccelerationType !== 'none'
     && source.VideoType === 'VideoFile' ? nativeInputFormat(source.Container) : undefined;
-  return { container, ...output, inputVideo: video, inputFormat, videoOutput, audioOutput, burnSubtitle,
+  return { container, ...output, inputVideo: video, inputFormat, videoOutput, audioOutput, burnSubtitle, bitmapIndex,
     streams: [video, audio, subtitle].filter(Boolean).map(stream => ({ type: stream.Type, codec: stream.Codec, index: stream.Type === 'Subtitle' ? subtitleInputIndex(source, stream) : stream.Index })),
     start, seek: BigInt(options.StartTimeTicks ?? 0) > 0n, copyTimestamps: options.CopyTimestamps === true, m2ts: options.EnableMpegtsM2TsMode === true, mediaType: options.MediaType ?? 'Video' };
 }
@@ -91,14 +112,16 @@ export function remuxArguments(url, plan, threads, version, subtitles) {
   if (plan.seek) args.push('-ss', mediaSeekTime(plan.start));
   if (plan.videoOutput?.encoder === 'copy') args.push('-fflags', '+genpts');
   if (plan.inputFormat) args.push('-f', plan.inputFormat);
-  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), '-i', url);
+  const overlay = bitmapOverlay(plan);
+  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []), '-i', url);
   if (plan.videoOutput?.hardware?.decoder.args.length) args.push('-noautoscale');
   args.push('-threads', String(threads));
-  for (const stream of plan.streams) args.push('-map', `0:${stream.index}`);
+  if (overlay) args.push('-filter_complex', overlay.graph);
+  for (const stream of plan.streams) args.push('-map', overlay && stream.type === 'Video' ? '[video]' : `0:${stream.index}`);
   args.push('-map_metadata', '-1', '-map_chapters', '-1', '-c', 'copy');
   const shift = subtitles && !plan.copyTimestamps ? Math.round(Number(plan.start) / 10000000) : null;
   if (plan.videoOutput && plan.videoOutput.encoder !== 'copy') {
-    const filters = [...plan.videoOutput.filters];
+    const filters = overlay ? [] : [...plan.videoOutput.filters];
     if (subtitles) filters.push(subtitles.filter);
     if (shift !== null) filters.push(`setpts=PTS-${shift}/TB`);
     args.push(...videoArguments({ ...plan.videoOutput, filters }, { version }));
@@ -144,16 +167,19 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
     (plan.genPts || plan.videoOutput?.encoder === 'copy') && '+genpts', plan.discardCorrupt && '+discardcorrupt'].filter(Boolean);
   if (inputFlags.length) args.push('-fflags', inputFlags.join(''));
   if (plan.inputFormat) args.push('-f', plan.inputFormat);
-  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), '-i', url);
+  const overlay = bitmapOverlay(plan);
+  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []), '-i', url);
   if (plan.videoOutput?.hardware?.decoder.args.length) args.push('-noautoscale');
   args.push('-map_metadata', '-1', '-map_chapters', '-1', '-threads', String(threads));
+  if (overlay) args.push('-filter_complex', overlay.graph);
   if (plan.streams.some(stream => stream.index < 0)) args.push('-sn');
   else {
-    for (const stream of plan.streams) args.push('-map', `0:${stream.index}`);
+    for (const stream of plan.streams) args.push('-map', overlay && stream.type === 'Video' ? '[video]' : `0:${stream.index}`);
     args.push('-map', '-0:s');
   }
   if (plan.video) {
-    const output = subtitles ? { ...plan.videoOutput, filters: [...plan.videoOutput.filters, subtitles.filter] } : plan.videoOutput;
+    const output = overlay ? { ...plan.videoOutput, filters: [] }
+      : subtitles ? { ...plan.videoOutput, filters: [...plan.videoOutput.filters, subtitles.filter] } : plan.videoOutput;
     args.push(...videoArguments(output, { hls: true, event: eventId != null, segmentLength: plan.segmentLength, version }));
     if (plan.videoOutput.codec === 'hevc') args.push('-tag:v:0', 'hvc1');
     if (plan.videoOutput.encoder === 'copy') {
