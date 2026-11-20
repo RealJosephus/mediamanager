@@ -114,6 +114,7 @@ async function playback(origin, authorization, protocol, scenario, report, signa
     return { status: response.status, mime: response.headers.get('content-type'), bytes: Buffer.from(await response.arrayBuffer()) };
   };
   const direct = scenario === 'direct';
+  const event = scenario === 'event';
   const burned = scenario === 'burn';
   const scaled = scenario === 'scale' || burned;
   const codec = direct || scaled ? 'ac3' : 'aac';
@@ -165,8 +166,13 @@ async function playback(origin, authorization, protocol, scenario, report, signa
       assert.match(report.master, /CODECS="avc1\.[^,"]+,ac-3"/u);
     } else assert.match(report.master, /CODECS="avc1\.[^,"]+,mp4a\.40\.2"/u);
     const variant = new URL(linesWithUris(report.master)[0], url);
+    if (event) {
+      variant.pathname = variant.pathname.replace(/\/main\.m3u8$/u, '/live.m3u8');
+      variant.searchParams.set('MinSegments', '1');
+    }
     const playlist = await request(variant);
     assert.equal(playlist.status, 200, playlist.bytes.toString()); report.playlist = playlist.bytes.toString();
+    if (event) assert.match(report.playlist, /#EXT-X-PLAYLIST-TYPE:EVENT/u);
     mediaUrl = new URL(linesWithUris(report.playlist)[0], variant);
   }
   const media = await request(mediaUrl);
@@ -231,7 +237,7 @@ test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes ma
   }
   async function capture(origin, label) {
     const results = evidence[label];
-    for (const [protocol, scenario] of [['hls', 'direct'], ['hls', 'hls'], ['http', 'http'], ['hls', 'scale'], ['hls', 'burn']]) {
+    for (const [protocol, scenario] of [['hls', 'direct'], ['hls', 'hls'], ['http', 'http'], ['hls', 'scale'], ['hls', 'burn'], ['hls', 'event']]) {
       const result = results[scenario] = {};
       try {
         const bytes = await playback(origin, authorization, protocol, scenario, result, t.signal);
@@ -318,7 +324,7 @@ test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes ma
     assert.deepEqual(evidence.node.keyframes, evidence.native.keyframes);
     assert.deepEqual(evidence.scenarioErrors, []);
     assert.notEqual(evidence.native.burn.decoded, evidence.native.scale.decoded, 'The timed cue changed decoded video frames.');
-    for (const protocol of ['direct', 'hls', 'http', 'scale', 'burn']) {
+    for (const protocol of ['direct', 'hls', 'http', 'scale', 'burn', 'event']) {
       const expected = evidence.native[protocol], actual = evidence.node[protocol];
       const normalize = info => {
         const copy = structuredClone(info);
@@ -330,6 +336,10 @@ test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes ma
       assert.deepEqual(normalize(actual.playbackInfo), normalize(expected.playbackInfo), protocol);
       if (protocol === 'direct') continue;
       assert.deepEqual(actual.head, expected.head, protocol);
+      if (protocol === 'event') {
+        const project = value => value.replace(/hls\/([a-f0-9]{32})\/\1/g, 'hls/<playlist>/<playlist>');
+        assert.equal(project(actual.playlist), project(expected.playlist));
+      }
       if (protocol === 'scale' || protocol === 'burn') {
         assert.equal(actual.decoded, expected.decoded, protocol + ' video frames and decoded timestamps');
         assert.deepEqual(packets(actual.probe, 'audio'), packets(expected.probe, 'audio'), 'Copied audio payload and timeline');
@@ -340,7 +350,7 @@ test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes ma
       assert.deepEqual(packets(actual.probe, 'video').map(packet => packet.hash), packets(fixture.raw, 'video').map(packet => packet.hash),
         protocol + ' original video payloads');
     }
-    assert.equal(evidence.nodeProcesses.length, 4);
+    assert.equal(evidence.nodeProcesses.length, 5);
     for (const { args } of evidence.nodeProcesses) {
       assert.ok(!args.includes('-hwaccel') && !args.includes('-init_hw_device'));
       if (args.includes('-vf')) assert.equal(args[args.indexOf('-codec:v:0') + 1], 'libx264');

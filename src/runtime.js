@@ -356,7 +356,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const remux = probe ? new RemuxService({ vfs, bridge:probe.bridge, ...remuxOptions, mediaEncoder, subtitleBurn }) : undefined;
   if (remux) rollback.push(() => remux.close());
   const hls = probe ? new HlsService({ vfs, bridge: probe.bridge, remux, onError, ...hlsOptions,
-    mediaEncoder, getEncodingOptions, getCacheDirectory: () => encodingPaths.getTranscodePath() }) : undefined;
+    mediaEncoder, getEncodingOptions, getCacheDirectory: () => encodingPaths.getTranscodePath(),
+    onEventStop: (liveStreamId, playSessionId) => sessions.closeLiveStreamIfNeeded(liveStreamId, playSessionId) }) : undefined;
   if (hls) rollback.push(() => hls.close());
   sessions.playbackJobs = remux?.jobs;
   let liveTvMediaSources, liveStreams, liveStreamProbe;

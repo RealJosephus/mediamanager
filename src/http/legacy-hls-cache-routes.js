@@ -17,7 +17,7 @@ function requireRouteValues(params) {
   }
 }
 
-export function registerLegacyHlsCacheRoutes(add, { encodingPaths }) {
+export function registerLegacyHlsCacheRoutes(add, { encodingPaths, playback }) {
   const cacheDirectory = async () => existingHlsCacheDirectory(await encodingPaths?.getTranscodePath({ create: false }));
   const artifact = (directory, name) => binaryStreamResult(options => openLegacyHlsArtifact(directory, name, options),
     { physicalFile: true, contentType: getMimeType(name) });
@@ -31,7 +31,8 @@ export function registerLegacyHlsCacheRoutes(add, { encodingPaths }) {
   add('GET', '/Videos/{itemId}/hls/{playlistId}/stream.m3u8', async ({ params, request }) => {
     requireRouteValues(params);
     if (!leaf.test(params.playlistId)) return invalidSegment();
-    return artifact(await cacheDirectory(), params.playlistId + extension(request));
+    return playback?.eventHlsArtifact?.(params.playlistId, undefined, true)
+      ?? artifact(await cacheDirectory(), params.playlistId + extension(request));
   });
   add('GET', '/Videos/{itemId}/hls/{playlistId}/{segmentId}.{segmentContainer}', async ({ params, signal }) => {
     requireRouteValues(params);
@@ -39,6 +40,8 @@ export function registerLegacyHlsCacheRoutes(add, { encodingPaths }) {
     if (!leaf.test(playlistId) || !leaf.test(segmentId)) return invalidSegment();
     const fileExtension = '.' + segmentContainer;
     if (!videoExtensions.has(fileExtension.toLowerCase())) return missingSegment();
+    const live = playback?.eventHlsArtifact?.(playlistId, segmentId + fileExtension);
+    if (live) return live;
     const directory = await cacheDirectory();
     return await hasLegacyHlsPlaylist(directory, playlistId, fileExtension, signal)
       ? artifact(directory, segmentId + fileExtension) : missingSegment();

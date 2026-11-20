@@ -40,6 +40,12 @@ export class LiveStreamsService {
     if (typeof id !== 'string' || !id) throw libraryError(400, 'Live stream id cannot be empty.');
     const entry = this.#entries.get(key(id)); return entry ? cloneNativeValue(entry.source) : null;
   }
+  hasByteReader(id) { return Boolean(id && this.#entries.get(key(id))?.owners.at(-1)?.lease.stream); }
+  openRead(id, options) {
+    const entry = this.#entries.get(key(id));
+    if (!entry) return Promise.reject(libraryError(404, 'Live stream not found.'));
+    return this.#read(entry, options);
+  }
 
   open(request, { signal } = {}) {
     return this.#admit(async () => {

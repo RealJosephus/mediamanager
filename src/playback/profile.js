@@ -428,6 +428,7 @@ function selectTranscode(source, item, profile, options, audio, video, subtitle,
     } else if (BigInt(options.StartTimeTicks ?? 0) !== 0n) append('StartTimeTicks', options.StartTimeTicks);
     append('PlaySessionId', options.PlaySessionId);
     append('ApiKey', options.AccessToken);
+    append('LiveStreamId', source.LiveStreamId);
     if (projected.RequireNonAnamorphic) append('RequireNonAnamorphic', 'True');
     if (maxChannels != null && get(entry, 'MaxAudioChannels') != null) append('TranscodingMaxAudioChannels', maxChannels);
     if (get(entry, 'EnableSubtitlesInManifest', false)) append('EnableSubtitlesInManifest', 'True');
