@@ -15,6 +15,15 @@ const list = value => lower(value).split(',').filter(Boolean);
 const frameRate = video => video.ReferenceFrameRate ?? video.AverageFrameRate ?? video.RealFrameRate;
 const formatProfile = value => lower(value).replace(/\s+/gu, '');
 const codecFactor = codec => ({ hevc: 0.6, vp9: 0.6, av1: 0.5 })[normalizeCodec(codec)] ?? 1;
+const maxTranscodingLevels = { h264: 51, hevc: 150, av1: 15 };
+
+export function normalizeTranscodingLevel(codec, value) {
+  if (value == null || value === '') return;
+  const level = Number(value);
+  if (!Number.isFinite(level)) return;
+  const maximum = maxTranscodingLevels[codec];
+  return maximum != null && (level < 0 || level >= maximum) ? maximum : level;
+}
 
 function scaleBitrate(bitrate, input, output) {
   let scale = Math.max(codecFactor(output) / codecFactor(input), 1);
@@ -106,10 +115,10 @@ function canCopy(video, source, request, codecs, range, requestedRanges) {
   const tag = option(request, codec, 'codectag');
   if (tag && !list(tag).includes(lower(video.CodecTag))) return false;
   if (requestedRanges.length) {
-    const fallback = ({ hdr10plus: 'hdr10', doviwithhdr10: 'hdr10', doviwithhlg: 'hlg', doviwithsdr: 'sdr' })[range];
-    const doviWithBase = (codec === 'hevc' || codec === 'av1') && range.startsWith('dovi') && range !== 'dovi';
     if (range === 'unknown' || requestedRanges.length === 1 && requestedRanges[0] === 'sdr' && range !== 'sdr'
-      || !requestedRanges.includes(range) && !requestedRanges.includes(fallback) && !doviWithBase) return false;
+      || range === 'dovi' && !requestedRanges.includes('dovi')) return false;
+    if (['hdr10', 'hdr10plus', 'hlg'].includes(range) && !requestedRanges.includes(range)
+      && !(range === 'hdr10plus' && requestedRanges.includes('hdr10'))) return false;
   }
   return !(lower(source.Container) === 'avi' && codec === 'h264');
 }
@@ -517,12 +526,13 @@ export function videoStreamPlan(video, source, request, allowed, { configuration
   if (profile?.includes('baseline')) profile = /_(?:vaapi|amf)$/u.test(encoder) ? 'constrained_baseline' : 'baseline';
   if (codec === 'h264' && profile?.includes('high')) profile = 'high';
   if (codec === 'av1' && profile && profile !== 'main') profile = 'main';
-  const level = Number(request.Level ?? option(request, codec, 'level'));
+  const requestedLevel = request.Level === '' ? option(request, codec, 'level') : request.Level ?? option(request, codec, 'level');
+  const level = normalizeTranscodingLevel(codec, requestedLevel);
   const deinterlace = Boolean(video.IsInterlaced && (request.DeInterlace || lower(option(request, codec, 'deinterlace')) === 'true'));
   const filters = videoFilters(video, resized, configuration, capabilities, selected, requestedRate, deinterlace, version);
   const crf = codec === 'hevc' ? configuration.H265Crf : configuration.H264Crf;
   return { codec, encoder, ...dimensions(video, resized), frameRate: requestedRate ?? rate, requestedRate, bitrate, profile,
-    level: Number.isFinite(level) && level >= 0 ? level : undefined, filters, hardware: selected,
+    level, requestedLevel, filters, hardware: selected,
     hardwareSize: selected.decoder.surface ? fixedHardwareSize(video, resized) : undefined,
     preset: configuration.EncoderPreset, crf, crfDefault: codec === 'hevc' ? 28 : 23, realFrameRate: video.RealFrameRate,
     vaapiDriver: capabilities.vaapiDriver };
@@ -554,7 +564,8 @@ export function videoArguments(plan, { hls = false, event = false, segmentLength
     else if (plan.encoder.endsWith('_videotoolbox')) args.push('-b:v', rate, '-qmin', '-1', '-qmax', '-1');
     else if (plan.encoder.endsWith('_qsv')) {
       if (plan.codec === 'h264' || plan.codec === 'hevc') args.push('-mbbrc', '1');
-      const factor = plan.codec === 'h264' && plan.level != null && plan.level < 51 ? 1 : 2;
+      const factor = plan.codec === 'h264' && plan.requestedLevel != null && plan.requestedLevel !== ''
+        && Number(plan.requestedLevel) < 51 ? 1 : 2;
       args.push('-b:v', rate, '-maxrate', String(bitrate + 1), '-rc_init_occupancy', String(bitrate * factor), '-bufsize', String(bitrate * 2 * factor));
     } else {
       if (plan.encoder.endsWith('_vaapi')) args.push('-rc_mode', plan.vaapiDriver === 'i965' ? 'CBR' : 'VBR');
@@ -564,8 +575,16 @@ export function videoArguments(plan, { hls = false, event = false, segmentLength
   }
   if (plan.requestedRate) args.push('-r', String(plan.requestedRate));
   if (plan.profile && !['av1_nvenc', 'h264_v4l2m2m'].includes(plan.encoder)) args.push('-profile:v:0', plan.profile);
-  if (plan.level && !/(?:libx265|nvenc|vaapi)/u.test(plan.encoder) && plan.codec !== 'av1') {
-    args.push('-level', String(plan.encoder === 'hevc_qsv' ? plan.level / 3 : plan.level));
+  if (plan.level != null) {
+    if (['libsvtav1', 'av1_qsv'].includes(plan.encoder)) {
+      if (Number.isInteger(plan.level)) {
+        const major = 2 + Math.floor(plan.level / 4), minor = plan.level % 4;
+        args.push('-level', String(10 * major + minor));
+      }
+    } else if (plan.encoder !== 'libx265' && !plan.encoder.endsWith('_nvenc')
+      && (!plan.encoder.endsWith('_vaapi') || ['iHD', 'i965'].includes(plan.vaapiDriver))) {
+      args.push('-level', String(plan.encoder === 'hevc_qsv' ? plan.level / 3 : plan.level));
+    }
   }
   if (plan.encoder === 'libx264') args.push('-x264opts:0', 'subme=0:me_range=16:rc_lookahead=10:me=hex:open_gop=0');
   if (plan.encoder === 'libx265') args.push('-x265-params:0', 'no-scenecut=1:no-open-gop=1:no-info=1');

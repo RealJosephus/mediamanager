@@ -14,7 +14,7 @@ import { leaseDiscInput, resolveDiscInput } from '../media-execution/disc-input.
 import { getEncodingThreadCount } from './media-encoder.js';
 import { hlsArguments } from '../media-execution/streaming.js';
 import { stageSubtitleBurn } from '../media-execution/subtitle-burn.js';
-import { outputVideoBitrate } from '../media-execution/video.js';
+import { normalizeTranscodingLevel, outputVideoBitrate } from '../media-execution/video.js';
 import { matchesTranscodeJob as matchesJob, transcodingInfo } from './transcode-jobs.js';
 import { TranscodeCache } from './transcode-cache.js';
 import { LiveStreamReadBridge } from './live-stream-bridge.js';
@@ -299,15 +299,67 @@ const adaptiveBitrateSteps = [
   [1000000, 300000], [600000, 200000], [400000, 100000],
 ];
 
-function playlistVideoCodec(codec, profile, level, bitDepth = 8) {
-  if (!level) return '';
+const defaultPlaylistLevels = { h264: 41, hevc: 120, av1: 19 };
+const vp9PictureLevels = [[36864, 10], [73728, 11], [122880, 20], [245760, 21], [552960, 30], [983040, 31]];
+
+function transcodedPlaylistLevel(codec, options) {
+  const defaultLevel = defaultPlaylistLevels[codec];
+  if (defaultLevel == null) return;
+  const h265 = codec === 'hevc' ? options.StreamOptions?.['h265-level'] : undefined;
+  const value = [options.Level, h265, options.StreamOptions?.[`${codec}-level`]].find(entry => entry != null && entry !== '');
+  return normalizeTranscodingLevel(codec, value ?? defaultLevel);
+}
+
+function vp9PlaylistLevel(video) {
+  const pixels = (video.Width ?? 0) * (video.Height ?? 0);
+  if (pixels <= 0 || pixels > 35651584) return 0;
+  const smallPicture = vp9PictureLevels.find(([maximum]) => pixels <= maximum);
+  if (smallPicture) return smallPicture[1];
+  const sampleRate = Math.fround(Math.fround(pixels) * Math.fround(video.ReferenceFrameRate ?? 30));
+  if (pixels <= 2228224) return sampleRate <= 83558400 ? 40 : 41;
+  if (pixels <= 8912896) return sampleRate <= 311951360 ? 50 : sampleRate <= 588251136 ? 51 : 52;
+  return sampleRate <= 1176502272 ? 60 : sampleRate <= 4706009088 ? 61 : 62;
+}
+
+function playlistVideoCodec(codec, profile, level, copiedVideo) {
+  if (!level || !Number.isInteger(level)) return '';
+  const bitDepth = [8, 10, 12].includes(copiedVideo?.BitDepth) ? copiedVideo.BitDepth : 8;
+  const twoDigits = value => String(value).padStart(2, '0');
   if (codec === 'h264') {
     const prefix = ({ high: '6400', main: '4D40', baseline: '42E0' })[lower(profile)] ?? '4240';
     return `avc1.${prefix}${level.toString(16).toUpperCase().padStart(2, '0')}`;
   }
   if (codec === 'hevc') return `hvc1.${['main10', 'main 10'].includes(lower(profile)) ? '2' : '1'}.4.L${level}.B0`;
-  if (codec === 'av1') return `av01.0.${String(level).padStart(2, '0')}M.${String(bitDepth).padStart(2, '0')}`;
+  if (codec === 'av1') {
+    const profileId = ({ high: 1, professional: 2 })[lower(profile)] ?? 0;
+    return `av01.${profileId}.${twoDigits(level > 0 && level <= 31 ? level : 19)}M.${twoDigits(bitDepth)}`;
+  }
+  if (codec === 'vp9' && copiedVideo) {
+    const profileId = ({ yuv422p: 1, yuv444p: 1, yuv420p10le: 2, yuv420p12le: 2,
+      yuv422p10le: 3, yuv422p12le: 3, yuv444p10le: 3, yuv444p12le: 3 })[copiedVideo.PixelFormat] ?? 0;
+    return `vp09.${twoDigits(profileId)}.${twoDigits(vp9PlaylistLevel(copiedVideo))}.${twoDigits(bitDepth)}`;
+  }
   return '';
+}
+
+function requestedPlaylistProfile(codec, options) {
+  const value = options.Profile || options.StreamOptions?.[`${codec}-profile`];
+  return typeof value === 'string' ? value.split(/[|,]/u).find(Boolean) : undefined;
+}
+
+function playlistAudioCodec(output, stream, options) {
+  if (!output) return;
+  const copy = output.encoder === 'copy';
+  if (output.codec === 'aac') {
+    const profile = copy ? stream?.Profile : requestedPlaylistProfile('aac', options);
+    return lower(profile) === 'he-aac' ? 'mp4a.40.5' : 'mp4a.40.2';
+  }
+  if (output.codec === 'dts') {
+    const profile = copy ? lower(stream?.Profile) : 'dts';
+    if (['dts-hd hra', 'dts-hd ma', 'dts-hd ma + dts:x', 'dts-hd ma + dts:x imax'].includes(profile)) return 'dtsh';
+    return profile === 'dts express' ? 'dtse' : 'dtsc';
+  }
+  return { mp3: 'mp4a.40.34', ac3: 'ac-3', eac3: 'ec-3', alac: 'alac', flac: 'fLaC', opus: 'Opus', truehd: 'mlpa' }[output.codec];
 }
 
 export function masterPlaylist(source, options = {}, query = '', tools) {
@@ -328,13 +380,10 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
   if (options.SegmentContainer && !parameters.some(([key]) => lower(key) === 'segmentcontainer')) parameters.push(['SegmentContainer', options.SegmentContainer]);
   const variantUrl = entries => (plan.live ? 'live.m3u8?' : 'main.m3u8?')
     + entries.map(([key, value]) => `${encode(key)}=${encodeQueryValue(value, Boolean(video))}`).join('&');
-  const profile = lower(videoOutput?.profile ?? (videoCopied ? undefined : 'high'));
-  const level = videoOutput?.level ?? (videoCopied ? undefined : { h264: 41, hevc: 120, av1: 8 }[videoOutput?.codec]);
-  const videoCodec = playlistVideoCodec(videoOutput?.codec, profile, level, videoCopied ? video.BitDepth ?? 8 : 8);
-  const audioCodec = audioOutput && ({
-    aac: audioOutput.encoder === 'copy' && lower(audio.Profile) === 'he-aac' ? 'mp4a.40.5' : 'mp4a.40.2',
-    mp3: 'mp4a.40.34', ac3: 'ac-3', eac3: 'ec-3', alac: 'alac', flac: 'fLaC', opus: 'opus', dts: 'dtsc', truehd: 'mlpa',
-  })[audioOutput.codec];
+  const profile = videoCopied && videoOutput.profile ? videoOutput.profile : requestedPlaylistProfile(videoOutput?.codec, options);
+  const level = (videoCopied ? videoOutput.level : undefined) ?? transcodedPlaylistLevel(videoOutput?.codec, options);
+  const videoCodec = playlistVideoCodec(videoOutput?.codec, profile, level, videoCopied ? video : undefined);
+  const audioCodec = playlistAudioCodec(audioOutput, audio, options);
   const bitrate = outputVideoBitrate(video, options, videoOutput?.codec) + (audioOutput?.encoder === 'copy'
     ? audioBitrate(audio, video ? options : { ...options, AudioCodec: 'copy' }) : audioOutput?.bitrate ?? 0);
   const [range, rangeType] = video ? videoCopied ? videoColorRange(video) : ['SDR', 'SDR'] : ['Unknown', 'Unknown'];
@@ -378,10 +427,13 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
         const existing = [...variants.keys()].find(name => lower(name) === lower(key));
         variants.set(existing ?? key, value);
       }
-      const variantProfile = options.StreamOptions?.[`${codec}-profile`]?.split(/[|,]/u)[0];
-      const variantLevel = Number(options.StreamOptions?.[`${codec}-level`]) || { h264: 41, hevc: 120, av1: 19 }[codec];
+      const variantProfile = requestedPlaylistProfile(codec, options);
+      const variantLevel = transcodedPlaylistLevel(codec, options);
       lines.push(streamInfo(bitrate, 'SDR', playlistVideoCodec(codec, variantProfile, variantLevel)), variantUrl([...variants]));
     }
+  }
+  if (videoCopied && range === 'SDR' && videoOutput.codec === 'hevc' && level > 150) {
+    lines.push(streamInfo(bitrate, videoRange, playlistVideoCodec('hevc', profile, 150), supplemental), variantUrl(parameters));
   }
   if (options.EnableAdaptiveBitrateStreaming && options.RemoteClient && !plan.live && source.Path?.trim()
     && videoOutput && !videoCopied && audioOutput?.encoder !== 'copy' && options.VideoBitRate != null) {

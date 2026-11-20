@@ -40,6 +40,10 @@ const hdrItemId = '92500000000000000000000000000004';
 const doviItemId = '92500000000000000000000000000005';
 const invalidDoviItemId = '92500000000000000000000000000006';
 const rotatedItemId = '92500000000000000000000000000007';
+const hevcLevelItemId = '92500000000000000000000000000008';
+const vp9ItemId = '92500000000000000000000000000009';
+const av1ItemId = '9250000000000000000000000000000a';
+const opusItemId = '9250000000000000000000000000000b';
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const linesWithUris = text => text.split(/\r?\n/u).filter(line => line && !line.startsWith('#'));
 
@@ -128,6 +132,42 @@ async function seedRotated(filename, evidence, signal) {
   return { id: rotatedItemId, name: 'Rotated AVC fixture', filename: output, bytes: await readFile(output), media };
 }
 
+const fmp4CodecFixtures = [
+  { codec: 'hevc', id: hevcLevelItemId, profile: 'Main', pixelFormat: 'yuv420p', bitDepth: 8, source: 'size=3840x2160:rate=60',
+    requestedRange: 'HDR10',
+    encoder: ['-c:v', 'libx265', '-preset', 'ultrafast', '-x265-params',
+      'pools=2:frame-threads=2:log-level=error:bframes=0:colorprim=bt709:transfer=bt709:colormatrix=bt709'] },
+  { codec: 'vp9', id: vp9ItemId, profile: 'Profile 2', pixelFormat: 'yuv420p10le', bitDepth: 10, source: 'size=640x360:rate=30',
+    encoder: ['-c:v', 'libvpx-vp9', '-profile:v', '2', '-cpu-used', '6', '-row-mt', '1', '-deadline', 'realtime'] },
+  { codec: 'av1', id: av1ItemId, profile: 'Main', pixelFormat: 'yuv420p10le', bitDepth: 10, source: 'size=640x360:rate=30',
+    encoder: ['-c:v', 'libsvtav1', '-preset', '11', '-svtav1-params', 'lp=2'] },
+];
+
+async function seedFmp4Codec(directory, { codec, id, profile, pixelFormat, bitDepth, source, encoder }, evidence, signal) {
+  const filename = path.join(directory, `${codec}-copy.mp4`);
+  await runMediaTool('ffmpeg', ['-v', 'error', '-f', 'lavfi', '-i', `testsrc2=${source}`,
+    '-frames:v', '12', '-an', ...encoder, '-threads', '2', '-pix_fmt', pixelFormat,
+    '-color_trc', 'bt709', '-color_primaries', 'bt709', '-colorspace', 'bt709', filename], evidence.commands, signal);
+  const media = normalizeProbe(await probe(filename, evidence, signal), { path: filename, protocol: 'File' });
+  const video = media.MediaStreams.find(stream => stream.Type === 'Video');
+  assert.deepEqual([video.Codec, video.Profile, video.PixelFormat, video.BitDepth], [codec, profile, pixelFormat, bitDepth]);
+  assert.ok(Number.isInteger(video.Level));
+  if (codec === 'hevc') assert.deepEqual([video.Level, video.ColorTransfer], [153, 'bt709']);
+  return { id, name: `${codec.toUpperCase()} fMP4 fixture`, filename, bytes: await readFile(filename), media };
+}
+
+async function seedOpus(filename, evidence, signal) {
+  const output = path.join(path.dirname(filename), 'opus.mp4');
+  await runMediaTool('ffmpeg', ['-v', 'error', '-i', filename, '-f', 'lavfi',
+    '-i', 'sine=frequency=440:sample_rate=48000:duration=2',
+    '-map', '0:v:0', '-map', '1:a:0', '-c:v', 'copy', '-c:a', 'libopus', '-ac', '2', '-b:a', '64000', '-strict', '-2', output],
+  evidence.commands, signal);
+  const media = normalizeProbe(await probe(output, evidence, signal), { path: output, protocol: 'File' });
+  const audio = media.MediaStreams.find(stream => stream.Type === 'Audio');
+  assert.deepEqual([audio?.Index, audio?.Codec, audio?.SampleRate, audio?.Channels], [1, 'opus', 48000, 2]);
+  return { id: opusItemId, name: 'Opus fMP4 fixture', filename: output, bytes: await readFile(output), media };
+}
+
 function bitmapCue(x = 80) {
   const segment = (time, type, payload = Buffer.alloc(0)) => {
     const header = Buffer.alloc(13);
@@ -205,7 +245,19 @@ async function seed(referenceRoot, evidence, signal, { extended }) {
   hdrVideo.BitRate ??= Math.round(hdrRaw.packets.filter(packet => packet.stream_index === inputHdr.index)
     .reduce((bytes, packet) => bytes + Number(packet.size), 0) * 8 / Number(hdrRaw.format.duration));
   const hdrBytes = await readFile(hdrFilename);
-  const extraSources = extended ? [await seedRotated(filename, evidence, signal), ...await seedDovi(hdrFilename, inputHdr.r_frame_rate, evidence, signal)] : [];
+  const extraSources = [];
+  if (extended) for (const [scenario, prepare] of [
+    ['rotation', async () => [await seedRotated(filename, evidence, signal)]],
+    ['dolbyVision', () => seedDovi(hdrFilename, inputHdr.r_frame_rate, evidence, signal)],
+    ...fmp4CodecFixtures.map(fixture => [fixture.codec, async () => [await seedFmp4Codec(mediaFolder, fixture, evidence, signal)]]),
+    ['opus', async () => [await seedOpus(filename, evidence, signal)]],
+  ]) {
+    try { extraSources.push(...await prepare()); }
+    catch (error) {
+      signal.throwIfAborted();
+      evidence.scenarioErrors.push({ label: 'fixture', scenario, error: error.message });
+    }
+  }
   const databasePath = path.join(dataPath, 'jellyfin.db');
   const database = new SqliteDatabase(databasePath, { requireMigrationHistory: true });
   try {
@@ -329,6 +381,12 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   }
   if (embed) assert.equal(url.searchParams.get('SubtitleCodec'), profile.SubtitleProfiles[0].Format);
   if (scaled) assert.equal(url.searchParams.get('MaxWidth'), '360');
+  if (hdr) url.searchParams.set('Level', '60');
+  if (scenario === 'http') {
+    assert.equal(source.MediaStreams.find(stream => stream.Type === 'Video').VideoRangeType, 'SDR');
+    url.searchParams.set('h264-rangetype', 'HDR10');
+    report.videoRangeRequest = url.searchParams.get('h264-rangetype');
+  }
   const remote = adaptive ? { headers: { 'X-Forwarded-For': '203.0.113.42' } } : undefined;
   if (adaptive) {
     const endpoint = await request('/System/Endpoint', remote);
@@ -349,6 +407,7 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   if (protocol === 'hls') {
     const master = await request(url, remote);
     assert.equal(master.status, 200, master.bytes.toString()); report.master = master.bytes.toString();
+    if (hdr) assert.match(report.master, /CODECS="avc1\.424033,ac-3"/u);
     if (scaled) {
       assert.match(report.master, /RESOLUTION=360x240/u);
       assert.match(report.master, adaptive ? /CODECS="avc1\.[^,"]+,mp4a\.40\.2"/u : /CODECS="avc1\.[^,"]+,ac-3"/u);
@@ -402,10 +461,12 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   return media.bytes;
 }
 
+const requestFrom = (origin, authorization, signal) => (route, options = {}) => fetch(new URL(route, origin), {
+  ...options, headers: { Authorization: authorization, ...options.headers }, signal,
+});
+
 async function captureHdrVariants(origin, authorization, root, label, evidence, signal) {
-  const request = (route, options = {}) => fetch(new URL(route, origin), {
-    ...options, headers: { Authorization: authorization, ...options.headers }, signal,
-  });
+  const request = requestFrom(origin, authorization, signal);
   const results = evidence[label].hdrVariants = [];
   // Native can reuse the first HLS segment within a playback session.
   // Open a fresh session to verify the actual output of each advertised URI.
@@ -479,9 +540,7 @@ async function readHlsFragment(request, variant) {
 }
 
 async function captureDolbyVision(origin, authorization, root, label, evidence, signal) {
-  const request = (route, options = {}) => fetch(new URL(route, origin), {
-    ...options, headers: { Authorization: authorization, ...options.headers }, signal,
-  });
+  const request = requestFrom(origin, authorization, signal);
   const cases = [
     { id: doviItemId, range: 'DOVIWithHDR10', requested: 'HDR10', tag: 'hvc1', retained: true },
     { id: doviItemId, range: 'DOVIWithHDR10', requested: 'DOVI|DOVIWithHDR10', tag: 'dvh1', retained: true },
@@ -537,9 +596,7 @@ async function captureDolbyVision(origin, authorization, root, label, evidence, 
 }
 
 async function captureRotation(origin, authorization, root, label, evidence, signal) {
-  const request = (route, options = {}) => fetch(new URL(route, origin), {
-    ...options, headers: { Authorization: authorization, ...options.headers }, signal,
-  });
+  const request = requestFrom(origin, authorization, signal);
   const observations = evidence[label].rotation = {};
   for (const container of ['ts', 'mp4']) {
     const info = await request(`/Items/${rotatedItemId}/PlaybackInfo`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -577,6 +634,133 @@ async function captureRotation(origin, authorization, root, label, evidence, sig
       const stop = await request('/Videos/ActiveEncodings?' + new URLSearchParams({ deviceId, playSessionId: PlaySessionId }), { method: 'DELETE' });
       assert.equal(stop.status, 204);
     }
+  }
+}
+
+async function captureFmp4Codec({ codec, id, requestedRange }, origin, authorization, root, label, evidence, signal) {
+  const request = requestFrom(origin, authorization, signal);
+  const evidenceByCodec = evidence[label].fmp4Codecs ??= {};
+  const info = await request(`/Items/${id}/PlaybackInfo`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ MediaSourceId: id, SubtitleStreamIndex: -1, EnableDirectPlay: false, EnableDirectStream: false,
+      DeviceProfile: { MaxStreamingBitrate: 120000000,
+        TranscodingProfiles: [{ Type: 'Video', Context: 'Streaming', Protocol: 'hls', Container: 'mp4', VideoCodec: codec, AudioCodec: 'aac' }],
+        CodecProfiles: requestedRange ? [{ Type: 'Video', Codec: codec,
+          Conditions: [{ Property: 'VideoRangeType', Condition: 'EqualsAny', Value: requestedRange }] }] : [],
+      } }) });
+  assert.equal(info.status, 200);
+  const { MediaSources: [source], PlaySessionId } = await info.json();
+  const input = source.MediaStreams.find(stream => stream.Type === 'Video');
+  const expected = {
+    hevc: ['hvc1.1.4.L153.B0', 'hvc1.1.4.L150.B0'],
+    vp9: ['vp09.02.21.10'],
+    av1: [`av01.0.${String(input.Level).padStart(2, '0')}M.10`],
+  }[codec];
+  const master = new URL(source.TranscodingUrl, origin);
+  const observedRange = master.searchParams.get(`${codec}-rangetype`);
+  if (requestedRange) {
+    assert.equal(input.VideoRangeType, 'SDR');
+    assert.equal(observedRange, requestedRange);
+  }
+  try {
+    const response = await request(master);
+    assert.equal(response.status, 200);
+    const manifest = await response.text();
+    const renditions = [...manifest.matchAll(/^#EXT-X-STREAM-INF:BANDWIDTH=(\d+),[^\r\n]*,VIDEO-RANGE=SDR,CODECS="([^"]+)"/gmu)];
+    const observed = evidenceByCodec[codec] = { sourceRange: input.VideoRangeType,
+      requestedRange: observedRange, codecDeclarations: renditions.map(entry => entry[2]) };
+    assert.deepEqual(observed.codecDeclarations, expected);
+    const uris = linesWithUris(manifest);
+    assert.equal(uris.length, expected.length);
+    assert.ok(uris.every(uri => uri === uris[0]));
+    assert.ok(renditions.every(entry => entry[1] === renditions[0][1]));
+    const variant = new URL(uris.at(-1), master);
+    assert.equal(variant.origin, origin);
+    const fragment = await readHlsFragment(request, variant);
+    assert.ok(fragment.initialization);
+    const filename = path.join(root, `${label}-${codec}-copy.mp4`);
+    await writeFile(filename, fragment.bytes, { signal });
+    const output = await probe(filename, evidence, signal);
+    const video = output.streams.find(stream => stream.codec_type === 'video');
+    assert.deepEqual([video.codec_name, video.level, video.width, video.height, video.pix_fmt],
+      [codec, input.Level, input.Width, input.Height, input.PixelFormat]);
+    observed.bandwidth = Number(renditions[0][1]);
+    observed.videoPackets = sha256(JSON.stringify(packets(output, 'video')));
+  } finally {
+    const stop = await request('/Videos/ActiveEncodings?' + new URLSearchParams({ deviceId, playSessionId: PlaySessionId }), { method: 'DELETE' });
+    assert.equal(stop.status, 204);
+  }
+}
+
+async function captureAv1Encoding(origin, authorization, root, label, evidence, signal) {
+  const request = requestFrom(origin, authorization, signal);
+  const info = await request(`/Items/${itemId}/PlaybackInfo`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ MediaSourceId: itemId, AudioStreamIndex: 2, SubtitleStreamIndex: -1,
+      EnableDirectPlay: false, EnableDirectStream: false, DeviceProfile: { MaxStreamingBitrate: 8000000,
+        TranscodingProfiles: [{ Type: 'Video', Context: 'Streaming', Protocol: 'hls', Container: 'mp4', VideoCodec: 'av1', AudioCodec: 'ac3' }],
+        CodecProfiles: [{ Type: 'Video', Codec: 'av1', Conditions: [
+          { Property: 'Width', Condition: 'LessThanEqual', Value: '360' },
+          { Property: 'VideoLevel', Condition: 'LessThanEqual', Value: '19' },
+        ] }],
+      } }) });
+  assert.equal(info.status, 200);
+  const { MediaSources: [source], PlaySessionId } = await info.json();
+  const master = new URL(source.TranscodingUrl, origin);
+  assert.equal(master.searchParams.get('VideoCodec'), 'av1');
+  assert.equal(master.searchParams.get('av1-level'), '19');
+  try {
+    const response = await request(master);
+    assert.equal(response.status, 200);
+    const manifest = await response.text();
+    assert.match(manifest, /CODECS="av01\.0\.15M\.08,ac-3"/u);
+    const variant = new URL(linesWithUris(manifest)[0], master);
+    assert.equal(variant.origin, origin);
+    const fragment = await readHlsFragment(request, variant);
+    assert.ok(fragment.initialization);
+    const filename = path.join(root, `${label}-av1-encoded.mp4`);
+    await writeFile(filename, fragment.bytes, { signal });
+    const output = await probe(filename, evidence, signal);
+    const video = output.streams.find(stream => stream.codec_type === 'video');
+    assert.deepEqual([video.codec_name, video.width, video.height, video.pix_fmt], ['av1', 360, 240, 'yuv420p']);
+    assert.ok(packets(output, 'video').length > 1);
+    const decoded = await runMediaTool('ffmpeg', ['-v', 'error', '-i', filename, '-map', '0:v:0', '-f', 'framemd5', '-'], evidence.commands, signal);
+    evidence[label].av1Encoded = { profile: video.profile, level: video.level,
+      decoded: sha256(decoded), audioPackets: sha256(JSON.stringify(packets(output, 'audio'))) };
+  } finally {
+    const stop = await request('/Videos/ActiveEncodings?' + new URLSearchParams({ deviceId, playSessionId: PlaySessionId }), { method: 'DELETE' });
+    assert.equal(stop.status, 204);
+  }
+}
+
+async function captureOpus(origin, authorization, root, label, evidence, signal) {
+  const request = requestFrom(origin, authorization, signal);
+  const info = await request(`/Items/${opusItemId}/PlaybackInfo`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ MediaSourceId: opusItemId, AudioStreamIndex: 1, SubtitleStreamIndex: -1,
+      EnableDirectPlay: false, EnableDirectStream: false, DeviceProfile: { MaxStreamingBitrate: 8000000,
+        TranscodingProfiles: [{ Type: 'Video', Context: 'Streaming', Protocol: 'hls', Container: 'mp4', VideoCodec: 'h264', AudioCodec: 'opus' }],
+      } }) });
+  assert.equal(info.status, 200);
+  const { MediaSources: [source], PlaySessionId } = await info.json();
+  const master = new URL(source.TranscodingUrl, origin);
+  try {
+    const response = await request(master);
+    assert.equal(response.status, 200);
+    const manifest = await response.text();
+    assert.match(manifest, /CODECS="avc1\.[^,"]+,Opus"/u);
+    const variant = new URL(linesWithUris(manifest)[0], master);
+    assert.equal(variant.origin, origin);
+    const fragment = await readHlsFragment(request, variant);
+    assert.ok(fragment.initialization);
+    const filename = path.join(root, `${label}-opus-copy.mp4`);
+    await writeFile(filename, fragment.bytes, { signal });
+    const output = await probe(filename, evidence, signal);
+    const audio = output.streams.find(stream => stream.codec_type === 'audio');
+    assert.deepEqual([audio?.codec_name, audio?.sample_rate, audio?.channels], ['opus', '48000', 2]);
+    assert.ok(packets(output, 'audio').length > 1);
+    evidence[label].opus = { audioPackets: sha256(JSON.stringify(packets(output, 'audio'))),
+      videoPackets: sha256(JSON.stringify(packets(output, 'video'))) };
+  } finally {
+    const stop = await request('/Videos/ActiveEncodings?' + new URLSearchParams({ deviceId, playSessionId: PlaySessionId }), { method: 'DELETE' });
+    assert.equal(stop.status, 204);
   }
 }
 
@@ -676,7 +860,10 @@ for (const backend of backends) test(backend === 'software'
     }
     if (!hardware) for (const [scenario, capture] of [
       ['dolbyVision', captureDolbyVision], ['hdrVariants', captureHdrVariants], ['rotation', captureRotation],
+      ...fmp4CodecFixtures.map(fixture => [fixture.codec, (...args) => captureFmp4Codec(fixture, ...args)]),
+      ['av1Encoding', captureAv1Encoding], ['opus', captureOpus],
     ]) {
+      if (evidence.scenarioErrors.some(error => error.label === 'fixture' && error.scenario === scenario)) continue;
       try { await capture(origin, authorization, root, label, evidence, t.signal); }
       catch (error) {
         t.signal.throwIfAborted();
@@ -721,7 +908,7 @@ for (const backend of backends) test(backend === 'software'
       await writeConfigurationFile(filename, 'network', { ...value, ...remoteFixture }, { source: node });
       const encodingPath = path.join(referenceRoot, 'config', 'encoding.xml');
       const encoding = readConfigurationDocument(await readFile(encodingPath), 'encoding');
-      await writeConfigurationFile(encodingPath, 'encoding', { ...encoding.value, AllowHevcEncoding: true }, { source: encoding.node });
+      await writeConfigurationFile(encodingPath, 'encoding', { ...encoding.value, AllowHevcEncoding: true, AllowAv1Encoding: true }, { source: encoding.node });
     }
     if (hardware) {
       const filename = path.join(referenceRoot, 'config', 'encoding.xml');
@@ -810,6 +997,9 @@ for (const backend of backends) test(backend === 'software'
       assert.deepEqual(evidence.node.hdrVariants, evidence.native.hdrVariants);
       assert.deepEqual(evidence.node.dolbyVision, evidence.native.dolbyVision);
       assert.deepEqual(evidence.node.rotation, evidence.native.rotation);
+      assert.deepEqual(evidence.node.fmp4Codecs, evidence.native.fmp4Codecs);
+      assert.deepEqual(evidence.node.av1Encoded, evidence.native.av1Encoded);
+      assert.deepEqual(evidence.node.opus, evidence.native.opus);
     }
     for (const [, protocol] of scenarios) {
       const expected = evidence.native[protocol], actual = evidence.node[protocol];
@@ -824,6 +1014,10 @@ for (const backend of backends) test(backend === 'software'
       if (protocol === 'adaptive') assert.deepEqual(actual.adaptive, expected.adaptive, 'The remote master advertises the same bandwidths and video bitrate requests.');
       if (protocol === 'direct') continue;
       assert.deepEqual(actual.head, expected.head, protocol);
+      if (expected.master) {
+        const codecs = manifest => Array.from(manifest.matchAll(/,CODECS="([^"]+)"/gu), match => match[1]);
+        assert.deepEqual(codecs(actual.master), codecs(expected.master), protocol + ' master codec declarations');
+      }
       if (protocol === 'event') {
         const project = value => value.replace(/hls\/([a-f0-9]{32})\/\1/g, 'hls/<playlist>/<playlist>');
         assert.equal(project(actual.playlist), project(expected.playlist));
@@ -883,11 +1077,20 @@ for (const backend of backends) test(backend === 'software'
       return;
     }
     const regularJobs = scenarios.length - 1;
-    const variantEncoders = ['copy', 'copy', 'copy', 'copy', 'libx265', 'libx264', 'libx264', 'copy'];
+    const variantEncoders = ['copy', 'copy', 'copy', 'copy', 'libx265', 'libx264', 'libx264', 'copy',
+      ...fmp4CodecFixtures.map(() => 'copy'), 'libsvtav1', 'copy'];
     assert.equal(evidence.nodeProcesses.length, regularJobs + variantEncoders.length);
     assert.deepEqual(evidence.nodeProcesses.slice(regularJobs).map(({ args }) => args[args.indexOf('-codec:v:0') + 1]), variantEncoders);
-    assert.ok(evidence.nodeProcesses.some(value => value.args.some(arg => arg.includes('tonemapx='))));
-    assert.ok((evidence.nativeFfmpeg ?? []).some(value => value.text.includes('tonemapx=')));
+    const { args: av1Args } = evidence.nodeProcesses.at(-2);
+    assert.equal(av1Args[av1Args.indexOf('-level') + 1], '53');
+    const { args: opusArgs } = evidence.nodeProcesses.at(-1);
+    assert.equal(opusArgs[opusArgs.indexOf('-codec:a:0') + 1], 'copy');
+    const nativeLogs = (evidence.nativeFfmpeg ?? []).map(value => value.text);
+    assert.ok(nativeLogs.some(log => log.includes('-codec:v:0 libsvtav1') && log.includes('-level 53')));
+    assert.ok(nativeLogs.some(log => log.includes('/opus.mp4') && log.includes('-codec:a:0 copy')));
+    assert.ok(evidence.nodeProcesses.some(({ args }) => args[args.indexOf('-level') + 1] === '51'
+      && args.some(arg => arg.includes('tonemapx='))));
+    assert.ok(nativeLogs.some(log => log.includes('tonemapx=') && log.includes('-level 51')));
     for (const { args } of evidence.nodeProcesses.slice(0, regularJobs)) {
       assert.ok(!args.includes('-hwaccel') && !args.includes('-init_hw_device'));
       if (args.includes('-vf') || args.includes('-filter_complex')) assert.equal(args[args.indexOf('-codec:v:0') + 1], 'libx264');
