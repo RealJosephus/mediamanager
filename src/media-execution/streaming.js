@@ -20,11 +20,20 @@ const containers = {
   wav: { muxer: 'wav', mime: 'audio/wav', audio: ['pcm_s16le', 'pcm_s24le', 'pcm_s32le', 'pcm_u8', 'pcm_f32le', 'pcm_f64le'] },
 };
 const matches = (requested, actual) => !requested || requested.toLowerCase().split(',').includes(actual?.toLowerCase()) || requested.toLowerCase() === 'copy';
+const ambiguousInputFormats = new Set(['m2ts', 'wmv', 'mts', 'vob', 'mpg', 'mpeg', 'rec', 'dvr-ms', 'ogm', 'divx', 'tp', 'rmvb', 'rtp', 'm4v', 'strm', 'iso']);
+
+function hardwareInputFormat(source, configuration) {
+  const container = source.Container?.toLowerCase();
+  if (!configuration?.HardwareAccelerationType || configuration.HardwareAccelerationType === 'none' || source.VideoType !== 'VideoFile'
+    || !/^[a-z0-9,-]+$/u.test(container ?? '') || ambiguousInputFormats.has(container)) return;
+  return container === 'ts' ? 'mpegts' : container.replaceAll('mkv', 'matroska');
+}
 
 export function remuxPlan(source, options = {}, { capabilities, configuration, version, subtitleBurn } = {}) {
   options = { ...options };
-  if (source.IsInfiniteStream || source.RequiresOpening || source.RequiresClosing || source.VideoType && !['VideoFile', 'Iso'].includes(source.VideoType)
-    || /^(?:hls|applehttp|dash)$/i.test(source.Container)) throw failure('not-supported', 'Remuxing requires a finite, opened media file.');
+  if (!options.LiveInput && (source.IsInfiniteStream || source.RequiresOpening || source.RequiresClosing)
+    || source.VideoType && !['VideoFile', 'Iso'].includes(source.VideoType)
+    || /^(?:hls|applehttp|dash)$/i.test(source.Container)) throw failure('not-supported', 'Streaming requires an opened media input.');
   const container = options.Container?.toLowerCase();
   const output = containers[container];
   if (!output) throw failure('not-supported', 'The requested container has no audited packet-copy muxer.');
@@ -76,7 +85,8 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
     const maximum = BigInt(source.RunTimeTicks) > 50000000n ? BigInt(source.RunTimeTicks) - 50000000n : 0n;
     if (start > maximum) start = maximum;
   }
-  return { container, ...output, inputVideo: video, videoOutput, audioOutput, burnSubtitle, streams: [video, audio, subtitle].filter(Boolean).map(stream => ({ type: stream.Type, codec: stream.Codec, index: stream.Type === 'Subtitle' ? subtitleInputIndex(source, stream) : stream.Index })),
+  return { container, ...output, inputVideo: video, inputFormat: video && hardwareInputFormat(source, configuration), videoOutput, audioOutput, burnSubtitle,
+    streams: [video, audio, subtitle].filter(Boolean).map(stream => ({ type: stream.Type, codec: stream.Codec, index: stream.Type === 'Subtitle' ? subtitleInputIndex(source, stream) : stream.Index })),
     start, seek: BigInt(options.StartTimeTicks ?? 0) > 0n, copyTimestamps: options.CopyTimestamps === true, m2ts: options.EnableMpegtsM2TsMode === true, mediaType: options.MediaType ?? 'Video' };
 }
 
@@ -88,7 +98,10 @@ export function remuxArguments(url, plan, threads, version, subtitles) {
     args.push('-ss', `${String(milliseconds / 3600000n % 24n).padStart(2, '0')}:${String(milliseconds / 60000n % 60n).padStart(2, '0')}:${String(milliseconds / 1000n % 60n).padStart(2, '0')}.${String(milliseconds % 1000n).padStart(3, '0')}`);
   }
   if (plan.videoOutput?.encoder === 'copy') args.push('-fflags', '+genpts');
-  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), '-i', url, '-threads', String(threads));
+  if (plan.inputFormat) args.push('-f', plan.inputFormat);
+  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), '-i', url);
+  if (plan.videoOutput?.hardware?.decoder.args.length) args.push('-noautoscale');
+  args.push('-threads', String(threads));
   for (const stream of plan.streams) args.push('-map', `0:${stream.index}`);
   args.push('-map_metadata', '-1', '-map_chapters', '-1', '-c', 'copy');
   const shift = subtitles && !plan.copyTimestamps ? Math.round(Number(plan.start) / 10000000) : null;
@@ -120,36 +133,54 @@ export function remuxArguments(url, plan, threads, version, subtitles) {
   return args;
 }
 
-export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks = 0n, { threads, version, maxMuxingQueueSize }, subtitles) {
+export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks = 0n, { threads, version, maxMuxingQueueSize }, subtitles, eventId) {
   if (!/^http:\/\/127\.0\.0\.1:\d+\/[a-f0-9]{64}$/.test(url)) throw new TypeError('HLS requires a private VFS input.');
-  const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-stats', '-stats_period', '0.5', '-protocol_whitelist', 'http,tcp', '-analyzeduration', '200M', '-probesize', '1G'];
+  if (eventId != null && !/^[a-f0-9]{32}$/u.test(eventId)) throw new TypeError('Invalid HLS event playlist identity.');
+  const prefix = eventId ?? 'segment';
+  const analyzeDuration = plan.analyzeDurationMs > 0 ? String(plan.analyzeDurationMs * 1000) : '200M';
+  const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-stats', '-stats_period', '0.5', '-protocol_whitelist', 'http,tcp', '-analyzeduration', analyzeDuration, '-probesize', '1G'];
   if (runtimeTicks > 0n) {
     const maximum = plan.runtime > 50000000n ? plan.runtime - 50000000n : 0n;
     const seekTicks = runtimeTicks + (plan.videoOutput?.encoder === 'copy' ? 5000000n : 0n);
     let milliseconds = (seekTicks > maximum ? maximum : seekTicks) / 10000n;
     args.push('-ss', `${String(milliseconds / 3600000n % 24n).padStart(2, '0')}:${String(milliseconds / 60000n % 60n).padStart(2, '0')}:${String(milliseconds / 1000n % 60n).padStart(2, '0')}.${String(milliseconds % 1000n).padStart(3, '0')}`);
   }
-  if (plan.videoOutput?.encoder === 'copy') args.push('-fflags', '+genpts');
-  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), '-i', url, '-map_metadata', '-1', '-map_chapters', '-1', '-threads', String(threads));
-  for (const stream of plan.streams) args.push('-map', `0:${stream.index}`);
-  args.push('-map', '-0:s');
+  if (plan.readAtNativeFramerate) {
+    args.push('-re');
+    if (encoderVersionAtLeast(version, 7, 1)) args.push('-readrate_catchup', '100');
+  }
+  const inputFlags = [plan.ignoreDts && '+igndts', plan.ignoreIndex && '+ignidx',
+    (plan.genPts || plan.videoOutput?.encoder === 'copy') && '+genpts', plan.discardCorrupt && '+discardcorrupt'].filter(Boolean);
+  if (inputFlags.length) args.push('-fflags', inputFlags.join(''));
+  if (plan.inputFormat) args.push('-f', plan.inputFormat);
+  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), '-i', url);
+  if (plan.videoOutput?.hardware?.decoder.args.length) args.push('-noautoscale');
+  args.push('-map_metadata', '-1', '-map_chapters', '-1', '-threads', String(threads));
+  if (plan.streams.some(stream => stream.index < 0)) args.push('-sn');
+  else {
+    for (const stream of plan.streams) args.push('-map', `0:${stream.index}`);
+    args.push('-map', '-0:s');
+  }
   if (plan.video) {
     const output = subtitles ? { ...plan.videoOutput, filters: [...plan.videoOutput.filters, subtitles.filter] } : plan.videoOutput;
-    args.push(...videoArguments(output, { hls: true, segmentLength: plan.segmentLength, version }));
+    args.push(...videoArguments(output, { hls: true, event: eventId != null, segmentLength: plan.segmentLength, version }));
     if (plan.videoOutput.codec === 'hevc') args.push('-tag:v:0', 'hvc1');
     if (plan.videoOutput.encoder === 'copy') {
-      if (['h264', 'hevc'].includes(plan.videoOutput.codec) && plan.video.NalLengthSize !== '0') {
+      if (!plan.live && ['h264', 'hevc'].includes(plan.videoOutput.codec) && plan.video.NalLengthSize !== '0') {
         args.push('-bsf:v', plan.videoOutput.codec + '_mp4toannexb');
       }
       args.push('-start_at_zero');
     }
     if (subtitles) args.push('-start_at_zero');
+    if (eventId && plan.container === 'ts') args.push('-flags', '-global_header');
   } else args.push('-vn');
   args.push(...audioArguments(plan.audioOutput));
   if (['opus', 'dts', 'truehd'].includes(plan.audioOutput?.codec) || plan.audioOutput?.codec === 'flac' && !encoderVersionAtLeast(version, 6)) args.push('-strict', '-2');
   args.push('-copyts', '-avoid_negative_ts', 'disabled', '-max_muxing_queue_size', String(maxMuxingQueueSize), '-f', 'hls', '-max_delay', '5000000', '-hls_time', String(plan.segmentLength), '-hls_segment_type', plan.container === 'mp4' ? 'fmp4' : 'mpegts');
-  if (plan.container === 'mp4') args.push('-hls_fmp4_init_filename', process.platform === 'win32' ? path.join(directory, 'segment-1.mp4') : 'segment-1.mp4');
-  args.push('-start_number', String(startNumber), '-hls_segment_filename', path.join(directory, `segment%d.${plan.container}`), '-hls_playlist_type', 'vod', '-hls_list_size', '0');
+  if (plan.container === 'mp4') args.push('-hls_fmp4_init_filename', process.platform === 'win32' ? path.join(directory, `${prefix}-1.mp4`) : `${prefix}-1.mp4`);
+  args.push('-start_number', String(startNumber));
+  if (eventId) args.push('-hls_base_url', `hls/${eventId}/`);
+  args.push('-hls_segment_filename', path.join(directory, `${prefix}%d.${plan.container}`), '-hls_playlist_type', eventId ? 'event' : 'vod', '-hls_list_size', '0');
   if (plan.container === 'mp4' && plan.video) args.push(encoderVersionAtLeast(version, 5) ? '-hls_segment_options' : '-hls_ts_options', 'movflags=+frag_discont+skip_sidx');
   args.push('-y', path.join(directory, 'main.m3u8'));
   return args;

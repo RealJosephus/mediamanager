@@ -7,7 +7,7 @@ import { pipeline } from 'node:stream/promises';
 import { StringDecoder } from 'node:string_decoder';
 import { setTimeout as delay } from 'node:timers/promises';
 import { StorageError, checkAbort } from '../storage/errors.js';
-import { singleRange } from '../http/binary-result.js';
+import { BinaryResult, singleRange } from '../http/binary-result.js';
 import { videoColorRange } from '../library/media-streams.js';
 import { remuxPlan, RemuxService } from './remux.js';
 import { getEncodingThreadCount } from './media-encoder.js';
@@ -15,11 +15,13 @@ import { hlsArguments } from '../media-execution/streaming.js';
 import { stageSubtitleBurn } from '../media-execution/subtitle-burn.js';
 import { outputVideoBitrate } from '../media-execution/video.js';
 import { matchesTranscodeJob as matchesJob, transcodingInfo } from './transcode-jobs.js';
+import { LiveStreamReadBridge } from './live-stream-bridge.js';
 
 export { hlsArguments };
 
 const failure = (code, message) => new StorageError(code, message);
 const lower = value => String(value ?? '').toLowerCase();
+const liveInitUri = /#EXT-X-MAP:URI="[^"\r\n]+"/u;
 const round = value => { const floor = Math.floor(value); return value - floor === 0.5 ? floor + floor % 2 : Math.round(value); };
 const ticksPerSecond = 10000000n;
 const int64Minimum = -(2n ** 63n);
@@ -250,10 +252,11 @@ export function hlsPlan(source, options = {}, tools) {
   if (!['ts', 'mp4'].includes(container)) throw failure('not-supported', 'HLS requires MPEG-TS or fragmented MP4 segments.');
   const audioStreams = source.MediaStreams.filter(stream => stream.Type === 'Audio').sort((a, b) => a.Index - b.Index);
   const audioOnly = options.MediaType === 'Audio';
+  const live = options.LiveInput === true && source.IsInfiniteStream === true;
   const audioIndex = (audioOnly ? undefined : audioStreams.find(stream => stream.Index === options.AudioStreamIndex)?.Index) ?? audioStreams.find(stream => stream.Channels > 0)?.Index ?? audioStreams[0]?.Index;
-  const plan = remuxPlan(source, { ...options, AudioStreamIndex: audioIndex, Container: container, StartTimeTicks: 0n, HlsManifest: true }, tools);
-  const video = source.MediaStreams.find(stream => stream.Index === plan.streams.find(stream => stream.type === 'Video')?.index);
-  const audio = source.MediaStreams.find(stream => stream.Index === plan.streams.find(stream => stream.type === 'Audio')?.index);
+  const plan = remuxPlan(source, { ...options, AudioStreamIndex: live && audioIndex === -1 ? undefined : audioIndex, Container: container, StartTimeTicks: 0n, HlsManifest: true }, tools);
+  const video = plan.inputVideo;
+  const audio = source.MediaStreams.find(stream => stream.Type === 'Audio' && stream.Index === plan.streams.find(stream => stream.type === 'Audio')?.index);
   const textSubtitles = source.MediaStreams.filter(stream => stream.Type === 'Subtitle' && stream.IsTextSubtitleStream);
   const selectedSubtitle = source.MediaStreams.find(stream => stream.Type === 'Subtitle' && stream.Index === options.SubtitleStreamIndex);
   // The current master endpoint does not bind EnableSubtitlesInManifest from
@@ -267,11 +270,13 @@ export function hlsPlan(source, options = {}, tools) {
     || plan.videoOutput?.encoder === 'copy' && (video?.DvProfile != null || container === 'ts' && (video?.Rotation ?? 0) !== 0)
     || options.SubtitleMethod === 'Hls' && (!selectedSubtitle?.IsTextSubtitleStream || !deliverable(selectedSubtitle))
     || subtitleGroup && options.SubtitleMethod !== 'Drop' && textSubtitles.some(stream => !deliverable(stream))) throw failure('not-supported', 'This HLS stream requires an unavailable manifest or processing branch.');
-  const segmentLength = options.SegmentLength ?? (audioOnly ? 3 : 6);
-  if (!Number.isSafeInteger(segmentLength) || segmentLength <= 0 || segmentLength > 86400 || BigInt(source.RunTimeTicks ?? 0) <= 0n) throw failure('invalid-request', 'HLS requires a finite duration and a positive segment length.');
-  if ((BigInt(source.RunTimeTicks) + BigInt(segmentLength) * 10000000n - 1n) / (BigInt(segmentLength) * 10000000n) > 100000n) throw failure('invalid-request', 'The HLS playlist exceeds the supported segment count.');
   const rate = plan.videoOutput?.frameRate;
   const copy = plan.videoOutput?.encoder === 'copy';
+  const mobileApple = /appletv|cfnetwork|ipad|iphone|ipod/iu.test(options.UserAgent ?? '');
+  const segmentLength = options.SegmentLength ?? (!copy || live && !mobileApple ? 3 : 6);
+  const runtime = BigInt(source.RunTimeTicks ?? 0);
+  if (!Number.isSafeInteger(segmentLength) || segmentLength <= 0 || segmentLength > 86400 || !live && runtime <= 0n) throw failure('invalid-request', 'HLS requires a valid duration and a positive segment length.');
+  if ((runtime + BigInt(segmentLength) * 10000000n - 1n) / (BigInt(segmentLength) * 10000000n) > 100000n) throw failure('invalid-request', 'The HLS playlist exceeds the supported segment count.');
   let playlistMilliseconds = segmentLength * 1000;
   if (!copy && rate && Math.abs(rate - Math.floor(rate + 0.001)) > 0.001) {
     playlistMilliseconds = Math.ceil(playlistMilliseconds * Math.ceil(rate) / rate);
@@ -279,7 +284,9 @@ export function hlsPlan(source, options = {}, tools) {
   const timeline = copy ? keyframeTimeline(options.KeyframeData, segmentLength) : {};
   if (timeline.keyframeSegments?.length > 100000) throw failure('invalid-request', 'The HLS playlist exceeds the supported segment count.');
   return { ...plan, video, audio, segmentLength, playlistSegmentTicks: BigInt(playlistMilliseconds) * 10000n,
-    runtime: BigInt(source.RunTimeTicks), ...timeline };
+    runtime, live, analyzeDurationMs: source.AnalyzeDurationMs, readAtNativeFramerate: source.ReadAtNativeFramerate,
+    ignoreDts: source.IgnoreDts, ignoreIndex: source.IgnoreIndex, genPts: source.GenPtsInput,
+    discardCorrupt: source.DiscardCorruptFrames, ...timeline };
 }
 
 function audioBitrate(audio, options) {
@@ -297,7 +304,7 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
     if (audioKey) audioKey[1] = codec; else parameters.push(['AudioCodec', codec]);
   }
   if (options.SegmentContainer && !parameters.some(([key]) => lower(key) === 'segmentcontainer')) parameters.push(['SegmentContainer', options.SegmentContainer]);
-  const variant = 'main.m3u8?' + parameters.map(([key, value]) => `${encode(key)}=${encodeQueryValue(value, Boolean(video))}`).join('&');
+  const variant = (plan.live ? 'live.m3u8?' : 'main.m3u8?') + parameters.map(([key, value]) => `${encode(key)}=${encodeQueryValue(value, Boolean(video))}`).join('&');
   const videoCopied = videoOutput?.encoder === 'copy';
   const profile = lower(videoOutput?.profile ?? (videoCopied ? undefined : 'high'));
   const level = videoOutput?.level ?? (videoCopied ? undefined : { h264: 41, hevc: 120, av1: 8 }[videoOutput?.codec]);
@@ -386,6 +393,8 @@ const operationFailure = errors => errors.length === 1 ? errors[0]
 
 export class HlsService {
   #jobs = new Map();
+  #events = new Map();
+  #liveBridge;
   #activity = new Map();
   #closed = false;
   #closing;
@@ -396,12 +405,12 @@ export class HlsService {
   #initializations = new Set();
   #owner = randomUUID();
   #cleanup = new Set();
-  constructor({ vfs, bridge, remux, mediaEncoder, getCacheDirectory, getEncodingOptions, maxConcurrentJobs = 4, idleTimeoutMs = 60000, timeoutMs = 21600000, onError = () => {}, onProcess = () => {}, onProgress = () => {} }) {
+  constructor({ vfs, bridge, remux, mediaEncoder, getCacheDirectory, getEncodingOptions, maxConcurrentJobs = 4, idleTimeoutMs = 60000, timeoutMs = 21600000, onError = () => {}, onProcess = () => {}, onProgress = () => {}, onEventStop }) {
     if (!vfs) throw new TypeError('HLS requires VFS.');
     if (!mediaEncoder) throw new TypeError('HLS requires its startup media encoder.');
     if (typeof getCacheDirectory !== 'function' || typeof getEncodingOptions !== 'function') throw new TypeError('HLS requires current encoding and transcode directory callbacks.');
     for (const value of [maxConcurrentJobs, idleTimeoutMs, timeoutMs]) if (!Number.isSafeInteger(value) || value < 1) throw new TypeError('Positive HLS limits are required.');
-    Object.assign(this, { vfs, mediaEncoder, remux: remux ?? new RemuxService({ vfs, bridge, mediaEncoder }), ownsRemux: !remux, getCacheDirectory, getEncodingOptions, maxConcurrentJobs, idleTimeoutMs, timeoutMs, onError, onProcess, onProgress });
+    Object.assign(this, { vfs, mediaEncoder, remux: remux ?? new RemuxService({ vfs, bridge, mediaEncoder }), ownsRemux: !remux, getCacheDirectory, getEncodingOptions, maxConcurrentJobs, idleTimeoutMs, timeoutMs, onError, onProcess, onProgress, onEventStop });
     cacheOwners.add(this.#owner);
   }
   #track(operation) {
@@ -469,7 +478,7 @@ export class HlsService {
   ping(playSessionId, isPaused) { this.jobs.ping(playSessionId, isPaused); }
   #touch(job) {
     clearTimeout(job.idle);
-    if (job.exited || !job.active || job.controller.signal.aborted) return;
+    if (job.exited && !job.eventId || job.eventId && job.readers || !job.active || job.controller.signal.aborted) return;
     job.idle = setTimeout(() => { this.#remove(job).catch(error => this.onError(error)); }, this.idleTimeoutMs); job.idle.unref();
   }
   #activityKey(options) {
@@ -493,11 +502,16 @@ export class HlsService {
   async #remove(job) {
     if (job.removing) return job.removing;
     job.controller.abort(); clearTimeout(job.idle); clearInterval(job.cleaner); this.#jobs.delete(job.key); this.jobs.unregister(job);
+    if (job.eventId) this.#events.delete(job.eventId);
     const cleanup = {};
     job.removing = (async () => {
       await job.tail; await Promise.all([...job.pendingReaders]);
       const errors = []; let directory;
       try { await job.done; } catch (error) { errors.push(error); }
+      if (job.eventId && job.options.LiveStreamId && job.done) {
+        try { await this.onEventStop?.(job.options.LiveStreamId, job.options.PlaySessionId); }
+        catch (error) { errors.push(error); }
+      }
       try { directory = await job.directory; } catch (error) { errors.push(error); }
       if (directory !== undefined) try {
         assertJobDirectory(job.cacheDirectory, directory);
@@ -510,6 +524,108 @@ export class HlsService {
     return job.removing;
   }
   async stop(deviceId, playSessionId) { await this.jobs.stop(deviceId, playSessionId); }
+  #createJob({ key, plan, options, source, virtualPath, version, cacheDirectory, openRead, eventId }) {
+    if (this.#closed) throw failure('closed', 'HLS is closed.');
+    if ([...this.#jobs.values()].filter(value => !value.exited && !matchesJob(value, options.DeviceId, options.PlaySessionId)).length >= this.maxConcurrentJobs) throw failure('busy', 'The HLS concurrency limit has been reached.');
+    const job = { key, plan, options, source, virtualPath, version, cacheDirectory, openRead, eventId,
+      controller: new AbortController(), readers: 0, pendingReaders: new Set(), tail: Promise.resolve() };
+    job.directory = mkdtemp(path.join(cacheDirectory, 'mediamanager-hls-')).then(async directory => {
+      try { await writeFile(path.join(directory, 'owner.json'), json({ kind: 'mediamanager-hls', pid: process.pid, id: this.#owner })); return directory; }
+      catch (error) {
+        assertJobDirectory(cacheDirectory, directory);
+        try { await rm(directory, { recursive: true, force: true, maxRetries: 10, retryDelay: 500 }); }
+        catch (cleanup) { throw operationFailure([error, cleanup]); }
+        throw error;
+      }
+    });
+    job.directory.catch(() => {});
+    this.#jobs.set(key, job);
+    if (eventId) this.#events.set(eventId, job);
+    this.jobs.register(job, {
+      describe: () => this.#describe(job), stop: () => this.#remove(job),
+      ping: isPaused => { if (isPaused != null) job.isPaused = isPaused; this.#touch(job); },
+    });
+    return job;
+  }
+
+  async #withEventReader(job, request, response, operation) {
+    const reader = new AbortController();
+    const cancel = () => { if (!response.writableFinished) reader.abort(); };
+    request.once('aborted', cancel); response.once('close', cancel);
+    if (request.aborted || response.destroyed) cancel();
+    const signal = AbortSignal.any([reader.signal, job.controller.signal, this.#lifetime.signal]);
+    const finished = Promise.withResolvers();
+    job.readers++; clearTimeout(job.idle); job.pendingReaders.add(finished.promise);
+    try { return await operation(signal); }
+    finally {
+      request.removeListener('aborted', cancel); response.removeListener('close', cancel);
+      job.readers--; job.pendingReaders.delete(finished.promise); finished.resolve();
+      if (!job.readers && (!job.active || job.error && !job.served)) await this.#remove(job);
+      else this.#touch(job);
+    }
+  }
+
+  eventPlaylist(source, virtualPath, options, request, response, { openRead } = {}) {
+    return this.#track(async () => {
+      const configuration = this.getEncodingOptions();
+      const plan = { ...this.plan(source, options, configuration), execution: {
+        threads: getEncodingThreadCount(configuration, options.CpuCoreLimit), version: this.mediaEncoder.version,
+        maxMuxingQueueSize: Math.max(128, configuration.MaxMuxingQueueSize ?? 128),
+      } };
+      const { directory: cacheDirectory, available } = await this.#initialize();
+      if (!available) throw failure('unavailable', 'The HLS process is unavailable.');
+      let version;
+      if (!openRead) {
+        const info = await this.vfs.stat(virtualPath, { signal: this.#lifetime.signal });
+        if (this.vfs.capabilities(virtualPath).reliableVersion && !plan.burnSubtitle?.Path) version = info.version;
+      }
+      const key = createHash('sha256').update(json(['event', cacheDirectory, source.LiveStreamId ? [source.LiveStreamId, source.Path] : virtualPath,
+        version, request.headers['user-agent'], options.DeviceId, options.PlaySessionId, cachePlan(plan)])).digest('hex');
+      const current = this.#jobs.get(key);
+      const job = current ?? this.#createJob({ key, plan, options, source, virtualPath, version, cacheDirectory, openRead,
+        eventId: randomUUID().replaceAll('-', '') });
+      await this.#withEventReader(job, request, response, async signal => {
+        const directory = await job.directory, playlist = path.join(directory, 'main.m3u8');
+        if (!job.eventStart) {
+          job.eventStart = this.#start(job, plan, options, 0, 0n, undefined, signal);
+          job.eventStart.catch(() => {});
+        }
+        await job.eventStart;
+        const minSegments = current ? 0 : options.MinSegments ?? (plan.segmentLength >= 10 ? 2 : 3);
+        let text;
+        while (true) {
+          checkAbort(signal);
+          if (job.error) throw job.error;
+          try { text = await readFile(playlist, 'utf8'); }
+          catch (error) { if (!['ENOENT', 'EBUSY', 'EPERM'].includes(error.code)) throw error; }
+          if (text && (job.exited || (text.match(/^#EXTINF:/gmu)?.length ?? 0) >= minSegments)) break;
+          if (job.exited) throw failure('not-found', 'The event playlist was not produced.');
+          await delay(50, undefined, { signal });
+        }
+        if (plan.container === 'mp4') text = text.replace(liveInitUri, `#EXT-X-MAP:URI="hls/${job.eventId}/${job.eventId}-1.mp4"`);
+        response.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
+        response.end(text); job.served = true;
+      });
+    });
+  }
+
+  eventArtifact(playlistId, filename, isPlaylist = false) {
+    const job = this.#events.get(lower(playlistId));
+    if (!job || (!isPlaylist && !new RegExp(`^${job.eventId}(?:[0-9]+${job.plan.container === 'mp4' ? '|-1' : ''})\\.${job.plan.container}$`, 'u').test(filename))) return null;
+    return new BinaryResult((request, response) => this.#track(async () => {
+      await this.#withEventReader(job, request, response, async signal => {
+        checkAbort(signal);
+        const file = path.join(await job.directory, isPlaylist ? 'main.m3u8' : filename);
+        if (!await exists(file)) throw Object.assign(failure('not-found', 'Hls segment not found.'), { status: 404 });
+        if (isPlaylist) {
+          let text = (await readFile(file, 'utf8')).replaceAll(`hls/${job.eventId}/`, '');
+          if (job.plan.container === 'mp4') text = text.replace(liveInitUri, `#EXT-X-MAP:URI="${job.eventId}-1.mp4"`);
+          response.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
+          response.end(text);
+        } else await this.#send(file, job.plan.mime, request, response, signal);
+      });
+    }));
+  }
   segment(source, virtualPath, options, index, request, response, { signal } = {}) {
     const current = this.getEncodingOptions();
     const execution = { threads: getEncodingThreadCount(current, options.CpuCoreLimit), version: this.mediaEncoder.version,
@@ -533,26 +649,7 @@ export class HlsService {
     const canonicalStart = index >= 0 && plan.keyframeStarts?.[index] != null ? plan.keyframeStarts[index] : BigInt(Math.max(index, 0)) * plan.playlistSegmentTicks;
     const timelineOffset = runtimeTicks - canonicalStart;
     const key = createHash('sha256').update(json([cacheDirectory, virtualPath, version, request.headers['user-agent'], options.DeviceId, options.PlaySessionId, cachePlan(plan), timelineOffset])).digest('hex');
-    let job = this.#jobs.get(key);
-    if (!job) {
-      if (this.#closed) throw failure('closed', 'HLS is closed.');
-      if ([...this.#jobs.values()].filter(value => !value.exited && !matchesJob(value, options.DeviceId, options.PlaySessionId)).length >= this.maxConcurrentJobs) throw failure('busy', 'The HLS concurrency limit has been reached.');
-      job = { key, plan, options, source, virtualPath, version, cacheDirectory, controller: new AbortController(), readers: 0, pendingReaders: new Set(), tail: Promise.resolve() };
-      job.directory = mkdtemp(path.join(cacheDirectory, 'mediamanager-hls-')).then(async directory => {
-        try { await writeFile(path.join(directory, 'owner.json'), json({ kind: 'mediamanager-hls', pid: process.pid, id: this.#owner })); return directory; }
-        catch (error) {
-          assertJobDirectory(cacheDirectory, directory);
-          try { await rm(directory, { recursive: true, force: true, maxRetries: 10, retryDelay: 500 }); }
-          catch (cleanup) { throw operationFailure([error, cleanup]); }
-          throw error;
-        }
-      });
-      this.#jobs.set(key, job);
-      this.jobs.register(job, {
-        describe: () => this.#describe(job), stop: () => this.#remove(job),
-        ping: isPaused => { if (isPaused != null) job.isPaused = isPaused; this.#touch(job); },
-      });
-    }
+    const job = this.#jobs.get(key) ?? this.#createJob({ key, plan, options, source, virtualPath, version, cacheDirectory });
     job.readers++; if (!job.options.PlaySessionId?.trim()) clearTimeout(job.idle);
     let finishReader;
     const finished = new Promise(resolve => { finishReader = resolve; }); job.pendingReaders.add(finished);
@@ -641,9 +738,13 @@ export class HlsService {
     const timer = setTimeout(() => controller.abort(failure('timeout', 'HLS processing timed out.')), this.timeoutMs); timer.unref();
     let lease, child, subtitles;
     try {
-      lease = await this.remux.bridge.lease(job.virtualPath, { version: job.version, signal, expiresInMs: this.timeoutMs });
+      if (job.plan.live && job.source.BufferMs > 0) await delay(job.source.BufferMs, undefined, { signal });
+      if (job.openRead) {
+        this.#liveBridge ??= new LiveStreamReadBridge();
+        lease = await this.#liveBridge.lease(job.openRead, { signal });
+      } else lease = await this.remux.bridge.lease(job.virtualPath, { version: job.version, signal, expiresInMs: this.timeoutMs });
       subtitles = await stageSubtitleBurn(this.remux.subtitleBurn, job.source, job.plan.burnSubtitle, job.virtualPath, signal);
-      const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution, subtitles);
+      const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution, subtitles, job.eventId);
       checkAbort(signal);
       const overrides = job.plan.videoOutput?.hardware?.environment;
       const environment = overrides ? { ...(this.mediaEncoder.environment ?? process.env), ...overrides } : this.mediaEncoder.environment;
@@ -666,8 +767,7 @@ export class HlsService {
         this.onProcess({ pid: child.pid, args: args.map(value => value === lease.url ? '[private source]' : value) });
         const code = await done; const finalText = decoder.end(); diagnostics = (diagnostics + finalText).slice(-8192); progressParser.end(finalText); checkAbort(signal);
         if (code !== 0) throw new StorageError('invalid-response', 'The HLS streams could not be processed.', { exitCode: code, diagnostic: diagnostics.replaceAll(lease.url, '[private source]') });
-        const after = await this.vfs.stat(job.virtualPath, { signal });
-        if (job.version != null && after.version !== job.version) throw failure('version-changed', 'The HLS source changed.');
+        if (job.version != null && (await this.vfs.stat(job.virtualPath, { signal })).version !== job.version) throw failure('version-changed', 'The HLS source changed.');
       } finally { signal.removeEventListener('abort', abort); child.kill(); await done.catch(() => {}); }
     } catch (error) { job.error = signal.aborted ? signal.reason ?? failure('cancelled', 'HLS was cancelled.') : error; }
     finally {
@@ -677,6 +777,7 @@ export class HlsService {
       try { await subtitles?.release(); } catch (error) { errors.push(error); }
       try { await lease?.release(); } catch (error) { errors.push(error); }
       job.exited = true;
+      if (job.eventId) this.#touch(job);
       try { this.#reportProgress(job, undefined, 'exit'); } catch (error) { errors.push(error); }
       if (errors.length) {
         job.error = operationFailure(job.error ? [job.error, ...errors] : errors);
@@ -735,6 +836,7 @@ export class HlsService {
       errors.push(...cleanup.filter(operation => Object.hasOwn(operation, 'error')).map(operation => operation.error));
       errors.push(...[...this.#initializations].map(initialization => initialization.error));
       cacheOwners.delete(this.#owner);
+      try { await this.#liveBridge?.close(); } catch (error) { errors.push(error); }
       if (this.ownsRemux) try { await this.remux.close(); } catch (error) { errors.push(error); }
       if (errors.length) throw operationFailure(errors);
     })().then(completion.resolve, completion.reject);

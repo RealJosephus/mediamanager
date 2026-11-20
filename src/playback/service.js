@@ -98,6 +98,10 @@ export class PlaybackService {
     }
   }
 
+  #canUseLiveInput(source) {
+    return Boolean(source.LiveStreamId && (this.getLiveStreams?.()?.hasByteReader?.(source.LiveStreamId) || this.#canResolveSource(source)));
+  }
+
   async sources(item, user, { signal } = {}) {
     const dynamicSources = await this.getLiveTvMediaSources?.()?.getMediaSources(item, { signal }) ?? [];
     let sources = await this.library.getMediaSources(item.Id, { user, dynamicSources });
@@ -216,8 +220,9 @@ export class PlaybackService {
           PermitAudioEncoding: policy.EnableAudioPlaybackTranscoding === true, PermitVideoEncoding: policy.EnableVideoPlaybackTranscoding === true,
           CanEncodeAudio: mediaEncoder?.canEncodeAudio?.bind(mediaEncoder),
           CanRemux: (source, requested) => !source.RequiresOpening && !source.LiveStreamId && this.remux?.supports(source, requested) === true && this.#canResolveSource(source),
-          CanHls: (source, requested) => !source.RequiresOpening && !source.LiveStreamId && this.hls?.supports(source, { ...requested,
-            CanDeliverHlsSubtitle: stream => this.canDeliverHlsSubtitle(source, stream) }) === true && this.#canResolveSource(source),
+          CanHls: (source, requested) => this.#canUseLiveInput(source) || !source.RequiresOpening && this.#canResolveSource(source)
+            ? this.hls?.supports(source, { ...requested, LiveInput: Boolean(source.LiveStreamId),
+              CanDeliverHlsSubtitle: stream => this.canDeliverHlsSubtitle(source, stream) }) === true : false,
           CanExtractSubtitle: (stream, format) => this.extraction?.supportsSubtitle(source, stream, format) === true, AudioStreamIndex: specific ? options.AudioStreamIndex : undefined,
           SubtitleStreamIndex: specific ? options.SubtitleStreamIndex : undefined });
         if (item.MediaType === 'Audio' && !user.Policy.EnableAudioPlaybackTranscoding) {
@@ -227,7 +232,7 @@ export class PlaybackService {
         if (source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) { source.SupportsDirectPlay = false; source.SupportsDirectStream = false; }
       }
     }
-    if (item.Type === 'LiveTvChannel' && item.SourceType === 'LiveTV') for (const source of sources) {
+    if (item.Type === 'LiveTvChannel' && item.SourceType === 'LiveTV') for (const source of sources) if (!source.LiveStreamId) {
       source.SupportsTranscoding = false; delete source.TranscodingUrl; delete source.TranscodingContainer;
     }
     // Storage checks and negotiation above use the persistent identity path.
@@ -284,11 +289,16 @@ export class PlaybackService {
         const limit = user.RemoteClientBitrateLimit > 0 ? user.RemoteClientBitrateLimit : this.configuration.RemoteClientBitrateLimit;
         const max = limit > 0 && this.isLocalNetwork && !this.isLocalNetwork(remoteEndPoint)
           ? Math.min(options.MaxStreamingBitrate ?? limit, limit) : options.MaxStreamingBitrate;
+        await this.hls?.initialize();
+        const policy = user.Policy;
         negotiateSource(result.MediaSource, item, profile, { ...options, MaxStreamingBitrate: max, AccessToken: auth.Token,
-          DeviceId: auth.DeviceId, EnableRemuxing: false, CanRemux: () => false, CanHls: () => false, CanExtractSubtitle: () => false });
+          DeviceId: auth.DeviceId, EnableRemuxing: this.#canUseLiveInput(result.MediaSource) && policy.EnableMediaPlayback && (policy.EnablePlaybackRemuxing
+            || policy.EnableAudioPlaybackTranscoding || policy.EnableVideoPlaybackTranscoding),
+          PermitAudioEncoding: policy.EnableAudioPlaybackTranscoding === true, PermitVideoEncoding: policy.EnableVideoPlaybackTranscoding === true,
+          CanRemux: () => false, CanHls: (source, request) => this.#canUseLiveInput(source)
+            && this.hls?.supports(source, { ...request, LiveInput: true }) === true, CanExtractSubtitle: () => false });
       }
       if (result.MediaSource.Container) result.MediaSource.Container = result.MediaSource.Container.split(',')[0];
-      result.MediaSource.SupportsTranscoding = false; delete result.MediaSource.TranscodingUrl; delete result.MediaSource.TranscodingContainer;
       return result;
     }
   }
@@ -344,6 +354,7 @@ export class PlaybackService {
   }
 
   async remuxStream(itemId, { user, ...options } = {}) {
+    if (options.LiveStreamId?.trim()) throw httpError(400, 'The requested streaming source is unavailable.');
     const item = await this.library.getItemRecord(itemId, { user });
     if (user && (!user.Policy.EnableMediaPlayback || !user.Policy.EnablePlaybackRemuxing
       && !user.Policy.EnableAudioPlaybackTranscoding && !user.Policy.EnableVideoPlaybackTranscoding)) throw httpError(403, 'Media remuxing is not allowed.');
@@ -376,15 +387,21 @@ export class PlaybackService {
     // StreamingHelpers resolves the source without a user visibility filter.
     // The HLS controller requires authentication; PlaybackInfo applies policy.
     const item = await this.library.getItemRecord(itemId);
-    const sources = await this.sources(item, null);
-    const source = options.MediaSourceId ? sources.find(value => value.Id.toLowerCase() === options.MediaSourceId.toLowerCase()) : sources[0];
+    const liveStreams = this.getLiveStreams?.();
+    const liveId = options.LiveStreamId?.trim();
+    const sources = liveId ? [liveStreams?.getLiveStream(liveId)].filter(Boolean) : await this.sources(item, null);
+    const source = !liveId && options.MediaSourceId ? sources.find(value => value.Id.toLowerCase() === options.MediaSourceId.toLowerCase()) : sources[0];
     if (!source) throw httpError(404, 'Media source not found.');
     if (!this.hls) throw httpError(503, 'HLS has not been configured.');
     options.PermitAudioEncoding = user?.Policy.EnableAudioPlaybackTranscoding;
     options.PermitVideoEncoding = user?.Policy.EnableVideoPlaybackTranscoding;
     options.CanDeliverHlsSubtitle = stream => this.canDeliverHlsSubtitle(source, stream);
+    options.LiveInput = Boolean(liveId);
+    if (liveId && source.FallbackMaxStreamingBitrate != null && options.VideoBitRate != null) {
+      options.VideoBitRate = Math.min(options.VideoBitRate, source.FallbackMaxStreamingBitrate);
+    }
     let keyframeRequest;
-    if (kind !== 'master' && options.MediaSourceId?.trim() && source.MediaStreams.some(stream => stream.Type === 'Video')) {
+    if ((kind === 'main' || kind === 'segment') && !liveId && options.MediaSourceId?.trim() && source.MediaStreams.some(stream => stream.Type === 'Video')) {
       const encoding = this.hls.getEncodingOptions();
       const allowed = encoding?.AllowOnDemandMetadataBasedKeyframeExtractionForExtensions ?? ['mkv'];
       const extension = path.win32.extname(source.Path ?? '').slice(1).toLowerCase();
@@ -397,6 +414,12 @@ export class PlaybackService {
       request.once('aborted', abort); response.once('close', abort);
       try {
         if (!await this.hls.initialize()) throw httpError(503, 'The HLS process is unavailable.');
+        if (kind === 'event') {
+          const openRead = liveId && liveStreams?.hasByteReader?.(liveId) ? input => liveStreams.openRead(liveId, input) : undefined;
+          const accessPath = openRead ? undefined : this.accessPath({ Id: source.Id, Path: source.Path });
+          await this.hls.eventPlaylist(source, accessPath, options, request, response, { openRead });
+          return;
+        }
         if (keyframeRequest) {
           const plan = this.hls.plan(source, options);
           if (plan.videoOutput?.encoder === 'copy') {
@@ -432,6 +455,7 @@ export class PlaybackService {
   }
 
   async stopHls(deviceId, playSessionId) { await this.hls?.stop(deviceId, playSessionId); }
+  eventHlsArtifact(playlistId, filename, isPlaylist) { return this.hls?.eventArtifact(playlistId, filename, isPlaylist); }
 
   async externalAudio(itemId, mediaSourceId, index, { user } = {}) {
     if (!nonemptyId(itemId)) throw httpError(400, "Guid can't be empty. (Parameter 'id')");

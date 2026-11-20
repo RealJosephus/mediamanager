@@ -38,7 +38,7 @@ export function bindPlayback(context) {
 export function bindStreaming(context, kind) {
   const query = (context, name) => queryValue(context.query, name);
   const options = { MediaType: kind === 'Audio' ? 'Audio' : 'Video', Container: context.params.container ?? query(context, 'container'), MediaSourceId: query(context, 'mediaSourceId') };
-  for (const name of ['VideoCodec', 'AudioCodec', 'SubtitleCodec', 'SubtitleMethod', 'Profile', 'Level', 'DeviceId', 'PlaySessionId', 'SegmentContainer', 'TranscodeReasons']) options[name] = query(context, name);
+  for (const name of ['VideoCodec', 'AudioCodec', 'SubtitleCodec', 'SubtitleMethod', 'Profile', 'Level', 'DeviceId', 'PlaySessionId', 'SegmentContainer', 'TranscodeReasons', 'LiveStreamId']) options[name] = query(context, name);
   for (const name of ['AudioStreamIndex', 'VideoStreamIndex', 'SubtitleStreamIndex', 'AudioSampleRate', 'AudioChannels', 'MaxAudioChannels', 'TranscodingMaxAudioChannels', 'Width', 'Height', 'MaxWidth', 'MaxHeight', 'VideoBitRate', 'AudioBitRate', 'MaxVideoBitDepth', 'MaxAudioBitDepth', 'MaxRefFrames', 'SegmentLength', 'MinSegments', 'CpuCoreLimit']) options[name] = integerValue(query(context, name), name[0].toLowerCase() + name.slice(1));
   for (const name of ['AllowVideoStreamCopy', 'AllowAudioStreamCopy', 'EnableAutoStreamCopy', 'CopyTimestamps', 'DeInterlace', 'RequireAvc', 'RequireNonAnamorphic', 'EnableMpegtsM2TsMode', 'AlwaysBurnInSubtitleWhenTranscoding', 'EnableSubtitlesInManifest', 'EnableAudioVbrEncoding']) options[name] = booleanValue(query(context, name), name[0].toLowerCase() + name.slice(1));
   options.StreamOptions = Object.fromEntries([...context.query].filter(([name]) => /^[a-z0-9_]+-(?:profile|level|audiochannels|videobitdepth|audiobitdepth|maxrefframes|deinterlace|rangetype|rotation|codectag)$/i.test(name)).map(([name, value]) => [name.toLowerCase(), value]));
@@ -53,7 +53,7 @@ export function bindStreaming(context, kind) {
     options[name] = value;
   }
   options.StartTimeTicks = longValue(query(context, 'startTimeTicks'), 'startTimeTicks', 0n);
-  if (query(context, 'params') || query(context, 'liveStreamId')) throw httpError(400, 'The requested streaming source is unavailable.');
+  if (query(context, 'params')) throw httpError(400, 'The requested streaming source is unavailable.');
   return options;
 }
 
@@ -158,10 +158,15 @@ export function registerPlaybackRoutes(add, { playback, users }) {
     await playback.stopHls(deviceId, playSessionId);
     return new HttpResult(204);
   });
+  add('GET', '/Videos/{itemId}/live.m3u8', context => playback.hlsStream(itemId(context), 'event', {
+    ...bindStreaming(context, 'Videos'), user: context.auth.User, AccessToken: context.auth.Token,
+    UserAgent: context.request.headers['user-agent'], QueryString: context.url.search.slice(1),
+  }));
   for (const kind of ['Videos', 'Audio']) for (const method of ['GET', 'HEAD']) {
     for (const playlist of method === 'HEAD' ? ['master'] : ['master', 'main']) add(method, `/${kind}/{itemId}/${playlist}.m3u8`, async context => {
       if (kind === 'Audio' && playlist === 'master' && !query(context, 'mediaSourceId')?.trim()) throw new BindingError('mediaSourceId', 'The mediaSourceId field is required.');
-      return playback.hlsStream(itemId(context), playlist, { ...bindStreaming(context, kind), user: context.auth.User, AccessToken: context.auth.Token, QueryString: context.url.search.slice(1) });
+      return playback.hlsStream(itemId(context), playlist, { ...bindStreaming(context, kind), user: context.auth.User,
+        AccessToken: context.auth.Token, UserAgent: context.request.headers['user-agent'], QueryString: context.url.search.slice(1) });
     });
     if (method === 'HEAD') continue;
     add(method, `/${kind}/{itemId}/hls1/{playlistId}/{segmentId}.{container}`, async context => {

@@ -206,14 +206,23 @@ export function videoStreamPlan(video, source, request, allowed, { configuration
     vaapiDriver: capabilities.vaapiDriver };
 }
 
-export function videoArguments(plan, { hls = false, segmentLength, version } = {}) {
+export function videoArguments(plan, { hls = false, event = false, segmentLength, version } = {}) {
   const args = ['-codec:v:0', plan.encoder];
   if (plan.encoder === 'copy') return args;
   const configured = ['veryslow', 'slower', 'slow', 'medium', 'fast', 'faster', 'veryfast', 'superfast', 'ultrafast'];
-  const preset = plan.preset === 'auto' ? 'veryfast' : configured.includes(plan.preset) ? plan.preset : hls ? 'veryfast' : 'superfast';
+  const preset = plan.preset ?? (hls && !event ? 'veryfast' : 'superfast');
+  const presetIndex = configured.indexOf(preset);
   if (plan.encoder === 'libx264' || plan.encoder === 'libx265') {
-    args.push('-preset', preset, '-crf', String(plan.crf >= 0 && plan.crf <= 51 ? plan.crf : plan.crfDefault));
-  } else if (plan.encoder === 'libsvtav1') args.push('-preset', String(configured.indexOf(preset) + 5));
+    args.push('-preset', presetIndex < 0 ? 'veryfast' : preset, '-crf', String(plan.crf >= 0 && plan.crf <= 51 ? plan.crf : plan.crfDefault));
+  } else if (plan.encoder === 'libsvtav1') args.push('-preset', String(presetIndex < 0 ? 10 : presetIndex + 5));
+  else if (plan.encoder.endsWith('_nvenc')) args.push('-preset', 'p' + (presetIndex < 0 ? 1 : Math.max(1, 7 - presetIndex)));
+  else if (plan.encoder.endsWith('_qsv')) args.push('-preset', presetIndex >= 0 && presetIndex < 7 ? preset : 'veryfast');
+  else if (plan.encoder.endsWith('_vaapi') && plan.vaapiDriver === 'iHD' && presetIndex >= 0) args.push('-compression_level', String(Math.min(7, 1 + presetIndex)));
+  else if (plan.encoder.endsWith('_amf')) {
+    args.push('-quality', presetIndex < 0 || presetIndex > 3 ? 'speed' : presetIndex === 3 ? 'balanced' : 'quality');
+    if (plan.codec === 'hevc' || plan.codec === 'av1') args.push('-header_insertion_mode', 'gop');
+    if (plan.codec === 'hevc') args.push('-gops_per_idr', '1');
+  }
   if (plan.bitrate > 0) {
     const bitrate = plan.encoder === 'h264_qsv' ? Math.max(1000, plan.bitrate) : plan.bitrate;
     const rate = String(bitrate), buffer = String(bitrate * 2);
