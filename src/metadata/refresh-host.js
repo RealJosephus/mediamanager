@@ -124,11 +124,11 @@ export class MetadataRefreshHost {
   #lifetime = new AbortController();
   #shutdownDrain = new AsyncLocalStorage();
   #drainingOperations = new Set();
-  constructor({ registry, loadContext, linkedChildren, store, vfs, userData, images, probe, updates, externalData, seriesLifecycle,
+  constructor({ registry, loadContext, linkedChildren, store, vfs, userData, images, probe, updates, externalData, seriesLifecycle, trickplay,
     supportedItemTypes = supported, logger = { error() {} }, now = () => new Date().toISOString() }) {
     if (!registry || !loadContext || !store) throw new TypeError('Metadata refresh requires registry, authoritative context and persistence.');
     this.linkedChildren = linkedChildren;
-    Object.assign(this, { registry, loadContext, store, vfs, userData, probe, logger, now, supportedItemTypes,
+    Object.assign(this, { registry, loadContext, store, vfs, userData, probe, trickplay, logger, now, supportedItemTypes,
       images: images ?? new MetadataImages({ logger }) });
     this.updates = updates ?? new MetadataUpdateHost({ registry, store, library: loadContext.library, images: this.images, logger, now });
     this.externalData = externalData ?? probe?.externalData ?? new ExternalDataManager({ store, vfs, logger });
@@ -161,7 +161,7 @@ export class MetadataRefreshHost {
     if (!this.supports(item)) throw Object.assign(new Error(`Metadata refresh persistence is not implemented for ${item.Type ?? item}.`), { status: 501 });
     if (modes[options.MetadataRefreshMode ?? 'FullRefresh'] == null) throw Object.assign(new TypeError('Unknown metadata refresh mode.'), { status: 400 });
     if (modes[options.ImageRefreshMode ?? 'None'] == null) throw Object.assign(new TypeError('Unknown image refresh mode.'), { status: 400 });
-    if (options.RegenerateTrickplay) throw Object.assign(new Error('Generated media is not implemented.'), { status: 501 });
+    if (options.RegenerateTrickplay && !this.trickplay) throw Object.assign(new Error('Trickplay generation requires configured media storage.'), { status: 501 });
   }
   queue(reference, options = {}, priority = 0, { ready } = {}) {
     if (!Number.isInteger(priority) || priority < 0 || priority > 2) throw new TypeError('A native refresh priority is required.');
@@ -594,6 +594,14 @@ export class MetadataRefreshHost {
       }
     }
     const runProviders = mode !== 0 && !item.IsLocked;
+    if (runProviders && this.trickplay && loaded.libraryOptions.ExtractTrickplayImagesDuringLibraryScan) {
+      const work = this.trickplay.refresh(item, { replace: options.RegenerateTrickplay && mode > modes.Default, libraryOptions: loaded.libraryOptions, signal });
+      const observed = work.catch(error => {
+        if (signal?.aborted && loaded.globalOptions.TrickplayOptions?.ScanBehavior === 'Blocking') throw error;
+        if (!signal?.aborted) this.logger.error(error, 'Error generating trickplay images');
+      });
+      if (loaded.globalOptions.TrickplayOptions?.ScanBehavior === 'Blocking') await observed;
+    }
     const runImageProviders = imageMode > 1 && !imagesFailed && imageProviders.length > 0;
     if (!runProviders && !runImageProviders && !options.ForceSave && !options.ReplaceAllMetadata && !firstRefresh && !requiresRefresh && !imageChanged && probeUpdate === ItemUpdateType.None && beforeSaveUpdate === ItemUpdateType.None && !(mode > 1 || imageMode > 1)) {
       await this.#afterRefresh(item, options);

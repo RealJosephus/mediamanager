@@ -65,6 +65,7 @@ import { createPhotoMetadataPlugin } from './metadata/photo-provider.js';
 import { createPhotoAlbumImagePlugin } from './metadata/photo-album-provider.js';
 import { createCollectionFolderImagePlugin } from './metadata/collection-folder-image-provider.js';
 import { createChannelDynamicImagePlugin } from './metadata/channel-dynamic-image-provider.js';
+import { createMediaImageProviders } from './metadata/media-image-providers.js';
 import { createBookOpfPlugin } from './metadata/book-opf-provider.js';
 import { createBookEpubPlugin } from './metadata/book-epub-provider.js';
 import { createBookComicPlugin } from './metadata/book-comic-provider.js';
@@ -91,6 +92,10 @@ import { refreshLibraryTaskId } from './tasks/refresh-library-task.js';
 import { RefreshGuideTaskWorker, refreshGuideTaskId } from './tasks/refresh-guide-task.js';
 import { KeyframeExtractionTaskWorker } from './tasks/keyframe-extraction-task.js';
 import { AudioNormalizationTaskWorker } from './tasks/audio-normalization-task.js';
+import { ChapterImagesTaskWorker } from './tasks/chapter-images-task.js';
+import { ChapterImages } from './library/chapter-images.js';
+import { TrickplayImagesTaskWorker, TrickplayMoveImagesTaskWorker } from './tasks/trickplay-images-task.js';
+import { TrickplayGeneration } from './library/trickplay-generation.js';
 import { DisplayPreferencesService } from './users/display-preferences-service.js';
 import { StartupService } from './users/startup-service.js';
 import { clrTrim } from './metadata/whitespace.js';
@@ -366,6 +371,11 @@ export async function createRuntime({ database, configuration, serverId, serverN
   let liveTvMediaSources, liveStreams, liveStreamProbe;
   const playback = new PlaybackService({ library, vfs, identityMap, sessions, activities, get configuration() { return currentConfiguration(); }, getEncodingOptions, getNetworkConfiguration, getSmartApiUrl, serverVersion, isLocalNetwork, probe, extraction, remux, hls,
     getLiveTvMediaSources: () => liveTvMediaSources, getLiveStreams: () => liveStreams });
+  const chapterImages = probe && applicationPaths.metadataPath && new ChapterImages({ playback, probe, fileSystem, applicationPaths,
+    getConfiguration: currentConfiguration, onError });
+  if (chapterImages) probe.chapterImages = chapterImages;
+  const trickplay = probe && dataPath && new TrickplayGeneration({ playback, probe, fileSystem, getConfiguration: currentConfiguration, onError });
+  if (trickplay) rollback.push(() => trickplay.close());
   rollback.push(() => { playback.beginClose(); return playback.drainSubtitlePreparations(); });
   const { cachePath: imageCachePath, ...imageProcessorOptions } = imageOptions;
   const imageProcessor = new ImageProcessor({ fileSystem,
@@ -405,6 +415,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
       get configuration() { return currentConfiguration(); }, expandPath: library.options.expandPath, logger }));
     registry.register(createCollectionFolderImagePlugin({ library, images: metadataImages }));
     registry.register(createChannelDynamicImagePlugin({ channels }));
+    if (probe && applicationPaths.cachePath) registry.register(createMediaImageProviders({ playback, probe, fileSystem,
+      getConfiguration: currentConfiguration, getCachePath: () => applicationPaths.cachePath }));
     registry.register(createBookComicPlugin({ fileSystem, openArchive: bookArchives.openArchive, logger,
       culture: () => currentConfiguration().UICulture || 'en-US' }));
     registry.register(createBookEpubPlugin({ openArchive: bookArchives.openArchive, logger }));
@@ -426,7 +438,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     const metadataNow = () => new Date().toISOString();
     seriesLifecycle = new SeriesMetadataLifecycleHost({ store, loadContext, updates: metadataUpdates, externalData,
       itemCreation, refresh: (reference, options) => metadata.refresh(reference, options), logger, now: metadataNow });
-    metadata = new MetadataRefreshHost({ registry, loadContext, store, linkedChildren, vfs, logger, userData, probe, externalData,
+    metadata = new MetadataRefreshHost({ registry, loadContext, store, linkedChildren, vfs, logger, userData, probe, externalData, trickplay,
       images: metadataImages, updates: metadataUpdates, seriesLifecycle, now: metadataNow });
     cancelMetadata = () => metadata.cancel();
     rollback.push(async () => { await bookArchives.close(); await metadata.close(); });
@@ -511,6 +523,12 @@ export async function createRuntime({ database, configuration, serverId, serverN
   if (probe) {
     await tasks.register({ create: options => new KeyframeExtractionTaskWorker({ ...options, playback }) });
     await tasks.register({ create: options => new AudioNormalizationTaskWorker({ ...options, playback, probe }) });
+    if (chapterImages && applicationPaths.cachePath) await tasks.register({ create: options => new ChapterImagesTaskWorker({ ...options,
+      chapterImages, store, fileSystem, historyPath: () => path.join(applicationPaths.cachePath, 'chapter-failures.txt') }) });
+    if (trickplay) {
+      await tasks.register({ create: options => new TrickplayImagesTaskWorker({ ...options, trickplay, store }) });
+      await tasks.register({ create: options => new TrickplayMoveImagesTaskWorker({ ...options, trickplay, store }) });
+    }
   }
   await plugins.bind('task', extension => tasks.register(extension));
   rollback.push(() => tasks.close());
@@ -884,6 +902,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       await attempt(() => libraryTaskScheduler?.close());
       await attempt(() => metadata?.saver.stop());
       await attempt(() => metadata?.close());
+      await attempt(() => trickplay?.close());
       await attempt(() => metadata?.saver.dispose());
       await attempt(() => libraryOptionsStore?.close());
       await attempt(() => libraryScanHost?.close());

@@ -52,7 +52,7 @@ export function registerMetadataRoutes(add, { library, libraryScanner, tasks, me
     options.ForceSave = options.MetadataRefreshMode === 'FullRefresh' || options.ImageRefreshMode === 'FullRefresh' || options.ReplaceAllMetadata || options.ReplaceAllImages;
     options.RemoveOldMetadata = options.ReplaceAllMetadata;
     if (!metadata) throw httpError(501,'Metadata refresh requires configured storage.');
-    if (options.RegenerateTrickplay) throw httpError(501,'Trickplay generation is not implemented.');
+    if (options.RegenerateTrickplay && !metadata.trickplay) throw httpError(501,'Trickplay generation requires configured media storage.');
     metadata.validateRefresh(item,options);
     // The native endpoint acknowledges a queued operation. Runtime shutdown drains it.
     try { void Promise.resolve(metadata.queue(itemId,options,0)).catch(report); }

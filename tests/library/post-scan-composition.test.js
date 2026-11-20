@@ -10,6 +10,10 @@ import { createTestRuntime } from '../helpers/runtime.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { dateText, idKey } from '../../src/library/records.js';
+import { audioNormalizationTaskId } from '../../src/tasks/audio-normalization-task.js';
+import { chapterImagesTaskId } from '../../src/tasks/chapter-images-task.js';
+import { ScheduledTaskFileStore } from '../../src/tasks/scheduled-task-store.js';
+import { trickplayImagesTaskId } from '../../src/tasks/trickplay-images-task.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
@@ -242,8 +246,15 @@ async function compareComposition(t, scenarioFile) {
   database = await createPostgresTestDatabase(null, 'post_scan', { max: 1 });
   const errors = [], events = [], started = [], completed = [], metadata = [], metadataBegins = [], monitor = [], cancelRequests = [];
   const controller = new AbortController();
+  const configurationDirectoryPath = path.join(programRoot, 'config');
+  // The Native oracle invokes the post-scan pipeline without independent media schedules.
+  for (const taskId of [audioNormalizationTaskId, chapterImagesTaskId, trickplayImagesTaskId]) {
+    const store = new ScheduledTaskFileStore({ taskId, programDataPath: programRoot, configurationDirectoryPath });
+    try { await store.saveTriggers([]); }
+    finally { await store.close(); }
+  }
   runtime = await createTestRuntime({ database, programDataPath: programRoot,
-    configurationDirectoryPath: path.join(programRoot, 'config'), serverId: 'post-scan-composition',
+    configurationDirectoryPath, serverId: 'post-scan-composition',
     configuration: { UICulture: 'en-US', MetadataCountryCode: 'US', IsStartupWizardCompleted: true,
       EnableCaseSensitiveItemIds: true, EnableNormalizedItemByNameIds: true, LibraryScanFanoutConcurrency: 1 },
     onError: error => errors.push(diagnosticFailure(error)) });

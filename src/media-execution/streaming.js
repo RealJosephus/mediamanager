@@ -4,6 +4,7 @@ import { subtitleInputIndex } from '../playback/extraction.js';
 import { encoderVersionAtLeast } from '../playback/media-encoder.js';
 import { audioArguments, audioStreamPlan } from './audio.js';
 import { videoArguments, videoStreamPlan } from './video.js';
+import { mediaSeekTime, nativeInputFormat } from './input.js';
 
 const failure = (code, message) => new StorageError(code, message);
 
@@ -20,14 +21,6 @@ const containers = {
   wav: { muxer: 'wav', mime: 'audio/wav', audio: ['pcm_s16le', 'pcm_s24le', 'pcm_s32le', 'pcm_u8', 'pcm_f32le', 'pcm_f64le'] },
 };
 const matches = (requested, actual) => !requested || requested.toLowerCase().split(',').includes(actual?.toLowerCase()) || requested.toLowerCase() === 'copy';
-const ambiguousInputFormats = new Set(['m2ts', 'wmv', 'mts', 'vob', 'mpg', 'mpeg', 'rec', 'dvr-ms', 'ogm', 'divx', 'tp', 'rmvb', 'rtp', 'm4v', 'strm', 'iso']);
-
-function hardwareInputFormat(source, configuration) {
-  const container = source.Container?.toLowerCase();
-  if (!configuration?.HardwareAccelerationType || configuration.HardwareAccelerationType === 'none' || source.VideoType !== 'VideoFile'
-    || !/^[a-z0-9,-]+$/u.test(container ?? '') || ambiguousInputFormats.has(container)) return;
-  return container === 'ts' ? 'mpegts' : container.replaceAll('mkv', 'matroska');
-}
 
 export function remuxPlan(source, options = {}, { capabilities, configuration, version, subtitleBurn } = {}) {
   options = { ...options };
@@ -85,7 +78,9 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
     const maximum = BigInt(source.RunTimeTicks) > 50000000n ? BigInt(source.RunTimeTicks) - 50000000n : 0n;
     if (start > maximum) start = maximum;
   }
-  return { container, ...output, inputVideo: video, inputFormat: video && hardwareInputFormat(source, configuration), videoOutput, audioOutput, burnSubtitle,
+  const inputFormat = video && configuration?.HardwareAccelerationType && configuration.HardwareAccelerationType !== 'none'
+    && source.VideoType === 'VideoFile' ? nativeInputFormat(source.Container) : undefined;
+  return { container, ...output, inputVideo: video, inputFormat, videoOutput, audioOutput, burnSubtitle,
     streams: [video, audio, subtitle].filter(Boolean).map(stream => ({ type: stream.Type, codec: stream.Codec, index: stream.Type === 'Subtitle' ? subtitleInputIndex(source, stream) : stream.Index })),
     start, seek: BigInt(options.StartTimeTicks ?? 0) > 0n, copyTimestamps: options.CopyTimestamps === true, m2ts: options.EnableMpegtsM2TsMode === true, mediaType: options.MediaType ?? 'Video' };
 }
@@ -93,10 +88,7 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
 export function remuxArguments(url, plan, threads, version, subtitles) {
   if (!/^http:\/\/127\.0\.0\.1:\d+\/[a-f0-9]{64}$/.test(url)) throw new TypeError('Remuxing requires a private VFS input.');
   const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-protocol_whitelist', 'http,tcp'];
-  if (plan.seek) {
-    const milliseconds = plan.start / 10000n;
-    args.push('-ss', `${String(milliseconds / 3600000n % 24n).padStart(2, '0')}:${String(milliseconds / 60000n % 60n).padStart(2, '0')}:${String(milliseconds / 1000n % 60n).padStart(2, '0')}.${String(milliseconds % 1000n).padStart(3, '0')}`);
-  }
+  if (plan.seek) args.push('-ss', mediaSeekTime(plan.start));
   if (plan.videoOutput?.encoder === 'copy') args.push('-fflags', '+genpts');
   if (plan.inputFormat) args.push('-f', plan.inputFormat);
   args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), '-i', url);
@@ -142,8 +134,7 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
   if (runtimeTicks > 0n) {
     const maximum = plan.runtime > 50000000n ? plan.runtime - 50000000n : 0n;
     const seekTicks = runtimeTicks + (plan.videoOutput?.encoder === 'copy' ? 5000000n : 0n);
-    let milliseconds = (seekTicks > maximum ? maximum : seekTicks) / 10000n;
-    args.push('-ss', `${String(milliseconds / 3600000n % 24n).padStart(2, '0')}:${String(milliseconds / 60000n % 60n).padStart(2, '0')}:${String(milliseconds / 1000n % 60n).padStart(2, '0')}.${String(milliseconds % 1000n).padStart(3, '0')}`);
+    args.push('-ss', mediaSeekTime(seekTicks > maximum ? maximum : seekTicks));
   }
   if (plan.readAtNativeFramerate) {
     args.push('-re');

@@ -386,3 +386,29 @@ export function videoArguments(plan, { hls = false, event = false, segmentLength
   if (plan.filters.length) args.push('-vf', plan.filters.join(','));
   return args;
 }
+
+export function trickplayVideoPlan(video, source, width, interval, trickplay, configuration, caps, version) {
+  const type = configuration.HardwareAccelerationType;
+  const keyframes = trickplay.EnableKeyFrameOnlyExtraction;
+  const supported = type === 'nvenc' && configuration.EnableEnhancedNvdecDecoder
+    || type === 'amf' && process.platform === 'win32' || type === 'qsv' && configuration.PreferSystemNativeHwDecoder
+    || ['vaapi', 'videotoolbox', 'rkmpp'].includes(type);
+  const accelerated = trickplay.EnableHwAcceleration && (!keyframes || supported) && type !== 'none';
+  const options = accelerated ? { ...configuration, EnableHardwareEncoding: configuration.EnableHardwareEncoding && trickplay.EnableHwEncoding }
+    : { HardwareAccelerationType: 'none', EnableHardwareEncoding: false };
+  const [darWidth, darHeight] = (video.AspectRatio ?? '').split(':').map(Number);
+  const changed = darWidth > 0 && darHeight > 0 && Math.abs(video.Width * darHeight - video.Height * darWidth) > 0.05;
+  const stream = changed ? { ...video, Height: Math.round(video.Width * darHeight / darWidth) } : video;
+  const request = { MaxWidth: width };
+  const selected = videoHardware(stream, source.VideoType, 'mjpeg', request, options, caps, { version });
+  const rate = 1000 / interval;
+  const fps = frameRate(stream);
+  const requested = fps && fps <= rate ? undefined : rate;
+  const filters = videoFilters(stream, request, options, caps, selected, requested, false, version);
+  if (!keyframes && requested) {
+    const index = filters.findIndex(value => value.startsWith('fps='));
+    const nominal = stream.ReferenceFrameRate > 0 ? stream.ReferenceFrameRate : 30;
+    filters.splice(index, 0, `setpts=N/${nominal.toFixed(3)}/TB`);
+  }
+  return { ...selected, filters, accelerated, keyframes };
+}
