@@ -25,18 +25,21 @@ var results = cases.Select(row =>
         OutputVideoCodec = row.OutputCodec,
         OutputAudioCodec = "aac",
     };
+    var outputEncoder = helper.GetVideoEncoder(state, row.Options);
+    var filters = row.FilterSelection ? helper.GetIntelVidFilterChain(state, row.Options, outputEncoder).MainFilters : null;
     return new
     {
         row.Name,
-        Encoder = helper.GetVideoEncoder(state, row.Options),
+        Encoder = outputEncoder,
         Decoder = helper.Decoder(state, row.Options) ?? string.Empty,
         Input = helper.GetInputVideoHwaccelArgs(state, row.Options),
+        Filters = filters?.Where(value => !string.IsNullOrEmpty(value)).ToArray(),
     };
 });
 File.WriteAllText(args[1], JsonSerializer.Serialize(results, json));
 
 public record VideoCase(string Name, MediaStream Video, VideoType VideoType, string OutputCodec,
-    BaseEncodingJobOptions Request, EncodingOptions Options, Capabilities Capabilities);
+    BaseEncodingJobOptions Request, EncodingOptions Options, Capabilities Capabilities, bool FilterSelection);
 
 public record Capabilities(string[] Encoders, string[] Decoders, string[] Filters, string[] Hwaccels,
     Dictionary<string, bool> FilterOptions, string? VaapiDriver, bool VaapiVulkanInterop, bool VideotoolboxAv1,

@@ -6,8 +6,11 @@ import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { readInstanceConfiguration } from '../../src/configuration.js';
+import { writeConfigurationFile } from '../../src/core/configuration-file.js';
+import { readConfigurationDocument } from '../../src/core/configuration-xml.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { probeStreamRow } from '../../src/library/probe-service.js';
+import { captureMediaProcess } from '../../src/media-execution/process.js';
 import { transferDatabase } from '../../src/migration/database-transfer.js';
 import { normalizeProbe } from '../../src/storage/probe-normalizer.js';
 import { IdentityAccessMap } from '../../src/storage/identity-mapping.js';
@@ -15,7 +18,7 @@ import { nativeGuid } from '../../src/users/native.js';
 import { keyframeExtractionTaskId } from '../../src/tasks/keyframe-extraction-task.js';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { createPrivateFilterOutput } from '../../tools/compat/filter-reference-output.js';
-import { validationOutputRoot } from '../../tools/validation/paths.js';
+import { validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
 import { declareFileTestResource } from '../helpers/file-test-resource.js';
 import { readFrozenAv } from '../helpers/frozen-av.js';
@@ -213,7 +216,9 @@ async function extractKeyframes(origin, authorization, signal) {
   assert.fail('The keyframe extraction task did not complete.');
 }
 
-test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes match the designated server', {
+for (const backend of ['software', ...(process.platform === 'darwin' ? ['videotoolbox'] : [])]) test(backend === 'software'
+  ? 'real mixed playback, HLS scaling and subtitles, and scheduled keyframes match the designated server'
+  : 'VideoToolbox decodes, scales, and encodes the same HTTP playback on both servers', {
   skip: !enabled, timeout: 300000,
 }, nativeCase((t, port) => mediaLease.run(async () => {
   const output = await createPrivateFilterOutput(path.join(validationOutputRoot(), 'mixed-transcode-' + randomUUID()));
@@ -221,6 +226,9 @@ test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes ma
   const referenceRoot = path.join(root, 'reference');
   const nativeOrigin = 'http://127.0.0.1:' + port;
   const evidence = { commands: [], native: {}, node: {}, nodeProcesses: [], diagnostics: [], scenarioErrors: [] };
+  const hardware = backend !== 'software';
+  const scenarios = hardware ? [['hls', 'direct'], ['hls', 'hls'], ['hls', 'scale']]
+    : [['hls', 'direct'], ['hls', 'hls'], ['http', 'http'], ['hls', 'scale'], ['hls', 'burn'], ['hls', 'event']];
   let current, native, proxy, nodeMedia, database, runtime, authorization, failure;
   async function stopNative() {
     if (!native) return;
@@ -237,7 +245,7 @@ test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes ma
   }
   async function capture(origin, label) {
     const results = evidence[label];
-    for (const [protocol, scenario] of [['hls', 'direct'], ['hls', 'hls'], ['http', 'http'], ['hls', 'scale'], ['hls', 'burn'], ['hls', 'event']]) {
+    for (const [protocol, scenario] of scenarios) {
       const result = results[scenario] = {};
       try {
         const bytes = await playback(origin, authorization, protocol, scenario, result, t.signal);
@@ -266,6 +274,15 @@ test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes ma
   }
   try {
     await mkdir(root);
+    if (hardware) {
+      const { stdout, exitCode, signal } = await captureMediaProcess(validationExecutable('ffmpeg'),
+        ['-nostdin', '-hide_banner', '-loglevel', 'error', '-init_hw_device', 'videotoolbox=vt',
+          '-f', 'lavfi', '-i', 'testsrc2=size=128x72:rate=24', '-frames:v', '2', '-c:v', 'h264_videotoolbox', '-allow_sw', '0',
+          '-f', 'h264', 'pipe:1'], { timeoutMs: 15000, maxOutputBytes: 1024 * 1024, signal: t.signal });
+      evidence.deviceProbe = { backend, exitCode, signal, bytes: stdout.length };
+      if (exitCode !== 0) return t.skip('The installed VideoToolbox encoder could not initialize hardware.');
+      assert.ok(stdout.length > 4 && stdout.readUInt32BE() === 1);
+    }
     current = await currentNativeReference();
     output.addSecret(current.accessToken);
     output.addSecret(process.env.MEDIAMANAGER_TEST_POSTGRES);
@@ -276,6 +293,12 @@ test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes ma
       'Jellyfin.Api/Helpers/FileStreamResponseHelpers.cs', 'MediaBrowser.Controller/MediaEncoding/EncodingHelper.cs']);
     await cp(current.sourceRoot, referenceRoot, { recursive: true });
     await current.prepareClone(referenceRoot, port);
+    if (hardware) {
+      const filename = path.join(referenceRoot, 'config', 'encoding.xml');
+      const { value, node } = readConfigurationDocument(await readFile(filename), 'encoding');
+      await writeConfigurationFile(filename, 'encoding', { ...value, HardwareAccelerationType: backend,
+        EnableHardwareEncoding: true, HardwareDecodingCodecs: ['h264'] }, { source: node });
+    }
     const fixture = await seed(referenceRoot, evidence, t.signal);
     evidence.source = fixture.asset;
     proxy = await startOwnedMediaProxy([
@@ -292,13 +315,15 @@ test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes ma
     native = current.start({ referenceRoot, outputRoot: root, label: 'native', origin: nativeOrigin });
     await native.ready();
     await capture(nativeOrigin, 'native');
-    evidence.native.keyframeTask = await extractKeyframes(nativeOrigin, authorization, t.signal);
+    if (!hardware) evidence.native.keyframeTask = await extractKeyframes(nativeOrigin, authorization, t.signal);
     await stopNative();
-    const persisted = new SqliteDatabase(fixture.databasePath, { readOnly: true, requireMigrationHistory: true });
     const itemKey = nativeGuid(itemId);
-    try { evidence.native.keyframes = persisted.rows('KeyframeData', { where: { ItemId: itemKey } })[0]; }
-    finally { persisted.close(); }
-    assert.ok(evidence.native.keyframes, 'Native stored keyframes from the scheduled transport-stream scan.');
+    if (!hardware) {
+      const persisted = new SqliteDatabase(fixture.databasePath, { readOnly: true, requireMigrationHistory: true });
+      try { evidence.native.keyframes = persisted.rows('KeyframeData', { where: { ItemId: itemKey } })[0]; }
+      finally { persisted.close(); }
+      assert.ok(evidence.native.keyframes, 'Native stored keyframes from the scheduled transport-stream scan.');
+    }
     for (const entry of await readdir(path.join(referenceRoot, 'log'))) {
       if (entry.startsWith('FFmpeg.') || entry.startsWith('FFmpeg-')) {
         (evidence.nativeFfmpeg ??= []).push({ filename: entry, text: await readFile(path.join(referenceRoot, 'log', entry), 'utf8') });
@@ -319,12 +344,14 @@ test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes ma
     });
     const nodeOrigin = 'http://127.0.0.1:' + runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port;
     await capture(nodeOrigin, 'node');
-    evidence.node.keyframeTask = await extractKeyframes(nodeOrigin, authorization, t.signal);
-    evidence.node.keyframes = (await database.rows('KeyframeData', { where: { ItemId: itemKey } }))[0];
-    assert.deepEqual(evidence.node.keyframes, evidence.native.keyframes);
+    if (!hardware) {
+      evidence.node.keyframeTask = await extractKeyframes(nodeOrigin, authorization, t.signal);
+      evidence.node.keyframes = (await database.rows('KeyframeData', { where: { ItemId: itemKey } }))[0];
+      assert.deepEqual(evidence.node.keyframes, evidence.native.keyframes);
+      assert.notEqual(evidence.native.burn.decoded, evidence.native.scale.decoded, 'The timed cue changed decoded video frames.');
+    }
     assert.deepEqual(evidence.scenarioErrors, []);
-    assert.notEqual(evidence.native.burn.decoded, evidence.native.scale.decoded, 'The timed cue changed decoded video frames.');
-    for (const protocol of ['direct', 'hls', 'http', 'scale', 'burn', 'event']) {
+    for (const [, protocol] of scenarios) {
       const expected = evidence.native[protocol], actual = evidence.node[protocol];
       const normalize = info => {
         const copy = structuredClone(info);
@@ -349,6 +376,20 @@ test('real mixed playback, HLS scaling and subtitles, and scheduled keyframes ma
       assert.deepEqual(packets(actual.probe, 'audio'), packets(expected.probe, 'audio'), protocol + ' AAC payload and timeline');
       assert.deepEqual(packets(actual.probe, 'video').map(packet => packet.hash), packets(fixture.raw, 'video').map(packet => packet.hash),
         protocol + ' original video payloads');
+    }
+    if (hardware) {
+      assert.equal(evidence.nodeProcesses.length, 2);
+      const [copy, scale] = evidence.nodeProcesses.map(value => value.args);
+      assert.equal(copy[copy.indexOf('-codec:v:0') + 1], 'copy');
+      assert.ok(!copy.includes('-hwaccel') && !copy.includes('-init_hw_device'));
+      assert.equal(scale[scale.indexOf('-codec:v:0') + 1], 'h264_videotoolbox');
+      assert.equal(scale[scale.indexOf('-hwaccel') + 1], 'videotoolbox');
+      assert.ok(scale[scale.indexOf('-vf') + 1].includes('scale_vt'));
+      const logs = (evidence.nativeFfmpeg ?? []).map(value => value.text).join('\n');
+      assert.match(logs, /-hwaccel videotoolbox\b/u);
+      assert.match(logs, /scale_vt=/u);
+      assert.match(logs, /h264_videotoolbox\b/u);
+      return;
     }
     assert.equal(evidence.nodeProcesses.length, 5);
     for (const { args } of evidence.nodeProcesses) {
