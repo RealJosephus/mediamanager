@@ -61,10 +61,10 @@ test('native audio HLS manifests, copy packets, seek and task lifecycle on Postg
     for (const expected of reference.records) {
       const entry = reference.profiles.find(value => value.name === expected.name), actualInfo = await info(entry);
       assert.deepEqual({ ...actualInfo, body: playbackTransportSummary(actualInfo.body, token) }, expected.info, expected.name + ' PlaybackInfo');
-      // Native audio URLs enter encoding unless AudioCodec=copy is explicit.
-      // PlaybackInfo is compared unchanged; executable manifests use the separately
-      // recorded native copy branch and the candidate rewrites its variant to copy.
-      const masterUrl = origin + actualInfo.body.MediaSources[0].TranscodingUrl, playSessionId = actualInfo.body.PlaySessionId;
+      const masterUrl = new URL(actualInfo.body.MediaSources[0].TranscodingUrl, origin), playSessionId = actualInfo.body.PlaySessionId;
+      // The recorded manifests and packet hashes were captured with this
+      // explicit copy request.
+      masterUrl.searchParams.set('AudioCodec', 'copy');
       const master = await fetch(masterUrl, { headers }), masterText = await master.text();
       assert.deepEqual({ ...headersOf(master), text: projectHlsRequestIdentities(masterText, { token, playSessionId }) }, expected.master, expected.name + ' master');
       assert.deepEqual(headersOf(await fetch(masterUrl, { headers, method: 'HEAD' })), expected.head);
@@ -95,11 +95,34 @@ test('native audio HLS manifests, copy packets, seek and task lifecycle on Postg
       assert.equal((await fetch(origin + `/Videos/ActiveEncodings?deviceId=hls-fixture&playSessionId=${playSessionId}`, { method: 'DELETE', headers })).status, expected.stop);
       assert.equal(runtime.hls.hasJob(playSessionId), false);
     }
-    for (const name of ['no-audio-copy', 'wrong-codec']) assert.equal((await info(reference.profiles.find(value => value.name === name))).body.MediaSources[0].SupportsTranscoding, false);
-    const low = structuredClone(reference.profiles[0]); low.profile.MusicStreamingTranscodingBitrate = 128000;
-    assert.equal((await info(low)).body.MediaSources[0].SupportsTranscoding, false, 'A bitrate limit below the source must not advertise copy.');
-    assert.equal((await fetch(origin + '/Audio/' + id + '/master.m3u8', { headers })).status, 400);
     for (const args of processes) { assert.equal(args[args.indexOf('-codec:a:0') + 1], 'copy'); assert.ok(args.includes('-vn')); assert.ok(!args.includes('-vf') && !args.includes('-af')); }
+    const low = structuredClone(reference.profiles[0]); low.profile.MusicStreamingTranscodingBitrate = 128000;
+    for (const [entry, codec] of [[reference.profiles.find(value => value.name === 'no-audio-copy'), 'aac'],
+      [reference.profiles.find(value => value.name === 'wrong-codec'), 'ac3'], [low, 'aac']]) {
+      const infoResult = (await info(entry)).body;
+      const [source] = infoResult.MediaSources;
+      assert.equal(source.SupportsTranscoding, true);
+      const masterUrl = new URL(source.TranscodingUrl, origin);
+      const variantResponse = await fetch(masterUrl, { headers });
+      assert.equal(variantResponse.status, 200);
+      const variantUrl = new URL((await variantResponse.text()).split(/\r?\n/u).find(line => line && !line.startsWith('#')), masterUrl);
+      assert.equal(variantUrl.searchParams.get('AudioCodec'), codec);
+      const playlist = await fetch(variantUrl, { headers });
+      assert.equal(playlist.status, 200);
+      const segmentUrl = new URL((await playlist.text()).split(/\r?\n/u).find(line => line && !line.startsWith('#')), variantUrl);
+      const segment = await fetch(segmentUrl, { headers });
+      assert.equal(segment.status, 200);
+      const file = path.join(directory, entry.name + '-encoded.ts');
+      await writeFile(file, Buffer.from(await segment.arrayBuffer()));
+      const probe = spawnSync(validationExecutable('ffprobe'), ['-v', 'error', '-show_streams', '-of', 'json', file], { windowsHide: true, encoding: 'utf8' });
+      assert.equal(probe.status, 0, probe.stderr);
+      assert.equal(JSON.parse(probe.stdout).streams[0].codec_name, codec);
+      assert.notEqual(processes.at(-1)[processes.at(-1).indexOf('-codec:a:0') + 1], 'copy');
+      assert.equal(runtime.hls.getTranscodingInfo('hls-fixture').IsAudioDirect, false);
+      assert.equal((await fetch(origin + '/Videos/ActiveEncodings?' + new URLSearchParams({ deviceId: 'hls-fixture',
+        playSessionId: infoResult.PlaySessionId }), { method: 'DELETE', headers })).status, 204);
+    }
+    assert.equal((await fetch(origin + '/Audio/' + id + '/master.m3u8', { headers })).status, 400);
   } finally {
     await runtime?.close(); await fixture.close(); await state.close();
     const cleanup = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema });

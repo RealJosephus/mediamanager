@@ -56,6 +56,29 @@ function audioContainerRemuxProfile(source, profiles, audio) {
     && (equal(get(entry, 'AudioCodec'), audio.Codec) || equal(get(entry, 'Container'), audio.Codec)));
 }
 
+function streamingProfiles(profile, mediaType) {
+  return get(profile, 'TranscodingProfiles', []).filter(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), mediaType)
+    && ['http', 'hls', 0, 1].includes(get(entry, 'Protocol', 'http'))
+    && equal(enumName(get(entry, 'Context', 'Streaming'), ['Streaming', 'Static']), 'Streaming'));
+}
+
+function videoTargetAudioBitrate(audio, codecs, maxBitrate, maxChannels) {
+  const target = codecs.find(codec => equal(codec, audio?.Codec)) ?? codecs[0];
+  const downmix = maxChannels != null && audio?.Channels > maxChannels;
+  const shiftCodec = maxChannels != null && audio?.Channels != null && target && !equal(target, audio.Codec);
+  const channels = downmix ? maxChannels : shiftCodec ? audio.Channels : maxChannels ?? 0;
+  const defaultBitrate = ['aac', 'mp3', 'ac3', 'eac3'].some(codec => equal(codec, target))
+    ? channels < 2 ? 128000 : channels >= 6 ? 640000 : 384000
+    : ['flac', 'alac'].some(codec => equal(codec, target)) ? channels < 2 ? 768000 : channels >= 6 ? 3584000 : 1536000 : 192000;
+  let estimate = audio?.BitRate ?? defaultBitrate;
+  if (downmix || shiftCodec) estimate = defaultBitrate;
+  const budgets = [[640000, 128000], [2000000, 384000], [3000000, 448000], [4000000, 640000], [5000000, 768000],
+    [10000000, 1536000], [15000000, 2304000], [20000000, 3584000]];
+  if (maxBitrate > 0) estimate = Math.min(estimate, budgets.find(([limit]) => maxBitrate <= limit)?.[1] ?? 7168000);
+  if (audio?.Channels === 1 && (audio.BitRate ?? 0) < 64000) estimate = Math.min(estimate, 64000);
+  return estimate;
+}
+
 export function universalAudioHlsCopyContainer(source, profile, maxBitrate, requestedContainer) {
   if (!source.SupportsDirectStream || !source.IsRemote && (source.Bitrate ?? 40000000) > (maxBitrate > 0 ? maxBitrate : 2147483647)) return;
   const streams = source.MediaStreams.filter(stream => stream.Type === 'Audio');
@@ -262,15 +285,17 @@ export function negotiateSource(source, item, profile, options = {}) {
       if (!video && !chosen && !analyzed.some(entry => !(entry.failed & reasons.ContainerNotSupported))) mask |= reasons.VideoCodecNotSupported;
     }
   }
-  const remux = !chosen && !exceeded ? selectRemux(source, item, profile, options, audio, videoStream, subtitle, mask) : undefined;
+  const transcode = !chosen ? selectTranscode(source, item, profile, options, audio, videoStream, subtitle, mask) : undefined;
   source.SupportsDirectPlay = Boolean(chosen);
   source.SupportsDirectStream = Boolean(chosen);
-  source.SupportsTranscoding = Boolean(remux);
-  if (remux) {
-    source.TranscodingContainer = remux.container;
-    source.TranscodingSubProtocol = remux.protocol;
-    source.TranscodingUrl = remux.url;
-    if (remux.audio) audio = remux.audio;
+  const canTranscode = options.EnableTranscoding !== false && options.EnableRemuxing !== false;
+  source.SupportsTranscoding = Boolean(transcode || chosen && canTranscode && streamingProfiles(profile, item.MediaType).length);
+  if (transcode) {
+    source.TranscodingContainer = transcode.container;
+    source.TranscodingSubProtocol = transcode.protocol;
+    source.TranscodingUrl = transcode.url;
+    if (transcode.audio) audio = transcode.audio;
+    mask = transcode.mask;
   }
   if (chosen) delete source.TranscodeReasons;
   else Object.defineProperty(source, 'TranscodeReasons', { value: reasonNames.filter(name => mask & reasons[name]), enumerable: false, configurable: true, writable: true });
@@ -278,7 +303,7 @@ export function negotiateSource(source, item, profile, options = {}) {
   source.DefaultAudioStreamIndex = video ? audio?.Index : undefined;
   source.DefaultSubtitleStreamIndex = video ? subtitleIndex : undefined;
   for (const stream of subtitles) {
-    const delivery = subtitleProfile(source, stream, profile, remux?.container ?? source.Container, { ...options, PlayMethod: remux ? 'Transcode' : 'DirectPlay' });
+    const delivery = subtitleProfile(source, stream, profile, transcode?.container ?? source.Container, { ...options, PlayMethod: transcode ? 'Transcode' : 'DirectPlay' });
     stream.DeliveryMethod = delivery.Method;
     if (delivery.Method === 'External') {
       // VobSub/DVDSub is negotiated by codec name but delivered as a Matroska
@@ -291,72 +316,107 @@ export function negotiateSource(source, item, profile, options = {}) {
   return source;
 }
 
-function selectRemux(source, item, profile, options, audio, video, subtitle, mask) {
-  if (!options.CanRemux && !options.CanHls || options.EnableRemuxing === false || options.EnableTranscoding === false || options.AllowVideoStreamCopy === false || options.AllowAudioStreamCopy === false) return;
+function selectTranscode(source, item, profile, options, audio, video, subtitle, sourceMask) {
+  if (!options.CanRemux && !options.CanHls || options.EnableRemuxing === false || options.EnableTranscoding === false) return;
   const isVideo = item.MediaType !== 'Audio';
   const candidates = isVideo ? audioCandidates(source, audio, options.AudioStreamIndex) : audio ? [audio] : [];
-  let entries = get(profile, 'TranscodingProfiles', []).filter(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), item.MediaType)
-    && ['http', 'hls', 0, 1].includes(get(entry, 'Protocol', 'http')) && ['Streaming', 0].includes(get(entry, 'Context', 'Streaming')));
+  let entries = streamingProfiles(profile, item.MediaType);
+  if (isVideo) {
+    if (source.UseMostCompatibleTranscodingProfile) entries = entries.filter(entry => equal(get(entry, 'Container'), 'ts'));
+    const rank = entry => {
+      const target = { ...source, Container: get(entry, 'Container') };
+      const compatibleVideo = video && options.AllowVideoStreamCopy !== false && containsContainer(get(entry, 'VideoCodec'), video.Codec);
+      const videoRank = compatibleVideo ? compatibility(target, video, profile, 'Video') ? 2 : 1 : 3;
+      let audioRank = 3;
+      if (audio && options.AllowAudioStreamCopy !== false) for (const codec of get(entry, 'AudioCodec', '').split(',').filter(Boolean)) {
+        if (!compatibility(target, { ...audio, Codec: codec }, profile, 'VideoAudio')) audioRank = Math.min(audioRank, equal(codec, audio.Codec) ? 1 : 2);
+      }
+      return videoRank * 4 + audioRank;
+    };
+    entries = entries.map(entry => ({ entry, rank: rank(entry) })).sort((left, right) => left.rank - right.rank).map(({ entry }) => entry);
+  }
   // Native audio direct-stream selection falls back to MPEG-TS when no transcode container is set.
   const audioDirectProfile = !isVideo && audio && audioContainerRemuxProfile(source,
     get(profile, 'DirectPlayProfiles', []).filter(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), 'Audio')), audio);
+  const canDirectStreamAudio = !isVideo && source.SupportsDirectStream && options.EnableDirectStream !== false
+    && !(sourceMask & reasons.ContainerBitrateExceedsLimit);
   const flacAudioMp4 = equal(audio?.Codec, 'flac') && !source.MediaStreams.some(stream => stream.Type === 'Video')
     && audioDirectProfile && equal(get(audioDirectProfile, 'Container'), 'mp4') && equal(get(audioDirectProfile, 'AudioCodec'), 'flac');
-  if (source.SupportsDirectStream && flacAudioMp4) entries = [{ Container: get(audioDirectProfile, 'Container'), Protocol: source.TranscodingSubProtocol ?? 'http', AudioDirectStream: true }];
-  else if (!isVideo && source.SupportsDirectStream && get(profile, 'DirectPlayProfiles', []).some(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), 'Audio')
+  if (canDirectStreamAudio && flacAudioMp4) entries = [{ Container: get(audioDirectProfile, 'Container'), Protocol: source.TranscodingSubProtocol ?? 'http', AudioDirectStream: true }];
+  else if (canDirectStreamAudio && get(profile, 'DirectPlayProfiles', []).some(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), 'Audio')
     && containsContainer(get(entry, 'AudioCodec'), audio?.Codec, false))) entries = [{ Container: 'ts', AudioDirectStream: true }];
   for (const entry of entries) {
+    let mask = sourceMask;
     const protocol = ['hls', 1].includes(get(entry, 'Protocol', 'http')) ? 'hls' : 'http';
     const container = get(entry, 'Container');
     const target = { ...source, Container: container };
-    if (isVideo && (!containsContainer(get(entry, 'VideoCodec'), video?.Codec, false) || compatibility(target, video, profile, 'Video'))) continue;
-    const selected = candidates.find(stream => containsContainer(get(entry, 'AudioCodec'), stream.Codec, false) && !compatibility(target, stream, profile, isVideo ? 'VideoAudio' : 'Audio'));
-    if (audio && !selected) continue;
-    const maxChannels = get(entry, 'MaxAudioChannels') == null ? options.MaxAudioChannels : Number(get(entry, 'MaxAudioChannels'));
+    const audioDirect = get(entry, 'AudioDirectStream', false);
+    let videoCodecs = get(entry, 'VideoCodec', video?.Codec ?? '').split(',').filter(Boolean);
+    let audioCodecs = get(entry, 'AudioCodec', isVideo ? audio?.Codec ?? '' : '').split(',').filter(Boolean);
+    if (isVideo && protocol === 'hls') {
+      videoCodecs = videoCodecs.filter(codec => ['h264', 'hevc', 'vp9', 'av1'].includes(codec));
+      const allowedAudio = ['aac', 'ac3', 'eac3', 'mp3'];
+      if (equal(container, 'mp4')) allowedAudio.push('alac', 'flac', 'opus', 'dts', 'truehd');
+      audioCodecs = audioCodecs.filter(codec => allowedAudio.includes(codec));
+    }
+    if (isVideo && video && !videoCodecs.some(codec => equal(codec, video.Codec))) mask |= reasons.VideoCodecNotSupported;
+    if (!isVideo && !audioDirect && options.CanEncodeAudio && !options.CanEncodeAudio(get(entry, 'AudioCodec', container))) continue;
+    const maxChannels = get(entry, 'MaxAudioChannels') == null ? undefined : Number(get(entry, 'MaxAudioChannels'));
+    const matching = candidates.find(stream => audioCodecs.some(codec => equal(codec, stream.Codec)));
+    const audioFailures = matching && isVideo ? compatibility(target, matching, profile, 'VideoAudio') : 0;
+    const exceedsChannels = isVideo && matching && matching.Channels > maxChannels;
+    if (isVideo && audio && !matching) mask |= reasons.AudioCodecNotSupported;
+    if (exceedsChannels) mask |= reasons.AudioChannelsNotSupported;
+    mask |= audioFailures;
+    const directAudio = isVideo && matching && !audioFailures && !exceedsChannels && !(mask & reasons.ContainerBitrateExceedsLimit) ? matching : undefined;
+    if (directAudio) audioCodecs = [directAudio.Codec];
+    const selected = directAudio ?? audio;
     const delivery = subtitle ? subtitleProfile(source, subtitle, profile, container, { ...options, PlayMethod: 'Transcode' }) : { Method: 'Encode' };
-    const projected = { AudioSampleRate: !isVideo && protocol === 'hls' ? undefined : selected?.SampleRate, MaxFramerate: video?.ReferenceFrameRate ?? video?.AverageFrameRate ?? video?.RealFrameRate,
+    const projected = { AudioSampleRate: directAudio?.SampleRate, MaxFramerate: video?.ReferenceFrameRate ?? video?.AverageFrameRate ?? video?.RealFrameRate,
       StreamOptions: new Map(), MaxAudioChannels: maxChannels };
     const qualify = (stream, name, value) => { if (value != null && value !== '') projected.StreamOptions.set(`${stream.Codec}-${name}`, value); };
     if (video) {
       qualify(video, 'level', video.Level); qualify(video, 'videobitdepth', video.BitDepth); qualify(video, 'profile', video.Profile?.toLowerCase());
-      qualify(video, 'audiochannels', selected?.Channels);
-      if (selected) { qualify(selected, 'profile', selected.Profile?.toLowerCase()); if (selected.Level) qualify(selected, 'level', selected.Level); }
+      qualify(video, 'audiochannels', directAudio?.Channels);
+      if (directAudio) { qualify(directAudio, 'profile', directAudio.Profile?.toLowerCase()); if (directAudio.Level) qualify(directAudio, 'level', directAudio.Level); }
     }
-    const applyCodec = (stream, type) => {
+    const applyCodec = (stream, type, codecs) => {
       const values = properties(source, stream, type);
-      for (const codec of get(profile, 'CodecProfiles', []).filter(codec => equal(enumName(get(codec, 'Type', 'Video'), codecTypes), type)
-        && containsContainer(get(codec, 'Container'), container) && containsContainer(get(codec, 'Codec'), stream?.Codec, false)
-        && !failures(get(codec, 'ApplyConditions', []), values, type).length).reverse()) {
-        applyRemuxConditions(projected, get(codec, 'Conditions', []), stream?.Codec);
+      for (const entry of get(profile, 'CodecProfiles', []).slice().reverse()) {
+        if (!equal(enumName(get(entry, 'Type', 'Video'), codecTypes), type) || !containsContainer(get(entry, 'Container'), container)
+          || failures(get(entry, 'ApplyConditions', []), values, type).length) continue;
+        const matches = codecs.filter(codec => containsContainer(get(entry, 'Codec'), codec, false));
+        for (const codec of type === 'Video' ? matches : matches.slice(0, 1)) {
+          applyRemuxConditions(projected, get(entry, 'Conditions', []), type === 'Audio' ? undefined : codec);
+        }
       }
     };
-    applyCodec(video, 'Video');
+    applyCodec(video, 'Video', videoCodecs);
     const bitrate = options.MaxStreamingBitrate ?? get(profile, 'MaxStreamingBitrate', 8000000);
-    const audioBitrate = selected?.BitRate ?? (selected ? 192000 : undefined);
-    projected.AudioBitrate = !isVideo && protocol === 'hls' || audioBitrate == null ? undefined : Math.min(projected.AudioBitrate ?? audioBitrate, audioBitrate);
-    applyCodec(selected, isVideo ? 'VideoAudio' : 'Audio');
-    if (!isVideo && protocol === 'hls') projected.AudioBitrate = Math.min(options.MaxStreamingBitrate ?? get(profile, 'MaxStreamingBitrate', 8000000), get(profile, 'MusicStreamingTranscodingBitrate', 128000), projected.AudioBitrate ?? 2147483647);
+    if (isVideo) projected.AudioBitrate = Math.min(projected.AudioBitrate ?? Infinity,
+      videoTargetAudioBitrate(selected, audioCodecs, bitrate, exceedsChannels ? maxChannels : options.MaxAudioChannels ?? maxChannels));
+    applyCodec(selected, isVideo ? 'VideoAudio' : 'Audio', audioCodecs);
+    if (!isVideo && !audioDirect) projected.AudioBitrate = Math.min(bitrate, get(profile, 'MusicStreamingTranscodingBitrate', 128000), projected.AudioBitrate ?? 2147483647);
     if (video && bitrate != null) projected.VideoBitrate = Math.max(64000, Math.min(projected.VideoBitrate ?? bitrate, bitrate - (projected.AudioBitrate ?? 0)));
     const videoFailures = ['VideoCodecNotSupported', 'VideoProfileNotSupported', 'VideoLevelNotSupported', 'VideoResolutionNotSupported', 'VideoBitDepthNotSupported', 'VideoFramerateNotSupported',
       'RefFramesNotSupported', 'AnamorphicVideoNotSupported', 'InterlacedVideoNotSupported', 'VideoBitrateNotSupported', 'VideoRangeTypeNotSupported', 'VideoRotationNotSupported', 'ContainerBitrateExceedsLimit'];
     if (videoFailures.some(name => mask & reasons[name])) applyRemuxConditions(projected, get(entry, 'Conditions', []));
     const requested = { ...options, ...projected, StreamOptions: Object.fromEntries(projected.StreamOptions), Container: container, MediaType: item.MediaType, AudioStreamIndex: selected?.Index,
-      VideoCodec: video?.Codec, AudioCodec: selected?.Codec, SubtitleStreamIndex: subtitle?.Index, SubtitleMethod: delivery.Method, SubtitleCodec: delivery.Format,
-      MaxAudioChannels: maxChannels, CopyTimestamps: get(entry, 'CopyTimestamps', false), EnableMpegtsM2TsMode: get(entry, 'EnableMpegtsM2TsMode', false),
+      VideoCodec: videoCodecs.join(','), AudioCodec: audioDirect ? 'copy' : audioCodecs.join(','), SubtitleStreamIndex: subtitle?.Index, SubtitleMethod: delivery.Method, SubtitleCodec: delivery.Format,
+      MaxAudioChannels: options.MaxAudioChannels, TranscodingMaxAudioChannels: maxChannels, CopyTimestamps: get(entry, 'CopyTimestamps', false), EnableMpegtsM2TsMode: get(entry, 'EnableMpegtsM2TsMode', false),
       SegmentContainer: container, SegmentLength: get(entry, 'SegmentLength') || undefined, EnableSubtitlesInManifest: get(entry, 'EnableSubtitlesInManifest', false) };
     requested.VideoBitRate = projected.VideoBitrate; requested.AudioBitRate = projected.AudioBitrate;
     if (!(protocol === 'hls' ? options.CanHls?.(source, requested) : options.CanRemux?.(source, requested))) continue;
     const query = [];
     const append = (name, value) => { if (value != null && value !== '') query.push(`${name}=${value}`); };
-    const audioDirect = get(entry, 'AudioDirectStream', false);
     append('DeviceProfileId', get(profile, 'Id')?.replaceAll('-', '').toLowerCase());
     append('DeviceId', options.DeviceId);
     append('MediaSourceId', source.Id);
     if (!audioDirect) {
-      if (video) append('VideoCodec', get(entry, 'VideoCodec') || video.Codec);
-      append('AudioCodec', selected?.Codec);
-      if (isVideo || protocol !== 'hls') append('AudioStreamIndex', selected?.Index);
-      if (subtitle && delivery.Method !== 'External') append('SubtitleStreamIndex', subtitle.Index);
+      append('VideoCodec', requested.VideoCodec);
+      append('AudioCodec', requested.AudioCodec);
+      if (isVideo) append('AudioStreamIndex', selected?.Index);
+      if (subtitle && (options.AlwaysBurnInSubtitleWhenTranscoding || delivery.Method !== 'External')) append('SubtitleStreamIndex', subtitle.Index);
       append('VideoBitrate', projected.VideoBitrate);
       append('AudioBitrate', projected.AudioBitrate);
       append('AudioSampleRate', projected.AudioSampleRate);
@@ -385,8 +445,11 @@ function selectRemux(source, item, profile, options, audio, video, subtitle, mas
     if (subtitle && delivery.Method === 'Embed') append('SubtitleCodec', delivery.Format);
     if (!audioDirect) for (const [name, value] of projected.StreamOptions) append(name, String(value).replaceAll(' ', ''));
     append('TranscodeReasons', audioDirect ? 'ContainerNotSupported' : reasonNames.filter(name => mask & reasons[name]).join(','));
+    if (options.AllowVideoStreamCopy === false) append('allowVideoStreamCopy', 'false');
+    if (options.AllowAudioStreamCopy === false) append('allowAudioStreamCopy', 'false');
+    if (options.AlwaysBurnInSubtitleWhenTranscoding) append('alwaysBurnInSubtitleWhenTranscoding', 'true');
     const id = guid(item.Id).toLowerCase();
-    return { container, protocol, audio: selected, url: `/${isVideo ? 'videos' : 'audio'}/${id}/${protocol === 'hls' ? 'master.m3u8' : 'stream.' + container}?${query.join('&')}` };
+    return { container, protocol, audio: selected, mask, url: `/${isVideo ? 'videos' : 'audio'}/${id}/${protocol === 'hls' ? 'master.m3u8' : 'stream.' + container}?${query.join('&')}` };
   }
 }
 

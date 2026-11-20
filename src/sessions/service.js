@@ -205,7 +205,7 @@ export class SessionService extends EventEmitter {
   }
   #dto(session) {
     const { Controllers, FullNowPlayingItem, ...dto } = session;
-    dto.TranscodingInfo = this.hls?.getTranscodingInfo?.(session.DeviceId) ?? dto.TranscodingInfo;
+    dto.TranscodingInfo = this.playbackJobs?.getTranscodingInfo(session.DeviceId) ?? dto.TranscodingInfo;
     return cloneNativeValue({ ...dto, PlayableMediaTypes: session.Capabilities.PlayableMediaTypes, SupportedCommands: session.Capabilities.SupportedCommands, IsActive: Controllers.length === 0 || Controllers.some((controller) => controller.isActive()), SupportsMediaControl: session.Capabilities.SupportsMediaControl && Controllers.some((controller) => controller.supportsMediaControl), SupportsRemoteControl: session.Capabilities.SupportsMediaControl && Controllers.some((controller) => controller.supportsMediaControl) });
   }
   async getSessions(auth, { deviceId, activeWithinSeconds, controllableByUserId } = {}) {
@@ -331,7 +331,7 @@ export class SessionService extends EventEmitter {
     if (!session) return;
     const info = bindPlaybackReport(report, { stopped: phase === 'stop' });
     info.SessionId = sessionId;
-    if ((info.PlayMethod === 'Transcode' || info.PlayMethod === 0) && !this.hls?.hasJob(info.PlaySessionId)) info.PlayMethod = 'DirectPlay';
+    if ((info.PlayMethod === 'Transcode' || info.PlayMethod === 0) && !this.playbackJobs?.hasJob(info.PlaySessionId)) info.PlayMethod = 'DirectPlay';
     if (phase === 'stop') {
       this.#stopTimer(sessionId);
       if (info.PositionTicks < 0n) {
@@ -376,7 +376,7 @@ export class SessionService extends EventEmitter {
     if (phase === 'stop') event.PlayedToCompletion = completed;
     if (phase !== 'progress') await this.activities?.playbackEvent(phase, event);
     this.emit({ start: 'PlaybackStart', progress: 'PlaybackProgress', stop: 'PlaybackStopped' }[phase], event);
-    if (phase !== 'stop' && info.PlaySessionId?.trim()) this.hls?.ping(info.PlaySessionId, info.IsPaused ?? false);
+    if (phase !== 'stop' && info.PlaySessionId?.trim()) this.playbackJobs?.ping(info.PlaySessionId, info.IsPaused ?? false);
     if (phase !== 'stop' && !automated) this.#startTimer(session, info);
   }
   #updateLiveStreamSession(id, sessionId, playSessionId) {

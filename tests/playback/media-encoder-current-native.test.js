@@ -240,7 +240,7 @@ async function nodeCase(sample, index, captured, t) {
         const segment = initialization.status === 200 ? await wire(`/Videos/${hlsSource.Id}/hls1/main/0.mp4?${query}`) : null;
         const execution = { threads: getEncodingThreadCount(getEncodingOptions(), cpuCoreLimit), version: encoder.version,
           maxMuxingQueueSize: getEncodingOptions().MaxMuxingQueueSize > 128 ? getEncodingOptions().MaxMuxingQueueSize : 128 };
-        const flacPlan = hlsPlan(hlsSource, options); flacPlan.audio = { ...flacPlan.audio, Codec: 'flac' };
+        const flacPlan = hlsPlan(hlsSource, options); flacPlan.audioOutput = { ...flacPlan.audioOutput, codec: 'flac' };
         row.hls.push({ cpuCoreLimit, configuredThreads: getEncodingOptions().EncodingThreadCount, initialization, segment, execution,
           flacArguments: hlsArguments('http://127.0.0.1:1/' + 'a'.repeat(64), flacPlan, cache, 0, 0n, execution),
           files: await files(cache), traces: (await traces(traceDirectory)).filter(trace => !before.has(trace.filename)), processObservations: payload(processObservations.slice(processStart)) });

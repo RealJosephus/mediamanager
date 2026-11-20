@@ -7,22 +7,25 @@ import { remuxPlan, remuxArguments } from '../../src/playback/remux.js';
 import { StorageError } from '../../src/storage/errors.js';
 import reference from './fixtures/remux-reference.json' with { type: 'json' };
 
-test('native StreamBuilder remux URLs match for 31 copy-compatible profiles', () => {
+test('native StreamBuilder URLs match for supported progressive profiles', () => {
   for (const entry of reference.profiles) {
     const source = structuredClone(reference.sources.find(source => source.name === entry.sourceName).source);
     negotiateSource(source, { Id: source.Id, MediaType: entry.mediaType }, entry.profile, { ...entry.options,
       CanRemux: (source, options) => { try { remuxPlan(source, options); return true; } catch { return false; } }, DeviceId: 'remux-fixture', PlaySessionId: 'fixture-session', AccessToken: 'fixture-token' });
     const native = reference.oracle.find(value => value.name === entry.name);
-    if (['no-video-copy', 'no-audio-copy', 'wrong-codec', 'bitrate', 'video-RefFrames', 'video-VideoRotation'].includes(entry.name)) {
-      assert.ok(native.url); assert.equal(source.SupportsTranscoding, false); assert.equal(source.TranscodingUrl, undefined);
-    } else assert.equal(source.TranscodingUrl, native.url, entry.name);
+    const flags = (entry.options?.AllowVideoStreamCopy === false ? '&allowVideoStreamCopy=false' : '')
+      + (entry.options?.AllowAudioStreamCopy === false ? '&allowAudioStreamCopy=false' : '');
+    assert.equal(source.TranscodingUrl, native.url + flags, entry.name);
   }
 });
 
 test('copy plans enforce stream identity, container constraints and native EOF seek clamp', () => {
   const source = reference.sources[0].source;
-  for (const options of [{ Container: 'hls' }, { Container: 'mp4', AudioStreamIndex: 99 }, { Container: 'webm' }, { Container: 'mp4', MaxAudioChannels: 1 },
-    { Container: 'mp4', VideoCodec: 'hevc' }, { Container: 'mp4', AudioSampleRate: 48000 }, { Container: 'mp4', StreamOptions: { 'h264-level': '1' } }, { Container: 'mp4', EnableAutoStreamCopy: false }]) assert.throws(() => remuxPlan(source, options), { code: 'not-supported' });
+  for (const options of [{ Container: 'hls' }, { Container: 'mp4', AudioStreamIndex: 99 }, { Container: 'webm' },
+    { Container: 'mp4', StreamOptions: { 'h264-level': '1' } }, { Container: 'mp4', EnableAutoStreamCopy: false }]) assert.throws(() => remuxPlan(source, options), { code: 'not-supported' });
+  assert.equal(remuxPlan(source, { Container: 'mp4', VideoCodec: 'hevc' }).videoOutput.encoder, 'libx265');
+  assert.equal(remuxPlan(source, { Container: 'mp4', MaxAudioChannels: 1 }).audioOutput.channels, 1);
+  assert.equal(remuxPlan(source, { Container: 'mp4', AudioSampleRate: 48000 }).audioOutput.encoder, 'copy');
   const plan = remuxPlan(source, { Container: 'mp4', StartTimeTicks: 20000000 });
   assert.equal(plan.start, BigInt(source.RunTimeTicks) - 50000000n);
   const args = remuxArguments('http://127.0.0.1:1/' + 'a'.repeat(64), plan, 0, '8.0');
@@ -35,7 +38,7 @@ test('copy plans enforce stream identity, container constraints and native EOF s
   assert.deepEqual(remuxPlan(sparse, { Container: 'mp4' }).streams.map(stream => stream.index), [0, 2]);
   assert.deepEqual(remuxPlan({ ...source, VideoType: 'Iso', IsoType: 'BluRay' }, { Container: 'mp4' }),
     remuxPlan(source, { Container: 'mp4' }), 'ISO sources use the same audited packet-copy limits');
-  assert.throws(() => remuxPlan({ ...source, VideoType: 'Iso' }, { Container: 'mp4', VideoCodec: 'hevc' }), { code: 'not-supported' });
+  assert.equal(remuxPlan({ ...source, VideoType: 'Iso' }, { Container: 'mp4', VideoCodec: 'hevc' }).videoOutput.encoder, 'libx265');
 });
 
 test('PlaybackInfo advertises remux and HLS only for sources resolvable through identity mapping and VFS', async () => {

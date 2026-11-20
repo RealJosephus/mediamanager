@@ -190,13 +190,12 @@ test('existing mono FLAC copies through current Native audio admission and forma
     report.warmStreams = await database.rows('MediaStreamInfos', { where: { ItemId: Id } });
     assert.ok(report.warmStreams.some(stream => stream.Codec === 'flac' && stream.Channels === 1));
     await positive('warm', { universal: true });
-    const differentSampleRate = report.warmStreams.find(stream => stream.Codec === 'flac').SampleRate === 8000 ? 16000 : 8000;
-    for (const parameters of ['AudioCodec=aac', 'AllowAudioStreamCopy=false', 'AudioChannels=2', `AudioSampleRate=${differentSampleRate}`]) {
+    for (const parameters of ['AudioCodec=unsupported', 'AudioChannels=0', 'AudioSampleRate=0']) {
       const before = report.readers.length, response = await request(`/Audio/${id}/stream.mp4?${parameters}`);
       assert.equal(response.status, 400, parameters); assert.equal(report.readers.length, before, 'A rejected transform never opens the original reader.');
     }
     assert.equal((await request(`/Audio/${id}/master.m3u8?MediaSourceId=${id}&SegmentContainer=ts&AudioCodec=copy`)).status, 400);
-    for (const container of ['mp4%7Caac&AudioCodec=aac', 'ts%7Cflac']) {
+    for (const container of ['mp4%7Cunsupported&AudioCodec=unsupported', 'ts%7Cflac']) {
       const before = report.readers.length;
       const response = await request(`/Audio/${id}/universal?UserId=${userId}&TranscodingProtocol=hls&TranscodingContainer=mp4&Container=${container}`);
       assert.equal(response.status, 400, container);
@@ -276,6 +275,8 @@ test('existing mono FLAC copies through current Native audio admission and forma
             'FFprobe only inspects the original streams and packets.');
           command.admission = 'probe';
         } else if (args.length === 1 && args[0] === '-version') command.admission = 'version';
+        else if (args.length === 1 && ['-encoders', '-decoders', '-filters', '-bsfs', '-hwaccels'].includes(args[0])
+          || args.length === 2 && args[0] === '-h' && /^(filter|bsf)=[a-z0-9_]+$/u.test(args[1])) command.admission = 'capability';
         else {
           const codecFlags = args.flatMap((value, index) => /^-(?:c|codec)(?::|$)|^-(?:acodec|vcodec|scodec)$/u.test(value) ? [index] : []);
           assert.ok(codecFlags.length && codecFlags.every(index => args[index + 1] === 'copy'), 'Every actual FFmpeg output codec is explicit packet copy.');

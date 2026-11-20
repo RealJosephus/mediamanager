@@ -1,4 +1,4 @@
-import { startMediaProcess } from '../media-execution/process.js';
+import { captureMediaProcess } from '../media-execution/process.js';
 import { StorageError } from './errors.js';
 import { unsignedInteger } from './range.js';
 
@@ -15,7 +15,7 @@ function requireExecutable(value) {
 /** Startup version discovery has one fixed command and no media input. */
 export async function readEncoderVersionOutput(executable, { signal, environment, onCleanupError } = {}) {
   requireExecutable(executable);
-  return captureProcess(executable, ['-version'], { signal, environment, maxOutputBytes: Infinity, onCleanupError });
+  return captureMediaProcess(executable, ['-version'], { signal, environment, maxOutputBytes: Infinity, onCleanupError });
 }
 
 function numericOption(value, name) {
@@ -114,7 +114,7 @@ async function runProbe(args, source, { executable, environment, signal, timeout
   for (const limit of [timeoutMs, maxOutputBytes]) {
     if (!Number.isSafeInteger(limit) || limit < 1) throw new TypeError('Probe limits must be positive safe integers.');
   }
-  const result = await captureProcess(executable, args, { signal, environment, timeoutMs, maxOutputBytes });
+  const result = await captureMediaProcess(executable, args, { signal, environment, timeoutMs, maxOutputBytes });
   let raw;
   try { raw = JSON.parse(result.stdout.toString('utf8')); }
   catch (error) { throw failure('invalid-response', 'ffprobe did not return valid JSON.', error); }
@@ -125,63 +125,4 @@ async function runProbe(args, source, { executable, environment, signal, timeout
     if (stream.sample_aspect_ratio === '0:1') stream.sample_aspect_ratio = '';
   }
   return { raw, diagnostics: result.stderr.toString('utf8').replaceAll(source, '[probe source]'), exitCode: result.exitCode, sourceConsistency };
-}
-
-async function captureProcess(executable, args, { signal, environment, timeoutMs, maxOutputBytes, onCleanupError }) {
-  checkAbort(signal);
-  let child, timer, killTimer, primary;
-  const cleanupErrors = [], stdout = [], stderr = [];
-  let stdoutSize = 0, stderrSize = 0;
-  const stop = error => {
-    primary ??= error;
-    if (!child || child.exitCode !== null || child.signalCode !== null) return;
-    try { child.kill(); } catch (error) { cleanupErrors.push(error); }
-    if (!killTimer) {
-      killTimer = setTimeout(() => {
-        if (child.exitCode === null && child.signalCode === null) {
-          try { child.kill('SIGKILL'); } catch (error) { cleanupErrors.push(error); }
-        }
-      }, 1000); killTimer.unref();
-    }
-  };
-  const onAbort = () => stop(failure('cancelled', 'Media probing was cancelled.', signal.reason));
-  try {
-    try { child = startMediaProcess(executable, args, { environment }); }
-    catch (error) { throw failure('unavailable', 'The media process could not start.', error); }
-    const done = new Promise(resolve => {
-      child.once('error', error => {
-        const startup = failure('unavailable', 'The media process could not start.', error);
-        if (primary === undefined) primary = startup; else cleanupErrors.push(startup);
-      });
-      child.once('close', resolve);
-    });
-    signal?.addEventListener('abort', onAbort, { once: true });
-    if (signal?.aborted) onAbort();
-    if (timeoutMs !== undefined) { timer = setTimeout(() => stop(failure('timeout', 'Media probing timed out.')), timeoutMs); timer.unref(); }
-    child.stdout.on('data', (chunk) => {
-      stdoutSize += chunk.length;
-      if (stdoutSize > maxOutputBytes) stop(failure('invalid-response', 'Media process output exceeded the configured limit.'));
-      else stdout.push(chunk);
-    });
-    child.stderr.on('data', (chunk) => {
-      stderrSize += chunk.length;
-      if (maxOutputBytes === Infinity || stderrSize <= 1024 * 1024) stderr.push(chunk);
-    });
-    const readError = error => { if (primary !== undefined) cleanupErrors.push(error); stop(error); };
-    child.stdout.once('error', readError); child.stderr.once('error', readError);
-    await done;
-  } catch (error) { primary ??= error; }
-  finally { clearTimeout(timer); clearTimeout(killTimer); signal?.removeEventListener('abort', onAbort); }
-  if (onCleanupError) for (const error of [...cleanupErrors]) {
-    try { onCleanupError(error); } catch (error) { cleanupErrors.push(error); }
-  }
-  const errors = primary === undefined ? cleanupErrors : [primary, ...cleanupErrors];
-  if (errors.length) {
-    const error = operationFailure(errors);
-    error.process = { executable, args, pid: child?.pid ?? null, exitCode: child?.exitCode ?? null, signal: child?.signalCode ?? null,
-      stdout: Buffer.concat(stdout).toString('utf8'), stderr: Buffer.concat(stderr).toString('utf8') };
-    throw error;
-  }
-  // All started processes have emitted close before their result is exposed.
-  return { stdout: Buffer.concat(stdout), stderr: Buffer.concat(stderr), exitCode: child.exitCode, pid: child.pid };
 }
