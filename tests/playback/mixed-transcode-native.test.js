@@ -4,12 +4,14 @@ import { createHash, randomUUID } from 'node:crypto';
 import { createServer } from 'node:net';
 import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { setTimeout as delay } from 'node:timers/promises';
 import { readInstanceConfiguration } from '../../src/configuration.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { probeStreamRow } from '../../src/library/probe-service.js';
 import { transferDatabase } from '../../src/migration/database-transfer.js';
 import { normalizeProbe } from '../../src/storage/probe-normalizer.js';
 import { nativeGuid } from '../../src/users/native.js';
+import { keyframeExtractionTaskId } from '../../src/tasks/keyframe-extraction-task.js';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { createPrivateFilterOutput } from '../../tools/compat/filter-reference-output.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
@@ -171,7 +173,26 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   return media.bytes;
 }
 
-test('PlaybackInfo, progressive and HLS match real mixed transcodes and HLS video scaling', {
+async function extractKeyframes(origin, authorization, signal) {
+  const headers = { Authorization: authorization };
+  const task = '/ScheduledTasks/' + keyframeExtractionTaskId;
+  const start = await fetch(origin + '/ScheduledTasks/Running/' + keyframeExtractionTaskId, { method: 'POST', headers, signal });
+  assert.equal(start.status, 204, await start.text());
+  for (let attempt = 0; attempt < 200; attempt++) {
+    const response = await fetch(origin + task, { headers, signal });
+    assert.equal(response.status, 200);
+    const info = await response.json();
+    if (info.State === 'Idle' && info.LastExecutionResult) {
+      assert.equal(info.Key, 'KeyframeExtraction');
+      assert.equal(info.LastExecutionResult.Status, 'Completed', JSON.stringify(info.LastExecutionResult));
+      return info;
+    }
+    await delay(50, undefined, { signal });
+  }
+  assert.fail('The keyframe extraction task did not complete.');
+}
+
+test('PlaybackInfo, progressive, HLS scaling and scheduled keyframes match the designated server', {
   skip: !enabled, timeout: 300000,
 }, nativeCase((t, port) => mediaLease.run(async () => {
   const output = await createPrivateFilterOutput(path.join(validationOutputRoot(), 'mixed-transcode-' + randomUUID()));
@@ -245,7 +266,13 @@ test('PlaybackInfo, progressive and HLS match real mixed transcodes and HLS vide
     native = current.start({ referenceRoot, outputRoot: root, label: 'native', origin: nativeOrigin });
     await native.ready();
     await capture(nativeOrigin, 'native');
+    evidence.native.keyframeTask = await extractKeyframes(nativeOrigin, authorization, t.signal);
     await stopNative();
+    const persisted = new SqliteDatabase(fixture.databasePath, { readOnly: true, requireMigrationHistory: true });
+    const itemKey = nativeGuid(itemId);
+    try { evidence.native.keyframes = persisted.rows('KeyframeData', { where: { ItemId: itemKey } })[0]; }
+    finally { persisted.close(); }
+    assert.ok(evidence.native.keyframes, 'Native stored keyframes from the scheduled transport-stream scan.');
     for (const entry of await readdir(path.join(referenceRoot, 'log'))) {
       if (entry.startsWith('FFmpeg.') || entry.startsWith('FFmpeg-')) {
         (evidence.nativeFfmpeg ??= []).push({ filename: entry, text: await readFile(path.join(referenceRoot, 'log', entry), 'utf8') });
@@ -260,6 +287,9 @@ test('PlaybackInfo, progressive and HLS match real mixed transcodes and HLS vide
     });
     const nodeOrigin = 'http://127.0.0.1:' + runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port;
     await capture(nodeOrigin, 'node');
+    evidence.node.keyframeTask = await extractKeyframes(nodeOrigin, authorization, t.signal);
+    evidence.node.keyframes = (await database.rows('KeyframeData', { where: { ItemId: itemKey } }))[0];
+    assert.deepEqual(evidence.node.keyframes, evidence.native.keyframes);
     assert.deepEqual(evidence.scenarioErrors, []);
     for (const protocol of ['direct', 'hls', 'http', 'scale']) {
       const expected = evidence.native[protocol], actual = evidence.node[protocol];

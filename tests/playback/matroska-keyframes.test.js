@@ -6,6 +6,7 @@ import { once } from 'node:events';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { PlaybackService } from '../../src/playback/service.js';
+import { hlsPlan } from '../../src/playback/hls.js';
 import { extractMatroskaKeyframes, MatroskaKeyframeService } from '../../src/playback/matroska-keyframes.js';
 import { IdentityAccessMap } from '../../src/storage/index.js';
 import { extractionFixture } from './extraction-fixture.js';
@@ -342,7 +343,7 @@ test('a missing row is extracted once, atomically stored, and used by concurrent
       getItemRecord: async () => ({ Id: itemId, MediaType: 'Video' }),
       getMediaSources: async () => [structuredClone(reference.source)] };
     let encoding = { AllowOnDemandMetadataBasedKeyframeExtractionForExtensions: ['.mkv'] };
-    const hls = { getEncodingOptions: () => encoding, initialize: async () => true };
+    const hls = { getEncodingOptions: () => encoding, initialize: async () => true, plan: hlsPlan, mediaTools: () => undefined };
     const playback = new PlaybackService({ library, hls, vfs: fixture.vfs, identityMap, getEncodingOptions: () => defaultConfiguration('encoding') });
     const [first, second] = await Promise.all([
       responseText(await playback.hlsStream(itemId, 'main', hlsOptions)),

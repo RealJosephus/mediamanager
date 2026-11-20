@@ -399,20 +399,20 @@ function waitForActive(promise, signal) {
 export class MatroskaKeyframeService {
   #active = new Map();
 
-  constructor({ store, vfs, onError = () => {} }) {
+  constructor({ store, vfs, probe, onError = () => {} }) {
     if (!store || !vfs) throw new TypeError('Matroska keyframe extraction requires a domain store and VFS.');
-    Object.assign(this, { store, vfs, onError });
+    Object.assign(this, { store, vfs, probe, onError });
   }
 
-  async get(itemId, virtualPath, { signal } = {}) {
+  async get(itemId, virtualPath, { signal, scheduled = false } = {}) {
     checkAbort(signal);
     if (this.#active.has(itemId)) {
       const active = this.#active.get(itemId);
       try {
         const result = await waitForActive(active.promise, signal);
-        if (active.virtualPath === virtualPath) return result;
+        if (active.virtualPath === virtualPath && (result || !scheduled || active.scheduled)) return result;
         if (this.#active.get(itemId) === active) this.#active.delete(itemId);
-        return this.get(itemId, virtualPath, { signal });
+        return this.get(itemId, virtualPath, { signal, scheduled });
       }
       catch (error) {
         // The owner uses its request signal so a lone aborted request stops
@@ -420,34 +420,50 @@ export class MatroskaKeyframeService {
         // that caller's cancellation.
         if (error.code !== 'cancelled' || signal?.aborted) throw error;
         if (this.#active.get(itemId) === active) this.#active.delete(itemId);
-        return this.get(itemId, virtualPath, { signal });
+        return this.get(itemId, virtualPath, { signal, scheduled });
       }
     }
-    const promise = this.#extractAndSave(itemId, virtualPath, signal);
-    const active = { virtualPath, promise };
+    const promise = this.#extractAndSave(itemId, virtualPath, signal, scheduled);
+    const active = { virtualPath, promise, scheduled };
     this.#active.set(itemId, active);
     try { return await promise; }
     finally { if (this.#active.get(itemId) === active) this.#active.delete(itemId); }
   }
 
-  async #extractAndSave(itemId, virtualPath, signal) {
-    const initial = await this.store.run(async database => (await database.rows('BaseItems', { where: { Id: itemId }, limit: 1 }))[0]);
+  async #extractAndSave(itemId, virtualPath, signal, scheduled) {
+    const { initial, cached } = await this.store.run(async database => ({
+      initial: (await database.rows('BaseItems', { where: { Id: itemId }, limit: 1 }))[0],
+      cached: scheduled && (await database.rows('KeyframeData', { where: { ItemId: itemId }, limit: 1 }))[0],
+    }));
     if (!initial) throw new StorageError('not-found', 'The media item does not exist.');
+    if (cached) return undefined;
     let data;
-    try { data = await extractMatroskaKeyframes(this.vfs, virtualPath, { signal }); }
+    if (!scheduled || /\.mkv$/iu.test(initial.Path ?? '')) {
+      try { data = await extractMatroskaKeyframes(this.vfs, virtualPath, { signal }); }
+      catch (error) {
+        if (error.code === 'cancelled' || signal?.aborted) throw error;
+        this.onError(error);
+      }
+    }
+    try {
+      if (scheduled && this.probe && !data?.KeyframeTicks.length) {
+        const source = await this.vfs.stat(virtualPath, { signal });
+        if (source.kind === 'file') data = await this.probe(virtualPath, source, { signal });
+      }
+    }
     catch (error) {
-      if (error.code === 'cancelled') throw error;
-      this.onError(error);
+      if (error.code === 'cancelled' || signal?.aborted) throw error;
+      if (error.code !== 'not-found') this.onError(error);
       return undefined;
     }
-    if (!data.KeyframeTicks.length) return undefined;
+    if (!data?.KeyframeTicks.length) return undefined;
     checkAbort(signal);
     try {
       await this.store.transaction(async database => {
         const current = (await database.rows('BaseItems', { where: { Id: itemId }, limit: 1 }))[0];
         if (rowIdentity(current) !== rowIdentity(initial)) throw new StorageError('version-changed', 'The media item changed during keyframe extraction.');
         const source = await this.vfs.stat(virtualPath, { signal });
-        if (!sameVersion(source, data.source.version, data.source.size)) throw new StorageError('version-changed', 'The Matroska source changed before keyframe persistence.');
+        if (!sameVersion(source, data.source.version, data.source.size)) throw new StorageError('version-changed', 'The media source changed before keyframe persistence.');
         await database.delete('KeyframeData', { ItemId: itemId });
         await database.insert('KeyframeData', { ItemId: itemId, TotalDuration: data.TotalDuration,
           KeyframeTicks: `[${data.KeyframeTicks.map(String).join(',')}]` });
