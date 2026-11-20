@@ -417,6 +417,13 @@ export class ProbeService {
       return { Item: updated && mapRecord(updated), Parent: parent && mapRecord(parent) };
     });
     invalidateVideoParent(loaded?.parent);
+    if (this.chapterImages && committed.Item && info && item.MediaType === 'Video' && loaded?.libraryOptions?.EnableChapterImageExtraction) {
+      try { await this.chapterImages.refresh(committed.Item, { libraryOptions: loaded.libraryOptions, signal }); }
+      catch (error) {
+        if (signal?.aborted) throw error;
+        loaded.logger?.error?.(error, 'Error extracting chapter images');
+      }
+    }
     this.#reportCommit(committed, notify, onCommitted);
     if (cacheKey) this.#cache.set(itemId, { key: cacheKey, info: structuredClone(info) });
     else this.#cache.delete(itemId);

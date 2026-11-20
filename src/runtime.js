@@ -89,6 +89,8 @@ import { refreshLibraryTaskId } from './tasks/refresh-library-task.js';
 import { RefreshGuideTaskWorker, refreshGuideTaskId } from './tasks/refresh-guide-task.js';
 import { KeyframeExtractionTaskWorker } from './tasks/keyframe-extraction-task.js';
 import { AudioNormalizationTaskWorker } from './tasks/audio-normalization-task.js';
+import { ChapterImagesTaskWorker } from './tasks/chapter-images-task.js';
+import { ChapterImages } from './library/chapter-images.js';
 import { DisplayPreferencesService } from './users/display-preferences-service.js';
 import { StartupService } from './users/startup-service.js';
 import { clrTrim } from './metadata/whitespace.js';
@@ -363,6 +365,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   let liveTvMediaSources, liveStreams, liveStreamProbe;
   const playback = new PlaybackService({ library, vfs, identityMap, sessions, activities, get configuration() { return currentConfiguration(); }, getEncodingOptions, getNetworkConfiguration, getSmartApiUrl, serverVersion, isLocalNetwork, probe, extraction, remux, hls,
     getLiveTvMediaSources: () => liveTvMediaSources, getLiveStreams: () => liveStreams });
+  const chapterImages = probe && applicationPaths.metadataPath && new ChapterImages({ playback, probe, fileSystem, applicationPaths,
+    getConfiguration: currentConfiguration, onError });
+  if (chapterImages) probe.chapterImages = chapterImages;
   rollback.push(() => { playback.beginClose(); return playback.drainSubtitlePreparations(); });
   const { cachePath: imageCachePath, ...imageProcessorOptions } = imageOptions;
   const imageProcessor = new ImageProcessor({ fileSystem,
@@ -508,6 +513,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
   if (probe) {
     await tasks.register({ create: options => new KeyframeExtractionTaskWorker({ ...options, playback }) });
     await tasks.register({ create: options => new AudioNormalizationTaskWorker({ ...options, playback, probe }) });
+    if (chapterImages && applicationPaths.cachePath) await tasks.register({ create: options => new ChapterImagesTaskWorker({ ...options,
+      chapterImages, store, fileSystem, historyPath: () => path.join(applicationPaths.cachePath, 'chapter-failures.txt') }) });
   }
   await plugins.bind('task', extension => tasks.register(extension));
   rollback.push(() => tasks.close());
