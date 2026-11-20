@@ -11,6 +11,7 @@ import { transferDatabase, exportCurrentSqlite } from '../../src/migration/datab
 import { runNativeCompleteLibraryScan } from '../../src/migration/complete-library-verifier.js';
 import { readBlurayDiscInfo, verifyBlurayDiscInfo } from '../../src/storage/bluray-disc-info.js';
 import { normalizeProbe } from '../../src/storage/probe-normalizer.js';
+import { nativeDate } from '../../src/users/native.js';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { createPrivateFilterOutput, filterEvidenceJson } from '../../tools/compat/filter-reference-output.js';
 import { compileOracle } from '../../tools/validation/oracle.js';
@@ -21,7 +22,7 @@ import { declareFileTestResource } from '../helpers/file-test-resource.js';
 import { captureDiscPlayback } from '../helpers/disc-playback.js';
 import { databaseFilename, idKey, installStoppedExport, portAvailable, removeSyntheticPreparation,
   stoppedDatabase, unusedPort } from '../helpers/library-exchange-state.js';
-import { orderedExchangeSnapshot } from '../helpers/ordered-exchange-snapshot.js';
+import { observeAuthenticatedExchangeRead, orderedExchangeSnapshot } from '../helpers/ordered-exchange-snapshot.js';
 import { errorObservation } from '../helpers/error-observation.js';
 import { configureStorage, discRows, functionalJson, libraryOptions, materializeBluray,
   probeValues, technicalDto, verifyBluray } from './fixtures/real-bluray-current/scenario.js';
@@ -272,15 +273,24 @@ async function runBlurayScanExchange(t, { fixture, original, playback, movieName
     const schema = database.schemaName;
     await database.close(); closedDatabaseOwners.add(database);
     database = ownDatabase(await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema }));
+    if (!original && !playback) {
+      const [device] = await database.rows('Devices', { where: { AccessToken: token }, limit: 1 });
+      assert.ok(device);
+      await database.update('Devices', { Id: device.Id }, { DateLastActivity: nativeDate(new Date(Date.now() - 181000)) });
+    }
     report.snapshots.node = await orderedExchangeSnapshot(database, { signal: t.signal });
+    const verifyColdRead = await observeAuthenticatedExchangeRead(database, token, { signal: t.signal });
     await startNode(database, 'node-bluray-cold'); report.nodeCold = await detail('node-bluray-cold-detail');
     assert.deepEqual(report.nodeCold.technical, report.nodeChanged.technical); assert.equal(report.nodeCold.value.UserData.IsFavorite, true);
     verifyEditedMetadata(report.nodeCold);
     await stopNode('node-cold-stopped');
-    assert.deepEqual(await orderedExchangeSnapshot(database, { signal: t.signal }), report.snapshots.node);
+    const cold = await verifyColdRead(report.snapshots.node);
+    report.snapshots.nodeCold = cold.snapshot;
+    report.deviceActivity = { nodeCold: cold.activity };
+    if (!original && !playback) assert.ok(cold.activity, 'The stale device must refresh during the cold authenticated read.');
     const exported = path.join(root, 'node-export.db'); report.exported = await exportCurrentSqlite(database, exported, { signal: t.signal });
     assert.equal(report.exported.verified, true);
-    await withSqlite(exported, async source => assert.deepEqual(await orderedExchangeSnapshot(source, { signal: t.signal }), report.snapshots.node));
+    await withSqlite(exported, async source => assert.deepEqual(await orderedExchangeSnapshot(source, { signal: t.signal }), report.snapshots.nodeCold));
     await installStoppedExport({ root, instanceRoot, exported });
     await startNative('native-bluray-continuation'); report.nativeImported = await detail('native-imported-bluray');
     assert.deepEqual(report.nativeImported.technical, report.nodeCold.technical); assert.equal(report.nativeImported.value.UserData.IsFavorite, true);
@@ -298,13 +308,16 @@ async function runBlurayScanExchange(t, { fixture, original, playback, movieName
         instanceBinding: report.binding, portableMountContract: storage.mountContract });
     });
     assert.deepEqual(await orderedExchangeSnapshot(returned, { signal: t.signal }), report.snapshots.continued);
+    const verifyReturnedRead = await observeAuthenticatedExchangeRead(returned, token, { signal: t.signal });
     await startNode(returned, 'node-bluray-returned-cold'); report.returnedCold = await detail('node-returned-bluray-detail');
     assert.deepEqual(report.returnedCold.technical, report.nativeContinued.technical); assert.equal(report.returnedCold.value.UserData.IsFavorite, true);
     assert.equal(report.returnedCold.value.Overview, 'Native continued original Blu-ray & 保留');
     verifyEditedMetadata(report.returnedCold, 'Native continued original Blu-ray & 保留');
     await stopNode('node-returned-stopped');
-    assert.deepEqual(await orderedExchangeSnapshot(returned, { signal: t.signal }), report.snapshots.continued);
-    assert.deepEqual(await orderedExchangeSnapshot(database, { signal: t.signal }), report.snapshots.node);
+    const returnedCold = await verifyReturnedRead(report.snapshots.continued);
+    report.snapshots.returnedCold = returnedCold.snapshot;
+    report.deviceActivity.returnedCold = returnedCold.activity;
+    assert.deepEqual(await orderedExchangeSnapshot(database, { signal: t.signal }), report.snapshots.nodeCold);
     report.mediaAfter = await verifyBluray(supply, disc); assert.deepEqual(report.mediaAfter, report.materialized);
     await supply.verifyInputs();
     report[original ? 'originalInputsUnchanged' : 'inputsUnchanged'] = true;

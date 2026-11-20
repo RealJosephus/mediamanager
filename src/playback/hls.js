@@ -255,7 +255,9 @@ export function hlsPlan(source, options = {}, tools) {
   const audioOnly = options.MediaType === 'Audio';
   const live = options.LiveInput === true && source.IsInfiniteStream === true;
   const audioIndex = (audioOnly ? undefined : audioStreams.find(stream => stream.Index === options.AudioStreamIndex)?.Index) ?? audioStreams.find(stream => stream.Channels > 0)?.Index ?? audioStreams[0]?.Index;
-  const plan = remuxPlan(source, { ...options, AudioStreamIndex: live && audioIndex === -1 ? undefined : audioIndex, Container: container, StartTimeTicks: 0n, HlsManifest: true }, tools);
+  const audioCodec = options.AudioCodec || (audioOnly ? undefined : 'aac');
+  const plan = remuxPlan(source, { ...options, AudioCodec: audioCodec,
+    AudioStreamIndex: live && audioIndex === -1 ? undefined : audioIndex, Container: container, StartTimeTicks: 0n, HlsManifest: true }, tools);
   const video = plan.inputVideo;
   const audio = source.MediaStreams.find(stream => stream.Type === 'Audio' && stream.Index === plan.streams.find(stream => stream.type === 'Audio')?.index);
   const textSubtitles = source.MediaStreams.filter(stream => stream.Type === 'Subtitle' && stream.IsTextSubtitleStream);
