@@ -1,7 +1,7 @@
 import { startMediaProcess } from '../media-execution/process.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
-import { mkdtemp, mkdir, readdir, readFile, writeFile, stat, rm, unlink } from 'node:fs/promises';
+import { readdir, readFile, stat, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { pipeline } from 'node:stream/promises';
 import { StringDecoder } from 'node:string_decoder';
@@ -16,6 +16,7 @@ import { hlsArguments } from '../media-execution/streaming.js';
 import { stageSubtitleBurn } from '../media-execution/subtitle-burn.js';
 import { outputVideoBitrate } from '../media-execution/video.js';
 import { matchesTranscodeJob as matchesJob, transcodingInfo } from './transcode-jobs.js';
+import { TranscodeCache } from './transcode-cache.js';
 import { LiveStreamReadBridge } from './live-stream-bridge.js';
 
 export { hlsArguments };
@@ -31,8 +32,6 @@ const doubleBits = Buffer.allocUnsafe(8);
 const encode = value => encodeURIComponent(value).replace(/[!'()*]/g, char => `%${char.charCodeAt(0).toString(16).toUpperCase()}`);
 const encodeQueryValue = (value, preserveComma) => preserveComma ? encode(value).replaceAll('%2C', ',') : encode(value);
 const json = value => JSON.stringify(value, (_, value) => typeof value === 'bigint' ? value.toString() : value);
-const cacheOwners = new Set();
-const processExists = pid => { try { process.kill(pid, 0); return true; } catch (error) { return error.code !== 'ESRCH'; } };
 const cachePlan = plan => ({
   container: plan.container,
   segmentLength: plan.segmentLength,
@@ -386,9 +385,6 @@ export function mainPlaylist(source, options = {}, query = '', tools) {
 }
 
 const exists = async file => stat(file).catch(error => { if (error.code !== 'ENOENT') throw error; });
-const assertJobDirectory = (root, directory) => {
-  if (path.dirname(directory) !== root || !path.basename(directory).startsWith('mediamanager-hls-')) throw new Error('Invalid HLS cache directory.');
-};
 const operationFailure = errors => errors.length === 1 ? errors[0]
   : Object.assign(new AggregateError(errors, errors[0]?.message ?? 'HLS cleanup failed.', { cause: errors[0] }),
     Object.fromEntries(['code', 'status', 'statusCode'].filter(name => errors[0]?.[name] !== undefined).map(name => [name, errors[0][name]])));
@@ -405,7 +401,7 @@ export class HlsService {
   #launchTail = Promise.resolve();
   #cacheReady;
   #initializations = new Set();
-  #owner = randomUUID();
+  #cache;
   #cleanup = new Set();
   constructor({ vfs, bridge, remux, mediaEncoder, getCacheDirectory, getEncodingOptions, maxConcurrentJobs = 4, idleTimeoutMs = 60000, timeoutMs = 21600000, onError = () => {}, onProcess = () => {}, onProgress = () => {}, onEventStop }) {
     if (!vfs) throw new TypeError('HLS requires VFS.');
@@ -413,7 +409,7 @@ export class HlsService {
     if (typeof getCacheDirectory !== 'function' || typeof getEncodingOptions !== 'function') throw new TypeError('HLS requires current encoding and transcode directory callbacks.');
     for (const value of [maxConcurrentJobs, idleTimeoutMs, timeoutMs]) if (!Number.isSafeInteger(value) || value < 1) throw new TypeError('Positive HLS limits are required.');
     Object.assign(this, { vfs, mediaEncoder, remux: remux ?? new RemuxService({ vfs, bridge, mediaEncoder }), ownsRemux: !remux, getCacheDirectory, getEncodingOptions, maxConcurrentJobs, idleTimeoutMs, timeoutMs, onError, onProcess, onProgress, onEventStop });
-    cacheOwners.add(this.#owner);
+    this.#cache = new TranscodeCache('hls', onError);
   }
   #track(operation) {
     if (this.#closed) return Promise.reject(failure('closed', 'HLS is closed.'));
@@ -430,7 +426,7 @@ export class HlsService {
         const directory = path.resolve(await this.getCacheDirectory()); this.#lifetime.signal.throwIfAborted();
         let ready = this.#cacheReady;
         if (ready?.directory !== directory) {
-          ready = { directory, promise: this.#prepareCache(directory) }; this.#cacheReady = ready;
+          ready = { directory, promise: this.#cache.prepare(directory) }; this.#cacheReady = ready;
           ready.promise.catch(() => { if (this.#cacheReady === ready) this.#cacheReady = undefined; });
         }
         await ready.promise; this.#lifetime.signal.throwIfAborted();
@@ -441,19 +437,6 @@ export class HlsService {
         throw error;
       } finally { if (!Object.hasOwn(initialization, 'error')) this.#initializations.delete(initialization); }
     });
-  }
-  async #prepareCache(root) {
-    await mkdir(root, { recursive: true });
-    for (const entry of await readdir(root, { withFileTypes: true })) {
-      if (!entry.isDirectory() || !/^mediamanager-hls-[A-Za-z0-9_-]+$/.test(entry.name)) continue;
-      const directory = path.join(root, entry.name);
-      try {
-        const owner = JSON.parse(await readFile(path.join(directory, 'owner.json'), 'utf8'));
-        if (owner.kind !== 'mediamanager-hls' || !Number.isSafeInteger(owner.pid) || owner.pid < 1 || typeof owner.id !== 'string') continue;
-        if (owner.pid === process.pid ? cacheOwners.has(owner.id) : processExists(owner.pid)) continue;
-        await rm(directory, { recursive: true, force: true, maxRetries: 10, retryDelay: 500 });
-      } catch (error) { if (error.code !== 'ENOENT' && !(error instanceof SyntaxError)) this.onError(error); }
-    }
   }
   mediaTools(configuration = this.getEncodingOptions()) {
     return { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version,
@@ -517,8 +500,7 @@ export class HlsService {
       }
       try { directory = await job.directory; } catch (error) { errors.push(error); }
       if (directory !== undefined) try {
-        assertJobDirectory(job.cacheDirectory, directory);
-        await rm(directory, { recursive: true, force: true, maxRetries: 10, retryDelay: 500 });
+        await this.#cache.remove(job.cacheDirectory, directory);
       } catch (error) { errors.push(error); }
       if (errors.length) throw operationFailure(errors);
     })();
@@ -532,15 +514,7 @@ export class HlsService {
     if ([...this.#jobs.values()].filter(value => !value.exited && !matchesJob(value, options.DeviceId, options.PlaySessionId)).length >= this.maxConcurrentJobs) throw failure('busy', 'The HLS concurrency limit has been reached.');
     const job = { key, plan, options, source, virtualPath, version, cacheDirectory, openRead, eventId, disc,
       controller: new AbortController(), readers: 0, pendingReaders: new Set(), tail: Promise.resolve() };
-    job.directory = mkdtemp(path.join(cacheDirectory, 'mediamanager-hls-')).then(async directory => {
-      try { await writeFile(path.join(directory, 'owner.json'), json({ kind: 'mediamanager-hls', pid: process.pid, id: this.#owner })); return directory; }
-      catch (error) {
-        assertJobDirectory(cacheDirectory, directory);
-        try { await rm(directory, { recursive: true, force: true, maxRetries: 10, retryDelay: 500 }); }
-        catch (cleanup) { throw operationFailure([error, cleanup]); }
-        throw error;
-      }
-    });
+    job.directory = this.#cache.create(cacheDirectory);
     job.directory.catch(() => {});
     this.#jobs.set(key, job);
     if (eventId) this.#events.set(eventId, job);
@@ -852,7 +826,7 @@ export class HlsService {
       const cleanup = [...this.#cleanup]; await Promise.allSettled(cleanup.map(operation => operation.promise));
       errors.push(...cleanup.filter(operation => Object.hasOwn(operation, 'error')).map(operation => operation.error));
       errors.push(...[...this.#initializations].map(initialization => initialization.error));
-      cacheOwners.delete(this.#owner);
+      this.#cache.close();
       try { await this.#liveBridge?.close(); } catch (error) { errors.push(error); }
       if (this.ownsRemux) try { await this.remux.close(); } catch (error) { errors.push(error); }
       if (errors.length) throw operationFailure(errors);

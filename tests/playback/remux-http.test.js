@@ -4,7 +4,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomBytes, createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { mkdtemp, writeFile, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, readdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -38,7 +38,7 @@ async function seed(database) {
 }
 async function eventually(condition) { for (let index = 0; index < 300; index++) { if (condition()) return; await delay(10); } assert.fail('Expected the asynchronous operation to finish.'); }
 
-test('native progressive remux HTTP, packet hashes, multi-version access and cancellation on PostgreSQL', {
+test('native progressive remux HTTP, packet hashes, shared output, multi-version access and cancellation on PostgreSQL', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
 }, async () => {
   const schema = `remux_http_${randomBytes(8).toString('hex')}`;
@@ -133,29 +133,78 @@ test('native progressive remux HTTP, packet hashes, multi-version access and can
     assert.deepEqual(await unavailable.json(), { MediaSources: [], ErrorCode: 'NoCompatibleStream' });
     assert.equal(fixture.requests.length, restrictedReads, 'Restricted versions must not open storage or extraction caches.');
 
+    const transcodeRoot = await runtime.encodingPaths.getTranscodePath();
+    const otherSession = suffix => {
+      const url = new URL(remuxUrl, origin);
+      url.searchParams.set('PlaySessionId', `progressive-${suffix}`);
+      return url;
+    };
+    const stop = async url => {
+      const query = new URLSearchParams({ deviceId: url.searchParams.get('DeviceId'), playSessionId: url.searchParams.get('PlaySessionId') });
+      assert.equal((await fetch(origin + '/Videos/ActiveEncodings?' + query, { method: 'DELETE', headers })).status, 204);
+    };
+    const bytes = async response => {
+      assert.equal(response.status, 200);
+      return Buffer.from(await response.arrayBuffer());
+    };
+    const sharedUrl = otherSession('shared'), differentOptions = new URL(sharedUrl);
+    differentOptions.searchParams.set('CopyTimestamps', 'true');
     fixture.setDelay(1000);
-    const controller = new AbortController(), getCount = fixture.requests.filter(request => request.method === 'GET').length;
-    const pending = fetch(origin + remuxUrl, { headers, signal: controller.signal });
-    const cancelled = assert.rejects(pending, { name: 'AbortError' });
+    const getCount = fixture.requests.filter(request => request.method === 'GET').length;
+    const firstProcess = processes.length;
+    const firstRequest = fetch(sharedUrl, { headers }).then(bytes);
     await eventually(() => fixture.requests.filter(request => request.method === 'GET').length > getCount);
-    assert.equal((await fetch(origin + remuxUrl, { headers })).status, 429);
-    controller.abort(); await cancelled;
-    await eventually(() => fixture.closedReads > 0);
-    await delay(50);
+    const follower = fetch(differentOptions, { headers }).then(bytes);
+    const overlapping = await fetch(otherSession('concurrency-limit'), { headers });
+    assert.equal(overlapping.status, 429, 'A different session needs a separate encoder.');
+    await overlapping.arrayBuffer();
+    const [shared, overlappingBytes] = await Promise.all([firstRequest, follower]);
+    assert.ok(shared.length > 0);
+    assert.deepEqual(overlappingBytes, shared);
+    assert.deepEqual(await fetch(differentOptions, { headers }).then(bytes), shared);
+    assert.equal(processes.length, firstProcess + 1, 'Both followers read the first encoder output.');
+
+    fixture.setDelay(0);
+    const source = reference.sources.find(source => source.name === 'source.mkv');
+    fixture.replace('/' + source.name, Buffer.from(source.media, 'base64'));
+    await fetch(sharedUrl, { headers }).then(bytes);
+    assert.equal(processes.length, firstProcess + 2, 'A changed VFS version needs a new job.');
+    await fetch(sharedUrl, { headers: { ...headers, 'User-Agent': 'Remux fixture second client' } }).then(bytes);
+    assert.equal(processes.length, firstProcess + 3, 'A different user agent needs a new job.');
+    const alternateCache = path.join(directory, 'alternate-transcodes');
+    await mkdir(alternateCache);
+    const encoding = runtime.namedConfiguration.getCurrentConfiguration('encoding');
+    await runtime.namedConfiguration.saveConfiguration('encoding', { ...encoding, TranscodingTempPath: alternateCache });
+    await fetch(sharedUrl, { headers: { ...headers, 'User-Agent': 'Remux fixture second client' } }).then(bytes);
+    assert.equal(processes.length, firstProcess + 4, 'The current transcode root participates in job identity.');
+    await stop(sharedUrl);
+    assert.equal((await readdir(alternateCache)).some(name => name.startsWith('mediamanager-progressive-')), false);
+
+    fixture.setDelay(1000);
+    const abandonedUrl = otherSession('abandoned'), stoppedClient = new AbortController();
+    const closedBefore = fixture.closedReads, beforeStop = fixture.requests.length;
+    const abandoned = assert.rejects(fetch(abandonedUrl, { headers, signal: stoppedClient.signal }), { name: 'AbortError' });
+    await eventually(() => fixture.requests.slice(beforeStop).some(request => request.method === 'GET'));
+    stoppedClient.abort(); await abandoned;
+    await stop(abandonedUrl);
+    await eventually(() => fixture.closedReads > closedBefore);
     const timeoutMs = runtime.remux.timeoutMs;
     runtime.remux.timeoutMs = 100;
-    assert.equal((await fetch(origin + remuxUrl, { headers })).status, 504, 'The whole read must obey the remux timeout.');
+    const timedOut = await fetch(otherSession('timeout'), { headers });
+    assert.equal(timedOut.status, 504, 'The whole read must obey the remux timeout.');
+    await timedOut.arrayBuffer();
     runtime.remux.timeoutMs = timeoutMs;
     fixture.setDelay(0);
-    const resumed = await fetch(origin + remuxUrl, { headers }); assert.equal(resumed.status, 200); await resumed.arrayBuffer();
+    await fetch(otherSession('timeout'), { headers }).then(bytes);
     assert.ok(processes.every(args => args[args.indexOf('-c') + 1] === 'copy' && !args.some(arg => ['-vf', '-af', '-filter_complex'].includes(arg))));
     assert.equal(fixture.requests.some(request => request.authorization), false);
     fixture.setDelay(1000);
     const beforeShutdown = fixture.requests.filter(request => request.method === 'GET').length;
-    const draining = fetch(origin + remuxUrl, { headers }).then(response => response.arrayBuffer()).catch(() => undefined);
+    const draining = fetch(otherSession('shutdown'), { headers }).then(response => response.arrayBuffer()).catch(() => undefined);
     await eventually(() => fixture.requests.filter(request => request.method === 'GET').length > beforeShutdown);
     await runtime.remux.close(); await draining;
     assert.equal(runtime.remux.supports(reference.sources[0].source, { Container: 'mp4' }), false);
+    for (const root of [transcodeRoot, alternateCache]) assert.equal((await readdir(root)).some(name => name.startsWith('mediamanager-progressive-')), false);
   } finally {
     if (database) { await database.client.query(`DROP SCHEMA "${schema}" CASCADE`); await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`); }
     if (runtime) await runtime.close(); else await database?.close();
