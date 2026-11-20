@@ -207,7 +207,7 @@ export class PlaybackService {
         const mediaEncoder = this.hls?.mediaEncoder ?? this.remux?.mediaEncoder;
         negotiateSource(source, item, profile, { ...options, AccessToken: auth.Token, DeviceId: auth.DeviceId, PlaySessionId: result.PlaySessionId,
           EnableSubtitleExtraction: this.getEncodingOptions().EnableSubtitleExtraction,
-          EnableRemuxing: policy.EnableMediaPlayback && (item.MediaType === 'Audio' ? policy.EnableAudioPlaybackTranscoding
+          EnableRemuxing: policy.EnableMediaPlayback && (item.MediaType === 'Audio' ? policy.EnablePlaybackRemuxing || policy.EnableAudioPlaybackTranscoding
             : policy.EnablePlaybackRemuxing || policy.EnableAudioPlaybackTranscoding || policy.EnableVideoPlaybackTranscoding),
           PermitAudioEncoding: policy.EnableAudioPlaybackTranscoding === true, PermitVideoEncoding: policy.EnableVideoPlaybackTranscoding === true,
           CanEncodeAudio: mediaEncoder?.canEncodeAudio?.bind(mediaEncoder),
@@ -395,7 +395,7 @@ export class PlaybackService {
         if (!await this.hls.initialize()) throw httpError(503, 'The HLS process is unavailable.');
         if (keyframeRequest) {
           const plan = this.hls.plan(source, options);
-          if (plan.video) {
+          if (plan.videoOutput?.encoder === 'copy') {
             const row = await this.library.store.run(async db => (await db.rows('KeyframeData', { where: { ItemId: keyframeRequest.itemId }, limit: 1 }))[0]);
             options.KeyframeData = storedKeyframeData(row);
             if (!options.KeyframeData && keyframeRequest.extract && this.keyframes) {
@@ -417,7 +417,7 @@ export class PlaybackService {
 
   #hlsPlaylist(source, kind, options) {
     return new BinaryResult(async (request, response) => {
-      const tools = { configuration: this.hls.getEncodingOptions(), capabilities: this.hls.mediaEncoder.capabilities };
+      const tools = { configuration: this.hls.getEncodingOptions(), capabilities: this.hls.mediaEncoder.capabilities, version: this.hls.mediaEncoder.version };
       const text = kind === 'master' ? masterPlaylist(source, options, options.QueryString, tools) : mainPlaylist(source, options, options.QueryString, tools);
       const bytes = Buffer.from(kind === 'master' && request.method === 'HEAD' ? '' : text);
       response.setHeader('Content-Type', 'application/vnd.apple.mpegurl');

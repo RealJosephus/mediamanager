@@ -17,15 +17,15 @@ import oracle from './fixtures/hls-oracle.json' with { type: 'json' };
 
 async function eventually(condition) { for (let index = 0; index < 300; index++) { if (await condition()) return; await delay(10); } assert.fail('The asynchronous operation did not finish.'); }
 
-test('native HLS StreamBuilder URLs and explicit packet-copy eligibility', () => {
+test('native HLS StreamBuilder URLs and per-track copy eligibility', () => {
   for (const entry of reference.profiles) {
     const source = structuredClone(entry.source);
     negotiateSource(source, { Id: source.Id, MediaType: 'Video' }, entry.profile, { ...entry.options, CanHls: (source, options) => { try { hlsPlan(source, options); return true; } catch { return false; } }, DeviceId: 'remux-fixture', PlaySessionId: 'fixture-session', AccessToken: 'fixture-token' });
     const native = oracle.find(value => value.name === entry.name);
-    if (['wrong-codec', 'no-video-copy'].includes(entry.name)) { assert.ok(native.url); assert.equal(source.SupportsTranscoding, false); }
-    else assert.equal(source.TranscodingUrl, native.url, entry.name);
+    assert.equal(source.TranscodingUrl, native.url + (entry.options?.AllowVideoStreamCopy === false ? '&allowVideoStreamCopy=false' : ''), entry.name);
   }
-  for (const options of [{ SegmentContainer: 'webm' }, { VideoCodec: 'hevc' }, { AllowVideoStreamCopy: false }, { SubtitleStreamIndex: 0, SubtitleMethod: 'Encode' }]) assert.throws(() => hlsPlan(reference.source, options));
+  for (const options of [{ SegmentContainer: 'webm' }, { AllowVideoStreamCopy: false }, { SubtitleStreamIndex: 0, SubtitleMethod: 'Encode' }]) assert.throws(() => hlsPlan(reference.source, options));
+  assert.equal(hlsPlan(reference.source, { VideoCodec: 'hevc' }).videoOutput.encoder, 'libx265');
   assert.equal(hlsPlan(reference.source, { AudioChannels: 1 }).audioOutput.encoder, 'aac');
   assert.equal(hlsPlan(reference.source, { AudioSampleRate: 48000 }).audioOutput.encoder, 'copy');
   const execution = { threads: 0, version: '8.0', maxMuxingQueueSize: 2048 };

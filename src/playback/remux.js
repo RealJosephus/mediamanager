@@ -26,7 +26,7 @@ export class RemuxService {
   }
   get available() { return this.mediaEncoder.ready; }
   plan(source, options, configuration = this.mediaEncoder.getEncodingOptions()) {
-    return remuxPlan(source, options, { configuration, capabilities: this.mediaEncoder.capabilities });
+    return remuxPlan(source, options, { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version });
   }
   supports(source, options) {
     if (!this.available || this.#closed) return false;
@@ -71,7 +71,9 @@ export class RemuxService {
     try {
       checkAbort(signal);
       const args = remuxArguments(lease.url, plan, threads, this.mediaEncoder.version);
-      try { child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment: this.mediaEncoder.environment }); }
+      const overrides = plan.videoOutput?.hardware?.environment;
+      const environment = overrides ? { ...(this.mediaEncoder.environment ?? process.env), ...overrides } : this.mediaEncoder.environment;
+      try { child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment }); }
       catch (error) { throw failure('unavailable', 'The remux process could not start.', error); }
       const started = Promise.withResolvers();
       done = new Promise(resolve => {

@@ -223,7 +223,7 @@ test('native HLS manifest semantics, reader delivery, copy packets, seek and tas
     assert.equal(sessions.find(session => session.DeviceId === 'hls-fixture').TranscodingInfo, undefined);
     const reads = fixture.requests.length;
     assert.equal((await fetch(lastSegment.origin + lastSegment.pathname)).status, 401);
-    for (const query of ['VideoCodec=hevc', 'AllowAudioStreamCopy=false', 'MaxWidth=64', 'SegmentLength=0', 'SubtitleStreamIndex=0&SubtitleMethod=Encode']) {
+    for (const query of ['VideoCodec=hevc', 'MaxWidth=64', 'SegmentLength=0', 'SubtitleStreamIndex=0&SubtitleMethod=Encode']) {
       assert.equal((await fetch(origin + `/Videos/${id}/master.m3u8?${query}`, { headers })).status, 400, query);
     }
     assert.equal(fixture.requests.length, reads);

@@ -97,18 +97,28 @@ function portAvailable(port) {
   });
 }
 
-async function playback(origin, authorization, protocol, acceptSourceAudio, report, signal) {
+async function playback(origin, authorization, protocol, scenario, report, signal) {
   const request = async (uri, init = {}) => {
     const headers = { Authorization: authorization, ...init.headers };
     const response = await fetch(new URL(uri, origin), { ...init, headers, signal });
     return { status: response.status, mime: response.headers.get('content-type'), bytes: Buffer.from(await response.arrayBuffer()) };
   };
-  const codec = acceptSourceAudio ? 'ac3' : 'aac';
+  const direct = scenario === 'direct';
+  const scaled = scenario === 'scale';
+  const codec = direct || scaled ? 'ac3' : 'aac';
+  const profile = {
+    MaxStreamingBitrate: 8000000,
+    DirectPlayProfiles: [{ Type: 'Video', Container: 'ts', VideoCodec: 'h264', AudioCodec: codec }],
+    TranscodingProfiles: [{ Type: 'Video', Context: 'Streaming', Protocol: protocol, Container: 'ts', VideoCodec: 'h264', AudioCodec: codec }],
+  };
+  if (scaled) profile.CodecProfiles = [{ Type: 'Video', Codec: 'h264',
+    Conditions: [{ Property: 'Width', Condition: 'LessThanEqual', Value: '360' }] }];
+  if (direct) {
+    const capabilities = await request('/Sessions/Capabilities?PlayableMediaTypes=Video', { method: 'POST' });
+    assert.equal(capabilities.status, 204, capabilities.bytes.toString());
+  }
   const response = await request(`/Items/${itemId}/PlaybackInfo`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ MediaSourceId: itemId, AudioStreamIndex: 2, DeviceProfile: {
-      MaxStreamingBitrate: 8000000, DirectPlayProfiles: [{ Type: 'Video', Container: 'ts', VideoCodec: 'h264', AudioCodec: codec }],
-      TranscodingProfiles: [{ Type: 'Video', Context: 'Streaming', Protocol: protocol, Container: 'ts', VideoCodec: 'h264', AudioCodec: 'aac' }],
-    } }) });
+    body: JSON.stringify({ MediaSourceId: itemId, AudioStreamIndex: 2, DeviceProfile: profile }) });
   assert.equal(response.status, 200, response.bytes.toString());
   const info = JSON.parse(response.bytes);
   report.playbackInfo = info;
@@ -116,15 +126,16 @@ async function playback(origin, authorization, protocol, acceptSourceAudio, repo
   const [source] = info.MediaSources;
   assert.equal(source.DefaultAudioStreamIndex, 2);
   assert.equal(source.SupportsTranscoding, true);
-  assert.equal(source.SupportsDirectPlay, acceptSourceAudio);
-  if (acceptSourceAudio) {
+  assert.equal(source.SupportsDirectPlay, direct);
+  if (direct) {
     assert.equal(source.TranscodingUrl, undefined);
     return;
   }
   const url = new URL(source.TranscodingUrl, origin);
   assert.equal(url.searchParams.get('VideoCodec'), 'h264');
-  assert.equal(url.searchParams.get('AudioCodec'), 'aac');
-  assert.equal(url.searchParams.get('TranscodeReasons'), 'AudioCodecNotSupported');
+  assert.equal(url.searchParams.get('AudioCodec'), codec);
+  assert.equal(url.searchParams.get('TranscodeReasons'), scaled ? 'VideoResolutionNotSupported' : 'AudioCodecNotSupported');
+  if (scaled) assert.equal(url.searchParams.get('MaxWidth'), '360');
   const head = await request(url, { method: 'HEAD' });
   report.head = { status: head.status, mime: head.mime, length: head.bytes.length };
   assert.equal(head.status, 200); assert.equal(head.bytes.length, 0);
@@ -132,7 +143,10 @@ async function playback(origin, authorization, protocol, acceptSourceAudio, repo
   if (protocol === 'hls') {
     const master = await request(url);
     assert.equal(master.status, 200, master.bytes.toString()); report.master = master.bytes.toString();
-    assert.match(report.master, /CODECS="avc1\.[^,"]+,mp4a\.40\.2"/u);
+    if (scaled) {
+      assert.match(report.master, /RESOLUTION=360x240/u);
+      assert.match(report.master, /CODECS="avc1\.[^,"]+,ac-3"/u);
+    } else assert.match(report.master, /CODECS="avc1\.[^,"]+,mp4a\.40\.2"/u);
     const variant = new URL(linesWithUris(report.master)[0], url);
     const playlist = await request(variant);
     assert.equal(playlist.status, 200, playlist.bytes.toString()); report.playlist = playlist.bytes.toString();
@@ -145,10 +159,11 @@ async function playback(origin, authorization, protocol, acceptSourceAudio, repo
     const session = await request('/Sessions?DeviceId=' + deviceId);
     assert.equal(session.status, 200);
     const sessions = JSON.parse(session.bytes);
+    report.sessions = sessions;
     report.transcodingInfo = sessions.find(value => value.DeviceId === deviceId)?.TranscodingInfo;
     assert.ok(report.transcodingInfo);
-    assert.equal(report.transcodingInfo.IsAudioDirect, false);
-    assert.equal(report.transcodingInfo.IsVideoDirect, true);
+    assert.equal(report.transcodingInfo.IsAudioDirect, scaled);
+    assert.equal(report.transcodingInfo.IsVideoDirect, !scaled);
   }
   const stop = '/Videos/ActiveEncodings?' + new URLSearchParams({ deviceId, playSessionId: info.PlaySessionId });
   report.stop = (await request(stop, { method: 'DELETE' })).status;
@@ -156,21 +171,21 @@ async function playback(origin, authorization, protocol, acceptSourceAudio, repo
   return media.bytes;
 }
 
-test('PlaybackInfo and real progressive and HLS requests copy H.264 while encoding AC-3 to AAC', {
+test('PlaybackInfo, progressive and HLS match real mixed transcodes and HLS video scaling', {
   skip: !enabled, timeout: 300000,
 }, nativeCase((t, port) => mediaLease.run(async () => {
   const output = await createPrivateFilterOutput(path.join(validationOutputRoot(), 'mixed-transcode-' + randomUUID()));
   const root = output.root;
   const referenceRoot = path.join(root, 'reference');
   const nativeOrigin = 'http://127.0.0.1:' + port;
-  const evidence = { commands: [], native: {}, node: {}, nodeProcesses: [], diagnostics: [] };
+  const evidence = { commands: [], native: {}, node: {}, nodeProcesses: [], diagnostics: [], scenarioErrors: [] };
   let current, native, proxy, database, runtime, authorization, failure;
   async function stopNative() {
     if (!native) return;
     const instance = native;
     native = undefined;
     evidence.nativeShutdown = await instance.stop(async () => {
-      const response = await fetch(nativeOrigin + '/System/Shutdown', { method: 'POST', headers: { Authorization: authorization },
+      const response = await fetch(nativeOrigin + '/System/Shutdown', { method: 'POST', headers: { Authorization: authorization, Connection: 'close' },
         signal: AbortSignal.timeout(15000) });
       await response.arrayBuffer();
       return response.status;
@@ -180,19 +195,30 @@ test('PlaybackInfo and real progressive and HLS requests copy H.264 while encodi
   }
   async function capture(origin, label) {
     const results = evidence[label];
-    results.direct = {};
-    await playback(origin, authorization, 'hls', true, results.direct, t.signal);
-    for (const protocol of ['hls', 'http']) {
-      const result = results[protocol] = {};
-      const bytes = await playback(origin, authorization, protocol, false, result, t.signal);
-      const filename = path.join(root, label + '-' + protocol + '.ts');
-      await writeFile(filename, bytes);
-      result.probe = await probe(filename, evidence, t.signal);
-      const audio = result.probe.streams.find(stream => stream.codec_type === 'audio');
-      assert.equal(audio.codec_name, 'aac');
-      assert.equal(audio.channels, 2);
-      assert.equal(audio.sample_rate, '48000');
-      await runMediaTool('ffmpeg', ['-v', 'error', '-i', filename, '-map', '0:v', '-map', '0:a', '-f', 'null', '-'], evidence.commands, t.signal);
+    for (const [protocol, scenario] of [['hls', 'direct'], ['hls', 'hls'], ['http', 'http'], ['hls', 'scale']]) {
+      const result = results[scenario] = {};
+      try {
+        const bytes = await playback(origin, authorization, protocol, scenario, result, t.signal);
+        if (!bytes) continue;
+        const filename = path.join(root, label + '-' + scenario + '.ts');
+        await writeFile(filename, bytes);
+        result.probe = await probe(filename, evidence, t.signal);
+        const audio = result.probe.streams.find(stream => stream.codec_type === 'audio');
+        assert.equal(audio.codec_name, scenario === 'scale' ? 'ac3' : 'aac');
+        assert.equal(audio.channels, 2);
+        assert.equal(audio.sample_rate, '48000');
+        if (scenario === 'scale') {
+          const video = result.probe.streams.find(stream => stream.codec_type === 'video');
+          assert.deepEqual([video.codec_name, video.width, video.height, video.pix_fmt], ['h264', 360, 240, 'yuv420p']);
+          result.decoded = (await runMediaTool('ffmpeg', ['-v', 'error', '-i', filename, '-map', '0:v:0',
+            '-f', 'framemd5', '-'], evidence.commands, t.signal)).toString('utf8');
+        }
+        await runMediaTool('ffmpeg', ['-v', 'error', '-i', filename, '-map', '0:v', '-map', '0:a', '-f', 'null', '-'], evidence.commands, t.signal);
+      } catch (error) {
+        t.signal.throwIfAborted();
+        result.error = output.publicError(error).message;
+        evidence.scenarioErrors.push({ label, scenario, error: result.error });
+      }
     }
   }
   try {
@@ -234,7 +260,8 @@ test('PlaybackInfo and real progressive and HLS requests copy H.264 while encodi
     });
     const nodeOrigin = 'http://127.0.0.1:' + runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port;
     await capture(nodeOrigin, 'node');
-    for (const protocol of ['direct', 'hls', 'http']) {
+    assert.deepEqual(evidence.scenarioErrors, []);
+    for (const protocol of ['direct', 'hls', 'http', 'scale']) {
       const expected = evidence.native[protocol], actual = evidence.node[protocol];
       const normalize = info => {
         const copy = structuredClone(info);
@@ -246,15 +273,21 @@ test('PlaybackInfo and real progressive and HLS requests copy H.264 while encodi
       assert.deepEqual(normalize(actual.playbackInfo), normalize(expected.playbackInfo), protocol);
       if (protocol === 'direct') continue;
       assert.deepEqual(actual.head, expected.head, protocol);
+      if (protocol === 'scale') {
+        assert.equal(actual.decoded, expected.decoded, 'Scaled video frames and decoded timestamps');
+        assert.deepEqual(packets(actual.probe, 'audio'), packets(expected.probe, 'audio'), 'Copied audio payload and timeline');
+        continue;
+      }
       assert.deepEqual(packets(actual.probe, 'video'), packets(expected.probe, 'video'), protocol + ' video payload and timeline');
       assert.deepEqual(packets(actual.probe, 'audio'), packets(expected.probe, 'audio'), protocol + ' AAC payload and timeline');
       assert.deepEqual(packets(actual.probe, 'video').map(packet => packet.hash), packets(fixture.raw, 'video').map(packet => packet.hash),
         protocol + ' original video payloads');
     }
-    assert.equal(evidence.nodeProcesses.length, 2);
+    assert.equal(evidence.nodeProcesses.length, 3);
     for (const { args } of evidence.nodeProcesses) {
       assert.ok(!args.includes('-hwaccel') && !args.includes('-init_hw_device'));
-      assert.notEqual(args[args.indexOf('-codec:a:0') + 1], 'copy');
+      if (args.includes('-vf')) assert.equal(args[args.indexOf('-codec:v:0') + 1], 'libx264');
+      else assert.notEqual(args[args.indexOf('-codec:a:0') + 1], 'copy');
     }
   } catch (error) { failure = output.publicError(error); evidence.error = failure.message; }
   finally {

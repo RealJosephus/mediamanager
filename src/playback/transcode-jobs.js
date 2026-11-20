@@ -8,17 +8,17 @@ export function matchesTranscodeJob(job, deviceId, playSessionId) {
 }
 
 export function transcodingInfo(plan, options, progress, hardwareAccelerationType, fallbackBitrate) {
-  const video = plan.inputVideo ?? plan.video;
+  const video = plan.videoOutput;
   const audio = plan.audioOutput;
   const reasons = new Set(options.TranscodeReasons?.split(',').filter(Boolean) ?? []);
   if (audio?.copyRefusedByCodec && video) reasons.add('AudioCodecNotSupported');
   return withNativeFloats({
-    AudioCodec: audio?.codec, VideoCodec: video?.Codec, Container: plan.container,
-    IsVideoDirect: Boolean(video), IsAudioDirect: audio?.encoder === 'copy',
+    AudioCodec: audio?.codec, VideoCodec: video?.codec, Container: plan.container,
+    IsVideoDirect: video?.encoder === 'copy', IsAudioDirect: audio?.encoder === 'copy',
     Bitrate: progress?.Bitrate ?? fallbackBitrate ?? audio?.bitrate ?? 0,
     ...(progress?.Framerate != null ? { Framerate: progress.Framerate } : {}),
     ...(progress?.CompletionPercentage != null ? { CompletionPercentage: progress.CompletionPercentage } : {}),
-    Width: video?.Width, Height: video?.Height, AudioChannels: audio?.channels,
+    Width: video?.width, Height: video?.height, AudioChannels: audio?.channels,
     HardwareAccelerationType: hardwareAccelerationType ?? 'none', TranscodeReasons: [...reasons],
   }, ['Framerate']);
 }

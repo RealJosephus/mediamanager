@@ -12,6 +12,7 @@ import { videoColorRange } from '../library/media-streams.js';
 import { remuxPlan, RemuxService } from './remux.js';
 import { getEncodingThreadCount } from './media-encoder.js';
 import { hlsArguments } from '../media-execution/streaming.js';
+import { outputVideoBitrate } from '../media-execution/video.js';
 import { matchesTranscodeJob as matchesJob, transcodingInfo } from './transcode-jobs.js';
 
 export { hlsArguments };
@@ -35,6 +36,7 @@ const cachePlan = plan => ({
   keyframeSegments: plan.keyframeSegments,
   streams: plan.streams.map(stream => [stream.type, stream.index]),
   audio: plan.audioOutput,
+  videoOutput: plan.videoOutput,
   video: plan.video ? [lower(plan.video.Codec), String(plan.video.NalLengthSize ?? '')] : null,
 });
 
@@ -259,25 +261,23 @@ export function hlsPlan(source, options = {}, tools) {
     && !(selectedSubtitle && options.SubtitleMethod === 'Encode');
   const externalHlsFormat = stream => ['srt', 'subrip', 'vtt', 'webvtt', 'ass', 'ssa', 'smi'].includes(lower(path.win32.extname(stream.Path ?? '').slice(1) || stream.Codec));
   const deliverable = stream => options.CanDeliverHlsSubtitle?.(stream) ?? (stream.IsExternal && externalHlsFormat(stream));
-  if (!audioOnly && (!video || !['h264', 'hevc'].includes(lower(video.Codec))) || plan.streams.some(stream => stream.type === 'Subtitle')
-    || video?.DvProfile != null || container === 'ts' && (video?.Rotation ?? 0) !== 0
+  if (!audioOnly && (!video || !['h264', 'hevc', 'av1', 'vp9'].includes(plan.videoOutput?.codec)) || plan.streams.some(stream => stream.type === 'Subtitle')
+    || video?.DvProfile != null || container === 'ts' && plan.videoOutput?.encoder === 'copy' && (video?.Rotation ?? 0) !== 0
     || options.SubtitleMethod === 'Hls' && (!selectedSubtitle?.IsTextSubtitleStream || !deliverable(selectedSubtitle))
     || subtitleGroup && options.SubtitleMethod !== 'Drop' && textSubtitles.some(stream => !deliverable(stream))) throw failure('not-supported', 'This HLS stream requires an unavailable manifest or processing branch.');
   const segmentLength = options.SegmentLength ?? (audioOnly ? 3 : 6);
   if (!Number.isSafeInteger(segmentLength) || segmentLength <= 0 || segmentLength > 86400 || BigInt(source.RunTimeTicks ?? 0) <= 0n) throw failure('invalid-request', 'HLS requires a finite duration and a positive segment length.');
   if ((BigInt(source.RunTimeTicks) + BigInt(segmentLength) * 10000000n - 1n) / (BigInt(segmentLength) * 10000000n) > 100000n) throw failure('invalid-request', 'The HLS playlist exceeds the supported segment count.');
-  const timeline = video ? keyframeTimeline(options.KeyframeData, segmentLength) : {};
+  const rate = plan.videoOutput?.frameRate;
+  const copy = plan.videoOutput?.encoder === 'copy';
+  let playlistMilliseconds = segmentLength * 1000;
+  if (!copy && rate && Math.abs(rate - Math.floor(rate + 0.001)) > 0.001) {
+    playlistMilliseconds = Math.ceil(playlistMilliseconds * Math.ceil(rate) / rate);
+  }
+  const timeline = copy ? keyframeTimeline(options.KeyframeData, segmentLength) : {};
   if (timeline.keyframeSegments?.length > 100000) throw failure('invalid-request', 'The HLS playlist exceeds the supported segment count.');
-  return { ...plan, video, audio, segmentLength, runtime: BigInt(source.RunTimeTicks), ...timeline };
-}
-
-function videoBitrate(video, requested, outputCodec) {
-  if (!video || requested == null) return 0;
-  let bitrate = Number(requested);
-  if (video.BitRate != null) bitrate = Math.min(bitrate, video.BitRate <= 2000000 ? round(video.BitRate * 2.5) : video.BitRate <= 3000000 ? video.BitRate * 2 : video.BitRate);
-  let factor = Math.max((lower(outputCodec).split(',')[0] === 'hevc' ? 0.6 : 1) / (lower(video.Codec) === 'hevc' ? 0.6 : 1), 1);
-  factor = bitrate <= 500000 ? Math.max(factor, 4) : bitrate <= 1000000 ? Math.max(factor, 3) : bitrate <= 2000000 ? Math.max(factor, 2.5) : bitrate <= 3000000 ? Math.max(factor, 2) : bitrate >= 30000000 ? 1 : factor;
-  return Math.min(round(bitrate * factor), Number(requested), 400000000);
+  return { ...plan, video, audio, segmentLength, playlistSegmentTicks: BigInt(playlistMilliseconds) * 10000n,
+    runtime: BigInt(source.RunTimeTicks), ...timeline };
 }
 
 function audioBitrate(audio, options) {
@@ -287,7 +287,7 @@ function audioBitrate(audio, options) {
 }
 
 export function masterPlaylist(source, options = {}, query = '', tools) {
-  const plan = hlsPlan(source, options, tools), { video, audio, audioOutput } = plan;
+  const plan = hlsPlan(source, options, tools), { video, videoOutput, audio, audioOutput } = plan;
   const parameters = [...new URLSearchParams(query)];
   if (audioOutput) {
     const audioKey = parameters.find(entry => lower(entry[0]) === 'audiocodec');
@@ -296,14 +296,20 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
   }
   if (options.SegmentContainer && !parameters.some(([key]) => lower(key) === 'segmentcontainer')) parameters.push(['SegmentContainer', options.SegmentContainer]);
   const variant = 'main.m3u8?' + parameters.map(([key, value]) => `${encode(key)}=${encodeQueryValue(value, Boolean(video))}`).join('&');
-  const profile = lower(video?.Profile), level = video?.Level;
-  const videoCodec = !level ? '' : lower(video.Codec) === 'h264' ? `avc1.${({ high: '6400', main: '4D40', baseline: '42E0' })[profile] ?? '4240'}${level.toString(16).toUpperCase().padStart(2, '0')}`
-    : `hvc1.${['main10', 'main 10'].includes(profile) ? '2' : '1'}.4.L${level}.B0`;
+  const videoCopied = videoOutput?.encoder === 'copy';
+  const profile = lower(videoOutput?.profile ?? (videoCopied ? undefined : 'high'));
+  const level = videoOutput?.level ?? (videoCopied ? undefined : { h264: 41, hevc: 120, av1: 8 }[videoOutput?.codec]);
+  const suffix = level?.toString(16).toUpperCase().padStart(2, '0');
+  const videoCodec = !level ? '' : ({
+    h264: `avc1.${({ high: '6400', main: '4D40', baseline: '42E0' })[profile] ?? '4240'}${suffix}`,
+    hevc: `hvc1.${['main10', 'main 10'].includes(profile) ? '2' : '1'}.4.L${level}.B0`,
+    av1: `av01.0.${String(level).padStart(2, '0')}M.08`,
+  })[videoOutput.codec];
   const audioCodec = audioOutput && ({
     aac: audioOutput.encoder === 'copy' && lower(audio.Profile) === 'he-aac' ? 'mp4a.40.5' : 'mp4a.40.2',
     mp3: 'mp4a.40.34', ac3: 'ac-3', eac3: 'ec-3', alac: 'alac', flac: 'fLaC', opus: 'opus', dts: 'dtsc', truehd: 'mlpa',
   })[audioOutput.codec];
-  const bitrate = videoBitrate(video, options.VideoBitRate, options.VideoCodec) + (audioOutput?.encoder === 'copy'
+  const bitrate = outputVideoBitrate(video, options, videoOutput?.codec) + (audioOutput?.encoder === 'copy'
     ? audioBitrate(audio, video ? options : { ...options, AudioCodec: 'copy' }) : audioOutput?.bitrate ?? 0);
   const [range, rangeType] = video ? videoColorRange(video) : ['Unknown', 'Unknown'];
   const subtitles = source.MediaStreams.filter(stream => stream.Type === 'Subtitle' && stream.IsTextSubtitleStream);
@@ -314,7 +320,7 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
   if (range !== 'Unknown') line += `,VIDEO-RANGE=${range === 'SDR' ? 'SDR' : rangeType.includes('HLG') || video.ColorTransfer === 'arib-std-b67' ? 'HLG' : 'PQ'}`;
   const codecs = [videoCodec, audioCodec].filter(Boolean).join(',');
   if (codecs) line += `,CODECS="${codecs}"`;
-  if (video?.Width && video?.Height) line += `,RESOLUTION=${video.Width}x${video.Height}`;
+  if (videoOutput?.width && videoOutput?.height) line += `,RESOLUTION=${videoOutput.width}x${videoOutput.height}`;
   const frameRate = video && (options.Framerate ?? (options.MaxFramerate != null ? Math.min(options.MaxFramerate, video.RealFrameRate ?? options.MaxFramerate) : video.RealFrameRate));
   if (frameRate) line += `,FRAME-RATE=${round(frameRate * 1000) / 1000}`;
   if (subtitleGroup) line += `,SUBTITLES="${subtitleGroup}"`;
@@ -347,7 +353,7 @@ export function subtitlePlaylist(source, segmentLength, accessToken = '') {
 }
 
 export function mainPlaylist(source, options = {}, query = '', tools) {
-  const plan = hlsPlan(source, options, tools), length = BigInt(plan.segmentLength) * ticksPerSecond;
+  const plan = hlsPlan(source, options, tools), length = plan.playlistSegmentTicks;
   const suffix = query ? '?' + query.replace(/^\?/, '') + '&' : '?';
   const segment = (index, start, duration) => `hls1/main/${index}.${plan.container}${suffix}runtimeTicks=${start}&actualSegmentLengthTicks=${duration}`;
   const durations = plan.keyframeSegments ?? Array.from({ length: Number((plan.runtime + length - 1n) / length) }, (_, index) => {
@@ -437,7 +443,7 @@ export class HlsService {
     }
   }
   plan(source, options, configuration = this.getEncodingOptions()) {
-    return hlsPlan(source, options, { configuration, capabilities: this.mediaEncoder.capabilities });
+    return hlsPlan(source, options, { configuration, capabilities: this.mediaEncoder.capabilities, version: this.mediaEncoder.version });
   }
   supports(source, options) { if (!this.remux.available || this.#closed) return false; try { this.plan(source, options); return true; } catch { return false; } }
   get jobs() { return this.remux.jobs; }
@@ -445,7 +451,7 @@ export class HlsService {
   getTranscodingInfo(deviceId) { return this.jobs.getTranscodingInfo(deviceId); }
   #describe(job) {
     const { video, audio, audioOutput } = job.plan;
-    const bitrate = videoBitrate(video, job.options.VideoBitRate, job.options.VideoCodec)
+    const bitrate = outputVideoBitrate(video, job.options, job.plan.videoOutput?.codec)
       + (audioOutput?.encoder === 'copy' ? audioBitrate(audio, job.options) : audioOutput?.bitrate ?? 0);
     return transcodingInfo(job.plan, job.options, job.progress, this.getEncodingOptions().HardwareAccelerationType, bitrate);
   }
@@ -519,7 +525,7 @@ export class HlsService {
     // Pin the VFS version and byte-producing plan so a changed object, selected stream,
     // segment length, muxer or segment-number timeline cannot reuse earlier output.
     // Canonical playlist segments share an offset of zero across their distinct ticks.
-    const canonicalStart = index >= 0 && plan.keyframeStarts?.[index] != null ? plan.keyframeStarts[index] : BigInt(Math.max(index, 0) * plan.segmentLength) * ticksPerSecond;
+    const canonicalStart = index >= 0 && plan.keyframeStarts?.[index] != null ? plan.keyframeStarts[index] : BigInt(Math.max(index, 0)) * plan.playlistSegmentTicks;
     const timelineOffset = runtimeTicks - canonicalStart;
     const key = createHash('sha256').update(json([cacheDirectory, virtualPath, version, request.headers['user-agent'], options.DeviceId, options.PlaySessionId, cachePlan(plan), timelineOffset])).digest('hex');
     let job = this.#jobs.get(key);
@@ -633,7 +639,9 @@ export class HlsService {
       lease = await this.remux.bridge.lease(job.virtualPath, { version: job.version, signal, expiresInMs: this.timeoutMs });
       const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution);
       checkAbort(signal);
-      child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment: this.mediaEncoder.environment, output: 'ignore' });
+      const overrides = job.plan.videoOutput?.hardware?.environment;
+      const environment = overrides ? { ...(this.mediaEncoder.environment ?? process.env), ...overrides } : this.mediaEncoder.environment;
+      child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment, output: 'ignore' });
       if (job.plan.video && job.plan.runtime >= 3000000000n) {
         job.cleaner = setInterval(() => {
           if (job.cleaning || job.exited) return;

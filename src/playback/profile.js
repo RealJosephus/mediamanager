@@ -64,12 +64,14 @@ function streamingProfiles(profile, mediaType) {
 
 function videoTargetAudioBitrate(audio, codecs, maxBitrate, maxChannels) {
   const target = codecs.find(codec => equal(codec, audio?.Codec)) ?? codecs[0];
-  const channels = Math.min(audio?.Channels ?? 0, maxChannels ?? Infinity);
+  const downmix = maxChannels != null && audio?.Channels > maxChannels;
+  const shiftCodec = maxChannels != null && audio?.Channels != null && target && !equal(target, audio.Codec);
+  const channels = downmix ? maxChannels : shiftCodec ? audio.Channels : maxChannels ?? 0;
   const defaultBitrate = ['aac', 'mp3', 'ac3', 'eac3'].some(codec => equal(codec, target))
     ? channels < 2 ? 128000 : channels >= 6 ? 640000 : 384000
     : ['flac', 'alac'].some(codec => equal(codec, target)) ? channels < 2 ? 768000 : channels >= 6 ? 3584000 : 1536000 : 192000;
   let estimate = audio?.BitRate ?? defaultBitrate;
-  if (audio && (channels < (audio.Channels ?? 0) || target && !equal(target, audio.Codec))) estimate = defaultBitrate;
+  if (downmix || shiftCodec) estimate = defaultBitrate;
   const budgets = [[640000, 128000], [2000000, 384000], [3000000, 448000], [4000000, 640000], [5000000, 768000],
     [10000000, 1536000], [15000000, 2304000], [20000000, 3584000]];
   if (maxBitrate > 0) estimate = Math.min(estimate, budgets.find(([limit]) => maxBitrate <= limit)?.[1] ?? 7168000);
@@ -390,7 +392,7 @@ function selectTranscode(source, item, profile, options, audio, video, subtitle,
     applyCodec(video, 'Video', videoCodecs);
     const bitrate = options.MaxStreamingBitrate ?? get(profile, 'MaxStreamingBitrate', 8000000);
     if (isVideo) projected.AudioBitrate = Math.min(projected.AudioBitrate ?? Infinity,
-      videoTargetAudioBitrate(selected, audioCodecs, bitrate, exceedsChannels ? maxChannels : options.MaxAudioChannels));
+      videoTargetAudioBitrate(selected, audioCodecs, bitrate, exceedsChannels ? maxChannels : options.MaxAudioChannels ?? maxChannels));
     applyCodec(selected, isVideo ? 'VideoAudio' : 'Audio', audioCodecs);
     if (!isVideo && !audioDirect) projected.AudioBitrate = Math.min(bitrate, get(profile, 'MusicStreamingTranscodingBitrate', 128000), projected.AudioBitrate ?? 2147483647);
     if (video && bitrate != null) projected.VideoBitrate = Math.max(64000, Math.min(projected.VideoBitrate ?? bitrate, bitrate - (projected.AudioBitrate ?? 0)));

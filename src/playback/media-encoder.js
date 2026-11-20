@@ -2,7 +2,7 @@ import { availableParallelism } from 'node:os';
 import { parseConfigurationVersion } from '../core/configuration-xml.js';
 import { decodeNativeText } from '../core/native-text.js';
 import { readEncoderVersionOutput } from '../storage/ffprobe.js';
-import { discoverMediaCapabilities } from '../media-execution/capabilities.js';
+import { discoverDeviceCapabilities, discoverMediaCapabilities } from '../media-execution/capabilities.js';
 
 const minimumLibraries = new Map([
   ['libavutil', [56, 70]], ['libavcodec', [58, 134]], ['libavformat', [58, 76]],
@@ -38,10 +38,11 @@ export function mediaEncoderVersion(output) {
   }) ? '4.4' : null;
 }
 
-export function encoderVersionAtLeast(version, major, minor = 0) {
-  if (version === null) return false;
-  const values = version.split('.').map(Number);
-  return values[0] > major || values[0] === major && values[1] >= minor;
+export function encoderVersionAtLeast(version, major, minor = 0, patch = 0) {
+  if (version == null) return false;
+  const [actualMajor, actualMinor = 0, actualPatch = 0] = version.split(/[.-]/u).map(Number);
+  return actualMajor > major || actualMajor === major
+    && (actualMinor > minor || actualMinor === minor && actualPatch >= patch);
 }
 
 export function readMediaEncoderStartupOptions({ args = [], environment = {} } = {}) {
@@ -121,10 +122,11 @@ export class MediaEncoder {
     // threads after its synchronous observers, even if an observer saves another value.
     await this.saveEncodingOptions(options);
     this.#probePath = deriveProbePath(selected);
-    this.#capabilities = await discoverMediaCapabilities(selected, {
+    const discovery = {
       signal: this.#lifetime.signal, environment: this.environment, onError: this.onError,
       onCleanupError: error => this.#cleanupErrors.push(error),
-    });
+    };
+    const listings = await discoverMediaCapabilities(selected, discovery);
     let discovered;
     try { discovered = await this.#readVersion(selected); }
     catch (error) {
@@ -132,6 +134,7 @@ export class MediaEncoder {
       try { await this.onError(error); } catch (reportError) { throw operationFailure([error, reportError]); }
     }
     this.#version = discovered ? mediaEncoderVersion(decodeNativeText(discovered.stdout)) : null;
+    this.#capabilities = await discoverDeviceCapabilities(selected, listings, options, discovery);
     this.#probeThreads = getEncodingThreadCount(options);
     this.#ready = true;
     return true;
