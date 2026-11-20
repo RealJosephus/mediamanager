@@ -179,7 +179,7 @@ export class PlaybackService {
     if (!service?.supports(source, stream) || !this.#canResolveSource(source)) {
       throw httpError(400, 'No compatible audio stream is available.');
     }
-    if (!hls) return this.#remuxSource(source, stream);
+    if (!hls) return this.#remuxSource(source, stream, user?.Id);
 
     const query = new URLSearchParams(Object.entries({
       MediaSourceId: source.Id, ApiKey: auth.Token, DeviceId: stream.DeviceId, PlaySessionId: stream.PlaySessionId,
@@ -364,16 +364,16 @@ export class PlaybackService {
     const source = options.MediaSourceId ? sources.find(value => value.Id.toLowerCase() === options.MediaSourceId.toLowerCase()) : sources[0];
     if (!source) throw httpError(404, 'Media source not found.');
     if (!this.remux) throw httpError(503, 'Media remuxing has not been configured.');
-    return this.#remuxSource(source, options);
+    return this.#remuxSource(source, options, user?.Id);
   }
 
-  #remuxSource(source, options) {
+  #remuxSource(source, options, userId) {
     const accessPath = this.accessPath({ Id: source.Id, Path: source.Path });
     return new BinaryResult(async (request, response) => {
       const controller = new AbortController();
       const abort = () => controller.abort();
       request.once('aborted', abort); response.once('close', abort);
-      try { await this.remux.stream(source, accessPath, options, request, response, { signal: controller.signal }); }
+      try { await this.remux.stream(source, accessPath, options, request, response, { signal: controller.signal, userId }); }
       catch (error) {
         if (response.headersSent || controller.signal.aborted) { response.destroy(); return; }
         error.status ??= ({ 'not-supported': 400, 'invalid-request': 400, 'not-found': 404, 'permission-denied': 403, 'authentication-required': 403, 'version-changed': 412,
@@ -454,7 +454,10 @@ export class PlaybackService {
     });
   }
 
-  async stopHls(deviceId, playSessionId) { await this.hls?.stop(deviceId, playSessionId); }
+  async stopHls(deviceId, playSessionId) {
+    if (this.hls) await this.hls.stop(deviceId, playSessionId);
+    else await this.remux?.jobs.stop(deviceId, playSessionId);
+  }
   eventHlsArtifact(playlistId, filename, isPlaylist) { return this.hls?.eventArtifact(playlistId, filename, isPlaylist); }
 
   async externalAudio(itemId, mediaSourceId, index, { user } = {}) {

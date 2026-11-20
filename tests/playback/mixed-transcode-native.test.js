@@ -274,6 +274,15 @@ async function playback(origin, authorization, protocol, scenario, report, signa
   const media = await request(mediaUrl);
   assert.equal(media.status, 200, media.bytes.subarray(0, 150).toString());
   report.stream = { mime: media.mime, size: media.bytes.length, sha256: sha256(media.bytes) };
+  if (scenario === 'http') {
+    const repeat = new URL(mediaUrl);
+    repeat.searchParams.set('AudioCodec', 'ac3');
+    repeat.searchParams.set('StartTimeTicks', '10000000');
+    const reused = await request(repeat);
+    assert.equal(reused.status, 200);
+    report.reused = { mime: reused.mime, size: reused.bytes.length, sha256: sha256(reused.bytes) };
+    assert.deepEqual(report.reused, report.stream, 'The same session reads existing output after changing encode and seek options.');
+  }
   if (protocol === 'hls') {
     const session = await request('/Sessions?DeviceId=' + deviceId);
     assert.equal(session.status, 200);
