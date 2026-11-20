@@ -269,27 +269,17 @@ test('dependency parser covers compact modules, static dynamic imports, CommonJS
     .unresolvedImports[0].reason, 'unsupported-url-specifier');
 });
 
-test('configured media executors resolve only inside their reviewed production boundaries', () => {
-  const configured = "import { spawn } from 'node:child_process'; class Copy { run() { return spawn(this.mediaEncoder.encoderPath, [], { shell: false }); } }";
-  for (const sourcePath of ['src/playback/extraction.js', 'src/playback/remux.js', 'src/playback/hls.js']) {
-    const result = analyzeJavaScriptDependencies(configured, { sourcePath });
-    assert.deepEqual(result.tools, ['ffmpeg']); assert.deepEqual(result.unresolvedExecutables, []);
-    for (const other of [configured.replace('mediaEncoder', 'unrelated'), configured.replace('this.mediaEncoder.encoderPath', 'resolveBinary()')])
-      assert.ok(analyzeJavaScriptDependencies(other, { sourcePath }).unresolvedExecutables.length > 0);
+test('configured media executables resolve through the reviewed production launcher', () => {
+  const sourcePath = 'src/media-execution/process.js';
+  const source = "import { spawn } from 'node:child_process'; export function startMediaProcess(executable, args) { return spawn(executable, args, { shell: false }); }";
+  const result = analyzeJavaScriptDependencies(source, { sourcePath });
+  assert.deepEqual(result.tools, ['ffmpeg', 'ffprobe']);
+  assert.deepEqual(result.unresolvedExecutables, []);
+  assert.ok(analyzeJavaScriptDependencies(source).unresolvedExecutables.length > 0);
+  assert.ok(analyzeJavaScriptDependencies(source, { sourcePath: 'src/storage/ffprobe.js' }).unresolvedExecutables.length > 0);
+  for (const other of [source.replace('startMediaProcess', 'run'), source.replace('spawn(executable', 'spawn(resolveBinary()')]) {
+    assert.ok(analyzeJavaScriptDependencies(other, { sourcePath }).unresolvedExecutables.length > 0);
   }
-  assert.ok(analyzeJavaScriptDependencies(configured).unresolvedExecutables.length > 0);
-  assert.ok(analyzeJavaScriptDependencies(configured, { sourcePath: 'src/unreviewed.js' }).unresolvedExecutables.length > 0);
-  for (const name of ['capture', 'collectOutput']) {
-    const source = `import { spawn } from 'node:child_process'; async function ${name}(program, args) { return spawn(program, args, { shell: false }); }
-      export function readVersion(program) { return ${name}(program, ['-version']); }`;
-    const result = analyzeJavaScriptDependencies(source, { sourcePath: 'src/storage/ffprobe.js' });
-    assert.deepEqual(result.tools, ['ffmpeg', 'ffprobe']); assert.deepEqual(result.unresolvedExecutables, []);
-    assert.ok(analyzeJavaScriptDependencies(source).unresolvedExecutables.length > 0);
-    assert.ok(analyzeJavaScriptDependencies(source + `\nexport { ${name} };`, { sourcePath: 'src/storage/ffprobe.js' }).unresolvedExecutables.length > 0);
-    assert.ok(analyzeJavaScriptDependencies(source + `\nexport default ${name};`, { sourcePath: 'src/storage/ffprobe.js' }).unresolvedExecutables.length > 0);
-  }
-  const generic = "import { spawn } from 'node:child_process'; export function run(program, args) { return spawn(program, args, { shell: false }); }";
-  assert.ok(analyzeJavaScriptDependencies(generic, { sourcePath: 'src/storage/ffprobe.js' }).unresolvedExecutables.length > 0);
 });
 
 test('dependency analysis distinguishes ordinary binding data from process module capabilities', () => {

@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { startMediaProcess } from '../media-execution/process.js';
 import { StorageError } from './errors.js';
 import { unsignedInteger } from './range.js';
 
@@ -146,7 +146,7 @@ async function captureProcess(executable, args, { signal, environment, timeoutMs
   };
   const onAbort = () => stop(failure('cancelled', 'Media probing was cancelled.', signal.reason));
   try {
-    try { child = spawn(executable, args, { shell: false, windowsHide: true, env: environment, stdio: ['ignore', 'pipe', 'pipe'] }); }
+    try { child = startMediaProcess(executable, args, { environment }); }
     catch (error) { throw failure('unavailable', 'The media process could not start.', error); }
     const done = new Promise(resolve => {
       child.once('error', error => {

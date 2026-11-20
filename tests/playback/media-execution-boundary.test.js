@@ -46,12 +46,7 @@ const reviewedResourceReflection = new Map([
     'Object.getPrototypeOf(query)!==Object.prototype',
   ])],
 ]);
-const allowedChildProcessModules = [
-  'playback/extraction.js',
-  'playback/hls.js',
-  'playback/remux.js',
-  'storage/ffprobe.js',
-];
+const allowedChildProcessModules = ['media-execution/process.js'];
 // Vendored font, JPEG and archive WASM resource loaders use Emscripten module/FS
 // bridges. They do not execute external media tools; keep their bytes exact.
 const reviewedGeneratedResources = new Map([
@@ -274,7 +269,7 @@ async function sourceFiles(directory) {
   return (await filesIn(directory)).filter(filename => /\.(?:c|m)?js$/u.test(filename));
 }
 
-test('production process execution stays inside the audited probe, packet-copy and subtitle-text boundary', async () => {
+test('production process execution stays inside the local media execution module', async () => {
   const processModules = [];
   for (const filename of (await Promise.all(productionRoots.map(sourceFiles))).flat()) {
     const relative = path.relative(sourceRoot, filename).replaceAll('\\', '/');
@@ -337,19 +332,19 @@ test('plugin entry and resource exceptions remain limited to their reviewed expr
 });
 
 test('media execution guard rejects alias, dynamic bridge, shell, and unreviewed-module bypasses', () => {
-  assert.equal(auditMediaExecutionSource('storage/ffprobe.js',
+  assert.equal(auditMediaExecutionSource('media-execution/process.js',
     "import { spawn } from 'node:child_process'; spawn('ffprobe', [], { shell: false });"), true);
-  assert.throws(() => auditMediaExecutionSource('storage/ffprobe.js',
+  assert.throws(() => auditMediaExecutionSource('media-execution/process.js',
     "import { exec as launch } from 'node:child_process'; launch('ffmpeg');"), /unaliased spawn/u);
-  assert.throws(() => auditMediaExecutionSource('storage/ffprobe.js',
+  assert.throws(() => auditMediaExecutionSource('media-execution/process.js',
     "const launch = process.getBuiltinModule('node:' + 'child_process').spawn; launch('ffmpeg');"),
   /indirect execution bridge/u);
-  assert.throws(() => auditMediaExecutionSource('storage/ffprobe.js',
+  assert.throws(() => auditMediaExecutionSource('media-execution/process.js',
     "import { spawn } from 'node:child_process'; spawn('ffmpeg', [], { shell: true });"), /command shell/u);
-  assert.throws(() => auditMediaExecutionSource('storage/ffprobe.js',
+  assert.throws(() => auditMediaExecutionSource('media-execution/process.js',
     "import { spawn } from 'node:child_process'; spawn('ffmpeg', [], { shell: false, shell: true });"),
   /exactly one command shell/u);
-  assert.throws(() => auditMediaExecutionSource('storage/ffprobe.js',
+  assert.throws(() => auditMediaExecutionSource('media-execution/process.js',
     "import { spawn } from 'node:child_process'; spawn('ffmpeg', [], { shell: false, ...{ shell: true } });"),
   /spread unknown command shell/u);
   assert.throws(() => auditMediaExecutionSource('library/query.js',
