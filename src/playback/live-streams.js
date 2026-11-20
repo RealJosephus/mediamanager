@@ -7,6 +7,7 @@ import { normalizeLiveTvMediaSource } from '../library/live-tv-media-sources.js'
 import { addLiveMediaInfo } from './live-stream-probe.js';
 import { BinaryResult } from '../http/binary-result.js';
 import { cloneNativeValue } from '../core/json.js';
+import { LiveStreamBuffer } from './live-stream-buffer.js';
 
 const providerId = md5Guid('Jellyfin.LiveTv.LiveTvMediaSourceProvider');
 const serviceId = md5Guid('Jellyfin.LiveTv.DefaultLiveTvService');
@@ -22,10 +23,10 @@ export class LiveStreamsService {
   #work = new Set();
   #tail = Promise.resolve();
   #closing;
-  constructor({ tuners, library, probe, getLocalApiUrl, onError = () => {} } = {}) {
+  constructor({ tuners, library, probe, getLocalApiUrl, getRetainedDirectory, onError = () => {} } = {}) {
     if (typeof tuners?.getChannelStream !== 'function' || typeof library?.itemCreation?.getItemById !== 'function'
       || typeof probe?.addMediaInfo !== 'function' || typeof getLocalApiUrl !== 'function') throw new TypeError('Public live streams require typed library, original tuners and probing.');
-    Object.assign(this, { tuners, library, probe, getLocalApiUrl, onError });
+    Object.assign(this, { tuners, library, probe, getLocalApiUrl, getRetainedDirectory, onError });
   }
   #track(work) { this.#work.add(work); const done = () => this.#work.delete(work); work.then(done, done); return work; }
   #serial(operation) { const pending = this.#tail.then(operation); this.#tail = pending.catch(() => {}); return pending; }
@@ -59,7 +60,7 @@ export class LiveStreamsService {
     return this.#admit(async () => {
       signal?.throwIfAborted();
       const lifetime = new AbortController(), combined = AbortSignal.any([lifetime.signal, this.#lifetime.signal]);
-      let registered = false, entry, owner;
+      let registered = false, ready = false, entry, owner;
       const cancel = () => { if (!registered) lifetime.abort(signal.reason); }; signal?.addEventListener('abort', cancel, { once: true });
       try {
         ({ entry, owner } = await this.#serial(async () => {
@@ -76,7 +77,8 @@ export class LiveStreamsService {
           if (channel?.Type !== 'LiveTvChannel') throw libraryError(500, 'The requested item is not a live TV channel.');
           if (!ordinalIgnoreCaseEquals(channel.ServiceName, this.tuners.name)) throw libraryError(500, 'Sequence contains no matching element.');
           const candidates = await this.tuners.getChannelStreamMediaSources(channel.ExternalId, { signal: combined });
-          const selected = candidates.find(source => ordinalIgnoreCaseEquals(source.mediaSource.Id, originalStreamId ?? '')) ?? candidates[0];
+          const selected = candidates.find(source => ordinalIgnoreCaseEquals(source.mediaSource.Id, originalStreamId ?? ''))
+            ?? candidates.find(source => source.mode === 'native') ?? candidates[0];
           if (!selected) throw libraryError(500, 'The channel has no original media source.');
           const lease = await this.tuners.getChannelStream(channel.ExternalId, originalStreamId, { source: selected,
             currentLiveStreams: [...this.#entries.values()].map(value => value.owners.at(-1).lease), signal: combined });
@@ -87,9 +89,10 @@ export class LiveStreamsService {
           source.RequiresClosing = true; source.LiveStreamId = providerId + '_' + serviceId + '_' + source.Id;
           if (source.SupportsDirectStream) source.SupportsDirectStream = source.Protocol === 'File'
             || source.Protocol === 'Http' && source.Path != null && !source.Path.toLowerCase().includes('.m3u');
-          // This server admits the original source only. No encoded execution
-          // or server remux URL is published by a live stream.
-          source.SupportsTranscoding = false; delete source.TranscodingUrl; delete source.TranscodingContainer;
+          // Device profiles supply upstream bytes. PlaybackInfo negotiates
+          // a server processing URL independently after retaining the input.
+          if (lease.mode !== 'device' || !lease.stream) source.SupportsTranscoding = false;
+          delete source.TranscodingUrl; delete source.TranscodingContainer;
           const identity = key(source.LiveStreamId);
           let current = this.#entries.get(identity);
           if (current && (!lease.sharing || current.owners.at(-1).lease.sharing !== lease.sharing)) {
@@ -104,11 +107,16 @@ export class LiveStreamsService {
           if (lease.stream) { source.Protocol = 'Http'; source.Path = this.getLocalApiUrl().replace(/\/$/u, '') + '/LiveTv/LiveStreamFiles/' + current.uniqueId + '/stream.ts'; }
           current.source = source;
           const opened = { lease, lifetime, privateOwner }; current.owners.push(opened);
+          const directory = lease.stream && this.getRetainedDirectory?.();
+          if (directory && !current.buffer) current.buffer = new LiveStreamBuffer(directory,
+            options => lease.forkRead(options), error => this.#report(error));
           registered = true; signal?.removeEventListener('abort', cancel);
           return { entry: current, owner: opened };
         }));
         const ownedLifetime = AbortSignal.any([combined, entry.lifetime.signal]);
         const combinedProbe = signal ? AbortSignal.any([ownedLifetime, signal]) : ownedLifetime;
+        await entry.buffer?.ready;
+        ready = true;
         const probing = Promise.resolve().then(() => this.probe.addMediaInfo(entry.source, { cacheKey: request.OpenToken, signal: combinedProbe,
           ...(owner.lease.stream ? { openRead: options => this.#read(entry, options) } : {}) }));
         entry.probes.add(probing); const finished = () => entry.probes.delete(probing); probing.then(finished, finished);
@@ -129,7 +137,7 @@ export class LiveStreamsService {
         // MediaSourceManager registers before probing/cloning. A later native
         // failure leaves that public ownership registered for explicit Close.
         // Shutdown and a revoked last public owner still drain immediately.
-        if (privateOwner || !registered || combined.aborted || entry?.lifetime.signal.aborted) {
+        if (privateOwner || !ready || combined.aborted || entry?.lifetime.signal.aborted) {
           lifetime.abort();
           if (entry && owner) await this.#serial(() => this.#release(entry, owner));
         }
@@ -144,7 +152,7 @@ export class LiveStreamsService {
       combined.throwIfAborted();
       const owner = preferredOwner ?? entry.owners.at(-1);
       if (!owner || !entry.owners.includes(owner)) throw libraryError(404, 'Live stream not found.');
-      const lease = await owner.lease.forkRead({ signal: combined });
+      const lease = entry.buffer ? await entry.buffer.openRead({ signal: combined }) : await owner.lease.forkRead({ signal: combined });
       if (combined.aborted) { await lease.close(); combined.throwIfAborted(); }
       const state = { close: null }; let closing;
       const close = () => closing ??= this.#track(Promise.resolve().then(async () => {
@@ -163,7 +171,7 @@ export class LiveStreamsService {
       if (this.#entries.get(entry.identity) === entry) this.#entries.delete(entry.identity);
       this.#unique.delete(key(entry.uniqueId)); this.#retired.delete(entry); entry.lifetime.abort();
     }
-    const tasks = [owner.lease.close(), ...(last ? [...entry.readers].map(reader => reader.close()) : [])];
+    const tasks = [owner.lease.close(), ...(last ? [entry.buffer?.close(), ...[...entry.readers].map(reader => reader.close())] : [])];
     const results = await Promise.allSettled(tasks);
     if (last) await Promise.allSettled([...entry.probes]);
     owner.lifetime.abort();

@@ -147,7 +147,7 @@ export class LiveTvTunerService {
     }).then(async value => { available(); if (value.done) await close(); return value; }).catch(async cause => { await close(); throw cause; })),
     return: value => close().then(() => ({ done: true, value })) };
     signal.addEventListener('abort', aborted, { once: true });
-    const consumer = Object.freeze({ mode: 'native', ...(lease.profile === undefined ? {} : { profile: lease.profile }),
+    const consumer = Object.freeze({ mode: lease.mode, ...(lease.profile === undefined ? {} : { profile: lease.profile }),
       tunerHostId: group.tunerHostId,
       originalStreamId: group.originalStreamId, mediaSource: structuredClone(lease.mediaSource), ...(stream ? { stream } : {}),
       ...(group.sharing ? { sharing: group.sharing } : {}), forkRead: options => this.#forkRead(group, options), close });
@@ -196,7 +196,8 @@ export class LiveTvTunerService {
         };
         combined.addEventListener('abort', aborted, { once: true });
         if (combined.aborted) { await close(); combined.throwIfAborted(); }
-        return Object.freeze({ mode: 'native', tunerHostId: group.tunerHostId, mediaSource: structuredClone(lease.mediaSource),
+        return Object.freeze({ mode: lease.mode, ...(lease.profile === undefined ? {} : { profile: lease.profile }),
+          tunerHostId: group.tunerHostId, mediaSource: structuredClone(lease.mediaSource),
           ...(stream ? { stream } : {}), close });
       })();
     });

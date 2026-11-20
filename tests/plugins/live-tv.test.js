@@ -150,7 +150,7 @@ test('caller abort and plugin disable cancel each Live TV kind at its own signal
   } finally { request.abort(); gates.forEach(gate => gate.resolve()); }
 });
 
-test('encoded profiles are rejected for source advertisement and before opening the provider', { timeout: 30000 }, async t => {
+test('device profiles preserve their upstream identity and reject server encoder declarations', { timeout: 30000 }, async t => {
   let advertised, openings = 0;
   const fixture = await pluginFixture(t, { options: { 'live-tv': { invoke: (_kind, method) => {
     if (method === 'getChannelStreamMediaSources' || method === 'getChannelItemMediaInfo') return [advertised];
@@ -163,6 +163,8 @@ test('encoded profiles are rejected for source advertisement and before opening 
     { ...source(), mode: 'transcoded' }, { ...source(), profile: 'heavy' }, { ...source(), profile: 'mobile' },
     { ...source(), profile: 'internet720' }, source({ Id: 'heavy_0123_4567' }), source({ Id: 'mobile_0123_4567' }),
     source({ Id: 'internet540_0123_4567' }), source({ Path: 'http://127.0.0.1/auto/v1?transcode=internet360' }),
+    { ...source({ Id: 'internet540_0123_4567' }), mode: 'device', profile: 'internet360' },
+    { ...source({ Id: 'internet360_0123_4567', Path: 'http://127.0.0.1/auto/v1?transcode=heavy' }), mode: 'device', profile: 'internet360' },
     source({ EncoderPath: '/controlled/encoder' }), source({ TranscodingUrl: '/encoded-output' }),
   ]) {
     advertised = invalid;
@@ -175,6 +177,11 @@ test('encoded profiles are rejected for source advertisement and before opening 
   advertised = source();
   const lease = await tuner.getChannelStream('channel', 'different', [], { source: advertised });
   assert.equal(lease.mediaSource.Id, advertised.mediaSource.Id); assert.equal(openings, 1); await lease.close();
+  advertised = { ...source({ Id: 'internet360_0123_4567', Path: 'http://127.0.0.1/auto/v1?transcode=internet360' }),
+    mode: 'device', profile: 'internet360' };
+  assert.deepEqual(await tuner.getChannelStreamMediaSources('channel', {}), [advertised]);
+  const device = await tuner.getChannelStream('channel', advertised.mediaSource.Id, [], { source: advertised });
+  assert.equal(device.mode, 'device'); assert.equal(device.profile, 'internet360'); await device.close();
 });
 
 test('original stream keys pass unchanged independently of the selected native source identity', { timeout: 30000 }, async t => {

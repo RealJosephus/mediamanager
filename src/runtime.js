@@ -582,6 +582,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       } });
     rollback.push(() => liveStreamProbe.close());
     liveStreams = new LiveStreamsService({ tuners: liveTvTuners, library, probe: liveStreamProbe, onError,
+      getRetainedDirectory: () => applicationPaths.cachePath && path.join(applicationPaths.cachePath, 'livetv'),
       getLocalApiUrl: () => {
         const scheme = networkHost.listenWithHttps ? 'https' : 'http';
         const address = network.getBindAddress(null, { skipOverrides: true }).address;

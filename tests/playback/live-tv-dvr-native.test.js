@@ -107,10 +107,11 @@ await writeFile(recording + '.processed', String((await readFile(recording)).len
         + (repeat ? '<previously-shown />' : '<new />') + '</programme>';
     });
     const retentionName = 'DVR retention series';
+    const recordingName = number => `${retentionName} ${number}`;
     for (let index = 0; index < 3; index++) {
       const offset = index * 600000;
       entries.push(`<programme start="${xmlDate(baseTime - 3600000 + offset)}" stop="${xmlDate(baseTime + 3600000 + offset)}" channel="dvr-fixture">`
-        + `<title>${retentionName}</title><sub-title>Episode ${index + 1}</sub-title><episode-num system="xmltv_ns">0.${index}.0</episode-num>`
+        + `<title>${recordingName(index + 1)}</title><sub-title>Episode ${index + 1}</sub-title><episode-num system="xmltv_ns">0.${index}.0</episode-num>`
         + '<new /></programme>');
     }
     const guide = '<?xml version="1.0" encoding="UTF-8"?><tv><channel id="dvr-fixture"><display-name>DVR fixture channel</display-name></channel>'
@@ -177,10 +178,10 @@ await writeFile(recording + '.processed', String((await readFile(recording)).len
     const programRoute = '/LiveTv/Programs?channelIds=' + channelId + '&enableImages=false&enableUserData=false';
     const programs = await until(() => nativeRequest(programRoute).then(value => value.Items),
       values => values.filter(value => value.Name === 'DVR fixture series').length === 2
-        && values.filter(value => value.Name === retentionName).length === 3, 'The official XMLTV guide must provide all five episodes.');
+        && values.filter(value => value.Name.startsWith(retentionName + ' ')).length === 3, 'The official XMLTV guide must provide all five episodes.');
     const byStart = (a, b) => Date.parse(a.StartDate) - Date.parse(b.StartDate);
     const futureEpisodes = programs.filter(value => value.Name === 'DVR fixture series').sort(byStart);
-    const retentionEpisodes = programs.filter(value => value.Name === retentionName).sort(byStart);
+    const retentionEpisodes = programs.filter(value => value.Name.startsWith(retentionName + ' ')).sort(byStart);
     const [episode] = futureEpisodes;
     await stopNative();
     const configuration = await readInstanceConfiguration(referenceRoot);
@@ -375,7 +376,7 @@ await writeFile(recording + '.processed', String((await readFile(recording)).len
       await post('/LiveTv/SeriesTimers/' + seriesId, { ...updatedSeries, KeepUpTo: 0 });
       await request('/LiveTv/TunerHosts', { method: 'POST', body: { ...tuner, AllowStreamSharing: true } });
       const readEpisodeTimer = number => readRows().then(values => {
-        const rows = values.filter(value => value.Name === retentionName);
+        const rows = values.filter(value => value.Name?.startsWith(retentionName + ' '));
         (report.retentionProgress ??= {})[side] = rows.map(row => ({ status: row.Status, number: row.EpisodeNumber,
           series: row.SeriesTimerId === series.ExternalId }));
         return rows.find(value => value.SeriesTimerId === series.ExternalId && value.EpisodeNumber === number);
@@ -386,7 +387,7 @@ await writeFile(recording + '.processed', String((await readFile(recording)).len
         catch (error) { if (error.code === 'ENOENT') return 0; throw error; }
       };
       const cancelEpisode = async row => {
-        const file = path.join(recordings, 'Series', retentionName, 'Season 1', `${retentionName} S01E0${row.EpisodeNumber} Episode ${row.EpisodeNumber}.ts`);
+        const file = path.join(recordings, 'Series', row.Name, 'Season 1', `${row.Name} S01E0${row.EpisodeNumber} Episode ${row.EpisodeNumber}.ts`);
         await until(() => fileSize(file), size => size >= bytes.length - 4096, side + ' must write the current episode before cancellation.');
         const active = (await request('/LiveTv/Timers?seriesTimerId=' + seriesId)).Items.find(value => value.ExternalId === row.Id);
         assert.ok(active);

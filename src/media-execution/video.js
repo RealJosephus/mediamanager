@@ -43,10 +43,12 @@ function canCopy(video, source, request, codecs) {
   if (request.RequireAvc && codec === 'h264' && video.IsAVC === false || request.RequireNonAnamorphic && video.IsAnamorphic
     || video.IsInterlaced && (request.DeInterlace || lower(option(request, codec, 'deinterlace')) === 'true')) return false;
   const limits = [
-    [request.MaxWidth, video.Width], [request.MaxHeight, video.Height], [request.VideoBitRate, video.BitRate],
+    [request.MaxWidth, video.Width], [request.MaxHeight, video.Height],
     [request.MaxFramerate ?? request.Framerate, frameRate(video) == null ? null : frameRate(video) - 0.05],
   ];
   if (limits.some(([maximum, value]) => maximum != null && (value == null || value > maximum))) return false;
+  if (request.VideoBitRate != null && (video.BitRate == null ? !source.LiveStreamId && !request.LiveStreamId?.trim()
+    : video.BitRate > request.VideoBitRate)) return false;
   if (request.Width != null && request.Width !== video.Width || request.Height != null && request.Height !== video.Height) return false;
   const knownLimits = [[request.Level ?? option(request, codec, 'level'), video.Level],
     [request.MaxVideoBitDepth ?? option(request, codec, 'videobitdepth'), video.BitDepth],
