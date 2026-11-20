@@ -15,6 +15,7 @@ import { remuxArguments, remuxPlan } from '../media-execution/streaming.js';
 import { stageSubtitleBurn } from '../media-execution/subtitle-burn.js';
 import { TranscodeJobs, transcodingInfo } from './transcode-jobs.js';
 import { TranscodeCache } from './transcode-cache.js';
+import { LiveStreamReadBridge } from './live-stream-bridge.js';
 
 export { remuxArguments, remuxPlan };
 
@@ -38,6 +39,7 @@ export class RemuxService {
   #retiring = new Set();
   #cache;
   #cacheReady;
+  #liveBridge;
   #cleanupErrors = [];
   constructor({ vfs, bridge, identityMap, mediaEncoder, subtitleBurn, getCacheDirectory = tmpdir,
     jobs = new TranscodeJobs(), timeoutMs = 21600000, maxConcurrentRemuxes = 4, onError = () => {}, onProcess = () => {} }) {
@@ -87,9 +89,9 @@ export class RemuxService {
     return directory;
   }
 
-  async #inputSnapshot(source, virtualPath, plan, signal) {
+  async #inputSnapshot(source, virtualPath, plan, signal, openRead) {
     const disc = plan.discInput ? await resolveDiscInput(this.vfs, source.VideoType, virtualPath, signal) : undefined;
-    const before = disc ? undefined : await this.vfs.stat(virtualPath, { signal });
+    const before = disc || openRead ? undefined : await this.vfs.stat(virtualPath, { signal });
     const identities = new Set([plan.externalAudio?.path, plan.externalSubtitle?.Path, plan.burnSubtitle?.Path].filter(Boolean));
     for (const stream of [plan.externalSubtitle, plan.burnSubtitle]) {
       const pair = vobSubPair(stream);
@@ -105,19 +107,19 @@ export class RemuxService {
       }
       return [identity, { path: virtualPath, version: info?.version ?? null, reliable: this.vfs.capabilities(virtualPath).reliableVersion }];
     })));
-    const cacheable = (disc ? disc.version != null : before.version != null && this.vfs.capabilities(virtualPath).reliableVersion)
+    const cacheable = !source.LiveStreamId && (disc ? disc.version != null : before?.version != null && this.vfs.capabilities(virtualPath).reliableVersion)
       && [...sidecars.values()].every(value => value.version != null && value.reliable);
-    return { disc, before, sidecars, cacheable };
+    return { disc, before, sidecars, cacheable, openRead };
   }
 
-  async #prepare(source, virtualPath, plan, signal) {
+  async #prepare(source, virtualPath, plan, signal, openRead) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(timeoutFailure()), this.timeoutMs); timer.unref();
     const preparing = AbortSignal.any([signal, controller.signal]);
     const pending = (async () => {
       const directory = await this.#cacheDirectory(preparing);
       preparing.throwIfAborted();
-      const input = await this.#inputSnapshot(source, virtualPath, plan, preparing);
+      const input = await this.#inputSnapshot(source, virtualPath, plan, preparing, openRead);
       preparing.throwIfAborted();
       return { directory, input };
     })();
@@ -127,7 +129,7 @@ export class RemuxService {
     finally { clearTimeout(timer); this.#preparing.delete(pending); }
   }
 
-  async stream(source, virtualPath, options, request, response, { signal, userId } = {}) {
+  async stream(source, virtualPath, options, request, response, { signal, userId, openRead } = {}) {
     const configuration = this.mediaEncoder.getEncodingOptions();
     const plan = this.plan(source, options, configuration), threads = getEncodingThreadCount(configuration, options.CpuCoreLimit);
     if (!this.available) throw failure('unavailable', 'The ffmpeg remux process is unavailable.');
@@ -138,12 +140,12 @@ export class RemuxService {
     response.setHeader('Content-Type', plan.mime);
     if (request.method === 'HEAD') { response.end(); return; }
     const deadline = performance.now() + this.timeoutMs;
-    const { directory, input } = await this.#prepare(source, virtualPath, plan, signal);
+    const { directory, input } = await this.#prepare(source, virtualPath, plan, signal, openRead);
     signal.throwIfAborted();
     const { disc, before, sidecars } = input;
     // As in Native, a seek or a different requested codec in the same session
     // can read the existing output. Its VFS inputs still have to match.
-    const key = JSON.stringify([directory, source.Path, virtualPath, disc?.version ?? before?.version,
+    const key = JSON.stringify([directory, source.LiveStreamId, source.Path, virtualPath, disc?.version ?? before?.version,
       request.headers['user-agent'], options.DeviceId, options.PlaySessionId, plan.container, userId,
       options.PermitAudioEncoding, options.PermitVideoEncoding, [...sidecars].map(([identity, input]) => [identity, input.path, input.version])]);
     let job = this.#jobs.get(key);
@@ -235,13 +237,18 @@ export class RemuxService {
     }
   }
 
-  async #produce(source, virtualPath, plan, threads, job, { disc, before, sidecars }, timeoutMs) {
+  async #produce(source, virtualPath, plan, threads, job, { disc, before, sidecars, openRead }, timeoutMs) {
     const { signal } = job.controller;
     job.workspace = await this.#cache.create(job.directory);
     job.file = await open(path.join(job.workspace, 'output'), 'wx+', 0o600);
     signal.throwIfAborted();
     const lifetime = { signal, expiresInMs: timeoutMs };
-    const lease = disc ? await leaseDiscInput(this.bridge, disc, this.mediaEncoder, lifetime)
+    if (source.LiveStreamId && source.BufferMs > 0) await delay(source.BufferMs, undefined, { signal });
+    let lease;
+    if (openRead) {
+      this.#liveBridge ??= new LiveStreamReadBridge();
+      lease = await this.#liveBridge.lease(openRead, { signal });
+    } else lease = disc ? await leaseDiscInput(this.bridge, disc, this.mediaEncoder, lifetime)
       : await this.bridge.lease(virtualPath, { ...lifetime, version: before.version });
     let child, done, failed, primary, killTimer, subtitles, externalAudio, externalSubtitle;
     const cleanupErrors = [];
@@ -301,7 +308,7 @@ export class RemuxService {
         if (failed) throw failed;
         if (child.exitCode !== 0 || !job.size) throw failure('invalid-response', 'The selected streams could not be processed.');
         if (disc) await disc.verify(signal);
-        else {
+        else if (before) {
           const after = await this.vfs.stat(virtualPath, { signal });
           if (before.version != null && before.version !== after.version) throw failure('version-changed', 'The source changed during remuxing.');
         }
@@ -349,6 +356,7 @@ export class RemuxService {
       await Promise.allSettled([...this.#preparing]);
       this.#cache.close();
       const errors = [...this.#cleanupErrors];
+      try { await this.#liveBridge?.close(); } catch (error) { errors.push(error); }
       if (this.ownsBridge) try { await this.bridge.close(); } catch (error) { errors.push(error); }
       if (errors.length) throw cleanupFailure(errors);
     })().then(completion.resolve, completion.reject);

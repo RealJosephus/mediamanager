@@ -67,6 +67,21 @@ function streamMap(stream, plan, subtitles) {
   return `0:${stream.index}`;
 }
 
+function probeInput(plan) {
+  return ['-analyzeduration', plan.analyzeDurationMs > 0 ? String(plan.analyzeDurationMs * 1000) : '200M', '-probesize', '1G'];
+}
+
+function inputFlags(plan) {
+  const flags = [plan.ignoreDts && '+igndts', plan.ignoreIndex && '+ignidx',
+    (plan.genPts || plan.videoOutput?.encoder === 'copy') && '+genpts', plan.discardCorrupt && '+discardcorrupt'].filter(Boolean);
+  return flags.length ? ['-fflags', flags.join('')] : [];
+}
+
+function inputPacing(plan, version) {
+  if (!plan.readAtNativeFramerate) return [];
+  return encoderVersionAtLeast(version, 7, 1) ? ['-re', '-readrate_catchup', '100'] : ['-re'];
+}
+
 function subtitleOverlay(plan, subtitles, ticks, shift) {
   const hardware = plan.subtitleHardware;
   const bitmap = plan.bitmapIndex != null;
@@ -115,6 +130,7 @@ function subtitleOverlay(plan, subtitles, ticks, shift) {
 
 export function remuxPlan(source, options = {}, { capabilities, configuration, version, subtitleBurn, canOpenSidecar } = {}) {
   options = { ...options };
+  const live = options.LiveInput === true && source.IsInfiniteStream === true;
   const discInput = source.VideoType === 'Dvd' || source.VideoType === 'BluRay';
   if (!options.LiveInput && (source.IsInfiniteStream || source.RequiresOpening || source.RequiresClosing)
     || source.VideoType && !discInput && !['VideoFile', 'Iso'].includes(source.VideoType)
@@ -126,7 +142,8 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
   const select = (type, index) => index == null ? source.MediaStreams.find(stream => stream.Type === type && !stream.IsAttachedPic && (type !== 'Audio' || stream.Index === source.DefaultAudioStreamIndex))
     ?? source.MediaStreams.find(stream => stream.Type === type && !stream.IsAttachedPic) : source.MediaStreams.find(stream => stream.Type === type && stream.Index === index);
   const video = options.MediaType === 'Audio' ? undefined : select('Video', options.VideoStreamIndex);
-  const audio = options.AudioStreamIndex === -1 ? undefined : select('Audio', options.AudioStreamIndex);
+  const audio = options.AudioStreamIndex === -1 && !live ? undefined
+    : select('Audio', live && options.AudioStreamIndex === -1 ? undefined : options.AudioStreamIndex);
   const selectedSubtitle = options.SubtitleStreamIndex >= 0 ? select('Subtitle', options.SubtitleStreamIndex) : undefined;
   if (options.SubtitleMethod === 'Embed' && selectedSubtitle?.Codec?.toLowerCase() === 'dvbsub') options.SubtitleMethod = 'Encode';
   const burnsByDelivery = options.SubtitleMethod == null || options.SubtitleMethod === 'Encode';
@@ -193,7 +210,9 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
   const inputFormat = video && configuration?.HardwareAccelerationType && configuration.HardwareAccelerationType !== 'none'
     && source.VideoType === 'VideoFile' ? nativeInputFormat(source.Container) : undefined;
   return { container, ...output, inputVideo: video, inputFormat, discInput, videoOutput, audioOutput, externalAudio, burnSubtitle,
-    bitmapIndex, subtitleHardware, subtitleEncoder, externalSubtitle,
+    bitmapIndex, subtitleHardware, subtitleEncoder, externalSubtitle, live, analyzeDurationMs: source.AnalyzeDurationMs,
+    readAtNativeFramerate: source.ReadAtNativeFramerate, ignoreDts: source.IgnoreDts, ignoreIndex: source.IgnoreIndex,
+    genPts: source.GenPtsInput, discardCorrupt: source.DiscardCorruptFrames,
     streams: [video, audio, subtitle].filter(Boolean).map(stream => ({ type: stream.Type, codec: stream.Codec, index: stream.Type === 'Subtitle' ? streamInputIndex(source, stream) : stream.Index })),
     start, seek: BigInt(options.StartTimeTicks ?? 0) > 0n, copyTimestamps: options.CopyTimestamps === true, m2ts: options.EnableMpegtsM2TsMode === true, mediaType: options.MediaType ?? 'Video' };
 }
@@ -202,8 +221,10 @@ export function remuxArguments(url, plan, threads, version, subtitles, audioUrl,
   if (!privateUrl.test(url)) throw new TypeError('Remuxing requires a private VFS input.');
   const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-protocol_whitelist', 'http,tcp'];
   const seek = plan.seek ? ['-ss', mediaSeekTime(plan.start)] : [];
+  if (plan.live) args.push(...probeInput(plan));
   args.push(...seek);
-  if (plan.videoOutput?.encoder === 'copy') args.push('-fflags', '+genpts');
+  if (plan.live) args.push(...inputPacing(plan, version), ...inputFlags(plan));
+  else if (plan.videoOutput?.encoder === 'copy') args.push('-fflags', '+genpts');
   if (plan.discInput) args.push('-f', 'concat', '-safe', '0');
   else if (plan.inputFormat) args.push('-f', plan.inputFormat);
   const shift = subtitles?.filter && !plan.copyTimestamps ? Math.round(Number(plan.start) / 10000000) : null;
@@ -218,7 +239,9 @@ export function remuxArguments(url, plan, threads, version, subtitles, audioUrl,
   if (plan.videoOutput?.hardware?.decoder.args.length) args.push('-noautoscale');
   args.push('-threads', String(threads));
   if (overlay) args.push('-filter_complex', overlay.graph);
-  for (const stream of plan.streams) args.push('-map', overlay && stream.type === 'Video' ? '[video]' : streamMap(stream, plan, subtitles));
+  // The tuner can supply codec information before it knows any stream index.
+  const autoMap = plan.live && plan.streams.some(stream => stream.type !== 'Subtitle' && stream.index < 0);
+  if (!autoMap) for (const stream of plan.streams) args.push('-map', overlay && stream.type === 'Video' ? '[video]' : streamMap(stream, plan, subtitles));
   args.push('-map_metadata', '-1', '-map_chapters', '-1', '-c', 'copy');
   if (plan.videoOutput && plan.videoOutput.encoder !== 'copy') {
     const filters = overlay ? [] : [...plan.videoOutput.filters];
@@ -236,11 +259,11 @@ export function remuxArguments(url, plan, threads, version, subtitles, audioUrl,
   if (['opus', 'dts', 'truehd'].includes(audioCodec) || audioCodec === 'flac' && !encoderVersionAtLeast(version, 6)) args.push('-strict', '-2');
   if (!plan.streams.some(stream => stream.type === 'Video')) args.push('-vn');
   if (!plan.streams.some(stream => stream.type === 'Audio')) args.push('-an');
-  if (!plan.streams.some(stream => stream.type === 'Subtitle')) args.push('-sn');
+  if (autoMap || !plan.streams.some(stream => stream.type === 'Subtitle')) args.push('-sn');
   args.push('-dn');
   if (plan.container === 'ts') {
     const video = plan.streams.find(stream => stream.type === 'Video');
-    if (plan.videoOutput?.encoder === 'copy' && ['h264', 'hevc'].includes(video?.codec)) args.push('-bsf:v', `${video.codec}_mp4toannexb`);
+    if (!plan.live && plan.videoOutput?.encoder === 'copy' && ['h264', 'hevc'].includes(video?.codec)) args.push('-bsf:v', `${video.codec}_mp4toannexb`);
     if (plan.m2ts) args.push('-mpegts_m2ts_mode', '1');
   }
   if (plan.copyTimestamps) args.push('-copyts', '-avoid_negative_ts', 'disabled', '-start_at_zero');
@@ -253,8 +276,7 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
   if (!privateUrl.test(url)) throw new TypeError('HLS requires a private VFS input.');
   if (eventId != null && !/^[a-f0-9]{32}$/u.test(eventId)) throw new TypeError('Invalid HLS event playlist identity.');
   const prefix = eventId ?? 'segment';
-  const analyzeDuration = plan.analyzeDurationMs > 0 ? String(plan.analyzeDurationMs * 1000) : '200M';
-  const probe = ['-analyzeduration', analyzeDuration, '-probesize', '1G'];
+  const probe = probeInput(plan);
   const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-stats', '-stats_period', '0.5', '-protocol_whitelist', 'http,tcp', ...probe];
   const seek = [];
   if (runtimeTicks > 0n) {
@@ -263,13 +285,7 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
     seek.push('-ss', mediaSeekTime(seekTicks > maximum ? maximum : seekTicks));
     args.push(...seek);
   }
-  if (plan.readAtNativeFramerate) {
-    args.push('-re');
-    if (encoderVersionAtLeast(version, 7, 1)) args.push('-readrate_catchup', '100');
-  }
-  const inputFlags = [plan.ignoreDts && '+igndts', plan.ignoreIndex && '+ignidx',
-    (plan.genPts || plan.videoOutput?.encoder === 'copy') && '+genpts', plan.discardCorrupt && '+discardcorrupt'].filter(Boolean);
-  if (inputFlags.length) args.push('-fflags', inputFlags.join(''));
+  args.push(...inputPacing(plan, version), ...inputFlags(plan));
   if (plan.discInput) args.push('-f', 'concat', '-safe', '0');
   else if (plan.inputFormat) args.push('-f', plan.inputFormat);
   const overlay = subtitleOverlay(plan, subtitles, runtimeTicks > 0n ? runtimeTicks : plan.start, null);

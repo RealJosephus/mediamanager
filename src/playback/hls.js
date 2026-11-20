@@ -284,10 +284,7 @@ export function hlsPlan(source, options = {}, tools) {
   }
   const timeline = copy ? keyframeTimeline(options.KeyframeData, segmentLength) : {};
   if (timeline.keyframeSegments?.length > 100000) throw failure('invalid-request', 'The HLS playlist exceeds the supported segment count.');
-  return { ...plan, video, audio, segmentLength, playlistSegmentTicks: BigInt(playlistMilliseconds) * 10000n,
-    runtime, live, analyzeDurationMs: source.AnalyzeDurationMs, readAtNativeFramerate: source.ReadAtNativeFramerate,
-    ignoreDts: source.IgnoreDts, ignoreIndex: source.IgnoreIndex, genPts: source.GenPtsInput,
-    discardCorrupt: source.DiscardCorruptFrames, ...timeline };
+  return { ...plan, video, audio, segmentLength, playlistSegmentTicks: BigInt(playlistMilliseconds) * 10000n, runtime, ...timeline };
 }
 
 function audioBitrate(audio, options) {
