@@ -18,14 +18,14 @@ export class LiveTvRecordingFolders {
   #closing;
   #binding;
 
-  constructor({ liveTv, libraryConfiguration, mediaAssets, dataPath, queueLibraryScan,
+  constructor({ liveTv, libraryConfiguration, mediaAssets, dataPath, queueLibraryScan, onLocations,
     admitOperation = () => libraryConfiguration.admitOperation(),
     runBackground = operation => Promise.resolve().then(operation), onError = () => {} } = {}) {
     if (typeof liveTv?.bindSaveObserver !== 'function' || !libraryConfiguration || !mediaAssets || !path.isAbsolute(dataPath ?? '')
       || typeof queueLibraryScan !== 'function') {
       throw new TypeError('Recording folders require live configuration, library management and mapped directory access.');
     }
-    Object.assign(this, { liveTv, libraryConfiguration, mediaAssets, dataPath, queueLibraryScan, admitOperation, runBackground, onError });
+    Object.assign(this, { liveTv, libraryConfiguration, mediaAssets, dataPath, queueLibraryScan, onLocations, admitOperation, runBackground, onError });
   }
 
   start() {
@@ -100,6 +100,8 @@ export class LiveTvRecordingFolders {
 
   async #reconcile(libraryConfiguration, access) {
     const recordingFolders = await this.#recordingFolders(access);
+    const currentPaths = new Set(recordingFolders.flatMap(folder => folder.Locations));
+    this.onLocations?.([...currentPaths]);
     const virtualFolders = await libraryConfiguration.getVirtualFolders();
     const existingPaths = virtualFolders.flatMap(folder => folder.Locations);
     const pathsAdded = [];
@@ -112,7 +114,6 @@ export class LiveTvRecordingFolders {
       pathsAdded.push(...pathsToCreate);
     }
     const configuration = await access.getConfiguration();
-    const currentPaths = new Set(recordingFolders.flatMap(folder => folder.Locations));
     if (configuration.MediaLocationsCreated == null) throw new TypeError('The recorded media locations are null.');
     const pathsToRemove = [...new Set(configuration.MediaLocationsCreated)].filter(location => !currentPaths.has(location));
     if (pathsAdded.length || pathsToRemove.length) {

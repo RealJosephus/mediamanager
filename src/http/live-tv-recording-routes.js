@@ -49,13 +49,11 @@ function bindQuery(context, { series = false } = {}) {
   return result;
 }
 
-export function registerLiveTvRecordingRoutes(add, { liveTvRecordings, users }) {
+export function registerLiveTvRecordingRoutes(add, { liveTvRecordings, liveTvDvr, users }) {
   if (!liveTvRecordings) return;
   add('GET', '/LiveTv/LiveRecordings/{recordingId}/stream', context => {
     if (!clrTrim(context.params.recordingId)) throw new BindingError('recordingId', 'The recordingId field is required.');
-    // Active built-in recordings have no backing stream. Existing files are
-    // available through the normal recording-item and video playback routes.
-    return notFound();
+    return liveTvDvr?.streamFile(context.params.recordingId) ?? notFound();
   }, { public: true });
   const options = { policy: 'LiveTvAccess' };
   const userById = id => {

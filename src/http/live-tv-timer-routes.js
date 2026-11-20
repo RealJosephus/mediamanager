@@ -38,12 +38,26 @@ export function registerLiveTvTimerRoutes(add, { liveTvTimers }) {
     if (!await liveTvTimers.cancelSeriesTimer(timerId(context))) throw httpError(404, 'The Live TV series timer was not found.');
     return noContent();
   }, management);
-  add('POST', '/LiveTv/Timers', () => unavailable('timer creation'),
+  add('POST', '/LiveTv/Timers', async context => {
+    if (!liveTvTimers.dvr) return unavailable('timer creation');
+    await liveTvTimers.createTimer(context.body); return noContent();
+  },
     body('timer', 'timerInfo', 'MediaBrowser.Model.LiveTv.TimerInfoDto'));
-  add('POST', '/LiveTv/Timers/{timerId}', context => { timerId(context); return unavailable('timer update'); },
+  add('POST', '/LiveTv/Timers/{timerId}', async context => {
+    timerId(context);
+    if (!liveTvTimers.dvr) return unavailable('timer update');
+    await liveTvTimers.updateTimer(context.body); return noContent();
+  },
     body('timer', 'timerInfo', 'MediaBrowser.Model.LiveTv.TimerInfoDto'));
-  add('POST', '/LiveTv/SeriesTimers', () => unavailable('series timer creation'),
+  add('POST', '/LiveTv/SeriesTimers', async context => {
+    if (!liveTvTimers.dvr) return unavailable('series timer creation');
+    await liveTvTimers.createSeriesTimer(context.body); return noContent();
+  },
     body('seriesTimer', 'seriesTimerInfo', 'MediaBrowser.Model.LiveTv.SeriesTimerInfoDto'));
-  add('POST', '/LiveTv/SeriesTimers/{timerId}', context => { timerId(context); return unavailable('series timer update'); },
+  add('POST', '/LiveTv/SeriesTimers/{timerId}', async context => {
+    timerId(context);
+    if (!liveTvTimers.dvr) return unavailable('series timer update');
+    await liveTvTimers.updateSeriesTimer(context.body); return noContent();
+  },
     body('seriesTimer', 'seriesTimerInfo', 'MediaBrowser.Model.LiveTv.SeriesTimerInfoDto'));
 }

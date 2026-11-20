@@ -1,7 +1,28 @@
 import path from 'node:path';
+import { writeFile } from 'node:fs/promises';
 import { LocalAdapter } from '../../plugins/local/adapter.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { StorageFileSystem } from '../../src/storage/files.js';
+
+export async function writeLocalFixtureStorage(filename, root, { syntheticSeed } = {}) {
+  if (!path.isAbsolute(root)) throw new TypeError('Fixture storage requires an absolute directory.');
+  const windows = process.platform === 'win32';
+  const definition = {
+    instances: [{ id: 'media-fixture', type: 'local', config: { root, writable: true } }],
+    mounts: [{ path: '/media-fixture', instanceId: 'media-fixture', root: '/', capabilities: {} }],
+    prefixes: [{ identityRoot: root, accessRoot: '/media-fixture', style: windows ? 'windows' : 'posix',
+      caseSensitive: !windows, returnAccess: 'The isolated fixture retains its physical identity.' }],
+  };
+  if (syntheticSeed) {
+    const id = 'synthetic-media-seed';
+    definition.instances.push({ id, type: 'local', config: { root: syntheticSeed, writable: false } });
+    definition.mounts.push({ path: '/' + id, instanceId: id, root: '/', capabilities: {} });
+    definition.prefixes.push({ identityRoot: 'Z:\\', accessRoot: '/' + id, style: 'windows', caseSensitive: false,
+      returnAccess: 'The same-run seed has synthetic identities and no backing media.' });
+  }
+  await writeFile(filename, JSON.stringify(definition), { flag: 'wx' });
+  return filename;
+}
 
 /** A private test directory accessed through the ordinary local plugin. */
 export async function localStateStorage(root) {

@@ -48,6 +48,14 @@ export class LiveStreamsService {
   }
 
   open(request, { signal } = {}) {
+    return this.#open(request, { signal, privateOwner: false });
+  }
+
+  openOwned(request, { signal } = {}) {
+    return this.#open(request, { signal, privateOwner: true });
+  }
+
+  #open(request, { signal, privateOwner }) {
     return this.#admit(async () => {
       signal?.throwIfAborted();
       const lifetime = new AbortController(), combined = AbortSignal.any([lifetime.signal, this.#lifetime.signal]);
@@ -95,7 +103,7 @@ export class LiveStreamsService {
           }
           if (lease.stream) { source.Protocol = 'Http'; source.Path = this.getLocalApiUrl().replace(/\/$/u, '') + '/LiveTv/LiveStreamFiles/' + current.uniqueId + '/stream.ts'; }
           current.source = source;
-          const opened = { lease, lifetime }; current.owners.push(opened);
+          const opened = { lease, lifetime, privateOwner }; current.owners.push(opened);
           registered = true; signal?.removeEventListener('abort', cancel);
           return { entry: current, owner: opened };
         }));
@@ -105,14 +113,23 @@ export class LiveStreamsService {
           ...(owner.lease.stream ? { openRead: options => this.#read(entry, options) } : {}) }));
         entry.probes.add(probing); const finished = () => entry.probes.delete(probing); probing.then(finished, finished);
         try { await probing; }
-        catch (error) { if (!ownedLifetime.aborted) { this.#report(error); addLiveMediaInfo(entry.source); } else throw error; }
+        catch (error) {
+          if (ownedLifetime.aborted || privateOwner && signal?.aborted) throw error;
+          this.#report(error); addLiveMediaInfo(entry.source);
+        }
         ownedLifetime.throwIfAborted();
+        if (privateOwner) {
+          signal?.throwIfAborted();
+          return Object.freeze({ MediaSource: cloneNativeValue(entry.source),
+            ...(owner.lease.stream ? { openRead: options => this.#read(entry, options, owner) } : {}),
+            release: () => this.#serial(() => this.#release(entry, owner)) });
+        }
         return { MediaSource: cloneNativeValue(entry.source) };
       } catch (error) {
         // MediaSourceManager registers before probing/cloning. A later native
         // failure leaves that public ownership registered for explicit Close.
         // Shutdown and a revoked last public owner still drain immediately.
-        if (!registered || combined.aborted || entry?.lifetime.signal.aborted) {
+        if (privateOwner || !registered || combined.aborted || entry?.lifetime.signal.aborted) {
           lifetime.abort();
           if (entry && owner) await this.#serial(() => this.#release(entry, owner));
         }
@@ -121,11 +138,12 @@ export class LiveStreamsService {
     });
   }
 
-  #read(entry, { signal } = {}) {
+  #read(entry, { signal } = {}, preferredOwner) {
     return this.#admit(async () => {
       const combined = AbortSignal.any([this.#lifetime.signal, entry.lifetime.signal, ...(signal ? [signal] : [])]);
       combined.throwIfAborted();
-      const owner = entry.owners.at(-1); if (!owner) throw libraryError(404, 'Live stream not found.');
+      const owner = preferredOwner ?? entry.owners.at(-1);
+      if (!owner || !entry.owners.includes(owner)) throw libraryError(404, 'Live stream not found.');
       const lease = await owner.lease.forkRead({ signal: combined });
       if (combined.aborted) { await lease.close(); combined.throwIfAborted(); }
       const state = { close: null }; let closing;
@@ -158,7 +176,8 @@ export class LiveStreamsService {
     // public owners. Their cleanup joins the same drain, without admitting work.
     if (this.#closing) return this.#closing;
     return this.#admit(() => this.#serial(async () => {
-      const entry = this.#entries.get(key(id)); if (entry) await this.#release(entry, entry.owners.at(-1));
+      const entry = this.#entries.get(key(id)), owner = entry?.owners.findLast(value => !value.privateOwner);
+      if (owner) await this.#release(entry, owner);
     }));
   }
 

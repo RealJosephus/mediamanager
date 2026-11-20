@@ -26,7 +26,7 @@ export class LiveTvGuideService {
   #closing;
 
   constructor({ liveTv, services, recordingFolders, sources, library, store, itemCreation, itemDeletion,
-    linkedChildren, loadContext, updates, metadataScanner, images, metadataAssets,
+    linkedChildren, loadContext, updates, metadataScanner, images, metadataAssets, refreshSeriesTimers,
     now = () => new Date(), onError = () => {} } = {}) {
     if (typeof liveTv?.admitRead !== 'function' || typeof services !== 'function'
       || typeof recordingFolders?.reconcile !== 'function' || typeof sources?.scanForTunerDeviceChanges !== 'function'
@@ -37,7 +37,7 @@ export class LiveTvGuideService {
       throw new TypeError('Guide refresh requires live providers, SQL ownership, mapped images and repository lifecycles.');
     }
     Object.assign(this, { liveTv, services, recordingFolders, sources, library, store, itemCreation, itemDeletion,
-      linkedChildren, loadContext, updates, metadataScanner, images, metadataAssets, now, onError });
+      linkedChildren, loadContext, updates, metadataScanner, images, metadataAssets, refreshSeriesTimers, now, onError });
   }
 
   #report(cause) { try { void Promise.resolve(this.onError(cause)).catch(() => {}); } catch { /* Logging cannot change the refresh boundary. */ } }
@@ -184,7 +184,7 @@ export class LiveTvGuideService {
     await this.recordingFolders.reconcile();
     await this.sources.scanForTunerDeviceChanges({ signal });
     const services = this.services();
-    return this.store.run(async session => {
+    await this.store.run(async session => {
       if (session.inTransaction) throw new TypeError('Guide refresh must own an autocommit SQL session.');
       const suffix = randomUUID().replaceAll('-', ''), seenChannels = q('mm_guide_channels_' + suffix), seenPrograms = q('mm_guide_programs_' + suffix);
       try {
@@ -206,6 +206,8 @@ export class LiveTvGuideService {
         catch (cause) { session.discardConnection(cause); throw cause; }
       }
     });
+    signal.throwIfAborted();
+    await this.refreshSeriesTimers?.(signal);
   }
 
   close() {

@@ -4,11 +4,13 @@ import { NativeLruCache } from '../core/native-lru.js';
 import { decodeNativeText } from '../core/native-text.js';
 import { clrTrim } from '../metadata/whitespace.js';
 import { NativeIgnoreRules } from './ignore-rules.js';
+import { nativePathKey, nativePathWithin } from './native-path.js';
 
 const pathApi = value => /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/u.test(value) ? path.win32 : path.posix;
 
 export class DotIgnoreRule {
   #defaultFileAccess;
+  #recordingRoots = new Set();
   constructor({ vfs, identityMap, fileAccess, processorCount = availableParallelism(), normalizePath = process.platform === 'win32' }) {
     if (!fileAccess && (!vfs || !identityMap)) throw new TypeError('Ignore rules require an explicit file reader.');
     Object.assign(this, { vfs, identityMap, processorCount, normalizePath });
@@ -23,11 +25,18 @@ export class DotIgnoreRule {
   }
 
   clearDirectoryCache() { this.directoryCache.clear(); }
+  setRecordingRoots(roots) {
+    const next = new Set(roots.map(nativePathKey));
+    if (next.size === this.#recordingRoots.size && [...next].every(root => this.#recordingRoots.has(root))) return;
+    this.#recordingRoots = next;
+    this.clearDirectoryCache();
+  }
   clone() {
     const rule = new DotIgnoreRule({ ...this,
       fileAccess: this.#defaultFileAccess ? undefined : this.fileAccess });
     rule.directoryCache = this.directoryCache.clone();
     rule.rulesCache = this.rulesCache.clone();
+    rule.#recordingRoots = this.#recordingRoots;
     return rule;
   }
 
@@ -52,11 +61,13 @@ export class DotIgnoreRule {
     const cached = this.directoryCache.get(directory);
     if (cached) return cached;
     const api = pathApi(directory), checked = [directory];
-    let complete = true;
-    const finish = (ignoreFile, known = complete) => {
+    let complete = true, recordingRoot;
+    const finish = (ignoreFile, known = complete, cacheRoot) => {
       const entry = { ignoreFile, complete: known };
       // Unknown mappings do not establish a cached native absence.
-      if (known) for (const current of checked) this.directoryCache.set(current, entry);
+      if (known) for (const current of checked) {
+        if (!cacheRoot || nativePathWithin(current, cacheRoot)) this.directoryCache.set(current, entry);
+      }
       return entry;
     };
     for (let current = directory;; current = api.dirname(current)) {
@@ -66,7 +77,11 @@ export class DotIgnoreRule {
       }
       const ignoreFile = api.join(current, '.ignore');
       const info = await this.fileAccess.info(ignoreFile, signal);
+      // A registered recording library can be bounded by application storage.
+      // Keep reading mapped ancestors when an administrator supplied them.
+      if (recordingRoot && !info.mapped) return finish(null, complete, recordingRoot);
       complete &&= info.mapped;
+      if (info.mapped && this.#recordingRoots.has(nativePathKey(current))) recordingRoot ??= current;
       if (info.entry?.kind === 'file') return finish(ignoreFile);
       if (current !== directory) checked.push(current);
       if (api.dirname(current) === current) return finish(null);
