@@ -27,6 +27,8 @@ const capabilities = {
   FilterOptions: { ScaleCudaFormat: true, TonemapCudaName: true, TonemapOpenclBt2390: true, OverlayOpenclFrameSync: true, OverlayVaapiFrameSync: true },
   VaapiDriver: 'iHD', VaapiVulkanInterop: false, VideotoolboxAv1: true, Version: '8.1.3',
 };
+const hdr10 = { Codec: 'hevc', Profile: 'Main 10', BitDepth: 10, PixelFormat: 'yuv420p10le',
+  ColorPrimaries: 'bt2020', ColorSpace: 'bt2020nc', ColorTransfer: 'smpte2084' };
 const scope = (name, type, { options, video, caps, output = 'h264', videoType = 'VideoFile', request = { MaxWidth: 960 } } = {}) => ({
   Name: name, Video: { ...defaultVideo, ...video }, VideoType: videoType, OutputCodec: output, Request: request,
   Options: {
@@ -58,7 +60,7 @@ test('the real FFmpeg listing and host encode probes distinguish tool support fr
     const encoder = `h264_${name}`;
     if (!tools.encoders.includes(encoder)) { probes.push({ name, encoder, installed: false }); continue; }
     const { stdout, exitCode, signal: terminationSignal } = await captureMediaProcess(executable, ['-nostdin', '-hide_banner', '-loglevel', 'error',
-      ...input, '-f', 'lavfi', '-i', 'testsrc2=size=128x72:rate=24', ...output, '-frames:v', '2', '-c:v', encoder,
+      ...input, '-f', 'lavfi', '-i', 'testsrc2=size=360x240:rate=24', ...output, '-frames:v', '2', '-c:v', encoder,
       '-f', 'h264', 'pipe:1'], { signal: t.signal, timeoutMs: 15000, maxOutputBytes: 4 * 1024 * 1024 });
     assert.ok(Number.isInteger(exitCode) || terminationSignal, name);
     if (exitCode === 0) assert.ok(stdout.length > 4 && stdout.readUInt32BE() === 1, name + ' produced H.264');
@@ -69,7 +71,7 @@ test('the real FFmpeg listing and host encode probes distinguish tool support fr
   await writeFile(path.join(root, 'host-encode-probes.json'), JSON.stringify({ platform, architecture: machine(), release: release(), probes }, null, 2));
 });
 
-test('the designated EncodingHelper selects hardware encode, decode, input devices and Intel filters', { skip: !enabled, timeout: 180000 }, async () => {
+test('the designated EncodingHelper selects hardware encode, decode, device and filter stages', { skip: !enabled, timeout: 180000 }, async () => {
   const cases = ['none', 'nvenc', 'qsv', 'amf', 'vaapi', 'videotoolbox', 'rkmpp', 'v4l2m2m'].flatMap(type => [
     scope(type + '-copy', type, { output: 'copy' }),
     scope(type + '-resize', type),
@@ -89,8 +91,6 @@ test('the designated EncodingHelper selects hardware encode, decode, input devic
     scope('rkmpp-ten-bit', 'rkmpp', { video: { BitDepth: 10, PixelFormat: 'yuv420p10le' } }),
     scope('encoder-absent', 'qsv', { output: 'av1' }));
   if (['win32', 'linux'].includes(process.platform)) {
-    const hdr10 = { Codec: 'hevc', Profile: 'Main 10', BitDepth: 10, PixelFormat: 'yuv420p10le',
-      ColorPrimaries: 'bt2020', ColorSpace: 'bt2020nc', ColorTransfer: 'smpte2084' };
     for (const [name, changes] of [
       ['native-surface', {}], ['download', { options: { EnableHardwareEncoding: false } }],
       ['explicit-decoder', { options: { PreferSystemNativeHwDecoder: false } }],
@@ -110,6 +110,51 @@ test('the designated EncodingHelper selects hardware encode, decode, input devic
         MaxWidth: 960, VideoBitRate: 8000000, AllowVideoStreamCopy: false, ...changes.request,
       } }), FilterSelection: true });
     }
+    if (process.platform === 'linux') for (const [name, changes] of [
+      ['single-pass', {}], ['two-pass', { request: { MaxWidth: 160 } }],
+      ['rotation', { video: { Rotation: -90 } }], ['readback', { options: { EnableHardwareEncoding: false } }],
+      ['software-input', { options: { HardwareDecodingCodecs: [] } }],
+      ['hdr-opencl', { video: hdr10, options: { EnableTonemapping: true } }],
+      ['hdr-upload', { video: hdr10, options: { EnableTonemapping: true, HardwareDecodingCodecs: [] } }],
+    ]) {
+      cases.push({ ...scope('rkmpp-filter-' + name, 'rkmpp', { ...changes, request: {
+        MaxWidth: 960, VideoBitRate: 8000000, AllowVideoStreamCopy: false, ...changes.request,
+      } }), FilterSelection: true });
+    }
+  }
+  if (process.platform === 'linux') {
+    const amdVulkan = { VaapiDriver: 'amd', VaapiVulkanInterop: true, VaapiVulkanModifier: true,
+      Hwaccels: [...capabilities.Hwaccels, 'vulkan'],
+      Filters: [...filters, 'scale_vulkan', 'libplacebo', 'transpose_vulkan', 'flip_vulkan'],
+      FilterOptions: { ...capabilities.FilterOptions, OverlayVulkanFrameSync: true } };
+    for (const [name, changes] of [
+      ['retained', {}], ['download', { options: { EnableHardwareEncoding: false } }],
+      ['upload', { options: { HardwareDecodingCodecs: [] } }], ['rotation', { video: { Rotation: 90 } }],
+      ['fallback', { caps: { FilterOptions: {} } }],
+      ['vpp', { video: hdr10, options: { EnableVppTonemapping: true } }],
+      ['opencl', { video: hdr10, options: { EnableTonemapping: true } }],
+      ['opencl-upload', { video: hdr10, options: { EnableTonemapping: true, HardwareDecodingCodecs: [] } }],
+      ['i965-opencl', { video: hdr10, options: { EnableTonemapping: true }, caps: { VaapiDriver: 'i965' } }],
+      ['amd-opencl', { video: hdr10, options: { EnableTonemapping: true }, caps: { VaapiDriver: 'amd' } }],
+      ['amd-vulkan', { video: hdr10, options: { EnableTonemapping: true }, caps: amdVulkan }],
+      ['amd-vulkan-intermediate', { video: { ...hdr10, Rotation: -90 }, options: { EnableTonemapping: true },
+        caps: { ...amdVulkan, VaapiVulkanModifier: false } }],
+    ]) {
+      cases.push({ ...scope('vaapi-filter-' + name, 'vaapi', { ...changes, request: {
+        MaxWidth: 960, VideoBitRate: 8000000, AllowVideoStreamCopy: false,
+      } }), FilterSelection: true });
+    }
+  }
+  if (process.platform === 'darwin') for (const [name, changes] of [
+    ['retained', {}], ['download', { options: { EnableHardwareEncoding: false } }],
+    ['upload', { options: { HardwareDecodingCodecs: [] } }],
+    ['rotation', { video: { Rotation: 90 }, caps: { Filters: [...filters, 'transpose_vt'] } }],
+    ['hdr-vt', { video: hdr10, options: { EnableVideoToolboxTonemapping: true } }],
+    ['hdr-metal', { video: hdr10, options: { EnableTonemapping: true } }],
+  ]) {
+    cases.push({ ...scope('videotoolbox-filter-' + name, 'videotoolbox', { ...changes, request: {
+      MaxWidth: 960, VideoBitRate: 8000000, AllowVideoStreamCopy: false,
+    } }), FilterSelection: true });
   }
   const root = path.join(validationOutputRoot(), 'video-hardware-' + randomUUID());
   await mkdir(root, { recursive: true });
@@ -128,6 +173,6 @@ test('the designated EncodingHelper selects hardware encode, decode, input devic
     return { Name: row.Name, Encoder: selection.encoder, Decoder: selection.decoder.args, Input: selection.inputArgs, Filters: plan ? plan.filters : null };
   });
   await writeFile(path.join(root, 'node-selection.json'), JSON.stringify(observed, null, 2));
-  const split = value => value.trim().split(/\s+/u).filter(Boolean);
+  const split = value => (value.match(/(?:[^\s"]+|"[^"]*")+/gu) ?? []).map(token => token.replaceAll('"', ''));
   assert.deepEqual(observed, rows.map(row => ({ ...row, Decoder: split(row.Decoder), Input: split(row.Input) })));
 });

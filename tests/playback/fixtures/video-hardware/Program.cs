@@ -26,7 +26,14 @@ var results = cases.Select(row =>
         OutputAudioCodec = "aac",
     };
     var outputEncoder = helper.GetVideoEncoder(state, row.Options);
-    var filters = row.FilterSelection ? helper.GetIntelVidFilterChain(state, row.Options, outputEncoder).MainFilters : null;
+    var filters = row.FilterSelection ? row.Options.HardwareAccelerationType switch
+    {
+        HardwareAccelerationType.qsv => helper.GetIntelVidFilterChain(state, row.Options, outputEncoder).MainFilters,
+        HardwareAccelerationType.rkmpp => helper.GetRkmppVidFilterChain(state, row.Options, outputEncoder).MainFilters,
+        HardwareAccelerationType.vaapi => helper.GetVaapiVidFilterChain(state, row.Options, outputEncoder).MainFilters,
+        HardwareAccelerationType.videotoolbox => helper.GetAppleVidFilterChain(state, row.Options, outputEncoder).MainFilters,
+        _ => throw new InvalidOperationException("The requested filter oracle is unavailable."),
+    } : null;
     return new
     {
         row.Name,
@@ -42,7 +49,7 @@ public record VideoCase(string Name, MediaStream Video, VideoType VideoType, str
     BaseEncodingJobOptions Request, EncodingOptions Options, Capabilities Capabilities, bool FilterSelection);
 
 public record Capabilities(string[] Encoders, string[] Decoders, string[] Filters, string[] Hwaccels,
-    Dictionary<string, bool> FilterOptions, string? VaapiDriver, bool VaapiVulkanInterop, bool VideotoolboxAv1,
+    Dictionary<string, bool> FilterOptions, string? VaapiDriver, bool VaapiVulkanInterop, bool VaapiVulkanModifier, bool VideotoolboxAv1,
     string Version);
 
 public class HardwareEncodingHelper(IMediaEncoder mediaEncoder) :
@@ -71,6 +78,7 @@ public class EncoderCapabilities : DispatchProxy
             "get_IsVaapiDeviceInteli965" => caps.VaapiDriver == "i965",
             "get_IsVaapiDeviceAmd" => caps.VaapiDriver == "amd",
             "get_IsVaapiDeviceSupportVulkanDrmInterop" => caps.VaapiVulkanInterop,
+            "get_IsVaapiDeviceSupportVulkanDrmModifier" => caps.VaapiVulkanModifier,
             "get_IsVideoToolboxAv1DecodeAvailable" => caps.VideotoolboxAv1,
             _ when method?.ReturnType == typeof(bool) => false,
             _ => throw new InvalidOperationException(method?.Name),
