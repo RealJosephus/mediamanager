@@ -338,10 +338,12 @@ function selectTranscode(source, item, profile, options, audio, video, subtitle,
   // Native audio direct-stream selection falls back to MPEG-TS when no transcode container is set.
   const audioDirectProfile = !isVideo && audio && audioContainerRemuxProfile(source,
     get(profile, 'DirectPlayProfiles', []).filter(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), 'Audio')), audio);
+  const canDirectStreamAudio = !isVideo && source.SupportsDirectStream && options.EnableDirectStream !== false
+    && !(sourceMask & reasons.ContainerBitrateExceedsLimit);
   const flacAudioMp4 = equal(audio?.Codec, 'flac') && !source.MediaStreams.some(stream => stream.Type === 'Video')
     && audioDirectProfile && equal(get(audioDirectProfile, 'Container'), 'mp4') && equal(get(audioDirectProfile, 'AudioCodec'), 'flac');
-  if (source.SupportsDirectStream && flacAudioMp4) entries = [{ Container: get(audioDirectProfile, 'Container'), Protocol: source.TranscodingSubProtocol ?? 'http', AudioDirectStream: true }];
-  else if (!isVideo && source.SupportsDirectStream && options.EnableDirectStream !== false && !(sourceMask & reasons.ContainerBitrateExceedsLimit) && get(profile, 'DirectPlayProfiles', []).some(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), 'Audio')
+  if (canDirectStreamAudio && flacAudioMp4) entries = [{ Container: get(audioDirectProfile, 'Container'), Protocol: source.TranscodingSubProtocol ?? 'http', AudioDirectStream: true }];
+  else if (canDirectStreamAudio && get(profile, 'DirectPlayProfiles', []).some(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), 'Audio')
     && containsContainer(get(entry, 'AudioCodec'), audio?.Codec, false))) entries = [{ Container: 'ts', AudioDirectStream: true }];
   for (const entry of entries) {
     let mask = sourceMask;
