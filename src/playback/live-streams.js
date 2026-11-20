@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { once } from 'node:events';
 import { md5Guid } from '../core/identity.js';
 import { ordinalIgnoreCaseEquals, ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
-import { guid, libraryError } from '../library/records.js';
+import { guid, idKey, libraryError } from '../library/records.js';
 import { normalizeLiveTvMediaSource } from '../library/live-tv-media-sources.js';
 import { addLiveMediaInfo } from './live-stream-probe.js';
 import { BinaryResult } from '../http/binary-result.js';
@@ -37,9 +37,10 @@ export class LiveStreamsService {
   #report(error) { try { void Promise.resolve(this.onError(error)).catch(() => {}); } catch { /* Diagnostics preserve native fallback. */ } }
   snapshot() { return [...this.#entries.values()].map(entry => ({ LiveStreamId: entry.source.LiveStreamId, UniqueId: entry.uniqueId,
     ConsumerCount: entry.owners.length, TunerHostId: entry.owners.at(-1)?.lease.tunerHostId ?? null, ReaderCount: entry.readers.size })); }
-  getLiveStream(id) {
+  getLiveStream(id, itemId) {
     if (typeof id !== 'string' || !id) throw libraryError(400, 'Live stream id cannot be empty.');
-    const entry = this.#entries.get(key(id)); return entry ? cloneNativeValue(entry.source) : null;
+    const entry = this.#entries.get(key(id));
+    return entry && (itemId === undefined || entry.itemId === idKey(itemId)) ? cloneNativeValue(entry.source) : null;
   }
   hasByteReader(id) { return Boolean(id && this.#entries.get(key(id))?.owners.at(-1)?.lease.stream); }
   openRead(id, options) {
@@ -101,7 +102,8 @@ export class LiveStreamsService {
             this.#retired.add(current); this.#unique.delete(key(current.uniqueId)); current = null;
           }
           if (!current) {
-            current = { identity, uniqueId: randomUUID().replaceAll('-', ''), source, owners: [], readers: new Set(), probes: new Set(), lifetime: new AbortController() };
+            current = { identity, itemId: idKey(channel.Id), uniqueId: randomUUID().replaceAll('-', ''), source,
+              owners: [], readers: new Set(), probes: new Set(), lifetime: new AbortController() };
             this.#entries.set(identity, current); this.#unique.set(key(current.uniqueId), current);
           }
           if (lease.stream) { source.Protocol = 'Http'; source.Path = this.getLocalApiUrl().replace(/\/$/u, '') + '/LiveTv/LiveStreamFiles/' + current.uniqueId + '/stream.ts'; }

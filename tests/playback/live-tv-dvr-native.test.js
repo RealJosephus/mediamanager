@@ -7,16 +7,20 @@ import { setTimeout as delay } from 'node:timers/promises';
 import test from 'node:test';
 import { readInstanceConfiguration } from '../../src/configuration.js';
 import { readXml, textOf } from '../../src/core/xml.js';
+import { PostgresDatabase } from '../../src/database/postgres.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { dateTicks } from '../../src/library/records.js';
 import { captureMediaProcess } from '../../src/media-execution/process.js';
 import { recordTransportStream } from '../../src/media-execution/recording.js';
-import { transferDatabase } from '../../src/migration/database-transfer.js';
+import { exportCurrentSqlite, transferDatabase } from '../../src/migration/database-transfer.js';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { createPrivateFilterOutput } from '../../tools/compat/filter-reference-output.js';
 import { validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
-import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
+import { declareFileTestResource } from '../helpers/file-test-resource.js';
 import { readFrozenAv } from '../helpers/frozen-av.js';
+import { startOwnedMediaProxy } from '../helpers/library-exchange-media-proxy.js';
+import { installStoppedExport, removeSyntheticPreparation, stoppedDatabase } from '../helpers/library-exchange-state.js';
 import { declareNativeHttpTestFile } from '../helpers/native-http-test-file.js';
 import { writeLocalFixtureStorage } from '../helpers/local-state-storage.js';
 import { createTestRuntime } from '../helpers/runtime.js';
@@ -24,6 +28,7 @@ import { createTestRuntime } from '../helpers/runtime.js';
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const enabled = Boolean(process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MEDIAMANAGER_TEST_POSTGRES);
 const nativeCase = declareNativeHttpTestFile({ enabled });
+const mediaLease = declareFileTestResource('native-media-5244', { enabled });
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const describe = bytes => ({ length: bytes.length, sha256: digest(bytes) });
 const pause = () => delay(150);
@@ -37,13 +42,13 @@ async function until(read, matches, label, timeout = 60000) {
   }
 }
 
-test('M3U EVENT playback, recordings, retries and XMLTV series schedules match Native', {
+test('M3U EVENT and progressive playback, recordings, retries and XMLTV series schedules match Native', {
   skip: !enabled, timeout: 420000,
-}, nativeCase(async (t, port) => {
+}, nativeCase((t, port) => mediaLease.run(async () => {
   const publication = await createPrivateFilterOutput(path.join(validationOutputRoot(), 'live-dvr-' + randomUUID()));
   const root = publication.root, referenceRoot = path.join(root, 'reference'), nativeOrigin = 'http://127.0.0.1:' + port;
   const report = { native: {}, node: {}, source: {}, remuxRequests: { native: 0, node: 0 } }, upstream = [];
-  let native, runtime, database, source, authorization, failure;
+  let native, runtime, database, returned, source, recordingProxy, authorization, failure;
   let holding = false, livePlayback = false, engine = 'native';
   const requestAt = origin => async (route, { method = 'GET', body, status = 200 } = {}) => {
     const response = await fetch(origin + route, { method, signal: t.signal, headers: {
@@ -80,8 +85,9 @@ test('M3U EVENT playback, recordings, retries and XMLTV series schedules match N
     report.reference = current.preparation;
     report.bindings = await current.sourceBindings(['src/Jellyfin.LiveTv/Recordings/RecordingsManager.cs',
       'src/Jellyfin.LiveTv/Timers/TimerManager.cs', 'src/Jellyfin.LiveTv/IO/DirectRecorder.cs',
-      'MediaBrowser.Controller/Streaming/ProgressiveFileStream.cs']);
+      'MediaBrowser.Controller/Streaming/ProgressiveFileStream.cs', 'MediaBrowser.Controller/IO/LocalMediaProxy.cs']);
     await cp(current.sourceRoot, referenceRoot, { recursive: true }); await current.prepareClone(referenceRoot, port);
+    removeSyntheticPreparation(referenceRoot, { allowAbsent: true });
     const fixture = await readFrozenAv('dual-avc.m2ts', { signal: t.signal });
     const input = path.join(root, 'source.m2ts'); await writeFile(input, fixture.bytes);
     const remux = async (format, repeated = []) => {
@@ -185,9 +191,16 @@ await writeFile(recording + '.processed', String((await readFile(recording)).len
     const [episode] = futureEpisodes;
     await stopNative();
     const configuration = await readInstanceConfiguration(referenceRoot);
+    const sqlitePath = path.join(configuration.dataPath, 'jellyfin.db');
+    const windows = process.platform === 'win32';
+    const portableMountContract = { mounts: [{ mountId: 'media-fixture', identityRoot: referenceRoot, accessRoot: '/media-fixture',
+      pathStyle: windows ? 'windows' : 'posix', caseSensitive: !windows, returnPolicy: 'required' }] };
     database = await createPostgresTestDatabase(null, 'live_dvr');
-    const sqlite = new SqliteDatabase(path.join(configuration.dataPath, 'jellyfin.db'), { readOnly: true, requireMigrationHistory: true });
-    try { await transferDatabase(sqlite, database); } finally { sqlite.close(); }
+    const sqlite = new SqliteDatabase(sqlitePath, { readOnly: true, requireMigrationHistory: true });
+    try {
+      report.transfer = await transferDatabase(sqlite, database, { signal: t.signal, portableMountContract,
+        instanceBinding: { serverId: configuration.serverId, originIdentityDigest: digest(await readFile(sqlitePath)) } });
+    } finally { sqlite.close(); }
     const start = new Date(baseTime - 60000), finish = new Date(+start + 300000);
     const future = new Date(+start + 86400000);
     const timersPath = path.join(configuration.dataPath, 'livetv', 'timers.json');
@@ -327,6 +340,58 @@ await writeFile(recording + '.processed', String((await readFile(recording)).len
       await until(() => observation.closed, Boolean, side + ' must release the shared event input.');
       livePlayback = false;
 
+      const progressiveStart = upstream.length;
+      livePlayback = true;
+      const progressiveProfile = { ...profile, TranscodingProfiles: [{ Type: 'Video', Context: 'Streaming',
+        Protocol: 'http', Container: 'ts', VideoCodec: 'h264', AudioCodec: 'ac3' }] };
+      const progressiveInfo = await request('/Items/' + channelId + '/PlaybackInfo', { method: 'POST', body: {
+        DeviceProfile: progressiveProfile, AutoOpenLiveStream: true, EnableDirectPlay: false, EnableDirectStream: false,
+        EnableTranscoding: true, MaxStreamingBitrate: 8000000,
+      } });
+      const [progressiveSource] = progressiveInfo.MediaSources;
+      assert.ok(progressiveSource.SupportsTranscoding && progressiveSource.LiveStreamId && progressiveSource.TranscodingUrl,
+        side + ' must negotiate a progressive stream for the open tuner.');
+      const progressiveUrl = new URL(progressiveSource.TranscodingUrl, origin);
+      assert.match(progressiveUrl.pathname, /\/stream\.ts$/iu);
+      assert.equal(progressiveUrl.searchParams.get('LiveStreamId'), progressiveSource.LiveStreamId);
+      const signal = AbortSignal.any([t.signal, AbortSignal.timeout(30000)]);
+      const response = await fetch(progressiveUrl, { headers: { Authorization: authorization }, signal });
+      const progressiveResponse = (report.progressiveResponse ??= {})[side] = { status: response.status,
+        streams: progressiveSource.MediaStreams.map(stream => ({ type: stream.Type, codec: stream.Codec, index: stream.Index })) };
+      if (!response.ok) progressiveResponse.error = await response.text();
+      assert.equal(response.status, 200, progressiveResponse.error);
+      assert.equal(response.headers.get('accept-ranges'), 'none');
+      assert.equal(response.headers.get('content-type'), 'video/mp2t');
+      const progressiveReader = response.body.getReader(), progressiveChunks = [];
+      const sampleSize = 188 * 500;
+      try {
+        let received = 0;
+        while (received < sampleSize) {
+          const { value, done } = await progressiveReader.read();
+          assert.equal(done, false, side + ' must deliver transport packets while the input remains open.');
+          progressiveChunks.push(value); received += value.byteLength;
+        }
+        assert.ok(upstream.slice(progressiveStart).some(value => value.engine === side && value.livePlayback && !value.closed));
+      } finally { await progressiveReader.cancel(); }
+      await request('/Videos/ActiveEncodings?' + new URLSearchParams({ deviceId: 'fixture-dvr', playSessionId: progressiveInfo.PlaySessionId }),
+        { method: 'DELETE', status: 204 });
+      await request('/LiveStreams/Close?liveStreamId=' + encodeURIComponent(progressiveSource.LiveStreamId), { method: 'POST', status: 204 });
+      await until(() => upstream.slice(progressiveStart).every(value => value.closed), Boolean, side + ' must release the progressive live input.');
+      livePlayback = false;
+      const progressiveFile = path.join(root, side + '-progressive-live.ts');
+      await writeFile(progressiveFile, Buffer.concat(progressiveChunks).subarray(0, sampleSize));
+      const codecs = await captureMediaProcess(validationExecutable('ffprobe'), ['-v', 'error', '-show_entries', 'stream=codec_name,codec_type',
+        '-of', 'json', progressiveFile], { signal: t.signal, timeoutMs: 15000, maxOutputBytes: 65536 });
+      assert.equal(codecs.exitCode, 0);
+      const streams = JSON.parse(codecs.stdout).streams.map(stream => [stream.codec_type, stream.codec_name]);
+      assert.deepEqual(streams, [['video', 'h264'], ['audio', 'ac3']]);
+      const decoded = await captureMediaProcess(validationExecutable('ffmpeg'), ['-v', 'error', '-i', progressiveFile,
+        '-map', '0:v:0', '-an', '-frames:v', '8', '-f', 'framemd5', '-'], { signal: t.signal, timeoutMs: 15000, maxOutputBytes: 65536 });
+      assert.equal(decoded.exitCode, 0);
+      const hashes = decoded.stdout.toString().split(/\r?\n/u).filter(line => /^0\s*,/u.test(line)).map(line => line.split(',').at(-1).trim());
+      assert.equal(hashes.length, 8);
+      expected.progressive = { streams, frames: hashes, deliveredBytes: sampleSize };
+
       await request('/LiveTv/TunerHosts', { method: 'POST', body: { ...tuner, AllowStreamSharing: false } });
       const token = (await request('/Items/' + remuxChannelId + '/PlaybackInfo')).MediaSources[0].OpenToken;
       const remuxSource = (await request('/LiveStreams/Open', { method: 'POST',
@@ -432,14 +497,31 @@ await writeFile(recording + '.processed', String((await readFile(recording)).len
         body: { ItemId: remuxChannelId, OpenToken: token } })).MediaSource;
       assert.ok(viewer.LiveStreamId);
       const attempt = Date.now();
+      const recovery = (report.retryProgress ??= {})[side] = { attempt, transitions: [] };
+      const owners = () => runtime?.liveStreams.snapshot().map(value => ({ consumers: value.ConsumerCount, readers: value.ReaderCount }));
+      recovery.ownersAtConflict = owners();
+      // There is a real one-minute retry. Leave a recording window after it
+      // even when tuner acquisition and database work run on a busy runner.
       const retry = { ...live, Name: 'Retry DVR fixture', PrePaddingSeconds: 9,
-        StartDate: new Date(attempt - 1000).toISOString(), EndDate: new Date(attempt + 80000).toISOString() };
-      const readRetry = async () => (await readRows()).find(value => value.Name === retry.Name);
+        StartDate: new Date(attempt - 1000).toISOString(), EndDate: new Date(attempt + 120000).toISOString() };
+      let lastState;
+      const readRetry = async () => {
+        const row = (await readRows()).find(value => value.Name === retry.Name);
+        const state = { status: row?.Status ?? null, retries: row?.RetryCount, start: row?.StartDate, end: row?.EndDate,
+          inputs: upstream.filter(value => value.engine === side).length };
+        const observation = JSON.stringify(state);
+        if (observation !== lastState) {
+          recovery.transitions.push({ elapsedMs: Date.now() - attempt, ...state });
+          lastState = observation;
+        }
+        return row;
+      };
       const originalInputs = upstream.length;
       await post('/LiveTv/Timers', retry);
       const deferred = await until(readRetry, value => value?.RetryCount === 1, side + ' must reschedule after the tuner conflict.');
       const nextStart = Date.parse(deferred.StartDate);
       assert.ok(nextStart >= attempt + 59000 && nextStart <= Date.now() + 61000);
+      assert.ok(nextStart < Date.parse(deferred.EndDate), 'The retry must still have time to capture the program.');
       assert.equal(deferred.Status, 'New');
       assert.equal(deferred.PrePaddingSeconds, 0);
       assert.ok(!deferred.RecordingPath);
@@ -448,8 +530,13 @@ await writeFile(recording + '.processed', String((await readFile(recording)).len
       assert.equal(retryTimer.Status, 'New');
       assert.equal(Date.parse(retryTimer.StartDate), nextStart);
       await request('/LiveStreams/Close?liveStreamId=' + encodeURIComponent(viewer.LiveStreamId), { method: 'POST', status: 204 });
+      recovery.ownersAfterClose = owners();
+      recovery.releasedAfterMs = Date.now() - attempt;
       holding = true;
-      const recovered = await until(readRetry, value => value?.Status === 'Completed', side + ' must record after the tuner is released.', 105000);
+      await until(readRetry, value => value?.Status === 'InProgress', side + ' must start the first retry after the tuner is released.',
+        Math.max(30000, nextStart - Date.now() + 45000));
+      const recovered = await until(readRetry, value => value?.Status === 'Completed', side + ' must finalize the retried recording.',
+        Math.max(30000, Date.parse(deferred.EndDate) - Date.now() + 45000));
       holding = false;
       assert.equal(recovered.Id, deferred.Id);
       assert.equal(recovered.RetryCount, 1);
@@ -459,36 +546,110 @@ await writeFile(recording + '.processed', String((await readFile(recording)).len
         postProcess: Number(await processed(recovered.RecordingPath)) };
       assert.deepEqual(expected.retry.bytes, describe(bytes));
       assert.equal(expected.retry.postProcess, bytes.length);
+      return recovered.RecordingPath;
     };
     await startNative('native-recording');
     await run(nativeOrigin, 'native');
     await stopNative();
     // PostgreSQL starts with the pre-recording rows and a fresh timer document.
     await writeFile(timersPath, '[]');
-    const syntheticSeed = path.join(referenceRoot, 'empty-synthetic-media');
-    await mkdir(syntheticSeed);
-    const storageConfiguration = await writeLocalFixtureStorage(path.join(referenceRoot, 'fixture-storage.json'), referenceRoot, { syntheticSeed });
+    const storageConfiguration = await writeLocalFixtureStorage(path.join(referenceRoot, 'fixture-storage.json'), referenceRoot);
     engine = 'node';
-    runtime = await createTestRuntime({ ...await readInstanceConfiguration(referenceRoot), database, storageConfiguration, onError: error => {
+    runtime = await createTestRuntime({ ...await readInstanceConfiguration(referenceRoot), database, storageConfiguration, portableMountContract,
+      remuxOptions: { onProcess: process => (report.progressiveProcesses ??= []).push(process) }, onError: error => {
       const stack = error.stack?.match(/\bsrc[/\\][a-z0-9-]+[/\\][a-z0-9-]+\.js:\d+/giu) ?? [];
       (report.diagnostics ??= []).push({ message: publication.publicError(error).message, stack });
     } });
     const nodeOrigin = 'http://127.0.0.1:' + runtime.networkHost.listeners.find(value => value.scheme === 'http').port;
-    await run(nodeOrigin, 'node');
+    const recordingPath = await run(nodeOrigin, 'node');
     const authority = JSON.parse(await runtime.store.run(db => db.getState('liveTvNativeState')));
     assert.equal(authority.timers.sourceSha256, digest(await readFile(timersPath)));
     assert.deepEqual(runtime.liveStreams.snapshot(), []);
     assert.deepEqual(report.node, report.native);
+
+    const readRecording = async origin => {
+      const request = requestAt(origin);
+      const record = await until(async () => (await request('/LiveTv/Recordings?fields=Path&enableImages=false')).Items
+        .find(value => value.Path === recordingPath), Boolean, engine + ' must index the retried recording.');
+      const detail = await request(`/Items/${record.Id}`);
+      const { MediaSources: [source] } = await request(`/Items/${record.Id}/PlaybackInfo`,
+        { method: 'POST', body: { MediaSourceId: record.Id, EnableDirectPlay: true } });
+      assert.ok(source?.Id, engine + ' must negotiate the saved recording.');
+      const query = new URLSearchParams({ static: 'true', MediaSourceId: source.Id });
+      const response = await fetch(origin + `/Videos/${record.Id}/stream.ts?${query}`,
+        { headers: { Authorization: authorization }, signal: t.signal });
+      const bytes = Buffer.from(await response.arrayBuffer());
+      assert.equal(response.status, 200, engine + ' must deliver the saved transport stream.');
+      assert.equal(response.headers.get('content-type'), 'video/mp2t');
+      const transport = describe(bytes);
+      assert.deepEqual(transport, report.node.retry.bytes);
+      return { id: record.Id, favorite: detail.UserData.IsFavorite, transport };
+    };
+    const recordingFiles = async () => ({ transport: describe(await readFile(recordingPath)),
+      metadata: describe(await readFile(recordingPath.replace(/\.ts$/u, '.nfo'))),
+      postProcessing: describe(await readFile(recordingPath + '.processed')),
+      timersSha256: digest(await readFile(timersPath)) });
+    const checkpoint = async () => {
+      const snapshot = new SqliteDatabase(sqlitePath, { requireMigrationHistory: true });
+      try { assert.equal(snapshot.database.prepare('PRAGMA wal_checkpoint(TRUNCATE)').get().busy, 0); }
+      finally { snapshot.close(); }
+      await stoppedDatabase(sqlitePath);
+    };
+    const exchange = report.exchange = { node: await readRecording(nodeOrigin), files: await recordingFiles() };
+    assert.equal(exchange.node.favorite, false);
+    const schema = database.schemaName;
+    await runtime.close(); runtime = undefined;
+    database = await PostgresDatabase.open({ connectionString: postgresTestConnectionString, schema });
+    const exported = path.join(root, 'node-recording.db');
+    exchange.export = await exportCurrentSqlite(database, exported, { signal: t.signal });
+    assert.equal(exchange.export.verified, true);
+    await checkpoint();
+    await installStoppedExport({ root, instanceRoot: referenceRoot, exported });
+    recordingProxy = await startOwnedMediaProxy([{ filename: recordingPath, contentType: 'video/mp2t',
+      expected: { bytes: exchange.files.transport.length, sha256: exchange.files.transport.sha256 } }]);
+    engine = 'native-restored';
+    await startNative('native-restored-recording');
+    exchange.native = await readRecording(nativeOrigin);
+    assert.deepEqual(exchange.native, exchange.node);
+    await requestAt(nativeOrigin)(`/UserFavoriteItems/${exchange.native.id}`, { method: 'POST' });
+    exchange.nativeContinued = await readRecording(nativeOrigin);
+    assert.deepEqual(exchange.nativeContinued, { ...exchange.node, favorite: true });
+    await stopNative();
+    await recordingProxy.close();
+    exchange.nativeProxy = recordingProxy.report.requests
+      .map(({ method, status, bodyBytes, sha256, completed }) => ({ method, status, bodyBytes, sha256, completed }));
+    assert.deepEqual(recordingProxy.report.errors, []);
+    assert.ok(recordingProxy.report.closed);
+    assert.ok(exchange.nativeProxy.some(value => value.method === 'GET' && value.status === 200 && value.completed
+      && value.bodyBytes === exchange.files.transport.length && value.sha256 === exchange.files.transport.sha256));
+    assert.deepEqual(await recordingFiles(), exchange.files);
+
+    returned = await createPostgresTestDatabase(null, 'live_dvr_return');
+    await checkpoint();
+    const continued = new SqliteDatabase(sqlitePath, { requireMigrationHistory: true, readOnly: true });
+    try {
+      exchange.reimport = await transferDatabase(continued, returned, { signal: t.signal, portableMountContract,
+        instanceBinding: { serverId: configuration.serverId, originIdentityDigest: digest(await readFile(sqlitePath)) } });
+    }
+    finally { continued.close(); }
+    engine = 'node-restored';
+    runtime = await createTestRuntime({ ...await readInstanceConfiguration(referenceRoot), database: returned, storageConfiguration, portableMountContract });
+    const returnedOrigin = 'http://127.0.0.1:' + runtime.networkHost.listeners.find(value => value.scheme === 'http').port;
+    exchange.nodeReturned = await readRecording(returnedOrigin);
+    assert.deepEqual(exchange.nodeReturned, exchange.nativeContinued);
+    assert.deepEqual(await recordingFiles(), exchange.files);
     await current.finish();
   } catch (error) { failure = publication.publicError(error); report.error = failure.message; }
   finally {
-    for (const cleanup of [stopNative, () => runtime?.close(), () => database && dropPostgresTestDatabase(database), () => source && new Promise(resolve => {
+    for (const cleanup of [stopNative, () => recordingProxy?.close(), () => runtime?.close(), () => database && dropPostgresTestDatabase(database),
+      () => returned && dropPostgresTestDatabase(returned), () => source && new Promise(resolve => {
       source.closeAllConnections(); source.close(resolve);
     })]) try { await cleanup(); }
     catch (error) { failure ??= publication.publicError(error); }
     report.upstream = upstream;
-    try { await writeFile(path.join(root, 'capture.json'), JSON.stringify(report)); }
+    try { await writeFile(path.join(root, 'capture.json'), JSON.stringify(report,
+      (_key, value) => typeof value === 'bigint' ? value.toString() : value)); }
     finally { await publication.publishAndClose(); }
   }
   if (failure) throw failure;
-}));
+}, { signal: t.signal })));

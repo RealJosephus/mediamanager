@@ -219,7 +219,8 @@ export class PlaybackService {
             : policy.EnablePlaybackRemuxing || policy.EnableAudioPlaybackTranscoding || policy.EnableVideoPlaybackTranscoding),
           PermitAudioEncoding: policy.EnableAudioPlaybackTranscoding === true, PermitVideoEncoding: policy.EnableVideoPlaybackTranscoding === true,
           CanEncodeAudio: mediaEncoder?.canEncodeAudio?.bind(mediaEncoder),
-          CanRemux: (source, requested) => !source.RequiresOpening && !source.LiveStreamId && this.remux?.supports(source, requested) === true && this.#canResolveSource(source),
+          CanRemux: (source, requested) => (this.#canUseLiveInput(source) || !source.RequiresOpening && this.#canResolveSource(source))
+            && this.remux?.supports(source, { ...requested, LiveInput: Boolean(source.LiveStreamId) }) === true,
           CanHls: (source, requested) => this.#canUseLiveInput(source) || !source.RequiresOpening && this.#canResolveSource(source)
             ? this.hls?.supports(source, { ...requested, LiveInput: Boolean(source.LiveStreamId),
               CanDeliverHlsSubtitle: stream => this.canDeliverHlsSubtitle(source, stream) }) === true : false,
@@ -295,7 +296,8 @@ export class PlaybackService {
           DeviceId: auth.DeviceId, EnableRemuxing: this.#canUseLiveInput(result.MediaSource) && policy.EnableMediaPlayback && (policy.EnablePlaybackRemuxing
             || policy.EnableAudioPlaybackTranscoding || policy.EnableVideoPlaybackTranscoding),
           PermitAudioEncoding: policy.EnableAudioPlaybackTranscoding === true, PermitVideoEncoding: policy.EnableVideoPlaybackTranscoding === true,
-          CanRemux: () => false, CanHls: (source, request) => this.#canUseLiveInput(source)
+          CanRemux: (source, request) => this.#canUseLiveInput(source) && this.remux?.supports(source, { ...request, LiveInput: true }) === true,
+          CanHls: (source, request) => this.#canUseLiveInput(source)
             && this.hls?.supports(source, { ...request, LiveInput: true }) === true, CanExtractSubtitle: () => false });
       }
       if (result.MediaSource.Container) result.MediaSource.Container = result.MediaSource.Container.split(',')[0];
@@ -354,26 +356,38 @@ export class PlaybackService {
   }
 
   async remuxStream(itemId, { user, ...options } = {}) {
-    if (options.LiveStreamId?.trim()) throw httpError(400, 'The requested streaming source is unavailable.');
     const item = await this.library.getItemRecord(itemId, { user });
     if (user && (!user.Policy.EnableMediaPlayback || !user.Policy.EnablePlaybackRemuxing
       && !user.Policy.EnableAudioPlaybackTranscoding && !user.Policy.EnableVideoPlaybackTranscoding)) throw httpError(403, 'Media remuxing is not allowed.');
     options.PermitAudioEncoding = user?.Policy.EnableAudioPlaybackTranscoding;
     options.PermitVideoEncoding = user?.Policy.EnableVideoPlaybackTranscoding;
-    const sources = await this.sources(item, user);
-    const source = options.MediaSourceId ? sources.find(value => value.Id.toLowerCase() === options.MediaSourceId.toLowerCase()) : sources[0];
+    const liveId = options.LiveStreamId?.trim();
+    const liveStreams = liveId ? this.getLiveStreams?.() : undefined;
+    let source;
+    if (liveId) {
+      source = liveStreams?.getLiveStream(liveId, item.Id);
+      options.LiveInput = true;
+      options.Container ??= 'ts';
+      if (source?.FallbackMaxStreamingBitrate != null && options.VideoBitRate != null) {
+        options.VideoBitRate = Math.min(options.VideoBitRate, source.FallbackMaxStreamingBitrate);
+      }
+    } else {
+      const sources = await this.sources(item, user);
+      source = options.MediaSourceId ? sources.find(value => value.Id.toLowerCase() === options.MediaSourceId.toLowerCase()) : sources[0];
+    }
     if (!source) throw httpError(404, 'Media source not found.');
     if (!this.remux) throw httpError(503, 'Media remuxing has not been configured.');
-    return this.#remuxSource(source, options, user?.Id);
+    const openRead = liveStreams?.hasByteReader?.(liveId) ? input => liveStreams.openRead(liveId, input) : undefined;
+    return this.#remuxSource(source, options, user?.Id, openRead);
   }
 
-  #remuxSource(source, options, userId) {
-    const accessPath = this.accessPath({ Id: source.Id, Path: source.Path });
+  #remuxSource(source, options, userId, openRead) {
+    const accessPath = openRead ? undefined : this.accessPath({ Id: source.Id, Path: source.Path });
     return new BinaryResult(async (request, response) => {
       const controller = new AbortController();
       const abort = () => controller.abort();
       request.once('aborted', abort); response.once('close', abort);
-      try { await this.remux.stream(source, accessPath, options, request, response, { signal: controller.signal, userId }); }
+      try { await this.remux.stream(source, accessPath, options, request, response, { signal: controller.signal, userId, openRead }); }
       catch (error) {
         if (response.headersSent || controller.signal.aborted) { response.destroy(); return; }
         error.status ??= ({ 'not-supported': 400, 'invalid-request': 400, 'not-found': 404, 'permission-denied': 403, 'authentication-required': 403, 'version-changed': 412,
