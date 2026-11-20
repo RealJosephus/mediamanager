@@ -1,5 +1,6 @@
 import { existsSync } from 'node:fs';
 import { machine, release } from 'node:os';
+import { videoColorRange } from '../library/media-streams.js';
 import { encoderVersionAtLeast } from '../playback/media-encoder.js';
 
 // Encoder, decoder and input-device selection follows the designated
@@ -17,6 +18,18 @@ const deviceArg = value => ['-init_hw_device', value];
 function openclAvailable(caps) {
   return supports(caps, 'hwaccels', 'opencl') && allFilters(caps, 'scale_opencl')
     && allOptions(caps, 'TonemapOpenclBt2390', 'OverlayOpenclFrameSync');
+}
+
+export function qsvPreferredPipeline(video, caps, platform = process.platform) {
+  const nativeDecoder = platform === 'win32' && supports(caps, 'hwaccels', 'd3d11va')
+    || platform === 'linux' && canonicalCodec(video.Codec) !== 'mpeg4' && supports(caps, 'hwaccels', 'vaapi');
+  return nativeDecoder && supports(caps, 'hwaccels', 'qsv') && openclAvailable(caps) && allFilters(caps, 'alphasrc');
+}
+
+export function qsvOpenclTonemap(video, options, decoder) {
+  const [range, type] = videoColorRange(video);
+  return Boolean(options.EnableTonemapping && range === 'HDR' && videoBitDepth(video) >= 10
+    && (type !== 'DOVI' || !decoder.args.length || ['d3d11va', 'vaapi'].includes(decoder.accelerator)));
 }
 
 function cudaAvailable(caps) {
@@ -112,7 +125,7 @@ export function videoDecoder(video, videoType, outputCodec, request, options, ca
     && (common8 && yuv8 || common10 && (yuv8 || yuv10) || codec === 'hevc' && (yuv8 || yuv10 || yuv12 || expanded))) {
     const qsv = supports(caps, 'hwaccels', 'qsv');
     const native = options.PreferSystemNativeHwDecoder !== false;
-    const keepSurfaces = qsv && opencl && alpha && (vaapi || d3d11);
+    const keepSurfaces = qsvPreferredPipeline(video, caps, platform);
     if (hwaccelAllowed) {
       accelerator = native ? (vaapi ? 'vaapi' : d3d11 ? 'd3d11va' : undefined) : qsv ? 'qsv' : undefined;
       if (keepSurfaces && accelerator) surface = accelerator === 'd3d11va' ? 'd3d11' : accelerator;
@@ -220,7 +233,12 @@ export function videoHardware(video, videoType, outputCodec, request, options, c
       const adapter = value == null || value < -2147483648 || value > 2147483647 ? ',vendor=0x8086' : String(Math.max(0, value));
       args.push(...deviceArg('d3d11va=dx11:' + adapter), ...deviceArg('qsv=qs@dx11'));
     }
-    args.push('-filter_hw_device', 'qs');
+    let filterDevice = 'qs';
+    if ((available('vaapi') || available('d3d11va')) && openclAvailable(caps) && qsvOpenclTonemap(video, options, decoder)) {
+      args.push(...deviceArg('opencl=ocl@' + (linux ? 'va' : 'dx11')));
+      if (!retained) filterDevice = 'ocl';
+    }
+    args.push('-filter_hw_device', filterDevice);
   }
   if (type === 'vaapi') {
     if (!linux || !available('vaapi') || !retained && !encoding) return empty;

@@ -8,6 +8,7 @@ import { defaultConfiguration } from '../../src/core/configuration-xml.js';
 import { discoverMediaCapabilities } from '../../src/media-execution/capabilities.js';
 import { captureMediaProcess } from '../../src/media-execution/process.js';
 import { videoHardware } from '../../src/media-execution/video-hardware.js';
+import { videoStreamPlan } from '../../src/media-execution/video.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
 
@@ -68,7 +69,7 @@ test('the real FFmpeg listing and host encode probes distinguish tool support fr
   await writeFile(path.join(root, 'host-encode-probes.json'), JSON.stringify({ platform, architecture: machine(), release: release(), probes }, null, 2));
 });
 
-test('the designated EncodingHelper selects hardware encode, decode and input devices independently', { skip: !enabled, timeout: 180000 }, async () => {
+test('the designated EncodingHelper selects hardware encode, decode, input devices and Intel filters', { skip: !enabled, timeout: 180000 }, async () => {
   const cases = ['none', 'nvenc', 'qsv', 'amf', 'vaapi', 'videotoolbox', 'rkmpp', 'v4l2m2m'].flatMap(type => [
     scope(type + '-copy', type, { output: 'copy' }),
     scope(type + '-resize', type),
@@ -87,6 +88,29 @@ test('the designated EncodingHelper selects hardware encode, decode and input de
     scope('rkmpp-scale-limit', 'rkmpp', { request: { MaxWidth: 64 } }),
     scope('rkmpp-ten-bit', 'rkmpp', { video: { BitDepth: 10, PixelFormat: 'yuv420p10le' } }),
     scope('encoder-absent', 'qsv', { output: 'av1' }));
+  if (['win32', 'linux'].includes(process.platform)) {
+    const hdr10 = { Codec: 'hevc', Profile: 'Main 10', BitDepth: 10, PixelFormat: 'yuv420p10le',
+      ColorPrimaries: 'bt2020', ColorSpace: 'bt2020nc', ColorTransfer: 'smpte2084' };
+    for (const [name, changes] of [
+      ['native-surface', {}], ['download', { options: { EnableHardwareEncoding: false } }],
+      ['explicit-decoder', { options: { PreferSystemNativeHwDecoder: false } }],
+      ['software-input', { options: { HardwareDecodingCodecs: [] } }],
+      ['copy-back', { caps: { FilterOptions: {} } }],
+      ['rotation', { video: { Rotation: 90 } }],
+      ['deinterlace', { video: { IsInterlaced: true },
+        request: { DeInterlace: true }, options: { DeinterlaceDoubleRate: true } }],
+      ['deinterlace-double', { video: { IsInterlaced: true, AverageFrameRate: 25 },
+        request: { DeInterlace: true }, options: { DeinterlaceDoubleRate: true } }],
+      ['hdr-vpp', { video: hdr10, options: { EnableVppTonemapping: true } }],
+      ['hdr-vpp-direct', { video: hdr10, options: { EnableVppTonemapping: true, VppTonemappingBrightness: 0 } }],
+      ['hdr-opencl', { video: hdr10, options: { EnableTonemapping: true } }],
+      ['hdr-opencl-upload', { video: hdr10, options: { EnableTonemapping: true, HardwareDecodingCodecs: [] } }],
+    ]) {
+      cases.push({ ...scope('qsv-filter-' + name, 'qsv', { ...changes, request: {
+        MaxWidth: 960, VideoBitRate: 8000000, AllowVideoStreamCopy: false, ...changes.request,
+      } }), FilterSelection: true });
+    }
+  }
   const root = path.join(validationOutputRoot(), 'video-hardware-' + randomUUID());
   await mkdir(root, { recursive: true });
   const input = path.join(root, 'input.json');
@@ -99,7 +123,9 @@ test('the designated EncodingHelper selects hardware encode, decode and input de
     const options = { ...defaultConfiguration('encoding'), ...row.Options };
     const selection = videoHardware(row.Video, row.VideoType, row.OutputCodec, row.Request, options, caps,
       { platform: process.platform, architecture: machine(), osRelease: release() });
-    return { Name: row.Name, Encoder: selection.encoder, Decoder: selection.decoder.args, Input: selection.inputArgs };
+    const plan = row.FilterSelection && videoStreamPlan(row.Video, { VideoType: row.VideoType },
+      { ...row.Request, VideoCodec: row.OutputCodec }, [row.OutputCodec], { configuration: options, capabilities: caps, version: caps.version });
+    return { Name: row.Name, Encoder: selection.encoder, Decoder: selection.decoder.args, Input: selection.inputArgs, Filters: plan ? plan.filters : null };
   });
   await writeFile(path.join(root, 'node-selection.json'), JSON.stringify(observed, null, 2));
   const split = value => value.trim().split(/\s+/u).filter(Boolean);

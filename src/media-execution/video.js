@@ -1,6 +1,6 @@
 import { videoColorRange } from '../library/media-streams.js';
 import { encoderVersionAtLeast } from '../playback/media-encoder.js';
-import { fixedHardwareSize, videoBitDepth, videoHardware } from './video-hardware.js';
+import { fixedHardwareSize, qsvOpenclTonemap, qsvPreferredPipeline, videoBitDepth, videoHardware } from './video-hardware.js';
 
 const codecProfiles = {
   h264: ['constrainedbaseline', 'baseline', 'extended', 'main', 'high', 'progressivehigh', 'constrainedhigh', 'high10'],
@@ -113,10 +113,12 @@ function softwareScale({ Width, Height, MaxWidth, MaxHeight }, alignment) {
   if (MaxHeight) return String.raw`scale=trunc(oh*a/${alignment})*${alignment}:min(max(iw/a\,ih)\,${MaxHeight})`;
 }
 
-function hardwareScale(filter, format, video, request) {
+function hardwareScale(filter, format, video, request, swapOutput = false) {
   const { width, height } = fixedHardwareSize(video, request);
   const args = [];
-  if (width && height && (width !== video.Width || height !== video.Height)) args.push('w=' + width, 'h=' + height);
+  if (width && height && (width !== video.Width || height !== video.Height)) {
+    args.push('w=' + (swapOutput ? height : width), 'h=' + (swapOutput ? width : height));
+  }
   if (format) args.push('format=' + format);
   return args.length ? filter + '=' + args.join(':') : undefined;
 }
@@ -132,6 +134,78 @@ function hardwareTonemap(type, format, options, version, stillImage) {
   const range = stillImage ? 'pc' : options.TonemappingRange;
   if (range === 'pc' || range === 'tv') args.push('range=' + range);
   return args.join(':');
+}
+
+const transposeDirection = { 90: 'cclock', '-90': 'clock', 180: 'reversal', '-180': 'reversal' };
+
+function qsvVideoFilters(video, request, options, selected, { hardware, hdrColors, sdrColors, method, deinterlace, doubleRate, needsDeinterlace, version }) {
+  const { decoder, encoder } = selected;
+  const linux = process.platform === 'linux';
+  const vaapi = hardware === 'vaapi', d3d11 = hardware === 'd3d11';
+  const hardwareEncoder = encoder.endsWith('_qsv');
+  const mjpeg = encoder.includes('mjpeg');
+  const [range, rangeType] = videoColorRange(video);
+  const vppTonemap = options.EnableVppTonemapping && range === 'HDR' && videoBitDepth(video) >= 10
+    && lower(video.ColorTransfer) === 'smpte2084' && rangeType !== 'DOVI' && (linux || encoderVersionAtLeast(version, 7, 0, 1));
+  const openclTonemap = !vppTonemap && qsvOpenclTonemap(video, options, decoder);
+  const tonemap = vppTonemap || openclTonemap;
+  const transpose = transposeDirection[video.Rotation];
+  const swap = Math.abs(video.Rotation) === 90;
+  const size = swap ? { ...video, Width: video.Height, Height: video.Width } : video;
+  const filters = [tonemap ? hdrColors : sdrColors];
+  if (!hardware) {
+    if (needsDeinterlace) filters.push(method + '=' + deinterlace);
+    const scale = softwareScale(request, 2);
+    filters.push(mjpeg && !openclTonemap ? (scale ? scale + ':' : 'scale=') + 'out_range=pc' : scale,
+      'format=' + (openclTonemap ? 'yuv420p10le' : 'nv12'));
+    if (openclTonemap) filters.push('hwupload=derive_device=opencl');
+  } else {
+    const rext = normalizeCodec(video.Codec) === 'hevc' && (lower(video.Profile) === 'rext'
+      || /^(?:yuv420p12le|yuv(?:422|444)p(?:10le|12le)?)$/u.test(lower(video.PixelFormat)));
+    const brightness = options.VppTonemappingBrightness;
+    const contrast = options.VppTonemappingContrast;
+    const procamp = [];
+    if (brightness && brightness >= -100 && brightness <= 100) procamp.push(['brightness', 'b', brightness]);
+    if (contrast > 1 && contrast <= 10) procamp.push(['contrast', 'c', contrast]);
+    const twoPass = !linux && vppTonemap && (rext || procamp.length > 0);
+    const resizeFormat = (linux ? tonemap : openclTonemap) ? (rext || !vaapi && transpose ? 'p010' : undefined) : 'nv12';
+    let scale = hardwareScale(vaapi ? 'scale_vaapi' : 'vpp_qsv', twoPass ? 'p010' : resizeFormat, size, request, !vaapi && swap);
+    if (scale) {
+      if (d3d11) scale += ':passthrough=0';
+      if (!vaapi && transpose) scale += ':transpose=' + transpose;
+      if (mjpeg) {
+        if (!openclTonemap && (vaapi || encoderVersionAtLeast(version, 7, 0, 1))) scale += ':out_range=pc';
+        if (vaapi) scale += ':mode=hq';
+        else if (encoderVersionAtLeast(version, 6)) scale += ':scale_mode=hq';
+      }
+      if (vaapi) scale += ':extra_hw_frames=24';
+      if (!linux && vppTonemap) {
+        if (procamp.length) scale += ':' + procamp.map(([name, , value]) => `${name}=${value}`).join(':') + ':procamp=1:async_depth=2';
+        else if (!twoPass) scale += ':tonemap=1';
+      }
+    }
+    if (d3d11 && (scale || needsDeinterlace)) filters.push('hwmap=derive_device=qsv');
+    if (needsDeinterlace) filters.push(vaapi ? 'deinterlace_vaapi=rate=' + (doubleRate ? 'field' : 'frame') : 'deinterlace_qsv=mode=2');
+    if (vaapi && transpose) filters.push('transpose_vaapi=dir=' + transpose);
+    filters.push(scale);
+    if (vppTonemap && linux) {
+      if (!vaapi) filters.push('hwmap=derive_device=vaapi', 'format=vaapi');
+      const tonemapFilter = 'tonemap_vaapi=format=nv12:p=bt709:t=bt709:m=bt709:extra_hw_frames=32';
+      filters.push(procamp.length ? 'procamp_vaapi=' + procamp.map(([, name, value]) => `${name}=${value}`).join(':') + ',' + tonemapFilter : tonemapFilter);
+      if (!vaapi) filters.push('hwmap=derive_device=qsv', 'format=qsv');
+    } else if (vppTonemap) {
+      if (twoPass) filters.push('vpp_qsv=tonemap=1:format=nv12:async_depth=2');
+      filters.push(sdrColors);
+    }
+    if (openclTonemap) filters.push('hwmap=derive_device=opencl:mode=read');
+  }
+  if (openclTonemap) filters.push(hardwareTonemap('opencl', 'nv12', options, version, mjpeg));
+  if (hardware && !hardwareEncoder || !hardware && openclTonemap) {
+    filters.push(!hardwareEncoder && (openclTonemap || vaapi) ? 'hwmap=mode=read' : 'hwdownload', 'format=nv12');
+  } else if (hardware && openclTonemap) {
+    filters.push('hwmap=derive_device=qsv:mode=write:reverse=1' + (linux ? ':extra_hw_frames=16' : ''), 'format=qsv');
+  } else if (vaapi && hardwareEncoder) filters.push('hwmap=derive_device=qsv', 'format=qsv');
+  return filters;
 }
 
 function videoFilters(video, request, options, caps, selected, requestedRate, needsDeinterlace, version) {
@@ -171,7 +245,7 @@ function videoFilters(video, request, options, caps, selected, requestedRate, ne
     if (hardware === 'd3d11') {
       filters.push('hwmap=derive_device=opencl:mode=read');
       if (needsDeinterlace && caps.filters?.includes('yadif_opencl') && caps.filters?.includes('bwdif_opencl')) filters.push(method + '_opencl=' + deinterlace);
-      const rotation = { 90: 'cclock', '-90': 'clock', 180: 'reversal', '-180': 'reversal' }[video.Rotation];
+      const rotation = transposeDirection[video.Rotation];
       const useRotation = rotation && caps.filterOptions?.TransposeOpenclReversal;
       if (useRotation) filters.push('transpose_opencl=dir=' + rotation);
       const size = useRotation && Math.abs(video.Rotation) === 90 ? { ...video, Width: video.Height, Height: video.Width } : video;
@@ -184,6 +258,9 @@ function videoFilters(video, request, options, caps, selected, requestedRate, ne
     if (convertHdr) filters.push(hardwareTonemap('opencl', 'nv12', options, version, stillImage));
     if (hardware === 'd3d11' && !encoder.endsWith('_amf')) filters.push('hwmap=mode=read', 'format=nv12');
     else filters.push('hwmap=derive_device=d3d11va:mode=write:reverse=1', 'format=d3d11');
+  } else if (options.HardwareAccelerationType === 'qsv' && (hardware || encoder.endsWith('_qsv')) && qsvPreferredPipeline(video, caps)) {
+    filters.push(...qsvVideoFilters(video, request, options, selected, { hardware, hdrColors, sdrColors, method,
+      deinterlace, doubleRate, needsDeinterlace, version }));
   } else if (hardware === 'videotoolbox_vld' && caps.filters?.includes('alphasrc')) {
     if (needsDeinterlace) filters.push('yadif_videotoolbox=' + deinterlace);
     filters.push(hardwareScale('scale_vt', video.PixelFormat === 'yuv420p' ? undefined : 'nv12', video, request));
