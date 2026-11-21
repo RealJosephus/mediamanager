@@ -164,6 +164,17 @@ export async function createApplication(services = {}) {
     let phase = 'admission';
     if (closing) { response.writeHead(503); response.end(); return; }
     activeRequests++;
+    const written = Promise.withResolvers();
+    const responseComplete = () => {
+      response.off('finish', responseComplete);
+      response.off('close', responseComplete);
+      written.resolve();
+    };
+    if (response.writableFinished || response.destroyed) written.resolve();
+    else {
+      response.once('finish', responseComplete);
+      response.once('close', responseComplete);
+    }
     try {
     await runInContext(async () => {
     const locale = localization.negotiate({ url: request.url, headers: request.headers });
@@ -305,6 +316,9 @@ export async function createApplication(services = {}) {
       if (!response.headersSent) { response.writeHead(500); response.end('Error processing request.'); }
       else if (!response.writableEnded) response.destroy(error);
     } finally {
+      // end() can leave bytes queued in the transport after the route and its
+      // resource scope finished. A disconnected client also ends ownership.
+      await written.promise;
       if (--activeRequests === 0) { idle?.resolve(); idle = undefined; }
     }
   };

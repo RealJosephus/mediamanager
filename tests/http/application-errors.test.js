@@ -1,6 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { once } from 'node:events';
+import { IncomingMessage, ServerResponse } from 'node:http';
+import { Duplex } from 'node:stream';
+import { setImmediate as turn } from 'node:timers/promises';
+import { createApplication } from '../../src/http/application.js';
 import { BinaryResult } from '../../src/http/binary-result.js';
 import { createTestApplication } from '../helpers/application.js';
 
@@ -99,4 +103,42 @@ test('a rejected response cleanup preserves completed bytes and its actual failu
     assert.deepEqual(recovered.bytes, payload);
   }
   t.diagnostic(JSON.stringify({ failures: owned.diagnostics }));
+});
+
+for (const disconnect of [false, true]) test(`request drain waits for response ${disconnect ? 'close' : 'finish'} under backpressure`, {
+  timeout: 10000,
+}, async () => {
+  const application = await createApplication({ configuration: { IsStartupWizardCompleted: true },
+    authentication: { authenticate: async () => ({}) } });
+  const writing = Promise.withResolvers(), release = Promise.withResolvers(), bytes = [];
+  const socket = new Duplex({ read() {}, write(chunk, _encoding, callback) {
+    writing.resolve();
+    void release.promise.then(() => { bytes.push(Buffer.from(chunk)); callback(); });
+  } });
+  const request = new IncomingMessage(socket);
+  request.method = 'GET'; request.url = '/System/Ping';
+  const response = new ServerResponse(request);
+  response.assignSocket(socket);
+  const handling = application.handler(request, response);
+  const finished = once(response, disconnect ? 'close' : 'finish');
+  try {
+    await writing.promise;
+    application.beginClose();
+    let drained = false;
+    const drain = application.drainRequests().then(() => { drained = true; });
+    await turn();
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.writableEnded, true);
+    assert.equal(response.writableFinished, false);
+    assert.equal(drained, false);
+
+    if (disconnect) socket.destroy();
+    else release.resolve();
+    await finished;
+    await drain;
+    if (!disconnect) assert.match(Buffer.concat(bytes).toString(), /\r\n\r\nMediaManager$/u);
+  } finally {
+    release.resolve(); socket.destroy();
+    await handling;
+  }
 });
