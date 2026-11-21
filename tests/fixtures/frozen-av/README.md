@@ -12,6 +12,11 @@ same artifact. SHA-256:
 `39c02b66aa2fe6d4f6fd7b4e13a8bda304774919db06c60b9001d096198c99d1`.
 Its original generation receipt, PMT declaration, native observations, recording
 receipts and probe outputs with and without SSIF are retained unchanged.
+Both 720×480 H.264 tracks contain the same two-second solid-color input.
+The stereo AC-3 track contains silence. This input can demonstrate a negotiated
+resize, packet copy, codec conversion and timestamp handling. Track selection
+by picture, downmixing and audible synchronization require distinguishable
+video or audio content. [Original generation command](original-dual-avc-generation.json)
 
 The original producer source and repository license accompany the original
 generation receipt, native observations, recording receipt and probe output.
@@ -20,12 +25,12 @@ never execute that producer or its generation command. This packaging does not
 recreate the historical runtime or certify a new native execution.
 
 The MPEG-2 input has 720 by 480 video pixels and stereo AC-3 audio.
-Tests may read the original transport unchanged or copy its first video stream
-and optional first audio stream to an explicitly selected Matroska, VOB or MP4
-container. An optional FFMETADATA input changes tags and chapters only. Current
-preparation stores the complete ffprobe observations and verifies packet payload
-hashes, order and timing before using a copied container. Timing comparisons use
+`readFrozenAv` verifies the original transport bytes against the manifest.
+`prepareFrozenVideo` copies the first video stream and optional first audio
+stream of `source.m2ts` into Matroska, VOB or MP4. An optional FFMETADATA input
+supplies tags and chapters. The helper stores the complete ffprobe observations
+and verifies packet payload hashes, order and timing. Timing comparisons use
 the original and copied stream time bases, allowing their actual timestamp
 resolution while preserving the shared video reference and audio synchronization.
-Container timestamps and bytes have their own current identity. No audio or
-video encoder is selected.
+Container timestamps and bytes have their own current identity.
+[Fixture preparation](../../helpers/frozen-av.js)

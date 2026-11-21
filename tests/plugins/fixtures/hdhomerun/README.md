@@ -1,96 +1,15 @@
-# Official HDHomeRun component evidence
+# HDHomeRun tuner fixture
 
-The official package follows the designated GPL-2.0-only sources in
-`D:/jellyfin/src/Jellyfin.LiveTv/TunerHosts/HdHomerun/`, `BaseTunerHost.cs`,
-`SharedHttpStream.cs`, `LiveStream.cs`, `Jellyfin.Networking/Udp/SocketFactory.cs`,
-the typed `ChannelInfo`/`MediaSourceInfo` models and Jellyfin JSON converters.
-The test records current source bindings, input SHA-256, actual assembly hashes,
-native results, real HTTP requests and UDP payloads. It is run only in Actions.
+The component test activates installed and preinstalled HDHomeRun packages through PluginHost and a mapped local cache. On the Native side it calls the designated Jellyfin HDHomeRun, BaseTunerHost and SocketFactory implementations in a worker. The report binds source files, assembly and input hashes to actual HTTP requests, UDP packets, cache bytes and returned source descriptors. The reference code is covered by GPL-2.0-only. [Component test](../../hdhomerun.test.js) · [Native oracle](Program.cs)
 
-`hdhomerun.test.js` activates installed and preinstalled packages through the
-formal PluginHost and configured local storage mount. Device/lineup/cache
-requests use actual isolated HTTP sockets. Its actual designated DLL oracle
-runs in an owned Worker, so synchronous .NET build/execution never blocks the
-HTTP server. The native handler routes only the discovered sender's port-less
-HTTP endpoint into that same isolated server; the original URI is retained.
-The native SocketFactory sends the actual 20-byte broadcast to UDP 65001. A real
-UDP fixture answers with too-short, wrong-kind and duplicate accepted packets.
-Both native and Node discovery use the actual default limited broadcast and
-port 65001. Each execution phase binds its captured 20-byte requests to that
-discovery socket's actual local port. Every request must receive four successful
-real UDP sends: short, wrong-kind, accepted and accepted again. The native
-consumer must produce exactly two ordered device/HTTP observations per actual
-request, proving the accepted replies reached its unmodified receive loop.
-Node records the real socket's message and close events and must receive the
-complete four-reply multiset per request. The two phases must receive equal
-request multiplicity and return the full same ordered device list, including
-duplicates; no ID deduplication or arbitrary nonempty result is accepted.
-This accommodates real duplicate limited-broadcast deliveries from the owned
-macOS feth topology while retaining every packet and every duplicate device.
-The first phase's native process and all reply callbacks finish before the next
-phase; local ports must differ and late packets outside either phase fail.
-The report keeps packet/reply prefixes even when an assertion fails, and the
-fixture socket closes before its final report. No empty environmental discovery
-result is counted as coverage. The oracle disables shared compilation so its
-build does not leave an unowned VBCSCompiler process.
+## Discovery and cache
 
-Model/lineup cases include exact property casing, defaults, duplicate known
-properties, an invalid earlier duplicate, numeric boolean conversion, quoted
-Int32, null roots/members and response-status differences. Actual BaseTunerHost
-sequences cover memory retention, cache bypass, old memory after empty refresh,
-OpenOrCreate short writes with a retained invalid suffix, strict typed cold cache
-reads, favorite/DRM filtering, duplicate channels and earlier-host precedence.
-Two additional real HTTP cases use host IDs `.` and `..`, whose native cache
-names are `._channels` and `.._channels`. Each actual Native host first writes
-its complete cache and a fresh host reads it after HTTP 503; every original
-cache byte remains in the report. The Node worker consumer uses the actual
-configured host ID when locating that file. Both identities are observed before
-their new differences are asserted, after the original consumers and owners
-close. Separate installed and official package cases require full mapped cache
-content, fresh activation, source-failure fallback and late-work rejection.
-The current Node guard can fail before producing a cache, so a red first action
-does not certify later Node cold-read behavior.
-One cache is first produced by the installed Node plugin through its mapped
-storage, embedded byte-for-byte in the hashed oracle input, and consumed by a
-fresh actual native BaseTunerHost typed fallback reader after a real HTTP 503.
-Validation demonstrates device-ID mutation, 404 suppression, null failure and
-model-cache clearing without clearing the channel cache. Source comparisons
-include every field assigned by the HDHomeRun producer and relevant constructor
-defaults; full raw native MediaSourceInfo JSON is retained. This producer-field
-projection does not prove a complete public MediaStream DTO.
+- Native sends its 20-byte discovery request to the default limited broadcast on UDP 65001. For every captured request the fixture sends a short packet, a wrong-kind packet and two valid replies. Node receives all four. Native produces two device/HTTP observations. Each phase binds requests to its actual socket port, compares ordered results including duplicates and drains callbacks before the next phase. This accounts for repeated broadcast delivery on macOS. Failed sends, late packets and socket cleanup remain visible in the report.
+- Controlled HTTP model and lineup responses exercise property casing, duplicate keys, numeric booleans, quoted Int32 values, nulls, HTTP errors, favorite/DRM filters and first-host precedence. Validation can update the device ID and clear the model cache while retaining the channel cache.
+- Cache comparisons cover memory hits, forced refresh, cold fallback and a shorter OpenOrCreate write that leaves an invalid suffix. A fresh Native reader consumes a cache written by the installed Node package after an HTTP 503. Host IDs `.` and `..` produce `._channels` and `.._channels` inside the cache root. Node rejects path separators, colons and NUL in a cache identity.
 
-The native protected stream factory is invoked to construct actual
-SharedHttpStream and HdHomerunUdpStream objects. Their selected class, original
-identity, source, tuner identity, sharing flag and initial consumer count are
-inspected; each is closed/disposed. `Open` is never invoked: the native modern
-SharedHttpStream writes a temporary recording/copy file, and the legacy path
-tunes TCP and receives/copies RTP to a temporary file. Recording/copy executors
-are excluded. Native hdtc encoded profile descriptors remain in the raw report;
-the six excluded profiles are explicitly recorded, while the retained native
-descriptor is compared. Node rejects encoded or legacy execution with the typed
-400 `not-supported` contract before opening those network paths. It preserves
-device configuration and native media-source capability fields.
+## Device profiles and streams
 
-Modern original HTTP delivery uses the shared SDK raw-input owner without
-writing a recording/spool file. Real Node HTTP tests verify first-byte readiness
-after held headers, zero-byte EOF failure, non-2xx body delivery, bounded shared
-chunks, independent retained owners, tuner limits, disabling during a pending
-first read, late response cancellation and resource cleanup. These checks do
-not claim actual native recording execution or public playback HTTP parity.
-HDHomeRun always selects its SharedHttpStream branch for modern lineup URLs;
-AllowStreamSharing and EnableStreamLooping do not change that native selection.
-Acquisition reserves ownership; byte backpressure starts at the first iterator
-read. An unread open owner does not block a probe/HTTP reader. The formal
-default consumer and installed package are composed to verify both string and
-null host identity, tuner capacity, retained ownership and final reopen. Native
-discovery records actual errors/socket codes, bound endpoints/broadcast flags,
-socket-handle disposal and available IPv4 interfaces, including failed runs.
-The discovery duration uses the native Guide scan's 3000 ms. A missing physical
-broadcast remains a hard failure, with full diagnostics retained; increasing
-the observation window does not certify an empty result.
+The Native stream factory constructs modern SharedHttpStream and legacy HdHomerunUdpStream objects. The fixture inspects the original stream ID, source, protocol, sharing flag, tuner identity and initial consumer count before disposal. Source-list comparisons cover the producer fields and stream defaults for each advertised profile. For an HDTC tuner with hardware transcoding enabled, the list includes six device profiles and the native source. A separate construction case checks the `internet360` HTTP URL. [Provider](../../../../plugins/hdhomerun/tuner.js) · [Profile definitions](../../../../plugins/hdhomerun/source.js)
 
-Cache identities containing path separators/NUL/ADS syntax are rejected at the
-owned cache boundary; this is an explicit functional difference. Discovery does
-not discard packets using a separate userland count threshold. No physical tuner, encoding profile,
-legacy TCP tune, recording executor or complete public playback is certified by
-this component fixture. Reports keep phase/release acceptance false.
+Node HTTP cases check first-byte readiness, empty EOF, non-success response bodies, tuner capacity, mismatch rejection, retained readers, cancellation and last-owner cleanup. Playback comparisons use a separate loopback device that serves modern profile URLs and accepts legacy TCP tune/lock commands, sends RTP and observes lock release. Use that fixture to trace bytes from the tuner through the playback service. [Playback comparison](../../../playback/hdhomerun-device-native.test.js)
