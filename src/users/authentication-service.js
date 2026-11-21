@@ -23,39 +23,46 @@ export class AuthenticationService extends EventEmitter {
   read(request) { return readAuthorization(request, { enableLegacyAuthorization: this.enableLegacyAuthorization }); }
 
   async authenticate(request) {
-    const auth = this.read(request);
-    Object.assign(auth, { User: null, UserId: zeroGuid, IsApiKey: false, IsAdministrator: false });
+    const auth = { ...this.read(request), User: null, UserId: zeroGuid, IsApiKey: false, IsAdministrator: false };
     if (!auth.Token) return auth;
-    await this.store.transaction(async database => {
-      const device = (await database.rows('Devices', { where: { AccessToken: auth.Token }, limit: 1 }))[0];
-      if (device) {
-        auth.IsAuthenticated = true;
-        if (empty(auth.Client)) auth.Client = device.AppName;
-        if (empty(auth.DeviceId)) auth.DeviceId = device.DeviceId;
-        const canUpdate = !auth.Client.toLowerCase().includes('chromecast');
-        const changes = {};
-        if (empty(auth.Device)) auth.Device = device.DeviceName;
-        else if (canUpdate && !equalsIgnoreCase(auth.Device, device.DeviceName)) changes.DeviceName = auth.Device;
-        if (empty(auth.Version)) auth.Version = device.AppVersion;
-        else if (canUpdate && !equalsIgnoreCase(auth.Version, device.AppVersion)) changes.AppVersion = auth.Version;
-        if (this.now().getTime() - Date.parse(wireDate(device.DateLastActivity)) > 180000) changes.DateLastActivity = nativeDate(this.now());
-        if (Object.keys(changes).length) await database.update('Devices', { Id: device.Id }, changes);
-        auth.User = await this.users.loadUser(database, device.UserId);
-        auth.UserId = auth.User ? wireGuid(auth.User.Id) : zeroGuid;
-        auth.IsAdministrator = auth.User?.Policy.IsAdministrator ?? false;
-      } else {
-        const key = (await database.rows('ApiKeys', { where: { AccessToken: auth.Token }, limit: 1 }))[0];
-        if (key) {
-          Object.assign(auth, { IsAuthenticated: true, IsApiKey: true, IsAdministrator: true, Client: key.Name, Token: key.AccessToken });
-          if (empty(auth.DeviceId)) auth.DeviceId = this.serverId;
-          if (empty(auth.Device)) auth.Device = this.serverName;
-          if (empty(auth.Version)) auth.Version = this.serverVersion;
-        }
-      }
+    const selected = await this.store.run(database => this.#authenticateToken(database, auth, false), {
+      readOnly: true, isolation: 'repeatable-read'
     });
-    if (!auth.IsAuthenticated) throw domainError(401, 'Invalid token.');
-    if (auth.User?.Policy.IsDisabled) throw domainError(401, 'User account has been disabled.');
-    return auth;
+    // An activity or device change needs the writer boundary. Re-read the
+    // token and user there so a concurrent revocation or disable is visible.
+    const result = selected ?? await this.store.transaction(database => this.#authenticateToken(database, auth, true));
+    if (!result.IsAuthenticated) throw domainError(401, 'Invalid token.');
+    if (result.User?.Policy.IsDisabled) throw domainError(401, 'User account has been disabled.');
+    return result;
+  }
+
+  async #authenticateToken(database, auth, writeDevice) {
+    const device = (await database.rows('Devices', { where: { AccessToken: auth.Token }, limit: 1 }))[0];
+    if (device) {
+      const result = { ...auth, IsAuthenticated: true };
+      if (empty(result.Client)) result.Client = device.AppName;
+      if (empty(result.DeviceId)) result.DeviceId = device.DeviceId;
+      const canUpdate = !result.Client.toLowerCase().includes('chromecast'), changes = {};
+      if (empty(result.Device)) result.Device = device.DeviceName;
+      else if (canUpdate && !equalsIgnoreCase(result.Device, device.DeviceName)) changes.DeviceName = result.Device;
+      if (empty(result.Version)) result.Version = device.AppVersion;
+      else if (canUpdate && !equalsIgnoreCase(result.Version, device.AppVersion)) changes.AppVersion = result.Version;
+      const now = this.now();
+      if (now.getTime() - Date.parse(wireDate(device.DateLastActivity)) > 180000) changes.DateLastActivity = nativeDate(now);
+      if (Object.keys(changes).length) {
+        if (!writeDevice) return null;
+        await database.update('Devices', { Id: device.Id, AccessToken: auth.Token }, changes);
+      }
+      result.User = await this.users.loadUser(database, device.UserId);
+      result.UserId = result.User ? wireGuid(result.User.Id) : zeroGuid;
+      result.IsAdministrator = result.User?.Policy.IsAdministrator ?? false;
+      return result;
+    }
+    const key = (await database.rows('ApiKeys', { where: { AccessToken: auth.Token }, limit: 1 }))[0];
+    if (!key) return auth;
+    return { ...auth, IsAuthenticated: true, IsApiKey: true, IsAdministrator: true, Client: key.Name,
+      Token: key.AccessToken, DeviceId: empty(auth.DeviceId) ? this.serverId : auth.DeviceId,
+      Device: empty(auth.Device) ? this.serverName : auth.Device, Version: empty(auth.Version) ? this.serverVersion : auth.Version };
   }
 
   checkUserAccess(user, { remoteEndPoint, ignoreParentalControl = false } = {}) {

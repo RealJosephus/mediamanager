@@ -22,8 +22,8 @@ async function setup(t) {
       serverId, onError: error => state.errors.push(error) });
     state.origin = `http://127.0.0.1:${state.runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port}`;
   };
-  state.request = async (route, { token, method = 'GET' } = {}) => {
-    const response = await fetch(state.origin + route, { method, headers: { Accept: 'application/json',
+  state.request = async (route, { token, method = 'GET', signal } = {}) => {
+    const response = await fetch(state.origin + route, { method, signal, headers: { Accept: 'application/json',
       ...(token && { Authorization: `MediaBrowser Token="${token}"` }) } });
     const text = await response.text(); let body = text; try { body = JSON.parse(text); } catch { }
     return { status: response.status, body, language: response.headers.get('content-language') };
@@ -66,6 +66,55 @@ test('postgres: real API-key management enforces elevated authorization, persist
   assert.equal((await state.request('/Auth/Keys', { token: login.AccessToken })).status, 403);
   assert.equal((await state.database.rows('Devices', { where: { AccessToken: login.AccessToken }, limit: 1 })).length, 1);
   assert.equal((await state.request('/Auth/Keys', { token: bootstrap.AccessToken })).body.TotalRecordCount, 3);
+});
+
+test('read-only HTTP authentication proceeds while the schema writer lock is held', { ...enabled, timeout: 30000 }, async t => {
+  const state = await setup(t);
+  const key = await state.runtime.apiKeys.create('Read while writing');
+  const held = Promise.withResolvers(), release = Promise.withResolvers();
+  const write = state.runtime.store.serializeWrites(async () => { held.resolve(); await release.promise; });
+  try {
+    await held.promise;
+    const result = await state.request('/Auth/Keys', { token: key.AccessToken, signal: AbortSignal.timeout(5000) });
+    assert.equal(result.status, 200);
+    assert.deepEqual(result.body.Items.map(value => value.AppName), ['Read while writing']);
+    assert.equal((await state.database.rows('ApiKeys', { where: { AccessToken: key.AccessToken } }))[0].DateLastActivity,
+      '0001-01-01 00:00:00');
+  } finally { release.resolve(); await write; }
+});
+
+test('device authentication rechecks revocation before applying an activity update', { ...enabled, timeout: 30000 }, async t => {
+  const state = await setup(t), { authentication, users } = state.runtime;
+  const user = await users.createUser({ Name: 'Device owner', Password: 'device password' });
+  const login = await authentication.login({ Username: user.Name, Pw: 'device password' },
+    { Client: 'Key test', DeviceId: 'revoking-device', Device: 'Original device', Version: '1.0' });
+  const token = login.AccessToken;
+  const [device] = await state.database.rows('Devices', { where: { AccessToken: token } });
+  await state.database.update('Devices', { Id: device.Id }, { DateLastActivity: '2000-01-01 00:00:00' });
+  const seen = Promise.withResolvers(), release = Promise.withResolvers();
+  let held = false;
+  state.database.queryHook = async (...args) => {
+    const result = await state.database.client.query(...args);
+    const sql = typeof args[0] === 'string' ? args[0] : args[0].text;
+    if (!held && sql.startsWith('SELECT') && sql.includes('"Devices"') && sql.includes('WHERE "AccessToken"')) {
+      held = true; seen.resolve(); await release.promise;
+    }
+    return result;
+  };
+  const pending = authentication.authenticate({ headers: { authorization: `MediaBrowser Token="${token}"` } });
+  const revoked = assert.rejects(pending, { status: 401 });
+  void revoked.catch(() => {});
+  try {
+    await Promise.race([seen.promise, pending]);
+    await authentication.logout(token);
+    release.resolve();
+    await revoked;
+    assert.deepEqual(await state.database.rows('Devices', { where: { AccessToken: token } }), []);
+  } finally {
+    release.resolve();
+    await Promise.allSettled([pending, revoked]);
+    state.database.queryHook = null;
+  }
 });
 
 for (const operation of ['create', 'list', 'revoke']) test('postgres: runtime close drains admitted API-key ' + operation + ' and rejects new operations before releasing PostgreSQL', { ...enabled, timeout: 60000 }, async t => {

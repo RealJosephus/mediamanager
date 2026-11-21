@@ -42,6 +42,7 @@ export class DomainStore {
   run(operation, {
     signal,
     readOnly = false,
+    isolation = 'read-committed',
     lockTimeoutMs,
     [postgresOperationAdmission]: admitted = false
   } = {}) {
@@ -66,7 +67,7 @@ export class DomainStore {
             try {
               return await database.transaction(operation, {
                 readOnly: true,
-                isolation: 'read-committed',
+                isolation,
                 signal,
                 lockTimeoutMs
               });
