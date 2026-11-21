@@ -88,7 +88,7 @@ export class LocalAdapter {
     const writable = configuration.writable === true;
     this.capabilities = Object.freeze({ randomRead: true, reliableLength: true, reliableVersion: false,
       directorySnapshot: true, create: writable, replace: writable, mkdir: writable, delete: writable,
-      rename: writable, atomicReplace: writable, conditionalWrite: false, directLease: false, watch: true });
+      rename: writable, atomicReplace: writable, conditionalWrite: false, directLease: false, watch: true, writeModified: writable });
   }
   async #target(value, { missing = false, leafLink = false } = {}) {
     value = normalizePath(value);

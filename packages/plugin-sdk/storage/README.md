@@ -7,6 +7,10 @@ object. Write and watch capabilities require their corresponding methods.
 Every declared default mount supplies its own capabilities; a default does not
 implicitly acquire write access.
 
+Adapters that accept an ISO modification time through `write(path, bytes,
+{ modified })` may declare the optional boolean capability `writeModified`.
+Callers can verify the stored timestamp through `stat().modified`.
+
 An adapter may implement `getSpace(path, { signal })` to report the capacity
 of the filesystem or quota that owns a mapped directory. It returns
 `{ freeBytes, usedBytes, deviceId, storageType }` or `null` if capacity is

@@ -351,6 +351,16 @@ export async function verifyRemoteGeneration(vfs, files, signal) {
   }
 }
 
+function verifyRestoredTime(expected, observed) {
+  if (expected === undefined) return;
+  // A filesystem can round a millisecond timestamp to the adjacent
+  // microsecond when converting it to its native representation.
+  const timestamp = typeof observed === 'string' ? observed : '';
+  const submillisecond = /\.\d{3}(\d+)/u.exec(timestamp)?.[1] ?? '0';
+  const difference = Date.parse(timestamp) - Date.parse(expected) + Number('0.' + submillisecond);
+  if (!(Math.abs(difference) <= 0.001)) throw new Error('Remote restore target modification time does not match the manifest.');
+}
+
 /** Restore to explicit new remote targets; partial progress is returned on errors. */
 export async function restoreRemoteAssets(options) {
   const allowed = new Set(['directory', 'manifest', 'vfs', 'targets', 'signal', 'maxAssetBytes']);
@@ -391,7 +401,8 @@ export async function restoreRemoteAssets(options) {
       }
       if (digest.sha256 !== file.sha256 || digest.bytes !== BigInt(file.bytes)) throw new Error('Remote restore refuses to overwrite different target content.');
     }
-    operations.push({ file, target, existed: Boolean(current), atomic: capabilities.atomicReplace === true });
+    const modified = capabilities.writeModified === true ? file.modifiedAt ?? undefined : undefined;
+    operations.push({ file, target, existed: Boolean(current), atomic: capabilities.atomicReplace === true, modified });
   }
   let filesRoot;
   try { filesRoot = await bindDirectory(path.resolve(directory, 'files'), 'Remote state package files directory'); }
@@ -405,11 +416,12 @@ export async function restoreRemoteAssets(options) {
   }
   const progress = { generation: manifest.generation, completed: [], complete: false };
   try {
-    for (const { file, target, existed, atomic } of operations) {
+    for (const { file, target, existed, atomic, modified } of operations) {
       checkAbort(signal);
       if (!existed) {
         const payload = await readBoundLocalAsset(filesRoot, file, maxAssetBytes);
-        const written = await vfs.write(target, payload, { size: BigInt(file.bytes), overwrite: false, atomic, signal });
+        const written = await vfs.write(target, payload, { size: BigInt(file.bytes), overwrite: false, atomic, signal,
+          ...(modified !== undefined && { modified }) });
         let writtenSize;
         try { writtenSize = BigInt(written?.size); } catch {}
         if (writtenSize !== BigInt(file.bytes) || atomic && written.atomic !== true) {
@@ -418,6 +430,7 @@ export async function restoreRemoteAssets(options) {
       }
       const current = await vfs.stat(target, { signal });
       if (current.kind !== 'file') throw new Error('Remote restore target is not a file.');
+      verifyRestoredTime(modified, current.modified);
       const version = conditionalVersion(vfs, target, current);
       const digest = await digestRemote(vfs, target, version, signal, {
         maxBytes: BigInt(file.bytes), expectedBytes: BigInt(file.bytes),
@@ -431,6 +444,7 @@ export async function restoreRemoteAssets(options) {
       if (current.kind !== 'file' || completed.version !== null && conditionalVersion(vfs, completed.target, current) !== completed.version) {
         throw new Error('Remote restore target changed before completion.');
       }
+      verifyRestoredTime(operations[index].modified, current.modified);
       if (completed.version === null) {
         const bytes = BigInt(operations[index].file.bytes);
         const digest = await digestRemote(vfs, completed.target, null, signal, {

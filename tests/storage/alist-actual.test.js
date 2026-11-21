@@ -36,7 +36,7 @@ test('actual current-source AList supports VFS byte access, network NFO and ffpr
     fetch: async (url, options) => {
       const requestUrl = new URL(url); const headers = new Headers(options.headers);
       const response = await fetch(url, options);
-      requests.push({ method: options.method, path: requestUrl.pathname, apiCredential: headers.has('authorization'), password: headers.has('password'), cookie: headers.has('cookie'), range: headers.get('range'), status: response.status, acceptRanges: response.headers.get('accept-ranges'), contentRange: response.headers.get('content-range'), contentLength: response.headers.get('content-length') });
+      requests.push({ method: options.method, path: requestUrl.pathname, apiCredential: headers.has('authorization'), password: headers.has('password'), cookie: headers.has('cookie'), range: headers.get('range'), lastModified: headers.get('last-modified'), status: response.status, acceptRanges: response.headers.get('accept-ranges'), contentRange: response.headers.get('content-range'), contentLength: response.headers.get('content-length') });
       return response;
     } }));
   await registry.createInstance('actual', 'alist', { baseUrl: service.baseUrl, credentialRef: 'synthetic', pageSize: 2, capabilities: { create: true, replace: true, mkdir: true, rename: true, delete: true } });
@@ -109,9 +109,11 @@ test('actual current-source AList supports VFS byte access, network NFO and ffpr
     assert.equal(result.raw.format.duration, '0.100000'); assert.equal(result.sourceConsistency, 'unversioned');
     checks.push({ operation: 'ffprobe', codec: result.raw.streams[0].codec_name, duration: result.raw.format.duration, sourceConsistency: result.sourceConsistency });
   });
-  await t.test('unversioned AList sidecars round trip through an instance state package', async t => {
-    await builtinRemoteAssetContract(t, vfs, false);
-    checks.push({ operation: 'state package capture, generation verification and restore', strongVersion: false });
+  await t.test('unversioned AList subtitles retain the original timestamp and cache fingerprint through restore', async t => {
+    const modifiedAt = '2018-02-03T04:05:06.789Z';
+    await builtinRemoteAssetContract(t, vfs, false, { modifiedAt });
+    assert.equal(requests.filter(request => request.method === 'PUT' && request.lastModified === String(Date.parse(modifiedAt))).length, 2);
+    checks.push({ operation: 'state package capture, generation verification and restore', strongVersion: false, restoredModificationTime: modifiedAt });
   });
   await t.test('actual download requests exclude API credentials', () => {
     const raw = requests.filter(request => !request.path.startsWith('/api/'));

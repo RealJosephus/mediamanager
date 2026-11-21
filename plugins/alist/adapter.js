@@ -134,7 +134,8 @@ export class AListAdapter {
     this.capabilities = Object.freeze({ randomRead: 'conditional', reliableLength: false, reliableVersion: false,
       directorySnapshot: false, create: writable.create, replace: writable.replace, mkdir: writable.mkdir,
       delete: writable.delete, rename: writable.rename,
-      atomicReplace: false, conditionalWrite: false, directLease: false, watch: false });
+      atomicReplace: false, conditionalWrite: false, directLease: false, watch: false,
+      writeModified: writable.create });
   }
 
   #scope(options) {
