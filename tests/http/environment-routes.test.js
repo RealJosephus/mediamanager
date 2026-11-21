@@ -68,8 +68,25 @@ async function fixture(t) {
     catch { return { status: response.status, contentType: response.headers.get('content-type'), body: text }; }
   };
   return { request: (parameters, identity) => send('DirectoryContents', { parameters, identity }),
-    send, configuration, identities, fileNames, unmapped, writableRoot, adapter, disk };
+    send, configuration, identities, fileNames, unmapped, writableRoot, adapter, disk, vfs };
 }
+
+test('a nested mount exposes the same virtual parent to directory browsing and validation', async t => {
+  const value = await fixture(t);
+  const parent = path.posix.join(value.identities[0].root, 'virtual');
+  value.vfs.mount({ path: '/posix/virtual/child', instanceId: 'disk', capabilities: {} });
+  assert.ok(!(await readdir(value.disk)).includes('virtual'));
+  const check = async () => {
+    const contents = await value.request({ path: parent, includeDirectories: 'true' });
+    assert.equal(contents.status, 200);
+    assert.deepEqual(contents.body, [{ Name: 'child', Path: parent + '/child', Type: 'Directory' }]);
+    assert.equal((await value.send('ValidatePath', { body: { Path: parent, IsFile: false } })).status, 204);
+    assert.equal((await value.send('ValidatePath', { body: { Path: parent, IsFile: true } })).status, 404);
+  };
+  await check();
+  await writeFile(path.join(value.disk, 'virtual'), 'A backing file hidden by the virtual directory.');
+  await check();
+});
 
 test('environment enumeration retains mapped file identities and never lists an unmapped host directory', async t => {
   const value = await fixture(t);

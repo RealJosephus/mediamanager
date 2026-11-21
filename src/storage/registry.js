@@ -6,6 +6,7 @@ export const storageCapabilityNames = Object.freeze([
   'randomRead', 'reliableLength', 'reliableVersion', 'directorySnapshot',
   'create', 'replace', 'mkdir', 'delete', 'rename', 'atomicReplace', 'conditionalWrite', 'directLease', 'watch'
 ]);
+const optionalCapabilities = new Set(['writeModified']);
 
 function storageRegistryFailure(errors, fallback) {
   if (errors.length === 1) return errors[0];
@@ -38,10 +39,11 @@ function validateAdapter(instance) {
     throw new TypeError('The storage capacity reader must be a function.');
   }
   const capabilities = instance.capabilities;
+  const capabilityNames = Object.keys(capabilities ?? {});
   if (!capabilities || typeof capabilities !== 'object' || Array.isArray(capabilities)
     || !Object.isFrozen(capabilities)
-    || Object.keys(capabilities).length !== storageCapabilityNames.length
-    || Object.keys(capabilities).some(name => !storageCapabilityNames.includes(name))) {
+    || storageCapabilityNames.some(name => !capabilityNames.includes(name))
+    || capabilityNames.some(name => !storageCapabilityNames.includes(name) && !optionalCapabilities.has(name))) {
     throw new TypeError('The storage adapter must expose the complete frozen capability contract.');
   }
   for (const name of storageCapabilityNames) {
@@ -49,6 +51,9 @@ function validateAdapter(instance) {
     if (name === 'randomRead' ? ![true, false, 'conditional'].includes(value) : typeof value !== 'boolean') {
       throw new TypeError(`The storage adapter capability ${name} is invalid.`);
     }
+  }
+  if (Object.hasOwn(capabilities, 'writeModified') && typeof capabilities.writeModified !== 'boolean') {
+    throw new TypeError('The storage adapter capability writeModified is invalid.');
   }
   for (const [capability, method] of Object.entries(operationCapabilities)) {
     if (capabilities[capability] && typeof instance[method] !== 'function') {

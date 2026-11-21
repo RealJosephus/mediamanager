@@ -7,6 +7,10 @@ object. Write and watch capabilities require their corresponding methods.
 Every declared default mount supplies its own capabilities; a default does not
 implicitly acquire write access.
 
+Adapters that accept an ISO modification time through `write(path, bytes,
+{ modified })` may declare the optional boolean capability `writeModified`.
+Callers can verify the stored timestamp through `stat().modified`.
+
 An adapter may implement `getSpace(path, { signal })` to report the capacity
 of the filesystem or quota that owns a mapped directory. It returns
 `{ freeBytes, usedBytes, deviceId, storageType }` or `null` if capacity is
@@ -27,6 +31,11 @@ asynchronous `close()`. It reports the actual content length, total size, range
 and source version when known. Unknown lengths and versions remain unknown;
 they do not imply random access or a stable revision. The caller owns the
 handle until both consumption and close finish.
+
+An adapter without a mount-wide `reliableVersion` guarantee may report
+`versionReliability: 'strong'` on an individual `stat` result. Its `version`
+must then identify that object's byte representation, and `openRead` with
+`ifMatch: version` must prove that it returned that representation or fail.
 
 An adapter may additionally implement `openResponse(path, options)` for sources
 whose status and headers are part of delivery. It returns

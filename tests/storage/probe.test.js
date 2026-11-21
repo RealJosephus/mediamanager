@@ -3,6 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import * as fs from 'node:fs/promises';
+import http from 'node:http';
 import path from 'node:path';
 import os from 'node:os';
 import net from 'node:net';
@@ -11,6 +12,7 @@ import { StorageRegistry, VirtualFileSystem, ProbeReadBridge, buildHttpProbeArgu
 import { buildRemoteProbeArguments, probeRemoteRaw } from '../../src/storage/ffprobe.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { LocalAdapter } from '../../plugins/local/adapter.js';
+import { WebDavAdapter } from '../../plugins/webdav/adapter.js';
 import { StorageError } from '../../src/storage/errors.js';
 
 async function fixture(t, bytes = Buffer.from('0123456789')) {
@@ -57,6 +59,67 @@ test('probe cancellation revokes leases and new leases remain independent', asyn
   assert.equal((await fetch(first.url)).status, 404);
   assert.equal(await (await fetch(second.url)).text(), '0123456789');
   await second.release();
+});
+
+test('WebDAV probe leases read weak ETags and enforce strong ETags independently for each object', { timeout: 20000 }, async t => {
+  const primary = '/source.wav', sidecar = '/source.srt', bytes = waveFixture();
+  const files = new Map([[primary, { bytes, etag: 'W/"wave"' }], [sidecar, { bytes: Buffer.from('sidecar'), etag: '"words"' }]]);
+  const gets = [];
+  const server = http.createServer((request, response) => {
+    const file = files.get(request.url);
+    if (!file) { response.writeHead(404).end(); return; }
+    if (request.method === 'PROPFIND') {
+      request.resume();
+      response.writeHead(207, { 'Content-Type': 'application/xml' });
+      response.end(`<d:multistatus xmlns:d="DAV:"><d:response><d:href>${request.url}</d:href><d:propstat><d:prop>`
+        + `<d:resourcetype/><d:getcontentlength>${file.bytes.length}</d:getcontentlength><d:getetag>${file.etag}</d:getetag>`
+        + '</d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response></d:multistatus>');
+      return;
+    }
+    const ifMatch = request.headers['if-match'];
+    gets.push({ path: request.url, ifMatch });
+    const etag = file.readTag ?? file.etag;
+    if (ifMatch && (etag.startsWith('W/') || ifMatch !== etag)) { response.writeHead(412).end(); return; }
+    response.writeHead(200, { 'Content-Length': file.bytes.length, ...(file.omitTag ? {} : { ETag: etag }) }).end(file.bytes);
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const registry = new StorageRegistry(), vfs = new VirtualFileSystem(registry), bridge = new ProbeReadBridge(vfs);
+  t.after(async () => {
+    await bridge.close(); await registry.close();
+    await new Promise(resolve => { server.closeAllConnections(); server.close(resolve); });
+  });
+  registry.registerType('webdav', config => new WebDavAdapter(config));
+  await registry.createInstance('dav', 'webdav', { baseUrl: `http://127.0.0.1:${server.address().port}/` });
+  vfs.mount({ path: '/dav', instanceId: 'dav', capabilities: {} });
+  const filename = '/dav' + primary, relatedPaths = ['/dav' + sidecar];
+  const weakMain = await bridge.lease(filename, { relatedPaths });
+  assert.equal(weakMain.consistency, 'unversioned');
+  const weak = await fetch(weakMain.url);
+  assert.equal(weak.status, 200);
+  assert.equal(weak.headers.get('etag'), 'W/"wave"');
+  assert.deepEqual(Buffer.from(await weak.arrayBuffer()), bytes);
+  files.get(sidecar).readTag = '"changed"';
+  assert.equal((await fetch(new URL('source.srt', weakMain.url))).status, 412);
+  assert.deepEqual(gets.splice(0), [{ path: primary, ifMatch: undefined }, { path: sidecar, ifMatch: '"words"' }]);
+  await weakMain.release();
+
+  const probe = await probeRaw(bridge, filename, { executable: validationExecutable('ffprobe'), signal: t.signal });
+  assert.equal(probe.sourceConsistency, 'unversioned');
+  assert.equal(probe.exitCode, 0, probe.diagnostics);
+  assert.equal(probe.raw.streams[0].codec_name, 'pcm_s16le');
+  assert.ok(gets.length > 0 && gets.every(request => request.ifMatch === undefined));
+  gets.length = 0;
+
+  files.get(primary).etag = '"wave"';
+  Object.assign(files.get(sidecar), { etag: 'W/"words"', readTag: undefined, omitTag: true });
+  const strongMain = await bridge.lease(filename, { relatedPaths });
+  assert.equal(strongMain.consistency, 'version-precondition');
+  const strong = await fetch(strongMain.url);
+  assert.equal(strong.status, 200);
+  assert.deepEqual(Buffer.from(await strong.arrayBuffer()), bytes);
+  assert.equal(await (await fetch(new URL('source.srt', strongMain.url))).text(), 'sidecar');
+  assert.deepEqual(gets, [{ path: primary, ifMatch: '"wave"' }, { path: sidecar, ifMatch: undefined }]);
+  await strongMain.release();
 });
 
 test('probe leases drain admitted Local stats before shutdown and reject late publication', { timeout: 30000 }, async t => {

@@ -6,6 +6,7 @@ import path from 'node:path';
 import { setImmediate as immediate } from 'node:timers/promises';
 import { LocalAdapter } from '../../plugins/local/adapter.js';
 import { StorageRegistry } from '../../src/storage/registry.js';
+import { VirtualFileSystem } from '../../src/storage/vfs.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { errorObservation } from '../helpers/error-observation.js';
 
@@ -32,6 +33,32 @@ async function fixture(t) {
   });
   return { root, adapter, registry, releases, pending, reports };
 }
+
+test('independent Local mounts publish each destination once without losing the other source', async t => {
+  const { root, registry } = await fixture(t);
+  await registry.createInstance('second', 'local', { root, writable: true });
+  const vfs = new VirtualFileSystem(registry);
+  for (const instanceId of ['files', 'second']) vfs.mount({ path: '/' + instanceId, instanceId, capabilities: { rename: true } });
+
+  for (let round = 0; round < 12; round++) {
+    const directory = round === 11;
+    const names = [`${round}-first`, `${round}-second`], target = `${round}-published`;
+    const leaf = name => directory ? path.join(root, name, 'contents.txt') : path.join(root, name);
+    for (const name of names) {
+      if (directory) await fs.mkdir(path.join(root, name));
+      await fs.writeFile(leaf(name), name);
+    }
+    const results = await Promise.allSettled(['files', 'second'].map((mount, index) =>
+      vfs.rename(`/${mount}/${names[index]}`, `/${mount}/${target}`, { overwrite: false })));
+    const winner = results.findIndex(result => result.status === 'fulfilled');
+    assert.ok(winner >= 0);
+    assert.equal(results[1 - winner].status, 'rejected');
+    assert.equal(results[1 - winner].reason.code, 'already-exists');
+    assert.equal(await fs.readFile(leaf(target), 'utf8'), names[winner]);
+    assert.equal(await fs.readFile(leaf(names[1 - winner]), 'utf8'), names[1 - winner]);
+    await assert.rejects(fs.lstat(path.join(root, names[winner])), { code: 'ENOENT' });
+  }
+});
 
 test('Local file and registry closes join a real FileHandle write until its descriptor closes', { timeout: 30000 }, async t => {
   const state = await fixture(t), entered = Promise.withResolvers(), release = Promise.withResolvers();

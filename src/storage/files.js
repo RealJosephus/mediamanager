@@ -122,9 +122,12 @@ export class StorageFileSystem {
   }
   async #run(work) { try { return await work(); } catch (error) { throw nativeError(error); } }
   async stat(identity, options = {}) { return this.#run(async () => {
-    const resolved = this.resolve(identity);
-    if (resolved.adapter.fileStat) return resolved.adapter.fileStat(resolved.path, options);
-    const value = await this.vfs.stat(this.accessPath(identity), options), big = options.bigint === true;
+    const access = this.accessPath(identity);
+    if (!this.vfs.isSyntheticDirectory(access)) {
+      const resolved = this.vfs.resolve(access);
+      if (resolved.adapter.fileStat) return resolved.adapter.fileStat(resolved.path, options);
+    }
+    const value = await this.vfs.stat(access, options), big = options.bigint === true;
     const mtimeNs = dateNs(value.modified), birthtimeNs = dateNs(value.created ?? value.modified);
     return { size: big ? value.size ?? 0n : Number(value.size ?? 0n), mtimeNs, birthtimeNs, ctimeNs: mtimeNs,
       mtimeMs: big ? mtimeNs / 1000000n : Number(mtimeNs) / 1000000,

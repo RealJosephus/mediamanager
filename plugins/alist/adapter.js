@@ -134,26 +134,43 @@ export class AListAdapter {
     this.capabilities = Object.freeze({ randomRead: 'conditional', reliableLength: false, reliableVersion: false,
       directorySnapshot: false, create: writable.create, replace: writable.replace, mkdir: writable.mkdir,
       delete: writable.delete, rename: writable.rename,
-      atomicReplace: false, conditionalWrite: false, directLease: false, watch: false });
+      atomicReplace: false, conditionalWrite: false, directLease: false, watch: false,
+      writeModified: writable.create });
   }
 
   #scope(options) {
     checkAbort(options.signal);
     if (this.#closed) throw new StorageError('closed', 'The AList adapter is closed.');
-    const timeout = options.deadline === undefined ? this.#timeoutMs : Math.min(this.#timeoutMs, options.deadline - Date.now());
+    const deadline = options.deadline;
+    const timeRemaining = () => deadline === undefined ? this.#timeoutMs : Math.min(this.#timeoutMs, deadline - Date.now());
+    const timeout = timeRemaining();
     if (!Number.isFinite(timeout)) throw new TypeError('The operation deadline must be a timestamp.');
     if (timeout <= 0) throw new StorageError('timeout', 'The storage operation deadline expired.');
     const controller = new AbortController();
     let timedOut = false;
     const onAbort = () => controller.abort(options.signal.reason);
     options.signal?.addEventListener('abort', onAbort, { once: true });
-    const timer = setTimeout(() => { timedOut = true; controller.abort(); }, Math.max(0, timeout));
-    timer.unref();
+    const expire = () => {
+      if (controller.signal.aborted) return;
+      timedOut = true;
+      controller.abort();
+    };
+    let timer = setTimeout(expire, timeout).unref();
     const completed = Promise.withResolvers();
     const scope = {
       done: completed.promise, cleanupErrors: [],
       signal: controller.signal,
       abort: () => controller.abort(),
+      progress: () => {
+        if (deadline === undefined) timer.refresh();
+        else {
+          clearTimeout(timer);
+          const remaining = timeRemaining();
+          if (remaining <= 0) expire();
+          else timer = setTimeout(expire, remaining).unref();
+        }
+        checkAbort(controller.signal);
+      },
       error: (error) => {
         if (timedOut && diagnostic(error, 'code') === 'cancelled') {
           return Object.assign(new StorageError('timeout', 'The storage operation timed out.'), { cause: error });
@@ -310,6 +327,7 @@ export class AListAdapter {
         const url = safeUrl(data.raw_url, this.#baseUrl);
         response = await this.#download(url, headers, scope);
         checkAbort(scope.signal);
+        scope.progress();
         if (attempt === 0 && [401, 403, 404, 410].includes(response.status)) {
           const expired = response;
           const primary = statusError(expired.status, 'read', expired.headers.get('retry-after'));
@@ -395,6 +413,7 @@ export class AListAdapter {
             if (done) break;
             count += BigInt(value.byteLength);
             if (expectedLength !== null && count > expectedLength) throw new StorageError('invalid-response', 'The backend sent more bytes than declared.');
+            if (value.byteLength) scope.progress();
             yield value;
           }
           if (expectedLength !== null && count !== expectedLength) throw new StorageError('invalid-response', 'The backend read ended before its declared length.');
@@ -462,6 +481,7 @@ export class AListAdapter {
             if (!(chunk instanceof Uint8Array)) throw new TypeError('Upload chunks must be bytes.');
             count += BigInt(chunk.byteLength);
             if (count > size) throw new StorageError('invalid-response', 'The upload exceeded its declared length.');
+            if (chunk.byteLength) scope.progress();
             yield chunk;
           }
           if (count !== size) throw new StorageError('invalid-response', 'The upload ended before its declared length.');

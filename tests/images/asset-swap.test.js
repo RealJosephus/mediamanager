@@ -66,6 +66,11 @@ test('an image swap that fails at the second publication restores both files and
 
 test('an overwrite-only image swap restores both files after an aborted publication and can be retried', async t => {
   const { adapter, assets, left, right, leftContents, rightContents } = await fixture(t, { rename: false });
+  const before = ['2025-01-01T00:00:00.1234567Z', '2025-01-01T00:00:00.7654321Z'];
+  await adapter.write('/left.png', leftContents, { modified: before[0] });
+  await adapter.write('/right.png', rightContents, { modified: before[1] });
+  const times = async () => (await Promise.all([assets.stat(left), assets.stat(right)])).map(file => file.modified);
+  assert.deepEqual(await times(), before);
   const controller = new AbortController();
   const stopped = Object.assign(new Error('Controlled abort after the second file was written.'), { code: 'cancelled' });
   const write = adapter.write.bind(adapter);
@@ -81,13 +86,17 @@ test('an overwrite-only image swap restores both files after an aborted publicat
   await assert.rejects(assets.swap(left, right, { signal: controller.signal }), error => error === stopped);
   assert.deepEqual(await assets.read(left), leftContents);
   assert.deepEqual(await assets.read(right), rightContents);
-  await assets.swap(left, right);
+  assert.deepEqual(await times(), before);
+  const swapped = await assets.swap(left, right);
+  assert.deepEqual(swapped.map(file => file.modified), [before[1], before[0]]);
+  assert.deepEqual(await times(), [before[1], before[0]]);
   assert.deepEqual(await assets.read(left), rightContents);
   assert.deepEqual(await assets.read(right), leftContents);
 });
 
 test('an overwrite-only image swap preserves the initial failure and still restores the other file', async t => {
   const { adapter, assets, left, right, leftContents, rightContents } = await fixture(t, { rename: false });
+  const before = (await Promise.all([assets.stat(left), assets.stat(right)])).map(file => file.modified);
   const write = adapter.write.bind(adapter);
   const publication = Object.assign(new Error('Controlled failure on the second write.'), { code: 'unavailable' });
   const recovery = Object.assign(new Error('Controlled failure restoring the second file.'), { code: 'permission-denied' });
@@ -106,4 +115,5 @@ test('an overwrite-only image swap preserves the initial failure and still resto
   });
   assert.deepEqual(await assets.read(left), leftContents);
   assert.deepEqual(await assets.read(right), rightContents);
+  assert.deepEqual((await Promise.all([assets.stat(left), assets.stat(right)])).map(file => file.modified), before);
 });

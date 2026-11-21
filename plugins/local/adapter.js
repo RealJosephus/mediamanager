@@ -6,6 +6,8 @@ import { StorageError, checkAbort, requireCapability } from '@mediamanager/plugi
 import { normalizePath } from '@mediamanager/plugin-sdk/storage/paths';
 import { resolveRange } from '@mediamanager/plugin-sdk/storage/range';
 import { hostFolderCapacity } from '@mediamanager/plugin-sdk/storage/host-capacity';
+import { setHostFileTimes } from '@mediamanager/plugin-sdk/storage/host-file-times';
+import { renameExclusive } from '@mediamanager/plugin-sdk/storage/rename-exclusive';
 import { watchDirectory } from './watch.js';
 
 const codes = { ENOENT: 'not-found', ENOTDIR: 'not-directory', EISDIR: 'is-directory',
@@ -44,6 +46,13 @@ const date = ns => {
   const fraction = (ns % 1000000000n + 1000000000n) % 1000000000n;
   return new Date(Number((ns - fraction) / 1000000n)).toISOString().replace('.000Z', `.${String(fraction / 100n).padStart(7, '0')}Z`);
 };
+function modifiedNanoseconds(value) {
+  const milliseconds = new Date(value).getTime();
+  if (!Number.isFinite(milliseconds)) throw new TypeError('Invalid local storage modification time.');
+  const fraction = typeof value === 'string' && /T\d{2}:\d{2}:\d{2}\.(\d+)(?:Z|[+-]\d{2}:?\d{2})$/iu.exec(value.trim())?.[1];
+  const submillisecond = fraction ? BigInt(fraction.padEnd(9, '0').slice(3, 9)) : 0n;
+  return BigInt(milliseconds) * 1_000_000n + submillisecond;
+}
 const createdNanoseconds = info => process.platform === 'linux'
   ? (info.ctimeNs < info.mtimeNs ? info.ctimeNs : info.mtimeNs) : info.birthtimeNs;
 const creationStat = info => {
@@ -88,7 +97,7 @@ export class LocalAdapter {
     const writable = configuration.writable === true;
     this.capabilities = Object.freeze({ randomRead: true, reliableLength: true, reliableVersion: false,
       directorySnapshot: true, create: writable, replace: writable, mkdir: writable, delete: writable,
-      rename: writable, atomicReplace: writable, conditionalWrite: false, directLease: false, watch: true });
+      rename: writable, atomicReplace: writable, conditionalWrite: false, directLease: false, watch: true, writeModified: writable });
   }
   async #target(value, { missing = false, leafLink = false } = {}) {
     value = normalizePath(value);
@@ -200,6 +209,7 @@ export class LocalAdapter {
       requireCapability(this, options.overwrite === false ? 'create' : 'replace');
       if (options.ifMatch !== undefined) requireCapability(this, 'conditionalWrite');
       if (value === '/') throw new StorageError('permission-denied', 'A storage root cannot be replaced.');
+      const modified = options.modified === undefined ? undefined : modifiedNanoseconds(options.modified);
       const target = await this.#target(value, { missing: true });
       const temporary = options.atomic ? path.join(path.dirname(target), `.storage-${randomUUID()}.tmp`) : target;
       const handle = await fs.open(temporary, options.atomic || options.overwrite === false ? 'wx' : 'w');
@@ -242,13 +252,16 @@ export class LocalAdapter {
           await Promise.allSettled([sourceNext]);
         }
         if (!errors.length) {
+          if (modified !== undefined && process.platform !== 'win32') await setHostFileTimes(handle.fd, temporary, modified);
           await handle.sync(); await handle.close(); active();
+          // NTFS can update its write time when the writing handle closes.
+          if (modified !== undefined && process.platform === 'win32') await setHostFileTimes(undefined, temporary, modified);
           if (options.atomic) {
+            active();
             await this.#target(value, { missing: true });
             if (options.overwrite === false) { await fs.link(temporary, target); await fs.unlink(temporary); }
             else await fs.rename(temporary, target);
           }
-          if (options.modified !== undefined) await fs.utimes(target, new Date(), new Date(options.modified));
           result = { size: count, version: version(await fs.stat(target, { bigint: true })), atomic: options.atomic === true };
         }
       } catch (error) { errors.push(error); }
@@ -280,13 +293,14 @@ export class LocalAdapter {
     };
     await remove(value, options.recursive === true);
   }, true); }
-  rename(value, destination, options = {}) { return this.#operation(options, async () => {
+  rename(value, destination, options = {}) { return this.#operation(options, async signal => {
     requireCapability(this, 'rename');
     if (options.ifMatch !== undefined) requireCapability(this, 'conditionalWrite');
     if (normalizePath(value) === '/' || normalizePath(destination) === '/') throw new StorageError('permission-denied', 'Storage roots cannot be renamed.');
     const target = await this.#target(destination, { missing: true }), source = await this.#target(value);
-    if (options.overwrite !== true) { try { await fs.lstat(target); throw new StorageError('already-exists', 'The destination exists.'); } catch (error) { if (error.code !== 'ENOENT') throw error; } }
-    await fs.rename(source, target);
+    checkAbort(signal);
+    if (options.overwrite === true) await fs.rename(source, target);
+    else await renameExclusive(source, target);
   }, true); }
   health(options = {}) { return this.#operation(options, async () => { await this.#target('/'); return { available: true }; }); }
   watch(value, options = {}) {

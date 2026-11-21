@@ -72,10 +72,15 @@ export class VirtualFileSystem {
     return entries;
   }
 
+  isSyntheticDirectory(path) {
+    path = normalizePath(path);
+    return !this.#mounts.has(path) && [...this.#mounts.keys()].some(mount => isWithin(mount, path));
+  }
+
   async stat(path, options = {}) {
     checkAbort(options.signal);
     path = normalizePath(path);
-    if (this.#overlays(path).size && !this.#mounts.has(path)) return syntheticEntry(path);
+    if (this.isSyntheticDirectory(path)) return syntheticEntry(path);
     const resolved = this.resolve(path);
     return { ...await resolved.adapter.stat(resolved.path, options), name: baseName(path) };
   }

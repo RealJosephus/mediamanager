@@ -8,7 +8,7 @@ import path from 'node:path';
 import { StorageRegistry, VirtualFileSystem, ProbeReadBridge, probeRaw } from '../../src/storage/index.js';
 import { AListAdapter } from '../../plugins/alist/adapter.js';
 import { createNfoPlugin } from '../../plugins/nfo/plugin.js';
-import { captureRemoteAssets, restoreRemoteAssets } from '../../src/migration/remote-assets.js';
+import { builtinRemoteAssetContract } from '../migration/helpers/builtin-remote-assets.js';
 import { startActualAList } from './helpers/actual-alist.js';
 import { remoteFileContract } from './remote-file-contract.js';
 
@@ -36,7 +36,7 @@ test('actual current-source AList supports VFS byte access, network NFO and ffpr
     fetch: async (url, options) => {
       const requestUrl = new URL(url); const headers = new Headers(options.headers);
       const response = await fetch(url, options);
-      requests.push({ method: options.method, path: requestUrl.pathname, apiCredential: headers.has('authorization'), password: headers.has('password'), cookie: headers.has('cookie'), range: headers.get('range'), status: response.status, acceptRanges: response.headers.get('accept-ranges'), contentRange: response.headers.get('content-range'), contentLength: response.headers.get('content-length') });
+      requests.push({ method: options.method, path: requestUrl.pathname, apiCredential: headers.has('authorization'), password: headers.has('password'), cookie: headers.has('cookie'), range: headers.get('range'), lastModified: headers.get('last-modified'), status: response.status, acceptRanges: response.headers.get('accept-ranges'), contentRange: response.headers.get('content-range'), contentLength: response.headers.get('content-length') });
       return response;
     } }));
   await registry.createInstance('actual', 'alist', { baseUrl: service.baseUrl, credentialRef: 'synthetic', pageSize: 2, capabilities: { create: true, replace: true, mkdir: true, rename: true, delete: true } });
@@ -109,12 +109,11 @@ test('actual current-source AList supports VFS byte access, network NFO and ffpr
     assert.equal(result.raw.format.duration, '0.100000'); assert.equal(result.sourceConsistency, 'unversioned');
     checks.push({ operation: 'ffprobe', codec: result.raw.streams[0].codec_name, duration: result.raw.format.duration, sourceConsistency: result.sourceConsistency });
   });
-  await t.test('remote migration refuses unsupported snapshot and conditional restore guarantees', async () => {
-    await assert.rejects(captureRemoteAssets({ vfs, assets: [{ assetId: 'third-subtitle', kind: 'subtitle', restorePath: 'third.srt', virtualPath: '/network/third.srt' }], destination: path.join(service.root, 'migration') }), /reliable conditional object versions/u);
-    await assert.rejects(restoreRemoteAssets({ vfs, directory: service.root, manifest: { generation: 'fixture', remoteAssets: [{
-      path: 'remote-assets/third.srt', bytes: 0, sha256: '0'.repeat(64), modifiedAt: null, remote: {
-        assetId: 'third-subtitle', virtualPath: '/network/third.srt', version: 'fixture', kind: 'subtitle' } }] }, targets: { 'third-subtitle': '/network/restored.srt' } }), /create, atomic conditional replace and reliable versions/u);
-    checks.push({ operation: 'migration consistency guards', capture: 'rejected unversioned source', restore: 'rejected non-atomic target' });
+  await t.test('unversioned AList subtitles retain the original timestamp and cache fingerprint through restore', async t => {
+    const modifiedAt = '2018-02-03T04:05:06.789Z';
+    await builtinRemoteAssetContract(t, vfs, false, { modifiedAt });
+    assert.equal(requests.filter(request => request.method === 'PUT' && request.lastModified === String(Date.parse(modifiedAt))).length, 2);
+    checks.push({ operation: 'state package capture, generation verification and restore', strongVersion: false, restoredModificationTime: modifiedAt });
   });
   await t.test('actual download requests exclude API credentials', () => {
     const raw = requests.filter(request => !request.path.startsWith('/api/'));

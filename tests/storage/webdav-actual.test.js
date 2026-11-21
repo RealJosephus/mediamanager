@@ -11,7 +11,8 @@ import path from 'node:path';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap, ProbeReadBridge, probeRaw } from '../../src/storage/index.js';
 import { WebDavAdapter } from '../../plugins/webdav/adapter.js';
 import { createNfoPlugin } from '../../plugins/nfo/plugin.js';
-import { captureRemoteAssets, restoreRemoteAssets } from '../../src/migration/remote-assets.js';
+import { restoreRemoteAssets } from '../../src/migration/remote-assets.js';
+import { builtinRemoteAssetContract } from '../migration/helpers/builtin-remote-assets.js';
 import { vfsStreamResult } from '../../src/http/binary-result.js';
 import { startActualWebDav } from './helpers/actual-webdav.js';
 import { remoteFileContract } from './remote-file-contract.js';
@@ -281,15 +282,18 @@ test('actual external rclone WebDAV supports independent VFS access, writes, NFO
     await assert.rejects(vfs.write('/readonly/rejected.nfo', Buffer.from('must not upload'), { overwrite: false }), { code: 'not-supported' });
     await assert.rejects(vfs.delete('/readonly/third.srt'), { code: 'not-supported' });
     assert.equal(requests.length, requestCount);
-    await assert.rejects(captureRemoteAssets({ vfs, assets: [{ assetId: 'third-subtitle', kind: 'subtitle',
-      restorePath: 'third.srt', virtualPath: '/network/third.srt' }], destination: path.join(service.root, 'migration') }),
-    /reliable conditional object versions/u);
     await assert.rejects(restoreRemoteAssets({ vfs, directory: service.root, manifest: { generation: 'fixture', remoteAssets: [{
       path: 'remote-assets/third.srt', bytes: 0, sha256: '0'.repeat(64), modifiedAt: null,
       remote: { assetId: 'third-subtitle', virtualPath: '/network/third.srt', version: 'fixture', kind: 'subtitle' },
-    }] }, targets: { 'third-subtitle': '/network/restored.srt' } }), /create, atomic conditional replace and reliable versions/u);
+    }] }, targets: { 'third-subtitle': '/readonly/restored.srt' } }), /requires create permission/u);
     checks.push({ operation: 'authentication rotation/read-only capability/migration guards', passed: true,
       rejectedBeforeProtocolRequest: true });
+  });
+
+  await t.test('strong WebDAV sidecars round trip through an instance state package', async t => {
+    await builtinRemoteAssetContract(t, vfs, true);
+    assert.ok(requests.some(request => request.method === 'GET' && request.path.endsWith('/package-source.nfo') && request.ifMatch));
+    checks.push({ operation: 'state package capture, generation verification and restore', strongVersion: true });
   });
 
   await t.test('credentials stay scoped to the WebDAV origin and every protocol request is authenticated', () => {

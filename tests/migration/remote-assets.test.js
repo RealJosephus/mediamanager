@@ -11,6 +11,7 @@ import { createInstanceFixture } from './instance-fixture.js';
 
 const itemId = '71717171-7171-7171-7171-717171717171';
 const nfoBytes = Buffer.from('<movie><title>Current 中文</title></movie>');
+const subtitleModified = '2018-02-03T04:05:06.789Z';
 const sha = value => createHash('sha256').update(value).digest('hex');
 const emptyRow = table => Object.fromEntries(tableDefinition(table).columns.filter(column => !column.generated)
   .map(column => [column.name, column.nullable ? null : column.clrType === 'bool' ? false : column.type === 'TEXT' ? '' : 0]));
@@ -23,7 +24,7 @@ async function fixture(t, { linkedNfo = false, weakVersion = false } = {}) {
   const target = await registry.createInstance('target', 'fixture', {});
   if (weakVersion) source.capabilities = Object.freeze({ ...source.capabilities, reliableVersion: false });
   await source.write('/movie.nfo', nfoBytes);
-  await source.write('/movie.srt', Buffer.from('1\n00:00:00,000 --> 00:00:01,000\nUpdated captions\n'));
+  await source.write('/movie.srt', Buffer.from('1\n00:00:00,000 --> 00:00:01,000\nUpdated captions\n'), { modified: subtitleModified });
   const vfs = new VirtualFileSystem(registry); vfs.mount({ path: '/source', instanceId: 'source', capabilities: {} });
   vfs.mount({ path: '/target', instanceId: 'target', capabilities: {
     create: true, replace: true, conditionalWrite: true, atomicReplace: true
@@ -73,16 +74,38 @@ test('current remote NFO and subtitles join the database generation and restore 
   assert.equal(restored.complete, true);
   assert.deepEqual(await content(target, '/movie.nfo'), await content(source, '/movie.nfo'));
   assert.deepEqual(await content(target, '/movie.srt'), await content(source, '/movie.srt'));
+  assert.equal((await target.stat('/movie.srt')).modified, subtitleModified);
   const retry = await restoreRemoteStatePackage(destination, { vfs, targets });
   assert.equal(retry.completed.every(item => item.reused), true);
   await target.write('/movie.nfo', Buffer.from('newer independent edit'));
   await assert.rejects(restoreRemoteStatePackage(destination, { vfs, targets }), /overwrite|bound generation/u);
   assert.equal((await content(target, '/movie.nfo')).toString(), 'newer independent edit');
-  const invalidVersion = structuredClone(manifest); invalidVersion.remoteAssets[0].remote.version = null;
+  const invalidVersion = structuredClone(manifest); invalidVersion.remoteAssets[0].remote.version = '';
   await resignManifest(destination, invalidVersion);
   await assert.rejects(verifyStatePackage(destination), /Invalid remote state asset declaration/u);
   manifest.mediaAccess.items[0].sidecars[0].stateAssetId = 'missing-nfo'; await resignManifest(destination, manifest);
   await assert.rejects(verifyStatePackage(destination), /state asset is missing/u);
+});
+
+test('remote restore never reports completion when a timestamp-capable target discards modification time', async t => {
+  const { target, vfs, create, destination } = await fixture(t);
+  await create();
+  const write = target.write.bind(target);
+  const attempts = [];
+  t.mock.method(target, 'write', (filename, data, options) => {
+    attempts.push([filename, options.modified]);
+    return write(filename, data, { ...options, modified: undefined });
+  });
+  for (const reused of [false, true]) {
+    await assert.rejects(restoreRemoteStatePackage(destination, { vfs, targets }), error => {
+      assert.match(error.message, /modification time does not match the manifest/u);
+      assert.equal(error.remoteRestoreProgress.complete, false);
+      assert.deepEqual(error.remoteRestoreProgress.completed.map(value => [value.assetId, value.reused]), [['movie-nfo', reused]]);
+      return true;
+    });
+  }
+  assert.deepEqual(attempts, [['/movie.nfo', undefined], ['/movie.srt', subtitleModified]]);
+  assert.equal((await target.stat('/movie.srt')).modified, null);
 });
 
 test('linked NFO state assets reject missing, wrong-kind and mismatched captures before commit', async t => {
@@ -175,9 +198,13 @@ test('a remote sidecar change during database export prevents generation commit'
   assert.match(progress.lastError, /Remote state changed/u);
 });
 
-test('remote capture refuses weak versions and media inventories before declaring a snapshot', async t => {
-  const { create } = await fixture(t, { weakVersion: true });
-  await assert.rejects(create(), /reliable conditional object versions/);
+test('remote capture binds sources without a reliable version by their bytes', async t => {
+  const { create, destination, vfs, target } = await fixture(t, { weakVersion: true });
+  const manifest = await create();
+  assert.ok(manifest.remoteAssets.every(file => file.remote.version === null));
+  assert.deepEqual(await verifyStatePackage(destination), manifest);
+  await restoreRemoteStatePackage(destination, { vfs, targets });
+  assert.deepEqual(await content(target, '/movie.nfo'), nfoBytes);
 });
 
 test('remote restore reports partial writes and resumes only matching completed assets', async t => {

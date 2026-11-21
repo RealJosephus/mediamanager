@@ -4,7 +4,7 @@ import { acquireTestResource } from '../helpers/test-resource-lease.js';
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
 import { spawn } from 'node:child_process';
-import { link, lstat, mkdir, readFile, realpath, readdir, unlink, writeFile, rm, utimes } from 'node:fs/promises';
+import { mkdir, readFile, readdir, writeFile, rm, utimes } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -17,7 +17,7 @@ import { discoverInstanceState } from '../../src/migration/instance-state.js';
 import { assertIsolatedInstanceOutput, cloneStoppedInstance } from '../../src/migration/instance-copy.js';
 import { createIsolatedOfflineCopyCaptureSession, createStoppedServiceCaptureSession } from '../../src/migration/capture-session.js';
 import { verifyNativeMediaAccess } from '../../src/migration/media-access.js';
-import { StorageError, StorageRegistry, VirtualFileSystem, IdentityAccessMap, normalizePath } from '../../src/storage/index.js';
+import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { AListAdapter } from '../../plugins/alist/adapter.js';
 import { WebDavAdapter } from '../../plugins/webdav/adapter.js';
@@ -80,95 +80,6 @@ async function preserveReports(directory, output, secrets) {
     await mkdir(path.dirname(target), { recursive: true });
     await writeFile(target, text, { flag: 'wx' });
   }
-}
-
-class IsolatedVersionedFilesystemAdapter {
-  #root;
-  #closed = false;
-
-  constructor(root) {
-    this.#root = path.resolve(root);
-    this.capabilities = Object.freeze({ randomRead: false, reliableLength: true, reliableVersion: true, directorySnapshot: false,
-      create: true, replace: true, atomicReplace: true, conditionalWrite: true, mkdir: false, delete: false, rename: false, directLease: false, watch: false });
-  }
-
-  #check(signal) {
-    if (signal?.aborted) throw new StorageError('cancelled', 'Storage operation was cancelled.');
-    if (this.#closed) throw new StorageError('closed', 'The isolated filesystem adapter is closed.');
-  }
-
-  #filename(value) {
-    const normalized = normalizePath(value);
-    const filename = path.resolve(this.#root, ...normalized.slice(1).split('/'));
-    const relative = path.relative(this.#root, filename);
-    if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) throw new StorageError('invalid-path', 'Path escapes the isolated filesystem root.');
-    return filename;
-  }
-
-  async #snapshot(value, signal) {
-    this.#check(signal);
-    const filename = this.#filename(value);
-    let metadata;
-    try { metadata = await lstat(filename); } catch (error) { if (error.code === 'ENOENT') throw new StorageError('not-found', 'The isolated filesystem object does not exist.'); throw error; }
-    if (metadata.isSymbolicLink()) throw new StorageError('invalid-response', 'Symbolic links are not valid isolated sidecar objects.');
-    if (metadata.isDirectory()) return { filename, metadata, bytes: null, version: `directory:${metadata.mtimeMs}` };
-    if (!metadata.isFile()) throw new StorageError('invalid-response', 'The isolated filesystem object is not a regular file.');
-    const [root, resolved] = await Promise.all([realpath(this.#root), realpath(filename)]);
-    const relative = path.relative(root, resolved);
-    if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) throw new StorageError('invalid-path', 'The isolated sidecar resolves outside its root.');
-    const bytes = await readFile(filename); this.#check(signal);
-    return { filename, metadata, bytes, version: `sha256:${sha(bytes)}` };
-  }
-
-  async stat(value, options = {}) {
-    const snapshot = await this.#snapshot(value, options.signal);
-    return { name: path.basename(snapshot.filename), kind: snapshot.bytes ? 'file' : 'directory', size: snapshot.bytes ? BigInt(snapshot.bytes.length) : null,
-      modified: snapshot.metadata.mtime, created: snapshot.metadata.birthtime, version: snapshot.version };
-  }
-
-  async openRead(value, options = {}) {
-    if (options.range) throw new StorageError('not-supported', 'The isolated sidecar adapter does not expose ranged reads.');
-    const snapshot = await this.#snapshot(value, options.signal);
-    if (!snapshot.bytes) throw new StorageError('is-directory', 'The isolated filesystem object is a directory.');
-    if (options.ifMatch && options.ifMatch !== snapshot.version) throw new StorageError('version-changed', 'The isolated sidecar version changed.');
-    let closed = false;
-    async function* stream() { if (!closed && snapshot.bytes.length) yield snapshot.bytes; }
-    return { stream: stream(), totalSize: BigInt(snapshot.bytes.length), contentLength: BigInt(snapshot.bytes.length), range: null,
-      rangeHonored: false, version: snapshot.version, close: async () => { closed = true; } };
-  }
-
-  async write(value, data, options = {}) {
-    this.#check(options.signal);
-    if (options.overwrite !== false || options.ifMatch) throw new StorageError('not-supported', 'The isolated restore fixture only permits atomic creation of absent files.');
-    const filename = this.#filename(value);
-    const parent = path.dirname(filename);
-    const [root, resolvedParent] = await Promise.all([realpath(this.#root), realpath(parent)]);
-    const relative = path.relative(root, resolvedParent);
-    if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) throw new StorageError('invalid-path', 'The isolated restore target resolves outside its root.');
-    const chunks = []; let length = 0;
-    for await (const chunk of data instanceof Uint8Array ? [data] : data) { this.#check(options.signal); chunks.push(Buffer.from(chunk)); length += chunk.length; }
-    if (options.size != null && BigInt(length) !== BigInt(options.size)) throw new StorageError('invalid-response', 'The isolated restore length differs from its declaration.');
-    const temporary = path.join(parent, `.${path.basename(filename)}.${randomUUID()}.tmp`);
-    try {
-      await writeFile(temporary, Buffer.concat(chunks), { flag: 'wx' });
-      try { await link(temporary, filename); } catch (error) { if (error.code === 'EEXIST') throw new StorageError('already-exists', 'The isolated restore target already exists.'); throw error; }
-    } finally { await unlink(temporary).catch(error => { if (error.code !== 'ENOENT') throw error; }); }
-    return { size: BigInt(length), atomic: true };
-  }
-
-  async listPage(value, options = {}) {
-    const snapshot = await this.#snapshot(value, options.signal);
-    if (snapshot.bytes) throw new StorageError('not-directory', 'The isolated filesystem object is not a directory.');
-    const entries = [];
-    for (const entry of await readdir(snapshot.filename, { withFileTypes: true })) {
-      if (entry.isSymbolicLink() || !entry.isFile() && !entry.isDirectory()) throw new StorageError('invalid-response', 'Unsupported isolated filesystem entry.');
-      entries.push(await this.stat(`${normalizePath(value)}/${entry.name}`, options));
-    }
-    return { entries, complete: true, nextCursor: null, consistency: 'weak', snapshot: null, deletionSafe: false };
-  }
-
-  async health(options = {}) { this.#check(options.signal); return { state: 'available' }; }
-  async close() { this.#closed = true; }
 }
 
 async function refreshNative(baseUrl, token, itemId) {
@@ -416,8 +327,8 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
     const reimportSchema = `media_reimport_${schemaNonce}`;
     const candidateStorageRoot = storageProtocol === 'webdav' ? '/candidate-media' : '/Candidate';
     const returnedStorageRoot = storageProtocol === 'webdav' ? '/returned-media' : returnedAListRoot;
-    const candidateNfoVirtual = '/sidecar-state/candidate-media/movie.nfo';
-    const returnedNfoVirtual = '/sidecar-state/returned-media/movie.nfo';
+    const candidateNfoVirtual = '/media/movie.nfo';
+    const returnedNfoVirtual = '/sidecar-state/movie.nfo';
     const readOwnedTrailer = async baseUrl => {
       const response = await fetch(`${baseUrl}/Items/${trailerId}?Fields=Path,MediaStreams`, {
         headers: { Authorization: `MediaBrowser Token="${token}"` }
@@ -462,15 +373,11 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
       registry.registerType('memory', () => new MemoryStorageAdapter());
       registry.registerType('alist', config => new AListAdapter(config, { resolveCredential: async () => actual.token }));
       registry.registerType('webdav', config => new WebDavAdapter(config, { resolveCredential: async () => actualWebDav.authorization }));
-      registry.registerType('isolated-versioned-filesystem', config => new IsolatedVersionedFilesystemAdapter(config.root));
       await registry.createInstance('return-media', storageProtocol, storageProtocol === 'webdav'
-        ? { baseUrl: actualWebDav.baseUrl, credentialRef: 'isolated' }
+        ? { baseUrl: actualWebDav.baseUrl, credentialRef: 'isolated', capabilities: { create: true } }
         : { baseUrl: actual.baseUrl, credentialRef: 'isolated', capabilities: { create: true, replace: true } });
-      await registry.createInstance('sidecar-state', 'isolated-versioned-filesystem', { root: actual.media });
       const vfs = new VirtualFileSystem(registry); vfs.mount({ path: '/media', instanceId: 'return-media', root: candidateStorageRoot, capabilities: {} });
-      vfs.mount({ path: '/sidecar-state', instanceId: 'sidecar-state', root: '/', capabilities: {
-        create: true, replace: true, conditionalWrite: true, atomicReplace: true
-      } });
+      vfs.mount({ path: '/sidecar-state', instanceId: 'return-media', root: returnedStorageRoot, capabilities: { create: true } });
       const identityMap = new IdentityAccessMap();
       identityMap.addPrefix({ identityRoot: readable, accessRoot: '/media', style: hostPathStyle, returnAccess: 'Native physical directory and actual local media proxy mount' });
       identityMap.bind(negativeId, '/media/feature.mkv');

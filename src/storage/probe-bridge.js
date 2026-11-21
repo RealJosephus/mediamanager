@@ -3,6 +3,7 @@ import { randomBytes } from 'node:crypto';
 import { once } from 'node:events';
 import { StorageError } from './errors.js';
 import { normalizePath, baseName, parentPath } from './paths.js';
+import { conditionalReadVersion } from './read-version.js';
 
 const checkAbort = signal => { if (signal?.aborted) throw Object.assign(new StorageError('cancelled', 'Probe transport was cancelled.'), { cause: signal.reason }); };
 function checkLifetime(signal, expiresInMs) {
@@ -114,14 +115,16 @@ export class ProbeReadBridge {
     if (version != null && info.version !== version) throw new StorageError('version-changed', 'The leased object changed before it was opened.');
     const objects = new Map();
     const filename = relatedPaths.length ? encodeURIComponent(baseName(path)) : '';
-    objects.set(filename, { path, version: version ?? info.version });
+    objects.set(filename, { path, version: info.version, ifMatch: conditionalReadVersion(this.#vfs, path, info) });
     for (const related of relatedPaths) {
       const relatedPath = normalizePath(related);
       if (parentPath(relatedPath) !== parentPath(path)) throw new StorageError('invalid-path', 'Related probe objects must share their directory.');
       const relatedInfo = await this.#vfs.stat(relatedPath, { signal: acquisitionSignal });
       this.#checkAcquisition(signal);
       if (relatedInfo.kind !== 'file') throw new StorageError('is-directory', 'Related probe objects must be files.');
-      objects.set(encodeURIComponent(baseName(relatedPath)), { path: relatedPath, version: relatedInfo.version });
+      objects.set(encodeURIComponent(baseName(relatedPath)), {
+        path: relatedPath, version: relatedInfo.version, ifMatch: conditionalReadVersion(this.#vfs, relatedPath, relatedInfo),
+      });
     }
     return this.#registerLease(objects, { signal, expiresInMs, extensionHint, filename });
   }
@@ -153,7 +156,7 @@ export class ProbeReadBridge {
     if (expiresInMs !== null) { timer = setTimeout(onAbort, expiresInMs); timer.unref(); }
     if (signal?.aborted) { await release(); checkAbort(signal); }
     return { url: `${this.#origin}/${token}${extensionHint}${filename ? '/' + filename : ''}`, expiresAt, release,
-      consistency: objects.get(filename).version ? 'version-precondition' : 'unversioned' };
+      consistency: objects.get(filename).ifMatch ? 'version-precondition' : 'unversioned' };
   }
 
   async #serve(request, response) {
@@ -194,8 +197,10 @@ export class ProbeReadBridge {
         response.writeHead(200); response.end(); return;
       }
       handle = await this.#vfs.openRead(object.path, { signal: controller.signal, range: parseRange(request.headers.range),
-        ifMatch: object.version ?? undefined, ifRange: request.headers['if-range'] });
-      if (object.version && handle.version !== object.version) throw new StorageError('version-changed', 'The leased object changed during its read.');
+        ifMatch: object.ifMatch ?? undefined, ifRange: request.headers['if-range'] });
+      if ((object.ifMatch || handle.version != null && object.version) && handle.version !== object.version) {
+        throw new StorageError('version-changed', 'The leased object changed during its read.');
+      }
       response.setHeader('Content-Type', handle.contentType ?? 'application/octet-stream');
       if (handle.contentLength != null) response.setHeader('Content-Length', String(handle.contentLength));
       if (handle.version) response.setHeader('ETag', handle.version);
