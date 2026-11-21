@@ -10,6 +10,12 @@ export function httpMediaUrl(value) {
     && URL.canParse(value) ? value : undefined;
 }
 
+export function udpMediaUrl(value) {
+  if (typeof value !== 'string' || !/^udp:\/\//iu.test(value) || /[\0\r\n]/u.test(value)) return;
+  const input = URL.parse(value);
+  if (input?.hostname && Number(input.port) > 0 && !input.username && !input.password) return 'udp:' + value.slice(4);
+}
+
 export function liveHttpHlsUrl(source) {
   if (source.LiveStreamId && source.IsInfiniteStream && source.Protocol === 'Http' && isHlsManifest(source.Container)) {
     return httpMediaUrl(source.Path);

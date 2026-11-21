@@ -6,7 +6,7 @@ import { withCleanup } from '../core/operation-failure.js';
 import { stageLiveTvStateFile } from '../database/live-tv-state-files.js';
 import { BinaryResult } from '../http/binary-result.js';
 import { postProcessRecording, recordTransportStream } from '../media-execution/recording.js';
-import { isHlsManifest } from '../media-execution/input.js';
+import { httpMediaUrl, isHlsManifest, udpMediaUrl } from '../media-execution/input.js';
 import { LiveStreamReadBridge } from '../playback/live-stream-bridge.js';
 import { ordinalIgnoreCaseEquals, ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { guideChannelId } from './live-tv-guide-channel.js';
@@ -199,22 +199,28 @@ export class LiveTvDvr {
     if (!candidate) throw libraryError(404, 'The recording channel has no media source.');
     const owner = candidate.RequiresOpening && await this.liveStreams.openOwned({ ItemId: channel.Id, OpenToken: candidate.OpenToken }, { signal });
     const source = owner?.MediaSource ?? candidate;
-    // Owned byte streams still use their reader. An original HTTP input needs
-    // its source URL so FFmpeg resolves nested manifests and segments there.
-    const url = !owner?.openRead && source.Protocol === 'Http' && /^https?:\/\//iu.test(source.Path ?? '') ? source.Path : null;
-    const openRead = owner?.openRead ?? (source.Protocol === 'File'
-      ? options => this.fileSystem.openRead(source.Path, options)
-      : async ({ signal: readSignal }) => {
-        if (!url) throw libraryError(422, 'The tuner source protocol has no byte reader.');
+    // Owned bytes take precedence. The original URL can provide a manifest's
+    // relative origin or allow FFmpeg to receive UDP directly.
+    let openRead = owner?.openRead;
+    const http = !openRead && source.Protocol === 'Http' ? httpMediaUrl(source.Path) : undefined;
+    const udp = !openRead && source.Protocol === 'Udp' ? udpMediaUrl(source.Path) : undefined;
+    if (!openRead && source.Protocol === 'File') openRead = options => this.fileSystem.openRead(source.Path, options);
+    if (http) {
+      openRead = async ({ signal: readSignal }) => {
         const controller = new AbortController();
         const combined = AbortSignal.any([readSignal, controller.signal]);
-        const result = await fetch(url, { signal: combined, headers: source.RequiredHttpHeaders ?? {} });
+        const result = await fetch(http, { signal: combined, headers: source.RequiredHttpHeaders ?? {} });
         if (!result.ok || !result.body) { controller.abort(); throw libraryError(502, 'The tuner did not supply a recording body.'); }
         return { stream: result.body, close: () => controller.abort() };
-      });
+      };
+    }
+    if (!openRead && !udp) {
+      await owner?.release();
+      throw libraryError(422, 'The tuner source protocol has no recording input.');
+    }
     const mappedHls = !owner?.openRead && source.Protocol === 'File'
       && (isHlsManifest(source.Container) || /\.m3u8?$/iu.test(source.Path ?? ''));
-    return { source, openRead, url, mappedHls, close: () => owner?.release() };
+    return { source, openRead, url: http ?? udp, mappedHls, close: () => owner?.release() };
   }
 
   async #openOutput(job, timer, { api, directory, basename, seriesPath }, signal) {

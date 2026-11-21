@@ -1,13 +1,20 @@
 import assert from 'node:assert/strict';
+import { createSocket } from 'node:dgram';
 import { once } from 'node:events';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import http from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { M3uTuner } from '../../plugins/m3u/tuner.js';
 import { LiveTvDvr } from '../../src/library/live-tv-dvr.js';
+import { LiveTvMediaSources } from '../../src/library/live-tv-media-sources.js';
+import { LiveTvTunerService } from '../../src/library/live-tv-tuner-service.js';
 import { captureMediaProcess } from '../../src/media-execution/process.js';
+import { recordTransportStream } from '../../src/media-execution/recording.js';
 import { LiveStreamReadBridge } from '../../src/playback/live-stream-bridge.js';
+import { LiveStreamProbe } from '../../src/playback/live-stream-probe.js';
+import { LiveStreamsService } from '../../src/playback/live-streams.js';
 import { LocalAdapter } from '../../plugins/local/adapter.js';
 import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
 import { StorageFileSystem } from '../../src/storage/files.js';
@@ -166,4 +173,90 @@ test('DVR reads nested manifests and byte-range segments through the authorized 
       await lease.release();
     }
   });
+});
+
+test('DVR probes and records MPEG-TS from the original UDP channel selected by M3U', { timeout: 30000 }, async t => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-dvr-udp-'));
+  const storage = await localStateStorage(root), errors = [], transitions = [], probes = [];
+  const encoderPath = validationExecutable('ffmpeg'), mediaEncoder = { ready: true, encoderPath,
+    probePath: validationExecutable('ffprobe'), getEncodingOptions: () => ({ EncodingThreadCount: 0 }) };
+  const probe = new LiveStreamProbe({ cachePath: root, mediaEncoder, probeOptions: { timeoutMs: 5000 }, onError: error => errors.push(error) });
+  const sender = createSocket('udp4'), reservation = createSocket('udp4');
+  let dvr, pulse, mediaSources, liveStreams, tuners;
+  const tuner = new M3uTuner({ cachePath: root, isLocalNetwork: () => true, logger: { error: error => errors.push(error) } });
+  t.after(async () => {
+    clearInterval(pulse);
+    await dvr?.close();
+    await liveStreams?.close();
+    await probe.close();
+    await mediaSources?.close();
+    await tuners?.close();
+    await tuner.close();
+    sender.close();
+    await storage.close();
+    await rm(root, { recursive: true, force: true });
+  });
+  sender.on('error', error => errors.push(error));
+  sender.bind(0, '127.0.0.1'); await once(sender, 'listening');
+  reservation.bind(0, '127.0.0.1'); await once(reservation, 'listening');
+  const port = reservation.address().port;
+  await new Promise(resolve => reservation.close(resolve));
+  const location = `udp://127.0.0.1:${port}?fifo_size=10000&overrun_nonfatal=1`;
+  const playlist = path.join(root, 'lineup.m3u');
+  await writeFile(playlist, '#EXTM3U\n#EXTINF:-1 tvg-id="udp-1",UDP channel\n' + location + '\n');
+  const configuration = { TunerHosts: [{ Type: 'm3u', Id: 'udp', Url: playlist, TunerCount: 1, EnableStreamLooping: true }] };
+  tuner.connect({ fileSystem: storage.fileSystem, liveTv: { admitRead: () => ({ getConfiguration: async () => configuration, release() {} }) } });
+  tuners = new LiveTvTunerService({ plugins: { entries: () => [tuner] }, sources: { addProviderMetadata() {}, getPrograms() {} } });
+  const [channel] = await tuners.getChannels({ enableCache: true });
+  const item = { Type: 'LiveTvChannel', Id: '12345678-1234-1234-1234-567890abcdef', SourceType: 'LiveTV', ServiceName: 'Emby',
+    ChannelType: 'TV', ExternalId: channel.Id };
+  const library = { itemCreation: { getItemById: async () => item }, getLiveMediaSources: async () => [] };
+  const getLocalApiUrl = () => 'http://127.0.0.1:1';
+  mediaSources = new LiveTvMediaSources({ tuners, library, getLocalApiUrl });
+  const [candidate] = await mediaSources.getMediaSources(item);
+  assert.equal(candidate.Protocol, 'Udp');
+  assert.equal(candidate.Path, location);
+  liveStreams = new LiveStreamsService({ tuners, library, getLocalApiUrl, onError: error => errors.push(error),
+    probe: { async addMediaInfo(source, options) {
+      assert.equal(options.openRead, undefined);
+      assert.equal(source.Id, candidate.Id);
+      assert.equal(source.Path, candidate.Path);
+      await probe.addMediaInfo(source, { ...options, addProbeDelay: false });
+      probes.push(source.MediaStreams[0].Codec);
+    } },
+  });
+  const media = await captureMediaProcess(encoderPath, [
+    '-nostdin', '-v', 'error', '-f', 'lavfi', '-i', 'testsrc2=size=160x90:rate=25:duration=10',
+    '-c:v', 'mpeg2video', '-threads', '1', '-f', 'mpegts', 'pipe:1',
+  ], { signal: t.signal, timeoutMs: 10000, maxOutputBytes: 4 * 1024 * 1024 });
+  assert.equal(media.exitCode, 0, media.stderr.toString());
+  let offset = 0;
+  pulse = setInterval(() => {
+    for (let packet = 0; packet < 4; packet++) {
+      const end = Math.min(offset + 1316, media.stdout.length);
+      sender.send(media.stdout.subarray(offset, end), port, '127.0.0.1');
+      offset = end === media.stdout.length ? 0 : end;
+    }
+  }, 10);
+  const timer = { Id: 'udp-recording', ChannelId: channel.Id, Name: 'UDP DVR', StartDate: new Date().toISOString(),
+    EndDate: new Date(Date.now() + 8000).toISOString(), PrePaddingSeconds: 0, PostPaddingSeconds: 0, RetryCount: 0 };
+  const finished = Promise.withResolvers();
+  dvr = new LiveTvDvr({ library, mediaSources, liveStreams, mediaEncoder, fileSystem: storage.fileSystem, dataPath: root,
+    timers: { readRecordingTimers: async () => [timer], async updateRecordingTimer(_timer, change) {
+      transitions.push(change);
+      dvr.syncTimers(change ? [{ ...timer, ...change }] : []);
+      return true;
+    } },
+    configuration: { getConfiguration: async () => configuration, release() {} },
+    runBackground: operation => operation().finally(finished.resolve), onError: error => errors.push(error),
+  });
+  await dvr.start(); await finished.promise;
+  assert.deepEqual(errors, []);
+  assert.deepEqual(probes, ['mpeg2video']);
+  assert.deepEqual(transitions.map(change => change.Status), ['InProgress', 'Completed']);
+  assert.deepEqual(tuners.getLiveStreams(), []);
+  const bytes = await readFile(transitions.at(-1).RecordingPath);
+  assert.ok(bytes.length > 18800 && bytes.length % 188 === 0 && bytes[0] === 0x47);
+  await assert.rejects(recordTransportStream(mediaEncoder, { Protocol: 'Http' }, location), { code: 'not-supported' });
+  await assert.rejects(recordTransportStream(mediaEncoder, candidate, 'tcp://127.0.0.1:1'), { code: 'not-supported' });
 });
