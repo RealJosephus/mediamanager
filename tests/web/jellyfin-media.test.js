@@ -79,6 +79,17 @@ test('designated Jellyfin Web retains favorites, watched state and a playlist af
       try { return await operation(); }
       finally { interval.finishedAt = new Date().toISOString(); }
     };
+    const reopen = (kind, destination, endpoint) => transition(kind, async () => {
+      const navigation = { kind, previous: new URL(page.url()).hash, target: new URL(destination).hash };
+      (report.readbackNavigation ??= []).push(navigation);
+      try {
+        await page.goto('about:blank');
+        const [response] = await Promise.all([apiResponse(endpoint), page.goto(destination)]);
+        return response;
+      } finally {
+        navigation.observed = new URL(page.url()).hash;
+      }
+    });
 
     await page.goto(`${client.origin}/index.html`);
     report.notificationPermission = await page.evaluate(() => Notification.permission);
@@ -123,6 +134,7 @@ test('designated Jellyfin Web retains favorites, watched state and a playlist af
         && getComputedStyle(image).backgroundImage.startsWith('url(')));
     assert.ok(report.requests.some(request => request.origin === fixture.origin
       && request.path.toLowerCase() === `/items/${movieId}/images/primary`.toLowerCase() && request.status === 200));
+    const movieUrl = page.url();
     report.steps.push('library-card', 'movie-card', 'movie-details', 'decoded-local-poster');
     await page.screenshot({ path: path.join(output, 'movie.png'), fullPage: true });
 
@@ -166,6 +178,7 @@ test('designated Jellyfin Web retains favorites, watched state and a playlist af
     const members = await fixture.administratorRequest(`/Playlists/${playlistId}/Items?UserId=${fixture.userId}`);
     report.playlistItemsBeforeRestart = await body(members);
     assert.deepEqual(report.playlistItemsBeforeRestart.Items.map(item => item.Id), [movieId]);
+    const playlistUrl = page.url();
     report.steps.push('playlist-created-in-ui', 'playlist-member-visible', 'playlist-server-readback');
     await page.screenshot({ path: path.join(output, 'playlist.png'), fullPage: true });
 
@@ -178,17 +191,14 @@ test('designated Jellyfin Web retains favorites, watched state and a playlist af
     const waitedSince = Date.now();
     await delay(Number(staleTime[1]) * 1000 + 1000);
     report.cacheReadback = { source: cacheSource, declaredMs: Number(staleTime[1]) * 1000, waitedMs: Date.now() - waitedSince };
-    const [playlistReadback] = await transition('page-reload', () => Promise.all([
-      apiResponse(new RegExp(`/Playlists/${playlistId}/Items$`, 'iu')), page.reload()
-    ]));
+    // The client can change routes during reconnect. Reopen the observed views
+    // in the same tab to read them over HTTP with the retained browser session.
+    const playlistReadback = await reopen('playlist-readback', playlistUrl, new RegExp(`/Playlists/${playlistId}/Items$`, 'iu'));
     report.playlistItemsAfterRestart = await body(playlistReadback);
     assert.deepEqual(report.playlistItemsAfterRestart.Items.map(item => item.Id), [movieId]);
     await detailPage.locator('.nameContainer').filter({ hasText: playlistName }).waitFor({ state: 'visible' });
     await playlistItem.first().waitFor({ state: 'visible' });
-    // Browser history returns to the movie that opened the playlist editor.
-    const [itemReadback] = await transition('history-back', () => Promise.all([
-      apiResponse(new RegExp(`/Items/${movieId}$`, 'iu')), page.goBack()
-    ]));
+    const itemReadback = await reopen('movie-readback', movieUrl, new RegExp(`/Items/${movieId}$`, 'iu'));
     report.detailAfterRestart = await body(itemReadback);
     assert.equal(report.detailAfterRestart.UserData.IsFavorite, true);
     assert.equal(report.detailAfterRestart.UserData.Played, true);

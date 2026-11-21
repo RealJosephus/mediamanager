@@ -178,7 +178,10 @@ test('designated Jellyfin Web browses official M3U live TV and opens, decodes, s
       const source = negotiation.MediaSources.find(source => source.Id === advertised.Id), playing = startResponse.request().postDataJSON(), progress = progressResponse.request().postDataJSON(), video = await videoState();
       assert.ok(source); assert.equal(source.RequiresOpening, true); assert.equal(typeof source.LiveStreamId, 'string'); assert.ok(source.LiveStreamId.length > 0);
       assert.equal(source.Protocol, 'Http'); assert.equal(source.Path, upstream.origin + '/original.mp4');
-      assert.equal(source.SupportsTranscoding, false); assert.equal(source.TranscodingUrl, undefined); assert.equal(source.RequiresClosing, true);
+      assert.equal(source.SupportsDirectPlay, true);
+      assert.equal(source.SupportsTranscoding, true);
+      assert.equal(source.TranscodingUrl, undefined, 'The browser can use the original source with this profile.');
+      assert.equal(source.RequiresClosing, true);
       assert.ok(source.MediaStreams.some(stream => stream.Codec === 'h264')); assert.ok(source.MediaStreams.some(stream => stream.Codec === 'aac'));
       assert.equal(playing.ItemId, channel.Id); assert.equal(playing.LiveStreamId, source.LiveStreamId); assert.equal(playing.PlayMethod, 'DirectPlay');
       assert.equal(progress.LiveStreamId, source.LiveStreamId); assert.ok(progress.PositionTicks >= 10000000);
