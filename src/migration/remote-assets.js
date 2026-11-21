@@ -4,6 +4,7 @@ import { constants as fsConstants } from 'node:fs';
 import path from 'node:path';
 import { StorageError, checkAbort } from '../storage/errors.js';
 import { normalizePath } from '../storage/paths.js';
+import { conditionalReadVersion as conditionalVersion } from '../storage/read-version.js';
 import { assertExactStateEntry } from './state-path-name.js';
 
 const kinds = new Set(['nfo', 'subtitle', 'lyric', 'image', 'playlist', 'attachment', 'plugin-state']);
@@ -99,11 +100,6 @@ export function validateRemoteAssetManifest(files) {
     assetIds.add(assetId); virtualPaths.add(virtualPath); localPaths.add(localPath); result.push(file);
   }
   return result;
-}
-
-function conditionalVersion(vfs, virtualPath, metadata) {
-  if (typeof metadata.version !== 'string' || !metadata.version || metadata.versionReliability === 'weak') return null;
-  return metadata.versionReliability === 'strong' || vfs.capabilities(virtualPath).reliableVersion ? metadata.version : null;
 }
 
 async function digestRemote(vfs, virtualPath, version, signal, { maxBytes, expectedBytes } = {}) {
