@@ -75,11 +75,15 @@ export class LiveTvDvr {
     return this.#starting ??= (async () => {
       const generation = this.#generation;
       const timers = await this.timers.readRecordingTimers();
-      await this.#recoverPublications();
+      this.#publications = await this.#recoverPublications();
       this.#ready = true;
       if (generation === this.#generation) this.syncTimers(timers);
       else this.#schedule();
-    })().catch(error => this.#report(error));
+    })().catch(error => {
+      this.#ready = false;
+      this.#starting = undefined;
+      throw error;
+    });
   }
 
   syncTimers(timers) {
@@ -137,21 +141,29 @@ export class LiveTvDvr {
   }
 
   async #recoverPublications() {
+    const publications = new Map();
     const root = this.#publicationRoot();
-    if (!root) return;
+    if (!root) return publications;
     let entries;
     try { entries = await this.fileSystem.readdir(root, { withFileTypes: true }); }
-    catch (error) { if (missing(error)) return; throw error; }
+    catch (error) { if (missing(error)) return publications; throw error; }
     const api = pathApi(root);
     for (const entry of entries) {
       if (!entry.isDirectory() || !/^recording-[a-f0-9-]{36}$/u.test(entry.name)) continue;
       const spool = api.join(root, entry.name), readPath = api.join(spool, 'recording.ts');
+      if (!await this.#publicationBytes(readPath)) {
+        await this.fileSystem.rm(spool, { recursive: true, force: true });
+        continue;
+      }
+      let metadata;
+      try { metadata = await this.fileSystem.readFile(api.join(spool, publicationFile), 'utf8'); }
+      catch (error) {
+        if (!missing(error)) throw error;
+        this.#report(error);
+        continue;
+      }
       try {
-        if (!await this.#publicationBytes(readPath)) {
-          await this.fileSystem.rm(spool, { recursive: true, force: true });
-          continue;
-        }
-        const state = JSON.parse(await this.fileSystem.readFile(api.join(spool, publicationFile), 'utf8'));
+        const state = JSON.parse(metadata);
         // Older writers left retryCapture=false both during capture and before upload.
         const phase = state?.phase ?? (state?.retryCapture ? 'publishing' : 'capturing');
         if (typeof state?.timer?.Id !== 'string' || !state.timer.Id.trim() || typeof state.path !== 'string'
@@ -160,10 +172,11 @@ export class LiveTvDvr {
           throw new Error('The staged recording has invalid publication metadata.');
         }
         const id = key(state.timer.Id);
-        if (this.#publications.has(id)) throw new Error('More than one staged recording exists for this timer.');
-        this.#publications.set(id, { ...state, phase, spool, readPath, due: 0 });
+        if (publications.has(id)) throw new Error('More than one staged recording exists for this timer.');
+        publications.set(id, { ...state, phase, spool, readPath, due: 0 });
       } catch (error) { this.#report(error); }
     }
+    return publications;
   }
 
   async #savePublication({ spool, timer, path: filename, seriesPath, phase, retryCapture }) {

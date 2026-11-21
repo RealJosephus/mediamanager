@@ -177,3 +177,34 @@ for (const mode of ['graceful shutdown', 'process exit', 'process exit with lega
     assert.deepEqual(failures, []);
   });
 }
+
+for (const stage of ['timers', 'spool enumeration']) {
+  test(`DVR retries startup after a temporary failure reading ${stage} and schedules later timers`, { timeout: 20000 }, async t => {
+    const fixture = await recordingFixture(t, { stream: async function* () { yield footage; } });
+    const run = fixture.newDvr(100);
+    const unavailable = Object.assign(new Error('The recording state is temporarily unavailable.'), { code: 'EIO' });
+    let reads = 0, enumerations = 0;
+    t.mock.method(run.dvr.timers, 'readRecordingTimers', async () => {
+      if (++reads === 1 && stage === 'timers') throw unavailable;
+      return [];
+    });
+    const readdir = fixture.fileSystem.readdir.bind(fixture.fileSystem);
+    t.mock.method(fixture.fileSystem, 'readdir', async (filename, options) => {
+      if (filename === fixture.publicationRoot && ++enumerations === 1 && stage === 'spool enumeration') throw unavailable;
+      return readdir(filename, options);
+    });
+    const first = run.dvr.start();
+    assert.equal(run.dvr.start(), first);
+    await assert.rejects(first, error => error === unavailable);
+    assert.equal(fixture.tuned, 0);
+    await run.dvr.start();
+    assert.equal(reads, 2);
+    assert.equal(enumerations, stage === 'spool enumeration' ? 2 : 1);
+    // Add a timer after startup. Subsequent publication reads should see it.
+    run.dvr.timers.readRecordingTimers.mock.restore();
+    run.dvr.syncTimers([fixture.timer]);
+    await run.completed;
+    assert.equal(fixture.tuned, 1);
+    assert.deepEqual(await fixture.fileSystem.readFile(fixture.timer.RecordingPath), footage);
+  });
+}
