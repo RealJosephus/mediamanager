@@ -7,6 +7,7 @@ import path from 'node:path';
 import pg from 'pg';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { dependencyOrder, quoteIdentifier, tableDefinition } from '../../src/database/model.js';
+import { decodeNativeTextBytes } from '../../src/database/native-text.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { expandStatePath } from './fixture-state-path.js';
@@ -129,6 +130,24 @@ export async function recordUserViewsCandidate({ dialect, fixture, contract, con
     assert.equal(keyCreated.status, 204, keyCreated.bodyText);
     const keys = await request('/Auth/Keys', { token: actors.primary.token }); assert.equal(keys.status, 200);
     const apiKey = keys.bodyJson.Items.find(key => key.AppName === 'UserViewsCandidate')?.AccessToken; assert.ok(apiKey);
+    // Detached refreshes may commit between the HTTP request and either of
+    // its surrounding row snapshots. Record each stamp in its writer's
+    // PostgreSQL transaction so a rolled-back save cannot validate an Etag.
+    const stampTable = `${quoteIdentifier(schema)}.view_saved_stamps`;
+    const recordStamp = `${quoteIdentifier(schema)}.record_view_saved_stamp`;
+    await database.client.query(`CREATE TABLE ${stampTable} ("Id" bytea, "DateLastSaved" bytea,
+      PRIMARY KEY ("Id", "DateLastSaved"));
+      CREATE FUNCTION ${recordStamp}() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN
+        INSERT INTO ${stampTable} VALUES (NEW."Id", NEW."DateLastSaved") ON CONFLICT DO NOTHING;
+        RETURN NEW;
+      END $$;
+      CREATE TRIGGER record_view_saved_stamp AFTER INSERT OR UPDATE OF "DateLastSaved" ON "BaseItems"
+      FOR EACH ROW WHEN (NEW."DateLastSaved" IS NOT NULL AND
+        NEW."Type" = convert_to('MediaBrowser.Controller.Entities.UserView', 'UTF8'))
+      EXECUTE FUNCTION ${recordStamp}()`);
+    const observedStamps = async () => (await database.client.query(`SELECT "Id", "DateLastSaved"
+      FROM ${stampTable} ORDER BY "Id", "DateLastSaved"`)).rows.map(row => ({ Id: decodeNativeTextBytes(row.Id),
+      DateLastSaved: decodeNativeTextBytes(row.DateLastSaved) }));
     before = await snapshot(database, root);
     for (const testCase of fixture.cases) {
       const actor = actors[testCase.actor ?? 'primary'];
@@ -147,7 +166,8 @@ export async function recordUserViewsCandidate({ dialect, fixture, contract, con
         const route = endpoint === 'views' ? `/UserViews?userId=${actor.userId}&${testCase.query}` : `/Users/${actor.userId}/Views?${testCase.query}`;
         const stageBefore = await snapshot(database, root);
         records.push({ name: testCase.name, query: testCase.query, actor: testCase.actor ?? 'primary', endpoint, route, response: await request(route, { token: actor.token }) });
-        caseStages.push({ name: testCase.name, endpoint, before: stageBefore, after: await snapshot(database, root) });
+        caseStages.push({ name: testCase.name, endpoint, before: stageBefore, after: await snapshot(database, root),
+          savedStamps: await observedStamps() });
       }
     }
     await runtime.library.userViews.drain();

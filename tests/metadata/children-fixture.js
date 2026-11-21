@@ -50,9 +50,10 @@ export function useIdentityPathReversalControl(fixture) {
   fixture.loadContext = fixture.host.loadContext = loadContext;
 }
 
-export async function setupChildrenFixture(t) {
+export async function setupChildrenFixture(t, { max, connectionTimeoutMillis } = {}) {
   const schema = 'metadata_children_' + randomUUID().replaceAll('-', '').slice(0, 16);
-  const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
+  const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true,
+    max, connectionTimeoutMillis });
   let stateRoot, linkedChildren, store, library, storage, itemCreation, host;
   const contexts = new Set(), states = new Set();
   t.after(async () => {

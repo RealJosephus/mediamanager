@@ -11,7 +11,8 @@ test('library closure cancels view refreshes before rejecting their later librar
   const finishRead = Promise.withResolvers(), finishRefresh = Promise.withResolvers();
   const errors = [], store = {
     run: operation => Promise.resolve().then(() => operation({})),
-    enqueue: operation => Promise.resolve().then(() => operation({}))
+    currentOperationCompletion() {},
+    runDetached: operation => operation()
   };
   const library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'view-close', onError: error => errors.push(error), configuration: { CacheSize: 16 } });
   const item = newNativeItemEntity('MediaBrowser.Controller.Entities.Folder'); item.Id = 'eb150000000000000000000000000001';

@@ -62,7 +62,7 @@ export class UserViewService {
     if (this.#closing) return;
     // ProviderManager retains every enqueue, including repeated ids. Selection
     // of unchanged providers happens inside the metadata service, not here.
-    this.#refreshQueue.push({ item, forceSave });
+    this.#refreshQueue.push({ item, forceSave, ready: this.store.currentOperationCompletion() });
     this.#startProcessing();
   }
 
@@ -78,17 +78,23 @@ export class UserViewService {
     while (!this.#closing && this.#refreshQueue.length) {
       // Named views all use Normal priority. CLR PriorityQueue replaces the
       // removed root with the last node; equal priorities do not sift down.
-      const { item, forceSave } = this.#refreshQueue[0];
+      const { item, forceSave, ready } = this.#refreshQueue[0];
       const last = this.#refreshQueue.pop();
       if (this.#refreshQueue.length) this.#refreshQueue[0] = last;
       try {
-        // Leave the request's reentrant scope and join the connection queue.
-        await this.store.enqueue(async () => {
+        // The creating request must finish before refresh captures its row.
+        // Metadata providers can wait on storage without owning a database
+        // connection or competing with foreground admission.
+        await this.store.runDetached(async () => {
+          await ready;
           if (this.#closing) return;
           this.refreshes?.reportStarted(item);
           try {
-            await this.metadata.refresh(item.Id, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'Default', ForceSave: forceSave,
-              signal: this.#refreshLifetime.signal });
+            const refresh = () => this.metadata.refresh(item.Id, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'Default',
+              ForceSave: forceSave, signal: this.#refreshLifetime.signal });
+            const withDetachedScope = this.metadata.loadContext?.withDetachedScope;
+            if (withDetachedScope) await withDetachedScope(refresh);
+            else await refresh();
             this.refreshes?.reportProgress(item, 100);
           } finally { this.refreshes?.reportCompleted(item); }
         });

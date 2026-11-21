@@ -94,6 +94,9 @@ function bodyContract(response, stage, allStages, root, { nativeTransientEtags, 
       const saved = candidate.database.baseItems.find(value => idKey(value.Id) === idKey(item.Id));
       if (saved) stamps.add(etag(saved.DateLastSaved));
     }
+    for (const observation of stage.savedStamps ?? []) if (idKey(observation.Id) === idKey(item.Id)) {
+      stamps.add(etag(observation.DateLastSaved));
+    }
     assert.match(item.Etag, /^[a-f0-9]{32}$/u, item.Name + ' Etag GUID format');
     const beforeRow = stage.before.database.baseItems.find(value => idKey(value.Id) === idKey(item.Id));
     if (row.DateLastSaved == null) assert.equal(item.Etag, etag(MIN_DATE), item.Name + ' initial unsaved Etag');

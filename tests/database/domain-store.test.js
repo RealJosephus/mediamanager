@@ -27,8 +27,8 @@ async function bounded(promise, timeoutMs = 1000) {
   } finally { controller.abort(); }
 }
 
-async function postgresStoreFixture(t, prefix) {
-  const database = await createPostgresTestDatabase(null, prefix, { max: 4 });
+async function postgresStoreFixture(t, prefix, options) {
+  const database = await createPostgresTestDatabase(null, prefix, { max: 4, ...options });
   const store = new DomainStore(database);
   t.after(async () => {
     await store.close();
@@ -206,6 +206,32 @@ test('an awaited PostgreSQL child uses an independent connection before backgrou
   assert.deepEqual(order, ['child', 'parent-finished', 'background']);
   assert.deepEqual((await store.run(db => db.rows('ApiKeys'))).map(row => row.Name).sort(),
     ['background', 'child-committed', 'parent-committed']);
+});
+
+for (const max of [1, 3]) test(`awaited children progress while all ${max} primary PostgreSQL connections are occupied`, {
+  skip: !postgresTestConnectionString, timeout: 30000,
+}, async t => {
+  const { store, database } = await postgresStoreFixture(t, 'domain_child_full', { max, connectionTimeoutMillis: 4000 });
+  const started = Array.from({ length: max }, () => Promise.withResolvers()), proceed = Promise.withResolvers();
+  const pid = async db => (await db.client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid;
+  const parents = started.map((arrival, index) => store.run(async parent => {
+    arrival.resolve(await pid(parent));
+    const occupied = await proceed.promise;
+    return store.runChild(async child => {
+      const childPid = await pid(child);
+      assert.ok(!occupied.includes(childPid));
+      assert.equal(await pid(database), childPid, 'Direct repository calls use the child connection.');
+      await store.transaction(db => db.insert('ApiKeys', apiKey('child-' + index)));
+    });
+  }));
+  try {
+    const occupied = await bounded(Promise.all(started.map(arrival => arrival.promise)), 5000);
+    assert.equal(new Set(occupied).size, max);
+    assert.equal(database.pool.idleCount, 0);
+    proceed.resolve(occupied);
+    await bounded(Promise.all(parents), 9000);
+    assert.equal((await database.rows('ApiKeys')).length, max);
+  } finally { proceed.resolve([]); await Promise.allSettled(parents); }
 });
 
 test('an aborted enqueue never runs and a failed background operation leaves the connection queue usable', {
@@ -417,7 +443,16 @@ test('domain child admission rejects external callers and parents holding transa
 
 test('domain shutdown drains an admitted child after its parent returns and freezes external admission', async () => {
   const pool = new MockPostgresPool();
-  const store = new DomainStore(new PostgresDatabase(pool, 'child_close_fixture'));
+  const childPool = new MockPostgresPool();
+  const password = () => 'fixture-password';
+  Object.defineProperty(pool.options, 'password', { value: password });
+  const store = new DomainStore(new PostgresDatabase(pool, 'child_close_fixture', {
+    createChildPool(options) {
+      assert.deepEqual(options, { ...pool.options, password });
+      assert.equal(childPool.clients.length, 0, 'The child pool is created once.');
+      return childPool;
+    }
+  }));
   const entered = Promise.withResolvers(), release = Promise.withResolvers();
   let child, closing, drained = false;
   try {
@@ -430,10 +465,12 @@ test('domain shutdown drains an admitted child after its parent returns and free
       await bounded(entered.promise);
     });
     closing = store.close().then(() => { drained = true; });
-    assert.equal(drained, false); assert.equal(pool.active, 1); assert.equal(pool.ended, false);
+    assert.equal(drained, false); assert.equal(pool.active, 0); assert.equal(pool.ended, false);
+    assert.equal(childPool.active, 1); assert.equal(childPool.ended, false);
     await assert.rejects(store.run(() => assert.fail('External admission after close.')), /Database store is closing/);
     release.resolve(); await bounded(child); await bounded(closing);
     assert.equal(drained, true); assert.equal(pool.active, 0); assert.equal(pool.ended, true);
+    assert.equal(childPool.active, 0); assert.equal(childPool.ended, true);
   } finally { release.resolve(); await Promise.allSettled([child, closing]); await store.close(); }
 });
 

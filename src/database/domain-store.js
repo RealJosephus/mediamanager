@@ -3,6 +3,7 @@ import { acquirePostgresWriteLock, releasePostgresWriteLock } from './postgres-w
 import { operationFailure } from '../core/operation-failure.js';
 
 const postgresOperationAdmission = Symbol('postgres-operation-admission');
+const childAdmission = Symbol('postgres-child-admission');
 
 async function withPostgresWriteLock(database, scope, operation, options) {
   if (scope.writeLockDepth > 0) return operation();
@@ -52,7 +53,8 @@ export class DomainStore {
       });
     }
     if (this.#closing && !admitted) return Promise.reject(new Error('Database store is closing'));
-    const start = () => this.database.withConnection(database => {
+    const withConnection = admitted === childAdmission ? this.database.withChildConnection : this.database.withConnection;
+    const start = () => withConnection.call(this.database, database => {
       signal?.throwIfAborted();
       let finishScope;
       const finished = new Promise(resolve => { finishScope = resolve; });
@@ -147,15 +149,15 @@ export class DomainStore {
   }
 
   // An awaited child must not join a background queue that can itself be
-  // waiting for this parent. Give it a separate tracked connection; inheriting
-  // the parent's transaction or writer lock would create another wait cycle.
+  // waiting for this parent. Its SQL uses a separate pool, since every
+  // ordinary connection can be held by a parent awaiting its own child.
   runChild(operation) {
     const parent = this.#context.getStore();
     if (!parent?.active || parent.transaction || parent.writeLockDepth > 0) {
       return Promise.reject(new Error('A domain child requires an active operation outside a transaction or writer lock.'));
     }
     return this.#context.exit(() => this.database.runDetached(() => this.run(operation, {
-      [postgresOperationAdmission]: true
+      [postgresOperationAdmission]: childAdmission
     })));
   }
 

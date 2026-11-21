@@ -8,6 +8,7 @@ import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { setTimeout as delay } from 'node:timers/promises';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { quoteIdentifier, tableDefinition } from '../../src/database/model.js';
@@ -384,6 +385,43 @@ postgresTest('UserView disposal cancels the active refresh, stops pending work a
     assert.equal(calls, 1, 'native disposal stops before taking any pending entry');
     assert.deepEqual(errors, []);
   } finally { gate.resolve(); }
+});
+
+postgresTest('an independent PostgreSQL read completes while a detached UserView refresh waits', async t => {
+  const { store, library, db, errors, query, newRows, advance } = await fixture(t);
+  const entered = Promise.withResolvers(), release = Promise.withResolvers();
+  const views = library.userViews;
+  await query(); await views.drain();
+  const view = (await newRows()).find(row => row.DateLastRefreshed != null);
+  assert.ok(view?.DateLastSaved);
+  const where = { Id: view.Id };
+  advance(60000);
+  const refresh = views.metadata.refresh.bind(views.metadata);
+  let started = false;
+  views.metadata.refresh = async (...args) => {
+    started = true;
+    entered.resolve();
+    await release.promise;
+    return refresh(...args);
+  };
+  try {
+    await store.transaction(async session => {
+      await session.update('BaseItems', where, { Name: 'Committed UserView' });
+      views.queueRefresh({ Id: view.Id });
+      await new Promise(resolve => setImmediate(resolve));
+      assert.equal(started, false);
+    });
+    await entered.promise;
+    const foreground = store.run(async session => (await session.rows('BaseItems', { where }))[0].Name,
+      { readOnly: true });
+    const timer = new AbortController();
+    try {
+      assert.equal(await Promise.race([foreground, delay(5000, 'read held behind refresh', { signal: timer.signal })]),
+        'Committed UserView');
+    } finally { timer.abort(); }
+  } finally { release.resolve(); await views.drain(); }
+  assert.deepEqual(errors, []);
+  assert.ok(dateTicks((await db.rows('BaseItems', { where }))[0].DateLastSaved) > dateTicks(view.DateLastSaved));
 });
 
 postgresTest('UserView repeated menus enqueue each identity separately after leaving the request scope', async t => {

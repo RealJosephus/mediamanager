@@ -46,7 +46,8 @@ for (const control of selected) test(`actual DLL queue control: ${control.name}`
   const items = Object.fromEntries(['A', 'B', 'C', ...Array.from({ length: 9 }, (_, index) => String(index + 1))].map((name, index) =>
     [name, { Id: `99520000-0000-0000-0000-${String(index + 1).padStart(12, '0')}`, Name: name }]));
   const names = new Map(Object.values(items).map(item => [item.Id, item.Name]));
-  const database = { dialect: 'postgres', withConnection: operation => operation(database), close: async () => {} };
+  const database = { dialect: 'postgres', withConnection: operation => operation(database),
+    runDetached: operation => operation(), close: async () => {} };
   const library = { store: new DomainStore(database), options: {}, clock: () => new Date(),
     onError(error) { errors.push({ name: error.name, code: error.code, message: error.message, stack: error.stack });
       events.push({ kind: 'logged-error', Message: error.message }); } };

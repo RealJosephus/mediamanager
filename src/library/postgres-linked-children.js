@@ -16,6 +16,11 @@ const handles = new WeakSet();
 const revisionObservers = new WeakMap();
 const pageSize = 128;
 const fields = '"Ordinal", "ItemId", "Type", "Path", "LibraryItemId"';
+const runtimeSchemaPattern = '^mm_links_[a-f0-9]{32}$';
+const runtimeSchemaMarker = 'MediaManager linked children runtime lease v1';
+const runtimeLeasePrefix = 'mediamanager:linked-children:';
+const ownedRuntimeSchema = `nspname ~ '${runtimeSchemaPattern}' AND nspowner=(SELECT oid FROM pg_roles WHERE rolname=current_user)
+  AND obj_description(oid, 'pg_namespace')=$1`;
 export const EMPTY_NATIVE_LINKS = Object.freeze({ kind: 'empty-native-links' });
 export const isLinkedChildrenHandle = value => value !== null && typeof value === 'object' && handles.has(value);
 const requirePlan = plan => {
@@ -57,6 +62,8 @@ export class PostgresLinkedChildrenStore {
   #closed = false;
   #initialized = false;
   #ownDatabase;
+  #schemaLease;
+  #leaseError;
   #operations = new Set();
   #operationContext = new AsyncLocalStorage();
   #closing = false;
@@ -84,7 +91,7 @@ export class PostgresLinkedChildrenStore {
     }
     Object.assign(this, { database, runtimeId });
     this.schemaName = 'mm_links_' + runtimeId.replaceAll('-', '');
-    if (!/^mm_links_[a-f0-9]{32}$/u.test(this.schemaName)) throw new TypeError('A UUID runtime identity is required.');
+    if (!new RegExp(runtimeSchemaPattern, 'u').test(this.schemaName)) throw new TypeError('A UUID runtime identity is required.');
     this.sets = `${q(this.schemaName)}.sets`;
     this.rows = `${q(this.schemaName)}.rows`;
     this.pins = `${q(this.schemaName)}.pins`;
@@ -92,6 +99,9 @@ export class PostgresLinkedChildrenStore {
   #active(owned = false) {
     if (this.#closed || !this.#initialized || !owned && this.#closing && this.#operationContext.getStore() !== this) {
       throw new Error('SQL link runtime is not active.');
+    }
+    if (!owned && this.#leaseError && this.#operationContext.getStore() !== this) {
+      throw new Error('The SQL link runtime lost its schema lease.', { cause: this.#leaseError });
     }
   }
   #run(operation) {
@@ -124,10 +134,46 @@ export class PostgresLinkedChildrenStore {
       return this.relationDatabase.withConnection(operation);
     });
   }
+
+  async #reapSchemas(lease) {
+    await lease.query('BEGIN ISOLATION LEVEL READ COMMITTED');
+    try {
+      const { rows } = await lease.query(`WITH marked AS MATERIALIZED (
+          SELECT oid, nspname FROM pg_namespace WHERE ${ownedRuntimeSchema} AND nspname<>$2
+        ) SELECT oid, nspname FROM marked WHERE pg_try_advisory_xact_lock(hashtextextended($3 || nspname, 0))`,
+      [runtimeSchemaMarker, this.schemaName, runtimeLeasePrefix]);
+      for (const { oid, nspname } of rows) {
+        // Another reaper may have removed this namespace between the catalog
+        // snapshot and lock acquisition. Recheck ownership on the locked name.
+        const current = await lease.query(`SELECT 1 FROM pg_namespace WHERE ${ownedRuntimeSchema} AND oid=$2 AND nspname=$3`,
+          [runtimeSchemaMarker, oid, nspname]);
+        if (current.rowCount) await lease.query(`DROP SCHEMA ${q(nspname)} CASCADE`);
+      }
+      await lease.query('COMMIT');
+    } catch (error) {
+      try { await lease.query('ROLLBACK'); }
+      catch (cleanup) { throw linkOperationFailure([error, cleanup], 'SQL link schema reclamation failed.'); }
+      throw error;
+    }
+  }
+
   async initialize() {
-    if (this.#closed || this.#initialized) throw new Error('SQL link runtime initializes exactly once.');
-    await this.relationDatabase.withConnection(async session => {
-      await session.client.query(`CREATE SCHEMA ${q(this.schemaName)};
+    if (this.#closed || this.#schemaLease) throw new Error('SQL link runtime initializes exactly once.');
+    const poolOptions = this.relationDatabase.pool.options;
+    const options = { ...poolOptions };
+    if (Object.hasOwn(poolOptions, 'password')) options.password = poolOptions.password;
+    const lease = this.#schemaLease = new pg.Client(options);
+    lease.on('error', error => { this.#leaseError ??= error; });
+    lease.on('end', () => { if (!this.#closing) this.#leaseError ??= new Error('The SQL link lease connection ended.'); });
+    try {
+      await lease.connect();
+      await lease.query('SET search_path TO pg_catalog; SET idle_session_timeout = 0');
+      await this.#reapSchemas(lease);
+      const { rows } = await lease.query('SELECT pg_try_advisory_lock(hashtextextended($1, 0)) AS locked',
+        [runtimeLeasePrefix + this.schemaName]);
+      if (!rows[0].locked) throw new Error('The SQL link runtime schema is already leased.');
+      await lease.query(`CREATE SCHEMA ${q(this.schemaName)};
+        COMMENT ON SCHEMA ${q(this.schemaName)} IS '${runtimeSchemaMarker}';
         CREATE TABLE ${this.sets} (id uuid PRIMARY KEY, parent_id bytea NOT NULL, max_revision bigint NOT NULL DEFAULT 0);
         CREATE TABLE ${this.rows} (set_id uuid NOT NULL REFERENCES ${this.sets}(id) ON DELETE CASCADE,
           "Ordinal" bigint NOT NULL CHECK ("Ordinal">0), "ItemId" bytea, "Type" integer NOT NULL,
@@ -145,9 +191,13 @@ export class PostgresLinkedChildrenStore {
           "Id" bytea NOT NULL,PRIMARY KEY(scope_id,"Ordinal"));
         CREATE INDEX ON ${this.pins}(set_id);
         CREATE INDEX ON ${q(this.schemaName)}.item_cohorts(scope_id);`);
-    });
-    this.#initialized = true;
-    this.resourceGraph = await createNativeResourceGraph({ linkedChildren: this });
+      this.#initialized = true;
+      this.resourceGraph = await createNativeResourceGraph({ linkedChildren: this });
+    } catch (error) {
+      try { await this.close(); }
+      catch (cleanup) { throw linkOperationFailure([error, cleanup], 'SQL link runtime initialization failed.'); }
+      throw error;
+    }
   }
   check(handle) {
     this.#active(true);
@@ -717,7 +767,7 @@ export class PostgresLinkedChildrenStore {
       const failures = [];
       // The graph owns a persistent scope. Drain it before waiting for every
       // scope lease, while its already-admitted views can still finish work.
-      try { await this.resourceGraph?.close(); } catch (error) { failures.push(error); }
+      try { await this.#operationContext.run(this, () => this.resourceGraph?.close()); } catch (error) { failures.push(error); }
       // Runtime has already stopped new requests/cache owners. Retained event
       // and importer owners can still finish/release; do not drop their rows.
       while (this.#operations.size || [...this.#entries.values()].some(entry => entry.references !== 0)) {
@@ -732,10 +782,15 @@ export class PostgresLinkedChildrenStore {
           await new Promise(resolve => this.#drainWaiters.add(resolve));
         }
         this.#closed = true;
-        try { await this.relationDatabase.withConnection(db => db.client.query(`DROP SCHEMA ${q(this.schemaName)} CASCADE`)); }
+        try {
+          if (this.#leaseError) throw this.#leaseError;
+          await this.#schemaLease.query(`DROP SCHEMA ${q(this.schemaName)} CASCADE`);
+          await this.#reapSchemas(this.#schemaLease);
+        }
         catch (error) { failures.push(error); }
       });
       try { if (this.#ownDatabase) await this.relationDatabase.close(); } catch (error) { failures.push(error); }
+      try { await this.#schemaLease?.end(); } catch (error) { failures.push(error); }
       this.#closed = true; this.#entries.clear();
       if (failures.length) throw new AggregateError(failures, 'SQL link runtime close failed.');
     })();

@@ -7,6 +7,27 @@ import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConne
 
 export const requiredValidationServices = ['postgres'];
 
+test('both production pools recover after PostgreSQL expires an idle connection', {
+  skip: !postgresTestConnectionString, timeout: 30000,
+}, async t => {
+  const database = await createPostgresTestDatabase(t, 'pool_idle', { max: 1 });
+  const links = new PostgresLinkedChildrenStore({ database });
+  t.after(() => links.close());
+  await links.initialize();
+  for (const owner of [database, links.relationDatabase]) {
+    const removed = new Promise(resolve => owner.pool.once('remove', resolve));
+    const pid = await owner.withConnection(async session => {
+      await session.client.query("SET idle_session_timeout = '250ms'");
+      return (await session.client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid;
+    });
+    assert.equal((await removed).processID, pid);
+    const { pid: next, usable } = (await owner.client.query('SELECT pg_backend_pid() AS pid, 1 AS usable')).rows[0];
+    assert.notEqual(next, pid);
+    assert.equal(usable, 1);
+  }
+  await links.close();
+});
+
 test('PostgreSQL close retains its actual backend and temporary objects until physical disconnect completes', {
   skip: !postgresTestConnectionString, timeout: 30000,
 }, async () => {

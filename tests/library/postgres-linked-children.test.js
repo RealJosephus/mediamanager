@@ -1,5 +1,8 @@
 import fs from 'node:fs/promises';
 import { createHash, randomUUID } from 'node:crypto';
+import { spawn } from 'node:child_process';
+import { once } from 'node:events';
+import { setTimeout as delay } from 'node:timers/promises';
 import { serialize, deserialize } from 'node:v8';
 import assert from 'node:assert/strict';
 import pg from 'pg';
@@ -12,6 +15,66 @@ import { nativeTextBytes } from '../../src/database/native-text.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
 
 import test from 'node:test';
+test('linked-child schema reclamation removes a crashed owner and preserves concurrent owners', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 60000,
+}, async t => {
+  const database = await createPostgresTestDatabase(null, 'links_orphan', { max: 1 });
+  const active = new PostgresLinkedChildrenStore({ database }), concurrent = new PostgresLinkedChildrenStore({ database });
+  const unmarked = 'mm_links_' + randomUUID().replaceAll('-', '');
+  let child, exited, abandoned;
+  try {
+    await active.initialize();
+    await database.client.query(`CREATE SCHEMA "${unmarked}"; CREATE TABLE "${unmarked}".unrelated (value integer)`);
+    const dbUrl = new URL('../../src/database/postgres.js', import.meta.url).href;
+    const linksUrl = new URL('../../src/library/postgres-linked-children.js', import.meta.url).href;
+    child = spawn(process.execPath, ['--input-type=module', '--eval', `
+      import { PostgresDatabase } from ${JSON.stringify(dbUrl)};
+      import { PostgresLinkedChildrenStore } from ${JSON.stringify(linksUrl)};
+      const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,
+        schema: process.env.MEDIAMANAGER_LINK_TEST_SCHEMA, max: 1 });
+      const store = new PostgresLinkedChildrenStore({ database });
+      await store.initialize();
+      process.send(store.schemaName);
+    `], { stdio: ['ignore', 'ignore', 'inherit', 'ipc'],
+      env: { ...process.env, MEDIAMANAGER_LINK_TEST_SCHEMA: database.schemaName } });
+    exited = once(child, 'exit');
+    [abandoned] = await Promise.race([once(child, 'message'), exited.then(([code, signal]) => {
+      throw new Error(`The linked-child process exited before starting (${code ?? signal}).`);
+    })]);
+    assert.match(abandoned, /^mm_links_[a-f0-9]{32}$/u);
+
+    const tables = async schema => (await database.client.query('SELECT tablename FROM pg_tables WHERE schemaname=$1 ORDER BY tablename',
+      [schema])).rows.map(row => row.tablename);
+    const ownedTables = ['folder_child_ids', 'item_cohorts', 'item_states', 'pins', 'rows', 'sets'];
+    await concurrent.initialize();
+    for (const schema of [active.schemaName, abandoned, concurrent.schemaName]) assert.deepEqual(await tables(schema), ownedTables);
+    assert.deepEqual(await tables(unmarked), ['unrelated']);
+
+    assert.equal(child.kill('SIGKILL'), true); await exited;
+    assert.deepEqual(await tables(abandoned), ownedTables, 'The killed process could not run graceful cleanup.');
+    const lockKey = 'mediamanager:linked-children:' + abandoned;
+    for (;;) {
+      const { free } = (await database.client.query('SELECT pg_try_advisory_xact_lock(hashtextextended($1, 0)) AS free',
+        [lockKey])).rows[0];
+      if (free) break;
+      await delay(20, undefined, { signal: t.signal });
+    }
+    await concurrent.close();
+    assert.deepEqual(await tables(abandoned), []);
+    assert.deepEqual(await tables(concurrent.schemaName), []);
+    assert.deepEqual(await tables(active.schemaName), ownedTables);
+    assert.deepEqual(await tables(unmarked), ['unrelated']);
+    assert.equal((await active.withSession(db => db.client.query(`SELECT count(*) AS count FROM ${active.rows}`))).rows[0].count, 0n);
+  } finally {
+    if (child) { child.kill('SIGKILL'); await Promise.allSettled([exited]); }
+    try {
+      await concurrent.close();
+      await active.close();
+      await database.client.query(`DROP SCHEMA IF EXISTS "${unmarked}" CASCADE`);
+    } finally { await dropPostgresTestDatabase(database); }
+  }
+});
+
 test('postgres: loaded empty link replacement clears only its parent and preserves caller rollback', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 30000,
 }, async t => {

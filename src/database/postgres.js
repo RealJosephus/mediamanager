@@ -260,7 +260,10 @@ export function canonicalTransferReceipt(value) {
 }
 
 export class PostgresDatabase {
-  constructor(pool, schema, { client, root } = {}) {
+  #childPool;
+  #createChildPool;
+
+  constructor(pool, schema, { client, root, createChildPool = options => new pg.Pool(options) } = {}) {
     this.pool = pool;
     this.schemaName = schema;
     this.controlSchema = `${schema}__mm`;
@@ -272,6 +275,7 @@ export class PostgresDatabase {
     this.root = root ?? this;
     this.client = client ?? new PoolClientFacade(this);
     if (!client) {
+      this.#createChildPool = createChildPool;
       this.operationContext = new AsyncLocalStorage();
       this.queryHookContext = new AsyncLocalStorage();
       this.queryHook = null;
@@ -279,18 +283,25 @@ export class PostgresDatabase {
       this.closePromise = null;
       this.connectionEnds = new Set();
       this.connectionEndsByClient = new WeakMap();
-      const track = client => {
-        if (this.connectionEndsByClient.has(client)) return;
-        const ended = Promise.withResolvers();
-        this.connectionEndsByClient.set(client, ended.promise);
-        this.connectionEnds.add(ended.promise);
-        client.once('end', () => { this.connectionEnds.delete(ended.promise); ended.resolve(); });
-      };
-      // Relation owners construct this database directly instead of using open.
-      // Acquire also observes an existing pool client when this owner borrows it.
-      pool.on?.('connect', track);
-      pool.on?.('acquire', track);
+      this.#observePool(pool);
     }
+  }
+
+  #observePool(pool) {
+    const track = client => {
+      if (this.connectionEndsByClient.has(client)) return;
+      const ended = Promise.withResolvers();
+      this.connectionEndsByClient.set(client, ended.promise);
+      this.connectionEnds.add(ended.promise);
+      client.once('end', () => { this.connectionEnds.delete(ended.promise); ended.resolve(); });
+    };
+    // Acquire also observes an existing client when this owner borrows it.
+    pool.on?.('connect', track);
+    pool.on?.('acquire', track);
+    // pg has already removed the idle client when it reports this error.
+    pool.on?.('error', error => process.emitWarning('An idle PostgreSQL connection was discarded.', {
+      code: 'MEDIAMANAGER_POSTGRES_IDLE_CONNECTION', detail: error.message
+    }));
   }
 
   static async open({
@@ -414,7 +425,24 @@ export class PostgresDatabase {
     if (this.closed) throw new Error(closedClientMessage);
     const activeSession = this.operationContext.getStore();
     if (activeSession?.connectionActive) return operation(activeSession);
-    const client = await this.pool.connect();
+    return this.#withPool(this.pool, operation);
+  }
+
+  async withChildConnection(operation) {
+    if (this.connectionSession) throw new Error('A PostgreSQL operation session cannot own a child pool');
+    if (this.closed) throw new Error(closedClientMessage);
+    if (!this.#childPool) {
+      const options = { ...this.pool.options };
+      // pg keeps explicit passwords on its options as non-enumerable values.
+      if (Object.hasOwn(this.pool.options, 'password')) options.password = this.pool.options.password;
+      this.#childPool = this.#createChildPool(options);
+      this.#observePool(this.#childPool);
+    }
+    return this.#withPool(this.#childPool, operation);
+  }
+
+  async #withPool(pool, operation) {
+    const client = await pool.connect();
     let setupError, setupFailed = false, operationError, operationFailed = false, session;
     try {
       try {
@@ -1207,8 +1235,10 @@ export class PostgresDatabase {
     this.closed = true;
     this.closePromise = (async () => {
       const errors = [];
-      try { await this.pool.end(); }
-      catch (error) { errors.push(error); }
+      const pools = this.#childPool ? [this.pool, this.#childPool] : [this.pool];
+      for (const result of await Promise.allSettled(pools.map(pool => Promise.resolve().then(() => pool.end())))) {
+        if (result.status === 'rejected') errors.push(result.reason);
+      }
       // Pool.end removes clients before their asynchronous disconnects finish.
       // Retain ownership until every admitted physical connection has ended.
       for (const result of await Promise.allSettled([...this.connectionEnds])) {

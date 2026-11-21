@@ -74,7 +74,8 @@ test('lyric deletion preserves an actually deleted prefix and shutdown drains an
       prefixes: [{ identityRoot: root, accessRoot: '/lyrics', style: process.platform === 'win32' ? 'windows' : 'posix',
         caseSensitive: process.platform !== 'win32', returnAccess: 'Owned actual original audio, instance state and lyric fixture paths.' }] }));
     source = await lyricProviderSource(Buffer.from('Original held metadata provider input.\n'));
-    database = await createPostgresTestDatabase(null, 'lyric_lifecycle'); await start();
+    database = await createPostgresTestDatabase(null, 'lyric_lifecycle', { max: 1, connectionTimeoutMillis: 5000 });
+    await start();
     const definition = runtime.storage.configuration(); definition.instances.push({ id: 'sidecars', type: 'local', config: { root: metadataSidecars, writable: true } });
     await runtime.storage.configure(definition);
     await runtime.storage.bindPath({ identityRoot: mediaRoot, instanceId: 'sidecars', purpose: 'metadata',

@@ -65,8 +65,9 @@ async function httpFixture(t, hold) {
   return { origin: 'http://127.0.0.1:' + server.address().port, requests, png };
 }
 
-async function setup(t, sample, { parallelism = 1, limit, onError = () => {}, updates: decorateUpdates } = {}) {
-  const fixture = await setupChildrenFixture(t); useIdentityPathReversalControl(fixture);
+async function setup(t, sample, { parallelism = 1, limit, onError = () => {}, updates: decorateUpdates, childWorkers = false } = {}) {
+  const fixture = await setupChildrenFixture(t, childWorkers ? { max: 1, connectionTimeoutMillis: 5000 } : undefined);
+  useIdentityPathReversalControl(fixture);
   await fixture.seed({ target: 'root', items: [{ key: 'root', type: 'Folder', Id: rootId, Name: 'Guide root', Path: null }] });
   const parent = await fixture.library.itemCreation.getItemById(rootId), channel = newNativeItemEntity('MediaBrowser.Controller.LiveTv.LiveTvChannel');
   Object.assign(channel, { Id: channelId, Name: 'Guide channel', ParentId: rootId, ServiceName: 'Emby' });
@@ -86,7 +87,10 @@ async function setup(t, sample, { parallelism = 1, limit, onError = () => {}, up
   const service = new LiveTvGuideImages({ store: fixture.store, linkedChildren: fixture.linkedChildren, loadContext: fixture.loadContext,
     itemCreation: fixture.library.itemCreation, updates, images: fixture.host.images, parallelism, onError,
     isImageDailyLimitActive: limit ?? (() => sample.limits[Math.min(calls++, sample.limits.length - 1)]),
-    runWorker: operation => fixture.store.runDetached(() => fixture.loadContext.withDetachedScope(operation)) });
+    runWorker: operation => {
+      const work = () => fixture.loadContext.withDetachedScope(operation);
+      return childWorkers ? fixture.store.runChild(work) : fixture.store.runDetached(work);
+    } });
   const closeHost = fixture.host.close.bind(fixture.host);
   fixture.host.close = async () => { await service.close(); await cohort.release(); await closeHost(); };
   t.after(async () => { await service.close(); await cohort.release(); });
@@ -230,6 +234,21 @@ test('guide image close cancels foreach admission while a running HTTP conversio
   const images = await fixture.database.rows('BaseItemImageInfos', { where: { ItemId: Id(500) } });
   assert.equal(images.filter(value => !/^http/i.test(value.Path)).length, 1); assert.equal(images.filter(value => /^http/i.test(value.Path)).length, 1);
   await fixture.cohort.release(); await assertReleased(fixture);
+});
+
+test('guide image workers can persist while the refresh holds its only ordinary connection', { skip: !pgEnabled, timeout: 30000 }, async t => {
+  const http = await httpFixture(t), errors = [];
+  const fixture = await setup(t, { limits: [false], items: [
+    program(601, [image('Primary', http.origin + '/one')]),
+    program(602, [image('Primary', http.origin + '/two')]),
+  ] }, { childWorkers: true, parallelism: 2, onError: error => errors.push(error) });
+  await fixture.store.run(() => fixture.service.preCache(fixture.cohort, cutoff));
+  assert.deepEqual(http.requests.sort(), ['/one', '/two']);
+  const images = await fixture.database.rows('BaseItemImageInfos');
+  assert.equal(images.length, 2);
+  assert.ok(images.every(value => !/^http/iu.test(value.Path)));
+  assert.deepEqual(errors, []);
+  await fixture.service.close(); await fixture.cohort.release(); await assertReleased(fixture);
 });
 
 test('guide image SQL persistence failure is logged per image after real download and mapped write, without deleting the remote', { skip: !pgEnabled, timeout: 30000 }, async t => {
