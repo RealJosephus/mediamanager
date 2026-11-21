@@ -8,7 +8,7 @@ import path from 'node:path';
 import { StorageRegistry, VirtualFileSystem, ProbeReadBridge, probeRaw } from '../../src/storage/index.js';
 import { AListAdapter } from '../../plugins/alist/adapter.js';
 import { createNfoPlugin } from '../../plugins/nfo/plugin.js';
-import { captureRemoteAssets, restoreRemoteAssets } from '../../src/migration/remote-assets.js';
+import { builtinRemoteAssetContract } from '../migration/helpers/builtin-remote-assets.js';
 import { startActualAList } from './helpers/actual-alist.js';
 import { remoteFileContract } from './remote-file-contract.js';
 
@@ -109,12 +109,9 @@ test('actual current-source AList supports VFS byte access, network NFO and ffpr
     assert.equal(result.raw.format.duration, '0.100000'); assert.equal(result.sourceConsistency, 'unversioned');
     checks.push({ operation: 'ffprobe', codec: result.raw.streams[0].codec_name, duration: result.raw.format.duration, sourceConsistency: result.sourceConsistency });
   });
-  await t.test('remote migration refuses unsupported snapshot and conditional restore guarantees', async () => {
-    await assert.rejects(captureRemoteAssets({ vfs, assets: [{ assetId: 'third-subtitle', kind: 'subtitle', restorePath: 'third.srt', virtualPath: '/network/third.srt' }], destination: path.join(service.root, 'migration') }), /reliable conditional object versions/u);
-    await assert.rejects(restoreRemoteAssets({ vfs, directory: service.root, manifest: { generation: 'fixture', remoteAssets: [{
-      path: 'remote-assets/third.srt', bytes: 0, sha256: '0'.repeat(64), modifiedAt: null, remote: {
-        assetId: 'third-subtitle', virtualPath: '/network/third.srt', version: 'fixture', kind: 'subtitle' } }] }, targets: { 'third-subtitle': '/network/restored.srt' } }), /create, atomic conditional replace and reliable versions/u);
-    checks.push({ operation: 'migration consistency guards', capture: 'rejected unversioned source', restore: 'rejected non-atomic target' });
+  await t.test('unversioned AList sidecars round trip through an instance state package', async t => {
+    await builtinRemoteAssetContract(t, vfs, false);
+    checks.push({ operation: 'state package capture, generation verification and restore', strongVersion: false });
   });
   await t.test('actual download requests exclude API credentials', () => {
     const raw = requests.filter(request => !request.path.startsWith('/api/'));

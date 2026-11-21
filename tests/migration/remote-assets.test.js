@@ -78,7 +78,7 @@ test('current remote NFO and subtitles join the database generation and restore 
   await target.write('/movie.nfo', Buffer.from('newer independent edit'));
   await assert.rejects(restoreRemoteStatePackage(destination, { vfs, targets }), /overwrite|bound generation/u);
   assert.equal((await content(target, '/movie.nfo')).toString(), 'newer independent edit');
-  const invalidVersion = structuredClone(manifest); invalidVersion.remoteAssets[0].remote.version = null;
+  const invalidVersion = structuredClone(manifest); invalidVersion.remoteAssets[0].remote.version = '';
   await resignManifest(destination, invalidVersion);
   await assert.rejects(verifyStatePackage(destination), /Invalid remote state asset declaration/u);
   manifest.mediaAccess.items[0].sidecars[0].stateAssetId = 'missing-nfo'; await resignManifest(destination, manifest);
@@ -175,9 +175,13 @@ test('a remote sidecar change during database export prevents generation commit'
   assert.match(progress.lastError, /Remote state changed/u);
 });
 
-test('remote capture refuses weak versions and media inventories before declaring a snapshot', async t => {
-  const { create } = await fixture(t, { weakVersion: true });
-  await assert.rejects(create(), /reliable conditional object versions/);
+test('remote capture binds sources without a reliable version by their bytes', async t => {
+  const { create, destination, vfs, target } = await fixture(t, { weakVersion: true });
+  const manifest = await create();
+  assert.ok(manifest.remoteAssets.every(file => file.remote.version === null));
+  assert.deepEqual(await verifyStatePackage(destination), manifest);
+  await restoreRemoteStatePackage(destination, { vfs, targets });
+  assert.deepEqual(await content(target, '/movie.nfo'), nfoBytes);
 });
 
 test('remote restore reports partial writes and resumes only matching completed assets', async t => {

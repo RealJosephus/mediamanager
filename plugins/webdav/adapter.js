@@ -237,7 +237,7 @@ function responseInfo(path, properties) {
     version,
     contentType: propertyText(properties, 'getcontenttype'),
     sizeReliability: size === null ? 'unavailable' : 'reported',
-    versionReliability: version === null ? 'unavailable' : version.startsWith('W/') ? 'weak' : 'reported',
+    versionReliability: version === null ? 'unavailable' : version.startsWith('W/') ? 'weak' : 'strong',
   };
 }
 

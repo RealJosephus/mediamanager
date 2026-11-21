@@ -28,6 +28,11 @@ and source version when known. Unknown lengths and versions remain unknown;
 they do not imply random access or a stable revision. The caller owns the
 handle until both consumption and close finish.
 
+An adapter without a mount-wide `reliableVersion` guarantee may report
+`versionReliability: 'strong'` on an individual `stat` result. Its `version`
+must then identify that object's byte representation, and `openRead` with
+`ifMatch: version` must prove that it returned that representation or fail.
+
 An adapter may additionally implement `openResponse(path, options)` for sources
 whose status and headers are part of delivery. It returns
 `{ statusCode, headers, contentLength, stream, close }`. Its options include
