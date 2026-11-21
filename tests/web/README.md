@@ -1,132 +1,23 @@
-# Actual Web consumers
+# Browser validation
 
-The Jellyfin tests serve the designated, unmodified production build on a
-separate HTTP origin and use the pinned Chromium executable. Source/build,
-dependency and browser identities are verified by the validation input loaders.
-Neither client authentication nor responses are injected. A new browser logs in
-with the visible server and password forms.
+These tests launch pinned Chromium and sign in through each client's visible forms. Jellyfin tests serve the designated production Web build on a separate origin. Emby uses the version captured from its official host for that run. The input loaders verify the client and browser identities. Supply `native_reference`, `native_instance` and `native_sqlite` to the validation workflow, plus `web_clients` for Jellyfin or `emby_web` for Emby. [Workflow inputs](../../.github/workflows/ci.yml)
 
-`jellyfin-web.test.js` covers the empty home and a display preference. It verifies
-the PostgreSQL value and waits for the client's declared query-cache TTL before
-reloading the visible form and checking the actual server readback.
+## Choose a consumer
 
-`jellyfin-media.test.js` starts from the same-run stopped native SQLite input,
-imports all native tables into a private PostgreSQL schema, and starts
-`startProductionInstance`. Its explicit portable media mount uses the independent
-local storage plugin. Input preparation reuses the tracked frozen VobSub source's
-existing H.264 and first AAC packets through the same checked MP4 copy used by
-the live TV consumer. A private concat list repeats that MP4 to at least 90
-seconds with `-auto_convert 0 -c:v copy -c:a copy`; it never invokes an encoder,
-filter or hardware decoder. Probes retain complete packets and rational clocks,
-check every repeated payload and order, presentation/decode times against a
-shared video origin (including audio offset), and successive video origins
-against the concat list's declared source duration and precision. Both
-preparation containers have their own
-size and SHA-256 identities; neither is described as identical to the source
-MKV. Tool exit/close, source stability and temporary cleanup are recorded.
-The private media root also contains an NFO and a copied, tracked PNG. An authenticated administrator
-creates the movie library and queues the actual scan through public HTTP APIs.
-The NFO consumer deliberately disables the external TMDB plugin.
-Ancestor `.ignore` lookups use a separately declared read-only local namespace
-and observe the actual host files or absence; they are not replaced by an empty
-memory filesystem. This namespace is confined to the ignore reader and adds no
-media identity prefix to the persisted portable mount contract.
+| Scenario | What to observe |
+| --- | --- |
+| Login and a display preference | Open the empty Jellyfin home, save the preference, check PostgreSQL, wait for the client's query-cache TTL and reload the visible form. [Jellyfin preferences](jellyfin-web.test.js) |
+| Browse, edit and restart | Open the scanned movie, load its image, favorite it, mark it watched and add it to a playlist. Restart the production entry in a separate Node process at the same origin. After the declared TTL, reopen the observed playlist and movie URLs in the same tab. Check the returned member, visible state, complete saved UserData rows and a fresh authenticated WebSocket handshake. [Jellyfin media](jellyfin-media.test.js) |
+| DirectPlay and resume | Play H.264/AAC, observe advancing decoded video, then stop with the player's Back action. Check the PG position. After the TTL, use the visible Resume action. Its negotiation must send the exact saved ticks, decoding must advance past them and each stop must match PG. The public server configuration supplies MinResumePct 1, MaxResumePct 90 and MinResumeDurationSeconds 30. [Jellyfin playback](jellyfin-playback.test.js) |
+| Remote control | Two browser contexts sign in as the same user. The controller selects the receiver's session in the cast menu, then pauses, resumes and stops playback. Pair controller HTTP actions with ordered receiver WebSocket commands, decoded video and PG playback state. Bind reports to the receiver's actual media URL and item/source IDs. [Jellyfin remote control](jellyfin-remote-control.test.js) |
+| Universal audio | Play the frozen mono FLAC from the Songs view. Check the universal audio GET, HTTP 200 or 206, `audio/flac`, and the audio element's source, ready state and advancing clock. [Jellyfin audio](jellyfin-universal-audio.test.js) |
+| Live TV | Open the Guide channel from the official M3U tuner. Follow the client's real auto-open and direct playback, check original bytes, decoded video, session reports, stop and released stream. Repeat with the same user and check the channel rows and play count. [Jellyfin Live TV](jellyfin-live-tv.test.js) |
+| Emby authentication and settings | Use a fresh touch-capable context and the connection wizard at `/emby`. With legacy authorization disabled, check public discovery, authenticated Info/WS, PG device identity and capabilities, reconnect after reload and a visible preference saved and read back. Live TV access is disabled for this user. [Emby authentication](emby-auth-info.test.js) |
 
-The browser clicks the library and movie cards, reads the real detail DTO and
-local image, favorites the movie, marks it watched, and creates a playlist with
-the selected movie. UserData is checked directly in PostgreSQL. The fixture then
-closes the original runtime and starts the production entry in a separate Node
-process at the same origin, preserving the same database, paths, plugins and
-browser session. PostgreSQL readback uses an independent observer connection.
-The browser grants the client's requested notification permission only to the
-client origin and records the actual permission, matching the playback input.
-The report records the actual child startup, listener shutdown and process exit;
-cleanup waits for that process before removing its schema and private files.
-After the declared client TTL, a
-reload checks the actual playlist response and visible member, and browser
-history returns to the movie to check server and visible favorite/watched state
-against the complete saved UserData rows. The client must authenticate a fresh
-WebSocket and receive the server handshake after the process restart.
+## Inputs and observations
 
-Browser exceptions and runtime diagnostics are retained in full, with actual
-request and page-error timestamps. The intentional offline interval can produce
-client diagnostics; their absence does not determine recovery. The actual UI,
-HTTP, PostgreSQL, authenticated WebSocket and process/resource assertions above
-still apply, as do failures to serve the designated client assets.
+The media, playback and remote-control scenarios start a production instance from the same-run stopped Native SQLite database imported into a private PG schema. Their mapped local library contains a tracked PNG, NFO and controlled video. Preparation copies the existing H.264 and first AAC streams from the frozen VobSub fixture into MP4 and repeats them to at least 90 seconds. It verifies packet payloads, order and rational timing against a shared video origin, and records each container's own hash. A separate read-only namespace serves ancestor `.ignore` lookups. The library scan uses public HTTP APIs. [Media fixture](web-fixture.js)
 
-Reports retain source and media hashes, observed HTTP paths/statuses (query keys
-only), selected response bodies, browser/runtime errors, screenshots and cleanup
-outcomes. Passwords, tokens and database credentials are redacted. Client assets
-are represented by hashes rather than republished in test reports. Private
-instance/media trees, browser and PostgreSQL schemas are closed and removed.
+Emby capture records the version, entry, manifest, service worker catalog, startup plugin modules and resource hashes. It rechecks the entry and worker after capture. Runtime observations bind the browser's served assets and external Cast scripts to those inputs. The Emby test covers the auth/info and settings interactions listed above.
 
-`jellyfin-playback.test.js` exercises actual H.264/AAC playback using the same
-controlled media. Its real server XML declares MinResumePct=1,
-MaxResumePct=90 and MinResumeDurationSeconds=30; a public configuration readback
-must confirm these values. The browser clicks Play, decodes advancing video,
-negotiates DirectPlay, and sends real start/progress/stop reports. Back invokes
-the designated player's own stop handler. PostgreSQL must contain the reported
-position. After the client's declared TTL, a reload checks the real item and
-visible Resume action, then the browser resumes and stops a second time. No
-player clock, playback report, authentication or client cache is injected.
-The Resume negotiation must send the exact saved ticks, and decoded video must
-advance beyond that position. The player's new start-report clock is diagnostic;
-each stop report must still match PostgreSQL and the server readback exactly.
-The isolated browser grants notifications only to the client origin, matching
-the designated client's permission request; the observed permission is recorded.
-Browser exceptions remain complete diagnostic observations; actual playback,
-HTTP and PostgreSQL results determine this consumer's outcome.
-
-`jellyfin-remote-control.test.js` signs two independent browser contexts into
-the visible forms and starts real DirectPlay on the receiver. The controller
-uses the original cast menu to select that actual session, opens its remote
-control page and clicks pause, resume and stop. The consumer binds each
-controller HTTP action to the receiver's ordered WebSocket command, decoded
-video state and actual progress/stop report; independent PostgreSQL reads must
-retain the reported position and play count. Both contexts use the original
-client and real session capabilities. No player state, authentication or
-server response is injected. Browser exceptions remain diagnostic observations;
-actual HTTP, WebSocket, video and persistence results establish this interaction.
-Playback reports use the session value from the receiver's actual media URL;
-an absent optional PlaySessionId remains the client's empty string. Item and
-media-source identities still bind each start, progress and stop report.
-It covers authorized control between two sessions of the same user, without
-extending that claim to arbitrary devices or cross-user permissions.
-
-The browse/edit consumers do not prove playback; the playback consumer requires
-its own successful execution. These tests do not prove weak networks,
-Emby Web playback, external TMDB, large libraries or production migration. A CI
-run establishes only its explicitly selected consumers and platforms. Run on
-GitHub Actions with `native_reference`, `native_instance`, `native_sqlite` and
-`web_clients` enabled; do not execute local validation.
-
-`emby-auth-info.test.js` uses the Emby Web release served by the official host
-when the CI job starts capturing it. The capture reads the version from the
-entry and downloads the current service worker catalog, entry/manifest links
-and startup plugin modules referenced by `app.js`. It checks the entry and
-worker again after the download to catch a release change during capture.
-It records SHA-256 for every original resource and keeps the worker's declared
-checksums separately. The browser's actual Cast script responses must match
-the captured external resources. The same-run input loader binds the producer,
-receipts and complete served tree before and after the consumer. CI artifacts
-retain identities and observations without redistributing the client bundle.
-
-A fresh touch-capable Chromium context uses the visible connection wizard,
-selects the actual server at its `/emby` address, and enters the real password.
-The production fixture preserves `EnableLegacyAuthorization=false`. Discovery
-resources, private Info, the authenticated WebSocket, the persisted PG device,
-and saved-token Info/socket reconnection after reload must all be observed. The
-real public policy API disables live TV access for this regular user; channel
-providers and live TV playback are outside this consumer. Emby's capability
-strings must survive session readback. A visible display toggle saves through
-the original client, persists in PostgreSQL, and reads back after a page reload.
-Authentication, local storage, responses and client code are not injected.
-Page and console exceptions remain complete diagnostic observations; their
-absence is not an extra acceptance condition. Actual login, Info, persisted
-device/capabilities/settings and socket keepalives establish the auth/info
-interaction. Navigation may cancel pending home requests. Entering the home URL
-does not certify the complete home-page browsing flow. Served-client errors,
-backend HTTP errors and socket errors retain their existing result assertions.
-This consumer establishes auth/info interaction only; it does not establish
-Emby browsing, editing or playback. Supply `emby_web=true` with the three native
-input flags. It does not require the Jellyfin Web build.
+Reports keep media and client hashes, selected HTTP observations, browser exceptions, runtime diagnostics, screenshots and cleanup results. Grant notification permission only to the client origin when requested by the fixture. After a restart, assess the actual HTTP, UI, WebSocket and PG observations alongside diagnostics from the offline interval. Private media, browser, processes and schemas are released after their owners close. Credentials are redacted from published reports.
