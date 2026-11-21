@@ -1,5 +1,6 @@
 import { startMediaProcess } from '../media-execution/process.js';
 import { streamInputIndex as subtitleInputIndex } from '../media-execution/input.js';
+import { leaseDiscInput, resolveDiscInput } from '../media-execution/disc-input.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -7,7 +8,7 @@ import path from 'node:path';
 import { ProbeReadBridge } from '../storage/probe-bridge.js';
 import { StorageError } from '../storage/errors.js';
 import { createNativeCharsetStreamDetector } from '../core/native-charset.js';
-import { isExternalSubtitleFallback, subtitleExtensionHint } from './subtitle-source.js';
+import { isExternalSubtitleFallback, subtitleExtensionHint, subtitleExtractionFormat } from './subtitle-source.js';
 
 const failure = (code, message, cause) => Object.assign(new StorageError(code, message), cause === undefined ? {} : { cause });
 const checkAbort = signal => { if (signal?.aborted) throw failure('cancelled', 'Media extraction was cancelled.', signal.reason); };
@@ -30,16 +31,7 @@ function deadline(milliseconds, expired) {
   };
   arm(); return () => clearTimeout(timer);
 }
-const copyMuxers = { ass: 'ass', ssa: 'ass', srt: 'srt', subrip: 'srt', pgssub: 'sup' };
-const vobSub = codec => /dvdsub|vobsub/i.test(codec ?? '');
-export function subtitleExtractionFormat(stream) {
-  const codec = stream.Codec?.toLowerCase();
-  const muxer = copyMuxers[codec];
-  if (muxer) return [['srt', 'subrip'].includes(codec) ? 'srt' : stream.Codec, muxer];
-  return vobSub(stream.Codec) ? ['mks', 'matroska'] : undefined;
-}
-
-export { subtitleInputIndex };
+export { subtitleExtractionFormat, subtitleInputIndex };
 
 function privateInput(url) {
   const value = new URL(url);
@@ -52,10 +44,11 @@ function streamIndex(value) {
   return value;
 }
 
-export function buildExtractionArguments(url, { kind, index, muxer, encoding, directory, output }) {
-  url = privateInput(url);
+export function buildExtractionArguments(url, { kind, index, muxer, subtitleCodec = 'copy', encoding, directory, output }) {
+  const concat = kind === 'subtitle' && typeof url === 'string' && url.startsWith('concat:');
+  url = concat ? `concat:${url.slice(7).split('|').map(privateInput).join('|')}` : privateInput(url);
   index = streamIndex(index);
-  const common = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-protocol_whitelist', 'http,tcp'];
+  const common = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-protocol_whitelist', concat ? 'concat,http,tcp' : 'http,tcp'];
   if (kind === 'attachment') {
     // No output stream is selected. Dumping extradata does not decode media.
     return [...common, `-dump_attachment:${index}`, 'pipe:1', '-i', url];
@@ -69,8 +62,11 @@ export function buildExtractionArguments(url, { kind, index, muxer, encoding, di
     return [...common, '-y', ...(encoding ? ['-sub_charenc', encoding] : []), '-i', url, '-map', `0:s:${index}`,
       '-an', '-vn', '-dn', '-c:s', 'srt', '-f', 'srt', output];
   }
-  if (kind !== 'subtitle' || !['ass', 'srt', 'sup', 'matroska'].includes(muxer)) throw new TypeError('Only audited subtitle copy muxers are allowed.');
-  return [...common, '-i', url, '-map', `0:${index}`, '-an', '-vn', '-dn', '-c:s', 'copy', '-flush_packets', '1', '-f', muxer, 'pipe:1'];
+  const copy = subtitleCodec === 'copy' && ['ass', 'srt', 'sup', 'matroska'].includes(muxer);
+  if (kind !== 'subtitle' || (!copy && (subtitleCodec !== 'srt' || muxer !== 'srt'))) {
+    throw new TypeError('Subtitle extraction requires a supported copy muxer or the SRT encoder.');
+  }
+  return [...common, '-i', url, '-map', `0:${index}`, '-an', '-vn', '-dn', '-c:s', subtitleCodec, '-flush_packets', '1', '-f', muxer, 'pipe:1'];
 }
 
 function waitFor(promise, signal) {
@@ -112,7 +108,7 @@ export class ExtractionService {
       : format === 'ass' ? ['ass', 'vtt', 'webvtt']
         : format === 'ssa' ? ['ssa', 'ass', 'vtt', 'webvtt'] : [format];
     return this.available && (!isExternalSubtitleFallback(stream) || this.subtitleCache.available) && Boolean(format) && (!delivered || outputs.includes(delivered)) && !source.IsInfiniteStream
-      && (!source.VideoType || ['VideoFile', 'Iso'].includes(source.VideoType)) && stream.SupportsExternalStream !== false;
+      && (!source.VideoType || ['VideoFile', 'Iso', 'Dvd', 'BluRay'].includes(source.VideoType)) && stream.SupportsExternalStream !== false;
   }
 
   async subtitle(source, stream, virtualPath, { signal } = {}) {
@@ -122,8 +118,9 @@ export class ExtractionService {
       signal: ownerSignal, statSource: /^https?:\/\//iu.test(stream.Path) ? () => null : () => this.vfs.stat(virtualPath),
       produce: initial => this.#convertExternalText(source, stream, virtualPath, initial, ownerSignal, reportCleanupFailure),
     }), signal);
-    const [format, muxer] = subtitleExtractionFormat(stream);
-    return this.#extract(source, stream, virtualPath, { kind: 'subtitle', format, muxer, index: subtitleInputIndex(source, stream), signal });
+    const [format, muxer, subtitleCodec] = subtitleExtractionFormat(stream);
+    const discType = !stream.IsExternal && ['Dvd', 'BluRay'].includes(source.VideoType) ? source.VideoType : undefined;
+    return this.#extract(source, stream, virtualPath, { kind: 'subtitle', format, muxer, subtitleCodec, discType, index: subtitleInputIndex(source, stream), signal });
   }
 
   async attachment(source, attachment, virtualPath, { signal } = {}) {
@@ -137,16 +134,18 @@ export class ExtractionService {
     checkAbort(signal);
     if (this.#closed) throw failure('closed', 'Media extraction is closed.');
     const resolved = this.vfs.resolve(virtualPath);
-    const before = await this.vfs.stat(virtualPath, { signal });
-    if (before.kind !== 'file') throw failure('is-directory', 'Extraction requires a media file.');
-    const reliable = resolved.capabilities.reliableVersion === true && before.version != null;
+    const disc = operation.discType ? await resolveDiscInput(this.vfs, operation.discType, virtualPath, signal) : undefined;
+    const before = disc ? undefined : await this.vfs.stat(virtualPath, { signal });
+    if (before && before.kind !== 'file') throw failure('is-directory', 'Extraction requires a media file.');
+    const version = disc ? disc.version : before.version;
+    const reliable = version != null && (disc !== undefined || resolved.capabilities.reliableVersion === true);
     if (!this.#adapters.has(resolved.adapter)) this.#adapters.set(resolved.adapter, ++this.#adapterSequence);
-    const key = reliable ? createHash('sha256').update(JSON.stringify([this.#adapters.get(resolved.adapter), resolved.path, virtualPath, before.version,
+    const key = reliable ? createHash('sha256').update(JSON.stringify([this.#adapters.get(resolved.adapter), resolved.path, virtualPath, version,
       source.Id, source.Path, stream.Index, stream.Codec, operation])).digest('hex') : randomUUID();
     const cached = this.#cache.get(key);
     if (cached) { this.#cache.delete(key); this.#cache.set(key, cached); return { ...cached, bytes: Buffer.from(cached.bytes) }; }
     return this.#requestJob(key, async (ownerSignal, reportCleanupFailure) => {
-      const result = await this.#perform(virtualPath, resolved, before, operation, ownerSignal, reportCleanupFailure);
+      const result = await this.#perform(virtualPath, resolved, { disc, version, reliable }, operation, ownerSignal, reportCleanupFailure);
       if (reliable && !ownerSignal.aborted && !this.#closed && result.bytes.length <= this.maxCacheBytes) {
         while (this.#cacheSize + result.bytes.length > this.maxCacheBytes && this.#cache.size) {
           const oldest = this.#cache.keys().next().value;
@@ -221,19 +220,22 @@ export class ExtractionService {
     return { bytes, exists, remove, failed, execution, ...(failed ? { error } : {}) };
   }
 
-  async #perform(virtualPath, resolved, before, operation, signal, reportCleanupFailure) {
-    const lease = await this.bridge.lease(virtualPath, { signal, version: before.version,
-      expiresInMs: operation.kind === 'subtitle' ? null : this.timeoutMs + 1000 });
+  async #perform(virtualPath, resolved, { disc, version, reliable }, operation, signal, reportCleanupFailure) {
+    // Native subtitle extraction reads the selected disc files as consecutive bytes.
+    const lease = disc ? await leaseDiscInput(this.bridge, disc, this.mediaEncoder, { signal, expiresInMs: null, concatProtocol: true })
+      : await this.bridge.lease(virtualPath, { signal, version, expiresInMs: operation.kind === 'subtitle' ? null : this.timeoutMs + 1000 });
     let extracted;
     const errors = [];
     try {
-      const result = await this.#run(buildExtractionArguments(lease.url, operation), { signal, redacted: lease.url, subtitle: operation.kind === 'subtitle' });
+      const result = await this.#run(buildExtractionArguments(lease.url, operation),
+        { signal, redacted: lease.url, redact: lease.redact, subtitle: operation.kind === 'subtitle' });
       checkAbort(signal);
       const attachmentDumpComplete = operation.kind === 'attachment' && result.exitCode === 1 && /(?:At least one output file must be specified|No output files specified)/i.test(result.diagnostics);
       if (result.exitCode !== 0 && !attachmentDumpComplete || result.bytes.length === 0) throw failure('invalid-response', 'ffmpeg could not extract the selected stream.');
-      const after = await this.vfs.stat(virtualPath, { signal });
+      if (disc) await disc.verify(signal);
+      const after = disc ? undefined : await this.vfs.stat(virtualPath, { signal });
       const current = this.vfs.resolve(virtualPath);
-      if (current.adapter !== resolved.adapter || current.path !== resolved.path || before.version != null && after.version !== before.version) throw failure('version-changed', 'Media changed during extraction.');
+      if (current.adapter !== resolved.adapter || current.path !== resolved.path || after && version != null && after.version !== version) throw failure('version-changed', 'Media changed during extraction.');
       let bytes = result.bytes;
       if (operation.format?.toLowerCase() === 'ass') {
         const text = bytes.toString('utf8').replace(/^\uFEFF/, '');
@@ -241,7 +243,7 @@ export class ExtractionService {
         // The native StreamWriter emits its UTF-8 preamble only when rewriting the font.
         if (replaced !== text) bytes = Buffer.from('\uFEFF' + replaced);
       }
-      extracted = { bytes, format: operation.format, consistency: resolved.capabilities.reliableVersion === true && before.version != null ? 'versioned' : 'unversioned' };
+      extracted = { bytes, format: operation.format, consistency: reliable ? 'versioned' : 'unversioned' };
     } catch (error) { errors.push(error); }
     try { await lease.release(); } catch (error) {
       errors.push(error); reportCleanupFailure(errors.length === 1 ? error : combinedFailure(errors, errors[0]?.message ?? 'Media extraction failed.'));
@@ -251,7 +253,7 @@ export class ExtractionService {
     return extracted;
   }
 
-  async #run(args, { signal, redacted, subtitle = false, timeoutMs = this.timeoutMs, maxOutputBytes = this.maxOutputBytes } = {}) {
+  async #run(args, { signal, redacted, redact, subtitle = false, timeoutMs = this.timeoutMs, maxOutputBytes = this.maxOutputBytes } = {}) {
     checkAbort(signal);
     while (this.#processes.size >= this.maxConcurrentExtractions) await waitFor(Promise.race([...this.#processes]), signal);
     checkAbort(signal);
@@ -300,7 +302,8 @@ export class ExtractionService {
       if (processFailures.length) throw combinedFailure(failureReason ? [failureReason, ...processFailures] : processFailures,
         failureReason?.message ?? 'Extraction process cleanup failed.');
       if (failureReason) throw failureReason;
-      return { bytes: Buffer.concat(stdout), diagnostics: Buffer.concat(stderr).toString('utf8').replaceAll(redacted ?? '\0', '[private source]'), exitCode: child.exitCode };
+      const diagnostics = Buffer.concat(stderr).toString('utf8');
+      return { bytes: Buffer.concat(stdout), diagnostics: redact ? redact(diagnostics) : diagnostics.replaceAll(redacted ?? '\0', '[private source]'), exitCode: child.exitCode };
     } finally { this.#processes.delete(completion); cancelDeadline?.(); clearTimeout(killTimer); signal?.removeEventListener('abort', abort); }
   }
 

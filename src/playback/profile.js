@@ -2,7 +2,7 @@ import { guid } from '../library/records.js';
 import { member } from '../http/binding.js';
 import { stringifyNativeJson, withNativeFloats } from '../core/json.js';
 import { videoColorRange } from '../library/media-streams.js';
-import { isExternalSubtitleFallback, subtitleInputFormat } from './subtitle-source.js';
+import { isExternalSubtitleFallback, subtitleExtractionFormat, subtitleInputFormat } from './subtitle-source.js';
 import { supportsSubtitleTextConversion } from './subtitles.js';
 
 const get = (object, name, fallback) => member(object ?? {}, name) ?? fallback;
@@ -225,7 +225,8 @@ export function subtitleProfile(source, stream, profile, container = source.Cont
         || !(textFallback ? options.CanExtractSubtitle?.(stream) : externalFile || options.CanExtractSubtitle?.(stream, get(entry, 'Format')))) continue;
       if (exact(entry)) return { Method: method, Format: get(entry, 'Format') };
       if (allowConversion && canConvert(stream, get(entry, 'Format')) && !source.IsInfiniteStream && stream.SupportsExternalStream !== false) {
-        const inputFormat = textFallback ? 'srt' : subtitleInputFormat(stream);
+        const extracted = externalFile ? undefined : subtitleExtractionFormat(stream);
+        const inputFormat = textFallback ? 'srt' : extracted?.[0] ?? subtitleInputFormat(stream);
         if (supportsSubtitleTextConversion(inputFormat, get(entry, 'Format'))) {
           return { Method: method, Format: get(entry, 'Format') };
         }

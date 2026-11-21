@@ -44,6 +44,7 @@ const hevcLevelItemId = '92500000000000000000000000000008';
 const vp9ItemId = '92500000000000000000000000000009';
 const av1ItemId = '9250000000000000000000000000000a';
 const opusItemId = '9250000000000000000000000000000b';
+const timedTextItemId = '9250000000000000000000000000000c';
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const linesWithUris = text => text.split(/\r?\n/u).filter(line => line && !line.startsWith('#'));
 
@@ -168,6 +169,18 @@ async function seedOpus(filename, evidence, signal) {
   return { id: opusItemId, name: 'Opus fMP4 fixture', filename: output, bytes: await readFile(output), media };
 }
 
+async function seedTimedText(filename, subtitle, evidence, signal) {
+  const output = path.join(path.dirname(filename), 'timed-text.mp4');
+  await runMediaTool('ffmpeg', ['-v', 'error', '-i', filename, '-i', subtitle, '-map', '0:v:0', '-map', '0:a:0', '-map', '1:s:0',
+    '-c:v', 'copy', '-c:a', 'aac', '-c:s', 'mov_text', output], evidence.commands, signal);
+  const media = normalizeProbe(await probe(output, evidence, signal), { path: output, protocol: 'File' });
+  const stream = media.MediaStreams.find(stream => stream.Type === 'Subtitle');
+  assert.deepEqual([stream?.Index, stream?.Codec], [2, 'mov_text']);
+  const bytes = await readFile(output);
+  evidence.timedTextSource = { bytes: bytes.length, sha256: sha256(bytes), streamIndex: stream.Index, codec: stream.Codec };
+  return { id: timedTextItemId, name: 'Embedded timed text fixture', filename: output, bytes, media };
+}
+
 function bitmapCue(x = 80) {
   const segment = (time, type, payload = Buffer.alloc(0)) => {
     const header = Buffer.alloc(13);
@@ -251,6 +264,7 @@ async function seed(referenceRoot, evidence, signal, { extended }) {
     ['dolbyVision', () => seedDovi(hdrFilename, inputHdr.r_frame_rate, evidence, signal)],
     ...fmp4CodecFixtures.map(fixture => [fixture.codec, async () => [await seedFmp4Codec(mediaFolder, fixture, evidence, signal)]]),
     ['opus', async () => [await seedOpus(filename, evidence, signal)]],
+    ['timedText', async () => [await seedTimedText(filename, subtitle, evidence, signal)]],
   ]) {
     try { extraSources.push(...await prepare()); }
     catch (error) {
@@ -764,6 +778,43 @@ async function captureOpus(origin, authorization, root, label, evidence, signal)
   }
 }
 
+async function captureTimedText(origin, authorization, _root, label, evidence, signal) {
+  const results = evidence[label].timedText = {};
+  const headers = { Authorization: authorization, 'Content-Type': 'application/json' };
+  for (const format of ['srt', 'vtt']) {
+    const response = await fetch(new URL(`/Items/${timedTextItemId}/PlaybackInfo`, origin), {
+      method: 'POST', headers, signal, body: JSON.stringify({
+        MediaSourceId: timedTextItemId, SubtitleStreamIndex: 2,
+        DeviceProfile: {
+          Name: 'Embedded timed text fixture', MaxStreamingBitrate: 30000000,
+          DirectPlayProfiles: [{ Type: 'Video', Container: 'mp4', VideoCodec: 'h264', AudioCodec: 'aac' }],
+          SubtitleProfiles: [{ Format: format, Method: 'External' }],
+        },
+      }),
+    });
+    assert.equal(response.status, 200);
+    const [source] = (await response.json()).MediaSources;
+    const stream = source.MediaStreams.find(stream => stream.Type === 'Subtitle' && stream.Index === 2);
+    const result = results[format] = { codec: stream?.Codec, method: stream?.DeliveryMethod, directPlay: source.SupportsDirectPlay };
+    assert.equal(stream?.Codec, 'mov_text');
+    assert.equal(stream.IsTextSubtitleStream, true);
+    assert.equal(stream.SupportsExternalStream, true);
+    assert.equal(source.SupportsDirectPlay, true);
+    assert.equal(stream.DeliveryMethod, 'External');
+    const delivery = new URL(stream.DeliveryUrl, origin);
+    assert.equal(delivery.origin, origin);
+    assert.ok(delivery.pathname.endsWith('/Stream.' + format));
+    result.path = delivery.pathname;
+    const subtitle = await fetch(delivery, { headers, signal });
+    const bytes = Buffer.from(await subtitle.arrayBuffer());
+    Object.assign(result, { status: subtitle.status, contentType: subtitle.headers.get('content-type')?.split(';')[0],
+      sha256: sha256(bytes), bytes: bytes.length, text: bytes.toString('utf8') });
+    assert.equal(result.status, 200);
+    assert.match(result.text, /Timed subtitle/u);
+    if (format === 'vtt') assert.match(result.text, /^WEBVTT/u);
+  }
+}
+
 async function extractKeyframes(origin, authorization, signal) {
   const headers = { Authorization: authorization };
   const task = '/ScheduledTasks/' + keyframeExtractionTaskId;
@@ -862,6 +913,7 @@ for (const backend of backends) test(backend === 'software'
       ['dolbyVision', captureDolbyVision], ['hdrVariants', captureHdrVariants], ['rotation', captureRotation],
       ...fmp4CodecFixtures.map(fixture => [fixture.codec, (...args) => captureFmp4Codec(fixture, ...args)]),
       ['av1Encoding', captureAv1Encoding], ['opus', captureOpus],
+      ['timedText', captureTimedText],
     ]) {
       if (evidence.scenarioErrors.some(error => error.label === 'fixture' && error.scenario === scenario)) continue;
       try { await capture(origin, authorization, root, label, evidence, t.signal); }
@@ -899,6 +951,8 @@ for (const backend of backends) test(backend === 'software'
       'Jellyfin.Api/Helpers/StreamingHelpers.cs', 'Jellyfin.Api/Helpers/DynamicHlsHelper.cs', 'Jellyfin.Api/Helpers/HlsCodecStringHelpers.cs',
       'Jellyfin.Api/Controllers/DynamicHlsController.cs',
       'Jellyfin.Api/Helpers/FileStreamResponseHelpers.cs', 'MediaBrowser.Controller/MediaEncoding/EncodingHelper.cs']);
+    if (!hardware) evidence.timedTextSourceBindings = await current.sourceBindings(['Jellyfin.Api/Controllers/SubtitleController.cs',
+      'MediaBrowser.MediaEncoding/Subtitles/SubtitleEncoder.cs', 'MediaBrowser.Model/Entities/MediaStream.cs', 'MediaBrowser.Model/Dlna/StreamBuilder.cs']);
     await cp(current.sourceRoot, referenceRoot, { recursive: true });
     await current.prepareClone(referenceRoot, port);
     const remoteFixture = hardware ? {} : { KnownProxies: ['127.0.0.1'], EnableRemoteAccess: true };
@@ -917,7 +971,9 @@ for (const backend of backends) test(backend === 'software'
         EnableHardwareEncoding: true, HardwareDecodingCodecs: ['h264', 'hevc'],
         EnableTonemapping: backend === 'nvenc', EnableVideoToolboxTonemapping: backend === 'videotoolbox' }, { source: node });
     }
-    const fixture = await seed(referenceRoot, { ...evidence, privateRoot: root }, t.signal, { extended: !hardware });
+    const seedEvidence = { ...evidence, privateRoot: root };
+    const fixture = await seed(referenceRoot, seedEvidence, t.signal, { extended: !hardware });
+    if (seedEvidence.timedTextSource) evidence.timedTextSource = seedEvidence.timedTextSource;
     evidence.source = fixture.asset;
     proxy = await startOwnedMediaProxy([
       { filename: fixture.filename, contentType: 'video/mp2t', expected: fixture.asset },
@@ -976,6 +1032,7 @@ for (const backend of backends) test(backend === 'software'
       vfs: nodeMedia.vfs, identityMap,
       hlsOptions: { onProcess: entry => evidence.nodeProcesses.push(entry) },
       remuxOptions: { onProcess: entry => evidence.nodeProcesses.push(entry) },
+      extractionOptions: { onProcess: entry => (evidence.nodeSubtitleProcesses ??= []).push(entry) },
       onError: error => evidence.diagnostics.push({ message: error.message, details: error.details }),
     });
     const nodeOrigin = 'http://127.0.0.1:' + runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port;
@@ -1000,6 +1057,10 @@ for (const backend of backends) test(backend === 'software'
       assert.deepEqual(evidence.node.fmp4Codecs, evidence.native.fmp4Codecs);
       assert.deepEqual(evidence.node.av1Encoded, evidence.native.av1Encoded);
       assert.deepEqual(evidence.node.opus, evidence.native.opus);
+      assert.deepEqual(evidence.node.timedText, evidence.native.timedText);
+      assert.ok(evidence.nodeSubtitleProcesses?.some(({ args }) =>
+        args[args.indexOf('-map') + 1] === '0:2' && args[args.indexOf('-c:s') + 1] === 'srt'),
+      'The embedded timed text was converted to SRT from its actual input index.');
     }
     for (const [, protocol] of scenarios) {
       const expected = evidence.native[protocol], actual = evidence.node[protocol];

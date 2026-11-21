@@ -102,6 +102,7 @@ async function runBlurayScanExchange(t, { fixture, original, playback, movieName
       MEDIAMANAGER_STORAGE: path.join(root, 'storage.json') },
     onError: (error, context) => report.runtimeErrors.push({ stage, route: context?.request?.url, error: errorObservation(error) }) });
     assert.ok(runtime.networkHost.listeners.some(listener => listener.port === port && listener.scheme === 'http'));
+    if (original) runtime.extraction.onProcess = entry => (report.nodeSubtitleProcesses ??= []).push(entry);
     const actualProbe = runtime.probe.probe;
     runtime.probe.probe = async function (bridge, virtualPath, options) {
       const result = await actualProbe.call(this, bridge, virtualPath, options);
@@ -142,6 +143,45 @@ async function runBlurayScanExchange(t, { fixture, original, playback, movieName
     assert.equal(result.value.MediaSources.length, 1);
     return { raw: result.raw, value: result.value, technical: technicalDto(result.value) };
   };
+  const capturePgs = async (side, detail) => {
+    setStage(side + '-original-bluray-pgs');
+    const tracks = detail.MediaStreams.filter(stream => stream.Type === 'Subtitle' && stream.Codec === 'pgssub' && !stream.IsExternal);
+    assert.ok(tracks.length > 0, 'The original disc must supply an embedded PGS track.');
+    const track = tracks.find(stream => stream.Language === 'eng') ?? tracks[0];
+    const requestBody = { MediaSourceId: idKey(itemId), SubtitleStreamIndex: track.Index, EnableDirectPlay: false, EnableDirectStream: false,
+      DeviceProfile: { MaxStreamingBitrate: 120000000,
+        TranscodingProfiles: [{ Type: 'Video', Context: 'Streaming', Protocol: 'http', Container: 'ts', VideoCodec: 'h264', AudioCodec: 'ac3' }],
+        SubtitleProfiles: [{ Format: 'pgssub', Method: 'External' }] } };
+    const playback = await request('/Items/' + idKey(itemId) + '/PlaybackInfo', { method: 'POST', body: requestBody });
+    assert.equal(playback.status, 200);
+    const [source] = playback.value.MediaSources;
+    assert.equal(source.VideoType, 'BluRay');
+    assert.equal(source.SupportsTranscoding, true);
+    const selected = source.MediaStreams.find(stream => stream.Type === 'Subtitle' && stream.Index === track.Index);
+    assert.equal(selected?.DeliveryMethod, 'External');
+    assert.equal(selected.SupportsExternalStream, true);
+    const url = new URL(selected.DeliveryUrl, origin);
+    assert.equal(url.origin, origin);
+    assert.match(url.pathname, /\/Stream\.pgssub$/u);
+    const response = await fetch(url, { redirect: 'error', signal: t.signal, headers: { Authorization: `MediaBrowser Token="${token}"` } });
+    const bytes = Buffer.from(await response.arrayBuffer());
+    const result = report.subtitles[side] = { trackIndex: track.Index, codec: selected.Codec, tracks: tracks.length,
+      pathname: url.pathname, status: response.status, mime: response.headers.get('content-type')?.split(';')[0],
+      bytes: bytes.length, sha256: sha256(bytes), segments: 0, presentations: 0 };
+    assert.equal(response.status, 200, bytes.subarray(0, 240).toString());
+    for (let offset = 0; offset < bytes.length;) {
+      assert.ok(bytes.length - offset >= 13, 'The PGS segment header must be complete.');
+      assert.equal(bytes.readUInt16BE(offset), 0x5047);
+      const pts = bytes.readUInt32BE(offset + 2);
+      result.firstPts ??= pts;
+      result.lastPts = pts;
+      result.segments++;
+      if (bytes[offset + 10] === 0x16) result.presentations++;
+      offset += 13 + bytes.readUInt16BE(offset + 11);
+      assert.ok(offset <= bytes.length, 'The PGS segment payload must be complete.');
+    }
+    assert.ok(result.presentations > 1 && result.lastPts > result.firstPts);
+  };
   const edit = async fields => {
     const previous = await detail(stage + '-before-edit');
     assert.equal((await request('/Items/' + idKey(itemId), { method: 'POST', body: { ...previous.value, ...fields } })).status, 204);
@@ -163,6 +203,8 @@ async function runBlurayScanExchange(t, { fixture, original, playback, movieName
       'Emby.Server.Implementations/Library/LibraryManager.cs', 'Jellyfin.Api/Controllers/LibraryController.cs',
       'Jellyfin.Api/Controllers/ItemUpdateController.cs', 'MediaBrowser.Controller/Entities/Video.cs', 'MediaBrowser.Controller/IO/LocalMediaProxy.cs',
       'MediaBrowser.Controller/MediaEncoding/EncodingHelper.cs']);
+    if (original) report.subtitleSourceBindings = await current.sourceBindings(['Jellyfin.Api/Controllers/SubtitleController.cs',
+      'MediaBrowser.MediaEncoding/Subtitles/SubtitleEncoder.cs', 'MediaBrowser.MediaEncoding/Encoder/EncodingUtils.cs', 'MediaBrowser.Model/Dlna/StreamBuilder.cs']);
     await cp(current.sourceRoot, instanceRoot, { recursive: true, force: false, errorOnExist: true });
     await current.prepareClone(instanceRoot, port); report.syntheticPreparation = removeSyntheticPreparation(instanceRoot);
     await mkdir(mediaRoot);
@@ -226,6 +268,7 @@ async function runBlurayScanExchange(t, { fixture, original, playback, movieName
       && request.file === firstNativeFile && request.method === 'GET' && request.readBytes > 0 && request.handleClosed === true),
     'The Native first scan must probe the first M2TS selected by its BDInfo result.');
     await startNative('native-bluray-public'); report.native = await detail('native-original-bluray-detail');
+    if (original) { report.subtitles = {}; await capturePgs('native', report.native.value); }
     if (playback) {
       report.playback = { native: {}, node: {} };
       nativePlayback = await captureDiscPlayback({ origin, token, itemId: idKey(itemId), detail: report.native.value,
@@ -251,6 +294,14 @@ async function runBlurayScanExchange(t, { fixture, original, playback, movieName
     report.rows.node = await discRows(database, disc); assert.equal(idKey(report.rows.node.row.Id), idKey(itemId));
     assert.deepEqual(report.rows.node.technical, report.rows.native.technical);
     report.node = await detail('node-original-bluray-detail'); assert.deepEqual(report.node.technical, report.native.technical);
+    if (original) {
+      await capturePgs('node', report.node.value);
+      assert.deepEqual(report.subtitles.node, report.subtitles.native);
+      const args = report.nodeSubtitleProcesses?.find(({ args }) => args.includes('sup'))?.args;
+      assert.ok(args, 'The Node production subtitle extractor must generate SUP.');
+      assert.deepEqual(args.slice(args.indexOf('-map'), args.indexOf('-map') + 2), ['-map', `0:${report.subtitles.node.trackIndex}`]);
+      assert.ok(args.includes('[private source]'));
+    }
     if (nativePlayback) {
       const nodePlayback = await captureDiscPlayback({ origin, token, itemId: idKey(itemId), detail: report.node.value,
         root, label: 'node-disc', report: report.playback.node, signal: t.signal });

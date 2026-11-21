@@ -2,6 +2,19 @@ import path from 'node:path';
 
 const textCodecs = new Set(['srt', 'subrip', 'vtt', 'webvtt', 'ass', 'ssa', 'sami']);
 const readerFormats = new Set(['srt', 'vtt', 'ass', 'ssa', 'smi']);
+const copyMuxers = new Map([
+  ['ass', 'ass'], ['ssa', 'ass'], ['srt', 'srt'], ['subrip', 'srt'], ['pgssub', 'sup'],
+]);
+
+export function subtitleExtractionFormat(stream) {
+  const codec = stream.Codec?.toLowerCase();
+  const muxer = copyMuxers.get(codec);
+  if (muxer) return [muxer === 'srt' ? 'srt' : stream.Codec, muxer];
+  if (/dvdsub|vobsub/i.test(codec ?? '')) return ['mks', 'matroska'];
+  if (stream.IsTextSubtitleStream === true && (!stream.IsExternal || /\.mks$/iu.test(stream.Path ?? ''))) {
+    return ['srt', 'srt', 'srt'];
+  }
+}
 
 export function subtitleInputFormat(stream) {
   const format = path.win32.extname(stream.Path ?? '').slice(1).toLowerCase() || stream.Codec?.toLowerCase();
