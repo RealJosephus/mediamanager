@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { EOL } from 'node:os';
 import { negotiateSource, universalAudioHlsCopyContainer } from './profile.js';
 import { decodeSubtitle, convertSubtitle } from './subtitles.js';
 import { normalizeSubtitleBytes } from './subtitle-charset.js';
@@ -578,7 +579,11 @@ export class PlaybackService {
         if (stream.IsTextSubtitleStream) bytes = normalizeSubtitleBytes(bytes);
         const text = stream.IsTextSubtitleStream ? new TextDecoder('utf-8', { ignoreBOM: true }).decode(bytes) : null;
         if (textFallback && !['srt', 'subrip', 'vtt', 'webvtt', 'json', 'ass', 'ssa', 'ttml'].includes(format)) throw httpError(400, `Unsupported format: ${format}`);
-        if (inputFormat !== format && !(inputFormat === 'ssa' && format === 'ass')) bytes = Buffer.from(convertSubtitle(text ?? decodeSubtitle(bytes), inputFormat, format, options));
+        if (inputFormat !== format && !(inputFormat === 'ssa' && format === 'ass')) {
+          const converted = convertSubtitle(text ?? decodeSubtitle(bytes), inputFormat, format, options);
+          // The Native WebVTT writer uses its host's line endings.
+          bytes = Buffer.from(format === 'vtt' || format === 'webvtt' ? converted.replaceAll('\r\n', EOL) : converted);
+        }
         if (format === 'vtt' && options.addVttTimeMap) bytes = Buffer.from(bytes.toString('utf8').replaceAll('WEBVTT', 'WEBVTT\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000'));
         checkAbort(controller.signal);
         await BinaryResult.bytes(bytes, getMimeType(`subtitle.${format}`), { knownLength: format !== 'json' }).send(request, response);

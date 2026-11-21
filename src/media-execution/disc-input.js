@@ -23,7 +23,7 @@ function seconds(ticks) {
   return fraction ? `${whole}.${fraction}` : whole;
 }
 
-export async function leaseDiscInput(bridge, disc, encoder, { signal, expiresInMs }) {
+export async function leaseDiscInput(bridge, disc, encoder, { signal, expiresInMs, concatProtocol = false }) {
   const leases = [], lines = [];
   const release = async () => {
     const results = await Promise.allSettled(leases.map(lease => lease.release()));
@@ -33,19 +33,23 @@ export async function leaseDiscInput(bridge, disc, encoder, { signal, expiresInM
   try {
     for (const file of disc.files) {
       const version = file.version ?? undefined;
-      const { raw } = await probeRaw(bridge, file.virtualPath, { executable: encoder.probePath, environment: encoder.environment,
-        threads: encoder.probeThreads, version, signal });
-      const ticks = normalizeProbe(raw).RunTimeTicks;
-      if (ticks == null || ticks < 0n) throw new StorageError('invalid-response', 'A disc segment has no usable duration.');
+      let duration;
+      if (!concatProtocol) {
+        const { raw } = await probeRaw(bridge, file.virtualPath, { executable: encoder.probePath, environment: encoder.environment,
+          threads: encoder.probeThreads, version, signal });
+        const ticks = normalizeProbe(raw).RunTimeTicks;
+        if (ticks == null || ticks < 0n) throw new StorageError('invalid-response', 'A disc segment has no usable duration.');
+        duration = seconds(ticks);
+      }
       const lease = await bridge.lease(file.virtualPath, { version, signal, expiresInMs });
       leases.push(lease);
-      lines.push(`file '${lease.url}'`, `duration ${seconds(ticks)}`);
+      if (duration !== undefined) lines.push(`file '${lease.url}'`, `duration ${duration}`);
     }
     await disc.verify(signal);
-    const manifest = await bridge.leaseBuffer(Buffer.from(lines.join('\n') + '\n'), { signal, expiresInMs });
-    leases.push(manifest);
+    if (!concatProtocol) leases.push(await bridge.leaseBuffer(Buffer.from(lines.join('\n') + '\n'), { signal, expiresInMs }));
+    const url = concatProtocol && leases.length > 1 ? `concat:${leases.map(lease => lease.url).join('|')}` : leases.at(-1).url;
     const redact = text => leases.reduce((value, lease) => value.replaceAll(lease.url, '[private source]'), text);
-    return { url: manifest.url, release, redact };
+    return { url, release, redact };
   } catch (error) {
     try { await release(); }
     catch (cleanup) { throw Object.assign(new AggregateError([error, cleanup], error.message, { cause: error }), { code: error.code }); }

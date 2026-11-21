@@ -2,7 +2,7 @@ import { createPlaybackState } from './runtime-state.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { EOL, tmpdir } from 'node:os';
 import path from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { tableDefinition } from '../../src/database/model.js';
@@ -157,7 +157,7 @@ test('authenticated HTTP serves native master, subtitle manifest and timed WebVT
     const segmentUrl = new URL(manifestText.split(/\r?\n/).find(line => line && !line.startsWith('#')), subtitleUrl);
     const segment = await fetch(segmentUrl, { headers });
     assert.equal(segment.status, 200); assert.equal(segment.headers.get('content-type'), native.subtitleSegment.contentType);
-    assert.equal(await segment.text(), native.subtitleSegment.text);
+    assert.equal(await segment.text(), native.subtitleSegment.text.replaceAll('\r\n', EOL));
     const missing = await fetch(new URL(subtitleUrl.pathname, origin), { headers });
     assert.equal(missing.status, native.missingLength.status); assert.equal(missing.headers.get('content-type'), native.missingLength.contentType);
     const missingProblem = parseLosslessJson(await missing.text()), nativeProblem = parseLosslessJson(native.missingLength.text);

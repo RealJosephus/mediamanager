@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { createHash, randomBytes } from 'node:crypto';
-import { tmpdir } from 'node:os';
+import { EOL, tmpdir } from 'node:os';
 import path from 'node:path';
 import { tableDefinition } from '../../src/database/model.js';
 import { createTestRuntime } from '../helpers/runtime.js';
@@ -147,19 +147,22 @@ test('ASS playback negotiation preserves the AV boundary while authenticated sub
     const anonymousSegment = await fetch(anonymousUrl); assert.equal(anonymousSegment.status, 401); await anonymousSegment.arrayBuffer();
     const segmentResponse = await fetch(segmentUrl, { headers });
     assert.equal(segmentResponse.status, 200); assert.equal(segmentResponse.headers.get('content-type'), reference.records['ass-vtt-hls-full'].contentType);
-    assert.equal(segmentResponse.headers.get('content-length'), reference.records['ass-vtt-hls-full'].contentLength);
-    assert.equal(await segmentResponse.text(), reference.records['ass-vtt-hls-full'].text);
+    const expectedText = reference.records['ass-vtt-hls-full'].text.replaceAll('\r\n', EOL);
+    assert.equal(Number(segmentResponse.headers.get('content-length')), Buffer.byteLength(expectedText));
+    assert.equal(await segmentResponse.text(), expectedText);
     for (const format of ['srt', 'vtt', 'json']) {
       const response = await fetch(origin + `/Videos/${itemId}/${itemId}/Subtitles/4/Stream.${format}?startPositionTicks=50000000&endPositionTicks=80000000`, { headers });
       const expected = reference.records[`ssa-${format}-crop`];
+      const expectedBody = format === 'vtt' ? expected.text.replaceAll('\r\n', EOL) : expected.text;
+      const expectedLength = format === 'vtt' ? String(Buffer.byteLength(expectedBody)) : expected.contentLength;
       assert.equal(response.status, expected.status, format); assert.equal(response.headers.get('content-type'), expected.contentType, format);
       const bytes = Buffer.from(await response.arrayBuffer()), length = response.headers.get('content-length');
       if (format === 'json') {
         observeComparison(t, format + ' delivered Content-Length', length, expected.contentLength);
         assert.equal(length == null, expected.contentLength == null, format + ' retains the native length-header presence');
         if (length != null) assert.equal(Number(length), bytes.length, format + ' length matches the actual body');
-      } else assert.equal(length, expected.contentLength, format);
-      assertProjectedEqual(t, format, bytes.toString('utf8'), expected.text, format === 'json' ? parseLosslessJson : undefined);
+      } else assert.equal(length, expectedLength, format);
+      assertProjectedEqual(t, format, bytes.toString('utf8'), expectedBody, format === 'json' ? parseLosslessJson : undefined);
     }
     assert.deepEqual(processes, []);
     assert.equal(fixture.requests.every(request => request.authorization == null), true);

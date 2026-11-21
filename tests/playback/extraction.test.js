@@ -7,6 +7,8 @@ import path from 'node:path';
 import { tmpdir } from 'node:os';
 import { ExtractionService, buildExtractionArguments, subtitleInputIndex } from '../../src/playback/extraction.js';
 import { ProbeReadBridge } from '../../src/storage/probe-bridge.js';
+import { StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
+import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { negotiateSource } from '../../src/playback/profile.js';
 import { extractionFixture } from './extraction-fixture.js';
 import reference from './fixtures/extraction-reference.json' with { type: 'json' };
@@ -89,6 +91,37 @@ test('ISO-classified file sources use the existing raw HTTP subtitle and attachm
   assert.equal(processes.filter(args => !args.includes('-version')).every(args => args.includes('[private source]')), true);
 });
 
+test('disc subtitle extraction joins selected VFS objects and keys its cache by all their versions', async t => {
+  const registry = new StorageRegistry(), vfs = new VirtualFileSystem(registry);
+  registry.registerType('memory', () => new MemoryStorageAdapter());
+  const adapter = await registry.createInstance('media', 'memory', {});
+  vfs.mount({ path: '/media', instanceId: 'media', capabilities: {} });
+  const { service, count, processes } = await setup(t, { vfs });
+  t.after(() => registry.close());
+  await adapter.mkdir('/VIDEO_TS');
+  // Split known demuxable bytes to isolate the ordered concat transport.
+  const bytes = files()['/media.mkv'], split = Math.floor(bytes.length / 2);
+  await adapter.write('/VIDEO_TS/VIDEO_TS.VOB', Buffer.from('excluded menu'));
+  await adapter.write('/VIDEO_TS/VTS_01_1.VOB', bytes.subarray(0, split));
+  const last = '/VIDEO_TS/VTS_02_1.VOB', tail = bytes.subarray(split);
+  await adapter.write(last, tail);
+  const expected = reference.outputs.find(value => value.source === 'media.mkv' && value.type === 'subtitle' && value.index === subtitle.Index);
+  const dvd = { ...source, VideoType: 'Dvd' };
+  for (let index = 0; index < 2; index++) {
+    const result = await service.subtitle(dvd, subtitle, '/media');
+    assertExtractionBytes(result.bytes, expected);
+    assert.equal(result.consistency, 'versioned');
+  }
+  assert.equal(count(), 1);
+  await adapter.write(last, tail);
+  assertExtractionBytes((await service.subtitle(dvd, subtitle, '/media')).bytes, expected);
+  assert.equal(count(), 2);
+  for (const args of processes.filter(args => !args.includes('-version'))) {
+    assert.equal(args[args.indexOf('-protocol_whitelist') + 1], 'concat,http,tcp');
+    assert.equal(args[args.indexOf('-i') + 1], '[private source]');
+  }
+});
+
 test('concurrent readers share extraction while individual cancellation preserves the other result', async t => {
   const { fixture, service, count } = await setup(t);
   fixture.setDelay(200);
@@ -152,9 +185,10 @@ test('unversioned adapters are explicitly uncached and unsupported branches star
   assert.equal(service.supportsSubtitle(source, { ...subtitle, Codec: 'ssa' }, 'webvtt'), true);
   assert.equal(service.supportsSubtitle(source, { ...subtitle, Codec: 'pgssub' }, 'vtt'), false);
   assert.equal(service.supportsSubtitle(source, { ...subtitle, Codec: 'dvdsub' }, 'vtt'), false);
-  await assert.rejects(service.subtitle(source, { ...subtitle, Codec: 'mov_text' }, '/media.mkv'), { code: 'not-supported' });
+  assert.equal(service.supportsSubtitle(source, { ...subtitle, Codec: 'mov_text', IsTextSubtitleStream: true }, 'vtt'), true);
+  await assert.rejects(service.subtitle(source, { ...subtitle, Codec: 'dvbsub', IsTextSubtitleStream: false }, '/media.mkv'), { code: 'not-supported' });
   await assert.rejects(service.attachment(source, { Index: 0, Codec: 'mjpeg' }, '/media.mkv'), { code: 'not-found' });
-  await assert.rejects(service.subtitle({ ...source, VideoType: 'BluRay' }, subtitle, '/media.mkv'), { code: 'not-supported' });
+  await assert.rejects(service.attachment({ ...source, VideoType: 'BluRay' }, source.MediaAttachments[0], '/media.mkv'), { code: 'not-supported' });
   assert.equal(count(), 2);
 });
 
@@ -201,6 +235,8 @@ test('stream indexes follow native input-path grouping and process arguments rej
   assert.equal(subtitleInputIndex(mixed, internal), 1);
   assert.equal(subtitleInputIndex(mixed, external), 1);
   assert.throws(() => buildExtractionArguments('file:///private.mkv', { kind: 'subtitle', index: 0, muxer: 'srt' }), TypeError);
+  assert.throws(() => buildExtractionArguments('concat:http://127.0.0.1:123/' + 'a'.repeat(64) + '|file:///private.mkv',
+    { kind: 'subtitle', index: 0, muxer: 'srt' }), TypeError);
   assert.throws(() => buildExtractionArguments('http://127.0.0.1:123/' + 'a'.repeat(64), { kind: 'subtitle', index: -1, muxer: 'srt' }), TypeError);
   assert.throws(() => buildExtractionArguments('http://127.0.0.1:123/' + 'a'.repeat(64), { kind: 'subtitle', index: 0, muxer: 'mpegts' }), TypeError);
   const directory = path.join(path.resolve(tmpdir()), 'mediamanager-subtitle-arguments'), output = path.join(directory, 'converted.srt');

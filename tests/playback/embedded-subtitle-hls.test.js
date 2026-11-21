@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
 import { mkdtemp, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { EOL, tmpdir } from 'node:os';
 import path from 'node:path';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition } from '../../src/database/model.js';
@@ -105,7 +105,7 @@ test('embedded ASS retains its negotiation restriction while an explicit authent
     const segmentResponse = await fetch(segmentUrl, { headers });
     assert.equal(segmentResponse.status, 200);
     assert.equal(segmentResponse.headers.get('content-type'), 'text/vtt');
-    assert.equal(await segmentResponse.text(), embeddedReference.nativeHlsVtt);
+    assert.equal(await segmentResponse.text(), embeddedReference.nativeHlsVtt.replaceAll('\r\n', EOL));
     assert.deepEqual(hlsProcesses, [], 'Subtitle rendition requests must not start an AV HLS process.');
     const subtitleProcesses = extractionProcesses.filter(process => process.args.includes('-map'));
     assert.equal(subtitleProcesses.length, 1);
