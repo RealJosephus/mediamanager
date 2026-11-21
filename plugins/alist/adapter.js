@@ -480,6 +480,7 @@ export class AListAdapter {
             if (!(chunk instanceof Uint8Array)) throw new TypeError('Upload chunks must be bytes.');
             count += BigInt(chunk.byteLength);
             if (count > size) throw new StorageError('invalid-response', 'The upload exceeded its declared length.');
+            if (chunk.byteLength) scope.progress();
             yield chunk;
           }
           if (count !== size) throw new StorageError('invalid-response', 'The upload ended before its declared length.');

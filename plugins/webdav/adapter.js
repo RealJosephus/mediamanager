@@ -780,7 +780,7 @@ export class WebDavAdapter {
         // A lost/unsafe MKCOL response cannot establish ownership. Never delete
         // a collection unless this request observed its exclusive creation.
         accepted: () => { owned = true; } });
-      checkAbort(scope.signal);
+      scope.progress();
       async function* body() {
         let count = 0n;
         for (;;) {
@@ -798,6 +798,7 @@ export class WebDavAdapter {
           if (!(part.value instanceof Uint8Array)) throw new TypeError('Upload chunks must be bytes.');
           count += BigInt(part.value.byteLength);
           if (count > size) throw invalidResponse('The WebDAV upload exceeded its declared length.');
+          if (part.value.byteLength) scope.progress();
           yield part.value;
         }
         if (count !== size) throw invalidResponse('The WebDAV upload ended before its declared length.');
@@ -815,7 +816,7 @@ export class WebDavAdapter {
       await this.#mutation('write', scratch + '/payload', { method: 'PUT', headers, body: requestBody,
         statuses: [200, 201, 204], options, scope });
       await uploadFinished;
-      checkAbort(scope.signal);
+      scope.progress();
       const result = await this.#mutation('rename', scratch + '/payload', {
         method: 'MOVE', headers: { Destination: this.#url(path).href, Overwrite: 'F' }, statuses: [201],
         errorContext: { destinationExclusive: true }, options, scope,
@@ -932,6 +933,7 @@ export class WebDavAdapter {
             if (!(chunk instanceof Uint8Array)) throw new TypeError('Upload chunks must be bytes.');
             count += BigInt(chunk.byteLength);
             if (count > size) throw invalidResponse('The WebDAV upload exceeded its declared length.');
+            if (chunk.byteLength) scope.progress();
             yield chunk;
           }
           if (count !== size) throw invalidResponse('The WebDAV upload ended before its declared length.');
