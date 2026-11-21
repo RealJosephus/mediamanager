@@ -107,7 +107,7 @@ export class RemuxService {
       }
       return [identity, { path: virtualPath, version: info?.version ?? null, reliable: this.vfs.capabilities(virtualPath).reliableVersion }];
     })));
-    const cacheable = !source.LiveStreamId && (disc ? disc.version != null : before?.version != null && this.vfs.capabilities(virtualPath).reliableVersion)
+    const cacheable = !plan.live && !source.LiveStreamId && (disc ? disc.version != null : before?.version != null && this.vfs.capabilities(virtualPath).reliableVersion)
       && [...sidecars.values()].every(value => value.version != null && value.reliable);
     return { disc, before, sidecars, cacheable, openRead };
   }
@@ -155,7 +155,7 @@ export class RemuxService {
       job = this.#jobs.get(key);
     }
     if (!job) {
-      const remaining = Math.ceil(deadline - performance.now());
+      const remaining = plan.live ? this.timeoutMs : Math.ceil(deadline - performance.now());
       if (remaining < 1) throw timeoutFailure();
       job = this.#start(key, directory, source, virtualPath, plan, threads, options, input, remaining);
     }
@@ -184,11 +184,11 @@ export class RemuxService {
       stop: () => this.#remove(job),
       ping: () => { if (job.idle && !job.finished) this.#armIdle(job); },
     });
-    const timer = setTimeout(() => controller.abort(timeoutFailure()), timeoutMs); timer.unref();
+    job.watchdog = setTimeout(() => controller.abort(timeoutFailure()), timeoutMs).unref();
     job.done = this.#produce(source, virtualPath, plan, threads, job, input, timeoutMs)
       .catch(error => { job.error = controller.signal.aborted ? controller.signal.reason : error; })
       .finally(() => {
-        clearTimeout(timer);
+        clearTimeout(job.watchdog);
         job.finished = true;
         if (job.readers.size === 0 && !job.removing) this.#idle(job).catch(this.onError);
       });
@@ -242,7 +242,7 @@ export class RemuxService {
     job.workspace = await this.#cache.create(job.directory);
     job.file = await open(path.join(job.workspace, 'output'), 'wx+', 0o600);
     signal.throwIfAborted();
-    const lifetime = { signal, expiresInMs: timeoutMs };
+    const lifetime = { signal, expiresInMs: plan.live ? null : timeoutMs };
     if (source.LiveStreamId && source.BufferMs > 0) await delay(source.BufferMs, undefined, { signal });
     let lease;
     if (openRead) {
@@ -303,6 +303,7 @@ export class RemuxService {
             offset += bytesWritten;
             job.size += bytesWritten;
           }
+          if (plan.live && !signal.aborted) job.watchdog.refresh();
         }
         await done;
         if (failed) throw failed;

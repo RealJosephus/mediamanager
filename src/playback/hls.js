@@ -200,6 +200,26 @@ export function createHlsProgressParser(runtimeTicks, startTimeTicks, report) {
   };
 }
 
+function watchLiveOutput(output, timer, signal) {
+  // The machine-readable output counters also work for audio-only HLS and
+  // durations beyond the range of the display clock used in session reports.
+  const previous = new Map();
+  let pending = '';
+  output.setEncoding('utf8').on('data', text => {
+    pending += text;
+    const lines = pending.split('\n'); pending = lines.pop();
+    for (const line of lines) {
+      const counter = /^(frame|out_time_us)=\s*(-?\d+)\s*$/u.exec(line);
+      if (!counter || signal.aborted) continue;
+      const value = BigInt(counter[2]);
+      if (value > (previous.get(counter[1]) ?? 0n)) {
+        previous.set(counter[1], value);
+        timer.refresh();
+      }
+    }
+  });
+}
+
 export function storedKeyframeData(row) {
   if (!row) return undefined;
   const text = row.KeyframeTicks;
@@ -824,28 +844,36 @@ export class HlsService {
       job.done = this.#run(job, startNumber, runtimeTicks);
       // The job owner observes completion even when a resource failure occurs
       // between a reader's polling iterations. Removal still awaits this task.
-      job.done.catch(() => {});
+      job.done.catch(() => {}).then(() => {
+        if (!job.plan.live || job.error?.code !== 'timeout') return;
+        job.active = false;
+        if (!job.readers) return this.#remove(job);
+      }).catch(() => {});
     } finally { unlock(); }
   }
   async #run(job, startNumber, runtimeTicks) {
     const controller = new AbortController(); job.processController = controller;
     const signal = AbortSignal.any([job.controller.signal, controller.signal]);
-    const timer = setTimeout(() => controller.abort(failure('timeout', 'HLS processing timed out.')), this.timeoutMs); timer.unref();
+    const live = job.plan.live;
+    const timer = setTimeout(() => controller.abort(failure('timeout', 'HLS processing timed out.')), this.timeoutMs).unref();
+    const lifetime = { signal, expiresInMs: live ? null : this.timeoutMs };
     let lease, child, subtitles, externalAudio;
     try {
       if (job.plan.live && job.source.BufferMs > 0) await delay(job.source.BufferMs, undefined, { signal });
       if (job.openRead) {
         this.#liveBridge ??= new LiveStreamReadBridge();
         lease = await this.#liveBridge.lease(job.openRead, { signal });
-      } else if (job.disc) lease = await leaseDiscInput(this.remux.bridge, job.disc, this.mediaEncoder, { signal, expiresInMs: this.timeoutMs });
-      else lease = await this.remux.bridge.lease(job.virtualPath, { version: job.version, signal, expiresInMs: this.timeoutMs });
+      } else if (job.disc) lease = await leaseDiscInput(this.remux.bridge, job.disc, this.mediaEncoder, lifetime);
+      else lease = await this.remux.bridge.lease(job.virtualPath, { ...lifetime, version: job.version });
       subtitles = await stageSubtitleBurn(this.remux.subtitleBurn, job.source, job.plan.burnSubtitle, job.virtualPath, signal);
-      if (job.plan.externalAudio) externalAudio = await this.remux.leaseSidecar(job.plan.externalAudio.path, { signal, expiresInMs: this.timeoutMs });
+      if (job.plan.externalAudio) externalAudio = await this.remux.leaseSidecar(job.plan.externalAudio.path, lifetime);
       const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution, subtitles, job.eventId, externalAudio?.url);
+      if (live) args.unshift('-progress', 'pipe:1');
       checkAbort(signal);
       const overrides = job.plan.videoOutput?.hardware?.environment;
       const environment = overrides ? { ...(this.mediaEncoder.environment ?? process.env), ...overrides } : this.mediaEncoder.environment;
-      child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment, cwd: subtitles?.cwd, output: 'ignore' });
+      child = startMediaProcess(this.mediaEncoder.encoderPath, args, { environment, cwd: subtitles?.cwd, output: live ? 'pipe' : 'ignore' });
+      if (live) watchLiveOutput(child.stdout, timer, signal);
       if (job.plan.video && job.plan.runtime >= 3000000000n) {
         job.cleaner = setInterval(() => {
           if (job.cleaning || job.exited) return;
@@ -853,7 +881,15 @@ export class HlsService {
         }, 20000); job.cleaner.unref();
       }
       const done = new Promise((resolve, reject) => { child.once('error', reject); child.once('close', resolve); });
-      const abort = () => child.kill(); signal.addEventListener('abort', abort, { once: true });
+      let killTimer;
+      const abort = () => {
+        if (killTimer || child.exitCode !== null || child.signalCode !== null) return;
+        child.kill();
+        killTimer = setTimeout(() => {
+          if (child.exitCode === null && child.signalCode === null) child.kill('SIGKILL');
+        }, 1000).unref();
+      };
+      signal.addEventListener('abort', abort, { once: true });
       let diagnostics = ''; const decoder = new StringDecoder('utf8');
       const progressParser = createHlsProgressParser(job.plan.runtime, runtimeTicks, progress => this.#reportProgress(job, progress, 'progress'));
       const consume = text => {
@@ -870,7 +906,9 @@ export class HlsService {
         }
         if (job.disc) await job.disc.verify(signal);
         else if (job.version != null && (await this.vfs.stat(job.virtualPath, { signal })).version !== job.version) throw failure('version-changed', 'The HLS source changed.');
-      } finally { signal.removeEventListener('abort', abort); child.kill(); await done.catch(() => {}); }
+      } finally {
+        signal.removeEventListener('abort', abort); abort(); await done.catch(() => {}); clearTimeout(killTimer);
+      }
     } catch (error) { job.error = signal.aborted ? signal.reason ?? failure('cancelled', 'HLS was cancelled.') : error; }
     finally {
       clearTimeout(timer); clearTimeout(job.idle); clearInterval(job.cleaner);
