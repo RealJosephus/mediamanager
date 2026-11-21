@@ -3,6 +3,9 @@ import { tmdbConfiguration, validateImagePreferences } from './configuration.js'
 import { defaultTmdbApiKey } from './default-key.js';
 import { setTimeout as delay } from 'node:timers/promises';
 
+const cacheCapacity = 100_000;
+const cacheAge = 3_600_000;
+
 function parseTmdbResponse(text) {
   if (!text.trim()) return null;
   return JSON.parse(text, (key, value, context) => {
@@ -29,6 +32,7 @@ export class TmdbHttpError extends Error {
 export class TmdbClient {
   #cache = new Map();
   #cacheWeight = 0;
+  #nextExpiry = Infinity;
   #remoteConfiguration;
   #lifetime = new AbortController();
 
@@ -66,11 +70,12 @@ export class TmdbClient {
     }
   }
 
-  close() { this.#lifetime.abort(); this.#cache.clear(); this.#remoteConfiguration = undefined; this.#cacheWeight = 0; }
+  close() { this.#lifetime.abort(); this.dispose(); this.#remoteConfiguration = undefined; }
 
   async getClientConfiguration(options) {
     if (!this.#remoteConfiguration) {
       const configuration = await this.request('configuration', {}, options);
+      this.#lifetime.signal.throwIfAborted();
       if (!configuration) throw new Error('TMDB client configuration is unavailable.');
       validateImagePreferences(this.configuration, configuration);
       this.#remoteConfiguration = configuration;
@@ -78,18 +83,34 @@ export class TmdbClient {
     return this.#remoteConfiguration;
   }
 
+  #expire(now) {
+    if (now < this.#nextExpiry) return;
+    this.#nextExpiry = Infinity;
+    for (const [key, entry] of this.#cache) {
+      if (entry.expires <= now) {
+        this.#cache.delete(key);
+        this.#cacheWeight -= entry.weight;
+      } else this.#nextExpiry = Math.min(this.#nextExpiry, entry.expires);
+    }
+  }
+
   async #cached(key, factory, cacheEmpty = true) {
+    this.#expire(this.now());
     const current = this.#cache.get(key);
-    if (current && current.expires > this.now()) return current.value;
-    if (current) { this.#cacheWeight -= current.weight; this.#cache.delete(key); }
+    if (current) return current.value;
     await this.getClientConfiguration();
     const value = await factory();
+    this.#lifetime.signal.throwIfAborted();
     if (value && (cacheEmpty || value.results?.length)) {
-      const weight = estimateSize(value);
-      // MemoryCache does not promise an eviction order. Capacity behavior needs runtime differential verification.
-      if (weight + this.#cacheWeight <= 100_000) {
-        this.#cache.set(key, { value, weight, expires: this.now() + 3_600_000 });
-        this.#cacheWeight += weight;
+      const now = this.now(), weight = estimateSize(value);
+      this.#expire(now);
+      // Concurrent requests for the same key can both reach this point.
+      const total = this.#cacheWeight - (this.#cache.get(key)?.weight ?? 0) + weight;
+      if (total <= cacheCapacity) {
+        const expires = now + cacheAge;
+        this.#cache.set(key, { value, weight, expires });
+        this.#cacheWeight = total;
+        this.#nextExpiry = Math.min(this.#nextExpiry, expires);
       }
     }
     return value;
@@ -182,7 +203,7 @@ export class TmdbClient {
     });
   }
 
-  dispose() { this.#cache.clear(); this.#cacheWeight = 0; }
+  dispose() { this.#cache.clear(); this.#cacheWeight = 0; this.#nextExpiry = Infinity; }
 }
 
 function estimateSize(value) {

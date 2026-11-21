@@ -39,6 +39,46 @@ test('TMDB only caches nonempty search pages and expires details after one hour'
   assert.equal(calls.filter((url) => url.pathname.endsWith('/movie/2')).length, 2);
 });
 
+test('TMDB reclaims the weight of untouched expired movies when a full cache receives a new key', async () => {
+  let now = 0;
+  const cast = Array.from({ length: 99 }, (_, id) => ({ id }));
+  const { client, calls } = fixtureClient(url => Response.json({ id: Number(url.pathname.split('/').at(-1)), credits: { cast } }),
+    { now: () => now });
+  const movie = id => client.movie(id, 'en', null, 'US');
+  try {
+    for (let id = 1; id <= 1000; id++) await movie(id);
+    await movie(1000);
+    assert.equal(calls.length, 1001);
+    now = 3_600_000;
+    assert.equal((await movie(1001)).id, 1001);
+    assert.equal((await movie(1001)).id, 1001);
+    assert.equal(calls.filter(url => url.pathname.endsWith('/movie/1001')).length, 1);
+  } finally { client.close(); }
+});
+
+test('TMDB concurrent responses for one key use one entry of cache capacity', async () => {
+  const cast = Array(49_999).fill({ id: 1 });
+  const both = Promise.withResolvers(), release = Promise.withResolvers();
+  let requests = 0;
+  const { client, calls } = fixtureClient(async url => {
+    const id = Number(url.pathname.split('/').at(-1));
+    if (id === 1) {
+      if (++requests === 2) both.resolve();
+      await release.promise;
+    }
+    return Response.json({ id, credits: { cast } });
+  });
+  const movie = id => client.movie(id, 'en', null, 'US');
+  const pending = Promise.all([movie(1), movie(1)]);
+  try {
+    await both.promise;
+    release.resolve();
+    await pending;
+    await movie(2); await movie(2);
+    assert.equal(calls.filter(url => url.pathname.endsWith('/movie/2')).length, 1);
+  } finally { release.resolve(); client.close(); await Promise.allSettled([pending]); }
+});
+
 test('TMDB returns missing detail as null while rate limits remain errors', async () => {
   const { client } = fixtureClient((url) => url.pathname.endsWith('/1') ? new Response(null, { status: 404 }) : new Response(null, { status: 429, headers: { 'retry-after': '3' } }));
   assert.equal(await client.movie(1, 'en', null, 'US'), null);
