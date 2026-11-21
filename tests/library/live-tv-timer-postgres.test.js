@@ -7,13 +7,20 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { setImmediate, setTimeout } from 'node:timers/promises';
 import { DomainStore } from '../../src/database/domain-store.js';
+import { md5Guid } from '../../src/core/identity.js';
 import { initializeLiveTvState } from '../../src/database/live-tv-state-import.js';
 import { quoteIdentifier as q } from '../../src/database/model.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { liveTvStateKey } from '../../src/library/live-tv-state.js';
 import { LiveTvTimersService } from '../../src/library/live-tv-timers-service.js';
+import { LibraryService } from '../../src/library/library-service.js';
+import { guideChannelId } from '../../src/library/live-tv-guide-channel.js';
+import { guideProgramId } from '../../src/library/live-tv-guide-program.js';
+import { cleanValue } from '../../src/library/records.js';
+import { attachLibraryNavigation } from './navigation-fixture.js';
+import { testFileSystem } from '../storage/plugin-files.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase,
-  postgresTestConnectionString } from '../database/postgres-fixture.js';
+  postgresTestConnectionString, postgresTestRow } from '../database/postgres-fixture.js';
 
 export const requiredValidationServices = ['postgres'];
 
@@ -92,6 +99,110 @@ async function assertSourceMatchesFile(database, kind, filename) {
   assert.equal(value[kind].sourceSha256, hash(bytes));
   return { state: value[kind], bytes };
 }
+
+test('series refresh batches PostgreSQL work while retaining the saved order and episode choices', {
+  skip: !postgresTestConnectionString, timeout: 30000,
+}, async t => {
+  const name = 'Batch series: Édition', channel = 'owned-sd', seriesId = 'owned-guide-series', ruleId = 'owned-rule';
+  const guideId = index => `owned-${String(index).padStart(3, '0')}`;
+  const startDate = index => new Date(Date.UTC(2050, 0, 1, 0, index === 130 ? 1 : index + 15)).toISOString().replace('.000Z', '.0000001Z');
+  const fixture = await timerFixture(t, 'live_tv_series_batch', {
+    timers: JSON.stringify([
+      { Id: 'manual-id', ProgramId: guideId(0), Status: 'New', IsManual: true, Opaque: 'preserve' },
+      { Id: 'missing-from-guide', SeriesTimerId: ruleId, Status: 'New', StartDate: startDate(0) },
+    ]),
+    seriesTimers: JSON.stringify([{ Id: ruleId, Name: name, ChannelId: channel, SeriesId: seriesId,
+      RecordAnyChannel: false, RecordAnyTime: true, RecordNewOnly: false, SkipEpisodesInLibrary: true }]),
+  });
+  const db = fixture.primaryDatabase, service = fixture.primaryService;
+  const library = new LibraryService({ store: fixture.primaryStore, serverId: 'series-query', fileSystem: testFileSystem });
+  const navigation = await attachLibraryNavigation(library);
+  service.dvr = { isActive: () => false, syncTimers() {} };
+  service.getRecordingSeriesPrograms = library.getRecordingSeriesPrograms.bind(library);
+  const insert = values => db.insert('BaseItems', postgresTestRow('BaseItems', values));
+  const program = (index, overrides = {}) => ({ Id: guideProgramId(guideId(index)), Type: 'MediaBrowser.Controller.LiveTv.LiveTvProgram',
+    ExternalId: guideId(index), Name: name, CleanName: cleanValue(name), SortName: guideId(index), ExternalSeriesId: seriesId,
+    ChannelId: guideChannelId('Emby', channel), IsSeries: true, Data: '{}',
+    StartDate: startDate(index), EndDate: '2050-01-01T04:00:00.0000002Z', ParentIndexNumber: 1, IndexNumber: index + 1,
+    ShowId: [6, 130].includes(index) ? 'same-airing' : `show-${index}`, ...overrides });
+  const seedPrograms = async (start, end) => {
+    for (let index = end - 1; index >= start; index--) await insert(program(index));
+  };
+
+  async function refresh() {
+    const statements = [];
+    const original = db.withConnection;
+    db.withConnection = function countQueries(operation, options) {
+      return original.call(this, async session => {
+        const query = session.client.query;
+        session.client.query = function countedQuery(input, ...args) {
+          statements.push(typeof input === 'string' ? { text: input } : input);
+          return query.call(this, input, ...args);
+        };
+        try { return await operation(session); }
+        finally { session.client.query = query; }
+      }, options);
+    };
+    try { assert.equal(await service.refreshSeriesTimers(), true); }
+    finally { db.withConnection = original; }
+    assert.match(statements[0].text, /pg_try_advisory_lock/u);
+    assert.match(statements.at(-1).text, /pg_advisory_unlock/u);
+    return statements;
+  }
+
+  try {
+    const otherChannel = guideChannelId('Emby', 'other-hd'), matchedSeries = md5Guid('owned library series');
+    const unrelatedSeries = md5Guid('unrelated library series'), primary = md5Guid('unrelated primary item');
+    for (const [externalId, id, height] of [[channel, guideChannelId('Emby', channel), 480], ['other-hd', otherChannel, 1080]]) {
+      await insert({ Id: id, Type: 'MediaBrowser.Controller.LiveTv.LiveTvChannel', Name: externalId, ExternalId: externalId, Height: height, Data: '{}' });
+    }
+    for (const [id, title] of [[matchedSeries, 'batch series - edition'], [unrelatedSeries, 'Unrelated']]) {
+      await insert({ Id: id, Type: 'MediaBrowser.Controller.Entities.TV.Series', Name: title, CleanName: cleanValue(title), Data: '{}' });
+    }
+    await insert({ Id: primary, Type: 'MediaBrowser.Controller.Entities.Movies.Movie', Name: 'Primary', Data: '{}' });
+    for (const [index, ancestor, overrides] of [[1, matchedSeries, {}], [2, matchedSeries, { IsVirtualItem: true }],
+      [3, unrelatedSeries, {}], [4, matchedSeries, { PrimaryVersionId: primary }]]) {
+      const id = md5Guid(`library episode ${index}`);
+      await insert({ Id: id, Type: 'MediaBrowser.Controller.Entities.TV.Episode', ParentIndexNumber: 1, IndexNumber: index + 1,
+        IsVirtualItem: false, Data: '{}', ...overrides });
+      await db.insert('AncestorIds', { ItemId: id, ParentItemId: ancestor });
+    }
+    await insert(program(140, { ChannelId: otherChannel }));
+    await insert(program(141, { ExternalSeriesId: 'unrelated-guide-series' }));
+
+    await seedPrograms(0, 1);
+    await db.insert('BaseItemProviders', { ItemId: guideProgramId(guideId(0)), ProviderId: 'SeriesTvdb', ProviderValue: '1234' });
+    const single = await refresh();
+    await seedPrograms(1, 24);
+    const withinPage = await refresh();
+    await seedPrograms(24, 131);
+    const multiplePages = await refresh();
+    const version = (await db.client.query('SHOW server_version')).rows[0].server_version;
+    t.diagnostic(`PostgreSQL ${version}, SQL calls under the writer lock for 1 / 24 / 131 programs: ${single.length} / ${withinPage.length} / ${multiplePages.length}`);
+    assert.ok(withinPage.length <= single.length + 2, 'Adding programs within a page must not add per-program queries.');
+    assert.ok(multiplePages.length <= withinPage.length + 10, 'Crossing one page adds only a bounded set of queries.');
+    const batches = statements => statements.filter(statement => statement.text.startsWith('SELECT request.ordinal')).map(statement => statement.values[0].length);
+    assert.deepEqual(batches(single), [1]);
+    assert.deepEqual(batches(withinPage), [24]);
+    assert.deepEqual(batches(multiplePages), [128, 3]);
+
+    const { bytes } = await assertSourceMatchesFile(db, 'timers', fixture.timerFile);
+    const [manual, removed, ...scheduled] = JSON.parse(bytes);
+    assert.equal(manual.Id, 'manual-id');
+    assert.equal(manual.IsManual, true);
+    assert.equal(manual.Opaque, 'preserve');
+    assert.equal(manual.StartDate, startDate(0));
+    assert.equal(manual.ChannelId, channel);
+    assert.deepEqual(manual.SeriesProviderIds, { Tvdb: '1234' });
+    assert.equal(removed.Id, 'missing-from-guide');
+    assert.equal(removed.Status, 'Cancelled');
+    assert.deepEqual(scheduled.map(timer => [timer.Id, timer.ProgramId, timer.Status, timer.SeriesTimerId]),
+      Array.from({ length: 130 }, (_, i) => {
+        const index = i + 1, programId = guideId(index);
+        return [md5Guid(ruleId + programId), programId, [1, 6].includes(index) ? 'Cancelled' : 'New', ruleId];
+      }));
+  } finally { await navigation.close(); }
+});
 
 test('independent PostgreSQL stores serialize timer cancellations and publish the complete winning source', {
   skip: !postgresTestConnectionString,

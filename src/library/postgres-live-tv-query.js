@@ -1,9 +1,42 @@
 import { quoteIdentifier as q } from '../database/model.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { decodeNativeTextBytes, nativeTextBytes } from '../database/native-text.js';
+import { postgresExcludeAlternateVersions, postgresExcludeOwnedItems } from '../database/postgres-query-expressions.js';
 import { buildPostgresItemPageQuery, queryPostgresItemPage, visitPostgresItemPages,
   visitPostgresItemPlanPages } from '../database/postgres-item-query.js';
-import { libraryError } from './records.js';
+import { cleanValue, libraryError } from './records.js';
+import { clrTrim } from '../metadata/whitespace.js';
+
+/** Match only this guide page against physical episodes under the named series. */
+export async function queryPostgresExistingRecordingEpisodes(database, programs, { signal } = {}) {
+  if (programs.length > 128) throw new TypeError('Recording episode checks require a batch of at most 128 programs.');
+  const ordinals = [], names = [], seasons = [], episodes = [];
+  for (const [ordinal, program] of programs.entries()) {
+    if (program.ParentIndexNumber == null || program.IndexNumber == null) continue;
+    ordinals.push(ordinal);
+    names.push(program.Name && clrTrim(program.Name) ? nativeTextBytes(cleanValue(program.Name)) : null);
+    seasons.push(program.ParentIndexNumber);
+    episodes.push(program.IndexNumber);
+  }
+  if (!ordinals.length) return new Set();
+  const sql = nativeTextSql(database.schemaName);
+  const items = `${q(database.schemaName)}.${q('BaseItems')}`, ancestors = `${q(database.schemaName)}.${q('AncestorIds')}`;
+  const leaf = alias => `substring(${sql.projection(`${alias}."Type"`)} from '[^.]+$')`;
+  const eligible = alias => `${postgresExcludeOwnedItems(alias)} AND ${postgresExcludeAlternateVersions(database.schemaName, items, alias)}`;
+  const result = await database.client.query({ text: `SELECT request.ordinal
+    FROM unnest($1::integer[], $2::bytea[], $3::integer[], $4::integer[]) AS request(ordinal, name, season, episode)
+    WHERE EXISTS (
+      SELECT 1 FROM ${items} episode
+      JOIN ${ancestors} ancestor ON ${sql.guidLower('ancestor."ItemId"')} = ${sql.guidLower('episode."Id"')}
+      JOIN ${items} series ON ${sql.guidKey('series."Id"')} = ${sql.guidKey('ancestor."ParentItemId"')}
+      WHERE ${leaf('episode')} = 'Episode' AND episode."IsVirtualItem" IS FALSE
+        AND episode."ParentIndexNumber" = request.season AND episode."IndexNumber" = request.episode
+        AND ${eligible('episode')}
+        AND ${leaf('series')} = 'Series' AND (request.name IS NULL OR series."CleanName" = request.name)
+        AND ${eligible('series')}
+    )`, values: [ordinals, names, seasons, episodes], signal });
+  return new Set(result.rows.map(row => row.ordinal));
+}
 
 export function visitPostgresPrograms(database, query, { rootId, userId, visibility }, visit) {
   return visitPostgresItemPages(database, { ...query, includeitemtypes: ['LiveTvProgram'],

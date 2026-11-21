@@ -280,7 +280,7 @@ export class LiveTvTimersService {
   async #seriesEpisodes(document, series, options, signal) {
     signal?.throwIfAborted();
     const now = Date.now();
-    const candidates = await this.getRecordingSeriesPrograms(series, now);
+    const candidates = await this.getRecordingSeriesPrograms(series, now, { signal });
     signal?.throwIfAborted();
     const { changes, append, events } = planSeriesEpisodes(series, recordingEntries(document, 'timers'), candidates, {
       ...options, now, isActive: id => this.dvr.isActive(id),
