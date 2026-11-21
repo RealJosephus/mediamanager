@@ -16,6 +16,7 @@ const terminal = new Set(['Cancelled', 'Completed']);
 const missing = error => ['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].includes(error.code);
 const key = ordinalIgnoreCaseKey;
 const publicationFile = 'publication.json';
+const recordingEnd = timer => Date.parse(timer.EndDate) + timer.PostPaddingSeconds * 1000;
 const dateParts = value => {
   const date = new Date(value), two = number => String(number).padStart(2, '0');
   return [String(date.getFullYear()).padStart(4, '0'), two(date.getMonth() + 1), two(date.getDate()),
@@ -103,7 +104,7 @@ export class LiveTvDvr {
         finishing: Boolean(publication), writing: false, path: publication?.path };
       this.#jobs.set(id, job);
       job.done = Promise.resolve().then(() => this.runBackground(() => publication
-        ? this.#finishPublication(job, publication) : this.#record(job, timer))).catch(error => {
+        ? this.#resumePublication(job, publication) : this.#record(job, timer))).catch(error => {
         const pending = this.#publications.get(id);
         if (pending) pending.due = Date.now() + this.publicationRetryMs;
         else if (this.#timers.get(id)?.StartDate === timer.StartDate) this.#timers.delete(id);
@@ -151,20 +152,23 @@ export class LiveTvDvr {
           continue;
         }
         const state = JSON.parse(await this.fileSystem.readFile(api.join(spool, publicationFile), 'utf8'));
+        // Older writers left retryCapture=false both during capture and before upload.
+        const phase = state?.phase ?? (state?.retryCapture ? 'publishing' : 'capturing');
         if (typeof state?.timer?.Id !== 'string' || !state.timer.Id.trim() || typeof state.path !== 'string'
-          || !pathApi(state.path).isAbsolute(state.path) || !state.path.endsWith('.ts') || typeof state.retryCapture !== 'boolean') {
+          || !pathApi(state.path).isAbsolute(state.path) || !state.path.endsWith('.ts') || typeof state.retryCapture !== 'boolean'
+          || !['capturing', 'publishing'].includes(phase)) {
           throw new Error('The staged recording has invalid publication metadata.');
         }
         const id = key(state.timer.Id);
         if (this.#publications.has(id)) throw new Error('More than one staged recording exists for this timer.');
-        this.#publications.set(id, { ...state, spool, readPath, due: 0 });
+        this.#publications.set(id, { ...state, phase, spool, readPath, due: 0 });
       } catch (error) { this.#report(error); }
     }
   }
 
-  async #savePublication({ spool, timer, path: filename, seriesPath, retryCapture }) {
+  async #savePublication({ spool, timer, path: filename, seriesPath, phase, retryCapture }) {
     const staged = await stageLiveTvStateFile(spool, publicationFile,
-      JSON.stringify({ timer, path: filename, seriesPath, retryCapture }), this.fileSystem);
+      JSON.stringify({ timer, path: filename, seriesPath, phase, retryCapture }), this.fileSystem);
     await withCleanup(async () => {
       await this.fileSystem.rename(staged.temporary, staged.filename);
       staged.published = true;
@@ -198,6 +202,7 @@ export class LiveTvDvr {
   }
 
   async #openOutput(job, timer, { api, directory, basename, seriesPath }, signal) {
+    if (job.publication) return this.fileSystem.open(job.readPath, 'a');
     await this.fileSystem.mkdir(directory, { recursive: true, signal });
     const remote = !this.fileSystem.resolve(directory).adapter.openFile;
     if (remote) {
@@ -216,7 +221,7 @@ export class LiveTvDvr {
         if (!exists && !this.#pathReserved(target, job)) {
           job.path = target;
           job.publication = { spool: job.spool, readPath: job.readPath, path: target, seriesPath,
-            timer, retryCapture: false, due: 0, readers: job.readers };
+            timer, phase: 'capturing', retryCapture: false, due: 0, readers: job.readers };
           await this.#savePublication(job.publication);
           return this.fileSystem.open(job.readPath, 'wx');
         }
@@ -299,8 +304,25 @@ export class LiveTvDvr {
     if (filename) await this.#scanRecording();
   }
 
+  async #resumePublication(job, publication) {
+    const id = key(publication.timer.Id);
+    if (publication.phase === 'capturing') {
+      const current = this.#timers.get(id);
+      if (current && Date.now() < recordingEnd(current)) {
+        job.spool = publication.spool;
+        job.readPath = publication.readPath;
+        job.publication = publication;
+        job.finishing = false;
+        return this.#record(job, current);
+      }
+      publication.phase = 'publishing';
+    }
+    return this.#finishPublication(job, publication);
+  }
+
   async #finishPublication(job, publication) {
     const { timer, spool, readPath, seriesPath } = publication, signal = this.#lifetime.signal;
+    signal.throwIfAborted();
     const current = (await this.timers.readRecordingTimers()).find(candidate => key(candidate.Id) === key(timer.Id));
     if (current?.Status === 'Completed') {
       if (current.RecordingPath !== publication.path) throw new Error('The recording timer was completed with a different file.');
@@ -310,7 +332,7 @@ export class LiveTvDvr {
     } else {
       const size = await this.#publicationBytes(readPath);
       if (size) {
-        if (publication.retryCapture) await this.#savePublication(publication);
+        await this.#savePublication(publication);
         await this.#publishRecording(job, publication, size, signal);
         try {
           const configuration = await this.configuration.getConfiguration();
@@ -374,13 +396,13 @@ export class LiveTvDvr {
   async #record(job, timer) {
     const stop = new AbortController();
     const signal = AbortSignal.any([this.#lifetime.signal, job.controller.signal, stop.signal]);
-    const end = Date.parse(timer.EndDate) + timer.PostPaddingSeconds * 1000;
+    const end = recordingEnd(timer);
     const deadline = () => {
       const remaining = end - Date.now();
       if (remaining <= 0) stop.abort();
       else job.deadline = setTimeout(deadline, Math.min(2147483647, remaining)).unref();
     };
-    let input, output, reader, bridge, failure, written = 0;
+    let input, output, reader, bridge, failure, interrupted, written = 0;
     const write = async bytes => { await output.writeFile(bytes); written += bytes.length; };
     try {
       deadline();
@@ -421,6 +443,7 @@ export class LiveTvDvr {
       }
     } catch (error) { if (!signal.aborted) { failure = error; this.#report(error); } }
     finally {
+      interrupted = this.#lifetime.signal.aborted && !job.controller.signal.aborted && Date.now() < end;
       clearTimeout(job.deadline);
       job.writing = false;
       job.finishing = true;
@@ -437,8 +460,15 @@ export class LiveTvDvr {
       await job.assets;
       const retryCapture = Boolean(failure && !signal.aborted && Date.now() < Date.parse(timer.EndDate) && timer.RetryCount < 10);
       if (job.publication) {
+        if (interrupted) return;
+        job.publication.timer = timer;
+        job.publication.phase = 'publishing';
         job.publication.retryCapture = retryCapture;
         this.#publications.set(key(timer.Id), job.publication);
+        if (this.#lifetime.signal.aborted) {
+          await this.#savePublication(job.publication);
+          return;
+        }
         await this.#finishPublication(job, job.publication);
         return;
       }
