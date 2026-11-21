@@ -6,6 +6,7 @@ import { withCleanup } from '../core/operation-failure.js';
 import { stageLiveTvStateFile } from '../database/live-tv-state-files.js';
 import { BinaryResult } from '../http/binary-result.js';
 import { postProcessRecording, recordTransportStream } from '../media-execution/recording.js';
+import { isHlsManifest } from '../media-execution/input.js';
 import { LiveStreamReadBridge } from '../playback/live-stream-bridge.js';
 import { ordinalIgnoreCaseEquals, ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { guideChannelId } from './live-tv-guide-channel.js';
@@ -211,7 +212,9 @@ export class LiveTvDvr {
         if (!result.ok || !result.body) { controller.abort(); throw libraryError(502, 'The tuner did not supply a recording body.'); }
         return { stream: result.body, close: () => controller.abort() };
       });
-    return { source, openRead, url, close: () => owner?.release() };
+    const mappedHls = !owner?.openRead && source.Protocol === 'File'
+      && (isHlsManifest(source.Container) || /\.m3u8?$/iu.test(source.Path ?? ''));
+    return { source, openRead, url, mappedHls, close: () => owner?.release() };
   }
 
   async #openOutput(job, timer, { api, directory, basename, seriesPath }, signal) {
@@ -440,7 +443,10 @@ export class LiveTvDvr {
           }).catch(error => this.#report(error));
         };
         const { source } = input;
-        if (!source.RequiresLooping && /ts$/iu.test(source.Container ?? '') && ['File', 'Http'].includes(source.Protocol)) {
+        if (input.mappedHls) {
+          bridge = await this.#bridge.leaseMappedHls(this.fileSystem.vfs, this.fileSystem.accessPath(source.Path), { signal });
+          await recordTransportStream(this.mediaEncoder, source, bridge.url, write, onStarted, { signal, mappedHls: true });
+        } else if (!source.RequiresLooping && /ts$/iu.test(source.Container ?? '') && ['File', 'Http'].includes(source.Protocol)) {
           reader = await input.openRead({ signal });
           await onStarted();
           for await (const bytes of reader.stream) {
