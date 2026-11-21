@@ -316,7 +316,9 @@ export class WebDavAdapter {
   #scope(options, { cleanup = false, retained = false } = {}) {
     checkAbort(options.signal);
     if (this.#closed && !cleanup) throw new StorageError('closed', 'The WebDAV adapter is closed.');
-    const timeout = options.deadline === undefined ? this.#timeoutMs : Math.min(this.#timeoutMs, options.deadline - Date.now());
+    const deadline = options.deadline;
+    const timeRemaining = () => deadline === undefined ? this.#timeoutMs : Math.min(this.#timeoutMs, deadline - Date.now());
+    const timeout = timeRemaining();
     if (!Number.isFinite(timeout)) throw new TypeError('The operation deadline must be a timestamp.');
     if (timeout <= 0) throw new StorageError('timeout', 'The storage operation deadline expired.');
     const controller = new AbortController();
@@ -324,14 +326,28 @@ export class WebDavAdapter {
     const completed = Promise.withResolvers();
     const onAbort = () => controller.abort(options.signal.reason);
     options.signal?.addEventListener('abort', onAbort, { once: true });
-    const timer = setTimeout(() => { timedOut = true; controller.abort(); }, Math.max(0, timeout));
-    timer.unref();
+    const expire = () => {
+      if (controller.signal.aborted) return;
+      timedOut = true;
+      controller.abort();
+    };
+    let timer = setTimeout(expire, timeout).unref();
     const scope = {
       cleanup, retained,
       done: completed.promise,
       responseCloseFailures: [],
       signal: controller.signal,
       abort: () => controller.abort(),
+      progress: () => {
+        if (deadline === undefined) timer.refresh();
+        else {
+          clearTimeout(timer);
+          const remaining = timeRemaining();
+          if (remaining <= 0) expire();
+          else timer = setTimeout(expire, remaining).unref();
+        }
+        checkAbort(controller.signal);
+      },
       error: (error) => {
         let result;
         if (timedOut && error?.code === 'cancelled') result = new StorageError('timeout', 'The storage operation timed out.');
@@ -567,6 +583,7 @@ export class WebDavAdapter {
       if (options.ifRange) headers.set('If-Range', options.ifRange);
       response = await this.#fetch(this.#url(path), { method: 'GET', headers, redirect: 'manual', signal: scope.signal });
       checkAbort(scope.signal);
+      scope.progress();
       if (redirectStatuses.has(response.status)) throw invalidResponse('WebDAV redirects are not allowed.');
       if (![200, 206].includes(response.status)) {
         const error = statusError(response.status, 'read', response.headers.get('retry-after'));
@@ -654,6 +671,7 @@ export class WebDavAdapter {
             if (done) break;
             count += BigInt(value.byteLength);
             if (expectedLength !== null && count > expectedLength) throw invalidResponse('WebDAV sent more bytes than declared.');
+            if (value.byteLength) scope.progress();
             yield value;
           }
           if (expectedLength !== null && count !== expectedLength) throw invalidResponse('The WebDAV read ended before its declared length.');
