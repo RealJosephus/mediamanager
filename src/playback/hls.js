@@ -685,7 +685,8 @@ export class HlsService {
       if (!available) throw failure('unavailable', 'The HLS process is unavailable.');
       let version;
       const disc = !openRead && plan.discInput ? await resolveDiscInput(this.vfs, source.VideoType, virtualPath, this.#lifetime.signal) : undefined;
-      if (!openRead && !plan.burnSubtitle?.Path && !plan.externalAudio) {
+      if (plan.liveHttpHls && openRead) throw failure('not-supported', 'A live HLS manifest requires its HTTP origin.');
+      if (!openRead && !plan.liveHttpHls && !plan.burnSubtitle?.Path && !plan.externalAudio) {
         if (disc) version = disc.version;
         else {
           const info = await this.vfs.stat(virtualPath, { signal: this.#lifetime.signal });
@@ -860,14 +861,19 @@ export class HlsService {
     let lease, child, subtitles, externalAudio;
     try {
       if (job.plan.live && job.source.BufferMs > 0) await delay(job.source.BufferMs, undefined, { signal });
-      if (job.openRead) {
-        this.#liveBridge ??= new LiveStreamReadBridge();
-        lease = await this.#liveBridge.lease(job.openRead, { signal });
-      } else if (job.disc) lease = await leaseDiscInput(this.remux.bridge, job.disc, this.mediaEncoder, lifetime);
-      else lease = await this.remux.bridge.lease(job.virtualPath, { ...lifetime, version: job.version });
+      if (!job.plan.liveHttpHls) {
+        if (job.openRead) {
+          this.#liveBridge ??= new LiveStreamReadBridge();
+          lease = await this.#liveBridge.lease(job.openRead, { signal });
+        } else if (job.disc) lease = await leaseDiscInput(this.remux.bridge, job.disc, this.mediaEncoder, lifetime);
+        else lease = await this.remux.bridge.lease(job.virtualPath, { ...lifetime, version: job.version });
+      }
+      // Give FFmpeg the manifest's origin for relative variants, keys and segments.
+      const inputUrl = job.plan.liveHttpHls ? job.source.Path : lease.url;
       subtitles = await stageSubtitleBurn(this.remux.subtitleBurn, job.source, job.plan.burnSubtitle, job.virtualPath, signal);
       if (job.plan.externalAudio) externalAudio = await this.remux.leaseSidecar(job.plan.externalAudio.path, lifetime);
-      const args = hlsArguments(lease.url, job.plan, await job.directory, startNumber, runtimeTicks, job.plan.execution, subtitles, job.eventId, externalAudio?.url);
+      const args = hlsArguments(inputUrl, job.plan, await job.directory, startNumber, runtimeTicks,
+        { ...job.plan.execution, requestHeaders: job.source.RequiredHttpHeaders }, subtitles, job.eventId, externalAudio?.url);
       if (live) args.unshift('-progress', 'pipe:1');
       checkAbort(signal);
       const overrides = job.plan.videoOutput?.hardware?.environment;
@@ -897,9 +903,13 @@ export class HlsService {
       };
       child.stderr.on('data', bytes => consume(decoder.write(bytes)));
       try {
-        this.onProcess({ pid: child.pid, args: args.map(value => value === lease.url || value === externalAudio?.url ? '[private source]' : value) });
+        this.onProcess({ pid: child.pid, args: args.map((value, index) => {
+          if (args[index - 1] === '-headers') return '[private headers]';
+          return value === inputUrl || value === externalAudio?.url ? '[private source]' : value;
+        }) });
         const code = await done; const finalText = decoder.end(); diagnostics = (diagnostics + finalText).slice(-8192); progressParser.end(finalText); checkAbort(signal);
         if (code !== 0) {
+          if (job.plan.liveHttpHls) throw new StorageError('invalid-response', 'The live HLS streams could not be processed.', { exitCode: code });
           let diagnostic = lease.redact?.(diagnostics) ?? diagnostics.replaceAll(lease.url, '[private source]');
           if (externalAudio) diagnostic = diagnostic.replaceAll(externalAudio.url, '[private source]');
           throw new StorageError('invalid-response', 'The HLS streams could not be processed.', { exitCode: code, diagnostic });

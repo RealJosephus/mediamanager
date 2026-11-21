@@ -3,7 +3,8 @@ import { StorageError } from '../storage/errors.js';
 import { encoderVersionAtLeast } from '../playback/media-encoder.js';
 import { audioArguments, audioStreamPlan } from './audio.js';
 import { videoArguments, videoStreamPlan } from './video.js';
-import { mediaSeekTime, nativeInputFormat, streamInputIndex } from './input.js';
+import { httpMediaProtocols, httpMediaUrl, isHlsManifest, liveHttpHlsUrl, mediaSeekTime, nativeInputFormat, streamInputIndex } from './input.js';
+import { mediaHttpHeaderArguments } from './process.js';
 
 const failure = (code, message) => new StorageError(code, message);
 
@@ -131,11 +132,13 @@ function subtitleOverlay(plan, subtitles, ticks, shift) {
 export function remuxPlan(source, options = {}, { capabilities, configuration, version, subtitleBurn, canOpenSidecar } = {}) {
   options = { ...options };
   const live = options.LiveInput === true && source.IsInfiniteStream === true;
+  const liveHttpHls = Boolean(live && options.HlsManifest === true && liveHttpHlsUrl(source));
   const discInput = source.VideoType === 'Dvd' || source.VideoType === 'BluRay';
   if (!options.LiveInput && (source.IsInfiniteStream || source.RequiresOpening || source.RequiresClosing)
     || source.VideoType && !discInput && !['VideoFile', 'Iso'].includes(source.VideoType)
     || discInput && source.Protocol !== 'File'
-    || /^(?:hls|applehttp|dash)$/i.test(source.Container)) throw failure('not-supported', 'Streaming requires an opened media input.');
+    || isHlsManifest(source.Container) && !liveHttpHls
+    || /^dash$/iu.test(source.Container)) throw failure('not-supported', 'Streaming requires an opened media input.');
   const container = options.Container?.toLowerCase();
   const output = containers[container];
   if (!output) throw failure('not-supported', 'The requested container has no audited packet-copy muxer.');
@@ -210,7 +213,7 @@ export function remuxPlan(source, options = {}, { capabilities, configuration, v
   const inputFormat = video && configuration?.HardwareAccelerationType && configuration.HardwareAccelerationType !== 'none'
     && source.VideoType === 'VideoFile' ? nativeInputFormat(source.Container) : undefined;
   return { container, ...output, inputVideo: video, inputFormat, discInput, videoOutput, audioOutput, externalAudio, burnSubtitle,
-    bitmapIndex, subtitleHardware, subtitleEncoder, externalSubtitle, live, analyzeDurationMs: source.AnalyzeDurationMs,
+    bitmapIndex, subtitleHardware, subtitleEncoder, externalSubtitle, live, liveHttpHls, analyzeDurationMs: source.AnalyzeDurationMs,
     readAtNativeFramerate: source.ReadAtNativeFramerate, ignoreDts: source.IgnoreDts, ignoreIndex: source.IgnoreIndex,
     genPts: source.GenPtsInput, discardCorrupt: source.DiscardCorruptFrames,
     streams: [video, audio, subtitle].filter(Boolean).map(stream => ({ type: stream.Type, codec: stream.Codec, index: stream.Type === 'Subtitle' ? streamInputIndex(source, stream) : stream.Index })),
@@ -280,12 +283,15 @@ export function remuxArguments(url, plan, threads, version, subtitles, audioUrl,
   return args;
 }
 
-export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks = 0n, { threads, version, maxMuxingQueueSize }, subtitles, eventId, audioUrl) {
-  if (!privateUrl.test(url)) throw new TypeError('HLS requires a private VFS input.');
+export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks = 0n, { threads, version, maxMuxingQueueSize, requestHeaders }, subtitles, eventId, audioUrl) {
+  if (plan.liveHttpHls ? !eventId || !httpMediaUrl(url) : !privateUrl.test(url)) {
+    throw new TypeError('HLS requires a private VFS input or an opened HTTP tuner manifest.');
+  }
   if (eventId != null && !/^[a-f0-9]{32}$/u.test(eventId)) throw new TypeError('Invalid HLS event playlist identity.');
   const prefix = eventId ?? 'segment';
   const probe = probeInput(plan);
-  const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-stats', '-stats_period', '0.5', '-protocol_whitelist', 'http,tcp', ...probe];
+  const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-stats', '-stats_period', '0.5', '-protocol_whitelist',
+    plan.liveHttpHls ? httpMediaProtocols : 'http,tcp', ...probe];
   const seek = [];
   if (runtimeTicks > 0n) {
     const maximum = plan.runtime > 50000000n ? plan.runtime - 50000000n : 0n;
@@ -297,7 +303,8 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
   if (plan.discInput) args.push('-f', 'concat', '-safe', '0');
   else if (plan.inputFormat) args.push('-f', plan.inputFormat);
   const overlay = subtitleOverlay(plan, subtitles, runtimeTicks > 0n ? runtimeTicks : plan.start, null);
-  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []), '-i', url,
+  args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []),
+    ...(plan.liveHttpHls ? mediaHttpHeaderArguments(requestHeaders ?? undefined) : []), '-i', url,
     ...bitmapInputArguments(subtitles, overlay, seek, probe), ...externalAudioArguments(plan, audioUrl, seek));
   if (plan.videoOutput?.hardware?.decoder.args.length) args.push('-noautoscale');
   args.push('-map_metadata', '-1', '-map_chapters', '-1', '-threads', String(threads));
