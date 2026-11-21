@@ -176,10 +176,10 @@ export class LiveTvTimersService {
   #closePromise;
   #poisoned;
 
-  constructor({ store, serverId, loadProgramDtos, liveTv, loadProgram, resolveRecordingTimer, getRecordingSeriesPrograms, users, sessions, dataPath,
+  constructor({ store, serverId, loadProgramDtos, liveTv, loadProgram, resolveRecordingTimer, visitRecordingSeriesPrograms, users, sessions, dataPath,
     stateFileSystem = fs, onError = () => {} } = {}) {
     if (!store || typeof loadProgramDtos !== 'function') throw new TypeError('Timer reads require PostgreSQL and program DTO projection.');
-    Object.assign(this, { store, serverId, loadProgramDtos, liveTv, loadProgram, resolveRecordingTimer, getRecordingSeriesPrograms, users, sessions, dataPath,
+    Object.assign(this, { store, serverId, loadProgramDtos, liveTv, loadProgram, resolveRecordingTimer, visitRecordingSeriesPrograms, users, sessions, dataPath,
       stateFileSystem, onError });
     this.stateDirectory = dataPath && path.join(dataPath, 'livetv');
   }
@@ -280,11 +280,10 @@ export class LiveTvTimersService {
   async #seriesEpisodes(document, series, options, signal) {
     signal?.throwIfAborted();
     const now = Date.now();
-    const candidates = await this.getRecordingSeriesPrograms(series, now, { signal });
+    const { changes, append, events } = await planSeriesEpisodes(series, recordingEntries(document, 'timers'),
+      visit => this.visitRecordingSeriesPrograms(series, now, { signal }, visit),
+      { ...options, now, isActive: id => this.dvr.isActive(id) });
     signal?.throwIfAborted();
-    const { changes, append, events } = planSeriesEpisodes(series, recordingEntries(document, 'timers'), candidates, {
-      ...options, now, isActive: id => this.dvr.isActive(id),
-    });
     if (!changes.size && !append.length) return { document: { ...document }, files: new Map(), events };
     return timerMutation(document, { changes, append }, events);
   }

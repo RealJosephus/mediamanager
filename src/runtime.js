@@ -311,7 +311,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const liveTvTimers = new LiveTvTimersService({ store, serverId, liveTv, users, sessions, dataPath, onError,
     loadProgramDtos: (_database, ids) => library.loadLiveTvTimerProgramDtos(ids),
     loadProgram: id => library.loadLiveTvTimerProgram(id), resolveRecordingTimer: (dto, options) => library.resolveRecordingTimer(dto, options),
-    getRecordingSeriesPrograms: (series, now, options) => library.getRecordingSeriesPrograms(series, now, options) });
+    visitRecordingSeriesPrograms: (series, now, options, visit) => library.visitRecordingSeriesPrograms(series, now, options, visit) });
   rollback.push(() => liveTvTimers.close());
   const syncPlay = new SyncPlayService({ sessions, users, library, onError });
   rollback.push(() => syncPlay.close());

@@ -1526,12 +1526,11 @@ export class LibraryService extends EventEmitter {
     });
   }
 
-  getRecordingSeriesPrograms(series, now, { signal } = {}) {
+  visitRecordingSeriesPrograms(series, now, { signal }, visit) {
     return this.store.run(async database => {
       const query = { includeitemtypes: ['LiveTvProgram'], minenddate: new Date(now).toISOString(), enabletotalrecordcount: false,
         ...(series.SeriesId ? { externalseriesid: series.SeriesId } : { name: series.Name }),
         ...(!series.RecordAnyChannel && { channelids: [guideChannelId('Emby', series.ChannelId)] }) };
-      const result = [];
       await visitPostgresItemPages(database, query, { signal }, async ({ rows }) => {
         if (!rows.length) return;
         const state = await this.load(database, null, { baseRows: rows, includeUserData: false, includeLinkGraph: false });
@@ -1544,14 +1543,13 @@ export class LibraryService extends EventEmitter {
             signal?.throwIfAborted();
             const channel = channels.get(idKey(item.ChannelId));
             const program = this.#recordingMetadata(item, channel, item.ExternalId, series.RecordAnyChannel ? undefined : series.ChannelId);
-            result.push({ program: { ...program, ShowId: item.ShowId, Genres: [] }, channelHd: Boolean(channel?.IsHD),
+            visit({ program: { ...program, ShowId: item.ShowId, Genres: [] }, channelHd: Boolean(channel?.IsHD),
               inLibrary: Boolean(existing && existing.has(index)) });
           }
         } finally {
           await state.dispose({ session: database });
         }
       });
-      return result;
     }, { signal });
   }
 

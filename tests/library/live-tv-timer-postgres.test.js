@@ -13,6 +13,7 @@ import { quoteIdentifier as q } from '../../src/database/model.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { liveTvStateKey } from '../../src/library/live-tv-state.js';
 import { LiveTvTimersService } from '../../src/library/live-tv-timers-service.js';
+import { planSeriesEpisodes } from '../../src/library/live-tv-series-schedule.js';
 import { LibraryService } from '../../src/library/library-service.js';
 import { guideChannelId } from '../../src/library/live-tv-guide-channel.js';
 import { guideProgramId } from '../../src/library/live-tv-guide-program.js';
@@ -100,6 +101,47 @@ async function assertSourceMatchesFile(database, kind, filename) {
   return { state: value[kind], bytes };
 }
 
+test('series planning consumes each guide page immediately and indexes existing timer IDs', async () => {
+  const series = { Id: 'indexed-rule', RecordAnyTime: true, RecordAnyChannel: true };
+  for (const count of [128, 512]) {
+    let idReads = 0;
+    const entries = Array.from({ length: count }, (_, index) => {
+      const ProgramId = `program-${index}`, id = md5Guid(series.Id + ProgramId).toUpperCase();
+      return { get Id() { idReads++; return id; }, ProgramId, Status: 'New' };
+    });
+    const plan = await planSeriesEpisodes(series, entries, async visit => {
+      for (let offset = 0; offset < count; offset += 128) {
+        for (let index = offset; index < offset + 128; index++) {
+          visit({ program: { ProgramId: `program-${index}`, Name: `Episode ${index}` } });
+        }
+        assert.equal(entries[offset].Name, `Episode ${offset}`, 'A completed page must already be planned.');
+      }
+    }, { isActive: () => false });
+    assert.deepEqual(plan.append, []);
+    assert.deepEqual(plan.events, []);
+    assert.deepEqual([...plan.changes.keys()], entries.map((_, index) => index));
+    assert.ok(idReads <= count * 3, `${idReads} ID reads for ${count} guide occurrences`);
+  }
+});
+
+test('series planning updates the first saved program alias after an exact ID match reassigns one', async () => {
+  const series = { Id: 'aliases', RecordAnyTime: true, RecordAnyChannel: true, RecordNewOnly: true };
+  const entries = [
+    { Id: md5Guid(series.Id + 'updated'), ProgramId: 'old', IsManual: true, Status: 'InProgress' },
+    { Id: 'first-manual', ProgramId: 'OLD', IsManual: true, Status: 'New' },
+    { Id: 'second-manual', ProgramId: 'old', IsManual: true, Status: 'Cancelled' },
+  ];
+  const plan = await planSeriesEpisodes(series, entries, async visit => {
+    visit({ program: { ProgramId: 'updated', IsRepeat: true, Name: 'Updated' } });
+    visit({ program: { ProgramId: 'Old', IsRepeat: true, Name: 'Manual episode' } });
+  }, { isActive: () => false });
+  assert.deepEqual(plan.append, []);
+  assert.deepEqual([...plan.changes].map(([index, change]) => [index, change.ProgramId, change.Status]), [
+    [0, 'updated', 'InProgress'], [1, 'Old', 'New'],
+  ]);
+  assert.deepEqual(entries.slice(1).map(timer => [timer.Id, timer.Status]), [['first-manual', 'New'], ['second-manual', 'Cancelled']]);
+});
+
 test('series refresh batches PostgreSQL work while retaining the saved order and episode choices', {
   skip: !postgresTestConnectionString, timeout: 30000,
 }, async t => {
@@ -118,7 +160,7 @@ test('series refresh batches PostgreSQL work while retaining the saved order and
   const library = new LibraryService({ store: fixture.primaryStore, serverId: 'series-query', fileSystem: testFileSystem });
   const navigation = await attachLibraryNavigation(library);
   service.dvr = { isActive: () => false, syncTimers() {} };
-  service.getRecordingSeriesPrograms = library.getRecordingSeriesPrograms.bind(library);
+  service.visitRecordingSeriesPrograms = library.visitRecordingSeriesPrograms.bind(library);
   const insert = values => db.insert('BaseItems', postgresTestRow('BaseItems', values));
   const program = (index, overrides = {}) => ({ Id: guideProgramId(guideId(index)), Type: 'MediaBrowser.Controller.LiveTv.LiveTvProgram',
     ExternalId: guideId(index), Name: name, CleanName: cleanValue(name), SortName: guideId(index), ExternalSeriesId: seriesId,
