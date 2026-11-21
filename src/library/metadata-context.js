@@ -146,7 +146,8 @@ export function createMetadataContextLoader(options) {
     });
   };
 
-  const loadContext = (reference, { draft, forItemSave = false, includeChildren = false, paths = capturePathScope() } = {}) => {
+  const loadContext = (reference, { draft, forItemSave = false, includeChildren = false, collectionRefresh = false,
+    paths = capturePathScope() } = {}) => {
     const owningScope = activeScope();
     return scopeWork(owningScope, () => store.run(async db => {
     // Capture before awaiting a database session. An actual child operation can
@@ -188,6 +189,13 @@ export function createMetadataContextLoader(options) {
     try {
     const referenceId = typeof reference === 'string' ? nativeGuid(reference) : reference.Id;
     const targetRows = await loadPostgresRowsByIds(db, [referenceId]), targetRow = targetRows[0];
+    const collectionPath = collectionRefresh && targetRow?.Type === 'MediaBrowser.Controller.Entities.Movies.BoxSet' && targetRow.Path
+      ? expandPath(targetRow.Path) : undefined;
+    const preserveCollectionMembers = Boolean(dataPath && collectionPath && nativeContainsSubPath(collectionPath, dataPath,
+      { windows: imagePathApiForRoot(collectionPath) === path.win32 }));
+    // A scan can retain a BoxSet from before a membership edit. Loading a
+    // fresh row baseline around that draft would make its old links writable.
+    if (preserveCollectionMembers) draft = undefined;
     const targetType = draft?.Type ?? String(targetRow?.Type ?? '').split('.').at(-1);
     const targetName = draft?.Name ?? targetRow?.Name;
     // Discovery, hydration and the conflict baseline share this exact observed
@@ -507,7 +515,7 @@ export function createMetadataContextLoader(options) {
     };
     attachMetadataSortCache(item, library.options);
     const versionItemCache = new Map(state.byId);
-    loaded = { item, context, linkedChildren,
+    loaded = { item, context, linkedChildren, preserveCollectionMembers,
       dispose: disposeContext,
       logger, libraryOptions, get globalOptions() { return currentConfiguration(); }, get metadataConfiguration() { return currentMetadataConfiguration(); }, saveLocalMetadataEnabled, exists, relationships, versionLinks, fileSystemMetadata,
       lookup: metadataLookup(item, parents), lookupFor: value => metadataLookup(value, loaded?.parents ?? parents), parents, parent: parents[0], collectionFolders, series, season,

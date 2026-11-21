@@ -401,7 +401,7 @@ export class MetadataRefreshHost {
       loaded = contexts.owned;
       options = prepareOwnedItemRefresh(inheritance.ownerItem ?? contexts.owner.item, loaded.item, options, inheritance);
     } else loaded = applyLiveSeriesParent(await loadContext(reference,
-      options[liveMetadataItem] ? { draft: options[liveMetadataItem] } : undefined), options[liveSeriesParent]);
+      { draft: options[liveMetadataItem], collectionRefresh: true }), options[liveSeriesParent]);
     this.validateRefresh(loaded.item, options);
     let collectionFolderRefresh = { updateType: ItemUpdateType.None, requiresSave: false };
     // D3: configured external writers must be available before image/probe or

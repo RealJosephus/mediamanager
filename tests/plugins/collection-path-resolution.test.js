@@ -5,6 +5,7 @@ import path from 'node:path';
 import { newNativeItemEntity, publishNativeItemLinks, retainNativeItemLinks, releaseNativeItemLinks,
   observeNativeItemLinkOwnership } from '../../src/library/native-item-entity.js';
 import { idKey } from '../../src/library/records.js';
+import { refreshLibraryTaskId } from '../../src/tasks/index.js';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
@@ -83,8 +84,20 @@ test('Collection HTTP members, metadata children and monitor lookup resolve pers
     try { parsed = text ? JSON.parse(text) : null; } catch { /* Preserve the actual HTTP failure body for the assertion. */ }
     return { status: response.status, text, body: parsed };
   };
-  const created = await request('/Collections?name=Path%20only%20members');
-  assert.equal(created.status, 200, created.text); await runtime.metadata.drain();
+  const scan = Promise.withResolvers();
+  const scanCompleted = ({ Result }) => { if (Result.Id === refreshLibraryTaskId) scan.resolve(Result); };
+  runtime.tasks.on('completed', scanCompleted);
+  let created;
+  try {
+    created = await request('/Collections?name=Path%20only%20members');
+    assert.equal(created.status, 200, created.text);
+    // The first Collections library queues a full scan separately from the
+    // metadata queue. Finish it before giving the live entity path-only links.
+    const result = await deadline(scan.promise, 'The scan scheduled for the new Collections library did not complete.');
+    report.observations.push({ phase: 'collection-creation-scan', status: result.Status, error: result.ErrorMessage });
+    assert.equal(result.Status, 'Completed', result.ErrorMessage);
+  } finally { runtime.tasks.off('completed', scanCompleted); }
+  await runtime.metadata.drain();
   let collection, collectionLease, nextLease = 0;
   report.collectionOwnership = [];
   // The fixture publishes unresolved links across several separate consumers.
@@ -148,14 +161,29 @@ test('Collection HTTP members, metadata children and monitor lookup resolve pers
   });
   // Actual Local XML creates the unresolved PostgreSQL relation. Metadata and
   // the HTTP mutation each receive a fresh path-only relation, not an ID cache.
-  await importPaths(locations.slice(0, 3));
-  assert.deepEqual(await metadataChildren(), members.slice(0, 3).map(item => idKey(item.Id)));
-  await importPaths(locations.slice(0, 3));
-  const added = await request(`/Collections/${collection.Id}/Items?ids=${members[3].Id}`);
-  assert.equal(added.status, 204, added.text); await runtime.metadata.drain();
   const persistedIds = async () => (await database.rows('LinkedChildren', { where: { ParentId: collection.Id },
     orderBy: [{ column: 'SortOrder', direction: 'ASC' }] })).map(row => idKey(row.ChildId));
-  assert.deepEqual(await persistedIds(), members.map(item => idKey(item.Id)));
+  const stale = await runtime.metadata.loadContext(collection.Id, { includeChildren: false });
+  try {
+    assert.equal(await runtime.collections.linkedChildren.count(stale.item.LinkedChildren), 0n);
+    await importPaths(locations.slice(0, 3));
+    assert.deepEqual(await metadataChildren(), members.slice(0, 3).map(item => idKey(item.Id)));
+    await importPaths(locations.slice(0, 3));
+    const added = await request(`/Collections/${collection.Id}/Items?ids=${members[3].Id}`);
+    assert.equal(added.status, 204, added.text);
+    const expected = members.map(item => idKey(item.Id)), afterAdd = await persistedIds();
+    report.observations.push({ phase: 'collection-add', status: added.status, ids: afterAdd });
+    assert.deepEqual(afterAdd, expected);
+    await runtime.metadata.drain();
+    const beforeScan = await persistedIds();
+    assert.deepEqual(beforeScan, expected);
+    // A scan can acquire its live entity before the HTTP edit and start its
+    // metadata refresh after the edit and its queued refresh finish.
+    await runtime.metadataScanner.refreshLiveItem(stale.item, { ForceSave: true, MetadataRefreshMode: 'None', ImageRefreshMode: 'None' });
+    const afterScan = await persistedIds();
+    report.observations.push({ phase: 'stale-metadata-refresh', status: added.status, beforeScan, afterScan });
+    assert.deepEqual(afterScan, expected);
+  } finally { await stale.dispose(); }
   const savedXml = await runtime.fileSystem.readFile(path.join(collection.Path, 'collection.xml'), 'utf8');
   for (const location of locations) assert.ok(savedXml.includes(xmlText(location)));
 

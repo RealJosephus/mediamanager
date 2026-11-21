@@ -24,6 +24,7 @@ import { getNewItemId } from '../core/identity.js';
 import { nativeGuid } from '../users/native.js';
 import { DotIgnoreRule } from './dot-ignore-rule.js';
 import { stateIgnoreFileAccess, stateOwnedFiles } from './state-owned-files.js';
+import { audioNativeType } from './audio-item-resolver.js';
 
 const pathStyle = value => /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/u.test(value) ? 'windows' : 'posix';
 const itemType = item => String(item?.NativeType ?? item?.Type ?? '').split('.').at(-1);
@@ -208,6 +209,20 @@ export class FolderValidationService {
       && nativeFileNameWithoutExtension(parent.Path)?.toLowerCase() !== 'collections' && listing.entries.length === 0) return null;
     const raw = { listing, ...this.#classifyEntries(accessPath, listing.entries) };
     const filtered = await this.#filterCandidates(raw, parent, root);
+    const confirmed = new WeakSet();
+    const confirmWeakFile = !listing.deletionSafe && listing.complete === true && listing.consistency === 'weak'
+      ? async candidate => {
+        try {
+          const file = await this.vfs.stat(candidate.accessPath);
+          if (file.kind !== 'file' || ['size', 'modified', 'version'].some(field =>
+            candidate.entry[field] != null && file[field] !== candidate.entry[field])) return false;
+          confirmed.add(candidate);
+          return true;
+        } catch (error) {
+          if (!['not-found', 'not-directory', 'version-changed'].includes(error?.code)) this.#report(error);
+          return false;
+        }
+      } : undefined;
     const directorySnapshots = new Map();
     const peekDirectory = (candidate, { forExtras = false } = {}) => {
       if (candidate?.entry?.kind !== 'directory') throw new TypeError('Only directory candidates can be enumerated.');
@@ -240,8 +255,15 @@ export class FolderValidationService {
         applicationRootPath: this.applicationRootPath
       })).length > 0,
       deletionSafe: listing.deletionSafe === true,
+      confirmWeakFile,
       onEnumerationReady
     });
+    if (confirmWeakFile) {
+      const claims = resolution.claims.filter(claim => claim.resolverId === 'builtin-audio-items'
+        && claim.nativeType === audioNativeType && confirmed.has(claim.primary));
+      if (claims.length) return Object.freeze({ ...resolution, claims: Object.freeze(claims),
+        deletionSafe: false, additionsOnly: true });
+    }
     return Object.freeze({ ...resolution, deletionSafe: listing.deletionSafe === true });
   }
 
@@ -413,6 +435,49 @@ export class FolderValidationService {
   #progress(reportProgress, value) {
     try { reportProgress(value); }
     catch { /* A progress observer cannot replace folder validation. */ }
+  }
+
+  async #validateVerifiedTracks(parent, claims, { signal, progress, needsChildren }) {
+    return this.store.serializeWrites(session => withFolderValidationScope({
+      session, store: this.store, library: this.library, linkedChildren: this.loadContext.linkedChildren, parent,
+    }, async scope => {
+      progress(7);
+      throwIfAborted(signal);
+      const loaded = await this.#context(parent.Id, { draft: parent }), created = [];
+      let ordinal = 0n;
+      for (let offset = 0; offset < claims.length; offset += 128) {
+        const page = claims.slice(offset, offset + 128);
+        const existing = new Set((await loadPostgresRowsByIds(session, page.map(claim => claim.Id))).map(row => idKey(row.Id)));
+        for (const claim of page) {
+          throwIfAborted(signal);
+          const position = ++ordinal;
+          // A confirmed ordinary file can refresh its existing track without
+          // authorizing any replacement or deletion from this weak listing.
+          const includeTrack = async item => {
+            if (needsChildren && item?.NativeType === audioNativeType && isFileProtocol(item)
+              && sameNativePath(item.Path, claim.identityPath)) await scope.valid(item, position, true);
+            return Boolean(item);
+          };
+          if (existing.has(idKey(claim.Id))) {
+            if (needsChildren) await scope.withCurrent(claim.Id, includeTrack);
+            continue;
+          }
+          if (await scope.withPath(claim.identityPath, includeTrack)) continue;
+          const entity = this.#retain(createResolvedItemEntity(claim, {
+            parent, parents: loaded.parents, metadataConfiguration: this.metadataConfiguration, clock: this.clock,
+          }));
+          created.push(entity);
+          if (needsChildren) await scope.valid(entity, position, true);
+        }
+      }
+      progress(8);
+      if (created.length) await this.library.createItems(created, parent, { signal });
+      progress(9);
+      progress(10);
+      const children = needsChildren ? await scope.accessible() : null;
+      if (children) this.#ownership.getStore().push(() => children.close());
+      return { created, children };
+    }), { signal });
   }
 
   async #reconcileChildren(parent, resolution, { signal, allowRemoveRoot, progress, needsChildren }) {
@@ -606,12 +671,14 @@ export class FolderValidationService {
         return Object.freeze({ created: Object.freeze([]), resolved: Object.freeze([]), skipped: true });
       }
       if (resolution == null) return Object.freeze({ created: Object.freeze([]), resolved: Object.freeze([]), skipped: true });
-      if (resolution.withheldPaths.length > 0) {
+      if (!resolution.additionsOnly && resolution.withheldPaths.length > 0) {
         throw new StorageError('not-supported', 'Folder validation cannot persist a partial sibling batch with withheld paths.');
       }
-      const container = ['Series', 'MusicAlbum'].includes(itemType(parent));
-      const { created, children } = await this.#reconcileChildren(parent, resolution, { signal, allowRemoveRoot, progress,
-        needsChildren: recursive || refreshChildMetadata && !container });
+      const container = !resolution.additionsOnly && ['Series', 'MusicAlbum'].includes(itemType(parent));
+      const options = { signal, allowRemoveRoot, progress, needsChildren: recursive || refreshChildMetadata && !container };
+      const { created, children } = resolution.additionsOnly
+        ? await this.#validateVerifiedTracks(parent, resolution.claims, options)
+        : await this.#reconcileChildren(parent, resolution, options);
       if (recursive) await this.#validateSubFolders(children, {
         collectionType,
         signal,

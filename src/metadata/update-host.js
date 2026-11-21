@@ -6,6 +6,7 @@ import { PeopleMetadataLifecycleHost } from './people-lifecycle.js';
 import { assertVideoRepositoryPath, copyLocalAlternateMetadata, localAlternateVersionIds, loadLocalAlternateContext } from './video-repository.js';
 import { invalidateVideoParent } from '../library/video-version-discovery.js';
 import { publishNativeImageInfos } from './images.js';
+import { assertMetadataBaseline } from './metadata-baseline.js';
 
 const repositoryAncestors = Symbol('video repository ancestors');
 const successfulSaveDateFloor = saves => {
@@ -74,6 +75,15 @@ export class MetadataUpdateHost extends EventEmitter {
   }
 
   async updateRepository(loaded, result, updateReason, options = {}) {
+    if (loaded.preserveCollectionMembers) return this.store.ensureSerializedWrites(async db => {
+      // Reject a superseded refresh before its XML saver can publish old links.
+      await assertMetadataBaseline(db, loaded);
+      return this.#updateRepository(loaded, result, updateReason, options);
+    }, { signal: options.signal });
+    return this.#updateRepository(loaded, result, updateReason, options);
+  }
+
+  async #updateRepository(loaded, result, updateReason, options) {
     const { signal, persist, persistImages, saverOperation = saveMetadata } = options;
     const item = result.Item;
     const context = { ...loaded.context, images: result.Images ?? loaded.context?.images ?? [] };

@@ -2,7 +2,9 @@ import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, realpath, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { inspect } from 'node:util';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
@@ -28,11 +30,13 @@ import {
   photoNativeType,
   isNativePhotoFileName,
   isNativeAudioFileName,
+  LibraryMetadataScanService,
   videoNativeType
 } from '../../src/library/index.js';
 import { ProviderRefreshService } from '../../src/metadata/provider-refresh-service.js';
+import { MetadataRefreshHost } from '../../src/metadata/refresh-host.js';
 import { reattachUserData } from '../../src/metadata/persistence.js';
-import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
+import { IdentityAccessMap, StorageError, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { knownAncestorIgnoreRule } from './ignore-namespace-fixture.js';
 import { createResolvedItemLifecycleFixture } from './resolved-item-lifecycle-fixture.js';
@@ -159,7 +163,7 @@ async function databaseFor(dialect) {
 }
 
 async function fixture(t, dialect, resolvers, {
-  configuration = {}, onResolverError = () => {}, reattach = reattachUserData
+  configuration = {}, onResolverError = () => {}, reattach = reattachUserData, metadataPath
 } = {}) {
   const { database, schema } = await databaseFor(dialect);
   const store = new DomainStore(database);
@@ -190,7 +194,7 @@ async function fixture(t, dialect, resolvers, {
     returnAccess: 'Directory item scan fixture'
   });
   const library = new LibraryService({fileSystem: testFileSystem, store, serverId: 'directory-item-scan',
-    programDataPath: PROGRAM_DATA_PATH, configuration, userRoot: { Id: USER_ROOT_ID } });
+    programDataPath: PROGRAM_DATA_PATH, metadataPath, configuration, userRoot: { Id: USER_ROOT_ID } });
   const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [ROOT_PATH] });
   const refreshes = new ProviderRefreshService();
   lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, ignoreRule, configuration,
@@ -931,5 +935,62 @@ for (const dialect of ['postgres']) {
       await validate();
       assert.deepEqual(await snapshot(database), before);
     });
+
+  test(`${dialect}: a weak listing adds verified tracks once and preserves absent or ambiguous items`, options, async t => {
+    const temporaryRoot = await realpath(tmpdir());
+    const metadataPath = await mkdtemp(path.join(temporaryRoot, 'mediamanager-weak-track-metadata-'));
+    t.after(async () => {
+      assert.equal(path.dirname(metadataPath), temporaryRoot);
+      await rm(metadataPath, { recursive: true });
+    });
+    const { database, store, library, adapter, vfs, validate, validation, lifecycleFixture } =
+      await fixture(t, dialect, [createAudioItemResolver()], { metadataPath });
+    await insertCollection(database, 'music');
+    const track = name => `${ROOT_PATH}\\${name}`;
+    const missingId = randomUUID(), conflictingId = randomUUID();
+    await database.insert('BaseItems', baseItem(missingId, audioNativeType, { ParentId: ROOT_ID, Path: track('Absent.mp3') }));
+    await database.insert('BaseItems', baseItem(conflictingId, MOVIE_TYPE, { ParentId: ROOT_ID, Path: track('Collision.mp3') }));
+    for (const name of ['Track.mp3', 'Vanished.mp3', 'Changed.mp3', 'Collision.mp3', 'Shortcut.strm']) {
+      await adapter.write('/' + name, Buffer.from('isolated directory entry'));
+    }
+    await adapter.mkdir('/Album');
+    const listPage = adapter.listPage.bind(adapter), stat = adapter.stat.bind(adapter), checked = [];
+    t.mock.method(adapter, 'listPage', async (location, options) => ({
+      ...await listPage(location, options), consistency: 'weak', snapshot: null, deletionSafe: false,
+    }));
+    t.mock.method(adapter, 'stat', async (location, options) => {
+      if (/\.(mp3|strm)$/u.test(location)) checked.push(location);
+      if (location === '/Vanished.mp3') throw new StorageError('not-found', 'The listed file disappeared.');
+      const result = await stat(location, options);
+      return location === '/Changed.mp3' ? { ...result, size: result.size + 1n } : result;
+    });
+    const scans = await Promise.all([validate({ recursive: false }), validate({ recursive: false })]);
+    assert.equal(scans.flatMap(scan => scan.created).length, 1);
+    assert.deepEqual(new Set(checked), new Set(['/Track.mp3', '/Vanished.mp3', '/Changed.mp3', '/Collision.mp3']));
+    const children = await database.rows('BaseItems', { where: { ParentId: ROOT_ID } });
+    assert.deepEqual(new Set(children.map(row => row.Path)), new Set(['Absent.mp3', 'Collision.mp3', 'Track.mp3'].map(track)));
+    assert.equal(children.find(row => row.Path === track('Track.mp3')).Id, itemId(track('Track.mp3'), audioNativeType));
+    assert.equal(children.find(row => row.Id === conflictingId).Type, MOVIE_TYPE);
+    assert.ok(children.some(row => row.Id === missingId));
+    const before = await snapshot(database);
+    assert.deepEqual((await validate({ recursive: false })).created, []);
+    assert.deepEqual(await snapshot(database), before);
+
+    const { images, loadContext, updates, linkedChildren } = lifecycleFixture;
+    const refreshErrors = [], logger = { error: error => refreshErrors.push(error) };
+    const metadata = new MetadataRefreshHost({ registry: updates.registry, images, loadContext, updates, linkedChildren, store, vfs,
+      supportedItemTypes: ['Audio'], logger });
+    validation.metadataScanner = new LibraryMetadataScanService({ library, metadata, scheduler: validation.scheduler, logger });
+    t.after(() => metadata.close());
+    const replacement = Buffer.from('A replacement track with a different file size.');
+    await adapter.write('/Track.mp3', replacement);
+    assert.deepEqual((await validate({ recursive: false, refreshChildMetadata: true, ForceSave: true })).created, []);
+    assert.deepEqual(refreshErrors, []);
+    const refreshed = await database.rows('BaseItems', { where: { ParentId: ROOT_ID } });
+    assert.equal(refreshed.find(row => row.Path === track('Track.mp3')).Size, BigInt(replacement.length));
+    for (const id of [missingId, conflictingId]) {
+      assert.deepEqual(refreshed.find(row => row.Id === id), children.find(row => row.Id === id));
+    }
+  });
 
 }

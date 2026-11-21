@@ -81,8 +81,8 @@ export class CollectionService extends EventEmitter {
     this.programDataPath = path.resolve(programDataPath);
     this.dataPath = path.resolve(dataPath);
     this.collectionsPath = path.join(this.dataPath, 'collections');
-    this.updateRepository = updateRepository ?? (item => updateLiveItemRepository(item,
-      { loadContext, itemCreation, updates, includeChildren: false, updateReason: ItemUpdateType.MetadataEdit }));
+    this.updateRepository = updateRepository ?? (item => store.ensureSerializedWrites(() => updateLiveItemRepository(item,
+      { loadContext, itemCreation, updates, includeChildren: false, updateReason: ItemUpdateType.MetadataEdit })));
     this.findByPath = findByPath ?? (identity => this.store.run(async db => {
       const stored = this.library.options?.reversePath?.(identity) ?? identity;
       const rows = (await queryPostgresItemPage(db,

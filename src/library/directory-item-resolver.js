@@ -598,13 +598,14 @@ export class DirectoryItemResolverPipeline {
   }
 
   async resolve({ parent, root, collectionContext = null, candidates, peekDirectory, getExtraCandidates, resolveExtra,
-    onEnumerationReady, deletionSafe = true, singleItem = false, signal } = {}) {
+    onEnumerationReady, deletionSafe = true, confirmWeakFile, singleItem = false, signal } = {}) {
     if (!Array.isArray(candidates)) throw new TypeError('Directory resolution requires a sibling candidate array.');
     if (peekDirectory != null && typeof peekDirectory !== 'function') throw new TypeError('peekDirectory must be a function.');
     if (getExtraCandidates != null && typeof getExtraCandidates !== 'function') throw new TypeError('getExtraCandidates must be a function.');
     if (resolveExtra != null && typeof resolveExtra !== 'function') throw new TypeError('resolveExtra must be a function.');
     if (onEnumerationReady != null && typeof onEnumerationReady !== 'function') throw new TypeError('onEnumerationReady must be a function.');
     if (typeof deletionSafe !== 'boolean') throw new TypeError('Directory resolution deletionSafe must be a boolean.');
+    if (confirmWeakFile != null && typeof confirmWeakFile !== 'function') throw new TypeError('confirmWeakFile must be a function.');
     checkAbort(signal);
     const byPath = indexCandidates(candidates);
     const ordered = [...candidates];
@@ -733,6 +734,7 @@ export class DirectoryItemResolverPipeline {
         const resolver = this.#resolvers[index];
         if (typeof resolver[method] !== 'function') continue;
         if (!results.has(index)) results.set(index, await this.#call(resolver, method, { ...base, candidate,
+          ...(confirmWeakFile && method === 'resolveFile' ? { confirmWeakFile: () => confirmWeakFile(candidate) } : {}),
           available: singleCandidates.filter(value => !unavailable(value)) }, signal,
         { continueOnError: true }));
         const result = results.get(index);

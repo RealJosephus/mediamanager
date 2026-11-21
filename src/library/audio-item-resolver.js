@@ -189,8 +189,8 @@ async function conventionalAlbum(candidate, peekDirectory, collectionContext) {
  *   Album / CD1 / track.<ordinary audio>
  *
  * A direct artist.nfo entry explicitly identifies an Artist without albums.
- * Playlist directories and weak snapshots are withheld so unsupported
- * structural decisions fail visibly.
+ * Album and Artist inference requires a strong directory snapshot. A weak
+ * listing can contribute an individually confirmed ordinary track.
  */
 export function createAudioItemResolver() {
   return Object.freeze({
@@ -264,7 +264,7 @@ export function createAudioItemResolver() {
       // Artists nor Albums. Their children retain the same ancestor context.
       return null;
     },
-    resolveFile({ parent, collectionContext, candidate, deletionSafe }) {
+    resolveFile({ parent, collectionContext, candidate, deletionSafe, confirmWeakFile }) {
       if (cueFile(candidate)) return null;
       const override = exactCollectionOverride(collectionContext, candidate.identityPath);
       const exactMusicOverride = override === 'music';
@@ -277,7 +277,12 @@ export function createAudioItemResolver() {
       // to VideoResolver; a music collection continues to create Audio.
       if (mixed && mixedVideoExtensions.has(fileParts(candidate.entry.name).extension)) return null;
       if (override != null && override !== 'music') return potentialAudio(candidate) ? withheld : null;
-      if (!deletionSafe) return potentialAudio(candidate) ? withheld : null;
+      if (!deletionSafe) {
+        if (confirmWeakFile && (resolvableMusicContext(collectionContext) || exactMusicOverride) && ordinaryAudio(candidate)) {
+          return confirmWeakFile().then(confirmed => confirmed ? audioClaim(candidate) : withheld);
+        }
+        return potentialAudio(candidate) ? withheld : null;
+      }
       if (ordinaryAudio(candidate) || audioShortcut(candidate)) return audioClaim(candidate);
       return potentialAudio(candidate) ? withheld : null;
     }

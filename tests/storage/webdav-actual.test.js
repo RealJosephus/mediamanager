@@ -16,7 +16,9 @@ import { builtinRemoteAssetContract } from '../migration/helpers/builtin-remote-
 import { vfsStreamResult } from '../../src/http/binary-result.js';
 import { startActualWebDav } from './helpers/actual-webdav.js';
 import { remoteFileContract } from './remote-file-contract.js';
+import { verifyRemoteMusicScan } from './helpers/remote-music-scan.js';
 
+export const requiredValidationServices = ['postgres', 'webdav'];
 const executable = process.env.MEDIAMANAGER_WEBDAV_EXECUTABLE;
 const evidenceDirectory = process.env.MEDIAMANAGER_WEBDAV_EVIDENCE
   ?? path.join(validationOutputRoot(), `actual-webdav-${randomUUID()}`);
@@ -295,6 +297,8 @@ test('actual external rclone WebDAV supports independent VFS access, writes, NFO
     assert.ok(requests.some(request => request.method === 'GET' && request.path.endsWith('/package-source.nfo') && request.ifMatch));
     checks.push({ operation: 'state package capture, generation verification and restore', strongVersion: true });
   });
+
+  await t.test('weak WebDAV listings safely add ordinary music tracks to PostgreSQL', t => verifyRemoteMusicScan(t, vfs));
 
   await t.test('credentials stay scoped to the WebDAV origin and every protocol request is authenticated', () => {
     assert.ok(requests.length > 0);

@@ -11,6 +11,7 @@ import { createNfoPlugin } from '../../plugins/nfo/plugin.js';
 import { builtinRemoteAssetContract } from '../migration/helpers/builtin-remote-assets.js';
 import { startActualAList } from './helpers/actual-alist.js';
 import { remoteFileContract } from './remote-file-contract.js';
+import { verifyRemoteMusicScan } from './helpers/remote-music-scan.js';
 
 const executable = process.env.MEDIAMANAGER_ALIST_EXECUTABLE;
 const connectionString = process.env.MEDIAMANAGER_TEST_POSTGRES;
@@ -121,4 +122,5 @@ test('actual current-source AList supports VFS byte access, network NFO and ffpr
     assert.ok(raw.every(request => !request.apiCredential && !request.password && !request.cookie));
     checks.push({ operation: 'credential isolation', rawRequests: raw.length, passed: true });
   });
+  await t.test('weak AList listings safely add ordinary music tracks to PostgreSQL', t => verifyRemoteMusicScan(t, vfs));
 });

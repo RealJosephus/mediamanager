@@ -209,7 +209,9 @@ export async function persistMetadataInDatabase(db, loaded, result, { signal, sa
       await db.insertBatch('BaseItemTrailerTypes', addedTrailerRows.sort((left, right) => left.Id - right.Id));
     }
     if (saveVideoRelations) {
-      await persistFolderLinks(db, item, { logger: loaded.logger, linkedChildren: loaded.linkedChildren, reversePath: loaded.reversePath });
+      if (!loaded.preserveCollectionMembers) {
+        await persistFolderLinks(db, item, { logger: loaded.logger, linkedChildren: loaded.linkedChildren, reversePath: loaded.reversePath });
+      }
       await persistVideoVersionRelations(db, item, { reversePath: loaded.reversePath, logger: loaded.logger });
     }
     signal?.throwIfAborted();
