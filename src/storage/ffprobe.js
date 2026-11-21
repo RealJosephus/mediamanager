@@ -1,4 +1,4 @@
-import { captureMediaProcess } from '../media-execution/process.js';
+import { captureMediaProcess, mediaHttpHeaderArguments } from '../media-execution/process.js';
 import { StorageError } from './errors.js';
 import { unsignedInteger } from './range.js';
 
@@ -52,12 +52,7 @@ function probeArguments(input, {
     if (typeof userAgent !== 'string' || /[\r\n\0]/u.test(userAgent)) throw new TypeError('Invalid probe user agent.');
     args.push('-user_agent', userAgent);
   }
-  if (requiredHttpHeaders !== undefined) {
-    const headers = Object.entries(requiredHttpHeaders);
-    if (headers.some(([name, value]) => !/^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/u.test(name)
-      || typeof value !== 'string' || /[\r\n\0]/u.test(value))) throw new TypeError('Invalid live probe HTTP headers.');
-    if (headers.length) args.push('-headers', headers.map(([name, value]) => `${name}: ${value}\r\n`).join(''));
-  }
+  args.push(...mediaHttpHeaderArguments(requiredHttpHeaders));
   if (rtsp) args.push('-rtsp_transport', 'tcp+udp', '-rtsp_flags', 'prefer_tcp');
   args.push('-i', input, '-threads', String(unsignedInteger(threads, 'thread count')), '-v', 'warning', '-print_format', 'json', '-show_streams');
   if (extractChapters) args.push('-show_chapters');

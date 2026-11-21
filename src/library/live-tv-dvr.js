@@ -114,17 +114,20 @@ export class LiveTvDvr {
     if (!candidate) throw libraryError(404, 'The recording channel has no media source.');
     const owner = candidate.RequiresOpening && await this.liveStreams.openOwned({ ItemId: channel.Id, OpenToken: candidate.OpenToken }, { signal });
     const source = owner?.MediaSource ?? candidate;
+    // Owned byte streams still use their reader. An original HTTP input needs
+    // its source URL so FFmpeg resolves nested manifests and segments there.
+    const url = !owner?.openRead && source.Protocol === 'Http' && /^https?:\/\//iu.test(source.Path ?? '') ? source.Path : null;
     const openRead = owner?.openRead ?? (source.Protocol === 'File'
       ? options => this.fileSystem.openRead(source.Path, options)
       : async ({ signal: readSignal }) => {
-        if (!/^https?:\/\//iu.test(source.Path ?? '')) throw libraryError(422, 'The tuner source protocol has no byte reader.');
+        if (!url) throw libraryError(422, 'The tuner source protocol has no byte reader.');
         const controller = new AbortController();
         const combined = AbortSignal.any([readSignal, controller.signal]);
-        const result = await fetch(source.Path, { signal: combined, headers: source.RequiredHttpHeaders ?? {} });
+        const result = await fetch(url, { signal: combined, headers: source.RequiredHttpHeaders ?? {} });
         if (!result.ok || !result.body) { controller.abort(); throw libraryError(502, 'The tuner did not supply a recording body.'); }
         return { stream: result.body, close: () => controller.abort() };
       });
-    return { source, openRead, close: () => owner?.release() };
+    return { source, openRead, url, close: () => owner?.release() };
   }
 
   async #openOutput(job, { api, directory, basename }, signal) {
@@ -240,6 +243,8 @@ export class LiveTvDvr {
             signal.throwIfAborted();
             await write(bytes);
           }
+        } else if (input.url) {
+          await recordTransportStream(this.mediaEncoder, source, input.url, write, onStarted, { signal, requestHeaders: source.RequiredHttpHeaders });
         } else {
           bridge = await this.#bridge.lease(input.openRead);
           await recordTransportStream(this.mediaEncoder, source, bridge.url, write, onStarted, { signal });

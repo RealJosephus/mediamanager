@@ -1,9 +1,9 @@
 import { once } from 'node:events';
 import { encoderVersionAtLeast, getEncodingThreadCount } from '../playback/media-encoder.js';
 import { StorageError } from '../storage/errors.js';
-import { startMediaProcess } from './process.js';
+import { mediaHttpHeaderArguments, startMediaProcess } from './process.js';
 
-export async function recordTransportStream(mediaEncoder, source, url, write, onStarted, { signal } = {}) {
+export async function recordTransportStream(mediaEncoder, source, url, write, onStarted, { signal, requestHeaders } = {}) {
   signal?.throwIfAborted();
   if (!mediaEncoder.ready) throw new StorageError('unavailable', 'The recording encoder is unavailable.');
   const args = ['-hide_banner', '-loglevel', 'error', '-async', '1', '-protocol_whitelist', 'http,https,tcp,tls,crypto'];
@@ -14,6 +14,7 @@ export async function recordTransportStream(mediaEncoder, source, url, write, on
     if (encoderVersionAtLeast(mediaEncoder.version, 8)) args.push('-readrate_catchup', '100');
   }
   if (source.RequiresLooping) args.push('-stream_loop', '-1', '-reconnect_at_eof', '1', '-reconnect_streamed', '1', '-reconnect_delay_max', '2');
+  args.push(...mediaHttpHeaderArguments(requestHeaders));
   args.push('-analyzeduration', '5000000', '-i', url, '-codec:v:0', 'copy', '-fflags', '+genpts', '-map_metadata', '-1',
     '-threads', String(getEncodingThreadCount(mediaEncoder.getEncodingOptions())), '-codec:a:0', 'copy', '-sn', '-f', 'mpegts', 'pipe:1');
   const child = startMediaProcess(mediaEncoder.encoderPath, args, { input: 'pipe', environment: mediaEncoder.environment });
