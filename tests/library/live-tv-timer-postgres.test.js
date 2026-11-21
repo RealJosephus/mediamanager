@@ -108,7 +108,7 @@ test('series refresh batches PostgreSQL work while retaining the saved order and
   const startDate = index => new Date(Date.UTC(2050, 0, 1, 0, index === 130 ? 1 : index + 15)).toISOString().replace('.000Z', '.0000001Z');
   const fixture = await timerFixture(t, 'live_tv_series_batch', {
     timers: JSON.stringify([
-      { Id: 'manual-id', ProgramId: guideId(0), Status: 'New', IsManual: true, Opaque: 'preserve' },
+      { Id: 'manual-id', ProgramId: guideId(0), Status: 'InProgress', IsManual: true, Opaque: 'preserve' },
       { Id: 'missing-from-guide', SeriesTimerId: ruleId, Status: 'New', StartDate: startDate(0) },
     ]),
     seriesTimers: JSON.stringify([{ Id: ruleId, Name: name, ChannelId: channel, SeriesId: seriesId,
@@ -189,6 +189,7 @@ test('series refresh batches PostgreSQL work while retaining the saved order and
     const { bytes } = await assertSourceMatchesFile(db, 'timers', fixture.timerFile);
     const [manual, removed, ...scheduled] = JSON.parse(bytes);
     assert.equal(manual.Id, 'manual-id');
+    assert.equal(manual.Status, 'InProgress');
     assert.equal(manual.IsManual, true);
     assert.equal(manual.Opaque, 'preserve');
     assert.equal(manual.StartDate, startDate(0));
