@@ -16,19 +16,20 @@ import { createTestMediaEncoder } from '../helpers/media-encoder.js';
 const timeoutMs = 2500;
 const source = { Protocol: 'Http', Path: '/owned.ts', LiveStreamId: 'owned', IsInfiniteStream: true, Container: 'ts',
   AnalyzeDurationMs: 100, MediaStreams: [{ Type: 'Video', Index: 0, Codec: 'h264', IsAVC: true, NalLengthSize: '0', Width: 160, Height: 96 }] };
-const playback = { LiveInput: true, Container: 'ts', SegmentLength: 1, MinSegments: 1, VideoCodec: 'h264' };
+const playback = { LiveInput: true, LiveStreamId: 'owned', Container: 'ts', SegmentLength: 1, MinSegments: 1, VideoCodec: 'h264' };
 const segmentUris = manifest => manifest.split(/\r?\n/u).filter(line => line.endsWith('.ts'));
 
 function liveInput(bytes) {
   const input = { stalled: false, opened: 0, closed: 0 };
   input.openRead = async ({ signal }) => {
     input.opened++;
-    return { close: () => { input.closed++; }, stream: (async function* () {
+    let closed = false;
+    return { close: () => { if (!closed) { closed = true; input.closed++; } }, stream: (async function* () {
       const initial = 188 * 550, chunk = 188 * 32;
       yield bytes.subarray(0, initial);
       for (let offset = initial; offset < bytes.length; offset += chunk) {
         await delay(75, undefined, { signal });
-        if (input.stalled) { await once(signal, 'abort'); return; }
+        if (input.stalled) { if (!signal.aborted) await once(signal, 'abort'); return; }
         yield bytes.subarray(offset, offset + chunk);
       }
     })() };
