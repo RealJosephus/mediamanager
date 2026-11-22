@@ -1,0 +1,140 @@
+name: Database migration
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/database/**'
+      - 'src/migration/**'
+      - 'tests/migration/emby-exchange.test.js'
+      - 'tests/migration/jellyfin-generations.test.js'
+      - 'tools/database/**'
+      - 'tools/ci/*migration*'
+      - 'tools/ci/fetch-emby-server.ps1'
+      - 'tests/fixtures/jellyfin-reference/**'
+      - '.github/workflows/database-migration.yml'
+  pull_request:
+    paths:
+      - 'src/database/**'
+      - 'src/migration/**'
+      - 'tests/migration/emby-exchange.test.js'
+      - 'tests/migration/jellyfin-generations.test.js'
+      - 'tools/database/**'
+      - 'tools/ci/*migration*'
+      - 'tools/ci/fetch-emby-server.ps1'
+      - 'tests/fixtures/jellyfin-reference/**'
+      - '.github/workflows/database-migration.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  emby:
+    name: Emby / ${{ matrix.channel }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        channel: ['4.9.1.0', latest]
+    env:
+      DOTNET_NOLOGO: '1'
+      MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24.16.0
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        with:
+          dotnet-version: 8.0.426
+      - uses: ankane/setup-postgres@b1a598d92f86cb2ed364411898d150d4eac6d5ca
+        with:
+          postgres-version: '17'
+          user: validation
+      - run: npm ci --bin-links=false
+      - name: Prepare official server
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: ./tools/ci/fetch-emby-server.ps1 -Channel '${{ matrix.channel }}'
+      - name: Supply the second server for both cross-version directions
+        if: matrix.channel == 'latest'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: ./tools/ci/fetch-emby-server.ps1 -Channel '4.9.1.0' -Alternate
+      - name: Prepare official media tools
+        shell: pwsh
+        env:
+          MEDIAMANAGER_VALIDATION_OUTPUT_ROOT: ${{ runner.temp }}/mediamanager-emby-reference/receipts
+          MEDIAMANAGER_RELEASE_ASSET_TOKEN: ${{ github.token }}
+        run: ./tools/ci/setup-media.ps1
+      - run: node --test tests/migration/emby-exchange.test.js
+      - run: node tools/ci/verify-emby-migration.mjs
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: emby-${{ matrix.channel }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-emby-reference/receipts/
+          retention-days: 14
+  jellyfin:
+    name: Jellyfin / previous, fresh and upgraded databases
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24.16.0
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        with:
+          dotnet-version: |
+            8.0.426
+            10.0.401
+      - uses: ankane/setup-postgres@b1a598d92f86cb2ed364411898d150d4eac6d5ca
+        with:
+          postgres-version: '17'
+          user: validation
+      - run: npm ci --bin-links=false
+      - name: Prepare official media tools
+        shell: pwsh
+        env:
+          MEDIAMANAGER_VALIDATION_OUTPUT_ROOT: ${{ runner.temp }}/results
+          MEDIAMANAGER_RELEASE_ASSET_TOKEN: ${{ github.token }}
+        run: ./tools/ci/setup-media.ps1
+      - name: Prepare both official Emby servers for the native-to-native return
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ./tools/ci/fetch-emby-server.ps1 -Channel latest
+          ./tools/ci/fetch-emby-server.ps1 -Channel '4.9.1.0' -Alternate
+      - name: Build both patched native references and exchange their stopped databases
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/builds" "$RUNNER_TEMP/results"
+          echo '{"sdk":{"version":"10.0.401","rollForward":"disable"}}' > "$RUNNER_TEMP/builds/global.json"
+          node --test tests/migration/jellyfin-generations.test.js
+          dirs=()
+          for ref in tests/fixtures/recorded-native tests/fixtures/jellyfin-reference; do
+            archive=$(jq -r .archive.path "$ref/jellyfin-source-package.json")
+            sha=$(jq -r .archive.sha256 "$ref/jellyfin-source-package.json")
+            echo "$sha  $ref/$archive" | sha256sum --check
+            dir="$RUNNER_TEMP/builds/$(basename "$ref")"
+            unzip -q "$ref/$archive" -d "$dir"
+            (cd "$RUNNER_TEMP/builds" && dotnet build "$dir/jellyfin-source/Jellyfin.Server/Jellyfin.Server.csproj" -c Release --verbosity quiet)
+            dirs+=("$dir/jellyfin-source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll")
+          done
+          python tools/ci/verify-jellyfin-migration.py "${dirs[@]}"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: jellyfin-migration-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/results/
+          retention-days: 14
