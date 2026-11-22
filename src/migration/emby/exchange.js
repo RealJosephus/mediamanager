@@ -27,6 +27,7 @@ import {
 } from './files.js';
 import { fromBlob } from './format.js';
 import { chapterMarkerName, isMarkerField, markerProviderId } from './chapter-markers.js';
+import { attachSkipper, projectSkipper } from '../intro-skipper.js';
 
 const digest = (value) => createHash('sha256').update(value).digest('hex');
 const jellyDb = (root) => path.join(root, 'data', 'data', 'jellyfin.db');
@@ -196,7 +197,7 @@ export async function exchange({
     await cloneDirectory(source, captured, { skipState: true });
     if (prepareSource) await prepareSource(captured, jellyDb(captured));
     await assertInput(captured, sourceType);
-    const sourceDb = connect(captured, sourceType, true);
+    const sourceDb = connect(captured, sourceType, sourceType !== 'jellyfin');
     let sourceId,
       targetId,
       sourceView,
@@ -256,7 +257,16 @@ export async function exchange({
           libraryRoot(seed ?? target, targetType),
           ...(baseline?.assets?.libraryRoots?.source ?? []),
         ];
-        sourceView = getCatalog(sourceType, sourceDb, sourceId, report);
+        const skipperSource = sourceType === 'jellyfin' && await attachSkipper(sourceDb, captured, report);
+        const skipperTarget = targetType === 'jellyfin' && await attachSkipper(targetDb, target, report);
+        if (skipperSource && skipperSource !== 'unknown') {
+          sourceDb.exec('BEGIN');
+          try {
+            projectSkipper(sourceDb, skipperSource, report);
+            sourceView = getCatalog(sourceType, sourceDb, sourceId, report);
+          } finally { sourceDb.exec('ROLLBACK'); }
+        } else sourceView = getCatalog(sourceType, sourceDb, sourceId, report);
+        if (skipperTarget && skipperTarget !== 'unknown') projectSkipper(targetDb, skipperTarget, report);
         targetView = getCatalog(targetType, targetDb, targetId, silent);
         if (sourceType === 'jellyfin') await readJellyfinLibraryOptions(sourceView, captured);
         if (targetType === 'jellyfin') await readJellyfinLibraryOptions(targetView, target);
@@ -312,7 +322,7 @@ export async function exchange({
           translatedRows(beforeSource.rows, aliases, targetAssets.rows, false),
           beforeTarget.rows,
           report,
-          { legacyChapters: baseline != null && !baseline.chapterMarkerVersion },
+          { sourceType, legacyChapters: baseline != null && !baseline.chapterMarkerVersion },
         );
         targetDb.exec('BEGIN IMMEDIATE; PRAGMA defer_foreign_keys=ON');
         try {
@@ -323,6 +333,7 @@ export async function exchange({
               adminUser,
               adminPassword,
               creditsEnd,
+              skipperTarget,
             });
             await writeJellyfinLibraryOptions(writes, target);
           }

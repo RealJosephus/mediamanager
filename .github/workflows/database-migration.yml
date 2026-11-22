@@ -10,6 +10,9 @@ on:
       - 'tools/database/**'
       - 'tools/jellyfin/EmbyChapterMarkers/**'
       - 'src/library/media-segment-service.js'
+      - 'src/media-execution/segment-analysis.js'
+      - 'plugins/skip-segments/**'
+      - 'tests/migration/skip-segments.test.js'
       - 'tools/ci/*migration*'
       - 'tools/ci/fetch-emby-server.ps1'
       - 'tests/fixtures/jellyfin-reference/**'
@@ -23,6 +26,9 @@ on:
       - 'tools/database/**'
       - 'tools/jellyfin/EmbyChapterMarkers/**'
       - 'src/library/media-segment-service.js'
+      - 'src/media-execution/segment-analysis.js'
+      - 'plugins/skip-segments/**'
+      - 'tests/migration/skip-segments.test.js'
       - 'tools/ci/*migration*'
       - 'tools/ci/fetch-emby-server.ps1'
       - 'tests/fixtures/jellyfin-reference/**'
@@ -74,7 +80,8 @@ jobs:
           MEDIAMANAGER_VALIDATION_OUTPUT_ROOT: ${{ runner.temp }}/mediamanager-emby-reference/receipts
           MEDIAMANAGER_RELEASE_ASSET_TOKEN: ${{ github.token }}
         run: ./tools/ci/setup-media.ps1
-      - run: node --test tests/migration/emby-exchange.test.js
+      - run: node --test tests/migration/emby-exchange.test.js tests/migration/skip-segments.test.js
+      - run: node tools/ci/verify-fingerprint-migration.mjs
       - run: node tools/ci/verify-emby-migration.mjs
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
@@ -120,6 +127,8 @@ jobs:
           ./tools/ci/fetch-emby-server.ps1 -Channel '4.9.1.0' -Alternate
       - name: Build both patched native references and exchange their stopped databases
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/builds" "$RUNNER_TEMP/results"
@@ -138,6 +147,9 @@ jobs:
           export MEDIAMANAGER_MARKER_PLUGIN="$RUNNER_TEMP/marker-reader/MediaManager.EmbyChapterMarkers.dll"
           dotnet build tools/jellyfin/EmbyChapterMarkers/EmbyChapterMarkers.csproj -c Release \
             -p:JellyfinBin="$(dirname "${dirs[1]}")" -o "$(dirname "$MEDIAMANAGER_MARKER_PLUGIN")"
+          export MEDIAMANAGER_SKIPPER_ZIP="$RUNNER_TEMP/intro-skipper-v12.0.7.0.zip"
+          gh api -H 'Accept: application/octet-stream' repos/intro-skipper/intro-skipper/releases/assets/775285725 > "$MEDIAMANAGER_SKIPPER_ZIP"
+          echo "3c72de01810910cabb25c0f2d6090b6bb2c391e3b333d69f04de338dfa4edf06  $MEDIAMANAGER_SKIPPER_ZIP" | sha256sum --check
           python tools/ci/verify-jellyfin-migration.py "${dirs[@]}"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:

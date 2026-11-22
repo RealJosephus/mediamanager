@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { embyMarkerProviderName, mediaSegmentProviderId } from '../../library/media-segment-service.js';
 import { statement } from './format.js';
+import { addSkipperMarker, blocksSkipperAddition, skipperProvider, updateSkipperMarker } from '../intro-skipper.js';
 
 export const markerProviderId = mediaSegmentProviderId(embyMarkerProviderName);
 const intro = 'IntroSkip', credits = 'CreditsSkip';
@@ -104,7 +105,7 @@ export function reserveChapterIndexes(db, item, chapters) {
   }
 }
 
-export function writeMarker(db, type, item, id, field, value, target, runtime, report, creditsEnd = 'preserve') {
+export function writeMarker(db, type, item, id, field, value, target, runtime, report, creditsEnd = 'preserve', skipperLayout) {
   if (target && !Object.hasOwn(target, field)) {
     report('conflict', 'item', id, field, 'target contains native markers with ambiguous or unrepresentable bounds');
     return;
@@ -127,13 +128,25 @@ export function writeMarker(db, type, item, id, field, value, target, runtime, r
   }
   if (type === 'jellyfin') {
     const segmentType = nativeTypes[field];
-    const old = db.prepare('SELECT Id FROM MediaSegments WHERE ItemId=? AND Type=?').all(item, segmentType);
+    const old = statement(db,'SELECT * FROM MediaSegments WHERE ItemId=? AND Type=?').all(item, segmentType);
     if (old.length > 1) throw new Error('Ambiguous target segment identity');
+    if (old[0]?.SegmentProviderId === skipperProvider && skipperLayout) {
+      if (skipperLayout === 'unknown') { report('conflict','item',id,field,'unknown Intro Skipper database format'); return; }
+      if (!updateSkipperMarker(db, skipperLayout, { ...old[0], Type: segmentType }, value, report)) return;
+    } else if (!old.length && value && blocksSkipperAddition(db, skipperLayout, item, segmentType, value)) {
+      report('conflict','item',id,field,'Intro Skipper disabled detection or suppressed this range');
+      return;
+    }
     if (!value) db.prepare('DELETE FROM MediaSegments WHERE ItemId=? AND Type=?').run(item, segmentType);
     else if (old.length) db.prepare('UPDATE MediaSegments SET StartTicks=?,EndTicks=? WHERE Id=?')
       .run(BigInt(value.StartTicks), BigInt(value.EndTicks), old[0].Id);
-    else db.prepare('INSERT INTO MediaSegments(Id,ItemId,Type,StartTicks,EndTicks,SegmentProviderId) VALUES (?,?,?,?,?,?)')
-      .run(randomUUID().toUpperCase(), item, segmentType, BigInt(value.StartTicks), BigInt(value.EndTicks), markerProviderId);
+    else {
+      const segmentId = randomUUID().toUpperCase(), start = BigInt(value.StartTicks), end = BigInt(value.EndTicks);
+      const owned = skipperLayout && addSkipperMarker(db, skipperLayout, segmentId, item, segmentType, start, end);
+      if (skipperLayout && !owned) report('retained', 'item', id, field, 'kept exact ticks under the imported marker provider');
+      db.prepare('INSERT INTO MediaSegments(Id,ItemId,Type,StartTicks,EndTicks,SegmentProviderId) VALUES (?,?,?,?,?,?)')
+        .run(segmentId, item, segmentType, start, end, owned ? skipperProvider : markerProviderId);
+    }
     return;
   }
   for (const kind of chapterTypes[field]) {

@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { restoreSkipperData } from './intro-skipper-data.js';
 import { fileURLToPath } from 'node:url';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { verifyPostgresTransferContract } from '../../src/database/postgres-transfer-contract.js';
@@ -18,13 +19,14 @@ import {
 
 export const exportJellyfinUsage = `
 Usage:
-  npm run db:export -- (--postgres-url <url> | --postgres-url-env <name>) --schema <schema> --output <new-jellyfin.db> [--target-mount-contract <contract.json>]
+  npm run db:export -- (--postgres-url <url> | --postgres-url-env <name>) --schema <schema> --output <new-jellyfin.db> [--target-mount-contract <contract.json>] [--intro-skipper-output <directory>]
 
 An existing output is accepted only after verification against the current
 PostgreSQL snapshot. Export never replaces an existing file. Export uses the
 portable mount contract persisted in PostgreSQL. An optional target contract may
 explicitly retarget identity paths between Windows and POSIX without changing
-mount IDs or VFS access roots.
+mount IDs or VFS access roots. Use --intro-skipper-output to restore the plugin's
+captured databases to the chosen directory alongside the Jellyfin database.
 `;
 
 export async function exportJellyfinSqlite(argv, {
@@ -38,7 +40,7 @@ export async function exportJellyfinSqlite(argv, {
 } = {}) {
   const options = parseNamedOptions(argv, {
     required: ['--schema', '--output'],
-    optional: ['--postgres-url', '--postgres-url-env', '--target-mount-contract'],
+    optional: ['--postgres-url', '--postgres-url-env', '--target-mount-contract', '--intro-skipper-output'],
   });
   const connectionString = readExplicitPostgresUrl(options, environment);
   const schema = readExplicitPostgresSchema(options);
@@ -56,12 +58,14 @@ export async function exportJellyfinSqlite(argv, {
       databaseCliExitCodes.postgres, cause);
   }
 
-  let result, operationError;
+  let result, operationError, skipperFiles;
   try {
     await verifyPostgres(source);
     result = await exportSqlite(source, output, targetContract
       ? { targetPortableMountContract: targetContract }
       : {});
+    const skipper = options['--intro-skipper-output'];
+    if (skipper) skipperFiles = await restoreSkipperData(source, path.resolve(skipper));
   } catch (cause) {
     operationError = cliError('SQLITE_EXPORT_FAILED', `The PostgreSQL to SQLite export failed: ${cause.message}`,
       databaseCliExitCodes.operation, cause);
@@ -80,6 +84,7 @@ export async function exportJellyfinSqlite(argv, {
     ok: true,
     operation: 'postgres-to-sqlite',
     schema,
+    ...(skipperFiles?.length ? { introSkipperDatabases: skipperFiles } : {}),
     output,
     nativeSchemaFingerprint: result.nativeSchemaFingerprint,
     migrationHistoryRows: result.migrationHistory.length,

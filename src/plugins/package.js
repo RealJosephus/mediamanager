@@ -51,6 +51,7 @@ export async function inspectPackage(directory, { installed = false } = {}) {
     || typeof declaration.entry !== 'string' || !/^[a-zA-Z0-9_./-]+\.js$/.test(declaration.entry)
     || declaration.entry.split('/').includes('..') || declaration.entry.startsWith('/')
     || !files.some(file=>file.name===declaration.entry)) throw new TypeError('Invalid Node plugin manifest.');
+  if (declaration.defaultEnabled !== undefined && typeof declaration.defaultEnabled !== 'boolean') throw new TypeError('defaultEnabled must be a boolean.');
   if (manifest.scripts || Object.keys(manifest.dependencies ?? {}).some(name=>!['@mediamanager/plugin-sdk','fast-xml-parser'].includes(name))) {
     throw new TypeError('Plugin dependencies must be bundled; install scripts are not supported.');
   }

@@ -872,6 +872,29 @@ export class PostgresDatabase {
     };
   }
   async inspectControlSchema() { return this.inspectSchema(this.controlSchema); }
+  async ensureMediaSegmentStorage() {
+    if (await this.getState('mediaSegmentStorageVersion') === '1') return;
+    const install = async db => {
+      const schema = q(db.controlSchema);
+      await db.client.query(`LOCK TABLE ${schema}.state IN SHARE ROW EXCLUSIVE MODE`);
+      const version = await db.getState('mediaSegmentStorageVersion');
+      if (version === '1') return;
+      if (version !== undefined) throw new Error('Unsupported playback segment storage version');
+      if (await db.getState('controlSchemaFingerprint') !== hash(await db.inspectControlSchema()))
+        throw new Error('Cannot extend a modified PostgreSQL control schema');
+      await db.client.query(`
+        CREATE TABLE ${schema}.intro_skipper_files(name text PRIMARY KEY,digest text NOT NULL);
+        CREATE TABLE ${schema}.intro_skipper_chunks(name text,position bigint,data bytea NOT NULL,PRIMARY KEY(name,position));
+        CREATE TABLE ${schema}.intro_skipper_protected(item_id bytea,type integer,PRIMARY KEY(item_id,type));
+        CREATE TABLE ${schema}.intro_skipper_segments(id bytea PRIMARY KEY,item_id bytea NOT NULL,type integer NOT NULL,start_ticks bigint NOT NULL,end_ticks bigint NOT NULL,position bigint NOT NULL);
+        CREATE INDEX ON ${schema}.intro_skipper_segments(item_id);
+        CREATE TABLE ${schema}.intro_skipper_format(layout text NOT NULL);
+        CREATE TABLE ${schema}.skip_segment_analysis(item_id bytea PRIMARY KEY,signature text NOT NULL)`);
+      await db.setState('mediaSegmentStorageVersion', '1');
+      await db.setState('controlSchemaFingerprint', hash(await db.inspectControlSchema()));
+    };
+    return this.inTransaction ? install(this) : this.transaction(install, { isolation: 'read-committed' });
+  }
   async preflight() {
     if (!this.connectionSession) return this.withConnection(database => database.inTransaction
       ? database.preflight()

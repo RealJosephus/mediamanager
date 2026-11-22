@@ -132,7 +132,9 @@ def run_host(dll, instance, *, fresh, seed_media=False, edit_item=None, expected
                     proc.wait(timeout=8)
             log.flush()
             log.seek(0)
-            diagnostic = log.read()[-6000:].replace(password, "[redacted]")
+            output = log.read()
+            causes = [line for line in output[:-6000].splitlines() if "[ERR]" in line or "Exception:" in line]
+            diagnostic = ("\n".join(causes[-15:]) + "\n" + output[-6000:]).replace(password, "[redacted]")
             if token:
                 diagnostic = diagnostic.replace(token, "[redacted]")
             print(diagnostic, file=sys.stderr)

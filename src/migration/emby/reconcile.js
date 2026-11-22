@@ -3,17 +3,62 @@ import { isMarkerField, matchesMarker } from './chapter-markers.js';
 
 const legacyChapterFields = chapters => chapters.map(({ ImageDateModified, ...row }) => row);
 
+const streamTypes = {
+  jellyfin: ['Audio', 'Video', 'Subtitle', 'EmbeddedImage', 'Data', 'Lyric'],
+  emby: ['Unknown', 'Audio', 'Video', 'Subtitle', 'EmbeddedImage', 'Attachment', 'Data'],
+};
+const byStreamIndex = rows => new Map(rows?.map(row => [row.StreamIndex, row]));
+
+// Receipts store each endpoint's native rows. Translate only the comparison and
+// write projection, so an earlier receipt and an untouched origin remain usable.
+function projectStreams(rows, target, previousSource, previousTarget, sourceType, issue) {
+  const sourceKinds = streamTypes[sourceType];
+  const targetKinds = sourceType === 'emby' ? streamTypes.jellyfin : streamTypes.emby;
+  const existing = byStreamIndex(target);
+  const beforeSource = byStreamIndex(previousSource);
+  const beforeTarget = byStreamIndex(previousTarget);
+  const result = new Map();
+  for (const row of existing.values()) {
+    if (!sourceKinds.includes(targetKinds[row.StreamType])) result.set(row.StreamIndex, row);
+  }
+  for (const row of rows) {
+    const index = row.StreamIndex;
+    const kind = sourceKinds[row.StreamType];
+    const mapped = targetKinds.indexOf(kind);
+    const current = existing.get(index);
+    if (mapped < 0) {
+      issue?.('origin-only', 'stream ' + index + ' has no target type for ' + (kind ?? row.StreamType));
+      if (current) result.set(index, current);
+    } else if (result.has(index)) {
+      issue?.('conflict', 'stream ' + index + ' is occupied by a target-only type');
+    } else if (current && current.StreamType === row.StreamType &&
+        beforeSource.get(index)?.StreamType === row.StreamType && beforeTarget.get(index)?.StreamType === row.StreamType) {
+      // Older writers copied the ordinal. Neither endpoint proves which type is
+      // correct until it has been re-probed or explicitly corrected.
+      issue?.('conflict', 'stream ' + index + ' retains the same ordinal with different native meanings; verify against the media');
+      result.set(index, current);
+    } else {
+      result.set(index, { ...row, StreamType: mapped });
+    }
+  }
+  return [...result.values()].sort((a, b) => a.StreamIndex - b.StreamIndex);
+}
+
 // Compare each endpoint with its own last projection. The target can legitimately
 // have lower precision or a different set of expressible fields.
-export function changesBetween(source, target, baseSource, baseTarget, report, { legacyChapters = false } = {}) {
+export function changesBetween(source, target, baseSource, baseTarget, report, { legacyChapters = false, sourceType } = {}) {
   const changes = [];
   for (const key of new Set([...source.keys(), ...baseSource.keys()])) {
-    const value = source.get(key),
-      before = baseSource.get(key),
-      current = target.get(key),
-      previous = baseTarget.get(key);
-    if (same(value, before)) continue;
+    let value = source.get(key), before = baseSource.get(key);
+    const current = target.get(key), previous = baseTarget.get(key);
     const [kind, id] = key.split('/');
+    if (sourceType && value?.Streams && (value.Streams.length || current?.Streams?.length || before?.Streams?.length)) {
+      const priorStreams = before?.Streams;
+      const project = (rows, issue) => projectStreams(rows, current?.Streams, priorStreams, previous?.Streams, sourceType, issue);
+      value = { ...value, Streams: project(value.Streams, (status, detail) => report(status, kind, id, 'Streams', detail)) };
+      if (before?.Streams) before = { ...before, Streams: project(before.Streams) };
+    }
+    if (same(value, before)) continue;
     if (!value) {
       if (!current) continue;
       if (!same(current, previous)) {

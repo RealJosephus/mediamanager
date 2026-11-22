@@ -214,6 +214,13 @@ async function prefetchRelationRows(state, name, table, ids, orderBy) {
   return rowsByItem;
 }
 
+async function projectedSegmentFlags(state, ids, read) {
+  const flags = state.projectedSegmentFlags ??= new Map();
+  const missing = ids.filter(id => !flags.has(idKey(id)));
+  if (missing.length) for (const [key, present] of await read(state.db, missing)) flags.set(key, present);
+  return flags;
+}
+
 async function prefetchImageRows(state, items) {
   const unique = uniqueItems(items), rowsByItem = relationMap(state, 'imageRowsByItem');
   const missing = unique.filter(item => !state.dtoRelations?.liveImageItems?.has(item) && !rowsByItem.has(idKey(item.Id)));
@@ -257,7 +264,8 @@ export async function prefetchPostgresDtoRelations(items, state, user, selected,
     const sourceIds = sourceItems.map(item => item.Id);
     await prefetchRelationRows(state, 'attachmentRowsByItem', 'AttachmentStreamInfos', sourceIds,
       [{ column: 'ItemId' }, { column: 'Index' }]);
-    await prefetchRelationRows(state, 'segmentRowsByItem', 'MediaSegments', sourceIds,
+    if (options.readProjectedSegmentFlags) await projectedSegmentFlags(state, sourceIds, options.readProjectedSegmentFlags);
+    else await prefetchRelationRows(state, 'segmentRowsByItem', 'MediaSegments', sourceIds,
       [{ column: 'ItemId' }, { column: 'Id' }]);
   }
   if (fields.has('trickplay')) await prefetchRelationRows(state, 'trickplayRowsByItem', 'TrickplayInfos',
@@ -405,7 +413,9 @@ async function mediaSource(item, queriedItem, type, prefix, state, user, options
     RequiresOpening: false, RequiresClosing: false, RequiresLooping: false, SupportsProbing: true,
     MediaStreams: await projectedStreams(state, item, options), MediaAttachments: attachments, Formats: [], Bitrate: item.TotalBitrate,
     RequiredHttpHeaders: new Map(), TranscodingSubProtocol: 'http', HasSegments: VIDEO_TYPES.has(item.Type) && protocol === 'File'
-      && (await relationRows(state, item, 'segmentRowsByItem', 'MediaSegments')).length > 0,
+      && (options.readProjectedSegmentFlags
+        ? (await projectedSegmentFlags(state, [item.Id], options.readProjectedSegmentFlags)).get(idKey(item.Id))
+        : (await relationRows(state, item, 'segmentRowsByItem', 'MediaSegments')).length > 0),
   };
   if (VIDEO_TYPES.has(item.Type)) Object.assign(source, { VideoType: item.VideoType ?? 'VideoFile', IsoType: item.IsoType, Video3DFormat: item.Video3DFormat, Timestamp: item.Timestamp });
   if (source.Bitrate == null) { const bitrate = source.MediaStreams.filter(stream => !stream.IsExternal).reduce((sum, stream) => (sum + (stream.BitRate ?? 0)) | 0, 0); if (bitrate > 0) source.Bitrate = bitrate; }

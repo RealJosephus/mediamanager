@@ -178,7 +178,7 @@ function changeRelations(db, id, name, values, report) {
       if (Object.hasOwn(valueTypes, name)) changeValues(db, id, name, values);
   }
 }
-export async function writeJellyfin(db, changes, catalog, source, report, { adminUser, adminPassword, creditsEnd } = {}) {
+export async function writeJellyfin(db, changes, catalog, source, report, { adminUser, adminPassword, creditsEnd, skipperTarget } = {}) {
   const adminHash = adminPassword ? await createPasswordHash(adminPassword) : null;
   const inaccessible = await createPasswordHash(randomBytes(48).toString('base64url'));
   const items = changes.filter((c) => c.key.startsWith('item/') && c.value);
@@ -281,7 +281,7 @@ export async function writeJellyfin(db, changes, catalog, source, report, { admi
       } else if (isMarkerField(field)) {
         const target = catalog.rows?.get(key);
         writeMarker(db, 'jellyfin', id, id, field, value[field], target,
-          fields.includes('RunTimeTicks') ? value.RunTimeTicks : target?.RunTimeTicks, report, creditsEnd);
+          fields.includes('RunTimeTicks') ? value.RunTimeTicks : target?.RunTimeTicks, report, creditsEnd, skipperTarget);
       } else changeRelations(db, id, field, value[field], report);
     }
     if (Object.hasOwn(patch, 'Name')) patch.CleanName = cleanValue(patch.Name);

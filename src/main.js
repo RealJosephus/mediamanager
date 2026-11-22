@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PostgresDatabase } from './database/postgres.js';
+import { quoteIdentifier } from './database/model.js';
 import { createRuntime } from './runtime.js';
 import { readInstanceConfiguration } from './configuration.js';
 import { resolveProductionEnvironment, verifyProductionDatabaseContract } from './production-target.js';
@@ -88,12 +89,19 @@ export async function startProductionInstance({ environment = process.env, args 
     if (!environment.MEDIAMANAGER_STORAGE && portableMountContract.mounts.length) {
       throw new Error('MEDIAMANAGER_STORAGE is required by the persisted portable VFS mount contract.');
     }
+    let skipperProjection = false;
+    if (database instanceof PostgresDatabase) {
+      const format = quoteIdentifier(database.controlSchema) + '.intro_skipper_format';
+      if ((await database.client.query('SELECT to_regclass($1) AS relation', [format])).rows[0].relation)
+        skipperProjection = Boolean((await database.client.query('SELECT 1 FROM ' + format + ' LIMIT 1')).rowCount);
+    }
     application = await createRuntime({
       ...settings,
       ...networkStartup,
       storageConfiguration: environment.MEDIAMANAGER_STORAGE, environment, portableMountContract,
       mediaEncoderOptions,
       importedMarkerReader: await hasImportedMarkerReader(instance),
+      skipperProjection,
       systemLifecycle,
       database,
       onError,

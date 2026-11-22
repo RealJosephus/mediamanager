@@ -16,7 +16,7 @@ import { storageOwnership } from '../storage/ownership.js';
 const error = (status,message) => Object.assign(new Error(message),{status,statusCode:status});
 const object = value => value !== null && typeof value==='object' && !Array.isArray(value);
 const clone = value => JSON.parse(JSON.stringify(value));
-const kinds = new Set(['metadata','similar','intro','storage','task','route','context','imagePaths','tuner','listings','channel','lyric','subtitle']);
+const kinds = new Set(['metadata','similar','intro','mediaSegment','storage','task','route','context','imagePaths','tuner','listings','channel','lyric','subtitle']);
 const detachedProviders = {
   lyric: { positions: lyricSignalPositions, copy: copyLyricProviderResult },
   subtitle: { positions: subtitleSignalPositions, copy: copySubtitleProviderResult },
@@ -284,7 +284,7 @@ export class PluginHost {
         try {
           const source=path.join(this.preinstalled,entry.name),{manifest}=await inspectPackage(source),id=manifest.mediamanager.id;
           if(!Object.hasOwn(this.#state.plugins,id)) {
-            this.#state.plugins[id]=this.#record(await stagePackage(source,this.directory),true);
+            this.#state.plugins[id]=this.#record(await stagePackage(source,this.directory),manifest.mediamanager.defaultEnabled !== false);
           }
         }catch(e){this.onError(e);}
       }
@@ -342,6 +342,7 @@ export class PluginHost {
         if(!kinds.has(kind)||!object(value)||!scope.active)throw new TypeError('Invalid plugin extension registration.');
         if(kind==='metadata')validateMetadataExtension(value);
         if(kind==='intro'&&typeof value.getIntros!=='function')throw new TypeError('An intro provider requires getIntros.');
+        if(kind==='mediaSegment' && (typeof value.name!=='string' || !value.name.trim()))throw new TypeError('A media segment provider requires a name.');
         if(kind==='lyric')validateLyricExtension(value);
         if(kind==='subtitle')validateSubtitleExtension(value);
         if(liveTvSignalPositions[kind])validateLiveTvExtension(kind,value);

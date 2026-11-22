@@ -137,6 +137,38 @@ test('editing a media container preserves unknown 64-bit values and duplicate JS
     original.replace('"old"', '"wav"').replace('}', ',"IndexNumberEnd":2}'),
   );
 });
+
+test('both stream projections translate native kinds by meaning and preserve unknown or occupied indexes', () => {
+  const records = streams => streams && new Map([['item/movie', { Streams: streams }]]);
+  const stream = (index, type, title) => ({ StreamIndex: index, StreamType: type, Title: title });
+  const read = (sourceType, input, target, beforeSource, beforeTarget) => {
+    const issues = [];
+    const result = changesBetween(records(input), records(target) ?? new Map(), records(beforeSource) ?? new Map(),
+      records(beforeTarget) ?? new Map(), (...args) => issues.push(args), { sourceType });
+    return { streams: result[0]?.value.Streams, issues: issues.map(i => [i[0], i[3]]) };
+  };
+  const jellyfin = [0, 1, 2, 3, 4].map((kind, i) => stream(i, kind, String(i)));
+  const emby = [1, 2, 3, 4, 6].map((kind, i) => stream(i, kind, String(i)));
+  assert.deepEqual(read('emby', emby), { streams: jellyfin, issues: [] });
+  assert.deepEqual(read('jellyfin', jellyfin), { streams: emby, issues: [] });
+  const attachment = stream(5, 5, 'font'), unknown = stream(6, 0, 'unknown'), future = stream(7, 17, 'future');
+  for (const row of [attachment, unknown, future]) {
+    assert.deepEqual(read('emby', [...emby, row]), { streams: jellyfin, issues: [['origin-only', 'Streams']] });
+  }
+  const lyric = stream(5, 5, 'lyrics');
+  assert.deepEqual(read('jellyfin', [...jellyfin, lyric]), { streams: emby, issues: [['origin-only', 'Streams']] });
+  const target = [attachment, future];
+  assert.deepEqual(read('jellyfin', [stream(5, 0, 'song'), stream(8, 1, 'video')], target, [], target),
+    { streams: [...target, stream(8, 2, 'video')], issues: [['conflict', 'Streams']] });
+
+  // A pre-fix receipt copied Emby's video ordinal 2 into a Jellyfin subtitle slot.
+  const wrong = [stream(0, 2, 'old')];
+  assert.deepEqual(read('jellyfin', [stream(0, 2, 'edited')], wrong, wrong, wrong),
+    { streams: undefined, issues: [['conflict', 'Streams']] });
+  assert.deepEqual(read('jellyfin', [stream(0, 1, 'corrected')], wrong, wrong, wrong),
+    { streams: [stream(0, 2, 'corrected')], issues: [] });
+  assert.deepEqual(read('emby', emby, jellyfin, emby, jellyfin), { streams: undefined, issues: [] });
+});
 test('native .NET GUIDs use mixed endian fields', () => {
   const guid = '00112233-4455-6677-8899-AABBCCDDEEFF';
   assert.equal(toBlob(guid).toString('hex'), '33221100554477668899aabbccddeeff');

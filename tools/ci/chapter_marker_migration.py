@@ -7,6 +7,7 @@ import socket
 import sqlite3
 import subprocess
 import time
+import zipfile
 
 
 def verify_chapter_markers(root, dll, jellyfin, emby, password):
@@ -17,8 +18,12 @@ def verify_chapter_markers(root, dll, jellyfin, emby, password):
     media = work / "media"
     media.mkdir()
     film = media / "Marker exchange (2024).mkv"
+    captions = work / "fixture.srt"
+    captions.write_text("1\n00:00:01,000 --> 00:00:02,000\nFixture\n")
     subprocess.run([os.environ["MEDIAMANAGER_FFMPEG"], "-hide_banner", "-loglevel", "error", "-f", "lavfi",
-                    "-i", "color=blue:size=64x48:rate=5", "-t", "10", "-c:v", "mpeg4", "-an", str(film)], check=True)
+                    "-i", "color=blue:size=64x48:rate=5", "-f", "lavfi", "-i", "sine=frequency=440",
+                    "-i", str(captions), "-map", "0:v", "-map", "1:a", "-map", "2:s",
+                    "-t", "10", "-c:v", "mpeg4", "-c:a", "aac", "-c:s", "srt", str(film)], check=True)
     virtual = "/marker-fixture"
     mounts = work / "mounts.json"
     mounts.write_text(json.dumps({"mounts": [{"mountId": "markers", "identityRoot": str(media), "accessRoot": virtual,
@@ -53,7 +58,9 @@ def marker_roundtrip(work, package, dll, jellyfin, emby, template, target_user, 
         return report
 
     def native_chapters(call, account, item):
-        dto = call(f"/Users/{account}/Items/{item}?Fields=Chapters,Path")
+        dto = call(f"/Users/{account}/Items/{item}?Fields=Chapters,MediaStreams,Path")
+        streams = [(s["Index"], s["Type"]) for s in dto["MediaStreams"]]
+        assert streams == [(0, "Video"), (1, "Audio"), (2, "Subtitle")], streams
         return [(c.get("MarkerType") or "Chapter", c.get("StartPositionTicks", 0), c.get("Name")) for c in dto["Chapters"]]
 
     with socket.socket() as listener:
@@ -136,6 +143,83 @@ def marker_roundtrip(work, package, dll, jellyfin, emby, template, target_user, 
     with emby(package, returned, port) as (call, account):
         actual = native_chapters(call, account, item)
         assert actual == points_in_emby(new_end, False), actual
+    if work.name == "fixed":
+        verify_skipper_sources(command, pg, work, manager, movie, storage, username, password, start, new_end,
+                               dll, jellyfin, emby, package, port, item, exchange, native_chapters)
     return {"version": json.loads((package / "receipts/reference-input.json").read_text())["version"],
             "embyBeforeAndAfter": True, "mediaManagerApi": True, "jellyfinWithAndWithoutProvider": True,
             "preservedCustomMarkerName": True, "changedIntroEndTicks": new_end, "deletedCredits": True}
+
+
+def verify_skipper_sources(command, pg, work, original, movie, storage, username, password, start, end,
+                          dll, jellyfin, emby, package, port, emby_item, exchange, native_chapters):
+    case = work / "plugin-transfer"
+    shutil.copytree(original, case)
+    dbfile = case / "data/data/jellyfin.db"
+    state = case / ".mediamanager-exchange"
+    def import_to(schema):
+        return command("import-jellyfin", "--source", dbfile, "--instance-binding", state / "binding.json",
+                       "--mount-contract", state / "mounts.json", *pg(schema))
+    def inspect(schema, before, after):
+        subprocess.run(["node", "tools/ci/verify-marker-api-migration.mjs", str(case), schema, str(storage), username, movie,
+                        json.dumps(before), json.dumps(after)], env={**os.environ, "MM_FIXTURE_PASSWORD": password}, check=True)
+    with sqlite3.connect(dbfile) as db:
+        runtime = db.execute("SELECT RunTimeTicks FROM BaseItems WHERE Id=?", (movie,)).fetchone()[0]
+        db.executemany("INSERT INTO Chapters(ItemId,ChapterIndex,StartPositionTicks,Name) VALUES(?,?,?,?)",
+                       [(movie,1,70000003,"End Credits"),(movie,2,91000005,"Stinger")])
+    schema = "marker_analysis_cold"
+    assert import_to(schema)["verified"]
+    intro = ["Intro",start,end]
+    inspect(schema,[intro],[intro,["Outro",70000003,91000005]])
+    after_scan = work / "analysis-reopened.db"
+    assert command("export-jellyfin","--output",after_scan,*pg(schema))["verified"]
+    with sqlite3.connect(after_scan) as db:
+        assert db.execute("SELECT StartTicks,EndTicks FROM MediaSegments WHERE Type=4 AND ItemId=?", (movie,)).fetchone() == (70000003,91000005)
+    installed = case / "data/plugins/Intro Skipper_12.0.7.0"
+    installed.mkdir(parents=True)
+    with zipfile.ZipFile(os.environ["MEDIAMANAGER_SKIPPER_ZIP"]) as archive:
+        (installed / "IntroSkipper.dll").write_bytes(archive.read("IntroSkipper.dll"))
+    (installed / "meta.json").write_text(json.dumps({"guid":"c83d86bb-a1e0-4c35-a113-e2101cf4ee6b",
+        "name":"Intro Skipper","version":"12.0.7.0","targetAbi":"12.4.0.0","assemblies":["IntroSkipper.dll"],"status":"Active"}))
+    def installed_and_active(get, user):
+        plugins = [(p["Name"], p["Status"]) for p in get("/Plugins")]
+        assert ("Intro Skipper", "Active") in plugins, plugins
+        assert isinstance(get(f"/Episode/{movie}/Segments?includeSuppressed=true"), list)
+    jellyfin(dll, case, fresh=False, inspect_playback=installed_and_active)
+    private = dbfile.parent / "introskipper"
+    assert (private / "introskipper-v2.db").is_file(), "The upstream plugin did not initialize its private database"
+    with sqlite3.connect(private / "introskipper-v2.db") as db:
+        db.executescript("CREATE TABLE OpaqueState(Value BLOB); INSERT INTO OpaqueState VALUES(X'00FF10');")
+        db.executemany("INSERT INTO Segments(Id,ItemId,Type,StartTicks,EndTicks,Source,State,ConfigHash,CreatedAt,UpdatedAt) VALUES(?,?,?,?,?,?,?,'original','2026-01-01','2026-01-01')",
+            [("76968930-36BC-4736-BC3F-33E753020064",movie,0,start,end+11,5,0),
+             ("334ACDD9-219B-4A6F-8D02-FC98A9F33BD6",movie,1,70000003,91000005,2,1)])
+    with sqlite3.connect(dbfile) as db:
+        db.execute("DELETE FROM MediaSegments WHERE ItemId=?", (movie,))
+    schema = "marker_skipper_v2"
+    assert "introskipper-v2.db" in import_to(schema)["introSkipperDatabases"]
+    manual = [["Intro",start,end+11]]
+    inspect(schema,manual,manual)
+    restored = work / "restored-skipper"
+    assert command("export-jellyfin","--output",work/"with-skipper.db","--intro-skipper-output",restored,*pg(schema))["verified"]
+    with sqlite3.connect(restored / "introskipper-v2.db") as db:
+        assert db.execute("SELECT Source,State,EndTicks FROM Segments WHERE ItemId=? ORDER BY Type", (movie,)).fetchall() == [(5,0,end+11),(2,1,91000005)]
+        assert db.execute("SELECT Value FROM OpaqueState").fetchone()[0] == bytes([0,255,16])
+    native_emby, native_jellyfin = work/"skipper-to-emby", work/"skipper-back"
+    exchange("export",case,native_emby,schema)
+    with emby(package, native_emby, port) as (call, account):
+        assert ("IntroEnd",end+11,"Intro End") in native_chapters(call, account, emby_item)
+    with sqlite3.connect(native_emby/"data/library.db") as db:
+        changed = db.execute("UPDATE Chapters3 SET StartPositionTicks=? WHERE ItemId=? AND MarkerType=2", (end+23, emby_item))
+        assert changed.rowcount == 1
+        index = db.execute("SELECT coalesce(max(ChapterIndex),-1)+1 FROM Chapters3 WHERE ItemId=?", (emby_item,)).fetchone()[0]
+        db.execute("INSERT INTO Chapters3(ItemId,ChapterIndex,MarkerType,StartPositionTicks,Name) VALUES(?,?,3,95000001,'Credits Start')", (emby_item,index))
+    exchange("import",native_emby,native_jellyfin,"marker_skipper_native_return","--credits-end","runtime")
+    with sqlite3.connect(native_jellyfin/"data/data/introskipper/introskipper-v2.db") as db:
+        assert db.execute("SELECT EndTicks,Source FROM Segments WHERE Id='76968930-36BC-4736-BC3F-33E753020064'").fetchone() == (end+23,5)
+        assert db.execute("SELECT StartTicks,EndTicks,Source FROM Segments WHERE ItemId=? AND Type=1 AND State=0", (movie,)).fetchone() == (95000001,runtime,5)
+    def final_native_read(get, user):
+        installed_and_active(get, user)
+        segments = get("/MediaSegments/" + movie)["Items"]
+        assert [(s["Type"],s["StartTicks"],s["EndTicks"]) for s in segments] == [("Intro",start,end+23),("Outro",95000001,runtime)], segments
+        assert len(get(f"/Episode/{movie}/Segments?includeSuppressed=true")) == 3
+    jellyfin(dll,native_jellyfin,fresh=False,inspect_playback=final_native_read)

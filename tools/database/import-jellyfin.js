@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { captureSkipperData } from './intro-skipper-data.js';
 import { fileURLToPath } from 'node:url';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { canonicalNativeSqliteSchema } from '../../src/database/sqlite-schema.js';
@@ -22,13 +23,14 @@ import {
 
 export const importJellyfinUsage = `
 Usage:
-  npm run db:import -- --source <jellyfin.db> (--postgres-url <url> | --postgres-url-env <name>) --schema <new-schema> --instance-binding <binding.json> --mount-contract <contract.json>
+  npm run db:import -- --source <jellyfin.db> (--postgres-url <url> | --postgres-url-env <name>) --schema <new-schema> --instance-binding <binding.json> --mount-contract <contract.json> [--intro-skipper-data <directory>]
 
 The PostgreSQL schema and its control schema must not already exist. The source
 must be a pinned Jellyfin SQLite database on writable storage. The command holds
 an SQLite write barrier only while creating a private point-in-time snapshot and
 imports that snapshot. Binding and mount contract files are mandatory and are
-never inferred from a storage URL.
+never inferred from a storage URL. A sibling introskipper directory is imported
+automatically for jellyfin.db. Use --intro-skipper-data to select another location.
 `;
 
 async function dropCreatedPostgresTarget(database) {
@@ -59,7 +61,7 @@ export async function importJellyfinSqlite(argv, {
 } = {}) {
   const options = parseNamedOptions(argv, {
     required: ['--source', '--schema', '--instance-binding', '--mount-contract'],
-    optional: ['--postgres-url', '--postgres-url-env'],
+    optional: ['--postgres-url', '--postgres-url-env', '--intro-skipper-data'],
   });
   const connectionString = readExplicitPostgresUrl(options, environment);
   const schema = readExplicitPostgresSchema(options);
@@ -114,7 +116,7 @@ export async function importJellyfinSqlite(argv, {
     throw combineOperationAndCleanupError(error, await closeResources([source, snapshot]), 'SOURCE_SQLITE_CLOSE_FAILED');
   }
 
-  let result, operationError;
+  let result, operationError, skipperFiles;
   try {
     await snapshot.assertUnchanged();
     const transferOptions = {
@@ -132,6 +134,12 @@ export async function importJellyfinSqlite(argv, {
     }
     await snapshot.assertUnchanged();
     await initializeTarget(target);
+    const skipper = options['--intro-skipper-data'] ?? (path.basename(sourceFilename).toLowerCase() === 'jellyfin.db'
+      ? path.join(path.dirname(sourceFilename), 'introskipper') : null);
+    if (skipper) {
+      skipperFiles = await captureSkipperData(target, skipper);
+      if (options['--intro-skipper-data'] && !skipperFiles) throw new Error('No recognized Intro Skipper database files in the requested directory');
+    }
   } catch (cause) {
     operationError = cliError('SQLITE_IMPORT_FAILED', `The SQLite to PostgreSQL import failed: ${cause.message}`,
       databaseCliExitCodes.operation, cause);
@@ -157,6 +165,7 @@ export async function importJellyfinSqlite(argv, {
     operation: 'sqlite-to-postgres',
     source: sourceFilename,
     schema,
+    ...(skipperFiles ? { introSkipperDatabases: skipperFiles } : {}),
     nativeSchemaFingerprint: result.nativeSchemaFingerprint,
     migrationHistoryRows: result.migrationHistory.length,
     tables: result.tables,

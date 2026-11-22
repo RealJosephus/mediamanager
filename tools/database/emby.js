@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { canonicalPortableMountContract } from '../../src/storage/portable-mount-contract.js';
 import { exchange, inspectEmby } from '../../src/migration/emby/exchange.js';
 import { exists, fileHash, stateDirectory } from '../../src/migration/emby/files.js';
+import { companionFiles } from '../../src/migration/intro-skipper.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { embyLibraryMounts, savedMounts } from '../../src/migration/emby/mounts.js';
 import { readIdentityMap } from '../../src/migration/emby/identities.js';
@@ -95,7 +96,9 @@ export async function runEmby(command, argv, environment = process.env, { afterD
             await mkdir(path.dirname(filename), { recursive: true });
             // This is a private clone. The live database for a MediaManager instance is PostgreSQL.
             for (const suffix of ['', '-wal', '-shm', '-journal']) await rm(filename + suffix, { force: true });
-            const exported = await exportJellyfinSqlite([...common, '--output', filename], { environment });
+            const skipper = path.join(path.dirname(filename), 'introskipper');
+            const exported = await exportJellyfinSqlite([...common, '--output', filename,
+              ...(await exists(skipper) ? [] : ['--intro-skipper-output', skipper])], { environment });
             await mkdir(path.join(root, 'config'), { recursive: true });
             await writeFile(savedMounts(root), JSON.stringify(exported.portableMountContract), { mode: 0o600 });
             const db = await PostgresDatabase.open({
@@ -158,6 +161,7 @@ export async function runEmby(command, argv, environment = process.env, { afterD
                 throw new Error('The prepared PostgreSQL input changed');
             };
             let reused;
+            const skipper = path.join(root, 'data/data/introskipper');
             await importJellyfinSqlite(
               [
                 ...common,
@@ -167,6 +171,7 @@ export async function runEmby(command, argv, environment = process.env, { afterD
                 path.join(state, 'binding.json'),
                 '--mount-contract',
                 path.join(state, 'mounts.json'),
+                ...((await companionFiles(skipper)).length ? ['--intro-skipper-data', skipper] : []),
               ],
               {
                 environment,
