@@ -311,7 +311,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const liveTvTimers = new LiveTvTimersService({ store, serverId, liveTv, users, sessions, dataPath, onError,
     loadProgramDtos: (_database, ids) => library.loadLiveTvTimerProgramDtos(ids),
     loadProgram: id => library.loadLiveTvTimerProgram(id), resolveRecordingTimer: (dto, options) => library.resolveRecordingTimer(dto, options),
-    getRecordingSeriesPrograms: (series, now) => library.getRecordingSeriesPrograms(series, now) });
+    visitRecordingSeriesPrograms: (series, now, options, visit) => library.visitRecordingSeriesPrograms(series, now, options, visit) });
   rollback.push(() => liveTvTimers.close());
   const syncPlay = new SyncPlayService({ sessions, users, library, onError });
   rollback.push(() => syncPlay.close());
@@ -570,7 +570,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
         if (error.code !== 'cancelled') onError?.(error);
       }); } });
     rollback.push(() => liveTvSources.close());
-    liveTvTuners = new LiveTvTunerService({ plugins, sources: liveTvSources, onError });
+    liveTvTuners = new LiveTvTunerService({ plugins, sources: liveTvSources, liveTv, onError });
     rollback.push(() => liveTvTuners.close());
     liveTvMediaSources = new LiveTvMediaSources({ tuners: liveTvTuners, library, onError,
       getLocalApiUrl: () => network.getLocalApiUrl('127.0.0.1') });
@@ -602,9 +602,11 @@ export async function createRuntime({ database, configuration, serverId, serverN
     sessions.liveStreams = liveStreams;
     if (dataPath && fileSystem && liveTvRecordingFolders) {
       liveTvDvr = new LiveTvDvr({ timers: liveTvTimers, library, dataPath, fileSystem, mediaEncoder, liveStreams, onError,
+        mediaFileSystem: configuredStorage.mediaFileSystem,
+        retainStorage: configuredStorage.retainGeneration,
         configuration: liveTv.admitRead(), mediaSources: liveTvMediaSources, folders: liveTvRecordingFolders, monitor: libraryMonitor,
         runBackground: operation => store.runDetached(() => loadContext.withDetachedScope(operation)),
-        saveAssets: options => saveRecordingAssets({ ...options, library, fileSystem, onError,
+        saveAssets: options => saveRecordingAssets({ ...options, library, onError,
           releaseDateFormat: (namedConfiguration?.getCurrentConfiguration('xbmcmetadata') ?? componentNfoConfiguration).ReleaseDateFormat,
           downloadImage: (url, signal) => metadataImages.download(url, signal) }),
         queueLibraryScan: () => { void tasks.queueScheduled(refreshLibraryTaskId).catch(onError); } });
@@ -668,8 +670,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
       if (libraryOptionsStore) await loadLibraryOptions(database, { fileSystem, programDataPath, dataPath, metadataPath: applicationPaths.metadataPath, onError, optionsStore: libraryOptionsStore });
       await libraryOptionsStore?.clear();
       await libraryConfiguration?.initialize();
+      await libraryMonitor?.start();
+      // Cold management mode defers the recorder until its storage is back.
+      if (networkHost.coreStartupHasCompleted) await liveTvDvr?.start();
     });
-    if (storageReadiness.ready) await libraryMonitor?.start();
   });
   const stopStorageObserver = () => { stopBeforeStorageObserver(); stopAfterStorageObserver(); };
   rollback.push(stopStorageObserver);
@@ -797,6 +801,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
       // after a program COMMIT. Keep that dependency admitted until guide drain.
       const guideImagesClosing = Promise.allSettled([guideClosing]).then(() => liveTvGuideImages?.close());
       const dvrClosing = liveTvDvr && attempt(() => liveTvDvr.close());
+      // DVR cancellation releases its private opens, including before the first
+      // buffered packet. Public and shared owners can drain afterward.
       const publicStreamsClosing = dvrClosing ? dvrClosing.then(() => liveStreams?.close()) : liveStreams?.close();
       const liveProbeClosing = Promise.allSettled([publicStreamsClosing]).then(() => liveStreamProbe?.close());
       const mediaSourcesClosing = Promise.allSettled([publicStreamsClosing]).then(() => liveTvMediaSources?.close());
@@ -949,8 +955,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
         networkHost.signal.throwIfAborted();
         if (storageReadiness.ready) await libraryMonitor?.start();
         await tasks.initialize();
-        if (storageReadiness.ready) await liveTvRecordingFolders?.reconcile();
-        await liveTvDvr?.start();
+        if (storageReadiness.ready) {
+          await liveTvRecordingFolders?.reconcile();
+          await liveTvDvr?.start();
+        }
         networkHost.completeStartup();
         startupReady = true;
         return networkHost.listeners;

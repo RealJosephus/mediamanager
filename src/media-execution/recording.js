@@ -1,20 +1,29 @@
 import { once } from 'node:events';
 import { encoderVersionAtLeast, getEncodingThreadCount } from '../playback/media-encoder.js';
 import { StorageError } from '../storage/errors.js';
-import { startMediaProcess } from './process.js';
+import { mediaHttpHeaderArguments, startMediaProcess } from './process.js';
+import { httpMediaProtocols, httpMediaUrl, udpMediaUrl } from './input.js';
 
-export async function recordTransportStream(mediaEncoder, source, url, write, onStarted, { signal } = {}) {
+export async function recordTransportStream(mediaEncoder, source, url, write, onStarted, { signal, requestHeaders, mappedHls = false } = {}) {
   signal?.throwIfAborted();
   if (!mediaEncoder.ready) throw new StorageError('unavailable', 'The recording encoder is unavailable.');
-  const args = ['-hide_banner', '-loglevel', 'error', '-async', '1', '-protocol_whitelist', 'http,https,tcp,tls,crypto'];
+  const udp = !mappedHls && source.Protocol === 'Udp' ? udpMediaUrl(url) : undefined;
+  const input = udp ?? httpMediaUrl(url);
+  if (!input) throw new StorageError('not-supported', 'The recording input protocol is unsupported.');
+  const protocols = udp ? 'udp' : mappedHls ? 'http,tcp,crypto' : httpMediaProtocols;
+  const args = ['-hide_banner', '-loglevel', 'error', '-async', '1', '-protocol_whitelist', protocols];
   const flags = [source.IgnoreDts && '+igndts', source.IgnoreIndex && '+ignidx', source.GenPtsInput && '+genpts'].filter(Boolean);
   if (flags.length) args.push('-fflags', flags.join(''));
   if (source.ReadAtNativeFramerate) {
     args.push('-re');
     if (encoderVersionAtLeast(mediaEncoder.version, 8)) args.push('-readrate_catchup', '100');
   }
-  if (source.RequiresLooping) args.push('-stream_loop', '-1', '-reconnect_at_eof', '1', '-reconnect_streamed', '1', '-reconnect_delay_max', '2');
-  args.push('-analyzeduration', '5000000', '-i', url, '-codec:v:0', 'copy', '-fflags', '+genpts', '-map_metadata', '-1',
+  if (!udp) {
+    if (source.RequiresLooping) args.push('-stream_loop', '-1', '-reconnect_at_eof', '1', '-reconnect_streamed', '1', '-reconnect_delay_max', '2');
+    args.push(...mediaHttpHeaderArguments(requestHeaders));
+  }
+  if (mappedHls) args.push('-f', 'hls');
+  args.push('-analyzeduration', '5000000', '-i', input, '-codec:v:0', 'copy', '-fflags', '+genpts', '-map_metadata', '-1',
     '-threads', String(getEncodingThreadCount(mediaEncoder.getEncodingOptions())), '-codec:a:0', 'copy', '-sn', '-f', 'mpegts', 'pipe:1');
   const child = startMediaProcess(mediaEncoder.encoderPath, args, { input: 'pipe', environment: mediaEncoder.environment });
   const closed = new Promise(resolve => child.once('close', (code, terminationSignal) => resolve({ code, terminationSignal })));

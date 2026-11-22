@@ -12,6 +12,7 @@ import { remoteStaticStreamResult } from './remote-static.js';
 import { StorageError, checkAbort } from '../storage/errors.js';
 import { masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlaylist } from './hls.js';
 import { probeKeyframes } from '../media-execution/keyframes.js';
+import { isHlsManifest, liveHttpHlsUrl } from '../media-execution/input.js';
 import { MatroskaKeyframeService } from './matroska-keyframes.js';
 import { readTrickplayResolutions } from './trickplay.js';
 import { guid, nonemptyId } from '../library/records.js';
@@ -101,7 +102,9 @@ export class PlaybackService {
   }
 
   #canUseLiveInput(source) {
-    return Boolean(source.LiveStreamId && (this.getLiveStreams?.()?.hasByteReader?.(source.LiveStreamId) || this.#canResolveSource(source)));
+    if (!source.LiveStreamId) return false;
+    const readsBytes = this.getLiveStreams?.()?.hasByteReader?.(source.LiveStreamId);
+    return isHlsManifest(source.Container) ? !readsBytes && Boolean(liveHttpHlsUrl(source)) : readsBytes || this.#canResolveSource(source);
   }
 
   async sources(item, user, { signal } = {}) {
@@ -435,7 +438,7 @@ export class PlaybackService {
         if (!await this.hls.initialize()) throw httpError(503, 'The HLS process is unavailable.');
         if (kind === 'event') {
           const openRead = liveId && liveStreams?.hasByteReader?.(liveId) ? input => liveStreams.openRead(liveId, input) : undefined;
-          const accessPath = openRead ? undefined : this.accessPath({ Id: source.Id, Path: source.Path });
+          const accessPath = openRead || liveHttpHlsUrl(source) ? undefined : this.accessPath({ Id: source.Id, Path: source.Path });
           await this.hls.eventPlaylist(source, accessPath, options, request, response, { openRead });
           return;
         }

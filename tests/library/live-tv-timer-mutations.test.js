@@ -53,6 +53,12 @@ function fixture({ timers, seriesTimers, failRename, beforeRename, corruptHash, 
   }, client: { async query(plan) {
     if (plan.text.startsWith('SELECT value')) return { rows: [{ value: state }] };
     if (plan.text.startsWith('UPDATE')) { assert.equal(plan.values[0], liveTvStateKey); state = plan.values[1]; return { rows: [] }; }
+    if (plan.text.startsWith('/* live-tv-recording-retention-refresh */')) {
+      const kind = plan.values[2];
+      assert.ok(['timers', 'seriesTimers'].includes(kind));
+      assert.deepEqual(plan.values, [liveTvStateKey, 'liveTvRecordingRetention:' + kind + ':', kind]);
+      return { rows: [] };
+    }
     throw new Error('Unexpected mutation SQL.');
   } } };
   const messages = [], notificationAttempts = [], errors = [];
@@ -210,7 +216,7 @@ test('notification failure is diagnostic and cannot roll a successful cancellati
     { code: 'controlled-notification-failure', message: 'Controlled notification failure.' });
 });
 
-test('close freezes mutation admission and drains the already-admitted serialized publication', async () => {
+test('close freezes mutation admission and drains the already-admitted serialized publication', { timeout: 10_000 }, async () => {
   const entered = Promise.withResolvers(), release = Promise.withResolvers();
   let blocked = false;
   const current = fixture({
@@ -223,10 +229,11 @@ test('close freezes mutation admission and drains the already-admitted serialize
     },
   });
   const first = current.service.cancelTimer(current.state.timers.rows[0].internalId);
-  await entered.promise;
+  await Promise.race([entered.promise, first.then(() => assert.fail('Timer publication did not reach the rename barrier.'))]);
   const closing = current.service.close();
-  await assert.rejects(current.service.cancelTimer(current.state.timers.rows[1].internalId), { status: 503 });
-  release.resolve();
+  try {
+    await assert.rejects(current.service.cancelTimer(current.state.timers.rows[1].internalId), { status: 503 });
+  } finally { release.resolve(); }
   assert.equal(await first, true);
   await closing;
   assert.deepEqual(JSON.parse(current.files.get(current.timerFile)).map(value => [value.Id, value.Status]),

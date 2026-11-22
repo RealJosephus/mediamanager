@@ -1,12 +1,13 @@
 import { XmlError } from '@mediamanager/plugin-sdk/core/xml';
 import { XmlTokenCursor } from '@mediamanager/plugin-sdk/core/xml-stream';
 import { clrTrim, clrWhitespace } from '@mediamanager/plugin-sdk/metadata/whitespace';
-import { ordinalIgnoreCaseEquals } from '@mediamanager/plugin-sdk/storage/ordinal-comparer';
+import { ordinalIgnoreCaseEquals, ordinalIgnoreCaseKey } from '@mediamanager/plugin-sdk/storage/ordinal-comparer';
 import { tryParseClrInt32Enum } from '@mediamanager/plugin-sdk/metadata/clr-enum';
 import { dateTicks, MIN_DATE } from '@mediamanager/plugin-sdk/library/records';
 
 const int = value => /^[+-]?\d+$/u.test(clrTrim(value)) && Number(value) >= -2147483648 && Number(value) <= 2147483647 ? Number(value) : null;
 const emptyOffset = { utc: MIN_DATE, offsetDate: MIN_DATE.replace('Z', '+00:00') };
+const channelKey = value => typeof value === 'string' ? value.length + ':' + ordinalIgnoreCaseKey(value) : null;
 const whitespace = new RegExp(`^[${clrWhitespace}]*$`, 'u');
 // CLR's end anchor also matches immediately before one final line feed.
 const dateExpression = new RegExp(`^([0-9]{4,14})(?:[${clrWhitespace}]([+-]*[0-9]{1,4}))?\\n?$`, 'u');
@@ -37,7 +38,7 @@ export function parseXmlTvDate(value) {
 // DtdProcessing.Ignore discards declarations without loading their external
 // resources or defining entities. Literal/attribute EOL normalization happens
 // before the shared cursor decodes numeric character references.
-function normalizedXml(source) {
+function normalizedXml(source, rootOnly = false) {
   const xml = String(source).replace(/\r\n?/gu, '\n');
   let result = '', index = 0, rootStarted = false, doctypeSeen = false;
   while (index < xml.length) {
@@ -82,9 +83,25 @@ function normalizedXml(source) {
           if (char === '>') break;
         }
       } while (index < xml.length);
+      if (rootOnly && rootStarted) break;
     } else result += xml[index++];
   }
   return result;
+}
+
+export function hasXmlTvRoot(source) {
+  try {
+    const cursor = new XmlTokenCursor(normalizedXml(source, true));
+    while (true) {
+      const token = cursor.readToken();
+      if (token.type === 'comment' || token.type === 'processing-instruction' ||
+        token.type === 'text' && whitespace.test(token.value)) continue;
+      return token.type === 'start' && token.name === 'tv';
+    }
+  } catch (cause) {
+    if (!(cause instanceof XmlError)) throw cause;
+    return false;
+  }
 }
 
 function document(source) {
@@ -144,7 +161,10 @@ function firstPosition(nodes, name) {
   const first = nodes.findIndex((entry, index) => index > tv && index < nodes[tv].end && entry.node.name === name);
   return first;
 }
-function following(nodes, start, name) { return nodes.findIndex((entry, index) => index >= start && entry.node.name === name); }
+function following(nodes, start, name) {
+  for (let index = start; index < nodes.length; index++) if (nodes[index].node.name === name) return index;
+  return -1;
+}
 function numericChannel(value) {
   const converted = value.replaceAll('-', '.').replaceAll('_', '.');
   let text = clrTrim(converted);
@@ -154,9 +174,10 @@ function numericChannel(value) {
   return null;
 }
 
-export function readXmlTvChannels(xml, language = null) {
-  const nodes = document(xml), result = [];
+function channelsFromDocument(nodes, language, signal) {
+  const result = [];
   for (let position = firstPosition(nodes, 'channel'); position >= 0; position = following(nodes, nodes[position].end, 'channel')) {
+    signal?.throwIfAborted();
     const node = nodes[position].node, Id = node.attributes.id;
     if (!Id) continue;
     const channel = { Id, DisplayName: null, Number: null, Icons: null };
@@ -173,6 +194,10 @@ export function readXmlTvChannels(xml, language = null) {
     if (channel.DisplayName) result.push(channel);
   }
   return result;
+}
+
+export function readXmlTvChannels(xml, language = null) {
+  return channelsFromDocument(document(xml), language);
 }
 
 function episodeNumber(node, result) {
@@ -225,15 +250,37 @@ function credits(node) {
   }
 }
 
-export function readXmlTvPrograms(xml, { channelId, startDateUtc, endDateUtc, language = null, signal } = {}) {
-  const nodes = document(xml), result = [], start = dateTicks(startDateUtc), end = dateTicks(endDateUtc);
-  for (let position = firstPosition(nodes, 'programme'); position >= 0;) {
+export function indexXmlTv(xml, signal) {
+  signal?.throwIfAborted();
+  const nodes = document(xml), channels = new Map();
+  for (let position = firstPosition(nodes, 'programme'); position >= 0; position = following(nodes, position + 1, 'programme')) {
+    signal?.throwIfAborted();
     const entry = nodes[position], node = entry.node, ChannelId = node.attributes.channel;
-    if (!ChannelId || !ordinalIgnoreCaseEquals(ChannelId, channelId) || signal?.aborted) {
-      position = following(nodes, position + 1, 'programme'); continue;
-    }
+    if (!ChannelId) continue;
     const StartDate = parseXmlTvDate(node.attributes.start) ?? emptyOffset, EndDate = parseXmlTvDate(node.attributes.stop) ?? emptyOffset;
-    if (dateTicks(EndDate.utc) < start || dateTicks(StartDate.utc) >= end) { position = following(nodes, position + 1, 'programme'); continue; }
+    const key = channelKey(ChannelId);
+    let entries = channels.get(key);
+    if (!entries) { entries = []; channels.set(key, entries); }
+    entries.push({ position, after: entry.end, node, ChannelId, StartDate, EndDate,
+      startTicks: dateTicks(StartDate.utc), endTicks: dateTicks(EndDate.utc) });
+  }
+  return {
+    hasTvRoot: nodes[0].node.name === 'tv',
+    channels: (language, signal) => channelsFromDocument(nodes, language, signal),
+    programs: options => programsFromIndex(channels.get(channelKey(options.channelId)) ?? [], options),
+  };
+}
+
+export function readXmlTvPrograms(xml, options = {}) {
+  return indexXmlTv(xml, options.signal).programs(options);
+}
+
+function programsFromIndex(entries, { startDateUtc, endDateUtc, language = null, signal }) {
+  const result = [], start = dateTicks(startDateUtc), end = dateTicks(endDateUtc);
+  let next = 0;
+  for (const { position, after, node, ChannelId, StartDate, EndDate, startTicks, endTicks } of entries) {
+    signal?.throwIfAborted();
+    if (position < next || endTicks < start || startTicks >= end) continue;
     const program = { ChannelId, StartDate, EndDate, Title: null, Description: null, ProgramId: null, Categories: [],
       Episode: null, Icons: null, Images: null, Ratings: null, StarRatings: null, CopyrightDate: null,
       IsPreviouslyShown: false, IsNew: false, IsLive: false, Premiere: null };
@@ -263,7 +310,7 @@ export function readXmlTvPrograms(xml, { channelId, startDateUtc, endDateUtc, la
       else if (name === 'credits') { credits(child); index++; }
       else index++;
     }
-    result.push(program); position = following(nodes, entry.end, 'programme');
+    result.push(program); next = after;
   }
   return result;
 }

@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { addAbortListener } from 'node:events';
 import { mkdir, open, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -54,11 +55,19 @@ export class LiveStreamBuffer {
     }, [() => input.close()], 'Live tuner input and cleanup failed.');
   }
 
+  async waitUntilReady(signal) {
+    signal.throwIfAborted();
+    const canceled = Promise.withResolvers();
+    const listener = addAbortListener(signal, () => canceled.reject(signal.reason));
+    try { await Promise.race([this.ready, canceled.promise]); }
+    finally { listener[Symbol.dispose](); }
+    signal.throwIfAborted();
+  }
+
   async openRead({ signal } = {}) {
     const reader = new AbortController();
     const combined = AbortSignal.any([reader.signal, this.#controller.signal, ...(signal ? [signal] : [])]);
-    await this.ready;
-    combined.throwIfAborted();
+    await this.waitUntilReady(combined);
     const start = performance.now() - this.#openedAt > 10000 ? Math.max(0, this.#size - 20000) : 0;
     return { stream: this.#read(start, combined), close: () => reader.abort() };
   }

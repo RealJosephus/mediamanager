@@ -1,6 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
+import { mkdtemp, readdir, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { LiveTvDvr } from '../../src/library/live-tv-dvr.js';
 import { LiveTvTunerService } from '../../src/library/live-tv-tuner-service.js';
 import { LiveStreamsService } from '../../src/playback/live-streams.js';
 import { addLiveMediaInfo } from '../../src/playback/live-stream-probe.js';
@@ -14,14 +18,17 @@ const source = () => ({ Id: 'fixed-source', Path: 'http://127.0.0.1:1/original.t
   RequiredHttpHeaders: {}, MediaStreams: [{ Type: 'Video', Index: 1, Width: 1920 }, { Type: 'Audio', Index: 2, BitRate: 128000 }] });
 const turn = () => new Promise(resolve => setImmediate(resolve));
 
-function input({ bytes = false } = {}) {
+function input({ bytes = false, firstChunk, readStarted } = {}) {
   const records = []; let stopped = false;
   const sharing = { get enabled() { return !stopped && records.some(record => !record.closed); }, retain: () => acquire() };
   function acquire() {
     const record = { closed: false, closes: 0, started: Promise.withResolvers(), closing: Promise.withResolvers(), pending: Promise.withResolvers(), offset: 0 };
     records.push(record);
     const iterator = { [Symbol.asyncIterator]() { return this; }, next() {
-      record.started.resolve(); return record.offset++ === 0 ? Promise.resolve({ done: false, value: Buffer.from([0, 255, 71, 13, 10]) }) : record.pending.promise;
+      record.started.resolve(); readStarted?.resolve();
+      if (record.offset++ > 0) return record.pending.promise;
+      const part = { done: false, value: Buffer.from([0, 255, 71, 13, 10]) };
+      return firstChunk ? Promise.race([firstChunk.promise.then(() => part), record.pending.promise]) : Promise.resolve(part);
     }, return() { record.pending.resolve({ done: true }); return Promise.resolve({ done: true }); } };
     let closing;
     const close = () => closing ??= (async () => {
@@ -33,11 +40,12 @@ function input({ bytes = false } = {}) {
   return { records, acquire, stop() { stopped = true; } };
 }
 
-function fixture({ bytes = false, probe = { async addMediaInfo(value) { return addLiveMediaInfo(value); } }, opening } = {}) {
+function fixture({ bytes = false, probe = { async addMediaInfo(value) { return addLiveMediaInfo(value); } },
+  opening, getRetainedDirectory, firstChunk, readStarted } = {}) {
   const inputs = [], calls = [], errors = [];
   const tuner = { async getChannelStreamMediaSources() { return [{ mode: 'native', mediaSource: source() }]; },
     async getChannelStream(channel, original, current, options) {
-      calls.push({ channel, original, current }); const selected = input({ bytes }); inputs.push(selected);
+      calls.push({ channel, original, current }); const selected = input({ bytes, firstChunk, readStarted }); inputs.push(selected);
       const owned = selected.acquire(); return opening ? opening(owned, options) : owned;
     } };
   const tuners = new LiveTvTunerService({ plugins: { entries: kind => kind === 'tuner' ? [tuner] : [] },
@@ -45,9 +53,71 @@ function fixture({ bytes = false, probe = { async addMediaInfo(value) { return a
   const library = { itemCreation: { async getItemById(id) {
     assert.equal(id.replaceAll('-', ''), channelId); return { Type: 'LiveTvChannel', ChannelType: 'TV', ExternalId: 'external-channel', ServiceName: 'Emby' };
   } } };
-  const streams = new LiveStreamsService({ tuners, library, probe, getLocalApiUrl: () => 'http://127.0.0.1:1', onError: error => errors.push(error) });
+  const streams = new LiveStreamsService({ tuners, library, probe, getRetainedDirectory,
+    getLocalApiUrl: () => 'http://127.0.0.1:1', onError: error => errors.push(error) });
   return { streams, tuners, inputs, calls, errors, async close() { await streams.close(); await tuners.close(); } };
 }
+
+for (const shared of [false, true]) test(`DVR shutdown before the first packet releases its lease with ${shared ? 'a shared viewer' : 'no viewer'}`, {
+  timeout: 20000,
+}, async t => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-stalled-tuner-'));
+  const firstChunk = Promise.withResolvers(), readStarted = Promise.withResolvers(), admitted = Promise.withResolvers();
+  const value = fixture({ bytes: true, firstChunk, readStarted, getRetainedDirectory() {
+    if (value.streams.snapshot()[0].ConsumerCount === (shared ? 2 : 1)) admitted.resolve();
+    return root;
+  } });
+  const now = Date.now(), openToken = token('stalled');
+  const timer = { Id: 'recording', ChannelId: channelId, Name: 'Stalled source', Status: 'New',
+    StartDate: new Date(now).toISOString(), EndDate: new Date(now + 60000).toISOString(),
+    PrePaddingSeconds: 0, PostPaddingSeconds: 0, RetryCount: 0 };
+  const transitions = [];
+  const dvr = new LiveTvDvr({ dataPath: root, liveStreams: value.streams,
+    fileSystem: { readdir: async () => [] },
+    timers: { readRecordingTimers: async () => [timer], updateRecordingTimer: async (_timer, change) => transitions.push(change) },
+    configuration: { getConfiguration: async () => ({}), release() {} },
+    library: { itemCreation: { getItemById: async () => ({ Type: 'LiveTvChannel' }) } },
+    mediaSources: { getMediaSources: async () => [{ ...source(), OpenToken: openToken }] },
+    runBackground: operation => operation(), onError: error => value.errors.push(error),
+  });
+  t.signal.addEventListener('abort', firstChunk.resolve, { once: true });
+  let viewer;
+  try {
+    if (shared) {
+      viewer = value.streams.open({ OpenToken: openToken });
+      void viewer.catch(() => {});
+      await readStarted.promise;
+    }
+    await dvr.start();
+    await Promise.all([admitted.promise, readStarted.promise]);
+    await dvr.close();
+    assert.deepEqual(transitions, []);
+    assert.equal(value.inputs.length, 1);
+    const [{ records }] = value.inputs;
+    const recordingLease = records[shared ? 2 : 0];
+    assert.equal(recordingLease.closes, 1);
+    if (shared) {
+      assert.equal(records[0].closed, false);
+      assert.equal(records[1].closed, false);
+      assert.equal(value.streams.snapshot()[0].ConsumerCount, 1);
+      firstChunk.resolve();
+      const { MediaSource } = await viewer;
+      const reader = await value.streams.openRead(MediaSource.LiveStreamId);
+      try { assert.deepEqual((await reader.stream.next()).value, Buffer.from([0, 255, 71, 13, 10])); }
+      finally { await reader.close(); }
+      await value.streams.closeLiveStream(MediaSource.LiveStreamId);
+    }
+    assert.deepEqual(value.streams.snapshot(), []);
+    assert.deepEqual(value.tuners.getLiveStreams(), []);
+    assert.ok(records.every(record => record.closes === 1));
+    assert.deepEqual(await readdir(root), []);
+    assert.deepEqual(value.errors, []);
+  } finally {
+    firstChunk.resolve();
+    await Promise.allSettled([viewer, dvr.close()]);
+    try { await value.close(); } finally { await rm(root, { recursive: true, force: true }); }
+  }
+});
 
 test('public counter closes reuse only the same input while private HTTP readers drain independently', { timeout: 20000 }, async t => {
   const value = fixture({ bytes: true }), gate = Promise.withResolvers(); let listener, closing, reading;

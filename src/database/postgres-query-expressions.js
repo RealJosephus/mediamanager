@@ -2,6 +2,17 @@ import { nativeTextSql } from './native-text-sql.js';
 
 const postgresEmptyGuidKey = '00000000000000000000000000000000';
 
+export function postgresExcludeOwnedItems(alias) {
+  return `(${alias}."OwnerId" IS NULL OR ${alias}."ExtraType" IS NOT NULL)`;
+}
+
+export function postgresExcludeAlternateVersions(schema, items, alias) {
+  const sql = nativeTextSql(schema);
+  return `(${alias}."PrimaryVersionId" IS NULL OR NOT EXISTS (SELECT 1 FROM ${items} primary_item
+    WHERE ${sql.guidKey('primary_item."Id"')} = ${sql.guidKey(`${alias}."PrimaryVersionId"`)}
+    AND ${sql.guidLower('primary_item."TopParentId"')} IS NOT DISTINCT FROM ${sql.guidLower(`${alias}."TopParentId"`)}))`;
+}
+
 // CLR integer format strings specify a minimum width, while PostgreSQL lpad
 // truncates to its requested width. Widen before abs to support Int32.MinValue.
 export function postgresSignedPaddedInteger(expression, width) {

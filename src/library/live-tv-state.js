@@ -1,7 +1,9 @@
 import { nativeTextBytes } from '../database/native-text.js';
 import { decodeNativeJsonArray, NativeItemJsonError, writeNativeDate } from './native-item-data.js';
-import { MIN_DATE } from './records.js';
+import { dateTicks, MIN_DATE } from './records.js';
 import { md5Guid, lowerInvariant } from '../core/identity.js';
+import { clrTrim } from '../metadata/whitespace.js';
+import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 
 export const liveTvStateKey = 'liveTvNativeState';
 const statuses = ['New', 'InProgress', 'Completed', 'Cancelled', 'ConflictedOk', 'ConflictedNotOk', 'Error'];
@@ -56,6 +58,7 @@ export function decodeLiveTvDocument(kind, text) {
 }
 
 const bytes = value => value == null ? null : Buffer.from(nativeTextBytes(value)).toString('hex');
+export const recordingRetentionKey = id => typeof id === 'string' ? `${id.length}:${bytes(ordinalIgnoreCaseKey(id))}` : null;
 const internalId = value => md5Guid(lowerInvariant('Emby' + (value ?? '') + '4'));
 const itemId = (value, type) => md5Guid(`MediaBrowser.Controller.LiveTv.${type}` + lowerInvariant('Emby' + (value ?? '') + '4'));
 const dtoFields = common.map(field => field.name).filter(name => !['Id', 'ChannelId', 'ProgramId'].includes(name));
@@ -67,6 +70,10 @@ export function indexLiveTvDocument(kind, text) {
     id: bytes(entry.Id), name: bytes(entry.Name), programId: bytes(entry.ProgramId), seriesId: bytes(entry.SeriesId),
     channelId: bytes(entry.ChannelId), overview: bytes(entry.Overview),
     seriesTimerId: bytes(entry.SeriesTimerId), startDate: entry.StartDate, endDate: entry.EndDate, status: String(entry.Status),
+    ...(kind === 'seriesTimers' ? { retentionKey: recordingRetentionKey(entry.Id) }
+      : entry.Status === 'Completed' && entry.Id != null && clrTrim(entry.Id) && entry.RecordingPath != null && clrTrim(entry.RecordingPath)
+        ? { retentionKey: recordingRetentionKey(entry.SeriesTimerId), recordingPath: bytes(entry.RecordingPath),
+          recordingEndTicks: dateTicks(entry.EndDate).toString() } : {}),
     dto: Object.fromEntries([...dtoFields, ...(kind === 'timers' ? ['Status']
       : ['RecordAnyTime', 'SkipEpisodesInLibrary', 'RecordAnyChannel', 'KeepUpTo', 'RecordNewOnly', 'Days'])]
       .filter(name => !['Name', 'Overview'].includes(name)).map(name => [name,

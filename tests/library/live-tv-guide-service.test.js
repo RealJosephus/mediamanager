@@ -2,8 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { mkdir, appendFile } from 'node:fs/promises';
+import { createServer } from 'node:http';
 import { LiveTvService } from '../../src/library/live-tv-service.js';
 import { LiveTvGuideService } from '../../src/library/live-tv-guide-service.js';
+import { LiveTvTunerService } from '../../src/library/live-tv-tuner-service.js';
+import { PluginHost } from '../../src/plugins/host.js';
 import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
 import { ExternalDataManager } from '../../src/library/external-data.js';
 import { LinkedChildReferenceService } from '../../src/library/linked-child-reference-service.js';
@@ -118,7 +121,7 @@ function observeCloseOwners(fixture) {
   return graphObservation;
 }
 
-async function setup(t) {
+async function setup(t, poolOptions) {
   let liveTv, guide;
   t.after(async () => {
     const failures = [];
@@ -128,7 +131,7 @@ async function setup(t) {
     if (failures.length === 1) throw failures[0];
     if (failures.length) throw new AggregateError(failures, 'Guide fixture resources failed to close.', { cause: failures[0] });
   });
-  const fixture = await setupChildrenFixture(t); useIdentityPathReversalControl(fixture);
+  const fixture = await setupChildrenFixture(t, poolOptions); useIdentityPathReversalControl(fixture);
   await fixture.seed({ target: 'root', items: [{ key: 'root', type: 'AggregateFolder', Id: 'a9800000000000000000000000000001', Name: 'Root', Path: null }] });
   liveTv = new LiveTvService({ configurationDirectoryPath: path.join(fixture.stateRoot, 'config'), fileSystem: testFileSystem });
   const calls = [], errors = [], progress = [], configuration = await liveTv.getConfiguration();
@@ -231,6 +234,132 @@ test('an empty service removes stale channels and repeated empty SQL selections 
   assert.deepEqual(await fixture.database.rows('BaseItems', { where: { Type: channelType } }), []);
   assert.deepEqual(await fixture.database.rows('BaseItems', { where: { Type: programType } }), []);
   assert.equal(fixture.progress.at(-1), 100); await assertReleased(fixture);
+});
+
+test('a single ordinary PG connection remains available while guide providers wait', { skip: !enabled, timeout: 30000 }, async t => {
+  const fixture = await setup(t, { max: 1, connectionTimeoutMillis: 1000 });
+  const retained = await stale(fixture);
+  fixture.setChannels([channel('held')]);
+  const [provider] = fixture.guide.services();
+  const listing = Promise.withResolvers(), programs = Promise.withResolvers();
+  const releaseListing = Promise.withResolvers(), releasePrograms = Promise.withResolvers();
+  const controller = new AbortController();
+  const foreground = () => fixture.store.run(async session => (await session.client.query('SELECT 1 AS ok')).rows[0].ok);
+  let namespace;
+  fixture.guide.services = () => [{ ...provider, async getChannelListing(options) {
+    namespace = await fixture.store.run(async session =>
+      (await session.client.query('SELECT pg_my_temp_schema() AS oid')).rows[0].oid);
+    listing.resolve();
+    await releaseListing.promise;
+    return { channels: await provider.getChannels(options), complete: true };
+  } }];
+  fixture.setPrograms(async () => {
+    programs.resolve();
+    await releasePrograms.promise;
+    return [program('late')];
+  });
+
+  assert.equal(await foreground(), 1);
+  const refresh = fixture.refresh(controller.signal);
+  const beforeFinished = gate => Promise.race([gate.promise, refresh.then(() => {
+    throw new Error('Guide finished before reaching the controlled provider.');
+  })]);
+  try {
+    await beforeFinished(listing);
+    assert.ok(namespace > 0);
+    assert.equal(await foreground(), 1);
+    releaseListing.resolve();
+    await beforeFinished(programs);
+    assert.equal(await foreground(), 1);
+    controller.abort();
+    releasePrograms.resolve();
+    await assert.rejects(refresh, { name: 'AbortError' });
+    assert.equal(await foreground(), 1);
+    assert.notEqual(await fixture.library.itemCreation.getItemById(retained.Id), null);
+    assert.deepEqual(await fixture.database.rows('BaseItems', { where: { Type: programType } }), []);
+    const leftover = await fixture.database.client.query(`SELECT relname FROM pg_class
+      WHERE relnamespace=$1 AND relname LIKE 'mm_guide_%'`, [namespace]);
+    assert.deepEqual(leftover.rows, []);
+    await assertReleased(fixture);
+  } finally {
+    controller.abort(); releaseListing.resolve(); releasePrograms.resolve();
+    await Promise.allSettled([refresh]);
+  }
+});
+
+test('official M3U outages and unavailable tuner plugins preserve persisted guide rows until a complete listing', {
+  skip: !enabled, timeout: 120000,
+}, async t => {
+  const fixture = await setup(t);
+  const responses = new Map();
+  const server = createServer((request, response) => {
+    const value = responses.get(request.url);
+    response.writeHead(value === undefined ? 503 : 200, {
+      'Content-Type': value?.startsWith('<') ? 'text/html' : 'application/vnd.apple.mpegurl'
+    }).end(value);
+  });
+  await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
+  t.after(() => new Promise(resolve => server.close(resolve)));
+  const baseUrl = 'http://127.0.0.1:' + server.address().port;
+  const playlist = name => `#EXTM3U\n#EXTINF:-1,${name}\n${baseUrl}/${name}.ts\n`;
+  let hosts = ['first'];
+  const plugins = await PluginHost.open({ directory: path.join(fixture.stateRoot, 'm3u-plugins'), preinstalled: false,
+    cachePath: path.join(fixture.stateRoot, 'm3u-cache'), onError: error => fixture.errors.push(error) });
+  const getConfiguration = async () => ({ TunerHosts: hosts.map(name => ({ Id: name, Type: 'M3U', Url: baseUrl + '/' + name })) });
+  const liveTv = { getConfiguration, admitRead: () => ({ getConfiguration, release() {} }) };
+  const tuners = new LiveTvTunerService({ plugins, liveTv, sources: { addProviderMetadata() {},
+    getPrograms: async channel => [program(channel.Id + '-program')] }, onError: error => fixture.errors.push(error) });
+  t.after(async () => { try { await tuners.close(); } finally { await plugins.close(); } });
+  await plugins.install(path.resolve('plugins/m3u'));
+  await plugins.connect({ fileSystem: testFileSystem, liveTv });
+  fixture.guide.services = () => [tuners];
+  const items = type => fixture.database.rows('BaseItems', { where: { Type: type } });
+  const ids = async type => (await items(type)).map(row => idKey(row.Id)).sort();
+
+  responses.set('/first', playlist('retained'));
+  await fixture.refresh();
+  const before = await Promise.all([ids(channelType), ids(programType)]);
+  assert.deepEqual(before.map(values => values.length), [1, 1]);
+  responses.delete('/first');
+  await fixture.refresh();
+  assert.deepEqual(await Promise.all([ids(channelType), ids(programType)]), before);
+
+  responses.set('/first', '<html><body>Scheduled maintenance</body></html>');
+  await fixture.refresh();
+  assert.deepEqual(await Promise.all([ids(channelType), ids(programType)]), before);
+  assert.ok(fixture.errors.some(error => /valid channel playlist/u.test(error.message)));
+
+  hosts = ['first', 'second'];
+  responses.set('/second', playlist('added'));
+  await fixture.refresh();
+  const partial = await Promise.all([ids(channelType), ids(programType)]);
+  assert.deepEqual(partial.map(values => values.length), [2, 2]);
+  assert.ok(partial.every((values, index) => values.includes(before[index][0])));
+  assert.deepEqual(fixture.calls.filter(value => value.kind === 'delete'), []);
+
+  // The official plugin fails its real connect check and leaves enumeration.
+  await plugins.connect({ fileSystem: {}, liveTv });
+  assert.equal(plugins.list().find(plugin => plugin.id === 'm3u').status, 'failed');
+  assert.deepEqual(await tuners.getChannelListing(), { channels: [], complete: false });
+  await fixture.refresh();
+  assert.deepEqual(await Promise.all([ids(channelType), ids(programType)]), partial);
+  assert.deepEqual(fixture.calls.filter(value => value.kind === 'delete'), []);
+
+  await plugins.connect({ fileSystem: testFileSystem, liveTv });
+  await plugins.setEnabled('m3u', true);
+  for (const name of hosts) responses.set('/' + name, '#EXTM3U\n');
+  await fixture.refresh();
+  assert.deepEqual(await Promise.all([ids(channelType), ids(programType)]), [[], []]);
+
+  responses.set('/first', playlist('restored'));
+  await fixture.refresh();
+  assert.deepEqual((await Promise.all([ids(channelType), ids(programType)])).map(values => values.length), [1, 1]);
+  await plugins.setEnabled('m3u', false);
+  hosts = [];
+  await fixture.refresh();
+  assert.deepEqual(await Promise.all([ids(channelType), ids(programType)]), [[], []]);
+  assert.ok(fixture.errors.some(error => /HTTP 503/u.test(error.message)));
+  await assertReleased(fixture);
 });
 
 test('already canceled refresh preserves recording-folder coordination before the tuner scan cancellation', { skip: !enabled, timeout: 30000 }, async t => {

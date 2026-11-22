@@ -1,4 +1,4 @@
-import { captureMediaProcess } from '../media-execution/process.js';
+import { captureMediaProcess, mediaHttpHeaderArguments } from '../media-execution/process.js';
 import { StorageError } from './errors.js';
 import { unsignedInteger } from './range.js';
 
@@ -42,7 +42,7 @@ export function buildRemoteProbeArguments(url, options = {}) {
 function probeArguments(input, {
   analyzeDurationMs = 0, configuredAnalyzeDuration, configuredProbeSize, userAgent,
   extractChapters = false, threads = 0, requiredHttpHeaders,
-} = {}, rtsp = false) {
+} = {}, rtsp = false, protocols) {
   const duration = unsignedInteger(analyzeDurationMs, 'analyze duration');
   const args = [];
   if (duration > 0n) args.push('-analyzeduration', String(duration * 1000n));
@@ -52,13 +52,9 @@ function probeArguments(input, {
     if (typeof userAgent !== 'string' || /[\r\n\0]/u.test(userAgent)) throw new TypeError('Invalid probe user agent.');
     args.push('-user_agent', userAgent);
   }
-  if (requiredHttpHeaders !== undefined) {
-    const headers = Object.entries(requiredHttpHeaders);
-    if (headers.some(([name, value]) => !/^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/u.test(name)
-      || typeof value !== 'string' || /[\r\n\0]/u.test(value))) throw new TypeError('Invalid live probe HTTP headers.');
-    if (headers.length) args.push('-headers', headers.map(([name, value]) => `${name}: ${value}\r\n`).join(''));
-  }
+  args.push(...mediaHttpHeaderArguments(requiredHttpHeaders));
   if (rtsp) args.push('-rtsp_transport', 'tcp+udp', '-rtsp_flags', 'prefer_tcp');
+  if (protocols) args.push('-protocol_whitelist', protocols);
   args.push('-i', input, '-threads', String(unsignedInteger(threads, 'thread count')), '-v', 'warning', '-print_format', 'json', '-show_streams');
   if (extractChapters) args.push('-show_chapters');
   args.push('-show_format');
@@ -106,7 +102,7 @@ export async function probeLiveRaw(url, {
   if (typeof url !== 'string' || /[\0\r\n]/u.test(url)) throw new TypeError('A live probe requires an original tuner URL.');
   const input = new URL(url);
   if (!['http:', 'https:', 'rtsp:', 'rtp:', 'udp:'].includes(input.protocol)) throw new TypeError('Unsupported live probe protocol.');
-  return runProbe(probeArguments(url, options, input.protocol === 'rtsp:'), url,
+  return runProbe(probeArguments(url, options, input.protocol === 'rtsp:', input.protocol === 'udp:' ? 'udp' : undefined), url,
     { executable, environment, signal, timeoutMs, maxOutputBytes, sourceConsistency: 'unversioned' });
 }
 

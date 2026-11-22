@@ -76,6 +76,12 @@ export function parseM3uText(text, { channelIdPrefix, tunerHostId }) {
   return channels;
 }
 
+export function isEmptyM3u(text) {
+  const [header, ...lines] = text.split(/\r\n|\r|\n/u).map(clrTrim).filter(line => line !== '');
+  return /^#EXTM3U(?:\s|$)/iu.test(header ?? '') &&
+    lines.every(line => line.startsWith('#') && !/^#EXTINF:/iu.test(line));
+}
+
 export async function decodeM3u(bytes, { signal } = {}) {
   const chunks = []; for await (const chunk of bytes) { signal?.throwIfAborted(); chunks.push(Buffer.from(chunk)); }
   const data = Buffer.concat(chunks); let encoding = 'utf-8', offset = 0;

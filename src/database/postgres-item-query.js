@@ -3,7 +3,8 @@ import { nativeTextSql } from './native-text-sql.js';
 import { quoteIdentifier as q } from './model.js';
 import { randomUUID } from 'node:crypto';
 import { operationFailure } from '../core/operation-failure.js';
-import { postgresAliasedVersionFamilyKey, postgresSignedPaddedInteger } from './postgres-query-expressions.js';
+import { postgresAliasedVersionFamilyKey, postgresExcludeAlternateVersions, postgresExcludeOwnedItems,
+  postgresSignedPaddedInteger } from './postgres-query-expressions.js';
 import { withPostgresNativeQueryJitOff } from './postgres-native-query-jit.js';
 import {
   postgresCleanValueFunctionName,
@@ -1839,9 +1840,9 @@ export function buildPostgresItemPageQuery(database, query, {
     }
   }
 
-  if (!includeOwnedItems) predicates.push(`(i."OwnerId" IS NULL OR i."ExtraType" IS NOT NULL)`);
+  if (!includeOwnedItems) predicates.push(postgresExcludeOwnedItems('i'));
   if (!includeOwnedItems && !includeAlternateVersions && !(query.isresumable && resumableMode === 'repository')) {
-    predicates.push(`(i."PrimaryVersionId" IS NULL OR NOT EXISTS (SELECT 1 FROM ${baseItems} primary_item WHERE ${normalizedId('primary_item."Id"')} = ${normalizedId('i."PrimaryVersionId"')} AND ${nativeTextSql(database.schemaName).guidLower("primary_item.\"TopParentId\"")} IS NOT DISTINCT FROM ${nativeTextSql(database.schemaName).guidLower("i.\"TopParentId\"")}))`);
+    predicates.push(postgresExcludeAlternateVersions(database.schemaName, baseItems, 'i'));
   }
 
   // LibraryManager sorts live entities, whose scalar getters differ from the

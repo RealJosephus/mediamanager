@@ -61,7 +61,8 @@ import { NativeItemJsonError } from './native-item-data.js';
 import { postgresUpcomingScope, queryPostgresSeriesSeasonPage, queryPostgresUpcomingEpisodePage } from './postgres-shows-query.js';
 import { queryPostgresNextUpPage } from './postgres-next-up-query.js';
 import { queryPostgresLatestItems } from './postgres-latest-items-query.js';
-import { visitPostgresRecommendedPrograms, visitPostgresPrograms, queryPostgresChannels, queryPostgresCurrentPrograms } from './postgres-live-tv-query.js';
+import { visitPostgresRecommendedPrograms, visitPostgresPrograms, queryPostgresChannels, queryPostgresCurrentPrograms,
+  queryPostgresExistingRecordingEpisodes } from './postgres-live-tv-query.js';
 import { queryPostgresProgramRecordingInfo, queryPostgresSeriesTimerProgramFilter } from './postgres-live-tv-state-query.js';
 import { queryPostgresRecordingFolderSources, orderPostgresRecordingFolders, createPostgresRecordingQuery } from './postgres-live-tv-recordings-query.js';
 import { recordingSourceVisibleWithoutUser, recordingFoldersMissingUser } from './live-tv-recording-folders-access.js';
@@ -1525,39 +1526,31 @@ export class LibraryService extends EventEmitter {
     });
   }
 
-  getRecordingSeriesPrograms(series, now) {
+  visitRecordingSeriesPrograms(series, now, { signal }, visit) {
     return this.store.run(async database => {
-      const query = (input, scope) => queryPostgresItemPage(database, { ...input, enabletotalrecordcount: false },
-        { scope, configuration: this.options.configuration });
-      const { rows } = await query({ includeitemtypes: ['LiveTvProgram'], minenddate: new Date(now).toISOString(),
+      const query = { includeitemtypes: ['LiveTvProgram'], minenddate: new Date(now).toISOString(), enabletotalrecordcount: false,
         ...(series.SeriesId ? { externalseriesid: series.SeriesId } : { name: series.Name }),
-        ...(!series.RecordAnyChannel && { channelids: [guideChannelId('Emby', series.ChannelId)] }) });
-      const channels = new Map(), seriesIds = new Map(), episodes = new Map(), result = [];
-      for (const row of rows) {
-        const item = await this.itemCreation.getItemById(row.Id);
-        if (item?.Type !== 'LiveTvProgram' || !item.EndDate) continue;
-        const key = idKey(item.ChannelId);
-        if (nonemptyId(item.ChannelId) && !channels.has(key)) channels.set(key, await this.itemCreation.getItemById(item.ChannelId));
-        const channel = channels.get(key);
-        let inLibrary = false;
-        if (series.SkipEpisodesInLibrary && item.IndexNumber != null && item.ParentIndexNumber != null) {
-          if (!seriesIds.has(item.Name)) {
-            const { rows } = await query({ includeitemtypes: ['Series'], name: item.Name });
-            seriesIds.set(item.Name, rows.map(row => row.Id));
+        ...(!series.RecordAnyChannel && { channelids: [guideChannelId('Emby', series.ChannelId)] }) };
+      await visitPostgresItemPages(database, query, { signal }, async ({ rows }) => {
+        if (!rows.length) return;
+        const state = await this.load(database, null, { baseRows: rows, includeUserData: false, includeLinkGraph: false });
+        try {
+          const programs = rows.map(row => state.byId.get(idKey(row.Id))).filter(item => item?.Type === 'LiveTvProgram' && item.EndDate);
+          const channelRows = await loadPostgresRowsByIds(database, programs.map(item => item.ChannelId));
+          const channels = new Map(channelRows.map(row => [idKey(row.Id), mapRecord(row)]));
+          const existing = series.SkipEpisodesInLibrary && await queryPostgresExistingRecordingEpisodes(database, programs, { signal });
+          for (const [index, item] of programs.entries()) {
+            signal?.throwIfAborted();
+            const channel = channels.get(idKey(item.ChannelId));
+            const program = this.#recordingMetadata(item, channel, item.ExternalId, series.RecordAnyChannel ? undefined : series.ChannelId);
+            visit({ program: { ...program, ShowId: item.ShowId, Genres: [] }, channelHd: Boolean(channel?.IsHD),
+              inLibrary: Boolean(existing && existing.has(index)) });
           }
-          const ancestors = seriesIds.get(item.Name), reference = JSON.stringify([item.Name, item.ParentIndexNumber, item.IndexNumber]);
-          if (ancestors.length && !episodes.has(reference)) {
-            const { rows } = await query({ includeitemtypes: ['Episode'], indexnumber: item.IndexNumber,
-              parentindexnumber: item.ParentIndexNumber, ismissing: false, limit: 1 }, { ancestorIds: ancestors });
-            episodes.set(reference, rows.length > 0);
-          }
-          inLibrary = episodes.get(reference) ?? false;
+        } finally {
+          await state.dispose({ session: database });
         }
-        const program = this.#recordingMetadata(item, channel, item.ExternalId, series.RecordAnyChannel ? undefined : series.ChannelId);
-        result.push({ program: { ...program, ShowId: item.ShowId, Genres: [] }, channelHd: Boolean(channel?.IsHD), inLibrary });
-      }
-      return result;
-    });
+      });
+    }, { signal });
   }
 
   async resolveLiveTvRecordingFolders(paths, { user = null, includeDtos = false } = {}) {

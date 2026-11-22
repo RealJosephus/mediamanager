@@ -69,6 +69,22 @@ const open = (value, chosen, signal, current = []) => value.tuner.getChannelStre
 const channel = (origin, values = {}) => ({ GuideNumber: '7.1', GuideName: 'News <&> 台', HD: 1, Favorite: -1, DRM: 0, VideoCodec: 'h264', AudioCodec: 'ac3', URL: origin + '/live.ts', ...values });
 const device = (origin, values = {}) => ({ FriendlyName: 'Controlled device', ModelNumber: 'HDHR5', DeviceID: 'C0FFEE', TunerCount: '2', BaseURL: origin, LineupURL: origin + '/lineup.json', ...values });
 
+test('HDHomeRun distinguishes a successful empty lineup from the same JSON on HTTP 503', { timeout: 30000 }, async t => {
+  let status = 200;
+  const origin = await server(t, (request, response) => {
+    const discovery = request.url === '/discover.json';
+    response.writeHead(discovery ? 200 : status, { 'Content-Type': 'application/json' });
+    response.end(JSON.stringify(discovery ? device(origin) : []));
+  });
+  const value = await fixture(t);
+  value.configure([defaults({ Url: origin })]);
+  await value.connect();
+  assert.deepEqual(await value.tuner.getChannelListing(false, {}), { channels: [], complete: true });
+  status = 503;
+  assert.deepEqual(await value.tuner.getChannelListing(false, {}), { channels: [], complete: false });
+  assert.deepEqual(await value.tuner.getChannels(false, {}), []);
+});
+
 test('installed and official HDHomeRun use shared admitted configuration and a mapped native cache', { timeout: 30000 }, async t => {
   const requests = [];
   const origin = await server(t, (request, response) => { requests.push(request.url); response.setHeader('Content-Type', 'application/json');

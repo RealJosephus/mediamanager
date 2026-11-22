@@ -4,6 +4,7 @@ import * as fs from 'node:fs/promises';
 import { createHash, randomUUID } from 'node:crypto';
 import { once } from 'node:events';
 import { createServer } from 'node:http';
+import { gzipSync } from 'node:zlib';
 import os from 'node:os';
 import path from 'node:path';
 import { PluginHost } from '../../src/plugins/host.js';
@@ -93,6 +94,125 @@ test('caller cancellation removes a real XMLTV HTTP prefix, drains its body and 
 
 test('a real XMLTV download deadline drains its body and file before backoff and validation retry', { timeout: 30000 },
   t => interruptedHttpDownload(t, 'deadline'));
+
+test('XMLTV rejects a cold maintenance response and replaces a bad cache left by an older version', { timeout: 30000 }, async t => {
+  const root = await ownedRoot(t), cachePath = path.join(root, 'cache');
+  const maintenance = '<html><body>Scheduled maintenance</body></html>';
+  let body = maintenance, requests = 0;
+  const server = createServer((_request, response) => { requests++; response.end(body); });
+  server.listen(0, '127.0.0.1'); await once(server, 'listening');
+  const info = { Id: 'guide', Path: `http://127.0.0.1:${server.address().port}/guide.xml` };
+  const provider = createXmlTvListingsProvider({ cachePath });
+  t.after(async () => { await provider.close(); await new Promise(resolve => server.close(resolve)); });
+
+  await assert.rejects(provider.getChannels(info), { code: 'invalid-xmltv-document' });
+  assert.deepEqual(await fs.readdir(cachePath), []);
+  body = xml;
+  assert.deepEqual((await provider.getChannels(info)).map(channel => channel.Id), ['c1']);
+  assert.deepEqual(await fs.readFile(path.join(cachePath, 'guide.xml')), xml);
+  assert.equal(requests, 2);
+
+  await fs.writeFile(path.join(cachePath, 'legacy.xml'), maintenance);
+  assert.deepEqual((await provider.getChannels({ ...info, Id: 'legacy' })).map(channel => channel.Id), ['c1']);
+  assert.deepEqual(await fs.readFile(path.join(cachePath, 'legacy.xml')), xml);
+  assert.deepEqual((await fs.readdir(cachePath)).sort(), ['guide.xml', 'legacy.xml']);
+  assert.equal(requests, 3);
+});
+
+test('an XMLTV gzip refresh preserves the previous cache until the gzip and XML validate', { timeout: 30000 }, async t => {
+  const root = await ownedRoot(t), cachePath = path.join(root, 'cache'), filename = path.join(cachePath, 'guide.xml');
+  const updated = Buffer.from(xml.toString().replace('English', 'Updated').replace('</tv>', '<!--' + 'a'.repeat(70000) + '--></tv>'));
+  const compressed = gzipSync(updated);
+  let body = gzipSync(xml), clock = Date.now(), writes = 0;
+  const server = createServer((_request, response) => response.end(body));
+  server.listen(0, '127.0.0.1'); await once(server, 'listening');
+  const info = { Id: 'guide', Path: `http://127.0.0.1:${server.address().port}/guide.xml.gz` };
+  const errors = [];
+  const provider = createXmlTvListingsProvider({ cachePath, now: () => clock, logger: { error: error => errors.push(error) },
+    fileSystem: { ...fs, async open(...args) {
+      const handle = await fs.open(...args);
+      return { writeFile: async bytes => { await handle.writeFile(bytes); writes += bytes.length; }, close: () => handle.close() };
+    } } });
+  t.after(async () => { await provider.close(); await new Promise(resolve => server.close(resolve)); });
+  const names = async () => (await provider.getChannels(info)).map(channel => channel.Name);
+  assert.deepEqual(await names(), ['English']);
+  clock += 7200000;
+  body = compressed.subarray(0, -8);
+  writes = 0;
+  assert.deepEqual(await names(), ['English']);
+  assert.ok(writes > 0);
+  assert.equal(errors.at(-1).code, 'Z_BUF_ERROR');
+  assert.deepEqual(await fs.readFile(filename), xml);
+  assert.deepEqual(await fs.readdir(cachePath), ['guide.xml']);
+
+  for (const invalid of ['<tv><channel', '<html>Service unavailable</html>']) {
+    await provider.validate(info, false, false);
+    body = gzipSync(invalid);
+    assert.deepEqual(await names(), ['English']);
+    assert.deepEqual(await fs.readFile(filename), xml);
+  }
+  await provider.validate(info, false, false);
+  body = compressed;
+  assert.deepEqual(await names(), ['Updated']);
+  assert.deepEqual(await fs.readFile(filename), updated);
+});
+
+test('XMLTV reads one version for 24 channels and releases a canceled index read', { timeout: 30000 }, async t => {
+  const root = await ownedRoot(t), filename = path.join(root, 'indexed.xml'), replacement = path.join(root, 'replacement.xml');
+  const channels = Array.from({ length: 24 }, (_, index) => 'c' + index);
+  const guide = label => '<tv>' + channels.map(channel => `<channel id="${channel}"><display-name>${channel}</display-name></channel>`
+    + Array.from({ length: 20 }, (_, slot) => `<programme channel="${channel}" start="20261121${String(slot).padStart(2, '0')}0000"`
+      + ` stop="20261121${String(slot + 1).padStart(2, '0')}0000"><title lang="en">${label} ${slot}</title><title lang="fr">FR ${slot}</title></programme>`).join('')
+  ).join('') + '</tv>';
+  await fs.writeFile(filename, guide('Old'));
+  const reads = [], entered = Promise.withResolvers(), aborted = Promise.withResolvers(), release = Promise.withResolvers();
+  let hold = false;
+  const provider = createXmlTvListingsProvider({ cachePath: root, fileSystem: { ...fs, async readFile(file, options) {
+    reads.push(file);
+    if (hold) {
+      const { signal } = options;
+      try {
+        await new Promise((_, reject) => {
+          signal.addEventListener('abort', () => reject(signal.reason), { once: true });
+          entered.resolve();
+        });
+      } finally { aborted.resolve(); await release.promise; }
+    }
+    return fs.readFile(file, options);
+  } } });
+  const info = { Id: 'indexed', Path: '/unused.xml' };
+  const programs = (channel, preferred, signal) => provider.getPrograms({ ...info, PreferredLanguage: preferred }, channel,
+    '2026-11-21T10:30:00Z', '2026-11-21T12:00:00Z', { signal });
+  try {
+    const results = await Promise.all(channels.map(channel => programs(channel.toUpperCase(), 'en')));
+    for (const result of results) assert.deepEqual(result.map(program => program.Name), ['Old 10', 'Old 11']);
+    assert.equal((await provider.getChannels(info)).length, 24);
+    assert.deepEqual((await programs('c0', 'fr')).map(program => program.Name), ['FR 10', 'FR 11']);
+    assert.deepEqual(reads, [filename]);
+
+    const { mtime } = await fs.stat(filename);
+    await fs.writeFile(replacement, guide('New'));
+    await fs.utimes(replacement, mtime, mtime);
+    await fs.rename(replacement, filename);
+    assert.deepEqual((await programs('c0', 'en')).map(program => program.Name), ['New 10', 'New 11']);
+    assert.deepEqual(reads, [filename, filename]);
+
+    await fs.writeFile(filename, guide('Newer'));
+    hold = true;
+    const caller = new AbortController();
+    const rejected = assert.rejects(programs('c0', 'en', caller.signal), { name: 'AbortError' });
+    await entered.promise;
+    caller.abort();
+    await Promise.all([rejected, aborted.promise]);
+    let closed = false;
+    const closing = provider.close().then(() => { closed = true; });
+    await turn();
+    assert.equal(closed, false);
+    release.resolve();
+    await closing;
+    await assert.rejects(programs('c0', 'en'), { status: 503 });
+  } finally { release.resolve(); await provider.close(); }
+});
 
 test('installed and official XMLTV packages use ordinary listings activation and mapped local sources', { timeout: 30000 }, async t => {
   for (const preinstalled of [false, true]) {

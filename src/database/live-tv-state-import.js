@@ -3,9 +3,11 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { quoteIdentifier as q } from './model.js';
 import { indexLiveTvDocument, liveTvStateKey } from '../library/live-tv-state.js';
+import { recordingRetentionVersion, refreshRecordingRetention } from './live-tv-recording-retention.js';
 import { stageLiveTvStateFile, removeUnpublishedLiveTvStateFiles, liveTvStateFileFailure } from './live-tv-state-files.js';
 
 const liveTvFiles = [['timers', 'timers.json'], ['seriesTimers', 'seriestimers.json']];
+const retentionKinds = liveTvFiles.map(([kind]) => kind);
 
 function authoritativeSource(persisted, kind, filename) {
   const sourceHex = persisted?.[kind]?.sourceHex, expectedHash = persisted?.[kind]?.sourceSha256;
@@ -59,10 +61,19 @@ export async function initializeLiveTvState(database, { dataPath, logger } = {})
     let persisted;
     try { persisted = JSON.parse(existing.rows[0].value); }
     catch (error) { throw new Error('The authoritative Live TV state is invalid.', { cause: error }); }
+    if (persisted.recordingRetentionVersion !== recordingRetentionVersion) {
+      for (const [kind, filename] of liveTvFiles) {
+        const bytes = authoritativeSource(persisted, kind, filename);
+        if (bytes) Object.assign(persisted[kind], indexLiveTvDocument(kind, bytes));
+      }
+      persisted.recordingRetentionVersion = recordingRetentionVersion;
+      await database.client.query(`UPDATE ${state} SET value=$2 WHERE key=$1`, [liveTvStateKey, JSON.stringify(persisted)]);
+      await refreshRecordingRetention(database, retentionKinds);
+    }
     await reconcileLiveTvStateFiles(persisted, { dataPath });
     return false;
   }
-  const documents = {};
+  const documents = { recordingRetentionVersion };
   for (const [kind, filename] of liveTvFiles) {
     let source;
     try { source = await fs.readFile(path.join(dataPath, 'livetv', filename)); }
@@ -74,5 +85,6 @@ export async function initializeLiveTvState(database, { dataPath, logger } = {})
   }
   await database.client.query({ text: `INSERT INTO ${state} (key, value) VALUES ($1, $2) ON CONFLICT (key) DO NOTHING`,
     values: [liveTvStateKey, JSON.stringify(documents)] });
+  await refreshRecordingRetention(database, retentionKinds);
   return true;
 }

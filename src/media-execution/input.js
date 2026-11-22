@@ -2,6 +2,26 @@ import { StorageError } from '../storage/errors.js';
 
 const ambiguousInputFormats = new Set(['m2ts', 'wmv', 'mts', 'vob', 'mpg', 'mpeg', 'rec', 'dvr-ms', 'ogm', 'divx', 'tp', 'rmvb', 'rtp', 'm4v', 'strm', 'iso']);
 
+export const httpMediaProtocols = 'http,https,tcp,tls,crypto';
+export const isHlsManifest = container => /^(?:hls|applehttp)$/iu.test(container?.split(',')[0]);
+
+export function httpMediaUrl(value) {
+  return typeof value === 'string' && /^https?:\/\//iu.test(value) && !/[\0\r\n]/u.test(value)
+    && URL.canParse(value) ? value : undefined;
+}
+
+export function udpMediaUrl(value) {
+  if (typeof value !== 'string' || !/^udp:\/\//iu.test(value) || /[\0\r\n]/u.test(value)) return;
+  const input = URL.parse(value);
+  if (input?.hostname && Number(input.port) > 0 && !input.username && !input.password) return 'udp:' + value.slice(4);
+}
+
+export function liveHttpHlsUrl(source) {
+  if (source.LiveStreamId && source.IsInfiniteStream && source.Protocol === 'Http' && isHlsManifest(source.Container)) {
+    return httpMediaUrl(source.Path);
+  }
+}
+
 export function streamInputIndex(source, stream) {
   let index = 0;
   for (const current of source.MediaStreams) {

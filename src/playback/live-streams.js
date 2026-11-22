@@ -117,7 +117,7 @@ export class LiveStreamsService {
         }));
         const ownedLifetime = AbortSignal.any([combined, entry.lifetime.signal]);
         const combinedProbe = signal ? AbortSignal.any([ownedLifetime, signal]) : ownedLifetime;
-        await entry.buffer?.ready;
+        await entry.buffer?.waitUntilReady(combinedProbe);
         ready = true;
         const probing = Promise.resolve().then(() => this.probe.addMediaInfo(entry.source, { cacheKey: request.OpenToken, signal: combinedProbe,
           ...(owner.lease.stream ? { openRead: options => this.#read(entry, options) } : {}) }));
@@ -140,8 +140,8 @@ export class LiveStreamsService {
         // failure leaves that public ownership registered for explicit Close.
         // Shutdown and a revoked last public owner still drain immediately.
         if (privateOwner || !ready || combined.aborted || entry?.lifetime.signal.aborted) {
-          lifetime.abort();
           if (entry && owner) await this.#serial(() => this.#release(entry, owner));
+          else lifetime.abort();
         }
         throw error;
       } finally { signal?.removeEventListener('abort', cancel); }

@@ -17,10 +17,10 @@ export class LiveTvTunerService {
   #streamTail = Promise.resolve();
   #closeFailures = [];
 
-  constructor({ plugins, sources, onError = () => {} } = {}) {
+  constructor({ plugins, sources, liveTv, onError = () => {} } = {}) {
     if (typeof plugins?.entries !== 'function' || typeof sources?.addProviderMetadata !== 'function'
       || typeof sources?.getPrograms !== 'function') throw new TypeError('Live TV tuners require providers and listings management.');
-    Object.assign(this, { plugins, sources, onError, name: 'Emby' });
+    Object.assign(this, { plugins, sources, liveTv, onError, name: 'Emby' });
   }
 
   #tuners() { return this.plugins.entries('tuner').filter(provider => provider.isSupported !== false); }
@@ -42,16 +42,34 @@ export class LiveTvTunerService {
 
   async #channels(enableCache, signal) {
     const channels = [];
-    for (const tuner of this.#tuners()) {
-      try { channels.push(...await tuner.getChannels(enableCache, { signal })); }
-      catch (cause) { this.#report(cause); }
+    const configured = (await this.liveTv?.getConfiguration())?.TunerHosts ?? [];
+    const tuners = this.#tuners();
+    // Losing a provider can hide all of its configured channels. Only a
+    // listing that covers every configured tuner type can authorize removal.
+    let complete = configured.every(host => typeof host?.Type === 'string' &&
+      tuners.some(tuner => ordinalIgnoreCaseEquals(tuner.type, host.Type)));
+    for (const tuner of tuners) {
+      try {
+        if (tuner.getChannelListing) {
+          const listing = await tuner.getChannelListing(enableCache, { signal });
+          channels.push(...listing.channels);
+          complete &&= listing.complete;
+        } else channels.push(...await tuner.getChannels(enableCache, { signal }));
+      } catch (cause) {
+        complete = false;
+        this.#report(cause);
+      }
     }
     await this.sources.addProviderMetadata(channels, { enableCache, signal });
-    return channels;
+    return { channels, complete };
   }
 
-  getChannels({ enableCache = false, signal } = {}) {
+  getChannelListing({ enableCache = false, signal } = {}) {
     return this.#run(signal, combined => this.#channels(enableCache, combined));
+  }
+
+  getChannels(options) {
+    return this.getChannelListing(options).then(listing => listing.channels);
   }
 
   resetTuner(id) {
@@ -66,7 +84,7 @@ export class LiveTvTunerService {
 
   getPrograms(channelId, startDateUtc, endDateUtc, { signal } = {}) {
     return this.#run(signal, async combined => {
-      const channels = await this.#channels(true, combined);
+      const { channels } = await this.#channels(true, combined);
       const channel = channels.find(value => value.Id == null || channelId == null
         ? value.Id == null && channelId == null : ordinalIgnoreCaseEquals(value.Id, channelId));
       if (!channel) throw libraryError(500, 'Sequence contains no matching element.');

@@ -1,6 +1,6 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from './storage/index.js';
 import { StorageFileSystem } from './storage/files.js';
 import { assertPortableMountStorageConfiguration } from './storage/portable-mount-contract.js';
@@ -47,7 +47,9 @@ async function closeStorage(owner, closeRegistry = () => owner.registry.close())
   const errors = [];
   // Sequential file owners must finish their pinned upload and spool cleanup
   // while their original adapters are still available.
-  try { await owner.fileSystem.close(); } catch (error) { errors.push(error); }
+  for (const fileSystem of [owner.fileSystem, owner.mediaFileSystem]) {
+    try { await fileSystem.close(); } catch (error) { errors.push(error); }
+  }
   try { await closeRegistry(); } catch (error) { errors.push(error); }
   if (errors.length === 1) throw errors[0];
   if (errors.length) throw new AggregateError(errors, 'Storage files and adapters failed to close.', { cause: errors[0] });
@@ -89,7 +91,7 @@ export async function createConfiguredStorage(filename, { environment = process.
   if (!plugins) throw new TypeError('Configured storage requires a plugin host.');
   filename ??= path.join(plugins.directory,'storage.json');
   let configuration, current, closing, closed = false, initializing = true, tail = Promise.resolve();
-  const extensions = new Map(), listeners = new Set(), beforeListeners = new Set();
+  const extensions = new Map(), listeners = new Set(), beforeListeners = new Set(), retiring = new Set();
   const notify = async () => { for (const listener of listeners) await listener(); };
   const report = async error => { try { await plugins.onError(error); } catch { /* Diagnostics cannot interrupt storage ownership transfer. */ } };
   const notifyBefore = async () => {
@@ -139,9 +141,36 @@ export async function createConfiguredStorage(filename, { environment = process.
       }
       const contract = portableMountContract === undefined ? undefined : assertPortableMountStorageConfiguration(portableMountContract,definition);
       const fileSystem = new StorageFileSystem({ vfs, identityMap: metadataIdentityMap });
+      const mediaFileSystem = new StorageFileSystem({ vfs, identityMap });
       fileSystem.spoolRoot = current?.fileSystem.spoolRoot;
-      return { registry,vfs,identityMap,metadataIdentityMap,ignoreIdentityMap,fileSystem,unavailable,portableMountContract:contract };
+      return { registry,vfs,identityMap,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,unavailable,
+        portableMountContract:contract, definition, users: new Set() };
     } catch (error) { await registry.close(); throw error; }
+  };
+  const retire = async owner => {
+    if (!owner.users.size) {
+      try { await closeStorage(owner); } catch (error) { await report(error); }
+      return;
+    }
+    // The new configuration is live while a recording finishes with the
+    // files and adapters it admitted. Shutdown still joins this retirement.
+    const pending = Promise.all(owner.users).then(() => closeStorage(owner)).catch(report);
+    retiring.add(pending);
+    void pending.then(() => retiring.delete(pending));
+  };
+  const retainGeneration = () => {
+    if (closed) throw Object.assign(new Error('Storage is closed.'), { status: 503 });
+    const owner = current, { fileSystem, mediaFileSystem } = owner;
+    const released = Promise.withResolvers();
+    owner.users.add(released.promise);
+    return { fileSystem, mediaFileSystem, isCurrent: () => current === owner,
+      mediaBinding(filename) {
+        const { mount, path: backendPath } = mediaFileSystem.resolve(filename);
+        const instance = owner.definition.instances.find(value => value.id === mount.instanceId);
+        return createHash('sha256').update(JSON.stringify([instance.type, instance.config, backendPath])).digest('hex');
+      },
+      close() { owner.users.delete(released.promise); released.resolve(); },
+    };
   };
   const change = async (definition, save = true, strictType) => {
     const candidate = await build(definition,{tolerateUnavailable:initializing || !save,strictType});
@@ -149,7 +178,7 @@ export async function createConfiguredStorage(filename, { environment = process.
     catch (error) { await candidate.registry.close(); throw error; }
     if (!initializing) await notifyBefore();
     const previous = current; current = candidate; configuration = clone(definition);
-    try { if (previous) await closeStorage(previous); } catch (error) { await report(error); }
+    if (previous) await retire(previous);
     if (save && !initializing) await notify();
     return clone(configuration);
   };
@@ -192,6 +221,7 @@ export async function createConfiguredStorage(filename, { environment = process.
             const fileSystem = new StorageFileSystem({ vfs: owner.vfs, identityMap: owner.metadataIdentityMap });
             fileSystem.spoolRoot = owner.fileSystem.spoolRoot;
             owner.fileSystem = fileSystem;
+            owner.mediaFileSystem = new StorageFileSystem({ vfs: owner.vfs, identityMap: owner.identityMap });
           }
         });
       };
@@ -200,6 +230,7 @@ export async function createConfiguredStorage(filename, { environment = process.
     const vfs = dynamic(()=>current.vfs), identityMap = dynamic(()=>current.identityMap), ignoreIdentityMap = dynamic(()=>current.ignoreIdentityMap);
     const metadataIdentityMap=dynamic(()=>current.metadataIdentityMap);
     const fileSystem = dynamic(()=>current.fileSystem);
+    const mediaFileSystem = dynamic(()=>current.mediaFileSystem);
     const metadataPath = access => {
       let identity;
       try { identity=current.identityMap.identityFor(access); }
@@ -212,7 +243,7 @@ export async function createConfiguredStorage(filename, { environment = process.
       return (...args)=>{args[0]=metadataPath(args[0]);if(key==='rename')args[1]=metadataPath(args[1]);return current.vfs[key](...args);};
     }});
     const unsubscribe=plugins.subscribe(()=>enqueue(notify));
-    return { vfs,identityMap,metadataVfs,metadataIdentityMap,ignoreIdentityMap,fileSystem,
+    return { vfs,identityMap,metadataVfs,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,retainGeneration,
       get portableMountContract() { return current.portableMountContract; },
       configuration:()=>clone(configuration), types:()=>[...extensions.keys()],
       status:()=>configuration.instances.map(instance=>({id:instance.id,type:instance.type,
@@ -270,7 +301,11 @@ export async function createConfiguredStorage(filename, { environment = process.
       close:()=>{
         if(closing)return closing;
         closed=true;
-        return closing=(async()=>{unsubscribe();listeners.clear();beforeListeners.clear();await tail;await closeStorage(current);})();
+        return closing=(async()=>{
+          unsubscribe(); listeners.clear(); beforeListeners.clear();
+          await tail;
+          await Promise.all([...retiring, Promise.all(current.users).then(() => closeStorage(current))]);
+        })();
       },
     };
   } catch(error) {

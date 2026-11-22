@@ -2,6 +2,13 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { StorageError } from '../storage/errors.js';
 
+export function mediaHttpHeaderArguments(headers = {}) {
+  const entries = Object.entries(headers);
+  if (entries.some(([name, value]) => !/^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/u.test(name)
+    || typeof value !== 'string' || /[\r\n\0]/u.test(value))) throw new TypeError('Invalid media input HTTP headers.');
+  return entries.length ? ['-headers', entries.map(([name, value]) => `${name}: ${value}\r\n`).join('')] : [];
+}
+
 export function startMediaProcess(executable, args, { environment, cwd, input = 'ignore', output = 'pipe' } = {}) {
   if (cwd && /[\\/]/u.test(executable) && !path.isAbsolute(executable)) executable = path.resolve(executable);
   return spawn(executable, args, { shell: false, windowsHide: true, env: environment, cwd, stdio: [input, output, 'pipe'] });

@@ -9,23 +9,28 @@ import { XmlError } from '@mediamanager/plugin-sdk/core/xml';
 import { clrTrim } from '@mediamanager/plugin-sdk/metadata/whitespace';
 import { ordinalIgnoreCaseEquals, ordinalIgnoreCaseKey } from '@mediamanager/plugin-sdk/storage/ordinal-comparer';
 import { dateTicks } from '@mediamanager/plugin-sdk/library/records';
-import { readXmlTvChannels, readXmlTvPrograms } from './reader.js';
+import { hasXmlTvRoot, indexXmlTv } from './reader.js';
 import { nativeXmlTvProgramEtag } from './program-etag.js';
 
 const age = 3600000, timeoutMilliseconds = 900000;
+const indexLimit = 8;
 // Installed packages have distinct module URLs but can share an explicit cache root.
 const activeTemporaryFiles = globalThis[Symbol.for('mediamanager.xmltv.temporaryFiles')] ??= new Set();
 const defaults = { KidsCategories: ['kids', 'family', 'children', 'childrens', 'disney'],
   MovieCategories: ['movie'], NewsCategories: ['news', 'journalism', 'documentary', 'current affairs'],
   SportsCategories: ['sports', 'basketball', 'baseball', 'football'] };
 const error = (code, message, cause) => Object.assign(new Error(message, cause ? { cause } : undefined), { code });
+const invalidXmlTvDocument = () => Object.assign(new XmlError('The downloaded XMLTV file has no tv root element.'), {
+  code: 'invalid-xmltv-document'
+});
 const aborted = cause => cause?.code === 'ABORT_ERR' || ['AbortError', 'TimeoutError'].includes(cause?.name);
 // The designated runtime's array FirstOrDefault returns the default for null
 // icon/rating arrays, as observed through its actual listings provider.
 const first = value => value?.[0];
 const missingCodes = new Set(['ENOENT', 'ENOTDIR', 'EACCES', 'EPERM', 'not-found', 'not-directory', 'permission-denied', 'unmapped-path', 'invalid-path']);
+const fileVersion = stat => [stat.dev, stat.ino, stat.size, stat.mtimeNs ?? stat.mtimeMs, stat.ctimeNs ?? stat.ctimeMs].join(':');
 
-function xmlText(bytes) {
+function xmlText(bytes, validateEncoding = true) {
   const value = Buffer.from(bytes);
   const utf32le = value.length >= 4 && (value[0] === 0xff && value[1] === 0xfe && value[2] === 0 && value[3] === 0
     || value[0] === 60 && value[1] === 0 && value[2] === 0 && value[3] === 0);
@@ -36,6 +41,7 @@ function xmlText(bytes) {
       : value[0] === 0xfe && value[1] === 0xff || value[0] === 0 && value[1] === 60 ? 'utf-16be' : 'utf-8';
   const declaration = decodeNativeTextEncoding(value.subarray(0, Math.min(value.length, 1024)), encoding).match(/^\uFEFF?<\?xml\s+[^?]*encoding\s*=\s*['"]([^'"]+)['"]/u);
   if (declaration) encoding = declaration[1].toLowerCase();
+  if (!validateEncoding) return decodeNativeTextEncoding(value, encoding);
   try {
     if (['utf-32', 'utf-32le', 'utf-32be'].includes(encoding)) {
       const littleEndian = utf32le || !utf32be && encoding !== 'utf-32be';
@@ -98,11 +104,11 @@ export function createXmlTvListingsProvider(pathOptions = {}) {
     return cachePath;
   };
   getCachePath();
-  const failures = new Map(), lifetime = new AbortController(), work = new Set();
+  const failures = new Map(), indexes = new Map(), lifetime = new AbortController(), work = new Set();
   let closing;
   const report = cause => { try { void Promise.resolve(logger.error?.(cause)).catch(() => {}); } catch { /* Diagnostics do not replace I/O. */ } };
   const exists = async filename => {
-    try { const stat = await fileSystem.stat(filename); return stat.isFile() ? stat : null; }
+    try { const stat = await fileSystem.stat(filename, { bigint: true }); return stat.isFile() ? stat : null; }
     catch (cause) { if (missingCodes.has(cause.code)) return null; throw cause; }
   };
   const removeTemp = async filename => { try { await fileSystem.unlink(filename); } catch (cause) { if (cause.code !== 'ENOENT') report(cause); } };
@@ -114,18 +120,20 @@ export function createXmlTvListingsProvider(pathOptions = {}) {
   const optionsSignal = signal => signal ? AbortSignal.any([signal, lifetime.signal]) : lifetime.signal;
   const language = info => info.PreferredLanguage && clrTrim(info.PreferredLanguage) ? info.PreferredLanguage
     : typeof preferredMetadataLanguage === 'function' ? preferredMetadataLanguage() : preferredMetadataLanguage;
-  const getXml = async (info, signal) => {
+  const getXml = async (info, signal, rejectedVersion) => {
     const cacheRoot = path.resolve(getCachePath());
     const identity = info.Id ?? '';
     if (typeof identity !== 'string' || /[\\/:\0]/u.test(identity)) throw error('invalid-path', 'The XMLTV cache identity must name an owned child file.');
     const filename = path.resolve(cacheRoot, identity + '.xml');
     if (path.dirname(filename) !== cacheRoot) throw error('invalid-path', 'The XMLTV cache identity escapes its owned directory.');
-    const cached = await exists(filename), current = now();
-    if (cached && cached.mtimeMs >= current - age) return filename;
+    const existing = await exists(filename), current = now();
+    const cached = existing && fileVersion(existing) !== rejectedVersion ? existing : null;
+    const loadedFile = (stat, index) => ({ filename, version: fileVersion(stat), index });
+    if (cached && Number(cached.mtimeMs) >= current - age) return loadedFile(cached);
     if (info.Path === null || info.Path === undefined) throw new TypeError('The XMLTV path is null.');
     const remote = /^http/iu.test(info.Path), failed = failures.get(info.Path);
     if (remote && failed !== undefined && current - failed < age) {
-      if (cached) return filename;
+      if (cached) return loadedFile(cached);
       throw error('download-backoff', 'Skipping the XMLTV download after a recent failure: ' + info.Path);
     }
     await fileSystem.mkdir(cacheRoot, { recursive: true });
@@ -149,18 +157,32 @@ export function createXmlTvListingsProvider(pathOptions = {}) {
       if (activeTemporaryFiles.has(temporaryIdentity)) throw error('EBUSY', 'The XMLTV temporary file is already in use.');
       activeTemporaryFiles.add(temporaryIdentity); ownsTemporary = true;
       handle = await fileSystem.open(temporary, 'w');
-      if (['.gz', '.gzip'].includes(path.extname(original.split('?')[0]).toLowerCase())) {
-        try {
-          await pipeline(Readable.from(input), createGunzip(), async stream => {
-            for await (const chunk of stream) await handle.writeFile(chunk);
-          }, { signal: downloadSignal });
-        } catch (cause) { report(cause); }
+      const compressed = ['.gz', '.gzip'].includes(path.extname(original.split('?')[0]).toLowerCase());
+      if (compressed) {
+        await pipeline(Readable.from(input), createGunzip(), async stream => {
+          for await (const chunk of stream) await handle.writeFile(chunk);
+        }, { signal: downloadSignal });
       } else for await (const chunk of input) { downloadSignal.throwIfAborted(); await handle.writeFile(chunk); }
       await handle.close(); handle = undefined;
       const downloaded = await exists(temporary);
-      if (!downloaded || downloaded.size === 0) throw error('empty-download', 'Downloaded XMLTV file is empty: ' + info.Path);
+      if (!downloaded?.size) throw error('empty-download', 'Downloaded XMLTV file is empty: ' + info.Path);
+      const bytes = await fileSystem.readFile(temporary, { signal: downloadSignal });
+      let index;
+      try { index = indexXmlTv(xmlText(bytes), downloadSignal); }
+      catch (cause) {
+        if (compressed || cached || !(cause instanceof XmlError)) throw cause;
+        // Native can publish an incomplete plain XMLTV document on a cold
+        // cache. Keep that behavior when its XMLTV root was actually read.
+        if (!hasXmlTvRoot(xmlText(bytes, false))) throw invalidXmlTvDocument();
+      }
+      if (index && !index.hasTvRoot) throw invalidXmlTvDocument();
       if (sourceHandle) { const closingSource = sourceHandle; sourceHandle = undefined; await closingSource.close(); }
-      await fileSystem.rename(temporary, filename); failures.delete(info.Path); return filename;
+      downloadSignal.throwIfAborted();
+      await fileSystem.rename(temporary, filename);
+      const published = await exists(filename);
+      if (!published) throw error('ENOENT', 'The published XMLTV file is unavailable.');
+      failures.delete(info.Path);
+      return loadedFile(published, index);
     } catch (cause) {
       if (handle) { try { await handle.close(); } catch (closeError) { report(closeError); } handle = undefined; }
       // Cleanup owns the path until unlink completes, so a writer admitted
@@ -170,8 +192,10 @@ export function createXmlTvListingsProvider(pathOptions = {}) {
       }
       if (ownsTemporary) await removeTemp(temporary);
       if (signal.aborted) throw signal.reason ?? cause;
-      failures.set(info.Path, now()); report(cause);
-      if (await exists(filename)) return filename;
+      if (cached || cause.code !== 'invalid-xmltv-document') failures.set(info.Path, now());
+      report(cause);
+      const retained = await exists(filename);
+      if (retained && fileVersion(retained) !== rejectedVersion) return loadedFile(retained);
       if (timeout.signal.aborted || aborted(cause)) {
         throw error('ETIMEDOUT', 'Timed out downloading the XMLTV file from ' + info.Path, cause);
       }
@@ -182,22 +206,75 @@ export function createXmlTvListingsProvider(pathOptions = {}) {
       try { await sourceHandle?.close(); } finally { try { await response?.body?.cancel(); } catch { /* A consumed body is already released. */ } }
     }
   };
-  const load = async (info, signal) => xmlText(await fileSystem.readFile(await getXml(info, signal)));
+  const loadVersion = async ({ filename, version, index }, signal) => {
+    signal.throwIfAborted();
+    let entry = indexes.get(filename);
+    if (entry?.version !== version) {
+      const controller = new AbortController();
+      const owned = optionsSignal(controller.signal);
+      entry = { version, controller, readers: 0, settled: Boolean(index),
+        pending: index ? Promise.resolve(index) : invoke(async () => {
+          const bytes = await fileSystem.readFile(filename, { signal: owned });
+          owned.throwIfAborted();
+          return indexXmlTv(xmlText(bytes), owned);
+        }) };
+      entry.pending.then(() => { entry.settled = true; }, () => {
+        entry.settled = true;
+        if (indexes.get(filename) === entry) indexes.delete(filename);
+      });
+    }
+    indexes.delete(filename);
+    indexes.set(filename, entry);
+    if (indexes.size > indexLimit) indexes.delete(indexes.keys().next().value);
+
+    let abort;
+    entry.readers++;
+    try {
+      const canceled = new Promise((_, reject) => {
+        abort = () => reject(signal.reason);
+        signal.addEventListener('abort', abort, { once: true });
+      });
+      return await Promise.race([entry.pending, canceled]);
+    } finally {
+      signal.removeEventListener('abort', abort);
+      if (--entry.readers === 0 && !entry.settled) {
+        if (indexes.get(filename) === entry) indexes.delete(filename);
+        entry.controller.abort();
+      }
+    }
+  };
+  const load = async (info, signal) => {
+    signal.throwIfAborted();
+    const cached = await getXml(info, signal);
+    const index = await loadVersion(cached, signal);
+    if (index.hasTvRoot) return index;
+    // A fresh file published by an earlier version may contain a different
+    // document type. Refill it without deleting a concurrent replacement.
+    const replacement = await loadVersion(await getXml(info, signal, cached.version), signal);
+    if (!replacement.hasTvRoot) throw invalidXmlTvDocument();
+    return replacement;
+  };
+  const getChannels = async (info, signal) => {
+    const combined = optionsSignal(signal), index = await load(info, combined);
+    combined.throwIfAborted();
+    return index.channels(language(info), combined);
+  };
   return Object.freeze({ type: 'xmltv', name: 'XmlTV', get cachePath() { return getCachePath(); },
     getPrograms(info, channelId, startDateUtc, endDateUtc, { signal } = {}) {
       return invoke(async () => {
         if (typeof channelId !== 'string' || !clrTrim(channelId)) throw new TypeError("Value cannot be null. (Parameter 'channelId')");
-        const combined = optionsSignal(signal), xml = await load(info, combined);
-        return readXmlTvPrograms(xml, { channelId, startDateUtc, endDateUtc, language: language(info), signal: combined }).map(program => xmlTvProgramInfo(program, info));
+        const combined = optionsSignal(signal), index = await load(info, combined);
+        combined.throwIfAborted();
+        return index.programs({ channelId, startDateUtc, endDateUtc, language: language(info), signal: combined }).map(program => xmlTvProgramInfo(program, info));
       });
     },
     getChannels(info, { signal } = {}) {
-      return invoke(async () => readXmlTvChannels(await load(info, optionsSignal(signal)), language(info)).map(channel => ({
+      return invoke(async () => (await getChannels(info, signal)).map(channel => ({
         Id: channel.Id, Name: channel.DisplayName, ImageUrl: first(channel.Icons)?.Source || null,
         Number: channel.Number && clrTrim(channel.Number) ? channel.Number : channel.Id, ChannelType: 'TV' })));
     },
     getLineups(info, _country, _location, { signal } = {}) {
-      return invoke(async () => readXmlTvChannels(await load(info, optionsSignal(signal)), language(info)).map(channel => ({ Id: channel.Id, Name: channel.DisplayName })));
+      return invoke(async () => (await getChannels(info, signal)).map(channel => ({ Id: channel.Id, Name: channel.DisplayName })));
     },
     validate(info, _validateLogin, _validateListings, { signal } = {}) {
       return invoke(async () => {
@@ -213,7 +290,7 @@ export function createXmlTvListingsProvider(pathOptions = {}) {
     },
     close() {
       lifetime.abort();
-      return closing ??= (async () => { while (work.size) await Promise.allSettled([...work]); })();
+      return closing ??= (async () => { while (work.size) await Promise.allSettled([...work]); indexes.clear(); })();
     },
   });
 }

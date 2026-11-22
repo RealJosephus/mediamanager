@@ -262,6 +262,7 @@ export function canonicalTransferReceipt(value) {
 export class PostgresDatabase {
   #childPool;
   #createChildPool;
+  #backgroundPools = new Map();
 
   constructor(pool, schema, { client, root, createChildPool = options => new pg.Pool(options) } = {}) {
     this.pool = pool;
@@ -432,13 +433,30 @@ export class PostgresDatabase {
     if (this.connectionSession) throw new Error('A PostgreSQL operation session cannot own a child pool');
     if (this.closed) throw new Error(closedClientMessage);
     if (!this.#childPool) {
-      const options = { ...this.pool.options };
-      // pg keeps explicit passwords on its options as non-enumerable values.
-      if (Object.hasOwn(this.pool.options, 'password')) options.password = this.pool.options.password;
-      this.#childPool = this.#createChildPool(options);
+      this.#childPool = this.#createChildPool(this.#poolOptions());
       this.#observePool(this.#childPool);
     }
     return this.#withPool(this.#childPool, operation);
+  }
+
+  async withBackgroundConnection(operation, job) {
+    if (this.connectionSession) throw new Error('A PostgreSQL operation session cannot own a background pool');
+    if (this.closed) throw new Error(closedClientMessage);
+    if (!['guide', 'recording-retention'].includes(job)) throw new TypeError('Unknown PostgreSQL background session owner');
+    let pool = this.#backgroundPools.get(job);
+    if (!pool) {
+      pool = new pg.Pool({ ...this.#poolOptions(), max: 1 });
+      this.#backgroundPools.set(job, pool);
+      this.#observePool(pool);
+    }
+    return this.#withPool(pool, operation);
+  }
+
+  #poolOptions() {
+    const options = { ...this.pool.options };
+    // pg keeps explicit passwords on its options as non-enumerable values.
+    if (Object.hasOwn(this.pool.options, 'password')) options.password = this.pool.options.password;
+    return options;
   }
 
   async #withPool(pool, operation) {
@@ -1235,7 +1253,7 @@ export class PostgresDatabase {
     this.closed = true;
     this.closePromise = (async () => {
       const errors = [];
-      const pools = this.#childPool ? [this.pool, this.#childPool] : [this.pool];
+      const pools = [this.pool, this.#childPool, ...this.#backgroundPools.values()].filter(Boolean);
       for (const result of await Promise.allSettled(pools.map(pool => Promise.resolve().then(() => pool.end())))) {
         if (result.status === 'rejected') errors.push(result.reason);
       }

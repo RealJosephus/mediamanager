@@ -74,10 +74,11 @@ export class HdHomerunTuner {
       return response;
     } finally { clearTimeout(timer); }
   }
-  async #json(url, signal, parse, ensureSuccess) {
+  async #json(url, signal, parse, ensureSuccess, onFailedResponse) {
     const response = await this.#request(url, signal);
     try {
       if (ensureSuccess && !response.ok) throw error(`Response status code ${response.status}.`, { code: 'http-error', httpStatus: response.status });
+      if (!response.ok) onFailedResponse?.();
       const bytes = await response.arrayBuffer(); signal.throwIfAborted();
       const charset = /\bcharset\s*=\s*["']?([^;"'\s]+)/iu.exec(response.headers.get('content-type') ?? '')?.[1] ?? 'utf-8';
       const decoder = new TextDecoder(charset, { fatal: /^utf-?8$/iu.test(charset) });
@@ -97,10 +98,11 @@ export class HdHomerunTuner {
       throw cause;
     }
   }
-  async #hostChannels(info, enableCache, signal) {
+  async #hostChannels(info, enableCache, signal, onFailedResponse) {
     if (enableCache && info.Id && this.#channels.has(info.Id)) return this.#channels.get(info.Id);
     const model = await this.#modelInfo(info, false, signal); if (model === null) throw nullReference();
-    const lineup = await this.#json(model.LineupURL ?? (model.BaseURL ?? '') + '/lineup.json', signal, parseLineup, false), channels = [];
+    const lineup = await this.#json(model.LineupURL ?? (model.BaseURL ?? '') + '/lineup.json',
+      signal, parseLineup, false, onFailedResponse), channels = [];
     for (const entry of lineup) {
       if (entry === null) throw nullReference();
       if (info.ImportFavoritesOnly && !entry.Favorite || entry.DRM) continue;
@@ -120,21 +122,26 @@ export class HdHomerunTuner {
     } finally { try { await file?.close(); } finally { this.#cacheWrites.delete(filename); } }
   }
   getChannels(enableCache, options) {
+    return this.getChannelListing(enableCache, options).then(listing => listing.channels);
+  }
+  getChannelListing(enableCache, options) {
     return this.#run(options, async (configuration, signal) => {
       const result = [];
+      let complete = true;
       for (const info of this.#hosts(configuration)) {
         const filename = this.#cacheFile(info);
         try {
-          const channels = await this.#hostChannels(info, enableCache, signal);
+          const channels = await this.#hostChannels(info, enableCache, signal, () => { complete = false; });
           result.push(...channels.filter(channel => !result.some(prior => equals(prior.Id, channel.Id))));
           if (!enableCache) try { await this.#writeCache(filename, channels, signal); } catch (cause) { if (!io(cause)) throw cause; }
         } catch (cause) {
+          complete = false;
           this.#report(cause);
           if (enableCache) try { result.push(...parseChannelCache(await this.fileSystem.readFile(filename, { encoding: 'utf8', signal }))); }
           catch (fallback) { if (!io(fallback)) throw fallback; }
         }
       }
-      return result;
+      return { channels: result, complete };
     });
   }
   async *#matches(configuration, channelId, signal) {

@@ -40,6 +40,7 @@ export async function saveRecordingAssets({ timer, filename, seriesPath, configu
   const guide = timer.ProgramId ? await library.itemCreation.getItemById(nativeGuid(guideProgramId(timer.ProgramId))) : null;
   const program = guide ?? { ...timer, PremiereDate: timer.OriginalAirDate, IndexNumber: timer.EpisodeNumber, ParentIndexNumber: timer.SeasonNumber };
   const api = imagePathApi(filename), destination = api.dirname(filename), stem = api.basename(filename, api.extname(filename));
+  await fileSystem.mkdir(destination, { recursive: true, signal });
   const sports = hasTag(timer, 'Sports'), kids = hasTag(timer, 'Kids'), news = hasTag(timer, 'News');
   if (configuration.SaveRecordingNFO) {
     const genres = [...(program.Genres ?? [])];
@@ -47,6 +48,7 @@ export async function saveRecordingAssets({ timer, filename, seriesPath, configu
       if (!genres.some(value => ordinalIgnoreCaseEquals(value, genre))) genres.push(genre);
     }
     if (seriesPath) {
+      await fileSystem.mkdir(seriesPath, { recursive: true, signal });
       await createNfo(fileSystem, api.join(seriesPath, 'tvshow.nfo'), 'tvshow', [
         ['id', providerId(timer.SeriesProviderIds, 'Tvdb')], ['imdb_id', providerId(timer.SeriesProviderIds, 'Imdb')],
         ['tmdbid', providerId(timer.SeriesProviderIds, 'Tmdb')], ['zap2itid', providerId(timer.SeriesProviderIds, 'Zap2It')],

@@ -4,7 +4,7 @@ import { lookup } from 'node:dns/promises';
 import { md5Guid } from '@mediamanager/plugin-sdk/core/identity';
 import { validateNativeLiveTvSource } from '@mediamanager/plugin-sdk/live-tv/contract';
 import { ordinalIgnoreCaseEquals } from '@mediamanager/plugin-sdk/storage/ordinal-comparer';
-import { decodeM3u, parseM3uText } from './parser.js';
+import { decodeM3u, isEmptyM3u, parseM3uText } from './parser.js';
 import { createMediaSource } from './source.js';
 import { NativeHttpInput, NativeReservationInput } from '@mediamanager/plugin-sdk/live-tv/raw-input';
 
@@ -61,8 +61,11 @@ export class M3uTuner {
   async #channels(info, enableCache, signal) {
     if (enableCache && info.Id && this.#memory.has(info.Id)) return this.#memory.get(info.Id);
     const source = await this.#listing(info, signal); let channels;
-    try { channels = parseM3uText(await decodeM3u(source.stream, { signal }), { channelIdPrefix: channelPrefix(info), tunerHostId: info.Id }); }
-    finally { await source.close(); }
+    try {
+      const text = await decodeM3u(source.stream, { signal });
+      channels = parseM3uText(text, { channelIdPrefix: channelPrefix(info), tunerHostId: info.Id });
+      if (!channels.length && !isEmptyM3u(text)) throw new Error('The M3U source did not return a valid channel playlist.');
+    } finally { await source.close(); }
     if (info.Id && channels.length) this.#memory.set(info.Id, channels);
     return channels;
   }
@@ -81,8 +84,12 @@ export class M3uTuner {
     } finally { try { await file?.close(); } finally { this.#cacheWrites.delete(filename); } }
   }
   getChannels(enableCache, options) {
+    return this.getChannelListing(enableCache, options).then(listing => listing.channels);
+  }
+  getChannelListing(enableCache, options) {
     return this.#run(options, async (configuration, signal) => {
       const result = [];
+      let complete = true;
       for (const info of configuration.TunerHosts.filter(info => equals(info.Type, this.type))) {
         const filename = this.#cacheFile(info);
         try {
@@ -94,6 +101,7 @@ export class M3uTuner {
           } catch (error) { if (!ioError(error) && !['EBUSY', 'EEXIST'].includes(error.code)) throw error; }
         } catch (error) {
           signal.throwIfAborted(); this.#report(error);
+          complete = false;
           if (enableCache) try {
             const cache = JSON.parse(await this.fileSystem.readFile(filename, { encoding: 'utf8', signal }));
             if (!Array.isArray(cache)) throw new TypeError('A tuner channel cache must be an array.');
@@ -101,7 +109,7 @@ export class M3uTuner {
           } catch (fallback) { if (!ioError(fallback)) throw fallback; }
         }
       }
-      return result;
+      return { channels: result, complete };
     });
   }
   async #local(hostname) {

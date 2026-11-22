@@ -81,6 +81,7 @@ export class LiveTvGuideService {
   async #channelPrograms(service, channel, signal, seen, session, days, maxCacheDate) {
     const start = offset(this.now(), -3600000), end = offset(start, days * 86400000);
     const programs = await service.getPrograms(channel.ExternalId, start, end, { signal });
+    signal.throwIfAborted();
     const loaded = await this.loadContext(channel.Id, { draft: channel });
     try {
       await withGuideProgramBatch({ ...this, channel, metadataChanged: async item => onMetadataChanged(item, await loaded.parentalRating(item)), now: this.now }, async batch => {
@@ -113,9 +114,12 @@ export class LiveTvGuideService {
 
   async #service(service, access, signal, progress, seenChannels, seenPrograms, session) {
     progress(10);
-    const incoming = await service.getChannels({ enableCache: false, signal });
+    const options = { enableCache: false, signal };
+    const { channels: incoming, complete } = service.getChannelListing
+      ? await service.getChannelListing(options) : { channels: await service.getChannels(options), complete: true };
+    signal.throwIfAborted();
     const parent = await this.library.getInternalLiveTvFolder(), parentOwner = acquireNativeItemLinkOwner(parent);
-    let channels, errors = false, ordinal = 0n;
+    let channels, errors = !complete, ordinal = 0n;
     try {
       channels = await createNativeItemCohort({ linkedChildren: this.linkedChildren,
         resolveLiveItem: id => this.itemCreation.getCachedItemById(id) });
@@ -184,7 +188,7 @@ export class LiveTvGuideService {
     await this.recordingFolders.reconcile();
     await this.sources.scanForTunerDeviceChanges({ signal });
     const services = this.services();
-    await this.store.run(async session => {
+    await this.store.runBackgroundSession('guide', async session => {
       if (session.inTransaction) throw new TypeError('Guide refresh must own an autocommit SQL session.');
       const suffix = randomUUID().replaceAll('-', ''), seenChannels = q('mm_guide_channels_' + suffix), seenPrograms = q('mm_guide_programs_' + suffix);
       try {
@@ -205,7 +209,7 @@ export class LiveTvGuideService {
         try { await session.client.query(`DROP TABLE IF EXISTS ${seenChannels};DROP TABLE IF EXISTS ${seenPrograms}`); }
         catch (cause) { session.discardConnection(cause); throw cause; }
       }
-    });
+    }, { signal });
     signal.throwIfAborted();
     await this.refreshSeriesTimers?.(signal);
   }

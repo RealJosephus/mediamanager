@@ -4,6 +4,7 @@ import { operationFailure } from '../core/operation-failure.js';
 
 const postgresOperationAdmission = Symbol('postgres-operation-admission');
 const childAdmission = Symbol('postgres-child-admission');
+const backgroundSessionAdmission = Symbol('postgres-background-session-admission');
 
 async function withPostgresWriteLock(database, scope, operation, options) {
   if (scope.writeLockDepth > 0) return operation();
@@ -44,6 +45,7 @@ export class DomainStore {
     readOnly = false,
     isolation = 'read-committed',
     lockTimeoutMs,
+    [backgroundSessionAdmission]: backgroundJob,
     [postgresOperationAdmission]: admitted = false
   } = {}) {
     const inherited = this.#context.getStore();
@@ -54,7 +56,9 @@ export class DomainStore {
       });
     }
     if (this.#closing && !admitted) return Promise.reject(new Error('Database store is closing'));
-    const withConnection = admitted === childAdmission ? this.database.withChildConnection : this.database.withConnection;
+    let withConnection = this.database.withConnection;
+    if (admitted === childAdmission) withConnection = this.database.withChildConnection;
+    if (backgroundJob) withConnection = operation => this.database.withBackgroundConnection(operation, backgroundJob);
     const start = () => withConnection.call(this.database, database => {
       signal?.throwIfAborted();
       let finishScope;
@@ -147,6 +151,13 @@ export class DomainStore {
   // Its individual SQL operations acquire their own ordinary store scopes.
   runDetached(operation) {
     return this.#context.exit(() => this.database.runDetached(operation));
+  }
+
+  // Jobs that own temporary tables need one session through external I/O.
+  // Leave the ordinary and awaited-child pools available while they wait.
+  runBackgroundSession(job, operation, { signal } = {}) {
+    if (this.#closing) return Promise.reject(new Error('Database store is closing'));
+    return this.runDetached(() => this.run(operation, { signal, [postgresOperationAdmission]: true, [backgroundSessionAdmission]: job }));
   }
 
   // An awaited child must not join a background queue that can itself be

@@ -6,12 +6,14 @@ import pg from 'pg';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { createHash, randomUUID } from 'node:crypto';
 import { inspect } from 'node:util';
+import { setTimeout as delay } from 'node:timers/promises';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { createRuntime } from '../../src/runtime.js';
 import { readInstanceConfiguration } from '../../src/configuration.js';
 import { defaultConfiguration } from '../../src/core/configuration-xml.js';
 import { serializeConfiguration } from '../../src/core/configuration-file.js';
 import { parseLosslessJson } from '../../src/core/json.js';
+import { guideChannelId } from '../../src/library/live-tv-guide-channel.js';
 import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { configurationJson } from './fixtures/configuration/observations.js';
@@ -247,7 +249,7 @@ test('postgres: saved paths and version survive a real cold runtime and cleared 
   });
 });
 
-test('postgres: a persisted disabled local plugin permits cold management and real storage recovery retries configuration initialization', enabled, async () => {
+test('postgres: a persisted disabled local plugin permits cold management and real storage recovery retries configuration initialization', enabled, async t => {
   await scenario('recovery', async state => {
     const metadata = path.join(state.programDataPath, 'recovered-metadata'), cache = path.join(state.programDataPath, 'recovered-cache');
     await state.open(); await state.principals(); await state.seedMedia();
@@ -258,6 +260,13 @@ test('postgres: a persisted disabled local plugin permits cold management and re
     assert.equal(saved.status, 204); const configuration = await state.snapshot('enabled-warm', metadata, cache, '7.8.9');
     const beforeStorage = await state.call('/Storage/Configuration'); assert.equal(beforeStorage.status, 200);
     const marker = await fs.readFile(path.join(cache, '.jellyfin-cache')), tag = await fs.readFile(path.join(cache, 'CACHEDIR.TAG'));
+    const channelId = 'storage-recovery-channel', sourcePath = path.join(state.programDataPath, 'media', 'recording-source.ts');
+    const footage = Buffer.alloc(3760, 0x47);
+    await state.runtime.fileSystem.writeFile(sourcePath, footage);
+    await state.database.insert('BaseItems', postgresTestRow('BaseItems', {
+      Id: guideChannelId('Emby', channelId), Type: 'MediaBrowser.Controller.LiveTv.LiveTvChannel',
+      Name: 'Storage recovery channel', ExternalId: channelId, MediaType: 'Video', Data: '{}',
+    }));
     await state.missingStorage('persist-disable-local', async () => {
       const disabled = await state.call('/Plugins/local/Enabled', { method: 'POST', body: { enabled: false } });
       assert.equal(disabled.status, 200); assert.equal(disabled.body.enabled, false); assert.equal(disabled.body.status, 'disabled');
@@ -277,6 +286,19 @@ test('postgres: a persisted disabled local plugin permits cold management and re
     await assert.rejects(fs.stat(metadata), missing);
     assert.deepEqual(await fs.readFile(path.join(cache, '.jellyfin-cache')), marker);
     assert.deepEqual(await fs.readFile(path.join(cache, 'CACHEDIR.TAG')), tag);
+    let opened = 0;
+    t.mock.method(state.runtime.liveTvMediaSources, 'getMediaSources', async item => {
+      assert.equal(item.Id.replaceAll('-', ''), guideChannelId('Emby', channelId));
+      opened++;
+      return [{ Protocol: 'File', Container: 'ts', Path: sourcePath }];
+    });
+    const timers = state.runtime.liveTvTimers;
+    const now = Date.now();
+    assert.equal(await timers.createTimer({ ServiceName: 'Emby', Name: 'Recording after storage recovery', ExternalChannelId: channelId,
+      Status: 'New', StartDate: new Date(now).toISOString(), EndDate: new Date(now + 300000).toISOString(),
+      PrePaddingSeconds: 0, PostPaddingSeconds: 0 }), true);
+    assert.equal((await timers.readRecordingTimers())[0].Status, 'New');
+    assert.equal(opened, 0);
     await fs.unlink(path.join(cache, '.jellyfin-cache')); await fs.unlink(path.join(cache, 'CACHEDIR.TAG'));
     const enabled = await state.call('/Plugins/local/Enabled', { method: 'POST', body: { enabled: true } });
     assert.equal(enabled.status, 200); assert.equal(enabled.body.enabled, true); assert.equal(enabled.body.status, 'active');
@@ -291,6 +313,15 @@ test('postgres: a persisted disabled local plugin permits cold management and re
     assert.deepEqual(await fs.readFile(path.join(cache, 'CACHEDIR.TAG')), tag);
     await state.snapshot('enabled-recovered', metadata, cache, '7.8.9', configuration);
     await state.exercise('enabled-recovered', metadata, cache, 8); await state.originals();
+    const deadline = Date.now() + 15000;
+    let recording = (await timers.readRecordingTimers())[0];
+    while (recording.Status !== 'Completed' && Date.now() < deadline) {
+      await delay(50, undefined, { signal: t.signal });
+      [recording] = await timers.readRecordingTimers();
+    }
+    assert.equal(recording.Status, 'Completed');
+    assert.equal(opened, 1);
+    assert.deepEqual(await fs.readFile(recording.RecordingPath), footage);
     await state.close();
   });
 });

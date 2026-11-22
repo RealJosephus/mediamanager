@@ -2,7 +2,7 @@
 // and IRequiresMediaInfoCallback interfaces. These are Node plugin operations,
 // not public HTTP DTOs or permission to run recording/transcoding executors.
 export const liveTvSignalPositions = Object.freeze({
-  tuner: Object.freeze({ getChannels: 1, getChannelStream: 3, getChannelStreamMediaSources: 1, discoverDevices: 1, validate: 1 }),
+  tuner: Object.freeze({ getChannels: 1, getChannelListing: 1, getChannelStream: 3, getChannelStreamMediaSources: 1, discoverDevices: 1, validate: 1 }),
   listings: Object.freeze({ getPrograms: 4, validate: 3, getLineups: 3, getChannels: 1 }),
   channel: Object.freeze({ getChannelFeatures: 0, isEnabledFor: 1, getChannelItems: 1,
     getChannelImage: 1, getSupportedChannelImages: 0, getChannelItemMediaInfo: 1,
@@ -121,6 +121,9 @@ export function validateLiveTvResult(kind, method, result) {
   if (method === 'getChannelStreamMediaSources' || method === 'getChannelItemMediaInfo') return validateLiveTvSources(result);
   if (kind === 'channel' && method === 'getChannelItems') return validateLiveTvChannelItems(result);
   if (kind === 'channel' && method === 'getChannelImage') return validateLiveTvChannelImage(result);
+  if (method === 'getChannelListing' && (!object(result) || !Array.isArray(result.channels) || typeof result.complete !== 'boolean')) {
+    throw new TypeError('A tuner channel listing requires a channels array and a complete flag.');
+  }
   if (['getChannels', 'discoverDevices', 'getPrograms', 'getLineups', 'getSupportedChannelImages'].includes(method)
     && !Array.isArray(result)) throw new TypeError('A Live TV list operation must return a finite array.');
   if (method === 'isEnabledFor' && typeof result !== 'boolean') throw new TypeError('Channel enablement must return boolean.');

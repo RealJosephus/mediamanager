@@ -1,8 +1,9 @@
-import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
+import { buildPostgresItemPageQuery, visitPostgresRowPlanPages } from '../database/postgres-item-query.js';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { reconcileLiveTvStateFiles } from '../database/live-tv-state-import.js';
+import { readRecordingKeepUpTo, recordingRetentionPlan, refreshRecordingRetention } from '../database/live-tv-recording-retention.js';
 import { stageLiveTvStateFile, removeUnpublishedLiveTvStateFiles, liveTvStateFileFailure } from '../database/live-tv-state-files.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
 import { decodeNativeTextBytes } from '../database/native-text.js';
@@ -15,7 +16,7 @@ import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { loadPostgresRowsByIds } from './postgres-library-query.js';
 import { queryPostgresLiveTvTimerPage } from './postgres-live-tv-timers-query.js';
 import { imageTagAndBlurHash } from './dto-inherited-images.js';
-import { decodeLiveTvDocument, indexLiveTvDocument, liveTvStateKey } from './live-tv-state.js';
+import { decodeLiveTvDocument, indexLiveTvDocument, liveTvStateKey, recordingRetentionKey } from './live-tv-state.js';
 import { guideProgramId } from './live-tv-guide-program.js';
 import { planSeriesEpisodes, recordingPadding as padding, selectTimerFields as select, seriesTimerSettings } from './live-tv-series-schedule.js';
 import { writeNativeDate } from './native-item-data.js';
@@ -176,10 +177,10 @@ export class LiveTvTimersService {
   #closePromise;
   #poisoned;
 
-  constructor({ store, serverId, loadProgramDtos, liveTv, loadProgram, resolveRecordingTimer, getRecordingSeriesPrograms, users, sessions, dataPath,
+  constructor({ store, serverId, loadProgramDtos, liveTv, loadProgram, resolveRecordingTimer, visitRecordingSeriesPrograms, users, sessions, dataPath,
     stateFileSystem = fs, onError = () => {} } = {}) {
     if (!store || typeof loadProgramDtos !== 'function') throw new TypeError('Timer reads require PostgreSQL and program DTO projection.');
-    Object.assign(this, { store, serverId, loadProgramDtos, liveTv, loadProgram, resolveRecordingTimer, getRecordingSeriesPrograms, users, sessions, dataPath,
+    Object.assign(this, { store, serverId, loadProgramDtos, liveTv, loadProgram, resolveRecordingTimer, visitRecordingSeriesPrograms, users, sessions, dataPath,
       stateFileSystem, onError });
     this.stateDirectory = dataPath && path.join(dataPath, 'livetv');
   }
@@ -280,11 +281,10 @@ export class LiveTvTimersService {
   async #seriesEpisodes(document, series, options, signal) {
     signal?.throwIfAborted();
     const now = Date.now();
-    const candidates = await this.getRecordingSeriesPrograms(series, now);
+    const { changes, append, events } = await planSeriesEpisodes(series, recordingEntries(document, 'timers'),
+      visit => this.visitRecordingSeriesPrograms(series, now, { signal }, visit),
+      { ...options, now, isActive: id => this.dvr.isActive(id) });
     signal?.throwIfAborted();
-    const { changes, append, events } = planSeriesEpisodes(series, recordingEntries(document, 'timers'), candidates, {
-      ...options, now, isActive: id => this.dvr.isActive(id),
-    });
     if (!changes.size && !append.length) return { document: { ...document }, files: new Map(), events };
     return timerMutation(document, { changes, append }, events);
   }
@@ -322,25 +322,32 @@ export class LiveTvTimersService {
 
   readRecordingTimers() { return this.#readRecordingState(recordingTimers); }
 
-  readRecordingRetention(seriesId) {
-    return this.#readRecordingState(document => {
-      const series = recordingEntries(document, 'seriesTimers').find(entry => entry && ordinalIgnoreCaseEquals(entry.Id, seriesId));
-      if (!(series?.KeepUpTo > 0)) return null;
-      return { keepPrevious: series.KeepUpTo - 1, timers: recordingTimers(document).filter(timer => timer.Status === 'Completed'
-        && nonblank(timer.RecordingPath) && ordinalIgnoreCaseEquals(timer.SeriesTimerId, seriesId))
-        .sort((left, right) => {
-          const [a, b] = [dateTicks(left.EndDate), dateTicks(right.EndDate)];
-          return a > b ? -1 : a < b ? 1 : 0;
-        }) };
-    });
+  withRecordingRetention(seriesId, { signal }, operation) {
+    return this.store.runBackgroundSession('recording-retention', async database => {
+      const keep = await readRecordingKeepUpTo(database, seriesId);
+      if (keep <= 0) return;
+      const plan = recordingRetentionPlan(database, seriesId);
+      return operation({ keepPrevious: keep - 1, visitTimers: visit => visitPostgresRowPlanPages(database, plan, { signal },
+        rows => visit(rows.map(row => ({ Id: stateText(row.Id), RecordingPath: stateText(row.RecordingPath) })))) });
+    }, { signal });
   }
 
-  removeCompletedRecording(timer) {
+  removeCompletedRecordings(timers) {
+    if (!timers.length) return Promise.resolve(false);
     return this.#mutate(document => {
-      const index = recordingEntries(document, 'timers').findIndex(entry => entry?.Status === 'Completed'
-        && ordinalIgnoreCaseEquals(entry.Id, timer.Id) && entry.RecordingPath === timer.RecordingPath);
-      return index < 0 ? null : timerMutation(document, { remove: new Set([index]) });
-    });
+      const pending = new Map();
+      for (const timer of timers) {
+        const key = recordingRetentionKey(timer.Id);
+        if (!pending.has(key)) pending.set(key, new Set());
+        pending.get(key).add(timer.RecordingPath);
+      }
+      const remove = new Set();
+      for (const [index, entry] of document.timers.rows.entries()) {
+        if (entry?.status === 'Completed' && entry.recordingPath != null
+          && pending.get(recordingRetentionKey(stateText(entry.id)))?.delete(stateText(entry.recordingPath))) remove.add(index);
+      }
+      return remove.size ? timerMutation(document, { remove }) : null;
+    }, { syncTimers: false });
   }
 
   updateRecordingTimer(timer, change, { finish = false } = {}) {
@@ -353,7 +360,7 @@ export class LiveTvTimersService {
     });
   }
 
-  #mutate(plan) {
+  #mutate(plan, { syncTimers = true } = {}) {
     if (this.#poisoned) return Promise.reject(this.#poisoned);
     if (this.#closing) return Promise.reject(libraryError(503, 'Live TV timer persistence is closing.'));
     if (!this.stateDirectory) return Promise.reject(libraryError(409, 'Live TV timer persistence requires a native data path.'));
@@ -382,6 +389,7 @@ export class LiveTvTimersService {
                 this.stateDirectory, filenames[kind], bytes, this.stateFileSystem));
               await database.client.query({ text: `UPDATE ${table} SET value = $2 WHERE key = $1`,
                 values: [liveTvStateKey, JSON.stringify(planned.document)] });
+              await refreshRecordingRetention(database, planned.files.keys());
               for (const replacement of replacements) {
                 await this.stateFileSystem.rename(replacement.temporary, replacement.filename);
                 replacement.published = true;
@@ -425,7 +433,7 @@ export class LiveTvTimersService {
       }
       if (result) {
         this.#queueNotifications(result.events);
-        if (this.dvr && result.files.has('timers')) {
+        if (syncTimers && this.dvr && result.files.has('timers')) {
           try { this.dvr.syncTimers(recordingTimers(result.document)); } catch (error) { this.#report(error); }
         }
       }
