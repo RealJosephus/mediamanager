@@ -419,18 +419,18 @@
   "assemblies": [
     {
       "name": "MediaBrowser.Providers",
-      "path": "D:\\mediamanager\\.agent-temp\\tmdb-missing\\recorded-v6\\oracle\\MediaBrowser.Providers.dll",
-      "sha256": "ba138e7822fb224fd9e5bc56a14e9725063870e438da8cbf13c9c7ccec646605"
+      "path": "D:\\mediamanager\\.test-output\\review-fix-tmdb-45214881512\\recorded\\oracle\\MediaBrowser.Providers.dll",
+      "sha256": "79b9b894437cfc010ed3f850d289aa799a38139dbc277fc5e23ca1e383acfbcd"
     },
     {
       "name": "Emby.Server.Implementations",
-      "path": "D:\\mediamanager\\.agent-temp\\tmdb-missing\\recorded-v6\\oracle\\Emby.Server.Implementations.dll",
-      "sha256": "c518bc18c0f70168405721f5f89ab6ba4c4ceeb704552e146c2f9e366bf31c9d"
+      "path": "D:\\mediamanager\\.test-output\\review-fix-tmdb-45214881512\\recorded\\oracle\\Emby.Server.Implementations.dll",
+      "sha256": "2a95c8be162a37b8d338fa0b3e93ad1cba7799acae2086f778dca85e144ebed7"
     },
     {
       "name": "MediaBrowser.Controller",
-      "path": "D:\\mediamanager\\.agent-temp\\tmdb-missing\\recorded-v6\\oracle\\MediaBrowser.Controller.dll",
-      "sha256": "a8939bae7bda1a470d7d9ec420d84b9647e74a9b308a669f81a1d72ce8a6a98f"
+      "path": "D:\\mediamanager\\.test-output\\review-fix-tmdb-45214881512\\recorded\\oracle\\MediaBrowser.Controller.dll",
+      "sha256": "6c15719451ca79c5576d37d28325b4495ea28448799c771e774363180c0ab9d8"
     },
     {
       "name": "System.Private.CoreLib",

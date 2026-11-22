@@ -1,6 +1,6 @@
 {
-  "started": "2026-10-03T14:08:46.1712234Z",
-  "ended": "2026-10-03T14:08:47.8670636Z",
+  "started": "2026-11-23T16:21:17.3734601Z",
+  "ended": "2026-11-23T16:21:18.913465Z",
   "tables": {
     "BaseItems": [
       {
@@ -44,7 +44,7 @@
         "PlaybackPositionTicks": "9007199254740997",
         "Played": true,
         "Rating": null,
-        "RetentionDate": "2026-10-03T14:08:47.2473559Z",
+        "RetentionDate": "2026-11-23T16:21:18.3819561Z",
         "SubtitleStreamIndex": null
       },
       {
@@ -59,7 +59,7 @@
         "PlaybackPositionTicks": "33",
         "Played": true,
         "Rating": null,
-        "RetentionDate": "2026-10-03T14:08:47.2473559Z",
+        "RetentionDate": "2026-11-23T16:21:18.3819561Z",
         "SubtitleStreamIndex": null
       },
       {
@@ -97,12 +97,7 @@
         "SortOrder": null
       }
     ],
-    "ItemValues": [
-      {
-        "ItemValueId": "F3333333-3333-3333-3333-000000000013",
-        "Value": "value"
-      }
-    ],
+    "ItemValues": [],
     "ItemValuesMap": [],
     "CustomItemDisplayPreferences": [
       {
@@ -152,6 +147,6 @@
     ]
   },
   "sourceBoundary": "Actual ItemPersistenceService.DeleteItem executes EF SQLite SQL against an isolated synthetic current-schema database. This is not LibraryManager.DeleteItem: alternate promotion, external assets and notifications are outside this recording.",
-  "assemblySha256": "aa009dca56edcd138a829c9c5c13ae96a7eb4f67ca462f252f99078e6f124b10",
+  "assemblySha256": "283b35a9cf5afc45e595a740ea2b71f544f8856ff3179cf0c86fe5786550035b",
   "phaseAcceptance": false
 }

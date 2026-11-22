@@ -19,6 +19,11 @@ assert.equal(createHash('sha256').update(await readFile(new URL('./fixtures/tmdb
   .digest('hex'), provenance.oracleFiles['persistence-input.mjs']);
 assert.equal(createHash('sha256').update(await readFile(new URL('../../src/database/native-model.json', import.meta.url)))
   .digest('hex'), provenance.nativeModelSha256);
+const manifestBytes = await readFile(new URL('../fixtures/jellyfin-reference/jellyfin-source-manifest.json', import.meta.url));
+const manifest = JSON.parse(manifestBytes);
+assert.deepEqual(provenance.reference, {
+  manifestSha256: createHash('sha256').update(manifestBytes).digest('hex'), head: manifest.head, aggregateSha256: manifest.contentDigest,
+});
 assert.equal(native.phaseAcceptance, false);
 const retentionDate = native.tables.UserData.find(row => row.CustomDataKey === 'shared').RetentionDate;
 assert.ok(retentionDate >= native.started && retentionDate <= native.ended);

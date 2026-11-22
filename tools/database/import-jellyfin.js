@@ -39,7 +39,7 @@ async function dropCreatedPostgresTarget(database) {
 }
 
 function sourceEnvelope(source) {
-  const canonical = canonicalNativeSqliteSchema();
+  const canonical = canonicalNativeSqliteSchema(source.schema.canonicalFingerprint);
   return {
     ...canonical,
     history: source.schema.history,

@@ -266,7 +266,7 @@ function transferResult(tables, envelope) {
 export async function getNativeEnvelope(database) {
   if (database.dialect === 'sqlite') {
     const schema = database.preflight();
-    const canonical = canonicalNativeSqliteSchema();
+    const canonical = canonicalNativeSqliteSchema(schema.canonicalFingerprint);
     return { ...canonical, history: schema.history, sqliteSequence: schema.sqliteSequence };
   }
   const value = await database.readNativeEnvelope();

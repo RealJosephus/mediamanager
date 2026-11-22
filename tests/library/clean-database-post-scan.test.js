@@ -122,7 +122,7 @@ test('postgres: extracted directory failures warn and preserve ordinary deletion
   assert.equal((await value.adapter.stat('/media/dead-0.mkv')).kind, 'file');
 });
 
-test('postgres: values orphaned by playlist deletion survive until the next maintenance sweep', {
+test('postgres: playlist deletion purges values whose final mapping is removed', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
 }, async t => {
   const value = await setupDatabaseCleanup(t, native.results.find(row => row.sample.Name === 'missing file playlist'));
@@ -133,7 +133,7 @@ test('postgres: values orphaned by playlist deletion survive until the next main
   const keys = Object.fromEntries(tableDefinition('ItemValuesMap').primaryKey.map(key => [key, link[key]]));
   assert.equal(await value.database.update('ItemValuesMap', keys, { ItemId: nativeGuid(cleanupId(100)) }), 1n);
   await value.operation();
-  assert.deepEqual((await value.database.rows('ItemValues')).map(row => row.ItemValueId), [mapped.ItemValueId]);
+  assert.deepEqual(await value.database.rows('ItemValues'), []);
   assert.deepEqual(await value.database.rows('ItemValuesMap'), []);
   assert.equal((await value.database.rows('BaseItems', { where: { Id: nativeGuid(cleanupId(100)) } })).length, 0);
   await value.operation();

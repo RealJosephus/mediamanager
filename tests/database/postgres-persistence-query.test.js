@@ -88,6 +88,7 @@ const ids = {
   newOrphan: '9a000000-0000-0000-0000-000000000006',
   inheritedOne: '9a000000-0000-0000-0000-000000000007',
   inheritedTwo: '9a000000-0000-0000-0000-000000000008',
+  sharedValue: '9a000000-0000-0000-0000-000000000009',
 };
 
 function blank(table) {
@@ -430,13 +431,15 @@ test('real PostgreSQL metadata credits fetch only requested people from a large 
   assert.equal((await database.rows('Peoples', { where: { Id: credits[1].PeopleId } }))[0].Name, 'New Target');
 });
 
-test('real PostgreSQL item deletion purges old orphans without loading or touching linked values', postgresOptions, async t => {
+test('real PostgreSQL item deletion purges existing and newly orphaned values while keeping shared values', postgresOptions, async t => {
   const { database, store, schema } = await setup(t, 'orphan_bounds');
   await insertItem(database, ids.item, 'Deleted');
   await insertItem(database, ids.keeper, 'Keeper');
   await database.insert('ItemValues', { ItemValueId: ids.oldOrphan, Type: 5, Value: 'Old Orphan', CleanValue: 'old orphan' });
   await database.insert('ItemValues', { ItemValueId: ids.newOrphan, Type: 5, Value: 'New Orphan', CleanValue: 'new orphan' });
   await database.insert('ItemValuesMap', { ItemId: ids.item, ItemValueId: ids.newOrphan });
+  await database.insert('ItemValues', { ItemValueId: ids.sharedValue, Type: 5, Value: 'Shared Value', CleanValue: 'shared value' });
+  for (const ItemId of [ids.item, ids.keeper]) await database.insert('ItemValuesMap', { ItemId, ItemValueId: ids.sharedValue });
   await database.client.query(`
     INSERT INTO "${schema}"."ItemValues" ("ItemValueId", "CleanValue", "Type", "Value")
     SELECT convert_to(md5('unrelated-value-' || value::text), 'UTF8'), convert_to(lower('Unrelated Value ' || value::text), 'UTF8'), 5,
@@ -469,7 +472,9 @@ test('real PostgreSQL item deletion purges old orphans without loading or touchi
     .has('mm_runtime_item_values_map_value_item_raw_idx'),
   'orphan cleanup probes raw ItemValueId membership through its covering reverse index');
   assert.equal((await database.rows('ItemValues', { where: { ItemValueId: ids.oldOrphan } })).length, 0);
-  assert.equal((await database.rows('ItemValues', { where: { ItemValueId: ids.newOrphan } })).length, 1);
+  assert.equal((await database.rows('ItemValues', { where: { ItemValueId: ids.newOrphan } })).length, 0);
+  assert.equal((await database.rows('ItemValues', { where: { ItemValueId: ids.sharedValue } })).length, 1);
+  assert.deepEqual((await database.rows('ItemValuesMap', { where: { ItemValueId: ids.sharedValue } })).map(row => row.ItemId), [ids.keeper]);
   assert.equal((await database.rows('BaseItems', { where: { Id: ids.item } })).length, 0);
   const unrelated = await database.client.query(`
     SELECT count(*) AS count

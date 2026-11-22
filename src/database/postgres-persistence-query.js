@@ -180,9 +180,6 @@ async function deletePostgresItemRowsFromStableScope(database, scope, { retained
       WHERE ${normalizedGuid(database, 'data."ItemId"')} = scope."Key"`, scope.values);
   }
 
-  // Native performs this sweep before deleting the target ItemValuesMap rows.
-  await deletePostgresOrphanItemValues(database);
-
   const linked = postgresTable(database, 'LinkedChildren');
   await database.client.query(`
     WITH scope AS (${scope.text})
@@ -224,6 +221,9 @@ async function deletePostgresItemRowsFromStableScope(database, scope, { retained
     DELETE FROM ${items} item
     USING scope
     WHERE ${normalizedGuid(database, 'item."Id"')} = scope."Key"`, scope.values);
+
+  // Deleting BaseItems cascades their ItemValuesMap rows before this sweep.
+  await deletePostgresOrphanItemValues(database);
 
   for (const table of ['MediaSegments', 'TrickplayInfos']) {
     await database.client.query(`

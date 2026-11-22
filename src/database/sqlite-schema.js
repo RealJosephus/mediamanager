@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { nativeModel, quoteIdentifier as q, createTableSql, createIndexSql } from './model.js';
 import { encodeValue, decodeValue } from './values.js';
+import { acceptsJellyfinHistory, currentFingerprint, previousFingerprint, jellyfinIndexes } from './jellyfin-generations.js';
 
 const statement = (database, sql) => {
   const prepared = database.prepare(sql);
@@ -189,43 +190,33 @@ export function inspectSqliteSchema(database) {
   return { objects, tables, ddl, fingerprint, sqliteSequence };
 }
 
-let expectedSchema;
-function getExpectedSchema() {
-  if (!expectedSchema) {
-    const database = new DatabaseSync(':memory:');
-    for (const table of nativeModel.tables) database.exec(createTableSql(table));
-    for (const table of nativeModel.tables) for (const index of table.indices) database.exec(createIndexSql(table, index));
-    expectedSchema = inspectSqliteSchema(database);
-    database.close();
-  }
-  return expectedSchema;
-}
-
-let canonicalSchema;
-/** Return the one repository-owned SQLite schema used for every Jellyfin export.
- * Source sqlite_schema SQL is compatibility evidence, never export provenance. */
-export function canonicalNativeSqliteSchema() {
-  if (!canonicalSchema) {
+const schemas = new Map();
+function generationSchema(fingerprint) {
+  if (!schemas.has(fingerprint)) {
     const database = new DatabaseSync(':memory:');
     try {
       for (const table of nativeModel.tables) database.exec(createTableSql(table));
-      for (const table of nativeModel.tables) for (const index of table.indices) database.exec(createIndexSql(table, index));
+      for (const table of nativeModel.tables) for (const index of jellyfinIndexes(table, fingerprint)) database.exec(createIndexSql(table, index));
       for (const sql of canonicalEfSchemaDdl) database.exec(sql);
       const inspected = inspectSqliteSchema(database);
-      canonicalSchema = Object.freeze({
-        ddl: Object.freeze([...inspected.ddl]),
-        fingerprint: inspected.fingerprint,
-      });
+      if (inspected.fingerprint !== fingerprint) throw new Error('Jellyfin canonical schema fingerprint drifted');
+      schemas.set(fingerprint, inspected);
     } finally { database.close(); }
   }
-  return { ddl: [...canonicalSchema.ddl], fingerprint: canonicalSchema.fingerprint };
+  return schemas.get(fingerprint);
+}
+
+export function canonicalNativeSqliteSchema(fingerprint = currentFingerprint) {
+  return { ddl: [...generationSchema(fingerprint).ddl], fingerprint };
 }
 
 export function preflightSqlite(database, { requireMigrationHistory = false, validateRows = true } = {}) {
   const schema = inspectSqliteSchema(database);
-  const expected = getExpectedSchema();
+  const canonicalFingerprint = schema.objects.some(object => object.type === 'index' && object.name === 'IX_AncestorIds_ParentItemId')
+    ? previousFingerprint : currentFingerprint;
+  const expected = generationSchema(canonicalFingerprint);
   const differences = [];
-  for (const expectedTable of expected.tables) {
+  for (const expectedTable of expected.tables.filter(table => !table.name.startsWith('__EFMigrations'))) {
     const actual = schema.tables.find((table) => table.name === expectedTable.name);
     if (!actual) differences.push(`Missing table ${expectedTable.name}`);
     else for (const key of ['columns', 'foreignKeys', 'indices', 'autoincrement', 'extraClauses', 'unsupportedConstraintSemantics']) if (!compare(actual[key], expectedTable[key])) differences.push(`${actual.name}: ${key} differ from the pinned model`);
@@ -248,9 +239,9 @@ export function preflightSqlite(database, { requireMigrationHistory = false, val
       || historyTable.extraClauses || historyTable.unsupportedConstraintSemantics) differences.push('Unknown EF migration history schema');
     else {
       history = database.prepare('SELECT "MigrationId", "ProductVersion" FROM "__EFMigrationsHistory" ORDER BY "MigrationId" COLLATE BINARY').all();
-      for (const row of history) if (![...nativeModel.migrations, ...nativeModel.dataMigrations].includes(row.MigrationId)) differences.push(`Unknown migration ${row.MigrationId}`);
-      const requiredMigrations = [...nativeModel.migrations, ...nativeModel.dataMigrations];
-      if (requireMigrationHistory && requiredMigrations.some((id) => !history.some((row) => row.MigrationId === id))) differences.push('Incomplete native EF migration history');
+      const ids = history.map(row => row.MigrationId);
+      if (!acceptsJellyfinHistory(canonicalFingerprint, ids, false)) differences.push('Unknown migration for the Jellyfin schema');
+      if (requireMigrationHistory && !acceptsJellyfinHistory(canonicalFingerprint, ids, true)) differences.push('Incomplete native EF migration history');
     }
   }
   const integrity = database.prepare('PRAGMA integrity_check').all();
@@ -285,7 +276,7 @@ export function preflightSqlite(database, { requireMigrationHistory = false, val
     if (differences.length) break;
   }
   if (differences.length) throw new SchemaCompatibilityError(differences);
-  return { ...schema, history };
+  return { ...schema, canonicalFingerprint, history };
 }
 
 export class SchemaCompatibilityError extends Error {

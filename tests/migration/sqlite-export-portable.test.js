@@ -273,7 +273,7 @@ test('canonical fresh SQLite history contains every pinned migration', () => {
   assert.deepEqual(pinnedNativeSqliteMigrationHistory, [
     ...nativeModel.migrations.map(MigrationId => ({
       MigrationId,
-      ProductVersion: nativeModel.efProductVersion,
+      ProductVersion: '10.0.14',
     })),
     ...nativeModel.dataMigrations.map(MigrationId => ({
       MigrationId,

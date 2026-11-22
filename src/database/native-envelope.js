@@ -1,4 +1,5 @@
 import { nativeModel } from './model.js';
+import { acceptsJellyfinHistory, currentFingerprint, previousFingerprint } from './jellyfin-generations.js';
 
 const sha256Pattern = /^[a-f0-9]{64}$/u;
 const maximumSqliteInteger = 9223372036854775807n;
@@ -8,20 +9,21 @@ const maximumSqliteInteger = 9223372036854775807n;
 // so production startup can validate persisted migration provenance without
 // enabling a SQLite runtime. A focused test prevents this literal from drifting
 // away from the generator.
-export const pinnedNativeSqliteSchemaFingerprint = '24690f1f413cc531c8ed385851cd0e3f392af7ec470860ee3d0348d285133725';
+export const pinnedNativeSqliteSchemaFingerprint = currentFingerprint;
 export const pinnedNativeDataMigrationProductVersion = '13.0.0.0';
+// The running SQLite provider, observed in a freshly initialized native server.
+// The EF source model snapshot records its design-time version separately.
+export const pinnedNativeEfRuntimeVersion = '10.0.14';
 export const pinnedNativeSqliteMigrationHistory = Object.freeze([
   ...nativeModel.migrations.map(MigrationId => Object.freeze({
     MigrationId,
-    ProductVersion: nativeModel.efProductVersion,
+    ProductVersion: pinnedNativeEfRuntimeVersion,
   })),
   ...nativeModel.dataMigrations.map(MigrationId => Object.freeze({
     MigrationId,
     ProductVersion: pinnedNativeDataMigrationProductVersion,
   })),
 ].sort((left, right) => left.MigrationId.localeCompare(right.MigrationId, 'en')));
-const pinnedNativeSqliteMigrationIds = Object.freeze(
-  pinnedNativeSqliteMigrationHistory.map(row => row.MigrationId));
 
 function plainRecord(value, label) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -89,16 +91,15 @@ export function serializeNativeEnvelope(value) {
  * Deep SQLite reconstruction remains an import/export boundary responsibility. */
 export function assertPinnedNativeEnvelope(value) {
   const envelope = normalizeNativeEnvelope(value);
-  if (envelope.fingerprint !== pinnedNativeSqliteSchemaFingerprint) {
+  if (![currentFingerprint, previousFingerprint].includes(envelope.fingerprint)) {
     throw new Error(`Jellyfin database exchange requires pinned Jellyfin schema fingerprint ${pinnedNativeSqliteSchemaFingerprint}`);
   }
   // ProductVersion records the EF/Jellyfin version that originally applied a
   // migration. Upgraded Jellyfin databases legitimately contain mixed values,
   // so compatibility is defined by the complete ordered migration ID set and
   // the source values are preserved verbatim for export.
-  if (JSON.stringify(envelope.history.map(row => row.MigrationId))
-    !== JSON.stringify(pinnedNativeSqliteMigrationIds)) {
-    throw new Error(`Jellyfin database exchange requires the complete pinned Jellyfin migration history (${pinnedNativeSqliteMigrationHistory.length} rows)`);
+  if (!acceptsJellyfinHistory(envelope.fingerprint, envelope.history.map(row => row.MigrationId), true)) {
+    throw new Error('Jellyfin database exchange requires the complete pinned Jellyfin migration history for its schema');
   }
   return envelope;
 }

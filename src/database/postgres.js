@@ -879,7 +879,12 @@ export class PostgresDatabase {
         readOnly: true,
         isolation: 'repeatable-read',
       }));
-    if (await this.getState('modelHash') !== modelHash) throw new Error('PostgreSQL model baseline differs');
+    // The preceding reference has the same columns and constraints. Its existing
+    // index definitions remain bound to the schema fingerprint recorded at creation.
+    const storedModelHash = await this.getState('modelHash');
+    if (storedModelHash !== modelHash && storedModelHash !== '1ed5fa7abafc9568504642a57166d95d5da05ad4912c4ff4ca1f93430232eb1c') {
+      throw new Error('PostgreSQL model baseline differs');
+    }
     const schemaSnapshot = await this.inspectSchema();
     assertNativeTextFunctionDefinitions(schemaSnapshot, this.schemaName);
     if (await this.getState('schemaFingerprint') !== hash(withoutPostgresRuntimeIndexes(schemaSnapshot))) throw new Error('PostgreSQL schema differs from its verified creation state');

@@ -1,6 +1,6 @@
 {
   "evidence": "source-derived with three migration-retained defaults; validated against isolated EF runtime schema",
-  "efProductVersion": "10.0.11",
+  "efProductVersion": "10.0.12",
   "tables": [
     {
       "name": "AccessSchedules",
@@ -217,9 +217,10 @@
       ],
       "indices": [
         {
-          "name": "IX_AncestorIds_ParentItemId",
+          "name": "IX_AncestorIds_ParentItemId_ItemId",
           "columns": [
-            "ParentItemId"
+            "ParentItemId",
+            "ItemId"
           ],
           "unique": false,
           "filter": null
@@ -1335,7 +1336,7 @@
             "OwnerId"
           ],
           "unique": false,
-          "filter": null
+          "filter": "\"OwnerId\" IS NOT NULL"
         },
         {
           "name": "IX_BaseItems_ParentId",
@@ -1400,7 +1401,7 @@
             "OwnerId"
           ],
           "unique": false,
-          "filter": null
+          "filter": "\"ExtraType\" IS NOT NULL"
         },
         {
           "name": "IX_BaseItems_TopParentId_Id",
@@ -4151,7 +4152,9 @@
     "20260728170000_AddPeopleNameLowerIndex",
     "20260728182152_AddPeopleItemMapCoveringIndex",
     "20260812050902_AddMediaStreamFilterIndex",
-    "20260815063607_RemoveOrphanedUserPermissionsAndPreferences"
+    "20260815063607_RemoveOrphanedUserPermissionsAndPreferences",
+    "20261002210711_MakeOwnerIdIndexesPartial",
+    "20261024092111_CoverAncestorIdsParentIndex"
   ],
   "dataMigrations": [
     "20250420000000_CreateNetworkConfiguration",
@@ -4186,7 +4189,6 @@
     "20260113120000_MigrateLinkedChildren",
     "20260113230000_CleanupOrphanedExtras",
     "20260115120000_FixIncorrectOwnerIdRelationships",
-    "20260206200000_FixLibrarySubtitleDownloadLanguages",
     "20260508120000_MergeDuplicateMusicArtists",
     "20260508130000_MergeDuplicatePeople",
     "20260522092304_UpdateNormalizedUsername",
@@ -4199,13 +4201,16 @@
     "20260825200000_ConsolidateLocalizedUserViews",
     "20260831100000_EnableLocalSimilarityProviders",
     "20260908120000_RepairAlternateVersionLinks",
-    "20260910120000_MigrateRatingLevels",
-    "20260911120000_StripEmbeddedLinkedChildren"
+    "20260911120000_StripEmbeddedLinkedChildren",
+    "20260912120000_HarmonizeConflictingUserData",
+    "20260915104305_FixNullEncoderPreset",
+    "20260927120000_FixLibrarySubtitleDownloadLanguages",
+    "20260928120000_MigrateRatingLevels"
   ],
   "sources": [
     {
       "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/JellyfinDbModelSnapshot.cs",
-      "sha256": "8d77990cd96bf1ce29a7e3e6152f9744fd40bad59b06aa76783b4a268c764ed4"
+      "sha256": "9c7cab0e6e38c60a7319d855ed6edc3d989f90c7624cf5be5268e60d6c9c6e77"
     },
     {
       "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20200514181226_AddActivityLog.cs",
@@ -4357,7 +4362,7 @@
     },
     {
       "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260113203012_ChangeOwnerIdToGuid.cs",
-      "sha256": "09fed5bb722789d7b33df5e9a6dc96cd418792d66d0da1fe019c9d18ac3c3f11"
+      "sha256": "9bb9d23f5010939273d01499c6c38d709c5147ca87619ce52e874d57cb8e056a"
     },
     {
       "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260113233000_AddForeignKeyToOwnerId.cs",
@@ -4428,60 +4433,68 @@
       "sha256": "6114faa2392de3172127a9044d186fbce8615f8063e17acf314ee87afeb6cbb1"
     },
     {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20261002210711_MakeOwnerIdIndexesPartial.cs",
+      "sha256": "8947443c8754e7e45283132a6b31822dde2263ea4e33c449ad6ad8406320c312"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20261024092111_CoverAncestorIdsParentIndex.cs",
+      "sha256": "84d567d54e0b915c293285f8a2ff66e4fdedcfd85c1152928a87ea99bbf7942d"
+    },
+    {
       "path": "Jellyfin.Server/Migrations/Routines/20250420050000_DisableTranscodingThrottling.cs",
-      "sha256": "17fe4b88702eb9617f5c6833ab054c37bad5b0925f815bf22e6df359d04e8168"
+      "sha256": "90d3640ce848634f20ed121d6db14a927ceeb9031ffc375748cb98990ee98a59"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420060000_CreateUserLoggingConfigFile.cs",
-      "sha256": "f61b8fe14ef82d3b7057598b6bbecd0f98017f3cd3ee309d192566ceea8ce6a2"
+      "sha256": "bf9c186b144dc1f529f952711c84801f04853ca27d13a6d64eaf2db5475218f2"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420070000_MigrateActivityLogDb.cs",
-      "sha256": "a7a4caaf252b95e283081de407db28693499f7a1e51169cc1aa2d07a766d2256"
+      "sha256": "2b3e8205e72108c0bf07d8a899c970292f52df0689c7da832b819bae9ebfda66"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420080000_RemoveDuplicateExtras.cs",
-      "sha256": "5c9e7c895b2abaa14f31023769d8e8570033a7e196abc80ddf95bc787e118dea"
+      "sha256": "23327f5938bad8375a95bad36cca32e0782a02fd8ddcdf6f9e81db8b6b53d3e3"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420090000_AddDefaultPluginRepository.cs",
-      "sha256": "2af65427af75c7ed8f7c0198120d5bcee59c0afec89e4d831828ba2d2ff5210c"
+      "sha256": "171242614b615b45346c78e7d051215dc54e096f0dc63bd6d432275fac0d000c"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420100000_MigrateUserDb.cs",
-      "sha256": "dcefdbfb2bb4421e99186945ba66b4c534f22f9ec8e881ba4fe6e0853d571295"
+      "sha256": "a7fbbab28c70d40ada3e8f9cd2f32c24e16e1e49801996c029679d760d9b5384"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420110000_ReaddDefaultPluginRepository.cs",
-      "sha256": "c2c67b359af8a09699f523235c5bc422b3f6dbef9f75d0f306bf563eb2818825"
+      "sha256": "c5a698347e3bc466ad27de55b60469fca34c97342638dcb2576400218960e3b5"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420120000_MigrateDisplayPreferencesDb.cs",
-      "sha256": "04aeccd95659dff55da56379a5d50f129120f79d95e52631368f52c93f76a6c2"
+      "sha256": "2dc367ce770e8d550a8d9de330a8c4bb3613315659e8339b6285fcf0f4da3246"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420130000_RemoveDownloadImagesInAdvance.cs",
-      "sha256": "2bf3203b22b6b481cdebd174ed21280de0fe524a0ed52c948a7567226173f030"
+      "sha256": "1f5d9a756f58a30a7ccf337876401ad37c2fa7c8f08c0d4457ec3f5e0834fcd0"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420140000_MigrateAuthenticationDb.cs",
-      "sha256": "4fa6c0ac2b7679ce9319ace02458f823c5806604e9ac8e9a9fbc5391b28f4636"
+      "sha256": "5ec84832b64ad9879558a2fdfcd7b41daac2ad208043bfa60e3918fde0a493b8"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420150000_FixPlaylistOwner.cs",
-      "sha256": "fe52508541158b7a2a56e277d91241ac82eb1dca35b733932663ac4a1d57a532"
+      "sha256": "bfcbb060a31622d1db871a4a44ff782c0d5cfc6bd0ee606921a90a8d7b08046f"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420160000_AddDefaultCastReceivers.cs",
-      "sha256": "7a9f8940d4c48ecf066513adae551504535ce50e80c347c0326b02bc13dd87a3"
+      "sha256": "6900486f3718dd79181133efc3399631c28b2626bf20a6cdd8878e2218533678"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420170000_UpdateDefaultPluginRepository.cs",
-      "sha256": "443c9398310abc73c8ec030b87bdddf794b760f106ba3fcc568c66e36833145f"
+      "sha256": "2bff62018327ecf5c4c0c1be846e17a15df3f8d24c22af069fd62aacf72f3925"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420180000_FixAudioData.cs",
-      "sha256": "f2e6331936feca3ddeb6cbf1084392418c28284c158cc6cd394625d3f5450f0f"
+      "sha256": "f7f34d2060ea9450aa4fc02c6c74abe03d2176494306826ff9275c26886f71c8"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420193000_MigrateLibraryDbCompatibilityCheck.cs",
@@ -4489,7 +4502,7 @@
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420200000_MigrateLibraryDb.cs",
-      "sha256": "0b8b6eafdb77b5e9fc28852fe233c8b8e0721e8b3085c6b760854e88824345a8"
+      "sha256": "d109a2016b2b64c72f7a9bb16e10b7d05694fe88a0632b0fcf26c37954cf146b"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420210000_MoveExtractedFiles.cs",
@@ -4497,15 +4510,15 @@
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420230000_MoveTrickplayFiles.cs",
-      "sha256": "d540993973dd98a68945f35fdb85fe720f248d7023133e5605b9c86381bd1aa5"
+      "sha256": "6ddb79137e93d55c27623f8fe02fa78f6e43a9d69027da7316140fd7fcb96d7a"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250420230000_RefreshInternalDateModified.cs",
-      "sha256": "6d96dfc4daa533ff2bbb9d91e5f01a2012fc3c516f43fe7c2db6d191f976517e"
+      "sha256": "3a7721d158233a74b038217f7ac1e31a1c664605ec7c5696b5fa6c5e4479ce5b"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250421000000_MigrateKeyframeData.cs",
-      "sha256": "c58bbf85a46dda3861698878a04c5c129ccf7497077b04d9ef9e1934889b7b21"
+      "sha256": "3fa6e38296eb64e007a23af3b92bd4019a521305b613736d79f8b85799298358"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20250618010000_MigrateLibraryUserData.cs",
@@ -4525,7 +4538,7 @@
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20260113120000_MigrateLinkedChildren.cs",
-      "sha256": "9c685fe22a2d9a7e55cc4c7d00a98a811c12fb9bcfb17005690fc72e97ed02e2"
+      "sha256": "b730af533532af4e1b7490268daaa7a5bebf30bd2790d004f1ac801b3a336fba"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20260113230000_CleanupOrphanedExtras.cs",
@@ -4534,10 +4547,6 @@
     {
       "path": "Jellyfin.Server/Migrations/Routines/20260115120000_FixIncorrectOwnerIdRelationships.cs",
       "sha256": "dacde20d072cf8e914b3ca0f42c8cfe041c1d6a23ea5765ceade4282648301b9"
-    },
-    {
-      "path": "Jellyfin.Server/Migrations/Routines/20260206200000_FixLibrarySubtitleDownloadLanguages.cs",
-      "sha256": "69c4f311b0ba2ff5057702b9b6430b6fc220ecfb0a4e795bcb65bddaa1b3b485"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20260508120000_MergeDuplicateMusicArtists.cs",
@@ -4569,7 +4578,7 @@
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20260729120000_RestorePlaylistChildrenFromMetadata.cs",
-      "sha256": "5ed2f0195653a49b5f4cc8bc1e67854153f92b6f804aa1e02231226fc3e87ea9"
+      "sha256": "9869c483aec7c59109f1cf9f587f03ec38dfabe051ef4f472661cb4991abb26d"
     },
     {
       "path": "Jellyfin.Server/Migrations/Routines/20260821120000_RecomputeSeriesPresentationKey.cs",
@@ -4588,32 +4597,44 @@
       "sha256": "287137d314ec0b33e32bff4e9b7516b843b6167078ebde3a79d4599128aa38f5"
     },
     {
-      "path": "Jellyfin.Server/Migrations/Routines/20260910120000_MigrateRatingLevels.cs",
-      "sha256": "78f7d02ff7e1afb3fb4ffa733f1856ac8d9238f81c66ac06694244ef38411d11"
+      "path": "Jellyfin.Server/Migrations/Routines/20260911120000_StripEmbeddedLinkedChildren.cs",
+      "sha256": "cd815cc3b383826a61c7dd7b5ba91cd6f7c71daa88e74b14c0be6c9d452a5da3"
     },
     {
-      "path": "Jellyfin.Server/Migrations/Routines/20260911120000_StripEmbeddedLinkedChildren.cs",
-      "sha256": "04d6bf244790622aa57039f64cc00958a3593ffc1a019c81cd02ea2b283c6c10"
+      "path": "Jellyfin.Server/Migrations/Routines/20260912120000_HarmonizeConflictingUserData.cs",
+      "sha256": "389fb139c4cb31c979e038d05651c7f7d69bcacaad62bd4aa88ca0c806ae4d0f"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260915104305_FixNullEncoderPreset.cs",
+      "sha256": "19412009e827f3ca4d2029cf01efe4d71919006f6cb19badac3d36c9acd9757b"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260927120000_FixLibrarySubtitleDownloadLanguages.cs",
+      "sha256": "b73f113e8a78848e23dfd50b14a5269232840ff3dd51d3b31771f1f973c6a831"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260928120000_MigrateRatingLevels.cs",
+      "sha256": "3aadaeba9f759a8ea8d8d99673c6319a46014df9b64a1c38fbf6ddab00eba4fa"
     },
     {
       "path": "Jellyfin.Server/Migrations/PreStartupRoutines/CreateNetworkConfiguration.cs",
-      "sha256": "25c7b68ed87524fdd4b131b1a54a98eeba6ee5bfba8a7db2e1d385501d3713b5"
+      "sha256": "bca8b14b4d333651602c28a28af942f0593a05c7cbc36aba0d95305cd282797a"
     },
     {
       "path": "Jellyfin.Server/Migrations/PreStartupRoutines/MigrateEncodingOptions.cs",
-      "sha256": "77908593739a2d55c8e5d2a8e3b6dfb3a032be4c6947342184d5d3f0fb5be1b6"
+      "sha256": "40c75c58ab856bff13f259d8cb98cba76e06f1e45fac176446dcb13a26635db1"
     },
     {
       "path": "Jellyfin.Server/Migrations/PreStartupRoutines/MigrateMusicBrainzTimeout.cs",
-      "sha256": "01f546de460bbffa070b3fb15a14dcce6f57875ecc654f91a1bc74f3c677b9ab"
+      "sha256": "018f2b0d8c52b26c4343fb5375e4e39b89b1aa3398781c1b1df2ecf410177eae"
     },
     {
       "path": "Jellyfin.Server/Migrations/PreStartupRoutines/MigrateNetworkConfiguration.cs",
-      "sha256": "2f5eec7487dcb4e69fe6587d0d679f986c49e3b55b13f88ad127029a2c05f6ed"
+      "sha256": "84f68576fa0713fa689734d03f47abc7e8bd0ae049530a1fde46488950d7b2fe"
     },
     {
       "path": "Jellyfin.Server/Migrations/PreStartupRoutines/RenameEnableGroupingIntoCollections.cs",
-      "sha256": "dc6b120be2488bfab756b3f3a27c5785e3ffa062165bb4f66963d809468ad464"
+      "sha256": "00aa657e01d70492544e2c566601ce0951f0602fa920a9759769fae5a82bd589"
     }
   ]
 }
