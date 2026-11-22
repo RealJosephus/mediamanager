@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { once } from 'node:events';
+import { mkdtemp, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 import { inspect } from 'node:util';
+import { ScheduledTaskWorker } from '../../src/tasks/refresh-library-task.js';
+import { ScheduledTaskManager } from '../../src/tasks/scheduled-task-manager.js';
 import { createTestApplication } from '../helpers/application.js';
 
 const taskId = '7738148ffcd07979c7ceb148e06b3aed';
@@ -58,6 +64,58 @@ test('scheduled task routes expose complete task DTOs and bind native filters', 
     assert.equal((await fetch(`${application.origin}/ScheduledTasks?isHidden=invalid`)).status, 400);
   } finally {
     await application.close();
+  }
+});
+
+test('plugin tasks use case-insensitive GUIDs for registration and every HTTP operation', { timeout: 10000 }, async t => {
+  const programDataPath = await mkdtemp(path.join(os.tmpdir(), 'mm-plugin-task-case-'));
+  t.after(() => rm(programDataPath, { recursive: true, force: true }));
+  const manager = new ScheduledTaskManager();
+  const id = 'ABCDEF0123456789ABCDEF0123456789', key = 'PluginCase';
+  const began = Promise.withResolvers();
+  const extension = (requestedId, taskKey) => ({ create: () => new ScheduledTaskWorker({
+    programDataPath,
+    definition: { id: requestedId, key: taskKey, name: taskKey, category: 'Plugins', description: taskKey, defaultTriggers: [] },
+    run: async ({ signal }) => {
+      began.resolve();
+      if (!signal.aborted) await once(signal, 'abort');
+      signal.throwIfAborted();
+    },
+  }) });
+  const application = await fixture({ tasks: manager });
+  const request = (suffix, options) => fetch(`${application.origin}/ScheduledTasks${suffix}`, options);
+  try {
+    const dispose = await manager.register(extension(id, key));
+    await assert.rejects(manager.register(extension(id.toLowerCase(), 'CaseAlias')), /Duplicate or invalid plugin task/u);
+    const listed = (await (await request('')).json()).filter(value => value.Id.toLowerCase() === id.toLowerCase());
+    assert.deepEqual(listed.map(value => [value.Id, value.Key]), [[id, key]]);
+    const [{ Id: listedId }] = listed;
+    const found = await request(`/${listedId.toLowerCase()}`);
+    assert.equal(found.status, 200);
+    assert.equal((await found.json()).Id, listedId);
+    assert.equal((await request(`/${listedId.slice(0, 16).toLowerCase() + listedId.slice(16)}/Triggers`, {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: '[{"Type":"IntervalTrigger","IntervalTicks":432000000000}]',
+    })).status, 204);
+    const triggers = [{ Type: 'IntervalTrigger', IntervalTicks: 432000000000n }];
+    assert.deepEqual((await manager.get(listedId)).Triggers, triggers);
+    assert.equal((await request(`/Running/${listedId}`, { method: 'POST' })).status, 204);
+    await began.promise;
+    const completed = once(manager, 'completed');
+    assert.equal((await request(`/Running/${listedId.toLowerCase()}`, { method: 'DELETE' })).status, 204);
+    const [{ Result }] = await completed;
+    assert.equal(Result.Id, listedId);
+    assert.equal(Result.Status, 'Cancelled');
+    await dispose();
+    assert.equal((await request(`/${listedId}`)).status, 404);
+    await manager.register(extension(listedId, key));
+    await manager.initialize();
+    const reloaded = await manager.get(listedId.toLowerCase());
+    assert.deepEqual(reloaded.Triggers, triggers);
+    assert.deepEqual(reloaded.LastExecutionResult, Result);
+  } finally {
+    await application.close();
+    await manager.close();
   }
 });
 

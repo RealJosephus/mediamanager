@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { RefreshLibraryTaskWorker, ScheduledTaskManager, refreshLibraryTaskId } from '../../src/tasks/index.js';
+import { RefreshLibraryTaskWorker, ScheduledTaskManager, ScheduledTaskWorker, refreshLibraryTaskId } from '../../src/tasks/index.js';
 import { LibraryScanService } from '../../src/library/index.js';
 import { StorageError } from '../../src/storage/errors.js';
 
@@ -72,6 +72,37 @@ test('start fails closed without an explicit complete scan operation and never c
     await manager.close();
   }
   assert.equal(queued, 0, 'the swallowing queue API must never be used as a complete scan operation');
+});
+
+test('a failed task plugin registration leaves listing and the same task identity available', async t => {
+  const manager = new ScheduledTaskManager({ scanner: scanner(async () => {}) });
+  t.after(() => manager.close());
+  await manager.initialize();
+  const before = await manager.list();
+  const definition = { id: 'plugin-task', key: 'PluginTask', name: 'Plugin task', defaultTriggers: [] };
+  const worker = () => new ScheduledTaskWorker({ definition, run: async () => {} });
+  let closes = 0;
+  await assert.rejects(manager.register({ create: () => ({ id: definition.id, close() { closes++; } }) }), TypeError);
+  assert.equal(closes, 1);
+  assert.equal(manager.has(definition.id), false);
+  assert.deepEqual(await manager.list(), before);
+
+  const broken = worker(), attach = broken.on.bind(broken), failure = new Error('Cannot attach progress listener.');
+  broken.on = (name, listener) => {
+    attach(name, listener);
+    if (name === 'progress') throw failure;
+    return broken;
+  };
+  await assert.rejects(manager.register({ create: () => broken }), error => error === failure);
+  assert.equal(broken.listenerCount('started'), 0);
+  assert.equal(broken.listenerCount('progress'), 0);
+  assert.deepEqual(await manager.list(), before);
+
+  const remove = await manager.register({ create: worker });
+  assert.equal((await manager.get(definition.id)).Name, definition.name);
+  assert.equal((await manager.list()).length, before.length + 1);
+  await remove();
+  assert.deepEqual(await manager.list(), before);
 });
 
 test('queue starts an idle task and returns that execution completion', async () => {

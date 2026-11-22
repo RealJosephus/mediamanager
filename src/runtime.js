@@ -524,6 +524,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const libraryScanner = libraryScanLifecycle ? new LibraryScanService({ lifecycle: libraryScanLifecycle, onError }) : undefined;
   if (libraryScanner) rollback.push(() => libraryScanner.close());
   const tasks = new ScheduledTaskManager({ scanner: libraryScanner, localization, onError, programDataPath, configurationDirectoryPath, dataPath });
+  rollback.push(() => tasks.close());
   if (probe) {
     await tasks.register({ create: options => new KeyframeExtractionTaskWorker({ ...options, playback }) });
     await tasks.register({ create: options => new AudioNormalizationTaskWorker({ ...options, playback, probe }) });
@@ -535,7 +536,6 @@ export async function createRuntime({ database, configuration, serverId, serverN
     }
   }
   await plugins.bind('task', extension => tasks.register(extension));
-  rollback.push(() => tasks.close());
   const libraryConfiguration = libraryScanLifecycle && libraryOptionsStore ? new LibraryConfigurationService({ fileSystem,
     programDataPath, optionsStore: libraryOptionsStore, get configuration() { return currentConfiguration(); }, configurationStore,
     mediaAssets: new MetadataImageAssets({ fileSystem, vfs, identityMap, get metadataPath() { return applicationPaths.metadataPath; }, stateRoots: [dataPath].filter(Boolean) }),

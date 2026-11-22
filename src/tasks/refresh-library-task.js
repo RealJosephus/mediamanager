@@ -96,7 +96,7 @@ function persistedResult(value, id) {
     parseJsonDateTime(value.EndTimeUtc);
   } catch { validDates = false; }
   if (!['Completed', 'Failed', 'Cancelled', 'Aborted'].includes(value.Status)
-    || value.Id.toLowerCase() !== id || !validDates) {
+    || value.Id.toLowerCase() !== id.toLowerCase() || !validDates) {
     throw new TypeError('The scheduled task history does not describe this task.');
   }
   const result = Object.fromEntries(requiredStrings.map(key => [key, value[key]]));

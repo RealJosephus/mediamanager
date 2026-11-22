@@ -1,5 +1,10 @@
 import { EventEmitter } from 'node:events';
 import { RefreshLibraryTaskWorker, refreshLibraryTaskId } from './refresh-library-task.js';
+import { operationFailure } from '../core/operation-failure.js';
+
+const taskEvents = ['started', 'progress', 'completed'];
+const workerMethods = ['on', 'off', 'admitInfo', 'initialize', 'close', 'execute', 'queueScheduled',
+  'cancelIfRunningAndQueue', 'cancel', 'updateTriggers', 'beginClose', 'drainShutdown'];
 
 function taskError(status, code, message) {
   return Object.assign(new Error(message), { status, statusCode: status, code });
@@ -25,7 +30,7 @@ export class ScheduledTaskManager extends EventEmitter {
     });
     this.#workers.push(new RefreshLibraryTaskWorker(options));
     this.options = options;
-    for (const worker of this.#workers) for (const name of ['started', 'progress', 'completed']) {
+    for (const worker of this.#workers) for (const name of taskEvents) {
       worker.on(name, event => this.emit(name, event));
     }
   }
@@ -33,12 +38,42 @@ export class ScheduledTaskManager extends EventEmitter {
   async register(extension) {
     if (this.#closePromise || this.#shutdownRequested) throw taskError(503, 'task-unavailable', 'Scheduled tasks are closing.');
     const worker = extension.create(this.options);
-    if (!worker?.id || this.#workers.some(existing => existing.id === worker.id)) { await worker?.close?.(); throw new TypeError('Duplicate or invalid plugin task.'); }
-    this.#workers.push(worker);
-    for (const name of ['started','progress','completed']) worker.on(name, event => this.emit(name,event));
-    try { if (this.initialized) await worker.initialize(); }
-    catch (error) { this.#workers.splice(this.#workers.indexOf(worker),1); await worker.close(); throw error; }
-    return async () => { this.#workers = this.#workers.filter(value => value !== worker); await worker.close(); };
+    const listeners = [];
+    let disposing, forwarding = false;
+    const dispose = () => disposing ??= (async () => {
+      this.#workers = this.#workers.filter(value => value !== worker);
+      const failures = [];
+      if (typeof worker?.close === 'function') {
+        try { await worker.close(); } catch (error) { failures.push(error); }
+      }
+      forwarding = false;
+      for (const [name, listener] of listeners) {
+        try { worker.off(name, listener); } catch (error) { failures.push(error); }
+      }
+      if (failures.length) throw operationFailure(failures, 'Scheduled task could not be disposed.');
+    })();
+    if (this.#workers.includes(worker)) throw new TypeError('Duplicate or invalid plugin task.');
+    try {
+      if (typeof worker?.id !== 'string' || !worker.id || this.#find(worker.id)
+        || !workerMethods.every(name => typeof worker[name] === 'function')
+        || worker.configurable && (typeof worker.isHidden !== 'function' || typeof worker.isEnabled !== 'function')) {
+        throw new TypeError('Duplicate or invalid plugin task.');
+      }
+      for (const name of taskEvents) {
+        const listener = event => { if (forwarding) this.emit(name, event); };
+        listeners.push([name, listener]);
+        worker.on(name, listener);
+      }
+      this.#workers.push(worker);
+      forwarding = true;
+      if (this.initialized) await worker.initialize();
+    } catch (error) {
+      forwarding = false;
+      try { await dispose(); }
+      catch (cleanup) { throw operationFailure([error, cleanup], 'Scheduled task registration and disposal failed.'); }
+      throw error;
+    }
+    return dispose;
   }
 
   #read(operation) {
@@ -69,22 +104,23 @@ export class ScheduledTaskManager extends EventEmitter {
     } finally { for (const { owner } of owners) owner.release(); }
   }); }
 
-  has(id) {
-    return typeof id === 'string' && this.#workers.some(worker => worker.id === id.toLowerCase());
+  #find(id) {
+    if (typeof id !== 'string') return undefined;
+    const key = id.toLowerCase();
+    return this.#workers.find(worker => worker.id.toLowerCase() === key);
   }
 
+  has(id) { return this.#find(id) !== undefined; }
+
   get(id) { return this.#read(async () => {
-    if (typeof id !== 'string') return null;
-    const worker = this.#workers.find(worker => worker.id === id.toLowerCase());
+    const worker = this.#find(id);
     if (!worker) return null;
     const owner = worker.admitInfo();
     try { return await owner.info(); } finally { owner.release(); }
   }); }
 
   #required(id) {
-    const worker = typeof id === 'string'
-      ? this.#workers.find(candidate => candidate.id === id.toLowerCase())
-      : null;
+    const worker = this.#find(id);
     if (!worker) {
       throw taskError(404, 'task-not-found', 'Scheduled task not found.');
     }
