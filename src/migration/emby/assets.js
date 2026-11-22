@@ -2,6 +2,7 @@ import path from 'node:path';
 import { copyFile, lstat, mkdir, readFile, readdir, rename, utimes, writeFile } from 'node:fs/promises';
 import { readXml, textOf } from '../../core/xml.js';
 import { decodeConfigurationXml } from '../../core/configuration-xml.js';
+import { ordinalIgnoreCaseKey } from '../../storage/ordinal-comparer.js';
 import { rebaseSystemConfiguration } from '../instance-system-configuration.js';
 import { cloneDirectory, directory, exists, fileHash, inside } from './files.js';
 
@@ -17,10 +18,47 @@ function relativeTo(root, value) {
   if (api.isAbsolute(rel) || rel === '..' || rel.startsWith('..' + api.sep)) return null;
   return rel.split(api.sep).join('/');
 }
+const assetKey = (root, name) => pathApi(root.identityRoot) === path.win32 ? ordinalIgnoreCaseKey(name) : name;
+function streamIdentity(media, value) {
+  if (typeof media !== 'string' || !pathApi(media).isAbsolute(media) || pathApi(value).isAbsolute(value) ||
+      /^[%\\/]|[:\u0000]/u.test(value)) return value;
+  const api = pathApi(media);
+  const segments = value.split(api === path.win32 ? /[\\/]/u : '/');
+  return segments.some(part => !part || part === '..' || part === '.') ? value
+    : api.join(api.dirname(media), ...segments);
+}
+function declaredLocation(roots, identity) {
+  for (const root of roots) {
+    const name = relativeTo(root.identityRoot, identity);
+    if (name) return { root, name };
+  }
+  return null;
+}
+function companionSubtitle(name, stream) {
+  if (/\.idx$/iu.test(name)) return name.slice(0, -4) + '.sub';
+  if (/\.sub$/iu.test(name) && /^dvd_?sub(?:title)?$/iu.test(stream.Codec ?? '')) return name.slice(0, -4) + '.idx';
+  return null;
+}
+function referencedFiles(rows, roots) {
+  const selected = new Map(roots.map(root => [root.id, new Set()]));
+  for (const [key, item] of rows) {
+    if (!key.startsWith('item/')) continue;
+    for (const stream of item.Streams) {
+      if (!stream.IsExternal || typeof stream.Path !== 'string' || !stream.Path) continue;
+      const location = declaredLocation(roots, streamIdentity(item.Path, stream.Path));
+      if (!location) continue;
+      const { root, name } = location;
+      selected.get(root.id).add(assetKey(root, name));
+      const pair = companionSubtitle(name, stream);
+      if (pair) selected.get(root.id).add(assetKey(root, pair));
+    }
+  }
+  return selected;
+}
 export function assetRoots(value) {
   if (!Array.isArray(value))
     throw new Error('Asset roots must be an array of {id, identityRoot, directory} entries');
-  const ids = new Set();
+  const ids = new Set(), identities = new Set();
   return value
     .map((entry) => {
       if (
@@ -37,6 +75,10 @@ export function assetRoots(value) {
         !pathApi(entry.identityRoot).isAbsolute(entry.identityRoot)
       )
         throw new Error('Absolute physical directory and media identityRoot required for ' + entry.id);
+      const identity = pathApi(entry.identityRoot).resolve(entry.identityRoot);
+      const key = assetKey(entry, identity.replace(/[\\/]+$/u, ''));
+      if (identities.has(key)) throw new Error('Asset root identity paths must be unique');
+      identities.add(key);
       ids.add(entry.id);
       return { id: entry.id, identityRoot: entry.identityRoot, directory: path.resolve(entry.directory) };
     })
@@ -52,7 +94,7 @@ async function readSetting(instance, type) {
   if (!api.isAbsolute(setting)) throw new Error('Configured MetadataPath must be absolute');
   return { bytes, file, setting, identity: type === 'emby' ? api.join(setting, 'metadata') : setting };
 }
-async function snapshotSidecars(entry, destination, report) {
+async function snapshotSidecars(entry, destination, selected, report) {
   const root = await directory(entry.directory);
   if (path.parse(root).root === root || inside(root, destination) || inside(destination, root))
     throw new Error('Asset root must be a separate dedicated directory');
@@ -79,7 +121,7 @@ async function snapshotSidecars(entry, destination, report) {
         for (const [k, v] of await walk(name, collect)) result.set(k, v);
         continue;
       }
-      if (!member.isFile() || !sidecar.test(member.name)) continue;
+      if (!member.isFile() || (!sidecar.test(member.name) && !selected.has(assetKey(entry, name)))) continue;
       const from = path.join(root, name),
         to = path.join(destination, name);
       const sha = await fileHash(from);
@@ -98,8 +140,15 @@ async function snapshotSidecars(entry, destination, report) {
   const first = await walk('', true);
   if (JSON.stringify([...first]) !== JSON.stringify([...(await walk('', false))]))
     throw new Error('Source sidecars changed during capture');
+  const captured = new Map();
+  for (const name of first.keys()) {
+    const key = assetKey(entry, name);
+    if (captured.has(key) && selected.has(key)) throw new Error('Ambiguous referenced file in asset root ' + entry.id + ': ' + name);
+    captured.set(key, name);
+  }
+  return captured;
 }
-export async function collectAssets({ instance, original, type, stage, override, roots, report }) {
+export async function collectAssets({ instance, original, type, stage, override, roots, rows = [], report }) {
   const standard = metadataDirectory(instance, type),
     settings = await readSetting(instance, type);
   let active = standard;
@@ -115,20 +164,23 @@ export async function collectAssets({ instance, original, type, stage, override,
       'Configured metadata is unavailable. Supply --metadata-root with the stopped physical metadata directory.',
     );
   const extra = active !== standard || roots.length > 0;
+  const captured = new Map();
   if (extra) {
     if (await exists(active)) {
       if (path.parse(active).root === active)
         throw new Error('A filesystem root cannot be captured as metadata');
       await cloneDirectory(active, stage);
     } else await mkdir(stage, { mode: 0o700 });
-    for (const entry of roots)
-      await snapshotSidecars(entry, path.join(stage, 'migration-assets', entry.id), report);
+    const referenced = referencedFiles(rows, roots);
+    for (const entry of roots) captured.set(entry.id,
+      await snapshotSidecars(entry, path.join(stage, 'migration-assets', entry.id), referenced.get(entry.id), report));
   }
   return {
     directory: extra ? stage : standard,
     extra,
     identities: [settings.identity, metadataDirectory(original, type)].filter(Boolean),
     roots,
+    captured,
   };
 }
 export async function activateMetadata(target, type, effective, unused) {
@@ -217,12 +269,17 @@ export async function projectAssetRows(rows, assets, report, remembered = {}) {
         let rel;
         const virtual = /^%MetadataPath%[\\/](.+)$/iu.exec(raw);
         if (virtual) rel = virtual[1].replaceAll('\\', '/');
-        for (const root of assets.identities) rel ??= relativeTo(root, raw);
-        for (const root of assets.roots) {
-          const name = relativeTo(root.identityRoot, raw);
-          if (rel == null && name && sidecar.test(name)) rel = 'migration-assets/' + root.id + '/' + name;
+        const identity = field === 'Streams' ? streamIdentity(row.Path, raw) : raw;
+        for (const root of assets.identities) rel ??= relativeTo(root, identity);
+        const location = rel == null && declaredLocation(assets.roots, identity);
+        if (location) {
+          const { root, name } = location;
+          const actual = assets.captured.get(root.id)?.get(assetKey(root, name));
+          if (actual) rel = 'migration-assets/' + root.id + '/' + actual;
+          else if (field === 'Streams')
+            report('missing', 'item', key.slice(5), field, 'referenced file unavailable in ' + root.id + ': ' + name);
         }
-        if (rel == null && Object.hasOwn(paths, raw)) rel = paths[raw];
+        if (rel == null && Object.hasOwn(paths, identity)) rel = paths[identity];
         if (rel == null) {
           report('external', 'item', key.slice(5), field, 'file reference retained: ' + raw);
           result[field].push(sub);
@@ -233,8 +290,13 @@ export async function projectAssetRows(rows, assets, report, remembered = {}) {
         const targetPath = '%MetadataPath%' + path.sep + rel.split('/').join(path.sep);
         if (!(await exists(path.join(assets.directory, rel))))
           report('missing', 'item', key.slice(5), field, rel);
+        if (field === 'Streams') {
+          const pair = companionSubtitle(rel, sub);
+          if (pair && !(await exists(path.join(assets.directory, pair))))
+            report('missing', 'item', key.slice(5), field, 'paired subtitle unavailable: ' + pair);
+        }
         if (raw !== targetPath) {
-          paths[raw] = rel;
+          paths[identity] = rel;
           if (!fields.includes(field)) fields.push(field);
         }
         result[field].push({ ...sub, [property]: targetPath });

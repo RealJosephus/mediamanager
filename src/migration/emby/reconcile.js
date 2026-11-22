@@ -1,5 +1,6 @@
 import { same } from './format.js';
 import { isMarkerField, matchesMarker } from './chapter-markers.js';
+import { mergeProviderIds } from './provider-ids.js';
 
 const legacyChapterFields = chapters => chapters.map(({ ImageDateModified, ...row }) => row);
 
@@ -46,19 +47,25 @@ function projectStreams(rows, target, previousSource, previousTarget, sourceType
 
 // Compare each endpoint with its own last projection. The target can legitimately
 // have lower precision or a different set of expressible fields.
-export function changesBetween(source, target, baseSource, baseTarget, report, { legacyChapters = false, sourceType } = {}) {
+export function changesBetween(source, target, baseSource, baseTarget, report, {
+  legacyChapters = false, sourceType, pendingProviders, pendingProviderEdits, legacyProviderItems, rememberTargetEdit,
+} = {}) {
   const changes = [];
   for (const key of new Set([...source.keys(), ...baseSource.keys()])) {
     let value = source.get(key), before = baseSource.get(key);
     const current = target.get(key), previous = baseTarget.get(key);
     const [kind, id] = key.split('/');
+    const pending = kind === 'item' && pendingProviders?.get(id);
+    const owed = kind === 'item' && pendingProviderEdits?.get(id);
+    const legacy = kind === 'item' && legacyProviderItems?.has(id);
+    const targetProviderEdit = current && previous?.Providers && !same(current.Providers, previous.Providers);
     if (sourceType && value?.Streams && (value.Streams.length || current?.Streams?.length || before?.Streams?.length)) {
       const priorStreams = before?.Streams;
       const project = (rows, issue) => projectStreams(rows, current?.Streams, priorStreams, previous?.Streams, sourceType, issue);
       value = { ...value, Streams: project(value.Streams, (status, detail) => report(status, kind, id, 'Streams', detail)) };
       if (before?.Streams) before = { ...before, Streams: project(before.Streams) };
     }
-    if (same(value, before)) continue;
+    if (same(value, before) && !pending && !owed && !legacy && !targetProviderEdit) continue;
     if (!value) {
       if (!current) continue;
       if (!same(current, previous)) {
@@ -73,11 +80,28 @@ export function changesBetween(source, target, baseSource, baseTarget, report, {
         report('conflict', kind, id, 'deletion', 'target removed a source-edited object');
         continue;
       }
+      if (value.Providers)
+        value = { ...value, Providers: mergeProviderIds(value.Providers, [], [], [], {
+          targetType: sourceType === 'jellyfin' ? 'emby' : 'jellyfin',
+          issue: (status, reason, evidence) => report(status, kind, id, 'Providers', reason, evidence),
+        }) };
       changes.push({ key, value, fields: Object.keys(value) });
       continue;
     }
     const changed = [];
     for (const name of Object.keys(value)) {
+      if (name === 'Providers') {
+        const merged = mergeProviderIds(value.Providers, current.Providers, before?.Providers, previous?.Providers, {
+          pending, owed, legacy, targetType: sourceType === 'jellyfin' ? 'emby' : 'jellyfin',
+          issue: (status, reason, evidence) => report(status, kind, id, name, reason, evidence),
+          rememberTargetEdit: provider => rememberTargetEdit?.(id, provider),
+        });
+        if (!same(merged, current.Providers ?? [])) {
+          value = { ...value, Providers: merged };
+          changed.push(name);
+        }
+        continue;
+      }
       if (same(value[name], before?.[name]) || same(value[name], current[name]) || matchesMarker(name, value[name], current[name])) continue;
       if (name === 'Chapters' && legacyChapters && before?.Chapters && previous?.Chapters) {
         const input = legacyChapterFields(value.Chapters), output = legacyChapterFields(current.Chapters);

@@ -1,6 +1,7 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { mkdir, rename, writeFile } from 'node:fs/promises';
+import { tokenizeJson } from '../../core/json-tokens.js';
 import { exists } from './files.js';
 import {
   itemTypes,
@@ -13,11 +14,45 @@ import {
   statement,
   imageEntries,
   locks,
-  providers,
+  editObjectFields,
+  jsonProperty,
 } from './format.js';
 import { valueTypes, personTypes } from './catalog.js';
 import { isMarkerField, reserveChapterIndexes, writeMarker } from './chapter-markers.js';
 import { insert, update } from './write-jellyfin.js';
+import { editEmbyLibraryOptions } from './libraries.js';
+
+const configName = name => typeof name === 'string' && name && !/[/\\:*?"<>|\u0000-\u001f]/u.test(name) &&
+  !['.', '..'].includes(name) && !/[. ]$/u.test(name);
+
+async function renameExistingUser(db, user, id, username, root, report) {
+  const { data } = db.prepare('SELECT data FROM accounts.LocalUsersv2 WHERE Id=?').get(user);
+  let updated, previousName, legacy;
+  try {
+    const json = tokenizeJson(data);
+    previousName = jsonProperty(json, 'Name')?.value;
+    const usesId = jsonProperty(json, 'UsesIdForConfigurationPath')?.value;
+    if (usesId != null && typeof usesId !== 'boolean') throw new Error('Invalid user configuration path mode');
+    legacy = usesId !== true;
+    if (legacy && (!configName(previousName) || !configName(username)))
+      throw new Error('legacy policy directory name cannot be moved unambiguously');
+    updated = editObjectFields(data, { Name: username, ...(legacy ? { UsesIdForConfigurationPath: true } : {}) });
+  } catch (error) {
+    report('conflict', 'user', id, 'Username', error.message);
+    return;
+  }
+  if (legacy) {
+    const users = path.join(root, 'config', 'users');
+    const oldDir = path.join(users, previousName);
+    const newDir = path.join(users, id.replaceAll('-', '').toLowerCase());
+    if (oldDir !== newDir && await exists(newDir)) {
+      report('conflict', 'user', id, 'Username', 'target policy directory already exists');
+      return;
+    }
+    if (oldDir !== newDir && await exists(oldDir)) await rename(oldDir, newDir);
+  }
+  update(db, 'LocalUsersv2', { data: updated }, { Id: user }, { schema: 'accounts' });
+}
 
 function remove(db, table, column, id) {
   db.prepare('DELETE FROM "' + table + '" WHERE "' + column + '"=?').run(id);
@@ -82,12 +117,23 @@ function relation(db, field, id, integer, value, item, find, report) {
       report('conflict', 'item', id, field, 'value contains the Emby delimiter');
       return;
     }
-    const raw = db.prepare('SELECT ProviderIds FROM MediaItems WHERE Id=?').get(integer).ProviderIds ?? '';
-    const opaque = raw.split('|').filter((part) => part && providers(part)[0]?.[1] == null);
+    const raw = db.prepare('SELECT ProviderIds FROM MediaItems WHERE Id=?').get(integer).ProviderIds;
+    const next = new Map();
+    for (const [key, id] of value) {
+      if (!next.has(key)) next.set(key, []);
+      next.get(key).push(key + '=' + id);
+    }
+    const serialized = [];
+    for (const part of raw ? raw.split('|') : []) {
+      const separator = part.indexOf('=');
+      const replacement = separator < 1 ? part : next.get(part.slice(0, separator))?.shift();
+      if (replacement !== undefined) serialized.push(replacement);
+    }
+    serialized.push(...[...next.values()].flat());
     update(
       db,
       'MediaItems',
-      { ProviderIds: [...value.map(([k, v]) => k + '=' + v), ...opaque].join('|') || null },
+      { ProviderIds: serialized.join('|') || null },
       { Id: integer },
     );
     return;
@@ -262,40 +308,8 @@ export async function writeEmby(db, changes, catalog, source, report, root) {
         );
         userIds.set(id, r.lastInsertRowid);
         report('requires-action', 'user', id, 'login', 'review the account in Emby and set a target password');
-      } else if (fields.includes('Username')) {
-        const user = userIds.get(id),
-          data = JSON.parse(db.prepare('SELECT data FROM accounts.LocalUsersv2 WHERE Id=?').get(user).data);
-        if (!data.UsesIdForConfigurationPath) {
-          const legal = (name) =>
-            typeof name === 'string' &&
-            name &&
-            !/[/\\:*?"<>|]/u.test(name) &&
-            !['.', '..'].includes(name) &&
-            !/[. ]$/u.test(name);
-          if (!legal(data.Name) || !legal(value.Username)) {
-            report(
-              'conflict',
-              'user',
-              id,
-              'Username',
-              'legacy policy directory name cannot be moved unambiguously',
-            );
-            continue;
-          }
-          const oldDir = path.join(root, 'config', 'users', data.Name),
-            newDir = path.join(root, 'config', 'users', id.replaceAll('-', '').toLowerCase());
-          if (await exists(oldDir)) {
-            if (await exists(newDir)) {
-              report('conflict', 'user', id, 'Username', 'target policy directory already exists');
-              continue;
-            }
-            await rename(oldDir, newDir);
-          }
-          data.UsesIdForConfigurationPath = true;
-        }
-        data.Name = value.Username;
-        update(db, 'LocalUsersv2', { data: JSON.stringify(data) }, { Id: user }, { schema: 'accounts' });
-      }
+      } else if (fields.includes('Username'))
+        await renameExistingUser(db, userIds.get(id), id, value.Username, root, report);
       continue;
     }
     const int = ids.get(id);
@@ -323,16 +337,16 @@ export async function writeEmby(db, changes, catalog, source, report, root) {
         const old = db
           .prepare('SELECT Value FROM ItemExtradata WHERE ItemId=? AND ExtradataTypeId=?')
           .get(int, type);
-        const options = old ? JSON.parse(old.Value) : {};
-        if (fields.includes('CollectionType')) options.ContentType = value.CollectionType;
-        if (fields.includes('Options')) Object.assign(options, value.Options);
-        if (fields.includes('Locations'))
-          options.PathInfos = value.Locations.map(
-            (p) => options.PathInfos?.find((i) => i.Path === p) ?? { Path: p },
-          );
-        db.prepare(
-          'INSERT INTO ItemExtradata(ItemId,ExtradataTypeId,Value) VALUES(?,?,?) ON CONFLICT(ItemId,ExtradataTypeId) DO UPDATE SET Value=excluded.Value',
-        ).run(int, type, JSON.stringify(options));
+        let options;
+        try {
+          options = editEmbyLibraryOptions(old?.Value, value, fields);
+        } catch (error) {
+          report('conflict', 'item', id, 'Options', error.message);
+        }
+        if (options !== undefined && options !== old?.Value)
+          db.prepare(
+            'INSERT INTO ItemExtradata(ItemId,ExtradataTypeId,Value) VALUES(?,?,?) ON CONFLICT(ItemId,ExtradataTypeId) DO UPDATE SET Value=excluded.Value',
+          ).run(int, type, options);
       }
     }
     for (const field of fields) {

@@ -1,5 +1,5 @@
 import { nativeGuid } from '../../users/native.js';
-import { commonLibraryOptions } from './libraries.js';
+import { commonLibraryOptions, libraryLocations } from './libraries.js';
 import { readMarkers } from './chapter-markers.js';
 import {
   itemTypes,
@@ -231,7 +231,7 @@ export function embyCatalog(db, serverId, report) {
     if (!folder?.PhysicalFolders) continue;
     const data = JSON.parse(r.Value);
     folder.CollectionType = data.ContentType ?? null;
-    folder.Locations = (data.PathInfos ?? []).map((p) => p.Path).filter(Boolean);
+    folder.Locations = libraryLocations(data);
     folder.Options = commonLibraryOptions(data);
   }
   readChildren(

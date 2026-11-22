@@ -183,23 +183,25 @@ export function providers(raw) {
 }
 export const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 export const keyFor = (type, ...ids) => [type, ...ids].join('/');
+export function jsonProperty(node, name) {
+  const matches = node.properties?.filter(([key]) => key === name) ?? [];
+  if (matches.length > 1) throw new Error('Ambiguous JSON property ' + name);
+  return matches[0]?.[1];
+}
 // Edit only the selected JSON value spans. Other numeric tokens may exceed
 // JavaScript's integer precision and other fields may occur more than once.
 export function editObjectFields(original, fields) {
-  if (!original) return JSON.stringify(fields);
+  original ||= '{}';
   const parsed = JSON.parse(original);
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('Expected JSON object');
   const node = tokenizeJson(original),
     edits = [],
     added = [];
   for (const [name, value] of Object.entries(fields)) {
-    const matches = node.properties.filter(([k]) => k === name);
-    if (matches.length > 1) throw new Error('Ambiguous JSON property ' + name);
-    const json = JSON.stringify(value);
-    if (matches.length) {
-      const token = matches[0][1];
-      edits.push([token.start, token.end, json]);
-    } else added.push(JSON.stringify(name) + ':' + json);
+    const token = jsonProperty(node, name);
+    const json = typeof value === 'function' ? value(original, token) : JSON.stringify(value);
+    if (token) edits.push([token.start, token.end, json]);
+    else added.push(JSON.stringify(name) + ':' + json);
   }
   if (added.length)
     edits.push([node.end - 1, node.end - 1, (node.properties.length ? ',' : '') + added.join(',')]);

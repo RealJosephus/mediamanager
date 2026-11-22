@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { once } from 'node:events';
-import { mkdir, readFile, unlink, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import net from 'node:net';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -13,6 +13,9 @@ import { DatabaseSync } from 'node:sqlite';
 import { cloneDirectory } from '../../src/migration/emby/files.js';
 import { runEmby } from '../database/emby.js';
 import { embyLibraryMounts } from '../../src/migration/emby/mounts.js';
+import { toBlob } from '../../src/migration/emby/format.js';
+import { nativeGuid } from '../../src/users/native.js';
+import { verifyProviderRoundtrip } from './provider-id-migration.mjs';
 
 const releaseRoot = process.env.MEDIAMANAGER_EMBY_REFERENCE_ROOT;
 const receipt = JSON.parse(await readFile(path.join(releaseRoot, 'receipts/reference-input.json')));
@@ -421,6 +424,19 @@ if (process.env.MEDIAMANAGER_EMBY_ALTERNATE_ROOT) {
     cross.push(version);
   }
 }
+const settingsRoundtrip = await verifySettingsRoundtrip();
+const providerRoundtrip = await verifyProviderRoundtrip({
+  root, original, wireId, item, postgres,
+  exchange: (mode, source, output, schema, ...options) => runEmby(mode, [...flags(source, output, schema), ...options], env),
+  async nativeProviders(instance) {
+    let providers;
+    await host(instance, async () => {
+      await login();
+      providers = (await call('/Users/' + adminId + '/Items/' + wireId + '?Fields=ProviderIds')).ProviderIds;
+    });
+    return providers;
+  },
+});
 // Remove the fixture file and its live PG row, then check the returned native catalog.
 await unlink(path.join(media, 'Round trip.wav'));
 await postgres('migration_b', (db) => db.deleteWhere('BaseItems', { Id: item }));
@@ -449,8 +465,138 @@ await writeFile(
       crossVersionColdReads: cross,
       officialColdRead: true,
       productionColdStart: true,
+      settingsRoundtrip,
+      providerRoundtrip,
     },
     null,
     2,
   ),
 );
+
+async function verifySettingsRoundtrip() {
+  const source = path.join(root, 'settings-source'), template = path.join(root, 'settings-template');
+  const manager = path.join(root, 'settings-manager'), target = path.join(root, 'settings-target');
+  const back = path.join(root, 'settings-back'), schema = 'migration_settings';
+  const users = [
+    { name: 'IdLayout', flag: 'true' },
+    { name: 'LegacyMissing' },
+    { name: 'LegacyNull', flag: 'null' },
+    { name: 'AmbiguousName', flag: 'true', duplicate: true },
+  ];
+  await cloneDirectory(original, source);
+  await host(source, async () => {
+    await login();
+    for (const user of users) {
+      user.id = (await call('/Users/New', 'POST', { Name: user.name })).Id;
+      await call('/Users/' + user.id + '/Password', 'POST', { NewPw: pw });
+    }
+  });
+  await runEmby('import', [...flags(source, manager, schema), '--mount-contract', contractFile], env);
+  await cloneDirectory(source, template);
+  const accounts = instance => new DatabaseSync(path.join(instance, 'data/users.db'));
+  const originalAccounts = accounts(template);
+  try {
+    for (const user of users) {
+      const { data } = originalAccounts.prepare('SELECT data FROM LocalUsersv2 WHERE guid=?').get(toBlob(user.id));
+      const native = JSON.parse(data);
+      delete native.Name;
+      delete native.UsesIdForConfigurationPath;
+      const name = '"Name" : "' + user.name + '"';
+      const config = user.flag ? ', "UsesIdForConfigurationPath" : ' + user.flag : '';
+      user.raw = '{ ' + (user.duplicate ? name + ',' : '') + name + config +
+        ', "TargetExtension":{"wide":9007199254740993,"repeat":null,"repeat":{"private":[]}},' + JSON.stringify(native).slice(1);
+      originalAccounts.prepare('UPDATE LocalUsersv2 SET data=? WHERE guid=?').run(user.raw, toBlob(user.id));
+      if (user.flag !== 'true') {
+        const directory = path.join(template, 'config/users', user.name);
+        const idDirectory = path.join(template, 'config/users', nativeGuid(user.id).replaceAll('-', '').toLowerCase());
+        try {
+          await rename(idDirectory, directory);
+        } catch (error) {
+          if (error.code !== 'ENOENT') throw error;
+        }
+        await mkdir(directory, { recursive: true });
+        await writeFile(path.join(directory, 'policy.xml'), '<UserPolicy><EnableMediaPlayback>false</EnableMediaPlayback></UserPolicy>');
+        await writeFile(path.join(directory, 'fixture.txt'), user.name);
+      }
+    }
+  } finally {
+    originalAccounts.close();
+  }
+  function embyOptions(instance, edit) {
+    const db = new DatabaseSync(path.join(instance, 'data/library.db'));
+    try {
+      const query = "SELECT e.ItemId,e.ExtradataTypeId,e.Value FROM ItemExtradata e JOIN ItemExtradataTypes t " +
+        "ON t.ExtradataTypeId=e.ExtradataTypeId JOIN MediaItems m ON m.Id=e.ItemId WHERE t.Name='LibraryOptions' AND m.Name='Exchange'";
+      const row = db.prepare(query).get();
+      assert.ok(row);
+      if (edit) db.prepare('UPDATE ItemExtradata SET Value=? WHERE ItemId=? AND ExtradataTypeId=?')
+        .run(edit(row.Value), row.ItemId, row.ExtradataTypeId);
+      return row.Value;
+    } finally {
+      db.close();
+    }
+  }
+  const retained = '{ "Path":' + JSON.stringify(media) + ',"PathExtension":9007199254740993,"Duplicate":1,"Duplicate":2 }';
+  const privateOptions = '"TargetOptions":9007199254740993,"TargetOptions":{"nested":9007199254740993}';
+  embyOptions(template, original => {
+    const parsed = JSON.parse(original);
+    delete parsed.PathInfos;
+    delete parsed.SaveLocalMetadata;
+    return '{ "SaveLocalMetadata" : false, "PathInfos" : [' + retained + '], ' + privateOptions + ',' +
+      JSON.stringify(parsed).slice(1);
+  });
+  const extra = path.join(root, 'settings-extra');
+  await mkdir(extra);
+  const xml = path.join(manager, 'data/root/default/Exchange/options.xml');
+  const preservedPath = '<MediaPathInfo custom="kept"><Path>' + media + '</Path><PathExtension x="1">unknown</PathExtension></MediaPathInfo>';
+  const keptXml = '<extension:LibraryData marker="yes" /><Unknown><![CDATA[<unchanged>]]></Unknown><!-- retained -->';
+  await writeFile(xml, '<LibraryOptions xmlns:extension="urn:test">' + keptXml +
+    '<SaveLocalMetadata note="keep">true</SaveLocalMetadata><PathInfos version="2">' + preservedPath +
+    '<extension:ExtraInfo/><MediaPathInfo><Path>' + extra + '</Path></MediaPathInfo></PathInfos></LibraryOptions>');
+  await postgres(schema, async db => {
+    for (const user of users) await db.update('Users', { Id: nativeGuid(user.id) },
+      { Username: 'Renamed' + user.name, NormalizedUsername: ('Renamed' + user.name).toUpperCase() });
+  });
+  const exported = await runEmby('export', [...flags(manager, target, schema), '--template', template], env);
+  const issues = JSON.parse(await readFile(exported.report, 'utf8')).issues;
+  assert.ok(issues.some(i => i.field === 'Username' && i.id === nativeGuid(users.at(-1).id) &&
+    i.reason === 'Ambiguous JSON property Name'), JSON.stringify(issues));
+  const targetAccounts = accounts(target);
+  try {
+    for (const user of users) {
+      const { data } = targetAccounts.prepare('SELECT data FROM LocalUsersv2 WHERE guid=?').get(toBlob(user.id));
+      let expected = user.duplicate ? user.raw : user.raw.replace('"Name" : "' + user.name, '"Name" : "Renamed' + user.name);
+      if (!user.flag) expected = expected.slice(0, -1) + ',"UsesIdForConfigurationPath":true}';
+      if (user.flag === 'null') expected = expected.replace('"UsesIdForConfigurationPath" : null', '"UsesIdForConfigurationPath" : true');
+      assert.ok(data === expected, user.name + ' raw account fields changed');
+      if (user.flag !== 'true') assert.equal(
+        await readFile(path.join(target, 'config/users', user.id.replaceAll('-', '').toLowerCase(), 'fixture.txt'), 'utf8'), user.name);
+    }
+  } finally {
+    targetAccounts.close();
+  }
+  const options = embyOptions(target);
+  assert.ok(options.includes(retained) && options.includes(privateOptions), options);
+  assert.equal(JSON.parse(options).SaveLocalMetadata, true);
+  assert.deepEqual(JSON.parse(options).PathInfos.map(value => value.Path), [media, extra]);
+  await host(target, async () => {
+    for (const user of users.filter(user => !user.duplicate)) {
+      token = null;
+      const session = await call('/Users/AuthenticateByName', 'POST', { Username: 'Renamed' + user.name, Pw: pw });
+      assert.equal(session.User.Id, user.id);
+      if (user.flag !== 'true') assert.equal(session.User.Policy.EnableMediaPlayback, false);
+    }
+    await login();
+  });
+  const replacement = path.join(root, 'settings-replacement');
+  await mkdir(replacement);
+  embyOptions(target, current => JSON.stringify({ ...JSON.parse(current), SaveLocalMetadata: false,
+    PathInfos: [{ Path: replacement }, { Path: media }] }));
+  await runEmby('import', [...flags(target, back, schema + '_back'), '--mount-contract', contractFile], env);
+  const xmlBack = await readFile(path.join(back, 'data/root/default/Exchange/options.xml'), 'utf8');
+  assert.ok(xmlBack.includes(keptXml) && xmlBack.includes(preservedPath), xmlBack);
+  assert.ok(xmlBack.includes('<SaveLocalMetadata note="keep">false</SaveLocalMetadata>') &&
+    xmlBack.includes('<PathInfos version="2">') && xmlBack.includes('<extension:ExtraInfo/>'), xmlBack);
+  assert.ok(xmlBack.indexOf(replacement) < xmlBack.indexOf(preservedPath) && !xmlBack.includes(extra), xmlBack);
+  return { accountBytes: true, legacyPolicyAndPassword: true, ambiguousName: true, jsonAndXmlOptions: true };
+}

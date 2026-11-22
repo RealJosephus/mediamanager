@@ -1,10 +1,12 @@
 import path from 'node:path';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { defaultLibraryOptions, parseLibraryOptions } from '../../library/options.js';
+import { defaultLibraryOptions, deserializeLibraryOptions } from '../../library/options.js';
 import { serializeLibraryOptions } from '../../library/library-options-store.js';
 import { decodeConfigurationXml } from '../../core/configuration-xml.js';
+import { escapeXml, escapeXmlAttribute } from '../../core/xml.js';
+import { XmlTokenCursor } from '../../core/xml-stream.js';
 import { exists } from './files.js';
-import { itemTypes } from './format.js';
+import { editObjectFields, itemTypes, jsonProperty, same } from './format.js';
 
 const keys = [
   'EnableRealtimeMonitor',
@@ -21,6 +23,142 @@ const keys = [
 export function commonLibraryOptions(value = {}) {
   return Object.fromEntries(keys.filter((k) => Object.hasOwn(value, k)).map((k) => [k, value[k]]));
 }
+export const libraryLocations = (options) => (options.PathInfos ?? [])
+  .map(info => info?.Path).filter(value => typeof value === 'string' && value.length);
+
+function retainedMembers(previous, values, write) {
+  const byKey = new Map();
+  for (const { key, raw } of previous) {
+    if (key === undefined) continue;
+    if (!byKey.has(key)) byKey.set(key, []);
+    byKey.get(key).push(raw);
+  }
+  return values.map(key => byKey.get(key)?.shift() ?? write(key));
+}
+
+export function editEmbyLibraryOptions(original, value, fields) {
+  const current = original ? JSON.parse(original) : {};
+  const edits = {};
+  if (fields.includes('CollectionType') && current.ContentType !== value.CollectionType)
+    edits.ContentType = value.CollectionType;
+  if (fields.includes('Options')) for (const [key, option] of Object.entries(commonLibraryOptions(value.Options)))
+    if (!same(current[key], option)) edits[key] = option;
+  if (fields.includes('Locations') && !same(libraryLocations(current), value.Locations)) {
+    edits.PathInfos = (raw, array) => {
+      if (array && !array.items && array.value !== null) throw new Error('Expected a PathInfos array');
+      const previous = (array?.items ?? []).map(node => {
+        const key = jsonProperty(node, 'Path')?.value;
+        return { key: typeof key === 'string' && key ? key : undefined, raw: raw.slice(node.start, node.end) };
+      });
+      const paths = retainedMembers(previous, value.Locations, Path => JSON.stringify({ Path }));
+      const members = previous.map(member => member.key === undefined ? member.raw : paths.shift()).filter(Boolean);
+      return '[' + [...members, ...paths].join(',') + ']';
+    };
+  }
+  return editObjectFields(original, edits);
+}
+
+function xmlSpans(xml) {
+  const cursor = new XmlTokenCursor(xml);
+  function element(token, start, inherited) {
+    const namespaces = cursor.namespacesFor(token, inherited);
+    const node = { ...token, namespaces, start, contentStart: cursor.position, children: [], text: '' };
+    while (!token.empty) {
+      const offset = cursor.position;
+      const current = cursor.readToken();
+      cursor.validateLookahead(current, namespaces, token.name);
+      if (current.type === 'end') {
+        node.contentEnd = offset;
+        break;
+      }
+      if (current.type === 'start') node.children.push(element(current, offset, namespaces));
+      if (current.type === 'text') node.text += current.value;
+    }
+    node.end = cursor.position;
+    node.contentEnd ??= node.end;
+    return node;
+  }
+  for (;;) {
+    const start = cursor.position, token = cursor.readToken();
+    if (token.type === 'start') return element(token, start);
+    if (token.type === 'eof') throw new Error('Missing LibraryOptions root');
+  }
+}
+const xmlChildren = (node, name) => node.children.filter(entry => entry.name === name && !entry.namespaces['']);
+function xmlChild(node, name) {
+  const matches = xmlChildren(node, name);
+  if (matches.length > 1) throw new Error('Ambiguous library XML element ' + name);
+  return matches[0];
+}
+const xsi = 'http://www.w3.org/2001/XMLSchema-instance';
+const nilAttribute = (node) => Object.keys(node.attributes).find(name => name.endsWith(':nil') &&
+  node.namespaces[name.split(':')[0]] === xsi);
+const text = value => escapeXml(value).replaceAll('\r', '&#xD;');
+function replaceSpans(xml, spans) {
+  for (const [start, end, value] of spans.sort((a, b) => b[0] - a[0]))
+    xml = xml.slice(0, start) + value + xml.slice(end);
+  return xml;
+}
+function withContents(xml, node, contents, nil = false) {
+  const nilName = nilAttribute(node);
+  if (!node.empty && !nilName && !nil)
+    return xml.slice(node.start, node.contentStart) + contents + xml.slice(node.contentEnd, node.end);
+  const attrs = Object.entries(node.attributes).filter(([key]) => key !== nilName);
+  if (nil) {
+    const prefix = Object.keys(node.namespaces).find(key => node.namespaces[key] === xsi && key);
+    attrs.push(...(prefix ? [[prefix + ':nil', 'true']] : [['xmlns:xsi', xsi], ['xsi:nil', 'true']]));
+  }
+  const attributes = attrs.map(([key, value]) => ' ' + key + '="' + escapeXmlAttribute(value) + '"').join('');
+  return '<' + node.name + attributes + '>' + contents + '</' + node.name + '>';
+}
+function xmlListContents(xml, node, values, childName, memberKey, write) {
+  if (!node || node.empty) return (values ?? []).map(write).join('');
+  const children = xmlChildren(node, childName).map(child => ({
+    child, key: memberKey(child), raw: xml.slice(child.start, child.end),
+  })).filter(entry => entry.key !== undefined);
+  const next = retainedMembers(children, values ?? [], write);
+  const spans = children.map(({ child }) => [child.start - node.contentStart, child.end - node.contentStart,
+    next.shift() ?? '']);
+  return replaceSpans(xml.slice(node.contentStart, node.contentEnd), spans) + next.join('');
+}
+export function editJellyfinLibraryOptions(bytes, value, fields) {
+  if (!bytes) {
+    const options = defaultLibraryOptions();
+    if (fields.includes('Options')) Object.assign(options, commonLibraryOptions(value.Options));
+    if (fields.includes('Locations')) options.PathInfos = value.Locations.map(Path => ({ Path }));
+    const serialized = serializeLibraryOptions(options);
+    if (serialized.failure) throw serialized.failure;
+    return serialized.bytes;
+  }
+  const original = decodeConfigurationXml(bytes), root = xmlSpans(original);
+  const current = deserializeLibraryOptions(original), edits = {};
+  if (fields.includes('Options')) for (const [key, option] of Object.entries(commonLibraryOptions(value.Options)))
+    if (!same(current[key], option)) edits[key] = option;
+  if (fields.includes('Locations') && !same(libraryLocations(current), value.Locations))
+    edits.PathInfos = value.Locations;
+  if (!Object.keys(edits).length) return bytes;
+  const added = [], spans = [];
+  for (const [key, option] of Object.entries(edits)) {
+    const node = xmlChild(root, key);
+    const array = ['PathInfos', 'MetadataSavers', 'SubtitleDownloadLanguages'].includes(key);
+    let contents;
+    if (key === 'PathInfos') contents = xmlListContents(original, node, option, 'MediaPathInfo',
+      child => xmlChild(child, 'Path')?.text || undefined,
+      value => '<MediaPathInfo><Path>' + text(value) + '</Path></MediaPathInfo>');
+    else if (array) contents = xmlListContents(original, node, option, 'string',
+      child => ['true', '1'].includes(child.attributes[nilAttribute(child)]?.trim()) ? null : child.text,
+      value => value == null ? '<string xmlns:xsi="' + xsi + '" xsi:nil="true"/>' : '<string>' + text(value) + '</string>');
+    else contents = option == null ? '' : text(option);
+    if (node) spans.push([node.start, node.end,
+      option == null && !array ? '' : withContents(original, node, contents, option == null)]);
+    else if (option != null) added.push('<' + key + '>' + contents + '</' + key + '>');
+  }
+  if (root.empty && added.length) spans.push([root.start, root.end, withContents(original, root, added.join(''))]);
+  else if (added.length) spans.push([root.contentEnd, root.contentEnd, added.join('')]);
+  const updated = replaceSpans(original, spans).replace(/^<\?xml\s[^?]*\?>/u, declaration =>
+    declaration.replace(/(\sencoding\s*=\s*)(["'])[^"']+\2/u, '$1"utf-8"'));
+  return Buffer.from(updated, 'utf8');
+}
 function filename(instance, folder) {
   const candidate = folder.Path ? path.win32.basename(folder.Path) : folder.Name;
   if (!candidate || candidate === '.' || candidate === '..' || /[\\/:]/u.test(candidate))
@@ -32,13 +170,13 @@ export async function readJellyfinLibraryOptions(view, instance) {
     if (!key.startsWith('item/') || row.type !== itemTypes[4]) continue;
     const file = filename(instance, row);
     const options = (await exists(file))
-      ? parseLibraryOptions(decodeConfigurationXml(await readFile(file)))
+      ? deserializeLibraryOptions(decodeConfigurationXml(await readFile(file)))
       : defaultLibraryOptions();
     row.Options = commonLibraryOptions(options);
-    if (options.PathInfos?.length) row.Locations = options.PathInfos.map((p) => p.Path).filter(Boolean);
+    if (options.PathInfos?.length) row.Locations = libraryLocations(options);
   }
 }
-export async function writeJellyfinLibraryOptions(changes, instance) {
+export async function writeJellyfinLibraryOptions(changes, instance, report) {
   for (const { key, value, fields } of changes) {
     if (
       !key.startsWith('item/') ||
@@ -47,16 +185,15 @@ export async function writeJellyfinLibraryOptions(changes, instance) {
     )
       continue;
     const file = filename(instance, value);
-    const previous = (await exists(file))
-      ? parseLibraryOptions(decodeConfigurationXml(await readFile(file)))
-      : defaultLibraryOptions();
-    if (fields.includes('Options')) Object.assign(previous, value.Options);
-    if (fields.includes('Locations'))
-      previous.PathInfos = value.Locations.map(
-        (name) => previous.PathInfos?.find((p) => p.Path === name) ?? { Path: name },
-      );
-    const { bytes, failure } = serializeLibraryOptions(previous);
-    if (failure) throw failure;
+    const before = (await exists(file)) ? await readFile(file) : null;
+    let bytes;
+    try {
+      bytes = editJellyfinLibraryOptions(before, value, fields);
+    } catch (error) {
+      report('conflict', 'item', key.slice(5), 'Options', error.message);
+      continue;
+    }
+    if (bytes === before) continue;
     await mkdir(path.dirname(file), { recursive: true, mode: 0o700 });
     await writeFile(file, bytes);
   }

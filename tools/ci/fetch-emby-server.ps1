@@ -1,7 +1,75 @@
-param([ValidateSet('contracts','4.9.1.0','latest')][string]$Channel = 'contracts', [switch]$Alternate)
+param(
+    [ValidateSet('contracts','4.9.1.0','latest')][string]$Channel = 'contracts',
+    [switch]$Alternate,
+    [string]$FreezeMigrationInputs
+)
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 if ($env:GITHUB_ACTIONS -ne 'true' -or -not $env:RUNNER_TEMP) { throw 'Reference packages must be prepared in GitHub Actions.' }
+$releaseRepository = 'repos/MediaBrowser/Emby.Releases'
+$fixedVersion = '4.9.1.0'
+$fixedId = 258289722
+$fixedBytes = 221809123
+$fixedSha = 'f5adde914a45d6a1d7e1a9e4379e3c24a4631d2faecaa098d44c0c7dbc14ea7e'
+
+function Assert-MigrationInputs($Inputs) {
+    if ($Inputs.schema -ne 1 -or $Inputs.runId -cne $env:GITHUB_RUN_ID -or $Inputs.commit -cne $env:GITHUB_SHA) {
+        throw 'Emby selection is for a different migration run.'
+    }
+    foreach ($entry in @($Inputs.latest, $Inputs.fixed)) {
+        if ($entry.version -notmatch '^\d+\.\d+\.\d+\.\d+$' -or $entry.assetId -le 0 -or
+            $entry.bytes -le 0 -or $entry.sha256 -cnotmatch '^[0-9a-f]{64}$' -or
+            $entry.url -cne "https://github.com/MediaBrowser/Emby.Releases/releases/download/$($entry.version)/embyserver-netcore_$($entry.version).zip") {
+            throw 'Invalid official Emby asset in the migration selection.'
+        }
+    }
+    if ($Inputs.fixed.version -cne $fixedVersion -or $Inputs.fixed.assetId -ne $fixedId -or
+        $Inputs.fixed.bytes -ne $fixedBytes -or $Inputs.fixed.sha256 -cne $fixedSha) {
+        throw 'The fixed Emby release asset changed.'
+    }
+}
+
+function Read-OfficialAsset($Release) {
+    $version = $Release.tag_name
+    if ($Release.assets.Count -ne 1) { throw "Release $version has no unique portable server package." }
+    $asset = $Release.assets[0]
+    $sha = ([string]$asset.digest) -replace '^sha256:', ''
+    if ($version -eq $fixedVersion) { $sha = $fixedSha }
+    return [ordered]@{
+        version = $version; assetId = $asset.id; bytes = $asset.size; sha256 = $sha; url = $asset.browser_download_url
+        releaseId = $Release.id; publishedAt = $Release.published_at; prerelease = $Release.prerelease
+    }
+}
+
+if ($FreezeMigrationInputs) {
+    if (Test-Path -LiteralPath $FreezeMigrationInputs) {
+        $inputs = Get-Content -LiteralPath $FreezeMigrationInputs -Raw | ConvertFrom-Json
+    } else {
+        # Include all public versions, including prereleases, ordered by the
+        # publisher's release timestamp. Take the asset from the same listing.
+        $filter = '.[] | select(.draft == false and .published_at != null and (.tag_name | test("^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$"))) | . as $release | {id,tag_name,published_at,prerelease,assets:[.assets[] | select(.name == ("embyserver-netcore_" + $release.tag_name + ".zip")) | {id,size,digest,browser_download_url}]}'
+        $lines = & gh api --paginate "$releaseRepository/releases?per_page=100" --jq $filter
+        if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve official Emby releases.' }
+        $releases = $lines | ForEach-Object { ConvertFrom-Json -InputObject $_ }
+        $latest = $releases | Sort-Object -Property @{Expression='published_at';Descending=$true}, @{Expression='id';Descending=$true} |
+            Select-Object -First 1
+        $fixed = @($releases | Where-Object tag_name -eq $fixedVersion)
+        if (-not $latest -or $fixed.Count -ne 1) { throw 'Cannot find the public server releases required for migration.' }
+        $inputs = [ordered]@{
+            schema = 1; commit = $env:GITHUB_SHA; runId = $env:GITHUB_RUN_ID
+            latest = Read-OfficialAsset $latest
+            fixed = Read-OfficialAsset $fixed[0]
+        }
+    }
+    Assert-MigrationInputs $inputs
+    $selection = $inputs | ConvertTo-Json -Depth 8 -Compress
+    if (-not (Test-Path -LiteralPath $FreezeMigrationInputs)) {
+        [IO.File]::WriteAllText($FreezeMigrationInputs, $selection + [Environment]::NewLine)
+    }
+    "selection=$selection" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+    return
+}
+
 $root = Join-Path $env:RUNNER_TEMP 'mediamanager-emby-reference'
 if ($Alternate) { $root = Join-Path $env:RUNNER_TEMP 'mediamanager-emby-alternate' }
 if (Test-Path -LiteralPath $root) { throw 'Emby reference output must be a new directory.' }
@@ -14,25 +82,15 @@ $version = '4.10.1.0'
 $expectedBytes = 219472907
 $assetId = $null
 if ($Channel -ne 'contracts') {
-    $version = $Channel
-    if ($version -eq 'latest') {
-        $lines = & gh api --paginate 'repos/MediaBrowser/Emby.Releases/releases?per_page=100' --jq '.[] | select(.draft == false and .published_at != null) | [.published_at,.tag_name] | @tsv'
-        if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve official Emby releases.' }
-        $latest = $lines | Where-Object { $_ -match '\s\d+\.\d+\.\d+\.\d+$' } | Sort-Object -Descending | Select-Object -First 1
-        if (-not $latest) { throw 'No public server release was found.' }
-        $version = ($latest -split '\s+')[1]
-    }
-    $release = & gh api "repos/MediaBrowser/Emby.Releases/releases/tags/$version" | ConvertFrom-Json
-    if ($LASTEXITCODE -ne 0 -or $release.draft -or $release.tag_name -cne $version) { throw 'Unexpected official release.' }
-    $asset = @($release.assets | Where-Object name -eq "embyserver-netcore_${version}.zip")
-    if ($asset.Count -ne 1) { throw 'The selected release has no unique portable server package.' }
-    $assetId = $asset[0].id
-    $url = $asset[0].browser_download_url
-    $expectedBytes = $asset[0].size
-    $expected = ([string]$asset[0].digest) -replace '^sha256:', ''
-    if ($version -eq '4.9.1.0' -and ($assetId -ne 258289722 -or $expectedBytes -ne 221809123)) { throw 'The fixed Emby release asset changed.' }
-    if ($version -eq '4.9.1.0') { $expected = 'f5adde914a45d6a1d7e1a9e4379e3c24a4631d2faecaa098d44c0c7dbc14ea7e' }
-    if (-not $expected -and $version -ne '4.9.1.0') { throw 'Missing official release asset digest.' }
+    if (-not $env:MEDIAMANAGER_EMBY_INPUTS) { throw 'The migration job requires the frozen Emby selection.' }
+    $inputs = $env:MEDIAMANAGER_EMBY_INPUTS | ConvertFrom-Json
+    Assert-MigrationInputs $inputs
+    $asset = if ($Channel -eq $fixedVersion) { $inputs.fixed } else { $inputs.latest }
+    $version = $asset.version
+    $assetId = $asset.assetId
+    $url = $asset.url
+    $expectedBytes = $asset.bytes
+    $expected = $asset.sha256
 }
 $receipt = [ordered]@{
     kind = 'official-emby-server'; version = $version; url = $url; assetId = $assetId
@@ -42,8 +100,18 @@ $receipt = [ordered]@{
     expectedBytes = $expectedBytes; expectedSha256 = $expected; status = 'started'
     redistribution = 'Only capture observations and provenance are published; the server package and instance are private.'
 }
+if ($assetId) {
+    $receipt.releaseId = $asset.releaseId
+    $receipt.publishedAt = $asset.publishedAt
+    $receipt.prerelease = $asset.prerelease
+}
 try {
-    Invoke-WebRequest -Uri $url -OutFile $archive -TimeoutSec 180
+    if ($assetId) {
+        & gh api -H 'Accept: application/octet-stream' "$releaseRepository/releases/assets/$assetId" > $archive
+        if ($LASTEXITCODE -ne 0) { throw 'Cannot download the frozen Emby asset.' }
+    } else {
+        Invoke-WebRequest -Uri $url -OutFile $archive -TimeoutSec 180
+    }
     $receipt.bytes = (Get-Item -LiteralPath $archive).Length
     $receipt.sha256 = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
     if ($receipt.bytes -ne $receipt.expectedBytes -or ($expected -and $receipt.sha256 -ne $expected)) { throw 'The official Emby package differs from the designated release.' }

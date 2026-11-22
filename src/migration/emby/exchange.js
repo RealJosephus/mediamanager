@@ -105,6 +105,28 @@ const silent = () => {};
 function getCatalog(type, db, id, report) {
   return type === 'emby' ? embyCatalog(db, id, report) : jellyfinCatalog(db, report);
 }
+function indexProviderState(records, aliases) {
+  const result = new Map();
+  for (const record of records ?? []) {
+    const id = aliases.items[record.id] ?? record.id;
+    if (!result.has(id)) result.set(id, new Map());
+    result.get(id).set(record.provider, record);
+  }
+  return result;
+}
+async function olderProviderConflicts(source, aliases) {
+  try {
+    const report = JSON.parse(await readFile(path.join(source, stateDirectory, 'report.json'), 'utf8'));
+    if (!Array.isArray(report?.issues)) return new Set();
+    return new Set(report.issues
+      .filter(issue => issue.status === 'conflict' && issue.kind === 'item' && issue.field === 'Providers')
+      .map(({ id }) => aliases.items[id] ?? id));
+  } catch (error) {
+    // Old reports are optional. The sealed receipt still supplies the baselines.
+    if (error.code === 'ENOENT' || error instanceof SyntaxError) return new Set();
+    throw error;
+  }
+}
 export async function inspectEmby(root) {
   root = await directory(root);
   await assertInput(root, 'emby');
@@ -209,17 +231,24 @@ export async function exchange({
       pathMaps,
       retainedSourceColumns, importedMarkerReader,
       issues = [];
-    const report = (status, kind, id, field, reason) => issues.push({ status, kind, id, field, reason });
+    const providerState = { conflicts: [], targetEdits: [] };
+    let pendingProviders, sourceItemIds;
+    const report = (status, kind, id, field, reason, evidence) => {
+      const issue = { status, kind, id, field, reason };
+      if (status === 'conflict' && field === 'Providers' && evidence) {
+        const { provider, source, target, previousSource, previousTarget } = evidence;
+        const now = {
+          source: { instanceId: sourceId, itemId: sourceItemIds.get(id) ?? id, values: source, previous: previousSource },
+          target: { instanceId: targetId, itemId: id, values: target, previous: previousTarget },
+        };
+        const firstSeen = pendingProviders.get(id)?.get(provider)?.firstSeen ?? now;
+        const conflict = { id, provider, firstSeen, ...now };
+        providerState.conflicts.push(conflict);
+        issue.evidence = conflict;
+      }
+      issues.push(issue);
+    };
     try {
-      inputAssets = await collectAssets({
-        instance: captured,
-        original: source,
-        type: sourceType,
-        stage: path.join(work, 'input-metadata'),
-        override: metadataRoot,
-        roots: assetRoots,
-        report,
-      });
       verifyDb(sourceDb, sourceType === 'emby' ? ['main', 'accounts'] : ['main']);
       if (sourceType === 'emby') retainedSourceColumns = originCoverage(sourceDb);
       sourceId = await identity(captured, sourceType, sourceDb);
@@ -248,11 +277,7 @@ export async function exchange({
         targetId = await identity(target, targetType, targetDb);
         baseline = prior && prior.originIdentity === targetId ? prior.base : null;
         const targetLibrary = targetType === 'emby' ? '%RootFolderPath%' : libraryRoot(output, targetType);
-        inputAssets.targetLibrary = seedAssets.targetLibrary = targetLibrary;
-        inputAssets.libraryRoots = [
-          libraryRoot(source, sourceType),
-          ...(baseline?.assets?.libraryRoots?.target ?? []),
-        ];
+        seedAssets.targetLibrary = targetLibrary;
         seedAssets.libraryRoots = [
           libraryRoot(seed ?? target, targetType),
           ...(baseline?.assets?.libraryRoots?.source ?? []),
@@ -272,6 +297,21 @@ export async function exchange({
         if (targetType === 'jellyfin') await readJellyfinLibraryOptions(targetView, target);
         const transferable =
           sourceType === 'jellyfin' ? activeSystemRoots(sourceView.rows, report) : sourceView.rows;
+        inputAssets = await collectAssets({
+          instance: captured,
+          original: source,
+          type: sourceType,
+          stage: path.join(work, 'input-metadata'),
+          override: metadataRoot,
+          roots: assetRoots,
+          rows: transferable,
+          report,
+        });
+        inputAssets.targetLibrary = targetLibrary;
+        inputAssets.libraryRoots = [
+          libraryRoot(source, sourceType),
+          ...(baseline?.assets?.libraryRoots?.target ?? []),
+        ];
         aliases = alignIdentities(
           transferable,
           targetView.rows,
@@ -279,6 +319,12 @@ export async function exchange({
           identityMap,
           !seed && targetType === 'jellyfin' ? output : null,
         );
+        sourceItemIds = new Map(Object.entries(aliases.items).map(([from, to]) => [to, from]));
+        pendingProviders = indexProviderState(baseline?.providerState?.conflicts, aliases);
+        const pendingProviderEdits = indexProviderState(baseline?.providerState?.targetEdits, aliases);
+        const legacyProviderItems = baseline && !baseline.providerState
+          ? await olderProviderConflicts(source, aliases)
+          : null;
         const sourceAssets = await projectAssetRows(
           transferable,
           inputAssets,
@@ -322,7 +368,11 @@ export async function exchange({
           translatedRows(beforeSource.rows, aliases, targetAssets.rows, false),
           beforeTarget.rows,
           report,
-          { sourceType, legacyChapters: baseline != null && !baseline.chapterMarkerVersion },
+          {
+            sourceType, legacyChapters: baseline != null && !baseline.chapterMarkerVersion,
+            pendingProviders, pendingProviderEdits, legacyProviderItems,
+            rememberTargetEdit: (id, provider) => providerState.targetEdits.push({ id, provider }),
+          },
         );
         targetDb.exec('BEGIN IMMEDIATE; PRAGMA defer_foreign_keys=ON');
         try {
@@ -335,7 +385,7 @@ export async function exchange({
               creditsEnd,
               skipperTarget,
             });
-            await writeJellyfinLibraryOptions(writes, target);
+            await writeJellyfinLibraryOptions(writes, target, report);
           }
           verifyDb(targetDb, targetType === 'emby' ? ['main', 'accounts'] : ['main']);
           targetDb.exec('COMMIT');
@@ -366,12 +416,15 @@ export async function exchange({
       report,
     );
     const libraries = (root, type) => path.join(root, type === 'emby' ? '' : 'data', 'root', 'default');
+    // The destination writer applies library options using its native format.
+    // The original options.xml stays with the captured instance.
     assets.libraries = await mergeAssets(
       libraries(captured, sourceType),
       libraries(target, targetType),
       baseline?.assets?.libraries?.target,
       baseline?.assets?.libraries?.source,
       report,
+      { include: name => !/^[^/]+\/options\.xml$/iu.test(name) },
     );
     assets.paths = pathMaps;
     assets.libraryRoots = { source: inputAssets.libraryRoots, target: [libraryRoot(output, targetType)] };
@@ -386,6 +439,7 @@ export async function exchange({
       aliases,
       inputAssets.extra ? inputAssets.directory : null,
       importedMarkerReader,
+      providerState,
     );
     // Copying and hashing the origin precedes the PG commit. A rename failure
     // after that point leaves a complete, identifiable directory for recovery.

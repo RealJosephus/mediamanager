@@ -77,11 +77,20 @@ function changeValues(db, id, field, values) {
 }
 function changeRelations(db, id, name, values, report) {
   switch (name) {
-    case 'Providers':
-      remove(db, 'BaseItemProviders', id);
-      for (const [ProviderId, ProviderValue] of values)
+    case 'Providers': {
+      const next = new Map(values);
+      const existing = db.prepare('SELECT ProviderId,ProviderValue FROM BaseItemProviders WHERE ItemId=?').all(id);
+      const removeProvider = db.prepare('DELETE FROM BaseItemProviders WHERE ItemId=? AND ProviderId=?');
+      for (const { ProviderId, ProviderValue } of existing) {
+        if (!next.has(ProviderId)) removeProvider.run(id, ProviderId);
+        else if (next.get(ProviderId) !== ProviderValue)
+          update(db, 'BaseItemProviders', { ProviderValue: next.get(ProviderId) }, { ItemId: id, ProviderId });
+        next.delete(ProviderId);
+      }
+      for (const [ProviderId, ProviderValue] of next)
         insert(db, 'BaseItemProviders', { ItemId: id, ProviderId, ProviderValue });
       break;
+    }
     case 'LockedFields':
       db.prepare('DELETE FROM BaseItemMetadataFields WHERE ItemId=? AND Id>=0 AND Id<?').run(id, locks.length);
       for (const value of new Set(values))
@@ -176,6 +185,85 @@ function changeRelations(db, id, name, values, report) {
     }
     default:
       if (Object.hasOwn(valueTypes, name)) changeValues(db, id, name, values);
+  }
+}
+function refreshHierarchy(db, changes, previousRows, sourceRows, report) {
+  const [seriesType, seasonType, episodeType] = itemTypes.slice(6, 9);
+  const get = db.prepare('SELECT Id,Type,Name,ParentId,SeriesId,SeasonId,ParentIndexNumber FROM BaseItems WHERE Id=?');
+  const children = db.prepare('SELECT Id FROM BaseItems WHERE ParentId=?');
+  const seasons = db.prepare('SELECT Id,Name,SeriesId FROM BaseItems WHERE ParentId=? AND Type=? AND IndexNumber=? LIMIT 2');
+  const directEpisodes = db.prepare('SELECT Id FROM BaseItems WHERE ParentId=? AND Type=?');
+  const walk = (item) => {
+    const seen = new Set([item.Id]);
+    const parents = [];
+    while (item.ParentId) {
+      if (seen.has(item.ParentId)) throw new Error('Jellyfin parent cycle at ' + item.Id);
+      item = get.get(item.ParentId);
+      if (!item) break;
+      seen.add(item.Id);
+      parents.push(item);
+    }
+    return parents;
+  };
+  const pending = new Set(), physical = new Set(), seasonParents = new Set();
+  for (const { key, value, fields } of changes) {
+    if (!key.startsWith('item/')) continue;
+    const id = key.slice(5);
+    if (!value) for (const child of children.all(id)) physical.add(child.Id);
+    if (fields.includes('ParentId') || fields.includes('type')) physical.add(id);
+    if (value?.type === episodeType && fields.some(field => ['SeriesId', 'ParentIndexNumber'].includes(field)))
+      pending.add(id);
+    const previous = previousRows.get(key);
+    if (!value || fields.some(field => ['IndexNumber', 'ParentId', 'type'].includes(field))) {
+      if (previous?.type === seasonType && previous.ParentId) seasonParents.add(previous.ParentId);
+      const parentId = value?.type === seasonType && get.get(id)?.ParentId;
+      if (parentId) seasonParents.add(parentId);
+    }
+  }
+  for (const id of seasonParents)
+    for (const episode of directEpisodes.all(id, episodeType)) pending.add(episode.Id);
+  for (const id of physical) {
+    const item = get.get(id);
+    if (!item) continue;
+    const parents = walk(item);
+    remove(db, 'AncestorIds', id);
+    for (const parent of parents) insert(db, 'AncestorIds', { ItemId: id, ParentItemId: parent.Id });
+    update(db, 'BaseItems', { TopParentId: itemTopParentId(item, parents) }, { Id: id });
+    if (item.Type === episodeType) pending.add(id);
+    for (const child of children.all(id)) physical.add(child.Id);
+  }
+  // Earlier exchanges can have the correct mapped parents but lack SeasonId.
+  const missing = db.prepare('SELECT Id,ParentId,SeriesId,ParentIndexNumber FROM BaseItems WHERE Type=? AND SeasonId IS NULL AND ParentId IS NOT NULL');
+  for (const item of missing.iterate(episodeType)) {
+    const origin = sourceRows.get('item/' + item.Id);
+    if (origin?.type === episodeType && origin.ParentId === item.ParentId && origin.SeriesId === item.SeriesId &&
+        origin.ParentIndexNumber === item.ParentIndexNumber) pending.add(item.Id);
+  }
+  for (const id of pending) {
+    const item = get.get(id);
+    if (item?.Type !== episodeType) continue;
+    const parents = walk(item);
+    const tvParent = parents.find(parent => parent.Type === seriesType || parent.Type === seasonType);
+    let season = tvParent?.Type === seasonType ? tvParent : null;
+    const series = parents.find(parent => parent.Type === seriesType);
+    let reason = 'no confirmed season parent';
+    if (!season && tvParent?.Type === seriesType && item.ParentIndexNumber != null) {
+      const candidates = seasons.all(tvParent.Id, seasonType, item.ParentIndexNumber);
+      if (candidates.length === 1) [season] = candidates;
+      if (candidates.length > 1) reason = 'multiple seasons under the parent series have the same season number';
+    }
+    const linkedSeries = get.get(season?.SeriesId ?? null);
+    const seriesId = series?.Id ?? (linkedSeries?.Type === seriesType ? linkedSeries.Id : null);
+    if (season && seriesId && [item.SeriesId, season.SeriesId].some(id => id && id !== seriesId)) {
+      season = null;
+      reason = 'season parent and recorded series disagree';
+    }
+    if (!season) report('requires-action', 'item', id, 'SeasonId', reason);
+    update(db, 'BaseItems', {
+      SeasonId: season?.Id ?? null,
+      SeasonName: season?.Name ?? null,
+      ...(season && seriesId && !item.SeriesId ? { SeriesId: seriesId } : {}),
+    }, { Id: id });
   }
 }
 export async function writeJellyfin(db, changes, catalog, source, report, { adminUser, adminPassword, creditsEnd, skipperTarget } = {}) {
@@ -325,35 +413,5 @@ export async function writeJellyfin(db, changes, catalog, source, report, { admi
     if (kind === 'item') remove(db, 'BaseItems', id, 'Id');
     if (kind === 'user') remove(db, 'Users', id, 'Id');
   }
-  if (
-    items.some((c) => c.fields.includes('ParentId')) ||
-    changes.some((c) => c.key.startsWith('item/') && !c.value)
-  ) {
-    // Rebuild only the physical hierarchy of mapped descendants whose parent changed.
-    const parent = db.prepare('SELECT Id,Type,ParentId FROM BaseItems WHERE Id=?');
-    const children = db.prepare('SELECT Id FROM BaseItems WHERE ParentId=?');
-    const done = new Set(),
-      queue = items.filter((c) => c.fields.includes('ParentId')).map((c) => c.key.slice(5));
-    for (let i = 0; i < queue.length; i++) {
-      const id = queue[i];
-      if (done.has(id)) continue;
-      done.add(id);
-      remove(db, 'AncestorIds', id);
-      const chain = new Set([id]);
-      const item = parent.get(id);
-      if (!item) continue;
-      const parents = [];
-      let row = item;
-      while (row.ParentId) {
-        if (chain.has(row.ParentId)) throw new Error('Jellyfin parent cycle at ' + id);
-        row = parent.get(row.ParentId);
-        if (!row) break;
-        chain.add(row.Id);
-        parents.push(row);
-        insert(db, 'AncestorIds', { ItemId: id, ParentItemId: row.Id });
-      }
-      update(db, 'BaseItems', { TopParentId: itemTopParentId(item, parents) }, { Id: id });
-      for (const child of children.all(id)) queue.push(child.Id);
-    }
-  }
+  refreshHierarchy(db, changes, catalog.rows, source.rows, report);
 }

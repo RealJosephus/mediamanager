@@ -32,7 +32,7 @@ export async function embyLibraryMounts(root) {
     }
   }
   for (const info of paths) {
-    const identityRoot = info.Path;
+    const identityRoot = info?.Path;
     if (typeof identityRoot !== 'string' || !identityRoot) continue;
     const windows = /^(?:[a-z]:[\\/]|\\\\)/iu.test(identityRoot);
     if (!(windows ? path.win32 : path.posix).isAbsolute(identityRoot)) continue;

@@ -15,6 +15,8 @@ import urllib.parse
 import wave
 from contextlib import contextmanager
 from chapter_marker_migration import verify_chapter_markers
+from episode_migration import verify_episodes
+from external_audio_migration import verify_external_audio
 
 runroot = Path(os.environ["RUNNER_TEMP"])
 output = runroot / "results" / "history.json"
@@ -36,14 +38,14 @@ def run_host(dll, instance, *, fresh, seed_media=False, edit_item=None, expected
     for flag, directory in (("--datadir","data"),("--cachedir","cache"),("--configdir","config"),("--logdir","log")):
         args.extend((flag, str(instance / directory)))
     token = ""
-    def call(route, body=None, admin=False, post=False, form=False):
+    def call(route, body=None, admin=False, post=False, form=False, raw=False, headers=None):
         auth = f'MediaBrowser Token="{token}"' if admin else 'MediaBrowser Client="Reference", Device="CI", DeviceId="ci-history", Version="1.0"'
         payload = None if body is None else (urllib.parse.urlencode(body) if form else json.dumps(body)).encode()
         content_type = "application/x-www-form-urlencoded" if form else "application/json"
-        req = urllib.request.Request(f"http://127.0.0.1:{port}"+route, data=payload, headers={"Content-Type":content_type,"Authorization":auth}, method="POST" if post or body is not None else "GET")
+        req = urllib.request.Request(f"http://127.0.0.1:{port}"+route, data=payload, headers={"Content-Type":content_type,"Authorization":auth,**(headers or {})}, method="POST" if post or body is not None else "GET")
         with urllib.request.urlopen(req, timeout=6) as response:
             data = response.read()
-            return json.loads(data) if data else None
+            return (response.status, response.headers, data) if raw else (json.loads(data) if data else None)
     env = {**os.environ, "XDG_CONFIG_HOME":str(instance/"config/user")}
     with (instance/"process.log").open("w+") as log:
         proc = subprocess.Popen(args, stdout=log, stderr=subprocess.STDOUT, cwd=instance, env=env)
@@ -76,7 +78,7 @@ def run_host(dll, instance, *, fresh, seed_media=False, edit_item=None, expected
             user_id = session["User"]["Id"]
             info = call("/System/Info", admin=True)
             if inspect_playback:
-                inspect_playback(lambda route: call(route, admin=True), user_id)
+                inspect_playback(lambda route, **options: call(route, admin=True, **options), user_id)
             media_id = edit_item
             if seed_media:
                 media = runroot / "jellyfin-music"
@@ -284,3 +286,5 @@ assert samples["newFresh"]["columns"] == samples["upgraded"]["columns"]
 assert samples["newFresh"]["indexes"] == samples["upgraded"]["indexes"]
 print(json.dumps({"histories":[len(oldrows),len(newrows),len(upgrade)], "extraAfterUpgrade":sorted(upgrade-newrows), "freshOnlyVsOld":sorted(newrows-oldrows)}))
 verify_chapter_markers(runroot, new, run_host, emby_host, password)
+verify_episodes(runroot, new, run_host, emby_host, password)
+verify_external_audio(runroot, new, run_host, emby_host)

@@ -4,39 +4,11 @@ import { once } from 'node:events';
 import { readCreditFrames, readFingerprint } from '../../src/media-execution/segment-analysis.js';
 import { recurringInterval } from '../../plugins/skip-segments/detection.js';
 import { rollingCredits } from '../../plugins/skip-segments/rolling-credits.js';
+import { music } from './migration-audio-fixture.mjs';
 
 // Two independent episodes contain the same theme at different offsets and volumes.
 // A third has different music. Exercise the actual packaged FFmpeg and its muxer.
-const rate = 11025,
-  length = 66;
-function music(id, opening, gain = 1) {
-  const pcm = Buffer.alloc(length * rate * 2 + 44);
-  pcm.write('RIFF');
-  pcm.writeUInt32LE(pcm.length - 8, 4);
-  pcm.write('WAVEfmt ', 8);
-  pcm.writeUInt32LE(16, 16);
-  pcm.writeUInt16LE(1, 20);
-  pcm.writeUInt16LE(1, 22);
-  pcm.writeUInt32LE(rate, 24);
-  pcm.writeUInt32LE(rate * 2, 28);
-  pcm.writeUInt16LE(2, 32);
-  pcm.writeUInt16LE(16, 34);
-  pcm.write('data', 36);
-  pcm.writeUInt32LE(pcm.length - 44, 40);
-  for (let i = 0; i < length * rate; i++) {
-    const t = i / rate,
-      theme = t >= opening && t < opening + 28,
-      clock = theme ? t - opening : t;
-    const step = Math.floor(clock * 3),
-      seed = theme ? 19 : id;
-    const note =
-      Math.abs((Math.imul(step + seed, 1597334677) ^ Math.imul(seed + step * step, 747796405)) >> 4) % 34;
-    const angle = clock * 2 * Math.PI * 123.47 * 2 ** (note / 12);
-    const chord = Math.sin(angle) + 0.46 * Math.sin(angle * 1.498) + 0.25 * Math.sin(angle * 2.51);
-    pcm.writeInt16LE(Math.round(10000 * gain * chord), 44 + i * 2);
-  }
-  return pcm;
-}
+const length = 66;
 const token = 'f'.repeat(64);
 async function sampleStream(media, contentType, seconds, read) {
   const service = createServer((req, res) => {

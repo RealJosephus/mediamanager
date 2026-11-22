@@ -138,6 +138,7 @@ export async function sealState(
   aliases,
   external,
   importedMarkerReader,
+  providerState,
 ) {
   const state = path.join(root, stateDirectory);
   await mkdir(state, { mode: 0o700 });
@@ -145,7 +146,7 @@ export async function sealState(
   const assetHash = external
     ? hash(JSON.stringify(await cloneDirectory(external, path.join(state, 'source-metadata'))))
     : undefined;
-  const base = { chapterMarkerVersion: 1, source: [...sourceRows], target: [...targetRows], assets, aliases };
+  const base = { chapterMarkerVersion: 1, source: [...sourceRows], target: [...targetRows], assets, aliases, providerState };
   await writeJson(path.join(state, 'base.json'), base);
   await writeJson(path.join(state, 'manifest.json'), {
     version: 1,
@@ -157,12 +158,13 @@ export async function sealState(
     baseHash: await fileHash(path.join(state, 'base.json')),
   });
 }
-export async function mergeAssets(from, to, oldA = {}, oldB = {}, report) {
+export async function mergeAssets(from, to, oldA = {}, oldB = {}, report, { include = () => true } = {}) {
   const a = (await exists(from)) ? await inventory(from) : { members: {}, directories: [] };
   const b = (await exists(to)) ? await inventory(to) : { members: {}, directories: [] };
   if (a.directories.length || Object.keys(a.members).length) await mkdir(to, { recursive: true, mode: 0o700 });
   for (const d of a.directories) await mkdir(path.join(to, d), { recursive: true, mode: 0o700 });
   for (const name of new Set([...Object.keys(oldA), ...Object.keys(a.members)])) {
+    if (!include(name)) continue;
     const get = (members) => (Object.hasOwn(members, name) ? members[name] : undefined);
     const input = get(a.members),
       current = get(b.members);
