@@ -21,7 +21,7 @@ import {
 
 const usage = [
   'emby:inspect -- --source <stopped-Emby-programdata>',
-  'emby:import -- --source <stopped-Emby-programdata> --output <new-MediaManager-instance> --schema <new-pg-schema> --postgres-url-env <variable> [--mount-contract <json>] [--admin-user <Emby-name> --admin-password-env <variable>]',
+  'emby:import -- --source <stopped-Emby-programdata> --output <new-MediaManager-instance> --schema <new-pg-schema> --postgres-url-env <variable> [--template <stopped-Jellyfin-instance>] [--mount-contract <json>] [--credits-end preserve|runtime] [--admin-user <Emby-name> --admin-password-env <variable>]',
   'emby:export -- --source <MediaManager-instance> --output <new-Emby-programdata> --schema <pg-schema> --postgres-url-env <variable> [--template <stopped-Emby-programdata>]',
   'Both directions accept --identity-map <users/items GUID JSON>, --asset-roots <JSON array of {id,identityRoot,directory}>, --metadata-root <physical source metadata directory> and --template-metadata-root <physical template metadata directory>.',
 ].join('\n');
@@ -41,9 +41,11 @@ export async function runEmby(command, argv, environment = process.env, { afterD
       '--asset-roots',
       '--metadata-root',
       '--template-metadata-root',
-      ...(command === 'import' ? ['--mount-contract', '--admin-user', '--admin-password-env'] : []),
+      ...(command === 'import' ? ['--mount-contract', '--admin-user', '--admin-password-env', '--credits-end'] : []),
     ],
   });
+  const creditsEnd = args['--credits-end'] ?? 'preserve';
+  if (!['preserve', 'runtime'].includes(creditsEnd)) throw new Error('--credits-end expects preserve or runtime');
   const connectionString = readExplicitPostgresUrl(args, environment);
   readExplicitPostgresSchema(args);
   const pgarg = args['--postgres-url-env']
@@ -86,6 +88,7 @@ export async function runEmby(command, argv, environment = process.env, { afterD
       : undefined,
     adminUser: args['--admin-user'],
     adminPassword,
+    creditsEnd,
     prepareSource:
       command === 'export'
         ? async (root, filename) => {

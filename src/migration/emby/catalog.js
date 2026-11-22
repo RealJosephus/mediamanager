@@ -1,5 +1,6 @@
 import { nativeGuid } from '../../users/native.js';
 import { commonLibraryOptions } from './libraries.js';
+import { readMarkers } from './chapter-markers.js';
 import {
   itemTypes,
   scalarFields,
@@ -92,6 +93,8 @@ function baseItem(row, type) {
     Members: [],
     People: [],
     Chapters: [],
+    IntroSkip: null,
+    CreditsSkip: null,
     Streams: [],
     Artists: [],
     AlbumArtists: [],
@@ -243,9 +246,10 @@ export function embyCatalog(db, serverId, report) {
       Type: personTypes[Number(r.PersonType)] ?? null,
     }),
   );
-  readChildren(db, 'SELECT * FROM Chapters3 ORDER BY ItemId,ChapterIndex', items, 'Chapters', (r) =>
-    fields(r, chapterFields),
+  readChildren(db, 'SELECT * FROM Chapters3 WHERE MarkerType IS NULL OR MarkerType=0 ORDER BY ItemId,ChapterIndex', items, 'Chapters', (r) =>
+    ({ ...fields(r, chapterFields), ImageDateModified: r.ImageDateModified ? String(r.ImageDateModified) : null }),
   );
+  readMarkers(db, 'emby', items, id => idMap.get(id), report);
   readChildren(db, 'SELECT * FROM MediaStreams2 ORDER BY ItemId,StreamIndex', items, 'Streams', (r) =>
     fields(r, streamFields),
   );
@@ -358,8 +362,9 @@ export function jellyfinCatalog(db, report) {
     }),
   );
   readChildren(db, 'SELECT * FROM Chapters ORDER BY ItemId,ChapterIndex', items, 'Chapters', (r) =>
-    fields(r, chapterFields),
+    ({ ...fields(r, chapterFields), ImageDateModified: timeToSeconds(r.ImageDateModified) }),
   );
+  readMarkers(db, 'jellyfin', items, guid, report);
   readChildren(db, 'SELECT * FROM MediaStreamInfos ORDER BY ItemId,StreamIndex', items, 'Streams', (r) =>
     fields(r, streamFields),
   );

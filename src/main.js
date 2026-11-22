@@ -7,6 +7,7 @@ import { resolveProductionEnvironment, verifyProductionDatabaseContract } from '
 import { readMediaEncoderStartupOptions } from './playback/media-encoder.js';
 import { readPublishedServerStartupOptions } from './network/startup.js';
 import { SystemLifecycle } from './system/lifecycle.js';
+import { hasImportedMarkerReader } from './migration/emby/files.js';
 
 function optionalEnvironmentInteger(environment, name, minimum, description) {
   const raw = environment[name];
@@ -92,6 +93,7 @@ export async function startProductionInstance({ environment = process.env, args 
       ...networkStartup,
       storageConfiguration: environment.MEDIAMANAGER_STORAGE, environment, portableMountContract,
       mediaEncoderOptions,
+      importedMarkerReader: await hasImportedMarkerReader(instance),
       systemLifecycle,
       database,
       onError,

@@ -1,6 +1,7 @@
 import { tmpdir } from 'node:os';
 import { PluginHost } from './plugins/host.js';
 import { IntroProviderManager } from './library/intro-providers.js';
+import { MediaSegmentService, embyMarkerProviderName } from './library/media-segment-service.js';
 import { initializeLiveTvState } from './database/live-tv-state-import.js';
 import { LiveTvService } from './library/live-tv-service.js';
 import { LiveTvTimersService } from './library/live-tv-timers-service.js';
@@ -116,7 +117,7 @@ function absoluteApplicationPath(value, name) {
 export async function createRuntime({ database, configuration, serverId, serverName = configuration?.ServerName || 'MediaManager', serverVersion = '13.0.0',
   networkConfiguration, publicAddress,
   programDataPath, configurationDirectoryPath, dataPath, metadataPath, cachePath, logDirectoryPath, libraryOptions, directoryItemResolvers,
-  pluginOptions = {}, storageConfiguration, environment, portableMountContract,
+  pluginOptions = {}, storageConfiguration, environment, portableMountContract, importedMarkerReader = false,
   vfs, identityMap, ignoreIdentityMap = identityMap, mediaEncoderOptions = {}, probeOptions, extractionOptions, remuxOptions, hlsOptions, imageOptions = {}, metadataOptions = {}, onError,
   autoDiscoveryOptions, onDatabaseOwnershipTransferred, systemLifecycle } = {}) {
   programDataPath = absoluteApplicationPath(programDataPath, 'programDataPath');
@@ -679,6 +680,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(stopStorageObserver);
   const services = { storage: configuredStorage, storageReadiness, fileSystem, get configuration() { return currentConfiguration(); }, get networkConfiguration() { return getNetworkConfiguration(); }, getNetworkConfiguration, getSmartApiUrl, network, baseUrl, publicAddress, store, activities, users, devices, library, itemCreation, itemDeletion, unsafeItemDeletion, folderValidation, linkedChildReferences, playlists, topLevelValidation, libraryScanHost, libraryScanLifecycle, libraryScanner, metadataScanner, artistsPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, tasks, userData, sessions, syncPlay, refreshes, authentication, localization, playback, probe, externalData, extraction, remux, hls, images, imageProcessor, metadata, metadataUpdates, resolvedItemLifecycle, metadataEditor, itemUpdates, plugins, similarItems, ignoreRule, serverId, serverName, serverVersion };
   services.collectionPosterVerifyPostScanTask = collectionPosterVerifyPostScanTask;
+  if (importedMarkerReader) {
+    services.mediaSegments = new MediaSegmentService({ store, library, providers: () => [{ name: embyMarkerProviderName }] });
+  }
   services.channels = channels;
   services.liveTv = liveTv;
   services.liveTvTimers = liveTvTimers;

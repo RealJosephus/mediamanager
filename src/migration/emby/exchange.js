@@ -26,6 +26,7 @@ import {
   writeJson,
 } from './files.js';
 import { fromBlob } from './format.js';
+import { chapterMarkerName, isMarkerField, markerProviderId } from './chapter-markers.js';
 
 const digest = (value) => createHash('sha256').update(value).digest('hex');
 const jellyDb = (root) => path.join(root, 'data', 'data', 'jellyfin.db');
@@ -114,11 +115,19 @@ export async function inspectEmby(root) {
     for (const name of ['MediaItems', 'UserDatas', 'ListItems', 'Chapters3', 'MediaStreams2', 'ItemPeople2'])
       counts[name] = db.prepare('SELECT count(*) AS n FROM ' + name).get().n;
     counts.users = db.prepare('SELECT count(*) AS n FROM accounts.LocalUsersv2').get().n;
-    const catalog = embyCatalog(db, id, silent);
+    const markerIssues = [];
+    const catalog = embyCatalog(db, id, (status, kind, item, field, reason) => {
+      if (isMarkerField(field) || field.startsWith('Chapters3.')) markerIssues.push({ status, item, field, reason });
+    });
     return {
       identity: id,
       counts,
       mappedRecords: catalog.rows.size,
+      chapterMarkers: {
+        counts: db.prepare('SELECT MarkerType AS type, count(*) AS rows FROM Chapters3 GROUP BY MarkerType ORDER BY MarkerType')
+          .all().map(row => ({ ...row, name: chapterMarkerName(row.type) })),
+        issues: markerIssues,
+      },
       hasDateLastSearched: schemaColumns(db, 'UserDatas').has('DateLastSearchedInt'),
       retainedSourceColumns: originCoverage(db),
     };
@@ -143,6 +152,7 @@ export async function exchange({
   afterDatabaseCommit,
   adminUser,
   adminPassword,
+  creditsEnd = 'preserve',
 }) {
   const sourceType = direction === 'import' ? 'emby' : 'jellyfin',
     targetType = direction === 'import' ? 'jellyfin' : 'emby';
@@ -164,6 +174,7 @@ export async function exchange({
     templateMetadataRoot,
     adminUser,
     publicationKey,
+    creditsEnd,
   });
   const work = publication.build,
     target = publication.target,
@@ -195,7 +206,7 @@ export async function exchange({
       stats,
       inputAssets,
       pathMaps,
-      retainedSourceColumns,
+      retainedSourceColumns, importedMarkerReader,
       issues = [];
     const report = (status, kind, id, field, reason) => issues.push({ status, kind, id, field, reason });
     try {
@@ -301,6 +312,7 @@ export async function exchange({
           translatedRows(beforeSource.rows, aliases, targetAssets.rows, false),
           beforeTarget.rows,
           report,
+          { legacyChapters: baseline != null && !baseline.chapterMarkerVersion },
         );
         targetDb.exec('BEGIN IMMEDIATE; PRAGMA defer_foreign_keys=ON');
         try {
@@ -310,6 +322,7 @@ export async function exchange({
             await writeJellyfin(targetDb, writes, targetView, aligned, report, {
               adminUser,
               adminPassword,
+              creditsEnd,
             });
             await writeJellyfinLibraryOptions(writes, target);
           }
@@ -320,6 +333,8 @@ export async function exchange({
           throw error;
         }
         targetView = getCatalog(targetType, targetDb, targetId, silent);
+        importedMarkerReader = targetType === 'jellyfin' && Boolean(targetDb.prepare(
+          'SELECT 1 FROM MediaSegments WHERE SegmentProviderId=? LIMIT 1').get(markerProviderId));
         if (targetType === 'jellyfin') await readJellyfinLibraryOptions(targetView, target);
         stats = {
           sourceRecords: sourceView.rows.size,
@@ -359,6 +374,7 @@ export async function exchange({
       assets,
       aliases,
       inputAssets.extra ? inputAssets.directory : null,
+      importedMarkerReader,
     );
     // Copying and hashing the origin precedes the PG commit. A rename failure
     // after that point leaves a complete, identifiable directory for recovery.

@@ -16,6 +16,7 @@ import {
   dateFields,
   stateFields,
   fromSeconds,
+  timeToSeconds,
   fromImageTicks,
   images,
   locks,
@@ -23,6 +24,7 @@ import {
   editObjectFields,
 } from './format.js';
 import { valueTypes } from './catalog.js';
+import { isMarkerField, writeMarker } from './chapter-markers.js';
 
 export function insert(db, table, row, { schema, ignore = false } = {}) {
   const keys = Object.keys(row);
@@ -164,6 +166,10 @@ function changeRelations(db, id, name, values, report) {
         };
         if (name === 'Streams')
           for (const k of ['IsDefault', 'IsExternal', 'IsForced', 'IsOriginal']) row[k] ??= 0;
+        else {
+          const original = old.get(r[key])?.ImageDateModified ?? null;
+          row.ImageDateModified = timeToSeconds(original) === r.ImageDateModified ? original : fromSeconds(r.ImageDateModified);
+        }
         insert(db, table, row);
       }
       break;
@@ -172,7 +178,7 @@ function changeRelations(db, id, name, values, report) {
       if (Object.hasOwn(valueTypes, name)) changeValues(db, id, name, values);
   }
 }
-export async function writeJellyfin(db, changes, catalog, source, report, { adminUser, adminPassword } = {}) {
+export async function writeJellyfin(db, changes, catalog, source, report, { adminUser, adminPassword, creditsEnd } = {}) {
   const adminHash = adminPassword ? await createPasswordHash(adminPassword) : null;
   const inaccessible = await createPasswordHash(randomBytes(48).toString('base64url'));
   const items = changes.filter((c) => c.key.startsWith('item/') && c.value);
@@ -272,6 +278,10 @@ export async function writeJellyfin(db, changes, catalog, source, report, { admi
       else if (field === 'type') {
         patch.Type = value.type;
         patch.IsFolder = folders.has(itemTypes.indexOf(value.type)) ? 1 : 0;
+      } else if (isMarkerField(field)) {
+        const target = catalog.rows?.get(key);
+        writeMarker(db, 'jellyfin', id, id, field, value[field], target,
+          fields.includes('RunTimeTicks') ? value.RunTimeTicks : target?.RunTimeTicks, report, creditsEnd);
       } else changeRelations(db, id, field, value[field], report);
     }
     if (Object.hasOwn(patch, 'Name')) patch.CleanName = cleanValue(patch.Name);

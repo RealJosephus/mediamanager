@@ -1,0 +1,10 @@
+{
+  "guid": "c967be0f-173c-4478-9c4d-41fc635ca993",
+  "name": "Emby Chapter Markers",
+  "description": "Provides imported and MediaManager-generated playback segments.",
+  "version": "1.0.0.0",
+  "targetAbi": "13.0.0.0",
+  "status": "Active",
+  "autoUpdate": false,
+  "assemblies": ["MediaManager.EmbyChapterMarkers.dll"]
+}

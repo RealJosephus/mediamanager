@@ -8,6 +8,8 @@ on:
       - 'tests/migration/emby-exchange.test.js'
       - 'tests/migration/jellyfin-generations.test.js'
       - 'tools/database/**'
+      - 'tools/jellyfin/EmbyChapterMarkers/**'
+      - 'src/library/media-segment-service.js'
       - 'tools/ci/*migration*'
       - 'tools/ci/fetch-emby-server.ps1'
       - 'tests/fixtures/jellyfin-reference/**'
@@ -19,6 +21,8 @@ on:
       - 'tests/migration/emby-exchange.test.js'
       - 'tests/migration/jellyfin-generations.test.js'
       - 'tools/database/**'
+      - 'tools/jellyfin/EmbyChapterMarkers/**'
+      - 'src/library/media-segment-service.js'
       - 'tools/ci/*migration*'
       - 'tools/ci/fetch-emby-server.ps1'
       - 'tests/fixtures/jellyfin-reference/**'
@@ -131,7 +135,17 @@ jobs:
             (cd "$RUNNER_TEMP/builds" && dotnet build "$dir/jellyfin-source/Jellyfin.Server/Jellyfin.Server.csproj" -c Release --verbosity quiet)
             dirs+=("$dir/jellyfin-source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll")
           done
+          export MEDIAMANAGER_MARKER_PLUGIN="$RUNNER_TEMP/marker-reader/MediaManager.EmbyChapterMarkers.dll"
+          dotnet build tools/jellyfin/EmbyChapterMarkers/EmbyChapterMarkers.csproj -c Release \
+            -p:JellyfinBin="$(dirname "${dirs[1]}")" -o "$(dirname "$MEDIAMANAGER_MARKER_PLUGIN")"
           python tools/ci/verify-jellyfin-migration.py "${dirs[@]}"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: jellyfin-emby-chapter-markers-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/marker-reader/MediaManager.EmbyChapterMarkers.dll
+            ${{ runner.temp }}/marker-reader/meta.json
+          if-no-files-found: error
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>MediaManager.EmbyChapterMarkers</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Update="meta.json" CopyToOutputDirectory="PreserveNewest" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Reference Include="MediaBrowser.Common" HintPath="$(JellyfinBin)/MediaBrowser.Common.dll" Private="false" />
+    <Reference Include="MediaBrowser.Controller" HintPath="$(JellyfinBin)/MediaBrowser.Controller.dll" Private="false" />
+    <Reference Include="MediaBrowser.Model" HintPath="$(JellyfinBin)/MediaBrowser.Model.dll" Private="false" />
+  </ItemGroup>
+</Project>

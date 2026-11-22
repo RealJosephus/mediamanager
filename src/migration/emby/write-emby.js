@@ -16,6 +16,7 @@ import {
   providers,
 } from './format.js';
 import { valueTypes, personTypes } from './catalog.js';
+import { isMarkerField, reserveChapterIndexes, writeMarker } from './chapter-markers.js';
 import { insert, update } from './write-jellyfin.js';
 
 function remove(db, table, column, id) {
@@ -152,16 +153,22 @@ function relation(db, field, id, integer, value, item, find, report) {
         .all()
         .map((r) => r.name),
     );
+    const range = ' WHERE ItemId=?' + (field === 'Chapters' ? ' AND (MarkerType=0 OR MarkerType IS NULL)' : '');
     const old = new Map(
-      statement(db, 'SELECT * FROM ' + table + ' WHERE ItemId=?')
+      statement(db, 'SELECT * FROM ' + table + range)
         .all(integer)
         .map((r) => [Number(r[key]), r]),
     );
-    remove(db, table, 'ItemId', integer);
+    db.prepare('DELETE FROM ' + table + range).run(integer);
+    if (field === 'Chapters') reserveChapterIndexes(db, integer, value);
     for (const r of value) {
       const row = { ...(old.get(r[key]) ?? {}), ItemId: integer };
       for (const [k, v] of Object.entries(r)) if (cols.has(k)) row[k] = sqliteValue(k, v);
-      if (field === 'Chapters') row.MarkerType ??= 0;
+      if (field === 'Chapters') {
+        row.MarkerType ??= 0;
+        if (r.ImageDateModified != null) row.ImageDateModified = BigInt(r.ImageDateModified);
+        else row.ImageDateModified = old.get(r[key])?.ImageDateModified === 0n ? 0n : null;
+      }
       insert(db, table, row);
     }
     return;
@@ -338,6 +345,10 @@ export async function writeEmby(db, changes, catalog, source, report, root) {
           continue;
         }
         patch[field] = ids.get(value[field]) ?? null;
+      } else if (isMarkerField(field)) {
+        const target = catalog.rows?.get(key);
+        writeMarker(db, 'emby', int, id, field, value[field], target,
+          fields.includes('RunTimeTicks') ? value.RunTimeTicks : target?.RunTimeTicks, report);
       } else if (field === 'Album') {
         const parent = ids.get(value.ParentId);
         const album =

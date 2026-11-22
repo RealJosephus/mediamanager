@@ -25,7 +25,7 @@ const columns = {
   ListItems: ['ListId', 'ListItemId', 'ListItemOrder'],
   ItemLinks2: ['ItemId', 'Type', 'LinkedId', 'LinkOrder'],
   ItemPeople2: ['ItemId', 'PersonId', 'Role', 'PersonType', 'ListOrder'],
-  Chapters3: ['ItemId', 'ChapterIndex', 'StartPositionTicks', 'Name', 'ImagePath'],
+  Chapters3: ['ItemId', 'ChapterIndex', 'StartPositionTicks', 'Name', 'ImagePath', 'ImageDateModified', 'MarkerType'],
   MediaStreams2: ['ItemId', ...streamFields],
   AncestorIds2: ['ItemId', 'AncestorId', 'Distance'],
   LocalUsersv2: ['Id', 'guid'],

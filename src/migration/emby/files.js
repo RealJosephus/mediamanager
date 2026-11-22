@@ -16,6 +16,17 @@ import {
 } from 'node:fs/promises';
 
 export const stateDirectory = '.mediamanager-exchange';
+export async function hasImportedMarkerReader(instance) {
+  let manifest;
+  try {
+    manifest = await readFile(path.join(instance, stateDirectory, 'manifest.json'), 'utf8');
+  } catch (error) {
+    if (error.code === 'ENOENT') return false;
+    throw error;
+  }
+  const lineage = JSON.parse(manifest);
+  return lineage.version === 1 && lineage.owner === 'jellyfin' && lineage.embyChapterMarkers === true;
+}
 export async function exists(file) {
   try {
     await lstat(file);
@@ -126,6 +137,7 @@ export async function sealState(
   assets,
   aliases,
   external,
+  importedMarkerReader,
 ) {
   const state = path.join(root, stateDirectory);
   await mkdir(state, { mode: 0o700 });
@@ -133,12 +145,13 @@ export async function sealState(
   const assetHash = external
     ? hash(JSON.stringify(await cloneDirectory(external, path.join(state, 'source-metadata'))))
     : undefined;
-  const base = { source: [...sourceRows], target: [...targetRows], assets, aliases };
+  const base = { chapterMarkerVersion: 1, source: [...sourceRows], target: [...targetRows], assets, aliases };
   await writeJson(path.join(state, 'base.json'), base);
   await writeJson(path.join(state, 'manifest.json'), {
     version: 1,
     owner,
     originIdentity,
+    ...(importedMarkerReader ? { embyChapterMarkers: true } : {}),
     originHash: hash(JSON.stringify(captured)),
     assetHash,
     baseHash: await fileHash(path.join(state, 'base.json')),

@@ -14,13 +14,14 @@ import urllib.request
 import urllib.parse
 import wave
 from contextlib import contextmanager
+from chapter_marker_migration import verify_chapter_markers
 
 runroot = Path(os.environ["RUNNER_TEMP"])
 output = runroot / "results" / "history.json"
 password = secrets.token_urlsafe(32)
 
 
-def run_host(dll, instance, *, fresh, seed_media=False, edit_item=None, expected_favorite=None):
+def run_host(dll, instance, *, fresh, seed_media=False, edit_item=None, expected_favorite=None, inspect_playback=None):
     for name in ("data", "config", "cache", "log", "config/user/Subtitle Edit"):
         (instance / name).mkdir(parents=True, exist_ok=True)
     with socket.socket() as listener:
@@ -74,6 +75,8 @@ def run_host(dll, instance, *, fresh, seed_media=False, edit_item=None, expected
             token = session["AccessToken"]
             user_id = session["User"]["Id"]
             info = call("/System/Info", admin=True)
+            if inspect_playback:
+                inspect_playback(lambda route: call(route, admin=True), user_id)
             media_id = edit_item
             if seed_media:
                 media = runroot / "jellyfin-music"
@@ -278,3 +281,4 @@ assert samples["newFresh"]["tables"] == samples["upgraded"]["tables"]
 assert samples["newFresh"]["columns"] == samples["upgraded"]["columns"]
 assert samples["newFresh"]["indexes"] == samples["upgraded"]["indexes"]
 print(json.dumps({"histories":[len(oldrows),len(newrows),len(upgrade)], "extraAfterUpgrade":sorted(upgrade-newrows), "freshOnlyVsOld":sorted(newrows-oldrows)}))
+verify_chapter_markers(runroot, new, run_host, emby_host, password)

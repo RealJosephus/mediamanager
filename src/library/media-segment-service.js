@@ -10,6 +10,7 @@ import { idKey, libraryError, nonemptyId } from './records.js';
 export const mediaSegmentTypes = Object.freeze(['Unknown', 'Commercial', 'Preview', 'Recap', 'Outro', 'Intro']);
 const columns = tableDefinition('MediaSegments').columns;
 export const mediaSegmentProviderId = name => md5Guid(lowerInvariant(name));
+export const embyMarkerProviderName = 'Emby Chapter Markers';
 
 function readAndCloseFailure(primary, cleanup) {
   const failure = new AggregateError([primary, cleanup], 'Media segment read and cursor cleanup failed.', { cause: primary });

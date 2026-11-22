@@ -10,6 +10,108 @@ import { changesBetween } from '../../src/migration/emby/reconcile.js';
 import { collectAssets, projectAssetRows } from '../../src/migration/emby/assets.js';
 import { editObjectFields, fromBlob, toBlob } from '../../src/migration/emby/format.js';
 import { mergeAssets } from '../../src/migration/emby/files.js';
+import { markerProviderId, readMarkers, reserveChapterIndexes, writeMarker } from '../../src/migration/emby/chapter-markers.js';
+
+function markerFixture(t) {
+  const db = new DatabaseSync(':memory:');
+  t.after(() => db.close());
+  db.exec(`
+    CREATE TABLE Chapters3(ItemId INTEGER,ChapterIndex INTEGER,StartPositionTicks INTEGER,Name TEXT,
+      ImagePath TEXT,ImageDateModified INTEGER,MarkerType INTEGER,PRIMARY KEY(ItemId,ChapterIndex));
+    CREATE TABLE MediaSegments(Id TEXT PRIMARY KEY,ItemId TEXT,Type INTEGER,StartTicks INTEGER,EndTicks INTEGER,SegmentProviderId TEXT);
+    CREATE TABLE ItemExtradataTypes(ExtradataTypeId INTEGER,Name TEXT);
+    CREATE TABLE ItemExtradata(ItemId INTEGER,ExtradataTypeId INTEGER);
+    INSERT INTO ItemExtradataTypes VALUES(7,'IntroDetectionExtradata'),(8,'Other');
+    INSERT INTO ItemExtradata VALUES(1,7),(1,8);
+  `);
+  const issues = [], report = (...issue) => issues.push(issue);
+  const read = (type, runtime) => {
+    const item = { RunTimeTicks: runtime, IntroSkip: null, CreditsSkip: null };
+    readMarkers(db, type, new Map([[type === 'emby' ? 1n : 'movie', item]]), () => 'movie', report);
+    return item;
+  };
+  return { db, read, issues, report };
+}
+
+test('typed intro boundaries preserve exact ticks, native identity, ordinary chapters and private marker metadata', t => {
+  const { db, read, report } = markerFixture(t);
+  const end = 9007199254740993n, runtime = String(end + 100n);
+  db.exec("INSERT INTO Chapters3 VALUES(1,0,0,'Chapter',NULL,NULL,NULL),(1,1,0,'Opening','poster',123,1),(1,16,9007199254740993,'Cut',NULL,NULL,2)");
+  const original = read('emby', runtime);
+  assert.deepEqual(original.IntroSkip, { StartTicks: '0', EndTicks: String(end) });
+  writeMarker(db, 'jellyfin', 'movie', 'id', 'IntroSkip', original.IntroSkip, null, runtime, report);
+  const inserted = db.prepare('SELECT Id,SegmentProviderId FROM MediaSegments').get();
+  assert.equal(inserted.SegmentProviderId, markerProviderId);
+  db.prepare("UPDATE MediaSegments SET EndTicks=?,SegmentProviderId='existing provider'").run(end - 4n);
+  const edited = read('jellyfin', runtime);
+  writeMarker(db, 'emby', 1, 'id', 'IntroSkip', edited.IntroSkip, original, runtime, report);
+  assert.deepEqual(read('emby', runtime).IntroSkip, edited.IntroSkip);
+  reserveChapterIndexes(db, 1, [{ ChapterIndex: 0 }, { ChapterIndex: 1 }]);
+  const point = db.prepare('SELECT * FROM Chapters3 WHERE MarkerType=1').get();
+  assert.deepEqual([point.Name, point.ImagePath, point.ImageDateModified], ['Opening', 'poster', 123]);
+  assert.notEqual(point.ChapterIndex, 1);
+  assert.equal(db.prepare('SELECT ExtradataTypeId FROM ItemExtradata').get().ExtradataTypeId, 8);
+  writeMarker(db, 'jellyfin', 'movie', 'id', 'IntroSkip', original.IntroSkip, edited, runtime, report);
+  assert.deepEqual({ ...db.prepare('SELECT Id,SegmentProviderId FROM MediaSegments').get() },
+    { Id: inserted.Id, SegmentProviderId: 'existing provider' });
+  writeMarker(db, 'emby', 1, 'id', 'IntroSkip', null, edited, runtime, report);
+  assert.deepEqual(db.prepare('SELECT Name FROM Chapters3').all().map(r => r.Name), ['Chapter']);
+});
+
+test('a sole credits start has no known end; only an explicit policy or an existing native tail provides one', t => {
+  const { db, read, issues, report } = markerFixture(t);
+  db.exec("INSERT INTO Chapters3 VALUES(1,10,70,'Credits Start',NULL,NULL,3)");
+  const start = read('emby', null).CreditsSkip;
+  assert.deepEqual(start, { StartTicks: '70', EndTicks: null });
+  const write = (runtime, policy) => writeMarker(db, 'jellyfin', 'movie', 'id', 'CreditsSkip', start,
+    read('jellyfin', runtime), runtime, report, policy);
+  write('100');
+  write(null, 'runtime');
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM MediaSegments').get().n, 0);
+  assert.equal(issues.at(-1)[0], 'origin-only');
+  write('100', 'runtime');
+  assert.equal(issues.at(-1)[0], 'inferred');
+  db.exec("UPDATE MediaSegments SET StartTicks=82");
+  write('100');
+  assert.deepEqual(read('jellyfin', '100').CreditsSkip, { StartTicks: '70', EndTicks: '100' });
+  db.exec("UPDATE MediaSegments SET EndTicks=87");
+  write('100', 'runtime');
+  assert.equal(issues.at(-1)[0], 'conflict');
+  assert.equal(db.prepare('SELECT EndTicks FROM MediaSegments').get().EndTicks, 87);
+  assert.equal(Object.hasOwn(read('jellyfin', '100'), 'CreditsSkip'), false);
+});
+
+test('incomplete, repeated and future marker types never overwrite existing intervals', t => {
+  const { db, read, issues, report } = markerFixture(t);
+  db.exec("INSERT INTO Chapters3 VALUES(1,1,20,NULL,NULL,NULL,1),(1,2,50,NULL,NULL,NULL,3),(1,3,62,NULL,NULL,NULL,9)");
+  assert.equal(Object.hasOwn(read('emby', '80'), 'IntroSkip'), false);
+  assert.equal(Object.hasOwn(read('emby', '80'), 'CreditsSkip'), false);
+  db.exec("INSERT INTO Chapters3 VALUES(1,4,9,NULL,NULL,NULL,2)");
+  assert.equal(Object.hasOwn(read('emby', '80'), 'IntroSkip'), false);
+  db.exec("UPDATE Chapters3 SET StartPositionTicks=24 WHERE MarkerType=2; INSERT INTO Chapters3 VALUES(1,5,22,NULL,NULL,NULL,2)");
+  assert.equal(Object.hasOwn(read('emby', '80'), 'IntroSkip'), false);
+  db.exec("INSERT INTO MediaSegments VALUES('1','movie',5,1,5,'a'),('2','movie',5,1,5,'b'),('3','movie',3,0,1,'a')");
+  const target = read('jellyfin', '80');
+  writeMarker(db, 'jellyfin', 'movie', 'id', 'IntroSkip', null, target, '80', report);
+  assert.equal(issues.at(-1)[0], 'conflict');
+  assert.deepEqual(db.prepare('SELECT Id FROM MediaSegments ORDER BY Id').all().map(r => r.Id), ['1', '2', '3']);
+  assert.ok(issues.some(issue => issue[3] === 'MediaSegments.Type' && issue[4] === '3'));
+});
+
+test('marker reconciliation distinguishes a first import, ambiguous points, independent edits and legacy ordinary chapters', () => {
+  const m = row => new Map(row ? [['item/id', row]] : []);
+  const a = { StartTicks: '1', EndTicks: '5' }, b = { ...a, EndTicks: '7' }, c = { ...a, EndTicks: '9' };
+  const issues = [], plan = (s, t, oldS, oldT) =>
+    changesBetween(m(s), m(t), m(oldS), m(oldT), (...i) => issues.push(i), { legacyChapters: true });
+  assert.deepEqual(plan({ IntroSkip: a }, { IntroSkip: null }, {}, {})[0].fields, ['IntroSkip']);
+  assert.deepEqual(plan({ IntroSkip: null }, { IntroSkip: a }, {}, {}), []);
+  assert.deepEqual(plan({}, { IntroSkip: a }, { IntroSkip: a }, { IntroSkip: a }), []);
+  assert.deepEqual(plan({ IntroSkip: null }, { IntroSkip: a }, { IntroSkip: a }, { IntroSkip: a })[0].fields, ['IntroSkip']);
+  assert.deepEqual(plan({ IntroSkip: b }, { IntroSkip: c }, { IntroSkip: a }, { IntroSkip: a }), []);
+  assert.equal(issues.at(-1)[0], 'conflict');
+  const old = [{ Name: 'Custom', ChapterIndex: 1 }], after = [{ ...old[0], ImageDateModified: null }];
+  assert.deepEqual(plan({ Chapters: after }, { Chapters: [] }, { Chapters: old }, { Chapters: old }), []);
+});
 
 test('each side has its own baseline; divergent edits and deletion keep the target', () => {
   const map = (row) => new Map(row ? [['item/id', row]] : []),
