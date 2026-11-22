@@ -12,9 +12,10 @@ import { readIdentityMap } from '../../src/migration/emby/identities.js';
 import { assetRoots } from '../../src/migration/emby/assets.js';
 import { importJellyfinSqlite } from './import-jellyfin.js';
 import { exportJellyfinSqlite } from './export-jellyfin.js';
+import { reconcileSkipperCopies, snapshotJellyfinAndSkipper } from './intro-skipper-data.js';
 import {
   parseNamedOptions,
-  createLockedSqliteSnapshot,
+  closeResources,
   readStableJsonFile,
   readExplicitPostgresUrl,
   readExplicitPostgresSchema,
@@ -92,15 +93,12 @@ export async function runEmby(command, argv, environment = process.env, { afterD
     creditsEnd,
     prepareSource:
       command === 'export'
-        ? async (root, filename) => {
+        ? async (root, filename, work) => {
             await mkdir(path.dirname(filename), { recursive: true });
             // This is a private clone. The live database for a MediaManager instance is PostgreSQL.
             for (const suffix of ['', '-wal', '-shm', '-journal']) await rm(filename + suffix, { force: true });
             const skipper = path.join(path.dirname(filename), 'introskipper');
-            const exported = await exportJellyfinSqlite([...common, '--output', filename,
-              ...(await exists(skipper) ? [] : ['--intro-skipper-output', skipper])], { environment });
-            await mkdir(path.join(root, 'config'), { recursive: true });
-            await writeFile(savedMounts(root), JSON.stringify(exported.portableMountContract), { mode: 0o600 });
+            const postgresSkipper = path.join(work, 'postgres-skipper');
             const db = await PostgresDatabase.open({
               connectionString: readExplicitPostgresUrl(args, environment),
               schema: args['--schema'],
@@ -116,6 +114,17 @@ export async function runEmby(command, argv, environment = process.env, { afterD
             } finally {
               await db.close();
             }
+            const exported = await exportJellyfinSqlite([...common, '--output', filename,
+              '--intro-skipper-output', postgresSkipper], { environment });
+            const issues = await reconcileSkipperCopies(skipper, postgresSkipper, {
+              files: (exported.introSkipperDatabases ?? []).map(name => ({ name })),
+              baseline: exported.introSkipperCapture,
+            });
+            for (const issue of issues)
+              issue.evidence.postgresCopy = path.join(stateDirectory, 'origin', 'data/data/introskipper', issue.evidence.postgresCopy);
+            await mkdir(path.join(root, 'config'), { recursive: true });
+            await writeFile(savedMounts(root), JSON.stringify(exported.portableMountContract), { mode: 0o600 });
+            return issues;
           }
         : undefined,
     prepareTarget:
@@ -139,16 +148,24 @@ export async function runEmby(command, argv, environment = process.env, { afterD
                 : await embyLibraryMounts(path.join(dir, 'origin')));
             await writeFile(savedMounts(root), JSON.stringify(selected), { mode: 0o600 });
             await writeFile(mounts, JSON.stringify(selected), { mode: 0o600 });
-            const snapshot = await createLockedSqliteSnapshot(filename);
+            const { main: snapshot, companions } = await snapshotJellyfinAndSkipper(filename, path.join(path.dirname(filename), 'introskipper'));
             const stable = path.join(work, 'postgres-input.db');
+            const skipper = path.join(work, 'postgres-skipper');
+            const hashes = {};
             try {
-              await snapshot.assertUnchanged();
-              await copyFile(snapshot.filename, stable);
-              await snapshot.assertUnchanged();
+              if (companions.length) await mkdir(skipper, { mode: 0o700 });
+              for (const { name, snapshot: file } of [{ name: '', snapshot }, ...companions]) {
+                const destination = name ? path.join(skipper, name) : stable;
+                await file.assertUnchanged();
+                await copyFile(file.filename, destination);
+                await file.assertUnchanged();
+                hashes[name] = await fileHash(destination);
+              }
             } finally {
-              await snapshot.close();
+              const errors = await closeResources([snapshot, ...companions.map(file => file.snapshot)]);
+              if (errors.length) throw new AggregateError(errors, 'Could not release prepared database snapshots');
             }
-            return fileHash(stable);
+            return hashes;
           }
         : undefined,
     finishTarget:
@@ -156,12 +173,18 @@ export async function runEmby(command, argv, environment = process.env, { afterD
         ? async (root, work, inputHash, resuming) => {
             const filename = path.join(work, 'postgres-input.db'),
               state = path.join(root, stateDirectory);
+            // Previously staged imports only sealed the main SQLite snapshot.
+            const skipper = typeof inputHash === 'string' ? path.join(root, 'data/data/introskipper') : path.join(work, 'postgres-skipper');
+            const hashes = typeof inputHash === 'string' ? { '': inputHash } : inputHash;
+            const companions = await companionFiles(skipper);
             const assertUnchanged = async () => {
-              if ((await fileHash(filename)) !== inputHash)
-                throw new Error('The prepared PostgreSQL input changed');
+              if (typeof inputHash !== 'string' && (await companionFiles(skipper)).length !== Object.keys(hashes).length - 1)
+                throw new Error('The prepared Intro Skipper database membership changed');
+              for (const [name, hash] of Object.entries(hashes))
+                if (await fileHash(name ? path.join(skipper, name) : filename) !== hash)
+                  throw new Error('The prepared PostgreSQL input changed' + (name ? ': ' + name : ''));
             };
             let reused;
-            const skipper = path.join(root, 'data/data/introskipper');
             await importJellyfinSqlite(
               [
                 ...common,
@@ -171,7 +194,7 @@ export async function runEmby(command, argv, environment = process.env, { afterD
                 path.join(state, 'binding.json'),
                 '--mount-contract',
                 path.join(state, 'mounts.json'),
-                ...((await companionFiles(skipper)).length ? ['--intro-skipper-data', skipper] : []),
+                ...(companions.length ? ['--intro-skipper-data', skipper] : []),
               ],
               {
                 environment,

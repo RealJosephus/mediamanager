@@ -8,6 +8,7 @@ import sqlite3
 import subprocess
 import time
 import zipfile
+from skipper_private_migration import verify_private_copies
 
 
 def verify_chapter_markers(root, dll, jellyfin, emby, password):
@@ -188,15 +189,24 @@ def verify_skipper_sources(command, pg, work, original, movie, storage, username
     jellyfin(dll, case, fresh=False, inspect_playback=installed_and_active)
     private = dbfile.parent / "introskipper"
     assert (private / "introskipper-v2.db").is_file(), "The upstream plugin did not initialize its private database"
-    with sqlite3.connect(private / "introskipper-v2.db") as db:
-        db.executescript("CREATE TABLE OpaqueState(Value BLOB); INSERT INTO OpaqueState VALUES(X'00FF10');")
-        db.executemany("INSERT INTO Segments(Id,ItemId,Type,StartTicks,EndTicks,Source,State,ConfigHash,CreatedAt,UpdatedAt) VALUES(?,?,?,?,?,?,?,'original','2026-01-01','2026-01-01')",
+    wal = sqlite3.connect(private / "introskipper-v2.db")
+    try:
+        assert wal.execute("PRAGMA journal_mode=WAL").fetchone()[0] == "wal"
+        wal.execute("PRAGMA wal_autocheckpoint=0")
+        wal.executescript("CREATE TABLE OpaqueState(Value BLOB); INSERT INTO OpaqueState VALUES(X'00FF10');")
+        wal.executemany("INSERT INTO Segments(Id,ItemId,Type,StartTicks,EndTicks,Source,State,ConfigHash,CreatedAt,UpdatedAt) VALUES(?,?,?,?,?,?,?,'original','2026-01-01','2026-01-01')",
             [("76968930-36BC-4736-BC3F-33E753020064",movie,0,start,end+11,5,0),
              ("334ACDD9-219B-4A6F-8D02-FC98A9F33BD6",movie,1,70000003,91000005,2,1)])
-    with sqlite3.connect(dbfile) as db:
-        db.execute("DELETE FROM MediaSegments WHERE ItemId=?", (movie,))
-    schema = "marker_skipper_v2"
-    assert "introskipper-v2.db" in import_to(schema)["introSkipperDatabases"]
+        wal.commit()
+        assert (private / "introskipper-v2.db-wal").stat().st_size > 32
+        with sqlite3.connect((private / "introskipper-v2.db").as_uri() + "?immutable=1", uri=True) as db:
+            assert db.execute("SELECT count(*) FROM Segments WHERE ItemId=?", (movie,)).fetchone() == (0,)
+        with sqlite3.connect(dbfile) as db:
+            db.execute("DELETE FROM MediaSegments WHERE ItemId=?", (movie,))
+        schema = "marker_skipper_v2"
+        assert "introskipper-v2.db" in import_to(schema)["introSkipperDatabases"]
+    finally:
+        wal.close()
     manual = [["Intro",start,end+11]]
     inspect(schema,manual,manual)
     restored = work / "restored-skipper"
@@ -223,3 +233,4 @@ def verify_skipper_sources(command, pg, work, original, movie, storage, username
         assert [(s["Type"],s["StartTicks"],s["EndTicks"]) for s in segments] == [("Intro",start,end+23),("Outro",95000001,runtime)], segments
         assert len(get(f"/Episode/{movie}/Segments?includeSuppressed=true")) == 3
     jellyfin(dll,native_jellyfin,fresh=False,inspect_playback=final_native_read)
+    verify_private_copies(work, case, schema, command, pg, dll, jellyfin, movie, start, end)

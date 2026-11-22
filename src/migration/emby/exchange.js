@@ -217,7 +217,7 @@ export async function exchange({
     if (publication.pending) return await publish(publication.pending, true);
     const prior = await verifyState(source, sourceType);
     await cloneDirectory(source, captured, { skipState: true });
-    if (prepareSource) await prepareSource(captured, jellyDb(captured));
+    const preparationIssues = prepareSource ? await prepareSource(captured, jellyDb(captured), work) : [];
     await assertInput(captured, sourceType);
     const sourceDb = connect(captured, sourceType, sourceType !== 'jellyfin');
     let sourceId,
@@ -230,7 +230,7 @@ export async function exchange({
       inputAssets,
       pathMaps,
       retainedSourceColumns, importedMarkerReader,
-      issues = [];
+      issues = preparationIssues ?? [];
     const providerState = { conflicts: [], targetEdits: [] };
     let pendingProviders, sourceItemIds;
     const report = (status, kind, id, field, reason, evidence) => {

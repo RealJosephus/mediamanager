@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { restoreSkipperData } from './intro-skipper-data.js';
+import { openSkipperPublication, stageSkipperData } from './intro-skipper-data.js';
 import { fileURLToPath } from 'node:url';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { verifyPostgresTransferContract } from '../../src/database/postgres-transfer-contract.js';
@@ -37,6 +37,7 @@ export async function exportJellyfinSqlite(argv, {
     requirePortableMountContract: true,
   }),
   exportSqlite = exportCurrentSqlite,
+  afterMainPublish,
 } = {}) {
   const options = parseNamedOptions(argv, {
     required: ['--schema', '--output'],
@@ -58,19 +59,23 @@ export async function exportJellyfinSqlite(argv, {
       databaseCliExitCodes.postgres, cause);
   }
 
-  let result, operationError, skipperFiles;
+  let result, operationError, skipper, publication;
   try {
     await verifyPostgres(source);
-    result = await exportSqlite(source, output, targetContract
-      ? { targetPortableMountContract: targetContract }
-      : {});
-    const skipper = options['--intro-skipper-output'];
-    if (skipper) skipperFiles = await restoreSkipperData(source, path.resolve(skipper));
+    const exportOptions = targetContract ? { targetPortableMountContract: targetContract } : {};
+    const companion = options['--intro-skipper-output'] && path.resolve(options['--intro-skipper-output']);
+    if (companion) {
+      publication = await openSkipperPublication(companion, output);
+      exportOptions.readSourceSnapshot = async session => { skipper = await stageSkipperData(session, publication.stage); };
+      result = await exportSqlite(source, output, exportOptions);
+      if (afterMainPublish) await afterMainPublish();
+      await publication.publish(skipper.files);
+    } else result = await exportSqlite(source, output, exportOptions);
   } catch (cause) {
     operationError = cliError('SQLITE_EXPORT_FAILED', `The PostgreSQL to SQLite export failed: ${cause.message}`,
       databaseCliExitCodes.operation, cause);
   }
-  const cleanupErrors = await closeResources([source]);
+  const cleanupErrors = await closeResources([publication, source]);
   if (operationError) {
     throw combineOperationAndCleanupError(operationError, cleanupErrors, 'SQLITE_EXPORT_CLEANUP_FAILED');
   }
@@ -84,7 +89,10 @@ export async function exportJellyfinSqlite(argv, {
     ok: true,
     operation: 'postgres-to-sqlite',
     schema,
-    ...(skipperFiles?.length ? { introSkipperDatabases: skipperFiles } : {}),
+    ...(skipper?.files.length ? {
+      introSkipperDatabases: skipper.files.map(file => file.name),
+      ...(skipper.baseline ? { introSkipperCapture: skipper.baseline } : {}),
+    } : {}),
     output,
     nativeSchemaFingerprint: result.nativeSchemaFingerprint,
     migrationHistoryRows: result.migrationHistory.length,

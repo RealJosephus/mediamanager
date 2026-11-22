@@ -127,6 +127,7 @@ export async function createLockedSqliteSnapshot(filename, {
   busyTimeoutMs = 10_000,
   backupDatabase = backupSqlite,
   temporaryRoot = os.tmpdir(),
+  whileLocked,
 } = {}) {
   if (!Number.isSafeInteger(busyTimeoutMs) || busyTimeoutMs < 0) {
     throw new TypeError('busyTimeoutMs must be a non-negative integer');
@@ -152,6 +153,7 @@ export async function createLockedSqliteSnapshot(filename, {
     await backupDatabase(reader, snapshotFilename);
     reader.close();
     reader = undefined;
+    if (whileLocked) await whileLocked();
     await assertSameRegularFile(source, sourceIdentity, 'SQLite source');
     barrier.exec('ROLLBACK');
     transaction = false;

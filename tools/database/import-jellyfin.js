@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { captureSkipperData } from './intro-skipper-data.js';
+import { captureSkipperData, snapshotJellyfinAndSkipper } from './intro-skipper-data.js';
 import { fileURLToPath } from 'node:url';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { canonicalNativeSqliteSchema } from '../../src/database/sqlite-schema.js';
@@ -12,7 +12,6 @@ import {
   cliError,
   closeResources,
   combineOperationAndCleanupError,
-  createLockedSqliteSnapshot,
   databaseCliExitCodes,
   parseNamedOptions,
   readExplicitPostgresSchema,
@@ -52,7 +51,7 @@ function sourceEnvelope(source) {
 export async function importJellyfinSqlite(argv, {
   environment = process.env,
   createSource = (filename, options) => new SqliteDatabase(filename, options),
-  createSourceSnapshot = filename => createLockedSqliteSnapshot(filename),
+  createSourceSnapshot,
   openPostgres = options => PostgresDatabase.open(options),
   assertEnvelope = assertPinnedJellyfinEnvelope,
   transfer = transferDatabase,
@@ -71,20 +70,27 @@ export async function importJellyfinSqlite(argv, {
     readStableJsonFile(options['--mount-contract'], 'Portable mount contract', canonicalPortableMountContract),
   ]);
 
-  let snapshot;
+  const skipper = options['--intro-skipper-data'] ?? (path.basename(sourceFilename).toLowerCase() === 'jellyfin.db'
+    ? path.join(path.dirname(sourceFilename), 'introskipper') : null);
+  let snapshot, companions;
   try {
-    snapshot = await createSourceSnapshot(sourceFilename);
+    ({ main: snapshot, companions } = await snapshotJellyfinAndSkipper(sourceFilename, skipper, createSourceSnapshot));
     if (!snapshot || typeof snapshot !== 'object' || typeof snapshot.filename !== 'string'
       || !snapshot.filename || typeof snapshot.assertUnchanged !== 'function'
       || typeof snapshot.close !== 'function') {
       throw new TypeError('SQLite source snapshot provider returned an invalid resource');
     }
+    if (options['--intro-skipper-data'] && !companions.length)
+      throw new Error('No recognized Intro Skipper database files in the requested directory');
   }
   catch (cause) {
-    throw cliError('SOURCE_SQLITE_SNAPSHOT_FAILED',
+    const error = cliError('SOURCE_SQLITE_SNAPSHOT_FAILED',
       `The SQLite source could not be captured behind a write barrier: ${cause.message}`,
       databaseCliExitCodes.operation, cause);
+    throw combineOperationAndCleanupError(error, await closeResources([snapshot, ...(companions ?? []).map(file => file.snapshot)]),
+      'SOURCE_SQLITE_CLOSE_FAILED');
   }
+  const snapshots = [snapshot, ...companions.map(file => file.snapshot)];
 
   let source;
   try {
@@ -96,7 +102,7 @@ export async function importJellyfinSqlite(argv, {
     const error = cliError('SOURCE_SQLITE_INCOMPATIBLE',
       `The SQLite source failed pinned Jellyfin compatibility validation: ${cause.message}`,
       databaseCliExitCodes.compatibility, cause);
-    throw combineOperationAndCleanupError(error, await closeResources([source, snapshot]), 'SOURCE_SQLITE_CLOSE_FAILED');
+    throw combineOperationAndCleanupError(error, await closeResources([source, ...snapshots]), 'SOURCE_SQLITE_CLOSE_FAILED');
   }
 
   let target;
@@ -113,7 +119,7 @@ export async function importJellyfinSqlite(argv, {
     const error = cliError('POSTGRES_TARGET_CREATE_FAILED',
       `The new PostgreSQL target could not be created: ${cause.message}`,
       databaseCliExitCodes.postgres, cause);
-    throw combineOperationAndCleanupError(error, await closeResources([source, snapshot]), 'SOURCE_SQLITE_CLOSE_FAILED');
+    throw combineOperationAndCleanupError(error, await closeResources([source, ...snapshots]), 'SOURCE_SQLITE_CLOSE_FAILED');
   }
 
   let result, operationError, skipperFiles;
@@ -134,12 +140,7 @@ export async function importJellyfinSqlite(argv, {
     }
     await snapshot.assertUnchanged();
     await initializeTarget(target);
-    const skipper = options['--intro-skipper-data'] ?? (path.basename(sourceFilename).toLowerCase() === 'jellyfin.db'
-      ? path.join(path.dirname(sourceFilename), 'introskipper') : null);
-    if (skipper) {
-      skipperFiles = await captureSkipperData(target, skipper);
-      if (options['--intro-skipper-data'] && !skipperFiles) throw new Error('No recognized Intro Skipper database files in the requested directory');
-    }
+    skipperFiles = await captureSkipperData(target, companions);
   } catch (cause) {
     operationError = cliError('SQLITE_IMPORT_FAILED', `The SQLite to PostgreSQL import failed: ${cause.message}`,
       databaseCliExitCodes.operation, cause);
@@ -150,7 +151,7 @@ export async function importJellyfinSqlite(argv, {
     try { await dropTarget(target); }
     catch (error) { cleanupErrors.push(error); }
   }
-  cleanupErrors.push(...await closeResources([target, source, snapshot]));
+  cleanupErrors.push(...await closeResources([target, source, ...snapshots]));
   if (operationError) {
     throw combineOperationAndCleanupError(operationError, cleanupErrors, 'SQLITE_IMPORT_CLEANUP_FAILED');
   }

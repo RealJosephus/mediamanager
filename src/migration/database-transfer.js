@@ -342,11 +342,13 @@ async function writeEnvelope(target, envelope) {
 /** Copy a stopped, isolated source into an empty target; never mutate the source. */
 export async function transferDatabase(source, target, options = {}) {
   if (!options || typeof options !== 'object' || Array.isArray(options)
-    || Object.keys(options).some(key => !['batchSize', 'signal', 'instanceBinding', 'portableMountContract'].includes(key))) {
+    || Object.keys(options).some(key => !['batchSize', 'signal', 'instanceBinding', 'portableMountContract', 'readSourceSnapshot'].includes(key))) {
     throw new TypeError('Invalid database transfer options');
   }
-  const { batchSize = 128, signal, instanceBinding, portableMountContract } = options;
+  const { batchSize = 128, signal, instanceBinding, portableMountContract, readSourceSnapshot } = options;
   if (source === target) throw new Error('Source and target must differ');
+  if (readSourceSnapshot !== undefined && (typeof readSourceSnapshot !== 'function' ||
+      source.dialect !== 'postgres' || target.dialect !== 'sqlite')) throw new TypeError('Invalid PostgreSQL snapshot reader');
   // Transaction control below is intentionally manual so the source snapshot
   // can end before the target commits. Pin every PostgreSQL root first; a
   // PostgreSQL-to-PostgreSQL transfer therefore holds two independent sessions.
@@ -423,6 +425,7 @@ export async function transferDatabase(source, target, options = {}) {
       sourceSnapshotLock = false;
       await releasePostgresSourceSnapshotLock(source);
     }
+    if (readSourceSnapshot) await readSourceSnapshot(source);
     let auditedMountContract = target.dialect === 'postgres' ? transferMountContract : null;
     const sourceTables = await databaseDigest(source, {
       batchSize,
@@ -592,7 +595,7 @@ export async function transferDatabase(source, target, options = {}) {
 
 const sqliteExportOptionNames = new Set([
   'batchSize', 'signal', 'instanceBinding', 'testOnlyAllowSyntheticEnvelope',
-  'portableMountContract', 'targetPortableMountContract', 'instanceStatePaths'
+  'portableMountContract', 'targetPortableMountContract', 'instanceStatePaths', 'readSourceSnapshot'
 ]);
 
 function normalizeSqliteExportOptions(options) {
@@ -630,7 +633,7 @@ function normalizeSqliteExportOptions(options) {
 }
 
 function transferOptionsForExport(options) {
-  return Object.fromEntries(['batchSize', 'signal', 'instanceBinding']
+  return Object.fromEntries(['batchSize', 'signal', 'instanceBinding', 'readSourceSnapshot']
     .filter(key => options[key] !== undefined).map(key => [key, options[key]]));
 }
 
@@ -738,6 +741,7 @@ async function verifyPublishedSqliteExport(source, filename, options, lease) {
       sourceSnapshotLock = false;
       await releasePostgresSourceSnapshotLock(source);
     }
+    if (options.readSourceSnapshot) await options.readSourceSnapshot(source);
     if (!options.testOnlyAllowSyntheticEnvelope) assertPinnedJellyfinEnvelope(envelope);
     const { sourceContract, targetContract } = await exportMountContracts(source, options);
     const projector = createSqliteExportPathProjector({ sourceContract, targetContract,
