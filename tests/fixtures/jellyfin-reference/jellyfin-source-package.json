@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "archive": {
+    "path": "jellyfin-source-0a4ae54bbbd8.zip",
+    "bytes": 4034047,
+    "sha256": "a8d18c608a7e5cd1c6fa429f401aa4f66586e56fa5bfa21cae9addfd301d5444",
+    "required": true
+  },
+  "prefix": "jellyfin-source/",
+  "sourceManifest": {
+    "path": "jellyfin-source-manifest.json",
+    "bytes": 530443,
+    "sha256": "0a535c2a261093ca23f8cc5105f3bf03bc18c147b3e571b7adc806753ff47692",
+    "required": true
+  },
+  "localModifications": {
+    "path": "jellyfin-local-modifications.json",
+    "bytes": 9879,
+    "sha256": "034343ea6e38809411184ddbd7659ec7a67c75876c812a871e13fce87419c4e3",
+    "required": true
+  },
+  "license": {
+    "path": "LICENSE-Jellyfin.txt",
+    "sha256": "f371b80469fb235bc500ec29e0e85b682d4a6157a158567d828ff0be544d4f1d",
+    "required": true
+  },
+  "head": "0a4ae54bbbd88dba2ea784837fb87282cc5f8fe6",
+  "patchedGitTree": "db27ebf057e75be44533e352f7600c89a1f21fe3",
+  "sourceContentDigest": "730849c1fa1300b114493c8ab3433ffbf28718c6881447a3630ffe89e5340270",
+  "sourceFiles": 2702,
+  "sourceBytes": 16571750,
+  "localModificationFiles": 24,
+  "excludedSourceFiles": [],
+  "audit": {
+    "manifestDigestsMatched": true,
+    "archiveMemberDigestsMatched": true,
+    "allLocalModificationsRetained": true,
+    "sourcePathAndCredentialMarkerReview": true,
+    "noInstanceOrBuildOutputInputs": true
+  }
+}

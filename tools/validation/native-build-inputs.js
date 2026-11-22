@@ -8,10 +8,11 @@ import { designatedJellyfinContentDigest, designatedJellyfinHead, designatedJell
 const digest = value => typeof value === 'string' && /^[a-f0-9]{64}$/u.test(value);
 const commit = value => typeof value === 'string' && /^[a-f0-9]{40}$/u.test(value);
 const same = (left, right) => JSON.stringify(left) === JSON.stringify(right);
-const restoreArguments = (packages, config) => ['restore', 'Jellyfin.Server/Jellyfin.Server.csproj', '--packages', packages,
+const configuration = 'Release';
+const restoreArguments = (packages, config) => ['restore', 'Jellyfin.Server/Jellyfin.Server.csproj', `-p:Configuration=${configuration}`, '--packages', packages,
   '--configfile', config, '-p:RestoreFallbackFolders=', '-p:RestoreAdditionalProjectFallbackFolders=',
   '--nologo', '--verbosity', 'minimal'];
-const buildArguments = output => ['build', 'Jellyfin.Server/Jellyfin.Server.csproj', '--configuration', 'Release',
+const buildArguments = output => ['build', 'Jellyfin.Server/Jellyfin.Server.csproj', '--configuration', configuration,
   '--framework', 'net10.0', '--no-restore', '--output', output, '--nologo', '--verbosity', 'minimal'];
 const omittedOfflinePayloads = ['dotnet-sdk-tree', 'nuget-packages-tree'];
 const evidenceStatement = 'SDK and NuGet manifests are verified against live same-run roots; manifests without those omitted byte trees are not an offline replay supply.';

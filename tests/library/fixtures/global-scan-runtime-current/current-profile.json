@@ -42,8 +42,8 @@
     },
     {
       "filename": "NativeScanHost.cs",
-      "bytes": 32497,
-      "sha256": "7b06b879da257a486b2e3c4a3b3230cfde754d66a546cedf5adaab712880fcbe",
+      "bytes": 32524,
+      "sha256": "c35adfa1cc8ef439c8688ef378111e74cc36a689fc5746bd80338ffebed8a2de",
       "role": "current-global-scan-runtime-input"
     },
     {

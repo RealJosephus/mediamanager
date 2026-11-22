@@ -4,7 +4,7 @@ Set-StrictMode -Version Latest
 if ($env:GITHUB_ACTIONS -ne 'true' -or -not $env:RUNNER_TEMP) { throw 'Native builds must run in GitHub Actions.' }
 if (-not $env:MEDIAMANAGER_DOTNET -or -not $env:MEDIAMANAGER_CI_DOTNET_ROOT) { throw 'Verify the isolated .NET installation before building the native reference.' }
 $repository = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
-$bundle = Join-Path $repository 'tests/fixtures/recorded-native'
+$bundle = Join-Path $repository 'tests/fixtures/jellyfin-reference'
 $output = Join-Path $env:RUNNER_TEMP 'mediamanager-native-build'
 if (Test-Path -LiteralPath $output) { throw 'Native build output must be a new isolated directory.' }
 $receipts = Join-Path $output 'receipts'
@@ -12,6 +12,7 @@ $sourceRoot = Join-Path $output 'source'
 $packages = Join-Path $output 'nuget-packages'
 $nugetConfig = Join-Path $sourceRoot 'nuget.config'
 $runtime = Join-Path $output 'runtime'
+$configuration = 'Release'
 [IO.Directory]::CreateDirectory($receipts) | Out-Null
 $env:DOTNET_CLI_HOME = Join-Path $output 'dotnet-home'
 $env:NUGET_PACKAGES = $packages
@@ -122,16 +123,16 @@ $failure = $null; $sourceVerified = $false
 try {
     $packageFile = Join-Path $bundle 'jellyfin-source-package.json'
     $package = Get-Content -LiteralPath $packageFile -Raw | ConvertFrom-Json
-    $archivePath = Join-Path $bundle 'jellyfin-source-208c278b75ab.zip'
+    $archivePath = Join-Path $bundle 'jellyfin-source-0a4ae54bbbd8.zip'
     $manifestPath = Join-Path $bundle 'jellyfin-source-manifest.json'
-    $archiveIdentity = Describe $archivePath 'jellyfin-source-208c278b75ab.zip'
+    $archiveIdentity = Describe $archivePath 'jellyfin-source-0a4ae54bbbd8.zip'
     $manifestIdentity = Describe $manifestPath 'jellyfin-source-manifest.json'
-    if ($archiveIdentity.sha256 -ne '92edc03192499dcdd98439072a6ece32ab839bb1f5bb0c9abbda03284ec9f161' -or
-        $manifestIdentity.sha256 -ne '2012abc83017dfd2a107a49b701531a0dad08c763bc721dc75726342002c8f5c' -or
+    if ($archiveIdentity.sha256 -ne 'a8d18c608a7e5cd1c6fa429f401aa4f66586e56fa5bfa21cae9addfd301d5444' -or
+        $manifestIdentity.sha256 -ne '0a535c2a261093ca23f8cc5105f3bf03bc18c147b3e571b7adc806753ff47692' -or
         $archiveIdentity.sha256 -ne $package.archive.sha256 -or $manifestIdentity.sha256 -ne $package.sourceManifest.sha256 -or
         $archiveIdentity.bytes -ne $package.archive.bytes -or $manifestIdentity.bytes -ne $package.sourceManifest.bytes) { throw 'Source package identity mismatch.' }
     $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
-    if ($manifest.files.Count -ne 2620 -or $manifest.files.Count -ne $package.sourceFiles) { throw 'Source manifest must contain all 2620 files.' }
+    if ($manifest.files.Count -ne 2702 -or $manifest.files.Count -ne $package.sourceFiles) { throw 'Source manifest must contain all 2702 files.' }
     $receipt.source = @{ archive = $archiveIdentity; manifest = $manifestIdentity; head = $manifest.head; contentDigest = $manifest.contentDigest; files = $manifest.files.Count }
     $expected = [Collections.Generic.Dictionary[string, object]]::new([StringComparer]::Ordinal)
     $sourcePaths = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
@@ -173,13 +174,13 @@ try {
     $receipt.sdkActual = (Get-Content -LiteralPath (Join-Path $receipts 'sdk-version.stdout.txt') -Raw).Trim()
     if ($receipt.sdkActual -ne $receipt.sdkExpected) { throw 'The selected SDK does not match the pinned version.' }
     Invoke-Dotnet 'sdk-info' @('--info')
-    Invoke-Dotnet 'restore' @('restore', 'Jellyfin.Server/Jellyfin.Server.csproj', '--packages', $packages,
+    Invoke-Dotnet 'restore' @('restore', 'Jellyfin.Server/Jellyfin.Server.csproj', "-p:Configuration=$configuration", '--packages', $packages,
         '--configfile', $nugetConfig, '-p:RestoreFallbackFolders=', '-p:RestoreAdditionalProjectFallbackFolders=',
         '--nologo', '--verbosity', 'minimal')
     $nugetBeforeBuild = Tree-Snapshot $packages 'nuget-packages'
     if ($nugetBeforeBuild.files.Count -eq 0) { throw 'Successful restore did not capture the complete NuGet package tree.' }
     $receipt.nugetBeforeBuild = Write-Record 'nuget-before-build.json' $nugetBeforeBuild
-    Invoke-Dotnet 'build' @('build', 'Jellyfin.Server/Jellyfin.Server.csproj', '--configuration', 'Release', '--framework', 'net10.0',
+    Invoke-Dotnet 'build' @('build', 'Jellyfin.Server/Jellyfin.Server.csproj', '--configuration', $configuration, '--framework', 'net10.0',
         '--no-restore', '--output', $runtime, '--nologo', '--verbosity', 'minimal')
     $nugetAfterBuild = Tree-Snapshot $packages 'nuget-packages'
     $receipt.nugetAfterBuild = Write-Record 'nuget-after-build.json' $nugetAfterBuild

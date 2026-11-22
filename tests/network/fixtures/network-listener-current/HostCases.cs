@@ -23,7 +23,6 @@ using MediaBrowser.Common.Updates;
 using MediaBrowser.Controller;
 using MediaBrowser.Controller.Configuration;
 using MediaBrowser.Controller.Library;
-using MediaBrowser.Controller.MediaEncoding;
 using MediaBrowser.Model.Configuration;
 using MediaBrowser.Model.IO;
 using MediaBrowser.Model.Updates;
@@ -38,7 +37,6 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -129,8 +127,8 @@ public static class HostCases {
                     value.AddPolicy(policy, new AuthorizationPolicyBuilder("fixture").RequireAuthenticatedUser().Build());
             });
             builder.Services.AddHttpsRedirection(value => value.HttpsPort = host.HttpsPort);
-            builder.Services.AddJellyfinApi([], initial).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new ListenerControllers()));
-            builder.Services.Replace(ServiceDescriptor.Transient<ConfigurationController>(_ => new ConfigurationController(host.ConfigurationManager, ListenerStub.Throwing<IMediaEncoder>())));
+            builder.Services.AddJellyfinApi([], initial, host.ConfigurationManager.Configuration)
+                .ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new ListenerControllers()));
             builder.Services.AddSingleton<ISystemManager>(services => new SystemManager(services.GetRequiredService<IHostApplicationLifetime>(), host, paths,
                 host.ConfigurationManager, new ListenerStartupOptions(), ListenerStub.Make<IInstallationManager>((method, _) => method.Name == "get_CompletedInstallations"
                     ? Array.Empty<InstallationInfo>() : throw new InvalidOperationException("Unexpected installation gateway: " + method.Name)), ListenerStub.Throwing<ILibraryManager>()));

@@ -215,7 +215,7 @@ async Task StopSource() {
 }
 var publicBuilder = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = Environments.Production });
 publicBuilder.Logging.ClearProviders(); publicBuilder.WebHost.UseUrls("http://127.0.0.1:0");
-publicBuilder.Services.AddJellyfinApi([], new NetworkConfiguration())
+publicBuilder.Services.AddJellyfinApi([], new NetworkConfiguration(), manager.Configuration)
     .ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlySubtitleController()));
 var publicApp = publicBuilder.Build();
 publicApp.Use(async (context, next) => {

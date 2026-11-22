@@ -463,7 +463,7 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
     exitCode: 0, stdout, stderr });
   const commands = [command(['--version'], commandOutput.versionOut, commandOutput.versionError, 1, 2),
     command(['--info'], commandOutput.infoOut, commandOutput.infoError, 2, 3),
-    command(['restore', 'Jellyfin.Server/Jellyfin.Server.csproj', '--packages', nugetRoot,
+    command(['restore', 'Jellyfin.Server/Jellyfin.Server.csproj', '-p:Configuration=Release', '--packages', nugetRoot,
       '--configfile', nugetConfig, '-p:RestoreFallbackFolders=', '-p:RestoreAdditionalProjectFallbackFolders=',
       '--nologo', '--verbosity', 'minimal'],
       commandOutput.restoreOut, commandOutput.restoreError, 3, 4),
@@ -796,15 +796,23 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   await write('receipts', 'build-receipt.json', JSON.stringify({ ...receipt,
     sourceOffer: [...receipt.sourceOffer.slice(0, 3), receipt.sourceOffer[0]] }));
   await assert.rejects(capture([ownPath]), /source offer is incomplete/u);
-  const sealedManifest = designated.attachments.sourceManifest.descriptor;
+  const manifestPath = designated.attachments.sourceManifest.descriptor.path;
+  const offeredManifest = receipt.sourceOffer.find(file => file.path === manifestPath);
+  assert.ok(offeredManifest);
+  const mismatchedManifest = { ...offeredManifest,
+    sha256: (offeredManifest.sha256.startsWith('0') ? '1' : '0') + offeredManifest.sha256.slice(1) };
   await write('receipts', 'build-receipt.json', JSON.stringify({ ...receipt,
-    sourceOffer: receipt.sourceOffer.map(file => file.path === sealedManifest.path ? sealedManifest : file) }));
+    sourceOffer: receipt.sourceOffer.map(file => file.path === manifestPath ? mismatchedManifest : file) }));
   await assert.rejects(capture([ownPath]), /source offer differs/u);
   await write('receipts', 'build-receipt.json', JSON.stringify({ ...receipt,
     restoreIsolation: { ...receipt.restoreIsolation, config: { ...receipt.restoreIsolation.config, sha256: '0'.repeat(64) } } }));
   await assert.rejects(capture([ownPath]), /restore isolation/u);
   await write('receipts', 'build-receipt.json', JSON.stringify({ ...receipt,
     commands: receipt.commands.map((value, index) => index === 2 ? { ...value, exitCode: 1 } : value) }));
+  await assert.rejects(capture([ownPath]), /command evidence differs/u);
+  await write('receipts', 'build-receipt.json', JSON.stringify({ ...receipt,
+    commands: receipt.commands.map((value, index) => index === 2
+      ? { ...value, arguments: value.arguments.filter(argument => argument !== '-p:Configuration=Release') } : value) }));
   await assert.rejects(capture([ownPath]), /command evidence differs/u);
   await write('receipts', 'build-receipt.json', JSON.stringify({ ...receipt,
     commands: receipt.commands.map((value, index) => index === 3
@@ -890,6 +898,9 @@ test('both native producers immediately verify the dependency-free restore and n
   assert.ok(sdkBefore >= 0 && sdkBefore < restore && restore < nugetBefore && nugetBefore < build
     && build < nugetAfter && nugetAfter < sdkAfter);
   assert.match(producer, /Remove-Item Env:NUGET_FALLBACK_PACKAGES/u);
+  assert.match(producer, /\$configuration = 'Release'/u);
+  assert.match(producer, /Invoke-Dotnet 'restore'[^\n]*"-p:Configuration=\$configuration"/u);
+  assert.match(producer, /Invoke-Dotnet 'build'[^\n]*'--configuration', \$configuration/u);
   assert.match(producer, /'--configfile', \$nugetConfig/u);
   assert.match(producer, /'-p:RestoreFallbackFolders='/u);
   assert.match(producer, /'--no-restore'/u);

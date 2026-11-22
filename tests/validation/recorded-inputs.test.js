@@ -81,7 +81,7 @@ test('the recorded GPL assembly includes its complete designated source and lice
   assert.equal(verified.inputs.length, 5, 'the package and four current source-offer attachments are byte-bound');
   assert.deepEqual(verified.sourceOffer.map(file => file.path).sort(), [
     'LICENSE-Jellyfin.txt', 'jellyfin-local-modifications.json',
-    'jellyfin-source-208c278b75ab.zip', 'jellyfin-source-manifest.json',
+    'jellyfin-source-0a4ae54bbbd8.zip', 'jellyfin-source-manifest.json',
   ]);
   const published = new Map(verified.sourceOfferAttachments.map(({ descriptor, bytes }) => [descriptor.path, bytes]));
   const expectedDocuments = {

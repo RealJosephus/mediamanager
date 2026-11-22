@@ -3,24 +3,24 @@ import { lstat, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const designatedJellyfinHead = '208c278b75abd897aefa1e1175126eac5e4dbfaa';
-export const designatedJellyfinContentDigest = 'e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313';
-export const designatedJellyfinSourceFiles = 2620;
-export const designatedJellyfinDirtyFiles = 20;
+export const designatedJellyfinHead = '0a4ae54bbbd88dba2ea784837fb87282cc5f8fe6';
+export const designatedJellyfinContentDigest = '730849c1fa1300b114493c8ab3433ffbf28718c6881447a3630ffe89e5340270';
+export const designatedJellyfinSourceFiles = 2702;
+export const designatedJellyfinDirtyFiles = 24;
 export const designatedJellyfinRepository = 'RealJosephus/mediamanager';
 
-const packageFilename = fileURLToPath(new URL('../../tests/fixtures/recorded-native/jellyfin-source-package.json', import.meta.url));
+const packageFilename = fileURLToPath(new URL('../../tests/fixtures/jellyfin-reference/jellyfin-source-package.json', import.meta.url));
 const ordering = 'JavaScript UTF-16 code-unit order; forward-slash paths; LF records';
 const descriptorPaths = {
-  archive: 'jellyfin-source-208c278b75ab.zip',
+  archive: 'jellyfin-source-0a4ae54bbbd8.zip',
   sourceManifest: 'jellyfin-source-manifest.json',
   localModifications: 'jellyfin-local-modifications.json',
   license: 'LICENSE-Jellyfin.txt',
 };
 const descriptorPins = {
-  archive: { bytes: 3867186, sha256: '92edc03192499dcdd98439072a6ece32ab839bb1f5bb0c9abbda03284ec9f161' },
-  sourceManifest: { bytes: 513264, sha256: '2012abc83017dfd2a107a49b701531a0dad08c763bc721dc75726342002c8f5c' },
-  localModifications: { bytes: 11636, sha256: '83671401df5455b4085fee49b4a4a437974981250f74bf345ca730814938fdc2' },
+  archive: { bytes: 4034047, sha256: 'a8d18c608a7e5cd1c6fa429f401aa4f66586e56fa5bfa21cae9addfd301d5444' },
+  sourceManifest: { bytes: 530443, sha256: '0a535c2a261093ca23f8cc5105f3bf03bc18c147b3e571b7adc806753ff47692' },
+  localModifications: { bytes: 9879, sha256: '034343ea6e38809411184ddbd7659ec7a67c75876c812a871e13fce87419c4e3' },
   license: { sha256: 'f371b80469fb235bc500ec29e0e85b682d4a6157a158567d828ff0be544d4f1d' },
 };
 const sourceOfferNames = ['archive', 'sourceManifest', 'localModifications', 'license'];
@@ -78,7 +78,7 @@ function statusEntries(value) {
 /** Validate the semantic links between the pinned package, manifest and local-modification ledger. */
 export function validateDesignatedJellyfinSourceDocuments({ sourcePackage, manifest, modifications }) {
   validatePackage(sourcePackage);
-  if (manifest?.source !== 'D:\\jellyfin' || manifest.head !== designatedJellyfinHead
+  if (manifest?.source !== 'designated-jellyfin-source' || manifest.head !== designatedJellyfinHead
     || manifest.ordering !== ordering || manifest.contentDigest !== designatedJellyfinContentDigest
     || !Array.isArray(manifest.files) || manifest.files.length !== designatedJellyfinSourceFiles) {
     throw new Error('The designated Jellyfin source manifest identity changed.');
@@ -102,7 +102,7 @@ export function validateDesignatedJellyfinSourceDocuments({ sourcePackage, manif
   }
   const dirty = statusEntries(manifest.status);
   if (dirty.length !== designatedJellyfinDirtyFiles || new Set(dirty.map(entry => entry.path)).size !== dirty.length
-    || dirty.filter(entry => entry.status === ' M').length !== 19 || dirty.filter(entry => entry.status === '??').length !== 1) {
+    || dirty.filter(entry => entry.status === ' M').length !== designatedJellyfinDirtyFiles - 1 || dirty.filter(entry => entry.status === '??').length !== 1) {
     throw new Error('The designated Jellyfin dirty-source status is incomplete.');
   }
   if (modifications?.head !== designatedJellyfinHead

@@ -451,3 +451,5 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/metadata/fixtures/photo-current/** -text
 /tests/http/startup-current-observations.js text eol=lf
 /tests/http/password-reset-current-observations.js text eol=lf
+
+/tests/fixtures/jellyfin-reference/** -text
