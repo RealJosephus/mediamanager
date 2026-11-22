@@ -2,7 +2,7 @@ import { constants } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { chmod, copyFile, lstat, mkdir, readFile, readdir, realpath, rename, rm, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { discoverInstanceState, validateInstanceStateSnapshot } from './instance-state.js';
+import { discoverInstanceState, stateDirectoryMode, validateInstanceStateSnapshot } from './instance-state.js';
 import { rebaseSystemConfiguration } from './instance-system-configuration.js';
 
 const pathKey = value => process.platform === 'win32' ? path.normalize(value).toLowerCase() : path.normalize(value);
@@ -112,7 +112,8 @@ async function copyTree(source, target, context) {
   const after = await lstat(source, { bigint: true });
   if (generation(before) !== generation(after)) throw new Error(`Stopped Jellyfin instance changed while it was copied: ${source}`);
   await utimes(target, Number(before.atimeNs) / 1e9, Number(before.mtimeNs) / 1e9);
-  if (process.platform !== 'win32') context.directories.push({ filename: target, mode: Number(before.mode & 0o777n) });
+  const mode = stateDirectoryMode(before);
+  if (mode != null) context.directories.push({ filename: target, mode });
 }
 
 async function isOwnedCloneDirectory(directory, identity) {

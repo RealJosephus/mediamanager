@@ -10,7 +10,7 @@ import { verifyPostgresTransferContract } from '../database/postgres-transfer-co
 import { SqliteDatabase } from '../database/sqlite.js';
 import { captureRemoteAssets, inspectRemoteAssets, verifyRemoteGeneration, restoreRemoteAssets, validateRemoteAssetManifest } from './remote-assets.js';
 import { validateMediaAccessPlan } from './media-access.js';
-import { calculateStateGeneration, isStateFileMode, stateFileMode,
+import { calculateStateGeneration, isStateDirectoryMode, isStateFileMode, stateDirectoryMode, stateFileMode,
   validateInstanceStateSnapshot, validateWriteBarrier, validateWriteBarrierSnapshot } from './instance-state.js';
 import { assertCaptureSessionHeld } from './capture-session.js';
 import { acquireOperationLease } from './operation-lease.js';
@@ -243,17 +243,26 @@ async function atomicCopyVerified(sourceRoot, sourceFilename, destinationRoot, d
   } finally { await source.handle.close(); }
 }
 
-async function ensurePhysicalDirectory(root, directory, label) {
+async function ensurePhysicalDirectory(root, directory, label, mode) {
   root = path.resolve(root); directory = path.resolve(directory);
   if (!inside(root, directory)) throw new Error(`${label} escapes its trusted root`);
   if (directory === root) return assertPhysicalDirectory(root, root, label);
   await assertPhysicalDirectory(root, path.dirname(directory), label);
-  try { await mkdir(directory, { recursive: false }); }
+  try { await mkdir(directory, { recursive: false, mode }); }
   catch (error) {
     if (error.code !== 'EEXIST') throw error;
     await assertExactStateEntry(directory, label);
   }
   return assertPhysicalDirectory(root, directory, label);
+}
+
+async function applyDirectoryMode(filename, mode, label) {
+  const handle = await open(filename, readOnlyNoFollowFlags | fsConstants.O_DIRECTORY);
+  try {
+    const [opened, named] = await Promise.all([handle.stat({ bigint: true }), lstat(filename, { bigint: true })]);
+    if (!opened.isDirectory() || !sameFile(opened, named)) throw new Error(`${label} changed while applying permissions`);
+    if (stateDirectoryMode(opened) !== mode) await handle.chmod(mode);
+  } finally { await handle.close(); }
 }
 
 function atomicTemporaryTarget(relative) {
@@ -337,7 +346,8 @@ function validateDirectoryManifest(directories, files, databaseRestorePath) {
   const seen = new Set(), filePaths = new Set(files.map(file => file.path));
   for (const directory of directories) {
     if (!directory || typeof directory !== 'object' || Array.isArray(directory)
-      || Object.keys(directory).sort().join(',') !== 'modifiedAt,path'
+      || Object.keys(directory).sort().join(',') !== (Object.hasOwn(directory, 'mode') ? 'mode,modifiedAt,path' : 'modifiedAt,path')
+      || Object.hasOwn(directory, 'mode') && !isStateDirectoryMode(directory.mode)
       || !safeRelative(directory.path) || filePaths.has(directory.path)
       || (directory.modifiedAt != null && (typeof directory.modifiedAt !== 'string'
         || Number.isNaN(Date.parse(directory.modifiedAt)) || new Date(directory.modifiedAt).toISOString() !== directory.modifiedAt))) {
@@ -397,7 +407,7 @@ function validatePackagedStateGeneration(manifest, instanceState) {
   const rootLabels = Object.keys(instanceState.roots);
   const records = [
     ...manifest.directories.map(directory => ({ ...stateRecordPath(directory.path, rootLabels), kind: 'directory',
-      modifiedAt: directory.modifiedAt })),
+      modifiedAt: directory.modifiedAt, ...(Object.hasOwn(directory, 'mode') ? { mode: directory.mode } : {}) })),
     ...manifest.instanceFiles.map(file => ({ ...stateRecordPath(file.path, rootLabels), kind: 'file',
       bytes: file.bytes.toString(), mode: file.mode, modifiedAt: file.modifiedAt, sha256: file.sha256 })),
   ];
@@ -840,6 +850,19 @@ function restoredFileModeMatches(file, metadata) {
   return file.mode == null || process.platform === 'win32' || file.mode === stateFileMode(metadata);
 }
 
+function restoredFileTimeMatches(file, metadata) {
+  if (file.modifiedAt == null) return true;
+  const milliseconds = BigInt(Date.parse(file.modifiedAt));
+  const delta = metadata.mtimeNs - milliseconds * 1_000_000n;
+  // A Date passed to utimes can round just below a millisecond boundary.
+  return metadata.mtimeNs / 1_000_000n === milliseconds || (delta >= -1000n && delta <= 1000n);
+}
+
+function verifyRestoredFileMetadata(file, metadata) {
+  if (!restoredFileModeMatches(file, metadata)) throw new Error(`Restored asset permissions differ: ${file.path}`);
+  if (!restoredFileTimeMatches(file, metadata)) throw new Error(`Restored asset modification time differs: ${file.path}`);
+}
+
 async function verifyRestoredTree(directory, manifest, destination, expectedStage, manifestSha256, plan,
   { requireCompleteInventory = true } = {}) {
   const state = await readOptionalJson(directory, restoredStatePath, controlFileLimits.restoredState, 'Restored state marker');
@@ -852,7 +875,15 @@ async function verifyRestoredTree(directory, manifest, destination, expectedStag
     const filename = path.join(directory, ...file.path.split('/'));
     const inspected = await inspectRegularFile(directory, filename, `Restored asset ${file.path}`,
       { expectedBytes: file.bytes, expectedSha256: file.sha256 });
-    if (!restoredFileModeMatches(file, inspected.metadata)) throw new Error(`Restored asset permissions differ: ${file.path}`);
+    verifyRestoredFileMetadata(file, inspected.metadata);
+  }
+  if (process.platform !== 'win32') for (const entry of manifest.directories) {
+    if (entry.mode == null) continue;
+    const filename = path.join(directory, ...entry.path.split('/'));
+    await assertPhysicalDirectory(directory, filename, `Restored directory ${entry.path}`);
+    if (stateDirectoryMode(await lstat(filename, { bigint: true })) !== entry.mode) {
+      throw new Error(`Restored directory permissions differ: ${entry.path}`);
+    }
   }
   if (requireCompleteInventory) {
     const expectedPaths = new Set([...expected.map(file => file.path), restoredStatePath]);
@@ -1258,9 +1289,9 @@ async function createStatePackageOwned(options, lease) {
       for (const relative of ['', ...sourceInventory.directories]) {
         const original = path.join(resolved, relative), metadata = await lstat(original, { bigint: true });
         const destinationRelative = [label, relative.split(path.sep).join('/')].filter(Boolean).join('/');
-        const modifiedAt = dateFromNanoseconds(metadata.mtimeNs).toISOString();
-        manifest.directories.push({ path: destinationRelative, modifiedAt });
-        directoryInventory.push({ original, path: destinationRelative, modifiedAt });
+        const entry = { path: destinationRelative, modifiedAt: dateFromNanoseconds(metadata.mtimeNs).toISOString(), mode: stateDirectoryMode(metadata) };
+        manifest.directories.push(entry);
+        directoryInventory.push({ original, ...entry });
       }
       for (const relative of sourceInventory.files) {
         signal?.throwIfAborted();
@@ -1370,8 +1401,12 @@ async function createStatePackageOwned(options, lease) {
           { expectedBytes: file.bytes, expectedSha256: file.hash });
       } catch (cause) { throw new Error(`State file changed during database capture: ${file.path}`, { cause }); }
     }
-    for (const directory of directoryInventory) if (dateFromNanoseconds((await lstat(directory.original, { bigint: true })).mtimeNs).toISOString() !== directory.modifiedAt) {
-      throw new Error(`State directory changed during database capture: ${directory.path}`);
+    for (const directory of directoryInventory) {
+      const metadata = await lstat(directory.original, { bigint: true });
+      if (!metadata.isDirectory() || stateDirectoryMode(metadata) !== directory.mode
+        || dateFromNanoseconds(metadata.mtimeNs).toISOString() !== directory.modifiedAt) {
+        throw new Error(`State directory changed during database capture: ${directory.path}`);
+      }
     }
     // Detect additions/deletions after the initial copy, including unknown plugin assets.
     for (const [label, source] of Object.entries(roots)) {
@@ -1606,8 +1641,14 @@ async function restorePreparedStatePackage({ directory, manifest, manifestSha256
       mediaAccessVerified: false, resumed: true, alreadyRestored: false, reusedFiles: expectedFiles.length };
   }
 
-  for (const directory of [...manifest.directories].sort((left, right) => left.path.split('/').length - right.path.split('/').length)) {
-    await ensurePhysicalDirectory(staging, path.join(staging, ...directory.path.split('/')), `Restore directory ${directory.path}`);
+  const directories = [...manifest.directories].sort((left, right) => left.path.split('/').length - right.path.split('/').length);
+  for (const directory of directories) {
+    signal?.throwIfAborted();
+    lease.assertHeld();
+    const filename = path.join(staging, ...directory.path.split('/')), label = `Restore directory ${directory.path}`;
+    const workingMode = directory.mode != null && process.platform !== 'win32' ? 0o700 : undefined;
+    await ensurePhysicalDirectory(staging, filename, label, workingMode);
+    if (workingMode !== undefined) await applyDirectoryMode(filename, workingMode, label);
   }
 
   let completed = 0, reusedFiles = 0;
@@ -1625,7 +1666,7 @@ async function restorePreparedStatePackage({ directory, manifest, manifestSha256
       try {
         const inspected = await inspectRegularFile(staging, filename, `Restore target ${file.path}`,
           { expectedBytes: file.bytes, expectedSha256: file.sha256 });
-        reused = restoredFileModeMatches(file, inspected.metadata);
+        reused = restoredFileModeMatches(file, inspected.metadata) && restoredFileTimeMatches(file, inspected.metadata);
       } catch (error) {
         if (!/checksum mismatch/u.test(error.message)) throw error;
       }
@@ -1637,22 +1678,24 @@ async function restorePreparedStatePackage({ directory, manifest, manifestSha256
         `Restore asset ${file.path}`, { expectedBytes: file.bytes, expectedSha256: file.sha256, modifiedAt, mode: file.mode });
       const inspected = await inspectRegularFile(staging, filename, `Restored asset ${file.path}`,
         { expectedBytes: file.bytes, expectedSha256: file.sha256 });
-      if (!restoredFileModeMatches(file, inspected.metadata)) throw new Error(`Restored asset permissions differ: ${file.path}`);
+      verifyRestoredFileMetadata(file, inspected.metadata);
     } else reusedFiles++;
     if (file.path === manifest.database.restorePath) await plan.dispose();
     completed++;
     await onProgress?.({ path: file.path, completed, total: expectedFiles.length, reused });
   }
   signal?.throwIfAborted();
-  for (const directory of [...manifest.directories].sort((left, right) => right.path.split('/').length - left.path.split('/').length)) {
+  for (const directory of directories.reverse()) {
+    signal?.throwIfAborted();
+    lease.assertHeld();
+    const restoredDirectory = path.join(staging, ...directory.path.split('/')), label = `Restored directory ${directory.path}`;
+    await assertPhysicalDirectory(staging, restoredDirectory, label);
     if (directory.modifiedAt) {
-      lease.assertHeld();
       const modified = new Date(directory.modifiedAt);
-      const restoredDirectory = path.join(staging, ...directory.path.split('/'));
-      await assertPhysicalDirectory(staging, restoredDirectory, `Restored directory ${directory.path}`);
       await lutimes(restoredDirectory, modified, modified);
-      await assertPhysicalDirectory(staging, restoredDirectory, `Restored directory ${directory.path}`);
     }
+    if (directory.mode != null && process.platform !== 'win32') await applyDirectoryMode(restoredDirectory, directory.mode, label);
+    await assertPhysicalDirectory(staging, restoredDirectory, label);
   }
   lease.assertHeld();
   await writeJsonAtomic(staging, restoredStatePath, restoredStateTemporaryPath, restoredState(manifest, destination, 'complete', manifestSha256, plan));

@@ -18,6 +18,7 @@ const ids = { owner: '30000000-0000-0000-0000-000000000001',
 export const platformHelperPath = ['config', 'plugins', 'fixture-helper'];
 export const platformHelperOutput = 'restored platform helper\n';
 const platformHelperScript = '#!/bin/sh\nprintf "%s\\n" "restored platform helper"\n';
+const platformPluginDirectory = 'config/plugins', platformPluginMode = 0o750;
 const opaque = Buffer.from([0xff, 0x80, 0, 0x7b]);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, (_key, item) => typeof item === 'bigint' ? { $integer: item.toString() } : item, 2) + '\n';
@@ -59,7 +60,10 @@ export async function capturePlatformPackage(t, output) {
   const helper = path.join(fixture.root, ...platformHelperPath);
   await mkdir(path.dirname(helper));
   await writeFile(helper, platformHelperScript);
-  if (process.platform !== 'win32') await chmod(helper, 0o750);
+  if (process.platform !== 'win32') {
+    await chmod(helper, 0o750);
+    await chmod(path.dirname(helper), platformPluginMode);
+  }
   await writeFile(path.join(fixture.root, 'config', 'system.xml'),
     `<ServerConfiguration><MetadataPath>${xml(metadata + path.sep)}</MetadataPath><CachePath>${xml(cache + path.sep)}</CachePath></ServerConfiguration>`);
   const insert = (Id, Type, Path, Data) => fixture.database.insert('BaseItems', {
@@ -100,6 +104,8 @@ export async function restorePlatformPackages(input, output, expectedPlatforms =
     const original = await readFile(path.join(directory, 'manifest.json'));
     assert.equal(hash(original), control.manifestSha256);
     const manifest = await verifyStatePackage(directory);
+    assert.equal(manifest.directories.find(entry => entry.path === platformPluginDirectory).mode,
+      control.platform === 'win32' ? null : platformPluginMode);
     const destination = path.join(output, control.platform + ' $1 $& $$ & restored');
     const restored = await restoreStatePackage(directory, destination);
     assert.equal(restored.alreadyRestored, false);
@@ -128,7 +134,10 @@ export async function restorePlatformPackages(input, output, expectedPlatforms =
     assert.equal(await readFile(path.join(settings.configuration.CachePath, 'asset.txt'), 'utf8'), 'cache asset');
     const helper = path.join(destination, ...platformHelperPath);
     assert.equal(await readFile(helper, 'utf8'), platformHelperScript);
-    if (process.platform !== 'win32' && control.platform !== 'win32') assert.equal((await stat(helper)).mode & 0o777, 0o750);
+    if (process.platform !== 'win32' && control.platform !== 'win32') {
+      assert.equal((await stat(helper)).mode & 0o777, 0o750);
+      assert.equal((await stat(path.dirname(helper))).mode & 0o7777, platformPluginMode);
+    }
     assert.equal((await restoreStatePackage(directory, destination)).alreadyRestored, true);
     assert.deepEqual(await verifyStatePackage(directory), manifest);
     assert.deepEqual(await readFile(path.join(directory, 'manifest.json')), original);

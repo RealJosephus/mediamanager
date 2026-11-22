@@ -114,7 +114,7 @@ test('clones populated read-only directories and removes its sealed stage after 
   await utimes(config, modified, modified);
   try {
     if (posix) {
-      await chmod(nested, 0o550);
+      await chmod(nested, 0o1550);
       await chmod(config, 0o555);
       await chmod(system, 0o440);
       if (process.getuid() !== 0) {
@@ -126,9 +126,9 @@ test('clones populated read-only directories and removes its sealed stage after 
     const cloned = await cloneStoppedInstance({ instanceState: source, destination });
     assert.equal(cloned.paths.metadata, path.join(destination, 'metadata-external'));
     assert.equal(await readFile(path.join(destination, 'config/nested/child'), 'utf8'), 'nested state');
-    for (const [relative, mode] of [['config', 0o555], ['config/nested', 0o550], ['config/system.xml', 0o440]]) {
+    for (const [relative, mode] of [['config', 0o555], ['config/nested', 0o1550], ['config/system.xml', 0o440]]) {
       const actual = await lstat(path.join(destination, relative));
-      if (posix) assert.equal(actual.mode & 0o777, mode);
+      if (posix) assert.equal(actual.mode & 0o7777, mode);
       if (actual.isDirectory()) assert.equal(actual.mtime.toISOString(), modified.toISOString());
     }
 

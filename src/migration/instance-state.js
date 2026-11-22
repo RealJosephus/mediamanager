@@ -13,6 +13,8 @@ const sha256 = value => createHash('sha256').update(value).digest('hex');
 const timestampFromNanoseconds = value => new Date(Number(value / 1_000_000n)).toISOString();
 export const stateFileMode = metadata => process.platform === 'win32' ? null : Number(metadata.mode & 0o777n);
 export const isStateFileMode = mode => mode === null || (Number.isInteger(mode) && mode >= 0 && mode <= 0o777);
+export const stateDirectoryMode = metadata => process.platform === 'win32' ? null : Number(metadata.mode & 0o7777n);
+export const isStateDirectoryMode = mode => mode === null || (Number.isInteger(mode) && mode >= 0 && mode <= 0o7777);
 const fileSha256 = async filename => {
   const hash = createHash('sha256');
   for await (const chunk of createReadStream(filename)) hash.update(chunk);
@@ -128,9 +130,15 @@ export function calculateStateGeneration(rootLabels, records) {
     if (seen.has(key)) throw new Error('Duplicate Jellyfin state generation record');
     seen.add(key);
     if (value.kind === 'directory') {
-      exactKeys(value, ['label', 'path', 'kind', 'modifiedAt'], 'Jellyfin state generation directory');
+      const fields = ['label', 'path', 'kind', 'modifiedAt'];
+      const hasMode = Object.hasOwn(value, 'mode');
+      if (hasMode) fields.push('mode');
+      exactKeys(value, fields, 'Jellyfin state generation directory');
+      if (hasMode && !isStateDirectoryMode(value.mode)) throw new Error('Invalid Jellyfin state generation directory permissions');
       directories.add(key);
-      normalized.push({ label: value.label, path: value.path, kind: 'directory', modifiedAt: value.modifiedAt, parts });
+      // Older packages have no directory mode in their signed generation.
+      normalized.push({ label: value.label, path: value.path, kind: 'directory', modifiedAt: value.modifiedAt,
+        ...(hasMode ? { mode: value.mode } : {}), parts });
     } else {
       exactKeys(value, ['label', 'path', 'kind', 'bytes', 'mode', 'modifiedAt', 'sha256'], 'Jellyfin state generation file');
       if (!/^(?:0|[1-9]\d*)$/u.test(value.bytes) || !sha256Pattern.test(value.sha256) || !isStateFileMode(value.mode)) {
@@ -179,7 +187,7 @@ async function stateGeneration(roots) {
     const directory = path.join(root, relative), before = await lstat(directory, { bigint: true });
     if (before.isSymbolicLink() || !before.isDirectory()) throw new Error(`Jellyfin state directory changed during generation capture: ${directory}`);
     records.push({ label, path: relative.split(path.sep).join('/'), kind: 'directory',
-      modifiedAt: timestampFromNanoseconds(before.mtimeNs) });
+      modifiedAt: timestampFromNanoseconds(before.mtimeNs), mode: stateDirectoryMode(before) });
     const entries = (await readdir(directory, { withFileTypes: true })).sort((left, right) => left.name < right.name ? -1 : left.name > right.name ? 1 : 0);
     for (const entry of entries) {
       const childRelative = path.join(relative, entry.name), filename = path.join(root, childRelative);

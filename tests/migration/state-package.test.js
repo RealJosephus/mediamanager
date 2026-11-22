@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { constants } from 'node:fs';
-import { access, chmod, link, mkdir, readFile, readdir, rename, rm, stat, unlink, writeFile } from 'node:fs/promises';
+import { access, chmod, link, mkdir, readFile, readdir, rename, rm, stat, unlink, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { createStatePackage, verifyStatePackage, restoreStatePackage } from '../../src/migration/state-package.js';
 import { discoverInstanceState } from '../../src/migration/instance-state.js';
@@ -105,6 +105,88 @@ test('state restore repairs staged permission drift and restores execute access'
     await chmod(path.join(destination, helper), 0o600);
     await assert.rejects(restoreStatePackage(packageDirectory, destination), /Restored asset permissions differ/u);
   }
+});
+
+test('state packages bind POSIX directory modes and seal nonempty directories after restore', async t => {
+  const fixture = await createInstanceFixture(t);
+  const parent = 'config/plugins', nested = `${parent}/private`, asset = `${nested}/settings.bin`;
+  const archive = path.join(fixture.directory, 'package'), destination = path.join(fixture.directory, 'restored');
+  const posix = process.platform !== 'win32';
+  const directories = [[parent, 0o1550], [nested, 0o700]];
+  let staging;
+  try {
+    await mkdir(path.join(fixture.root, nested), { recursive: true });
+    await writeFile(path.join(fixture.root, asset), 'private plugin state');
+    if (posix) {
+      for (const [relative, mode] of directories) await chmod(path.join(fixture.root, relative), mode);
+      const stale = await fixture.packageOptions({ destination: archive });
+      await chmod(path.join(fixture.root, parent), 0o750);
+      await assert.rejects(createStatePackage(stale), /complete state generation is no longer current/u);
+      await chmod(path.join(fixture.root, parent), 0o1550);
+    }
+    const manifest = await createStatePackage(await fixture.packageOptions({ destination: archive }));
+    for (const [relative, mode] of directories) {
+      assert.equal(manifest.directories.find(entry => entry.path === relative).mode, posix ? mode : null);
+    }
+    staging = path.join(fixture.directory, `.restored.mediamanager-restore-${manifest.generation}`);
+    const controller = new AbortController();
+    await assert.rejects(restoreStatePackage(archive, destination, { signal: controller.signal,
+      onProgress: ({ path: relative }) => { if (relative === asset) controller.abort(); },
+    }), /abort/iu);
+    await writeFile(path.join(staging, asset), 'Private plugin state');
+    // A process can stop after sealing one directory in a restoring tree.
+    if (posix) await chmod(path.join(staging, nested), 0o500);
+    assert.equal((await restoreStatePackage(archive, destination)).resumed, true);
+    assert.equal(await readFile(path.join(destination, asset), 'utf8'), 'private plugin state');
+    if (posix) for (const [relative, mode] of directories) {
+      assert.equal((await stat(path.join(destination, relative))).mode & 0o7777, mode);
+    }
+    assert.equal((await restoreStatePackage(archive, destination)).alreadyRestored, true);
+    if (posix) {
+      await chmod(path.join(destination, parent), 0o750);
+      await assert.rejects(restoreStatePackage(archive, destination), /Restored directory permissions differ: config\/plugins/u);
+    }
+  } finally {
+    if (posix) for (const root of [fixture.root, destination, staging].filter(Boolean)) for (const [relative] of directories) {
+      try { await chmod(path.join(root, relative), 0o700); }
+      catch (error) { if (error.code !== 'ENOENT') throw error; }
+    }
+  }
+});
+
+test('state restore repairs staged mtime drift and detects it in an already published destination', async t => {
+  const fixture = await createInstanceFixture(t);
+  const relative = 'config/stamped.bin', bytes = Buffer.from('unchanged asset bytes');
+  const filename = path.join(fixture.root, relative);
+  await writeFile(filename, bytes);
+  await utimes(filename, 1_735_689_600.123456, 1_735_689_600.123456);
+  const archive = path.join(fixture.directory, 'package'), destination = path.join(fixture.directory, 'restored');
+  const manifest = await createStatePackage(await fixture.packageOptions({ destination: archive }));
+  const expected = manifest.instanceFiles.find(file => file.path === relative).modifiedAt;
+  assert.equal(expected, '2025-01-01T00:00:00.123Z');
+  const staging = path.join(fixture.directory, `.restored.mediamanager-restore-${manifest.generation}`);
+  const controller = new AbortController();
+  await assert.rejects(restoreStatePackage(archive, destination, { signal: controller.signal,
+    onProgress: ({ path: value }) => { if (value === relative) controller.abort(); },
+  }), /abort/iu);
+  const drift = new Date('2020-01-01T00:00:00Z');
+  const stamp = async file => (await stat(file)).mtime.toISOString();
+  const staged = path.join(staging, relative);
+  assert.equal(await stamp(staged), expected);
+  await utimes(staged, drift, drift);
+  assert.deepEqual(await readFile(staged), bytes);
+  const resumed = await restoreStatePackage(archive, destination, {
+    onProgress: step => { if (step.path === relative) assert.equal(step.reused, false); },
+  });
+  const restored = path.join(destination, relative);
+  assert.equal(resumed.resumed, true);
+  assert.equal(await stamp(restored), expected);
+  assert.deepEqual(await readFile(restored), bytes);
+  assert.equal((await restoreStatePackage(archive, destination)).alreadyRestored, true);
+  await utimes(restored, drift, drift);
+  await assert.rejects(restoreStatePackage(archive, destination), /Restored asset modification time differs: config\/stamped\.bin/u);
+  assert.equal(await stamp(restored), drift.toISOString());
+  assert.deepEqual(await readFile(restored), bytes);
 });
 
 test('state packages preserve distinct filesystem spellings and never overwrite a case alias', async t => {
