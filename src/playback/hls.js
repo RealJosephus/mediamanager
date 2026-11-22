@@ -641,10 +641,10 @@ export class HlsService {
     return job.removing;
   }
   async stop(deviceId, playSessionId) { await this.jobs.stop(deviceId, playSessionId); }
-  #createJob({ key, plan, options, source, virtualPath, version, cacheDirectory, openRead, eventId, disc }) {
+  #createJob({ key, plan, options, source, virtualPath, version, cacheDirectory, openRead, eventId, disc, audioTimeline }) {
     if (this.#closed) throw failure('closed', 'HLS is closed.');
     if ([...this.#jobs.values()].filter(value => !value.exited && !matchesJob(value, options.DeviceId, options.PlaySessionId)).length >= this.maxConcurrentJobs) throw failure('busy', 'The HLS concurrency limit has been reached.');
-    const job = { key, plan, options, source, virtualPath, version, cacheDirectory, openRead, eventId, disc,
+    const job = { key, plan, options, source, virtualPath, version, cacheDirectory, openRead, eventId, disc, audioTimeline,
       controller: new AbortController(), readers: 0, pendingReaders: new Set(), tail: Promise.resolve() };
     job.directory = this.#cache.create(cacheDirectory);
     job.directory.catch(() => {});
@@ -747,6 +747,21 @@ export class HlsService {
     return this.#track(() => this.#segment(source, virtualPath, options, current, execution, index, request, response,
       AbortSignal.any([this.#lifetime.signal, ...(signal ? [signal] : [])])));
   }
+
+  async #audioInputCanSeek(virtualPath, capability, signal) {
+    if (capability !== 'conditional') return capability === true;
+    // An origin can advertise ranges and still return the whole object. Check
+    // an actual nonzero offset before FFmpeg uses a byte seek for a time cut.
+    let handle;
+    try {
+      handle = await this.vfs.openRead(virtualPath, { range: { start: 1n }, signal });
+      return handle.rangeHonored === true && handle.range?.start === 1n;
+    } catch (error) {
+      if (error.code === 'not-supported' || error.code === 'range-not-satisfiable') return false;
+      throw error;
+    } finally { await handle?.close(); }
+  }
+
   async #segment(source, virtualPath, options, configuration, execution, index, request, response, signal) {
     const plan = { ...this.plan(source, options, configuration), execution };
     const runtimeTicks = BigInt(options.CurrentRuntimeTicks ?? 0);
@@ -756,7 +771,8 @@ export class HlsService {
     if (!available) throw failure('unavailable', 'The HLS process is unavailable.');
     const disc = plan.discInput ? await resolveDiscInput(this.vfs, source.VideoType, virtualPath, signal) : undefined;
     const before = disc ? undefined : await this.vfs.stat(virtualPath, { signal }); checkAbort(signal);
-    const inputVersion = disc ? disc.version : this.vfs.capabilities(virtualPath).reliableVersion === true ? before.version : null;
+    const capabilities = disc ? undefined : this.vfs.capabilities(virtualPath);
+    const inputVersion = disc ? disc.version : capabilities.reliableVersion === true ? before.version : null;
     const version = plan.burnSubtitle?.Path || plan.externalAudio ? null : inputVersion;
     // The native cache identity uses the source, user agent, device and play session.
     // Pin the VFS version and byte-producing plan so a changed object, selected stream,
@@ -764,22 +780,25 @@ export class HlsService {
     // Canonical playlist segments share an offset of zero across their distinct ticks.
     const canonicalStart = index >= 0 && plan.keyframeStarts?.[index] != null ? plan.keyframeStarts[index] : BigInt(Math.max(index, 0)) * plan.playlistSegmentTicks;
     const timelineOffset = runtimeTicks - canonicalStart;
-    const key = createHash('sha256').update(json([cacheDirectory, virtualPath, version, request.headers['user-agent'], options.DeviceId, options.PlaySessionId, cachePlan(plan), timelineOffset])).digest('hex');
-    const job = this.#jobs.get(key) ?? this.#createJob({ key, plan, options, source, virtualPath, version, cacheDirectory, disc });
+    const weakAudioTimeline = version == null && !plan.video && plan.container === 'mp4' && timelineOffset === 0n && canonicalStart < plan.runtime;
+    const independentCopy = weakAudioTimeline && !plan.externalAudio && plan.audioOutput?.encoder === 'copy';
+    const timelineKey = createHash('sha256').update(json([cacheDirectory, virtualPath, version, request.headers['user-agent'], options.DeviceId, options.PlaySessionId, cachePlan(plan), timelineOffset])).digest('hex');
+    if (independentCopy) plan.normalizeAudioTimeline = true;
+    if (independentCopy && index > 0 && await this.#audioInputCanSeek(virtualPath, capabilities?.randomRead, signal)) {
+      const remaining = plan.runtime - canonicalStart;
+      plan.audioClipDuration = remaining < plan.playlistSegmentTicks ? remaining : plan.playlistSegmentTicks;
+    }
+    const key = plan.audioClipDuration ? `${timelineKey}:${index}` : timelineKey;
+    const job = this.#jobs.get(key) ?? this.#createJob({ key, plan, options, source, virtualPath, version, cacheDirectory, disc,
+      audioTimeline: independentCopy ? timelineKey : undefined });
     job.readers++; if (!job.options.PlaySessionId?.trim()) clearTimeout(job.idle);
     let finishReader;
     const finished = new Promise(resolve => { finishReader = resolve; }); job.pendingReaders.add(finished);
     const previous = job.tail; let unlock; job.tail = new Promise(resolve => { unlock = resolve; });
     const combined = AbortSignal.any([job.controller.signal, ...(signal ? [signal] : [])]);
-    // A weak source is copied again for each non-overlapping response group.
-    // Audio fMP4 fragments must still share the initialization segment's zero
-    // origin. Starting a later fragment as a new file resets its decode clock,
-    // and the normal end-of-file seek clamp can also repeat earlier packets.
-    // Rebuild the canonical audio timeline and select the requested fragment;
-    // retain the ordinary seek branch for explicit noncanonical timelines.
-    const segmentTicks = BigInt(plan.segmentLength) * ticksPerSecond;
-    const audioFromOrigin = job.version == null && !plan.video && plan.container === 'mp4' && timelineOffset === 0n
-      && BigInt(Math.max(index, 0)) < (plan.runtime + segmentTicks - 1n) / segmentTicks;
+    // Keep one clock for inputs without byte seeks and for encoders that need
+    // their priming samples at the start of the presentation.
+    const audioFromOrigin = weakAudioTimeline && !plan.audioClipDuration;
     const copyStartNumber = audioFromOrigin ? 0 : Math.max(index, 0);
     const copyRuntimeTicks = audioFromOrigin ? 0n : runtimeTicks;
     try {
@@ -799,9 +818,10 @@ export class HlsService {
       while (true) {
         checkAbort(combined);
         if (job.error && job.active) throw job.error;
-        if (await exists(file) && (job.exited || await exists(next))) break;
+        const generated = await exists(file);
+        if (generated?.size > 0 && (job.exited || await exists(next))) break;
         if (job.exited) {
-          if (await exists(file)) break;
+          if ((await exists(file))?.size > 0) break;
           // A process can finish between selection and waiting. Reevaluate the
           // missing segment once using this request's selected copy origin.
           if (!started) { await this.#start(job, plan, options, copyStartNumber, copyRuntimeTicks, undefined, combined); started = true; continue; }
@@ -833,6 +853,7 @@ export class HlsService {
       await previous; checkAbort(signal);
       this.#dropActivity(job.options.DeviceId, job.options.PlaySessionId);
       for (const other of this.#jobs.values()) if (other !== job && matchesJob(other, job.options.DeviceId, job.options.PlaySessionId)) {
+        if (job.audioTimeline && job.audioTimeline === other.audioTimeline && other.readers) continue;
         other.active = false; clearTimeout(other.idle); other.processController?.abort(); await other.done;
       }
       if ([...this.#jobs.values()].filter(value => value !== job && value.active && !value.exited).length >= this.maxConcurrentJobs) throw failure('busy', 'The HLS concurrency limit has been reached.');

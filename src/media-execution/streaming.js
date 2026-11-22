@@ -7,6 +7,7 @@ import { httpMediaProtocols, httpMediaUrl, isHlsManifest, liveHttpHlsUrl, mediaS
 import { mediaHttpHeaderArguments } from './process.js';
 
 const failure = (code, message) => new StorageError(code, message);
+const hlsAudioTime = ticks => `${ticks / 10000000n}.${String(ticks % 10000000n / 10n).padStart(6, '0')}`;
 
 const containers = {
   mp4: { muxer: 'mp4', mime: 'video/mp4', video: ['h264', 'hevc', 'av1', 'vp9', 'mpeg4'], audio: ['aac', 'ac3', 'eac3', 'mp3', 'alac'], subtitle: ['mov_text'] },
@@ -293,7 +294,13 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
   const args = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-stats', '-stats_period', '0.5', '-protocol_whitelist',
     plan.liveHttpHls ? httpMediaProtocols : 'http,tcp', ...probe];
   const seek = [];
-  if (runtimeTicks > 0n) {
+  if (plan.audioClipDuration) {
+    // Seek before the cut so demuxers that land on an earlier packet still
+    // supply every packet in the requested output window.
+    const preroll = 10000000n;
+    if (runtimeTicks > preroll) seek.push('-ss', hlsAudioTime(runtimeTicks - preroll));
+    args.push(...seek);
+  } else if (runtimeTicks > 0n) {
     const maximum = plan.runtime > 50000000n ? plan.runtime - 50000000n : 0n;
     const seekTicks = runtimeTicks + (plan.videoOutput?.encoder === 'copy' ? 5000000n : 0n);
     seek.push('-ss', mediaSeekTime(seekTicks > maximum ? maximum : seekTicks));
@@ -306,6 +313,10 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
   args.push(...(plan.videoOutput?.hardware?.inputArgs ?? []), ...(overlay?.canvas ?? []),
     ...(plan.liveHttpHls ? mediaHttpHeaderArguments(requestHeaders ?? undefined) : []), '-i', url,
     ...bitmapInputArguments(subtitles, overlay, seek, probe), ...externalAudioArguments(plan, audioUrl, seek));
+  if (plan.audioClipDuration) {
+    const time = hlsAudioTime(runtimeTicks);
+    args.push('-ss', time, '-t', hlsAudioTime(plan.audioClipDuration), '-output_ts_offset', time);
+  }
   if (plan.videoOutput?.hardware?.decoder.args.length) args.push('-noautoscale');
   args.push('-map_metadata', '-1', '-map_chapters', '-1', '-threads', String(threads));
   if (overlay) args.push('-filter_complex', overlay.graph);
@@ -326,6 +337,7 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
     if (subtitles?.filter) args.push('-start_at_zero');
     if (eventId && plan.container === 'ts') args.push('-flags', '-global_header');
   } else args.push('-vn');
+  if (plan.normalizeAudioTimeline) args.push('-start_at_zero');
   args.push(...audioArguments(plan.audioOutput));
   if (['opus', 'dts', 'truehd'].includes(plan.audioOutput?.codec) || plan.audioOutput?.codec === 'flac' && !encoderVersionAtLeast(version, 6)) args.push('-strict', '-2');
   args.push('-copyts', '-avoid_negative_ts', 'disabled', '-max_muxing_queue_size', String(maxMuxingQueueSize), '-f', 'hls', '-max_delay', '5000000', '-hls_time', String(plan.segmentLength), '-hls_segment_type', plan.container === 'mp4' ? 'fmp4' : 'mpegts');
@@ -334,6 +346,7 @@ export function hlsArguments(url, plan, directory, startNumber = 0, runtimeTicks
   if (eventId) args.push('-hls_base_url', `hls/${eventId}/`);
   args.push('-hls_segment_filename', path.join(directory, `${prefix}%d.${plan.container}`), '-hls_playlist_type', eventId ? 'event' : 'vod', '-hls_list_size', '0');
   if (plan.container === 'mp4' && plan.video) args.push(encoderVersionAtLeast(version, 5) ? '-hls_segment_options' : '-hls_ts_options', 'movflags=+frag_discont+skip_sidx');
+  if (plan.audioClipDuration) args.push(encoderVersionAtLeast(version, 5) ? '-hls_segment_options' : '-hls_ts_options', 'movflags=+frag_discont');
   args.push('-y', path.join(directory, 'main.m3u8'));
   return args;
 }

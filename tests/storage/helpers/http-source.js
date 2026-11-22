@@ -2,9 +2,8 @@ import http from 'node:http';
 import { once } from 'node:events';
 import { gzipSync } from 'node:zlib';
 
-export async function startHttpSource() {
+export async function startHttpSource({ bytes = Buffer.from('0123456789') } = {}) {
   const events = [], waiters = new Set(), sockets = new Set();
-  const bytes = Buffer.from('0123456789');
   const server = http.createServer((request, response) => {
     const closed = Promise.withResolvers(), socketClosed = Promise.withResolvers();
     const entry = { method: request.method, target: request.url, headers: { ...request.headers },

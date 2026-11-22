@@ -4,16 +4,25 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomBytes, createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { mkdtemp, writeFile, rm } from 'node:fs/promises';
+import { once } from 'node:events';
+import { mkdir, mkdtemp, realpath, writeFile, rm } from 'node:fs/promises';
+import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { createTestRuntime } from '../helpers/runtime.js';
-import { IdentityAccessMap } from '../../src/storage/index.js';
+import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
+import { sourceUriPath } from '../../src/storage/uri.js';
+import { LocalAdapter } from '../../plugins/local/adapter.js';
+import { HttpAdapter } from '../../plugins/http/adapter.js';
+import { HlsService } from '../../src/playback/hls.js';
+import { defaultConfiguration } from '../../src/core/configuration-xml.js';
+import { createTestMediaEncoder } from '../helpers/media-encoder.js';
 import { extractionFixture } from './extraction-fixture.js';
 import reference from './fixtures/audio-hls-reference.json' with { type: 'json' };
 import { playbackTransportSummary, projectHlsRequestIdentities } from '../helpers/playback-transport-projection.js';
+import { startHttpSource } from '../storage/helpers/http-source.js';
 
 
 
@@ -23,6 +32,107 @@ const id = '88888888888888888888888888888888';
 const headersOf = response => ({ status: response.status, headers: Object.fromEntries(['content-type', 'content-length', 'accept-ranges', 'expires', 'cache-control', 'etag', 'last-modified'].map(key => [key, response.headers.get(key)])) });
 const projection = probe => ({ streams: probe.streams?.map(value => Object.fromEntries(['codec_name', 'profile', 'width', 'height', 'pix_fmt', 'sample_rate', 'channels'].filter(key => value[key] != null).map(key => [key, value[key]]))),
   packets: probe.packets?.map(value => Object.fromEntries(['stream_index', 'pts_time', 'dts_time', 'duration_time', 'size', 'data_hash', 'flags'].filter(key => value[key] != null).map(key => [key, value[key]]))) });
+
+test('sequential audio fMP4 requests preserve copied packets and seek when the source supports it', { timeout: 60000 }, async t => {
+  const temporaryRoot = await realpath(tmpdir()), root = await mkdtemp(path.join(temporaryRoot, 'mediamanager-audio-clips-'));
+  const input = path.join(root, 'source.mka'), cache = path.join(root, 'cache');
+  const registry = new StorageRegistry(), vfs = new VirtualFileSystem(registry);
+  const configuration = defaultConfiguration('encoding'), processes = [], errors = [];
+  const mediaEncoder = await createTestMediaEncoder(t, { configuration });
+  const hls = new HlsService({ vfs, mediaEncoder, getCacheDirectory: () => cache, getEncodingOptions: () => configuration,
+    onProcess: ({ args }) => processes.push(args), onError: error => errors.push(error) });
+  const inputBytes = Buffer.from(reference.media, 'base64');
+  let pending, origin;
+  const server = createServer((request, response) => {
+    const [segment, backend] = request.url.slice(1).split('/'), index = Number(segment);
+    const inputPath = backend ? '/http' + sourceUriPath(`${origin.origin}/${backend}`) : '/source.mka';
+    pending = hls.segment(reference.source, inputPath, { MediaType: 'Audio', AudioCodec: 'copy', SegmentContainer: 'mp4',
+      SegmentLength: 3, PlaySessionId: backend ?? 'audio-clips', DeviceId: 'audio-clips',
+      CurrentRuntimeTicks: BigInt(Math.max(index, 0)) * 30000000n },
+    index, request, response).catch(error => {
+      errors.push(error);
+      if (response.headersSent) response.destroy(error);
+      else response.writeHead(error.status ?? 500).end();
+    });
+  });
+  t.after(async () => {
+    await hls.close(); server.closeAllConnections();
+    if (server.listening) await new Promise(resolve => server.close(resolve));
+    await registry.close();
+    await origin?.close();
+    assert.equal(path.dirname(root), temporaryRoot); await rm(root, { recursive: true });
+  });
+  await mkdir(cache); await writeFile(input, inputBytes);
+  registry.registerType('local', options => LocalAdapter.open(options));
+  await registry.createInstance('audio', 'local', { root });
+  vfs.mount({ path: '/', instanceId: 'audio', capabilities: {} });
+  origin = await startHttpSource({ bytes: inputBytes });
+  registry.registerType('http', options => new HttpAdapter(options));
+  await registry.createInstance('audio-http', 'http', {});
+  vfs.mount({ path: '/http', instanceId: 'audio-http', capabilities: {} });
+  assert.equal(vfs.capabilities('/source.mka').reliableVersion, false);
+  server.listen(0, '127.0.0.1'); await once(server, 'listening');
+
+  const request = async (index, backend) => {
+    const resource = backend ? `${index}/${backend}` : index;
+    const response = await fetch(`http://127.0.0.1:${server.address().port}/${resource}`);
+    const bytes = Buffer.from(await response.arrayBuffer()); await pending;
+    assert.equal(response.status, 200, errors.map(error => error.message).join('\n'));
+    return bytes;
+  };
+  const probe = filename => {
+    const result = spawnSync(validationExecutable('ffprobe'), ['-v', 'error', '-select_streams', 'a:0', '-show_packets',
+      '-show_entries', 'packet=pts_time,duration_time,data_hash', '-show_data_hash', 'sha256', '-of', 'json', filename],
+    { windowsHide: true, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+    assert.equal(result.status, 0, result.stderr);
+    return JSON.parse(result.stdout).packets;
+  };
+  const source = probe(input), init = await request(-1);
+  const readSegment = async (index, suffix = '') => {
+    const filename = path.join(root, `check-${index}${suffix}.mp4`);
+    await writeFile(filename, Buffer.concat([init, await request(index)]));
+    return probe(filename);
+  };
+  const data = packets => packets.map(packet => packet.data_hash);
+  let before;
+  for (const index of [0, 1, 2, 8]) {
+    const packets = await readSegment(index), start = index * 3, args = processes.at(-1);
+    assert.deepEqual(data(packets), data(source.filter(packet => Number(packet.pts_time) >= start && Number(packet.pts_time) < start + 3)));
+    assert.ok(Math.abs(Number(packets[0].pts_time) - Number(source.find(packet => Number(packet.pts_time) >= start).pts_time)) < 0.001);
+    if (index > 0) {
+      assert.equal(args[args.indexOf('-start_number') + 1], String(index));
+      assert.notEqual(args.indexOf('-ss'), -1);
+      assert.ok(args.indexOf('-ss') < args.indexOf('-i'));
+    }
+    if (index === 1) before = data(packets);
+  }
+
+  const changed = spawnSync(validationExecutable('ffmpeg'), ['-hide_banner', '-loglevel', 'error', '-f', 'lavfi', '-i',
+    'sine=frequency=1700:sample_rate=44100', '-t', '8', '-ac', '2', '-c:a', 'aac', '-output_ts_offset', '7', '-y', input],
+  { windowsHide: true, encoding: 'utf8' });
+  assert.equal(changed.status, 0, changed.stderr);
+  const rebased = await readSegment(1, '-replacement');
+  assert.notDeepEqual(data(rebased), before);
+  assert.ok(Number(probe(input)[0].pts_time) >= 6, 'The replacement has a nonzero media origin.');
+  assert.ok(Number(rebased[0].pts_time) >= 3 && Number(rebased[0].pts_time) < 3.03);
+  assert.equal(processes.length, 6);
+
+  const expected = source.filter(packet => Number(packet.pts_time) >= 24 && Number(packet.pts_time) < 27);
+  for (const [backend, seekable] of [['bytes', true], ['ignore-range', false]]) {
+    const fragment = await request(8, backend), args = processes.at(-1);
+    const initialization = await request(-1, backend);
+    const filename = path.join(root, `${backend}.mp4`);
+    await writeFile(filename, Buffer.concat([initialization, fragment]));
+    const packets = probe(filename);
+    assert.deepEqual(data(packets), data(expected));
+    assert.ok(Math.abs(Number(packets[0].pts_time) - Number(expected[0].pts_time)) < 0.001);
+    assert.equal(args[args.indexOf('-start_number') + 1], seekable ? '8' : '0');
+    assert.equal(args.includes('-ss'), seekable);
+    assert.ok(origin.events.some(entry => entry.target === '/' + backend && entry.headers.range === 'bytes=1-'));
+  }
+  assert.deepEqual(errors, []);
+});
+
 async function seed(database) {
   for (const [table, rows] of Object.entries(reference.tables)) {
     const columns = tableDefinition(table).columns, pending = [...rows], inserted = new Set();

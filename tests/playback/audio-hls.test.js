@@ -6,6 +6,16 @@ import { negotiateSource } from '../../src/playback/profile.js';
 import reference from './fixtures/audio-hls-reference.json' with { type: 'json' };
 import oracle from './fixtures/audio-hls-oracle.json' with { type: 'json' };
 
+test('an independent audio fragment keeps its full seek and presentation offset past 24 hours', () => {
+  const plan = { ...hlsPlan(reference.source, { MediaType: 'Audio', AudioCodec: 'copy', SegmentContainer: 'mp4' }),
+    audioClipDuration: 30000000n, normalizeAudioTimeline: true };
+  const args = hlsArguments('http://127.0.0.1:1/' + 'a'.repeat(64), plan, tmpdir(), 28801, 864030000000n,
+    { threads: 0, version: '8.0', maxMuxingQueueSize: 2048 });
+  assert.equal(args[args.indexOf('-ss') + 1], '86402.000000');
+  assert.equal(args[args.lastIndexOf('-ss') + 1], '86403.000000');
+  assert.equal(args[args.indexOf('-output_ts_offset') + 1], '86403.000000');
+});
+
 test('audio HLS uses native StreamBuilder URLs and chooses copy or encoding from the request', () => {
   for (const entry of reference.profiles) {
     const source = structuredClone(entry.source);
