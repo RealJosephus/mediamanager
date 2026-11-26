@@ -3,7 +3,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { DatabaseSync } from 'node:sqlite';
-import { cloneDirectory, stateDirectory } from '../../src/migration/emby/files.js';
+import { cloneDirectory, stateDirectory, verifyState } from '../../src/migration/emby/files.js';
 
 export async function verifyProviderRoundtrip({ root, original, wireId, item, exchange, postgres, nativeProviders, adminUser }) {
   const instance = name => path.join(root, 'providers-' + name);
@@ -71,10 +71,11 @@ export async function verifyProviderRoundtrip({ root, original, wireId, item, ex
 
 async function makeOldReceipt(instance, unresolvedItem) {
   const state = name => path.join(instance, stateDirectory, name + '.json');
-  const base = JSON.parse(await readFile(state('base'), 'utf8'));
+  const manifest = JSON.parse(await readFile(state('manifest'), 'utf8'));
+  const { base } = await verifyState(instance, manifest.owner);
   delete base.providerState;
   const bytes = JSON.stringify(base) + '\n';
-  const manifest = JSON.parse(await readFile(state('manifest'), 'utf8'));
+  manifest.version = 1;
   manifest.baseHash = createHash('sha256').update(bytes).digest('hex');
   await writeFile(state('base'), bytes);
   await writeFile(state('manifest'), JSON.stringify(manifest) + '\n');

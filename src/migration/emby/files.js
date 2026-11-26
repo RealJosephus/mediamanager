@@ -27,7 +27,7 @@ export async function readEmbyImportManifest(instance) {
     throw error;
   }
   const lineage = JSON.parse(manifest);
-  return lineage.version === 1 && lineage.owner === 'jellyfin' ? lineage : null;
+  return [1, 2].includes(lineage.version) && lineage.owner === 'jellyfin' ? lineage : null;
 }
 export async function exists(file) {
   try {
@@ -112,12 +112,45 @@ export async function cloneDirectory(source, destination, { skipState = false } 
 export async function writeJson(file, value) {
   await writeFile(file, JSON.stringify(value) + '\n', { mode: 0o600 });
 }
+// The manifest authenticates base.json, which in turn binds the order and
+// content of each endpoint's chunks. Only the private publication stage writes them.
+async function writeRowChunks(state, endpoint, rows) {
+  const hashes = [], records = [];
+  let bytes = 0;
+  async function flush() {
+    const chunk = Buffer.from('[' + records.join(',') + ']\n');
+    await writeFile(path.join(state, endpoint + '-' + hashes.length + '.json'), chunk, { mode: 0o600, flag: 'wx' });
+    hashes.push(hash(chunk));
+    bytes = 0;
+    records.length = 0;
+  }
+  for (const row of rows) {
+    const record = JSON.stringify(row);
+    records.push(record);
+    bytes += Buffer.byteLength(record) + 1;
+    if (bytes >= 2 * 1024 * 1024) await flush();
+  }
+  if (records.length) await flush();
+  return hashes;
+}
+
+async function readRowChunks(state, endpoint, hashes) {
+  if (!Array.isArray(hashes)) throw new Error('Invalid migration row chunk manifest');
+  const rows = [];
+  for (const [index, expected] of hashes.entries()) {
+    const chunk = await readFile(path.join(state, endpoint + '-' + index + '.json'));
+    if (hash(chunk) !== expected) throw new Error('Migration field baseline has changed');
+    for (const row of JSON.parse(chunk)) rows.push(row);
+  }
+  return rows;
+}
+
 export async function verifyState(root, kind) {
   const state = path.join(root, stateDirectory);
   if (!(await exists(state))) return null;
   await directory(state);
   const meta = JSON.parse(await readFile(path.join(state, 'manifest.json'), 'utf8'));
-  if (meta.version !== 1 || meta.owner !== kind) throw new Error('Invalid migration lineage');
+  if (![1, 2].includes(meta.version) || meta.owner !== kind) throw new Error('Invalid migration lineage');
   const anchor = await readFile(path.join(state, 'base.json'));
   if (hash(anchor) !== meta.baseHash) throw new Error('Migration field baseline has changed');
   const origin = path.join(state, 'origin');
@@ -127,7 +160,11 @@ export async function verifyState(root, kind) {
   const external = meta.assetHash ? path.join(state, 'source-metadata') : null;
   if (external && hash(JSON.stringify(await inventory(external))) !== meta.assetHash)
     throw new Error('Captured external metadata has changed');
-  return { origin, external, originIdentity: meta.originIdentity, base: JSON.parse(anchor) };
+  const base = JSON.parse(anchor);
+  if (meta.version === 2) {
+    for (const endpoint of ['source', 'target']) base[endpoint] = await readRowChunks(state, endpoint, base[endpoint]);
+  }
+  return { origin, external, originIdentity: meta.originIdentity, base };
 }
 export async function sealState(
   root,
@@ -148,10 +185,11 @@ export async function sealState(
   const assetHash = external
     ? hash(JSON.stringify(await cloneDirectory(external, path.join(state, 'source-metadata'))))
     : undefined;
-  const base = { chapterMarkerVersion: 1, source: [...sourceRows], target: [...targetRows], assets, aliases, providerState };
+  const base = { chapterMarkerVersion: 1, source: await writeRowChunks(state, 'source', sourceRows),
+    target: await writeRowChunks(state, 'target', targetRows), assets, aliases, providerState };
   await writeJson(path.join(state, 'base.json'), base);
   await writeJson(path.join(state, 'manifest.json'), {
-    version: 1,
+    version: 2,
     owner,
     originIdentity,
     ...(importedMarkerReader ? { embyChapterMarkers: true } : {}),
