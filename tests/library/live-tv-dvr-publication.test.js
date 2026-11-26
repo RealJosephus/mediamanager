@@ -81,6 +81,48 @@ async function recordingFixture(t, { stream, endIn = 60000, local = false, befor
     get tuned() { return tuned; } };
 }
 
+test('DVR writes the configured local release date to movie and episode NFOs', { timeout: 30000 }, async t => {
+  for (const series of [false, true]) await t.test(series ? 'episode' : 'movie', async t => {
+    const fixture = await recordingFixture(t, { local: true, stream: async function* () { yield footage; } });
+    Object.assign(fixture.timer, { IsMovie: !series, IsSeries: series, IsProgramSeries: series,
+      OriginalAirDate: new Date(2024, 2, 7, 13, 24).toISOString() });
+    const { dvr, completed } = fixture.newDvr(100);
+    dvr.configuration.getConfiguration = async () => ({ RecordingPath: fixture.recordingRoot, SaveRecordingNFO: true });
+    dvr.saveAssets = options => saveRecordingAssets({ ...options, library: dvr.library, releaseDateFormat: 'dd MMMM yyyy HH:mm' });
+    await dvr.start(); await completed; await dvr.close();
+    assert.deepEqual(fixture.failures, []);
+    const recorded = path.parse(fixture.timer.RecordingPath);
+    assert.deepEqual(await readFile(fixture.timer.RecordingPath), footage);
+    const nfo = await readFile(path.join(recorded.dir, recorded.name + '.nfo'), 'utf8');
+    for (const tag of series ? ['aired'] : ['premiered', 'releasedate']) {
+      assert.ok(nfo.includes('<' + tag + '>07 March 2024 13:24</' + tag + '>'), nfo);
+    }
+  });
+});
+
+test('DVR separates same-name series by the first provider result and uses the plain directory without a year', { timeout: 30000 }, async t => {
+  const fixture = await recordingFixture(t, { local: true, stream: async function* () { yield footage; } });
+  for (const [i, results] of [[1, [{ ProductionYear: 1980 }, { ProductionYear: 2000 }]],
+    [2, [{ ProductionYear: 2022 }]], [3, []]]) {
+    const timer = fixture.timer;
+    Object.assign(timer, { Id: 'version-' + i, Status: 'New', Name: 'Same Show.', IsProgramSeries: true,
+      IsSeries: true, ProductionYear: 2026, SeasonNumber: 1, EpisodeNumber: i, SeriesProviderIds: { Tmdb: 'show-' + i } });
+    delete timer.RecordingPath;
+    const { dvr, completed } = fixture.newDvr(100);
+    dvr.searchSeries = async (info, signal) => {
+      assert.deepEqual(info, { Name: timer.Name, ProviderIds: { Tmdb: 'show-' + i } });
+      signal.throwIfAborted(); return results;
+    };
+    dvr.configuration.getConfiguration = async () => ({ RecordingPath: fixture.recordingRoot, SaveRecordingNFO: true });
+    dvr.saveAssets = options => saveRecordingAssets({ ...options, library: dvr.library });
+    await dvr.start(); await completed; await dvr.close();
+    const folder = path.join(fixture.recordingRoot, 'Same Show' + (results.length ? ' (' + results[0].ProductionYear + ')' : ''));
+    assert.equal(path.dirname(fixture.timer.RecordingPath), path.join(folder, 'Season 1'));
+    assert.ok((await readFile(path.join(folder, 'tvshow.nfo'), 'utf8')).includes('<tmdbid>show-' + i + '</tmdbid>'));
+  }
+  assert.deepEqual(fixture.failures, []);
+});
+
 test('DVR keeps the original local reservation through shutdowns before and after writing bytes', { timeout: 20000 }, async t => {
   const waiting = [Promise.withResolvers(), Promise.withResolvers()];
   const fixture = await recordingFixture(t, { local: true, stream: async function* (signal, tuned) {

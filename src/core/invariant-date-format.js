@@ -80,7 +80,7 @@ function tokens(format, options) {
   return result;
 }
 
-function sourceParts(value) {
+function sourceParts(value, localTime) {
   const text = value instanceof Date ? value.toISOString() : String(value);
   const match = /^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,7}))?)?)?(Z|[+-]\d{2}:\d{2})?$/.exec(text);
   if (!match) throw new RangeError(`Invalid invariant date value: ${text}`);
@@ -95,15 +95,18 @@ function sourceParts(value) {
     const sign = zone[0] === '+' ? 1 : -1, offset = sign * (zoneHour * 60 + zoneMinute);
     date.setTime(date.getTime() - offset * 60000);
     if (date.getUTCFullYear() < 1 || date.getUTCFullYear() > 9999) throw new RangeError(`Invalid invariant date value: ${text}`);
-    return { year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate(), hour: date.getUTCHours(), minute: date.getUTCMinutes(), second: date.getUTCSeconds(), fraction: local.fraction, zone: 'Z' };
   }
-  return local;
+  const offset = localTime ? -date.getTimezoneOffset() : 0;
+  date.setUTCMinutes(date.getUTCMinutes() + offset);
+  const offsetText = (offset < 0 ? '-' : '+') + pad(Math.floor(Math.abs(offset) / 60), 2) + ':' + pad(Math.abs(offset) % 60, 2);
+  return { year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate(), hour: date.getUTCHours(),
+    minute: date.getUTCMinutes(), second: date.getUTCSeconds(), fraction: local.fraction, zone: localTime ? offsetText : 'Z' };
 }
 
 function dayIndex(parts) { const date = new Date(0); date.setUTCFullYear(parts.year, parts.month - 1, parts.day); return date.getUTCDay(); }
 
-export function formatInvariantDate(value, format) {
-  const parts = sourceParts(value), values = tokens(format), weekday = dayIndex(parts);
+export function formatInvariantDate(value, format, { localTime = false } = {}) {
+  const parts = sourceParts(value, localTime && format !== 'U'), values = tokens(format), weekday = dayIndex(parts);
   let output = '';
   for (const token of values) {
     if (token.literal != null) { output += token.literal; continue; }
@@ -118,8 +121,11 @@ export function formatInvariantDate(value, format) {
     else if (specifier === 'f') { if (length > 7) throw formatError('Invariant date fractions cannot exceed seven digits.'); value = parts.fraction.slice(0, length); }
     else if (specifier === 'F') { if (length > 7) throw formatError('Invariant date fractions cannot exceed seven digits.'); value = parts.fraction.slice(0, length).replace(/0+$/, ''); if (!value && output.endsWith('.')) output = output.slice(0, -1); }
     else if (specifier === 't') value = (parts.hour < 12 ? 'AM' : 'PM').slice(0, length === 1 ? 1 : 2);
-    else if (specifier === 'z') value = length === 1 ? '+0' : length === 2 ? '+00' : '+00:00';
-    else if (specifier === 'K') value = 'Z'.repeat(length);
+    else if (specifier === 'z') {
+      const offset = parts.zone === 'Z' ? '+00:00' : parts.zone;
+      value = length === 1 ? offset[0] + Number(offset.slice(1, 3)) : length === 2 ? offset.slice(0, 3) : offset;
+    }
+    else if (specifier === 'K') value = parts.zone.repeat(length);
     else if (specifier === 'g') value = 'A.D.';
     output += value;
   }

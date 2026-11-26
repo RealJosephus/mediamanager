@@ -7,6 +7,7 @@ import { readCreditFrames, readFingerprint } from './media-execution/segment-ana
 import { initializeLiveTvState } from './database/live-tv-state-import.js';
 import { LiveTvService } from './library/live-tv-service.js';
 import { LiveTvTimersService } from './library/live-tv-timers-service.js';
+import { remoteMetadataSearch } from './metadata/remote-lookup.js';
 import { LiveTvDvr } from './library/live-tv-dvr.js';
 import { saveRecordingAssets } from './library/live-tv-recording-assets.js';
 import { LiveTvRecordingsService } from './library/live-tv-recordings-service.js';
@@ -612,6 +613,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
     sessions.liveStreams = liveStreams;
     if (dataPath && fileSystem && liveTvRecordingFolders) {
       liveTvDvr = new LiveTvDvr({ timers: liveTvTimers, library, dataPath, fileSystem, mediaEncoder, liveStreams, onError,
+        searchSeries: (searchInfo, signal) => remoteMetadataSearch('Series', { SearchInfo: searchInfo },
+          { library, metadata, configuration: currentConfiguration(), signal }),
         mediaFileSystem: configuredStorage.mediaFileSystem,
         retainStorage: configuredStorage.retainGeneration,
         configuration: liveTv.admitRead(), mediaSources: liveTvMediaSources, folders: liveTvRecordingFolders, monitor: libraryMonitor,

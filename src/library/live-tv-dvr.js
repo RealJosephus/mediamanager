@@ -30,7 +30,7 @@ const dateParts = value => {
 };
 const pathApi = filename => /^[A-Za-z]:[\\/]|^\\\\/u.test(filename) ? path.win32 : path.posix;
 
-function recordingLocation(timer, configuration, dataPath) {
+function recordingLocation(timer, configuration, dataPath, seriesYear) {
   const defaultPath = configuration.RecordingPath?.trim() ? configuration.RecordingPath : path.join(dataPath, 'livetv', 'recordings');
   const programSeries = timer.IsProgramSeries;
   const custom = programSeries ? configuration.SeriesRecordingPath : timer.IsMovie ? configuration.MovieRecordingPath : null;
@@ -44,7 +44,9 @@ function recordingLocation(timer, configuration, dataPath) {
   const parts = [root];
   if (configuration.EnableRecordingSubfolders && ordinalIgnoreCaseEquals(root, defaultPath)) parts.push(group);
   const year = timer.ProductionYear != null ? ` (${timer.ProductionYear})` : '';
-  parts.push(safeName((timer.Name ?? '') + (!programSeries && (timer.IsMovie || kids) ? year : '')));
+  const folder = programSeries ? safeName(timer.Name) + (seriesYear == null ? '' : ` (${seriesYear})`)
+    : safeName((timer.Name ?? '') + (timer.IsMovie || kids ? year : ''));
+  parts.push(folder);
   const seriesPath = programSeries ? api.join(...parts) : undefined;
   if (programSeries && timer.SeasonNumber != null) parts.push(`Season ${timer.SeasonNumber}`);
 
@@ -590,7 +592,10 @@ export class LiveTvDvr {
         const channel = await this.library.itemCreation.getItemById(guideChannelId('Emby', timer.ChannelId));
         if (channel?.Type !== 'LiveTvChannel') throw libraryError(404, 'The recording channel was not found.');
         const configuration = await this.configuration.getConfiguration();
-        const location = recordingLocation(timer, configuration, this.dataPath);
+        const ids = timer.SeriesProviderIds instanceof Map ? Object.fromEntries(timer.SeriesProviderIds) : timer.SeriesProviderIds;
+        const matches = timer.IsSeries && ids && Object.keys(ids).length
+          ? await this.searchSeries?.({ Name: timer.Name, ProviderIds: ids }, signal) : undefined;
+        const location = recordingLocation(timer, configuration, this.dataPath, matches?.[0]?.ProductionYear);
         input = await this.#openInput(channel, mediaFileSystem, signal);
         output = await this.#openOutput(job, timer, location, signal);
         if (job.publication.fileIdentity) {

@@ -1,5 +1,6 @@
 import { EOL } from 'node:os';
 import { escapeXml } from '../core/xml.js';
+import { formatInvariantDate } from '../core/invariant-date-format.js';
 import { nativeGuid } from '../users/native.js';
 import { imagePathApi } from '../metadata/image-assets.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
@@ -12,15 +13,6 @@ const providerId = (program, name) => {
 };
 const hasTag = (timer, name) => timer.Tags?.some(tag => ordinalIgnoreCaseEquals(tag, name));
 const fields = (name, values) => (values ?? []).map(value => [name, value]);
-
-function localDate(value, format) {
-  const date = new Date(value);
-  const replacements = { yyyy: String(date.getFullYear()).padStart(4, '0'), yy: String(date.getFullYear()).slice(-2),
-    MM: String(date.getMonth() + 1).padStart(2, '0'), M: date.getMonth() + 1,
-    dd: String(date.getDate()).padStart(2, '0'), d: date.getDate() };
-  return (format || 'yyyy-MM-dd').replace(/'([^']*)'|"([^"]*)"|\\(.)|yyyy|yy|MM|M|dd|d/gu,
-    (token, single, double, escaped) => single ?? double ?? escaped ?? replacements[token]);
-}
 
 function nfoDocument(element, values) {
   const declaration = '\ufeff<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
@@ -56,8 +48,8 @@ export async function saveRecordingAssets({ timer, filename, seriesPath, configu
       ]);
     }
     const now = new Date();
-    const airDate = program.PremiereDate ? localDate(program.PremiereDate, releaseDateFormat)
-      : seriesPath && !timer.IsRepeat ? localDate(now, releaseDateFormat) : undefined;
+    const premiereDate = program.PremiereDate ?? (seriesPath && !timer.IsRepeat ? now : undefined);
+    const airDate = premiereDate && formatInvariantDate(premiereDate, releaseDateFormat ?? 'yyyy-MM-dd', { localTime: true });
     const overview = (program.Overview ?? '').replace(/<[^>]*>/gu, '').replaceAll('&quot;', "'");
     const imdb = providerId(program.ProviderIds, 'Imdb'), tvdb = providerId(program.ProviderIds, 'Tvdb'), tmdb = providerId(program.ProviderIds, 'Tmdb');
     const lock = !seriesPath && (!timer.IsMovie || sports || news) && !imdb && !tvdb && !tmdb;
