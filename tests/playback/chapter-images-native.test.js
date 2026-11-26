@@ -278,6 +278,49 @@ test('chapter images and trickplay regenerate, move, and round-trip through Nati
     evidence.node.imageStreamAfterExchange = await readAdvertisedTrickplay(coldRequest, evidence.node.readAfterExchange);
     assert.deepEqual(evidence.node.imageStreamAfterExchange, evidence.native.imageStream);
     assert.deepEqual(await returned.rows('TrickplayInfos', { where: { ItemId: itemId } }), [evidence.node.trickplayRow]);
+    const orphanedPreview = async (api, origin, label) => {
+      assert.equal((await readTrickplay(api)).sha256, evidence.node.trickplay.sha256);
+      const folder = (await api('/Library/VirtualFolders')).find(row => row.Name === 'Chapter images');
+      assert.equal(folder.LibraryOptions.SaveTrickplayWithMedia, true);
+      const saveOptions = options => api('/Library/VirtualFolders/LibraryOptions', { method: 'POST',
+        body: JSON.stringify({ Id: folder.ItemId, LibraryOptions: options }) }, 204);
+      await saveOptions({ ...folder.LibraryOptions, EnableTrickplayImageExtraction: false,
+        ExtractTrickplayImagesDuringLibraryScan: false });
+      await execute(api, trickplayImagesTaskId);
+      assert.equal((await readTrickplay(api)).sha256, evidence.node.trickplay.sha256);
+      const parked = path.join(root, label + '-parked-previews');
+      await rename(mediaTiles, parked);
+      try {
+        await mkdir(path.dirname(tile(instanceTiles)), { recursive: true });
+        await rename(tile(parked), tile(instanceTiles));
+        try {
+          await execute(api, trickplayImagesTaskId);
+          assert.equal((await api(trickplayRoute + 'tiles.m3u8')).bytes.toString(), evidence.node.trickplay.playlist);
+          assert.equal(sha256(await readFile(tile(instanceTiles))), evidence.node.trickplay.sha256);
+        } finally { await rename(tile(instanceTiles), tile(parked)); }
+        await execute(api, trickplayImagesTaskId);
+        const statuses = {};
+        for (const name of ['tiles.m3u8', '0.jpg']) {
+          const response = await fetch(origin + trickplayRoute + name, { headers: { Authorization: authorization }, signal: t.signal });
+          await response.arrayBuffer();
+          statuses[name] = response.status;
+        }
+        return statuses;
+      } finally {
+        await rename(parked, mediaTiles);
+        await saveOptions(folder.LibraryOptions);
+      }
+    };
+    const nodeOrigin = 'http://127.0.0.1:' + runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port;
+    const actual = await orphanedPreview(coldRequest, nodeOrigin, 'node');
+    assert.deepEqual(await returned.rows('TrickplayInfos', { where: { ItemId: itemId } }), []);
+    await runtime.close(); runtime = undefined;
+    await startNative('native-orphaned-preview');
+    const reference = await orphanedPreview(request, nativeOrigin, 'native');
+    await closeNative();
+    t.diagnostic(JSON.stringify({ nativeAfterRemoval: reference, nodeAfterRemoval: actual }));
+    assert.deepEqual(reference, { 'tiles.m3u8': 404, '0.jpg': 404 });
+    assert.deepEqual(actual, reference, 'After the task the playlist should retire with its user-managed tiles.');
     await current.finish();
   } catch (error) { failure = output.publicError(error); evidence.error = failure.message; }
   finally {

@@ -8,7 +8,7 @@ import { trickplayDirectory } from '../playback/trickplay.js';
 import { nativeGuid } from '../users/native.js';
 import { dateTicks, idKey, VIDEO_TYPES } from './records.js';
 
-const missing = error => ['ENOENT', 'not-found', 'not-directory'].includes(error.code);
+const missing = error => ['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].includes(error.code);
 const layoutName = ({ Width, TileWidth, TileHeight }) => `${Width} - ${TileWidth}x${TileHeight}`;
 const bandwidth = (bytes, { TileWidth, TileHeight, Interval }) => Math.ceil(bytes * 8000 / TileWidth / TileHeight / Interval);
 const roundEven = value => { const floor = Math.floor(value); return value - floor === 0.5 ? floor + floor % 2 : Math.round(value); };
@@ -49,20 +49,37 @@ export class TrickplayGeneration {
 
   close() { this.#lifetime.abort(); return this.#tail; }
 
-  async #entries(directory, signal) {
-    try { return await this.fileSystem.readdir(directory, { signal }); }
+  async #entries(directory, signal, withFileTypes = false) {
+    try { return await this.fileSystem.readdir(directory, { signal, withFileTypes }); }
     catch (error) { if (!missing(error)) throw error; return []; }
   }
 
-  async #discover(directory, id, runtime, options, known, signal) {
+  async #tiles(folder, signal) {
+    return (await this.#entries(folder, signal, true)).filter(entry => entry.isFile() && /\.jpg$/iu.test(entry.name));
+  }
+
+  async #discover(directory, alternate, id, runtime, options, known, signal) {
     const api = imagePathApi(directory), store = this.playback.library.store;
+    const orphaned = [];
+    for (const [width, info] of known) {
+      const layout = layoutName(info);
+      if ((await this.#tiles(api.join(directory, layout), signal)).length) continue;
+      if (alternate && (await this.#tiles(imagePathApi(alternate).join(alternate, layout), signal)).length) continue;
+      orphaned.push(width);
+    }
+    if (orphaned.length) {
+      await store.transaction(async database => {
+        for (const Width of orphaned) await database.delete('TrickplayInfos', { ItemId: id, Width });
+      }, { signal });
+      for (const width of orphaned) known.delete(width);
+    }
     for (const name of await this.#entries(directory, signal)) {
       const match = /^(\d+) - (\d+)x(\d+)$/u.exec(name);
       if (!match) continue;
       const [Width, TileWidth, TileHeight] = match.slice(1).map(Number);
       if (!Width || !TileWidth || !TileHeight || known.has(Width) || ![Width, TileWidth, TileHeight].every(value => Number.isSafeInteger(value))) continue;
       const folder = api.join(directory, name);
-      const files = (await this.#entries(folder, signal)).filter(value => /\.jpg$/iu.test(value)).sort();
+      const files = (await this.#tiles(folder, signal)).map(entry => entry.name).sort();
       if (!files.length) continue;
       const capacity = TileWidth * TileHeight;
       const maximum = files.length * capacity, minimum = files.length > 1 ? (files.length - 1) * capacity + 1 : 1;
@@ -208,12 +225,13 @@ export class TrickplayGeneration {
     const runtime = BigInt(item.RunTimeTicks ?? 0);
     libraryOptions ??= await this.#libraryOptions(item);
     if (!libraryOptions) return;
-    const source = (await library.getMediaSources(id)).find(value => idKey(value.Id) === idKey(id));
-    if (!source?.MediaStreams.length) return;
     const directory = trickplayDirectory(item, library.options.dataPath, libraryOptions.SaveTrickplayWithMedia);
     if (!directory) return;
     const known = new Map((await store.run(database => database.rows('TrickplayInfos', { where: { ItemId: id } }), { signal })).map(info => [info.Width, info]));
-    if (!replace) await this.#discover(directory, id, runtime, options, known, signal);
+    if (!replace) {
+      const alternate = trickplayDirectory(item, library.options.dataPath, !libraryOptions.SaveTrickplayWithMedia);
+      await this.#discover(directory, alternate, id, runtime, options, known, signal);
+    }
     if (!libraryOptions.EnableTrickplayImageExtraction && !replace && libraryOptions.SaveTrickplayWithMedia) return;
     if (!libraryOptions.EnableTrickplayImageExtraction || replace) {
       await this.fileSystem.rm(directory, { recursive: true, force: true });
@@ -223,7 +241,8 @@ export class TrickplayGeneration {
     }
     options.Interval = Math.max(1000, options.Interval);
     if (!(options.TileWidth > 0 && options.TileHeight > 0)) throw new Error('The trickplay tile dimensions are invalid.');
-    const video = source.MediaStreams.find(value => value.Type === 'Video' && !value.IsAttachedPic);
+    const source = (await library.getMediaSources(id)).find(value => idKey(value.Id) === idKey(id));
+    const video = source?.MediaStreams.find(value => value.Type === 'Video' && !value.IsAttachedPic);
     const api = imagePathApi(item.Path);
     if (!video || api.basename(api.dirname(item.Path)).toLowerCase() === 'backdrops') return;
     const accessPath = this.playback.accessPath(item);
