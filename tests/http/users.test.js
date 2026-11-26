@@ -144,7 +144,7 @@ test('HTTP password changes preserve only the current token and reject old crede
 
 test('HTTP API keys authorize administration without a user and deletion revokes existing sessions', async t => {
   const { request, runtime, adminToken } = await setup(t);
-  assert.equal((await request('/Auth/Keys?app=Integration', { method: 'POST', token: adminToken })).status, 204);
+  assert.equal((await request('/Auth/Keys?app=Integration', { method: 'POST', token: adminToken })).status, 200);
   const keys = await request('/Auth/Keys', { token: adminToken });
   assert.equal(keys.status, 200);
   assert.equal(keys.data.Items[0].AppName, 'Integration');

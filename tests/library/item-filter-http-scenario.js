@@ -1012,7 +1012,7 @@ async function recordItemFilterCandidateObserved({ dialect, fixture, connectionS
     const userToken = login.body.AccessToken;
     const appName = `${scenarioName} HTTP Oracle`;
     const createKey = await request(`/Auth/Keys?app=${encodeURIComponent(appName)}`, { method: 'POST', token: userToken });
-    if (createKey.status !== 204) throw new Error(`Candidate API-key creation failed with ${createKey.status}.`);
+    if (createKey.status !== 200) throw new Error(`Candidate API-key creation failed with ${createKey.status}.`);
     const listedKeys = await request('/Auth/Keys', { token: userToken });
     if (listedKeys.status !== 200) throw new Error(`Candidate API-key listing failed with ${listedKeys.status}.`);
     const apiKey = listedKeys.body.Items.find(item => item.AppName === appName)?.AccessToken;

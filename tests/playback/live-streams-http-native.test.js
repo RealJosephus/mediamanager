@@ -176,7 +176,7 @@ test('public live Open Close and PlaybackInfo match actual native HTTP and real 
       tokens[mode] = login.value.AccessToken; output.addSecret(tokens[mode]);
     }
     const appName = 'PublicLive ' + randomUUID();
-    assert.equal((await request(nativeOrigin, '/Auth/Keys?app=' + encodeURIComponent(appName), { token: current.accessToken, method: 'POST' })).status, 204);
+    assert.equal((await request(nativeOrigin, '/Auth/Keys?app=' + encodeURIComponent(appName), { token: current.accessToken, method: 'POST' })).status, 200);
     const keys = await request(nativeOrigin, '/Auth/Keys', { token: current.accessToken }); tokens.apiKey = keys.value.Items.find(key => key.AppName === appName).AccessToken; output.addSecret(tokens.apiKey);
     const configured = await request(nativeOrigin, '/LiveTv/TunerHosts', { method: 'POST', body: { Type: 'm3u', Url: playlistFile, AllowStreamSharing: false,
       EnableStreamLooping: false, TunerCount: 0, UserAgent: 'PublicOriginal/1.0' } }); assert.equal(configured.status, 200); assert.equal(configured.value.AllowStreamSharing, false);

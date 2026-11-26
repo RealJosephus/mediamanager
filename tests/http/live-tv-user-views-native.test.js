@@ -99,8 +99,8 @@ test('configured Live TV user views match native HTTP, global identity and creat
     fixture = await createWebServerFixture({ preparation: report.preparation });
     for (const secret of fixture.secrets) output.addSecret(secret);
     const appName = 'LiveTvViews_' + randomUUID();
-    assert.equal((await request(origin, '/Auth/Keys?app=' + appName, { token: current.accessToken, method: 'POST' })).status, 204);
-    assert.equal((await fixture.administratorRequest('/Auth/Keys?app=' + appName, { method: 'POST' })).status, 204);
+    assert.equal((await request(origin, '/Auth/Keys?app=' + appName, { token: current.accessToken, method: 'POST' })).status, 200);
+    assert.equal((await fixture.administratorRequest('/Auth/Keys?app=' + appName, { method: 'POST' })).status, 200);
     const keys = {}, servers = { native: origin, node: fixture.origin }, users = {};
     const subjects = [{ role: 'primary', name: fixture.username, password: fixture.password },
       { role: 'secondary', name: 'LiveTvViews_' + randomUUID().slice(0, 8), password: randomUUID() }];

@@ -1,6 +1,12 @@
 import { randomUUID } from 'node:crypto';
 import { domainError, nativeDate, wireDate } from './native.js';
 
+export function apiKeyDto(key) {
+  return { Id: 0, AccessToken: key.AccessToken, DeviceId: '', AppName: key.Name,
+    AppVersion: '', DeviceName: '', UserId: '00000000000000000000000000000000', IsActive: false,
+    DateCreated: wireDate(key.DateCreated), DateLastActivity: '0001-01-01T00:00:00.0000000Z' };
+}
+
 export class ApiKeyService {
   #pending = new Set();
   #closed = false;
@@ -27,9 +33,7 @@ export class ApiKeyService {
         const rows = await database.rows('ApiKeys', {
           columns: ['Id', 'AccessToken', 'Name', 'DateCreated'], limit: 128, ...(after && { after })
         });
-        for (const key of rows) items.push({ Id: 0, AccessToken: key.AccessToken, DeviceId: '', AppName: key.Name,
-          AppVersion: '', DeviceName: '', UserId: '00000000000000000000000000000000', IsActive: false,
-          DateCreated: wireDate(key.DateCreated), DateLastActivity: '0001-01-01T00:00:00.0000000Z' });
+        for (const key of rows) items.push(apiKeyDto(key));
         if (rows.length < 128) return { Items: items, TotalRecordCount: items.length, StartIndex: 0 };
         after = { Id: rows.at(-1).Id };
       }

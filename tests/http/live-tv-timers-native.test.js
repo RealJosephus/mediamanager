@@ -184,7 +184,7 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
       assert.equal(login.status, 200); output.addSecret(login.bodyJson.AccessToken); result[role] = login.bodyJson.AccessToken;
     }
     const app = 'Timer fixture ' + randomUUID();
-    assert.equal((await request(server, '/Auth/Keys?app=' + encodeURIComponent(app), { token: administratorToken, method: 'POST' })).status, 204);
+    assert.equal((await request(server, '/Auth/Keys?app=' + encodeURIComponent(app), { token: administratorToken, method: 'POST' })).status, 200);
     const listed = await request(server, '/Auth/Keys', { token: administratorToken }); assert.equal(listed.status, 200);
     result.apiKey = listed.bodyJson.Items.find(item => item.AppName === app).AccessToken; output.addSecret(result.apiKey);
     result.anonymous = undefined; result.invalid = 'invalid-timer-token';

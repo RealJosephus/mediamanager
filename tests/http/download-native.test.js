@@ -240,7 +240,7 @@ test('actual Download authorization, typed gates, attachment bytes and committed
       assert.equal(login.status, 200); identities[key] = { id: created.json.Id, token: login.json.AccessToken, username, deviceId };
       output.addSecret(login.json.AccessToken); secrets.add(login.json.AccessToken);
     }
-    assert.equal((await request('/Auth/Keys?app=DownloadConsumer', { method: 'POST' })).status, 204);
+    assert.equal((await request('/Auth/Keys?app=DownloadConsumer', { method: 'POST' })).status, 200);
     const keys = await request('/Auth/Keys'); assert.equal(keys.status, 200);
     const key = keys.json.Items.find(entry => entry.AppName === 'DownloadConsumer'); assert.ok(key?.AccessToken);
     identities.api = { token: key.AccessToken }; output.addSecret(key.AccessToken); secrets.add(key.AccessToken);

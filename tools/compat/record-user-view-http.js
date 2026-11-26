@@ -1090,11 +1090,11 @@ try {
   assert.equal(idKey(userId), idKey(fixture.userId));
   const appName = scenarioName + ' HTTP Oracle';
   const createKey = await request('/Auth/Keys?app=' + encodeURIComponent(appName), { method: 'POST', token: userToken });
-  assert.equal(createKey.status, 204, createKey.bodyText);
+  assert.equal(createKey.status, 200);
   const keys = await request('/Auth/Keys', { token: userToken });
   assert.equal(keys.status, 200, keys.bodyText);
   apiKey = keys.bodyJson.Items.find(item => item.AppName === appName)?.AccessToken;
-  assert.ok(apiKey);
+  assert.ok(apiKey && createKey.bodyJson.AccessToken === apiKey, 'The created key must be listed by the same manager.');
   privateOutput.addSecret(apiKey);
   // Demotion scenarios retain a separate administrator, just as the historical seed did.
   const control = await request('/Users/New', { method: 'POST', token: apiKey, body: { Name: 'OracleControlAdmin' } });

@@ -323,7 +323,7 @@ test('M3U XMLTV source management matches actual native HTTP, configuration and 
       assert.equal(login.status, 200); tokens[mode] = login.bodyJson.AccessToken; output.addSecret(tokens[mode]);
     }
     const appName = 'Sources ' + randomUUID();
-    assert.equal((await request(nativeOrigin, '/Auth/Keys?app=' + encodeURIComponent(appName), { token: current.accessToken, method: 'POST' })).status, 204);
+    assert.equal((await request(nativeOrigin, '/Auth/Keys?app=' + encodeURIComponent(appName), { token: current.accessToken, method: 'POST' })).status, 200);
     const keys = await request(nativeOrigin, '/Auth/Keys', { token: current.accessToken }); assert.equal(keys.status, 200);
     tokens.apiKey = keys.bodyJson.Items.find(value => value.AppName === appName).AccessToken; output.addSecret(tokens.apiKey);
     assert.equal((await request(nativeOrigin, '/LiveTv/Channels?enableImages=false&enableUserData=false')).status, 200);

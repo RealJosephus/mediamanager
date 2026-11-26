@@ -263,7 +263,7 @@ test('existing recordings list, folders, detail and retained-file deletion match
       assert.equal(login.status, 200); tokens[mode] = login.bodyJson.AccessToken; output.addSecret(tokens[mode]);
     }
     const app = 'Recording fixture ' + randomUUID();
-    assert.equal((await request(origin, '/Auth/Keys?app=' + encodeURIComponent(app), { token: current.accessToken, method: 'POST' })).status, 204);
+    assert.equal((await request(origin, '/Auth/Keys?app=' + encodeURIComponent(app), { token: current.accessToken, method: 'POST' })).status, 200);
     const keys = await request(origin, '/Auth/Keys', { token: current.accessToken }); assert.equal(keys.status, 200);
     tokens.apiKey = keys.bodyJson.Items.find(key => key.AppName === app).AccessToken; output.addSecret(tokens.apiKey);
     await stopNative('native-registration');

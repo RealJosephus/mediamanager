@@ -104,7 +104,7 @@ test('item ancestors match actual native parent translation, visibility, default
       tokens[mode] = login.bodyJson.AccessToken;
       output.addSecret(tokens[mode]);
     }
-    assert.equal((await request(origin, '/Auth/Keys?app=AncestorConsumer', { token: current.accessToken, method: 'POST' })).status, 204);
+    assert.equal((await request(origin, '/Auth/Keys?app=AncestorConsumer', { token: current.accessToken, method: 'POST' })).status, 200);
     const keys = await request(origin, '/Auth/Keys', { token: current.accessToken });
     assert.equal(keys.status, 200);
     tokens.userless = keys.bodyJson.Items.find(item => item.AppName === 'AncestorConsumer').AccessToken;

@@ -121,8 +121,8 @@ test('Live TV named configuration POST matches native replacement, XML consumpti
     for (const secret of fixture.secrets) output.addSecret(secret);
     const appName = 'LiveTvConfiguration_' + randomUUID(), keys = {}, users = {}, tokens = {};
     const servers = { native: origin, node: fixture.origin };
-    assert.equal((await request(origin, '/Auth/Keys?app=' + appName, { token: current.accessToken, method: 'POST' })).status, 204);
-    assert.equal((await fixture.administratorRequest('/Auth/Keys?app=' + appName, { method: 'POST' })).status, 204);
+    assert.equal((await request(origin, '/Auth/Keys?app=' + appName, { token: current.accessToken, method: 'POST' })).status, 200);
+    assert.equal((await fixture.administratorRequest('/Auth/Keys?app=' + appName, { method: 'POST' })).status, 200);
     const nativeKeys = await request(origin, '/Auth/Keys', { token: current.accessToken });
     const nodeKeys = await (await fixture.administratorRequest('/Auth/Keys')).json();
     keys.native = nativeKeys.bodyJson.Items.find(value => value.AppName === appName).AccessToken;

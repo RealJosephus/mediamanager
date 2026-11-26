@@ -45,7 +45,7 @@ test('postgres: real API-key management enforces elevated authorization, persist
   assert.equal((await state.request('/Auth/Keys', { token: login.AccessToken })).status, 403);
   const events = []; runtime.authentication.on('AuthenticationResult', value => events.push(value));
   const sessionCount = runtime.sessions.countUserSessions(regular.Id);
-  for (const name of ['A', 'A', '播放器\0🎬']) assert.equal((await state.request('/Auth/Keys?app=' + encodeURIComponent(name), { token: bootstrap.AccessToken, method: 'POST' })).status, 204);
+  for (const name of ['A', 'A', '播放器\0🎬']) assert.equal((await state.request('/Auth/Keys?app=' + encodeURIComponent(name), { token: bootstrap.AccessToken, method: 'POST' })).status, 200);
   const result = await state.request('/Auth/Keys', { token: bootstrap.AccessToken });
   assert.equal(result.status, 200); assert.equal(result.language, 'en-US');
   assert.deepEqual(result.body.Items.map(key => key.AppName), ['Bootstrap', 'A', 'A', '播放器\0🎬']);

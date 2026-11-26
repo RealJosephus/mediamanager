@@ -552,7 +552,7 @@ test('same-run full Native session and playback loggers match fresh PostgreSQL H
       assert.equal(created.status, 200); base.users[name] = { id: created.json.Id, name: created.json.Name };
       report.preparation.push(created);
     }
-    assert.equal((await request('/Auth/Keys?app=' + encodeURIComponent(input.apiKeyName), { method: 'POST' })).status, 204);
+    assert.equal((await request('/Auth/Keys?app=' + encodeURIComponent(input.apiKeyName), { method: 'POST' })).status, 200);
     const keys = await request('/Auth/Keys'); assert.equal(keys.status, 200);
     const key = keys.json.Items.find(value => value.AppName === input.apiKeyName); assert.ok(key);
     base.api = { token: secret(key.AccessToken) };

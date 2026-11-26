@@ -91,8 +91,8 @@ test('Live TV info and guide windows match current native HTTP, permissions and 
     fixture = await createWebServerFixture({ preparation: report.preparation });
     for (const secret of fixture.secrets) output.addSecret(secret);
     const appName = 'GuideInfo_' + randomUUID();
-    assert.equal((await request(origin, '/Auth/Keys?app=' + appName, { token: current.accessToken, method: 'POST' })).status, 204);
-    assert.equal((await fixture.administratorRequest('/Auth/Keys?app=' + appName, { method: 'POST' })).status, 204);
+    assert.equal((await request(origin, '/Auth/Keys?app=' + appName, { token: current.accessToken, method: 'POST' })).status, 200);
+    assert.equal((await fixture.administratorRequest('/Auth/Keys?app=' + appName, { method: 'POST' })).status, 200);
     const nativeKeys = await request(origin, '/Auth/Keys', { token: current.accessToken });
     const nodeKeys = await (await fixture.administratorRequest('/Auth/Keys')).json();
     const keys = { native: nativeKeys.bodyJson.Items.find(value => value.AppName === appName).AccessToken,

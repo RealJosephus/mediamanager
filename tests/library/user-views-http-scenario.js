@@ -127,7 +127,7 @@ export async function recordUserViewsCandidate({ dialect, fixture, contract, con
       actor.token = login.bodyJson.AccessToken; actor.login = login.bodyJson;
     }
     const keyCreated = await request('/Auth/Keys?app=UserViewsCandidate', { method: 'POST', token: actors.primary.token });
-    assert.equal(keyCreated.status, 204, keyCreated.bodyText);
+    assert.equal(keyCreated.status, 200);
     const keys = await request('/Auth/Keys', { token: actors.primary.token }); assert.equal(keys.status, 200);
     const apiKey = keys.bodyJson.Items.find(key => key.AppName === 'UserViewsCandidate')?.AccessToken; assert.ok(apiKey);
     // Detached refreshes may commit between the HTTP request and either of

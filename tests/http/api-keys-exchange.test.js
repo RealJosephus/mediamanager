@@ -40,7 +40,7 @@ test('postgres: API-created and revoked keys export to native controller/EF cont
 
   const bootstrap = await runtime.apiKeys.create('Exchange bootstrap'), origin = `http://127.0.0.1:${runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port}`;
   const headers = { Accept: 'application/json', Authorization: `MediaBrowser Token="${bootstrap.AccessToken}"` };
-  for (const name of ['Node consumer\0key', 'Remove before export']) assert.equal((await fetch(origin + '/Auth/Keys?app=' + encodeURIComponent(name), { method: 'POST', headers })).status, 204);
+  for (const name of ['Node consumer\0key', 'Remove before export']) assert.equal((await fetch(origin + '/Auth/Keys?app=' + encodeURIComponent(name), { method: 'POST', headers })).status, 200);
   let response = await fetch(origin + '/Auth/Keys', { headers }); assert.equal(response.status, 200); const initial = await response.json();
   const selected = initial.Items[1].AccessToken, removed = initial.Items[2].AccessToken;
   assert.equal((await fetch(origin + '/Auth/Keys/' + removed, { method: 'DELETE', headers })).status, 204);

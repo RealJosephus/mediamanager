@@ -38,8 +38,7 @@ export function projectKeyObservation(record) {
     if (observation.status !== 200 || !value || typeof value !== 'object' || Array.isArray(value)) return value;
     const camel = new MIMEType(observation.contentType).params.get('profile') === 'CamelCase',
       items = camel ? 'items' : 'Items', accessToken = camel ? 'accessToken' : 'AccessToken', dateCreated = camel ? 'dateCreated' : 'DateCreated';
-    if (!Array.isArray(value[items])) return value;
-    return { ...value, [items]: value[items].map(entry => {
+    const projectKey = entry => {
       if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return entry;
       const token = entry[accessToken], generatedKey = generated.get(token), projected = { ...entry };
       if (tokens.has(token)) projected[accessToken] = tokens.get(token);
@@ -48,7 +47,8 @@ export function projectKeyObservation(record) {
         projected[dateCreated] = '$date-' + generatedKey.id;
       }
       return projected;
-    }) };
+    };
+    return Array.isArray(value[items]) ? { ...value, [items]: value[items].map(projectKey) } : projectKey(value);
   };
   return { name: record.name, before: state(record.before), after: state(record.after),
     observations: record.observations.map(observation => ({ status: observation.status, contentType: observation.contentType,

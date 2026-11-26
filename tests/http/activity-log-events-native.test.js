@@ -335,7 +335,7 @@ test('real user, authentication and Download producers commit activity before re
     const observerLogin = await request('/Users/AuthenticateByName', { token: null, method: 'POST', deviceId: 'activity-events-reader',
       body: { Username: input.users.reader, Pw: passwords.reader } });
     assert.equal(observerLogin.status, 200); base.reader = { id: observer.json.Id, token: observerLogin.json.AccessToken };
-    assert.equal((await request('/Auth/Keys?app=ActivityEventsConsumer', { method: 'POST' })).status, 204);
+    assert.equal((await request('/Auth/Keys?app=ActivityEventsConsumer', { method: 'POST' })).status, 200);
     const keys = await request('/Auth/Keys'); assert.equal(keys.status, 200);
     const api = keys.json.Items.find(entry => entry.AppName === 'ActivityEventsConsumer'); assert.ok(api?.AccessToken);
     base.api = { token: secret(api.AccessToken) };

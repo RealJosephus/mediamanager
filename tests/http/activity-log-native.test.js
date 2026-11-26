@@ -184,7 +184,7 @@ test('actual ActivityLog HTTP authorization, MVC binding, SQL filters/count/orde
     assert.equal(login.status, 200);
     identities.ordinary = { id: created.json.Id, token: login.json.AccessToken, deviceId };
     output.addSecret(login.json.AccessToken); secrets.add(login.json.AccessToken);
-    assert.equal((await request('/Auth/Keys?app=ActivityLogConsumer', { method: 'POST' })).status, 204);
+    assert.equal((await request('/Auth/Keys?app=ActivityLogConsumer', { method: 'POST' })).status, 200);
     const keys = await request('/Auth/Keys'); assert.equal(keys.status, 200);
     const key = keys.json.Items.find(entry => entry.AppName === 'ActivityLogConsumer'); assert.ok(key?.AccessToken);
     identities.api = { token: key.AccessToken }; output.addSecret(key.AccessToken); secrets.add(key.AccessToken);

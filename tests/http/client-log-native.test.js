@@ -338,7 +338,7 @@ test('actual Native client log HTTP principals, limits and bytes match productio
     const login = await control('/Users/AuthenticateByName', { method: 'POST', token: null,
       body: { Username: 'Client_log_ordinary', Pw: password } });
     assert.equal(login.status, 200); identities.ordinary = login.json.AccessToken; output.addSecret(identities.ordinary);
-    assert.equal((await control('/Auth/Keys?app=' + encodeURIComponent(input.apiKeyName), { method: 'POST' })).status, 204);
+    assert.equal((await control('/Auth/Keys?app=' + encodeURIComponent(input.apiKeyName), { method: 'POST' })).status, 200);
     const keys = await control('/Auth/Keys'); assert.equal(keys.status, 200);
     identities.api = keys.json.Items.find(key => key.AppName === input.apiKeyName)?.AccessToken; assert.ok(identities.api); output.addSecret(identities.api);
     report.preparation.push({ ordinaryUserId: user.json.Id, administrator: user.json.Policy.IsAdministrator, actualApiKeyCreated: true });
