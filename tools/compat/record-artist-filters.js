@@ -344,6 +344,7 @@ const expected = {
   'artists-name-bridge': ['artistAlice', 'albumArtistAlice'],
   'artists-root-request-dispatches-filtered-repository-query': [],
   'artists-query-key-and-name-case-insensitive': ['artistAlice'],
+  'artists-clean-name-reuses-physical-selector': ['rockCredit'],
   'artists-single-pipe-occurrence-splits': ['artistAlice', 'artistBob'],
   'artists-repeated-occurrences-are-values': ['artistAlice', 'artistBob'],
   'artists-repeated-occurrence-keeps-literal-pipe': ['literalPipeCredit', 'artistBob'],
@@ -352,10 +353,10 @@ const expected = {
   'artists-whitespace-selects-first-library-artist': ['artistAlice'],
   'artists-whitespace-overwrites-direct-artist-ids': ['artistAlice'],
   'artists-repeated-whitespace-and-name-union': ['artistAlice', 'artistBob'],
-  'artists-name-bridge-excludes-owned-selector': ['ownerEligibleCredit'],
-  'artists-name-bridge-excludes-hidden-alternate-selector': ['alternatePrimaryCredit'],
-  'artists-raw-name-keeps-sharp-s-distinct-from-ss': ['unicodeSharpCredit'],
-  'artists-raw-name-ascii-ss-does-not-fold-to-sharp-s': ['unicodeSsCredit'],
+  'artists-name-bridge-excludes-owned-selector': [],
+  'artists-name-bridge-excludes-hidden-alternate-selector': [],
+  'artists-raw-name-keeps-sharp-s-distinct-from-ss': [],
+  'artists-raw-name-ascii-ss-does-not-fold-to-sharp-s': [],
   'artist-ids-invalid-only-drops-filter': ['artistAlice', 'noCredit'],
   'artist-ids-valid-and-invalid-keeps-valid': ['artistAlice'],
   'artist-ids-repeated-comma-occurrence-is-not-split': ['artistBob'],
@@ -382,6 +383,27 @@ const expected = {
 };
 const expectedTotalCounts = { 'user-artist-group-count-before-page': 2 };
 const expectedOrders = { 'music-album-artist-default-order': ['albumAlpha2025', 'albumZeta2025', 'albumBeta2024'] };
+const expectedCreatedArtists = new Map([
+  ['Owner Competition', 'owner competition'], ['Alternate Competition', 'alternate competition'],
+  ['Straße', 'straße'], ['STRASSE', 'strasse'],
+]);
+
+function assertMainReadEffects(before, after, beforeFiles, afterFiles) {
+  const ids = new Set(before.tables.BaseItems.map(row => row.Id));
+  const added = after.tables.BaseItems.filter(row => !ids.has(row.Id));
+  assert.deepEqual(after.tables.BaseItems.filter(row => ids.has(row.Id)), before.tables.BaseItems);
+  for (const name of Object.keys(before.tables).filter(name => name !== 'BaseItems')) {
+    assert.deepEqual(after.tables[name], before.tables[name], name);
+  }
+  assert.equal(added.length, expectedCreatedArtists.size);
+  assert.deepEqual(new Map(added.map(row => [row.Name, row.CleanName])), expectedCreatedArtists);
+  assert.ok(added.every(row => row.Type === 'MediaBrowser.Controller.Entities.Audio.MusicArtist'
+    && row.ParentId === null && row.TopParentId === null && row.IsFolder === 0));
+  const newPaths = new Set(expectedCreatedArtists.keys());
+  assert.deepEqual(afterFiles.entries.filter(entry => !newPaths.has(entry.path)), beforeFiles.entries);
+  assert.deepEqual(new Set(afterFiles.entries.filter(entry => entry.type === 'directory' && newPaths.has(entry.path))
+    .map(entry => entry.path)), newPaths);
+}
 const discoveryOnly = modeArgument === 'discover' ? new Set(fixture.cases.map(testCase => testCase.name)) : new Set();
 const probeExpectation = {
   'probe-unknown-credit': {
@@ -616,9 +638,8 @@ try {
 
   databaseStages.afterReads = relationshipSnapshot();
   filesystemStages.afterReads = await treeSnapshot(artistMetadataPath);
-  if (isMainRun) {
-    assert.deepEqual(databaseStages.afterReads, databaseStages.beforeReads);
-    assert.deepEqual(filesystemStages.afterReads, filesystemStages.beforeReads);
+  if (modeArgument === 'main') {
+    assertMainReadEffects(databaseStages.beforeReads, databaseStages.afterReads, filesystemStages.beforeReads, filesystemStages.afterReads);
   } else if (probeExpectation) {
     const beforeIds = new Set(databaseStages.beforeReads.tables.BaseItems.map(row => row.Id));
     const newBaseItems = databaseStages.afterReads.tables.BaseItems.filter(row => !beforeIds.has(row.Id));
@@ -659,8 +680,8 @@ databaseStages.finalAfterShutdown = relationshipSnapshot();
 filesystemStages.finalAfterShutdown = await treeSnapshot(artistMetadataPath);
 if (isMainRun) {
   try {
-    assert.deepEqual(databaseStages.finalAfterShutdown, databaseStages.beforeReads);
-    assert.deepEqual(filesystemStages.finalAfterShutdown, filesystemStages.beforeReads);
+    assert.deepEqual(databaseStages.finalAfterShutdown, databaseStages.afterReads);
+    assert.deepEqual(filesystemStages.finalAfterShutdown, filesystemStages.afterReads);
   } catch (error) {
     scenarioError ??= error;
   }
@@ -686,9 +707,7 @@ const foreignKeyCheckPassedAllStages = [
   ...Object.values(probeStages).map(stage => stage.database)
 ].every(stage => Array.isArray(stage?.foreignKeyCheck) && stage.foreignKeyCheck.length === 0);
 const summary = {
-  passed: scenarioError == null && cleanShutdown && processResult?.code === 0 && portFinallyAvailable
-    && foreignKeyCheckPassedAllStages
-    && (!isMainRun || (databaseUnchangedByReads && filesystemUnchangedByReads)),
+  passed: scenarioError == null && cleanShutdown && processResult?.code === 0 && portFinallyAvailable && foreignKeyCheckPassedAllStages,
   mode: modeArgument,
   origin,
   fixtureCases: isMainRun ? fixture.cases.length : 0,

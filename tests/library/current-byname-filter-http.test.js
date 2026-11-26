@@ -25,7 +25,7 @@ const inputs = {
 const pins = JSON.parse(await readFile(new URL('./fixtures/current-byname-filters/input-identities.json', import.meta.url)));
 const studioExpectations = await readFile(new URL('./fixtures/current-byname-filters/studio-expected.json', import.meta.url));
 const recorders = { artist: recordArtistFilters, studio: recordStudioFilters, genre: recordGenreFilters, album: recordAlbumFilters };
-const counts = { artist: [49, 95], studio: [34, 68], genre: [34, 68], album: [59, 112] };
+const counts = { artist: [50, 97], studio: [34, 68], genre: [34, 68], album: [59, 112] };
 
 for (const kind of ['artist', 'studio', 'genre', 'album']) test(`postgres: current native ${kind} filter requests and mutations`, {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,

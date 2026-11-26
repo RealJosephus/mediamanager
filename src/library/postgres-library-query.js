@@ -6,8 +6,7 @@ import { withPostgresNativeQueryJitOff } from '../database/postgres-native-query
 import { queryPostgresLibraryStatement } from '../database/postgres.js';
 import { quoteIdentifier as q } from '../database/model.js';
 import { lowerInvariant } from '../core/identity.js';
-import { postgresInvariantLowerFunctionName,
-  postgresNativePathKeyFunctionName } from '../database/postgres-runtime-schema.js';
+import { postgresInvariantLowerFunctionName, postgresNativePathKeyFunctionName } from '../database/postgres-runtime-schema.js';
 import { postgresAliasedVersionFamilyKey } from '../database/postgres-query-expressions.js';
 import { nativePathKey } from './native-path.js';
 import { queryPostgresSeriesEpisodePage } from './postgres-series-episodes-query.js';
@@ -280,11 +279,14 @@ export async function queryPostgresAlbumSelectorIds(database, names) {
 }
 
 /** Resolve native Artists selectors in request order without hydrating candidates. */
-export async function queryPostgresArtistSelectorIds(database, names) {
+export async function queryPostgresArtistSelectorIds(database, names, { matchCleanName = true } = {}) {
   if (!names.length) return [];
-  const normalizedNames = names.map(name => name === '' ? null : lowerInvariant(name));
+  const normalize = matchCleanName ? name => clrTrim(name) === '' ? null : cleanValue(name)
+    : name => name === '' ? null : lowerInvariant(name);
+  const normalizedNames = names.map(normalize);
+  const selectorName = matchCleanName ? 'artist."CleanName"'
+    : `${q(database.schemaName)}.${q(postgresInvariantLowerFunctionName)}(artist."Name")`;
   const baseItems = qualified(database, 'BaseItems');
-  const invariantLower = `${q(database.schemaName)}.${q(postgresInvariantLowerFunctionName)}`;
   const result = await database.client.query({
     text: `/* artist-selectors */
       SELECT selected."Id"
@@ -293,7 +295,7 @@ export async function queryPostgresArtistSelectorIds(database, names) {
         SELECT artist."Id"
         FROM ${baseItems} artist
         WHERE substring(${nativeTextSql(database.schemaName).projection("artist.\"Type\"")} from '[^.]+$') = 'MusicArtist'
-          AND (requested."Name" IS NULL OR ${invariantLower}(artist."Name") = requested."Name")
+          AND (requested."Name" IS NULL OR ${selectorName} = requested."Name")
           AND (artist."OwnerId" IS NULL OR artist."ExtraType" IS NOT NULL)
           AND (artist."PrimaryVersionId" IS NULL OR NOT EXISTS (
             SELECT 1 FROM ${baseItems} primary_artist
@@ -312,9 +314,9 @@ export async function queryPostgresArtistSelectorIds(database, names) {
   return result.rows.map(row => row.Id == null ? null : decodeNativeTextBytes(row.Id));
 }
 
-/** Resolve one native Artists selector without hydrating the candidate set. */
+/** Resolve a direct artist lookup from the stored display name. */
 export async function queryPostgresArtistSelectorId(database, name) {
-  return (await queryPostgresArtistSelectorIds(database, [name]))[0] ?? undefined;
+  return (await queryPostgresArtistSelectorIds(database, [name], { matchCleanName: false }))[0] ?? undefined;
 }
 
 /** Select the first FindArtists result consumed by DTO references and images. */

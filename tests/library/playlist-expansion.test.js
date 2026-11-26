@@ -11,6 +11,7 @@ import { quoteIdentifier } from '../../src/database/model.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { LibraryService } from '../../src/library/library-service.js';
 import { PlaylistService } from '../../src/library/playlist-service.js';
+import { parseQuery } from '../../src/library/query.js';
 import { initializeLibraryRoot } from '../../src/library/root-initialization.js';
 import { idKey, cleanValue } from '../../src/library/records.js';
 import { nativeGuid } from '../../src/users/native.js';
@@ -76,7 +77,7 @@ for (const dialect of ['postgres']) {
     const queries = [];
     library.getItemList = async query => {
       queries.push({ ParentId: query.ParentId ? idKey(query.ParentId) : '0'.repeat(32), Recursive: query.Recursive,
-        IsFolder: query.IsFolder ?? null, EnableTotalRecordCount: query.EnableTotalRecordCount ?? true,
+        IsFolder: parseQuery(query).isfolder ?? null, EnableTotalRecordCount: query.EnableTotalRecordCount ?? true,
         IncludeItemTypes: query.IncludeItemTypes ?? [], MediaTypes: query.MediaTypes ?? [],
         ArtistIds: (query.ArtistIds ?? []).map(idKey), GenreIds: (query.GenreIds ?? []).map(idKey),
         OrderBy: (query.SortBy ?? []).map((Key, index) => ({ Key, Direction: query.SortOrder[index] })) });

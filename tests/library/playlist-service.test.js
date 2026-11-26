@@ -324,6 +324,31 @@ for (const dialect of ['postgres']) test(`${dialect}: managed playlists preserve
     await assert.rejects(access(row.Path), { code: 'ENOENT' });
     assert.equal(removed.length, 2);
     assert.deepEqual(errors, []);
+    await t.test('folder expansion selects audio files and type inference stops at its first usable item', async () => {
+      const track = nativeGuid('72000000000000000000000000000004'), m3u = nativeGuid('72000000000000000000000000000005');
+      const missing = nativeGuid('72000000000000000000000000000006');
+      await store.transaction(async db => {
+        for (const [id, type, name, isFolder] of [[track, 'MediaBrowser.Controller.Entities.Audio.Audio', 'song.mp3', false],
+          [m3u, playlistNativeType, 'disc.m3u', true]]) {
+          await db.insert('BaseItems', item(id, type, path.join(directory, 'folder', name), {
+            ParentId: ids.folder, PresentationUniqueKey: idKey(id), IsFolder: isFolder, IsInMixedFolder: isFolder,
+            MediaType: 'Audio', UnratedType: 'Music',
+            Data: isFolder ? '{"OpenAccess":true,"PlaylistMediaType":"Audio"}' : '{}',
+          }));
+          await db.insert('AncestorIds', { ItemId: id, ParentItemId: ids.folder });
+        }
+      });
+      const query = { ParentId: ids.folder, Recursive: true, MediaTypes: ['Audio'], IsFolder: false };
+      assert.deepEqual(new Set((await library.getItemList(query, { user: owner })).map(i => i.Id)), new Set([m3u, track]));
+      const explicit = await playlists.create({ name: 'Explicit audio', mediaType: 'Audio', ids: [missing, track], user: owner });
+      assert.deepEqual((await playlists.get(explicit.Id, { user: owner })).ItemIds, [idKey(track)]);
+      await playlists.add(explicit.Id, [ids.folder], { user: owner });
+      assert.deepEqual((await playlists.get(explicit.Id, { user: owner })).ItemIds, [idKey(track), idKey(track)]);
+      await assert.rejects(playlists.create({ name: 'Missing first', ids: [missing, track], user: owner }), { status: 400 });
+      const inferred = await playlists.create({ name: 'Inferred audio', ids: [ids.folder, missing], user: owner });
+      assert.equal((await database.rows('BaseItems', { where: { Id: nativeGuid(inferred.Id) } }))[0].MediaType, 'Audio');
+      assert.deepEqual((await playlists.get(inferred.Id, { user: owner })).ItemIds, [idKey(track)]);
+    });
   } finally {
     try { await closeStateDeletion({ playlists, itemCreation, library, linkedChildren }); await store.close(); closed = true; }
     finally {

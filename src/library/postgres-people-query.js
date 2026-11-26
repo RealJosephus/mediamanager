@@ -15,7 +15,7 @@ const upper = (text, culture) => Array.from(text, character => {
   return [...mapped].length === 1 ? mapped : character;
 }).join('');
 
-/** Select the repository's credited names before resolving their Person entities. */
+/** Page the repository's credited names that have a by-name Person entity. */
 export function visitPostgresPeople(database, input, { userId, visibility, culture, signal }, visit) {
   const sql = nativeTextSql(database.schemaName);
   const table = name => `${q(database.schemaName)}.${q(name)}`;
@@ -34,11 +34,14 @@ export function visitPostgresPeople(database, input, { userId, visibility, cultu
     values.push(...accessible.values);
     predicates.push(`EXISTS (SELECT 1 FROM ${related} JOIN accessible ON ${same('accessible."Id"', 'relation."ItemId"')} WHERE ${credit})`);
   }
+  const namedPerson = `named."Type" = ${bind(personType)} AND named."Name" = person."Name"`;
   if (userId && input.isFavorite !== undefined) {
     predicates.push(`EXISTS (SELECT 1 FROM ${table('BaseItems')} named
       JOIN ${table('UserData')} data ON ${same('data."ItemId"', 'named."Id"')}
-      WHERE named."Type" = ${bind(personType)} AND named."Name" = person."Name"
+      WHERE ${namedPerson}
         AND ${sql.guidKey('data."UserId"')} = ${bind(idKey(userId))} AND data."IsFavorite" = ${bind(input.isFavorite)})`);
+  } else {
+    predicates.push(`EXISTS (SELECT 1 FROM ${table('BaseItems')} named WHERE ${namedPerson})`);
   }
   if (input.parentId !== undefined) predicates.push(`EXISTS (SELECT 1 FROM ${related}
     JOIN ${table('AncestorIds')} ancestor ON ${same('ancestor."ItemId"', 'relation."ItemId"')}

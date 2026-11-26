@@ -1949,8 +1949,8 @@ export class LibraryService extends EventEmitter {
         || (user.MaxParentalRatingScore ?? policy.MaxParentalRatingScore ?? policy.MaxParentalRating) != null
         || policy.BlockedTags?.length || policy.AllowedTags?.length || policy.BlockUnratedItems?.length);
       const visibility = restricted ? await this.#postgresUserViewVisibility(navigation, user) : undefined;
-      // The by-name list has no tagged-item counts. Its repository count is
-      // taken before dropping missing or invisible Person entities.
+      // The by-name list has no tagged-item counts. The repository requires a
+      // Person row before paging, then the individual DTOs are checked for visibility.
       const options = dtoOptions({ ...input, fields: input.fields.filter(field => field.toLowerCase() !== 'itemcounts') });
       const Items = [];
       const { total, startIndex } = await visitPostgresPeople(db, input, {

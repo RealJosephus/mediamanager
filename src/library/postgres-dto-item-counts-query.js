@@ -15,8 +15,8 @@ export const dtoItemCountKinds = Object.freeze({
 });
 const countedTypes = { Movie: 'MovieCount', Series: 'SeriesCount', Episode: 'EpisodeCount', MusicArtist: 'ArtistCount',
   LiveTvProgram: 'ProgramCount', Trailer: 'TrailerCount', Audio: 'SongCount', MusicAlbum: 'AlbumCount',
-  MusicVideo: 'MusicVideoCount', BoxSet: 'BoxSetCount', Book: 'BookCount' };
-const publicNames = Object.values(countedTypes).filter(name => !['BoxSetCount', 'BookCount'].includes(name));
+  MusicVideo: 'MusicVideoCount', BoxSet: 'BoxSetCount', Book: 'BookCount', AudioBook: 'AudioBookCount' };
+const publicNames = Object.values(countedTypes).filter(name => !['BoxSetCount', 'BookCount', 'AudioBookCount'].includes(name));
 const emptyCounts = () => Object.fromEntries([...publicNames.map(name => [name, 0]), ['ChildCount', 0]]);
 const int32 = expression => `(((((${expression})::bigint + 2147483648) % 4294967296 + 4294967296) % 4294967296) - 2147483648)`;
 

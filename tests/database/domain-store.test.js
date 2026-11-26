@@ -289,6 +289,7 @@ class MockPostgresClient {
     this.queries.push({ text, values });
     if (text === 'SELECT fail') throw new Error('mock query failure');
     if (text === 'ROLLBACK' && this.failRollback) throw new Error('mock rollback failure');
+    if (text === 'COMMIT') return { command: 'COMMIT', rows: [], rowCount: null };
     if (text.startsWith('SELECT pg_try_advisory_lock')) return { rows: [{ locked: true }], rowCount: 1 };
     if (text.startsWith('SELECT pg_advisory_unlock')) {
       return { rows: [{ unlocked: !this.failUnlock }], rowCount: 1 };

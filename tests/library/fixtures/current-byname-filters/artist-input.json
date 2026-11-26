@@ -17,6 +17,7 @@
     { "key": "unicodeSharpSelector", "id": "73000000-0000-0000-0000-000000000011", "name": "Straße", "cleanName": "unicode-sharp-credit", "type": "MusicArtist", "isFolder": true, "parentId": "73000000-0000-0000-0000-000000000100" },
     { "key": "unicodeSsSelector", "id": "73000000-0000-0000-0000-000000000012", "name": "STRASSE", "cleanName": "unicode-ss-credit", "type": "MusicArtist", "isFolder": true, "parentId": "73000000-0000-0000-0000-000000000100" },
     { "key": "requestOrderByNameBobSelector", "id": "73000000-0000-0000-0000-000000000013", "name": "Bob", "cleanName": "bob", "sortName": "bob", "type": "MusicArtist", "isFolder": false, "parentId": null, "topParentId": null },
+    { "key": "rockSelector", "id": "73000000-0000-0000-0000-000000000014", "name": "Rock", "cleanName": "rock", "type": "MusicArtist", "isFolder": true, "parentId": "73000000-0000-0000-0000-000000000100" },
 
     { "key": "artistAlice", "id": "73000000-0000-0000-0000-000000000201", "name": "Artist Alice Direct", "type": "Movie", "parentId": "73000000-0000-0000-0000-000000000100" },
     { "key": "albumArtistAlice", "id": "73000000-0000-0000-0000-000000000202", "name": "Album Artist Alice", "type": "Movie", "parentId": "73000000-0000-0000-0000-000000000100" },
@@ -36,6 +37,7 @@
     { "key": "unicodeSharpCredit", "id": "73000000-0000-0000-0000-000000000216", "name": "Unicode Sharp S Credit", "type": "Movie", "parentId": "73000000-0000-0000-0000-000000000100" },
     { "key": "unicodeSsCredit", "id": "73000000-0000-0000-0000-000000000217", "name": "Unicode SS Credit", "type": "Movie", "parentId": "73000000-0000-0000-0000-000000000100" },
     { "key": "bomEmptyCleanOrphanCredit", "id": "73000000-0000-0000-0000-000000000218", "name": "BOM Empty Clean Orphan Credit", "type": "Movie", "parentId": "73000000-0000-0000-0000-000000000100" },
+    { "key": "rockCredit", "id": "73000000-0000-0000-0000-000000000219", "name": "Rock Credit", "type": "Movie", "parentId": "73000000-0000-0000-0000-000000000100" },
 
     { "key": "ancestorRoot", "id": "73000000-0000-0000-0000-000000000220", "name": "Ancestor Root", "type": "Folder", "parentId": "73000000-0000-0000-0000-000000000100" },
     { "key": "ancestorInner", "id": "73000000-0000-0000-0000-000000000221", "name": "Ancestor Inner", "type": "Folder", "parentId": "73000000-0000-0000-0000-000000000220" },
@@ -69,7 +71,8 @@
     { "key": "alternateExcludedValue", "id": "73000000-0000-0000-0000-000000000812", "type": 0, "value": "Alternate Excluded Persisted", "cleanValue": "alternate-excluded-credit" },
     { "key": "unicodeSharpValue", "id": "73000000-0000-0000-0000-000000000813", "type": 0, "value": "Unicode Sharp Persisted", "cleanValue": "unicode-sharp-credit" },
     { "key": "unicodeSsValue", "id": "73000000-0000-0000-0000-000000000814", "type": 0, "value": "Unicode SS Persisted", "cleanValue": "unicode-ss-credit" },
-    { "key": "bomEmptyCleanValue", "id": "73000000-0000-0000-0000-000000000815", "type": 0, "value": "BOM Empty Clean Persisted", "cleanValue": "" }
+    { "key": "bomEmptyCleanValue", "id": "73000000-0000-0000-0000-000000000815", "type": 0, "value": "BOM Empty Clean Persisted", "cleanValue": "" },
+    { "key": "rockValue", "id": "73000000-0000-0000-0000-000000000816", "type": 0, "value": "Rock", "cleanValue": "rock" }
   ],
   "itemValueLinks": [
     { "itemKey": "artistAlice", "valueKey": "artistAliceValue" },
@@ -91,6 +94,7 @@
     { "itemKey": "unicodeSharpCredit", "valueKey": "unicodeSharpValue" },
     { "itemKey": "unicodeSsCredit", "valueKey": "unicodeSsValue" },
     { "itemKey": "bomEmptyCleanOrphanCredit", "valueKey": "bomEmptyCleanValue" },
+    { "itemKey": "rockCredit", "valueKey": "rockValue" },
     { "itemKey": "ancestorChild", "valueKey": "artistAliceValue" },
     { "itemKey": "linkedChild", "valueKey": "artistAliceValue" },
     { "itemKey": "ownCreditFolder", "valueKey": "artistAliceValue" },
@@ -122,6 +126,7 @@
     { "name": "artists-name-bridge", "query": "Artists=Alice", "scope": ["artistAlice", "albumArtistAlice", "artistBob"] },
     { "name": "artists-root-request-dispatches-filtered-repository-query", "query": "Artists=Alice", "scope": [], "omitScope": true },
     { "name": "artists-query-key-and-name-case-insensitive", "query": "aRtIsTs=alice", "scope": ["artistAlice", "artistBob"] },
+    { "name": "artists-clean-name-reuses-physical-selector", "query": "Artists=R%C3%96CK%21%21%21", "scope": ["rockCredit", "noCredit"] },
     { "name": "artists-single-pipe-occurrence-splits", "query": "Artists=Alice%7CBob", "scope": ["artistAlice", "artistBob", "noCredit"] },
     { "name": "artists-repeated-occurrences-are-values", "query": "Artists=Alice&Artists=Bob", "scope": ["artistAlice", "artistBob", "noCredit"] },
     { "name": "artists-repeated-occurrence-keeps-literal-pipe", "query": "Artists=Alice%7CBob&Artists=Bob", "scope": ["literalPipeCredit", "artistBob", "artistAlice"] },

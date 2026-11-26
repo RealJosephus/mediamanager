@@ -183,7 +183,7 @@ export class PlaylistService {
           [item.Type === 'MusicArtist' ? 'ArtistIds' : 'GenreIds']: [item.Id],
           SortBy: ['AlbumArtist', 'Album', 'SortName'], SortOrder: ['Ascending', 'Ascending', 'Ascending'] };
       } else if (item.IsFolder) {
-        query = { ParentId: item.Id, Recursive: true, IsFolder: false,
+        query = { ParentId: item.Id, Recursive: true, Filters: ['IsNotFolder'],
           MediaTypes: ['Audio', 'Video'], EnableTotalRecordCount: false };
       } else if (directlyPlayableTypes.has(item.Type)) {
         await add(item);
@@ -495,16 +495,17 @@ export class PlaylistService {
             throw libraryError(500, 'The native playlists folder is unavailable.');
           }
           for (const id of itemIds) {
+            if (mediaType != null && mediaType !== 'Unknown') break;
             const selectedState=await this.library.load(db,user,{includeUserData:false,includeLinkGraph:false,baseRows:await loadPostgresPageGraph(db,await loadPostgresRowsByIds(db,[id]),await loadPostgresNavigationRows(db),{includeManualLinks:false})});
-            try{const item = selectedState.byId.get(idKey(id));
-            if (!item) throw libraryError(400, 'No item exists with the supplied Id');
-            if (mediaType == null || mediaType === 'Unknown') {
+            try {
+              const item = selectedState.byId.get(idKey(id));
+              if (!item) throw libraryError(400, 'No item exists with the supplied Id');
               if (item.MediaType && item.MediaType !== 'Unknown') mediaType = item.MediaType;
               else if (['MusicArtist', 'MusicAlbum', 'MusicGenre'].includes(item.Type)) mediaType = 'Audio';
               else if (item.Type === 'Genre') mediaType = 'Video';
-              else if(item.IsFolder)mediaType=(await this.library.getItemList({ParentId:item.Id,Recursive:true,IsFolder:false,MediaTypes:['Audio','Video'],Limit:1},{user}))[0]?.MediaType;
-            }
-            }finally{await selectedState.dispose();}
+              else if (item.IsFolder) mediaType = (await this.library.getItemList({ ParentId: item.Id, Recursive: true,
+                Filters: ['IsNotFolder'], MediaTypes: ['Audio', 'Video'], Limit: 1 }, { user }))[0]?.MediaType;
+            } finally { await selectedState.dispose(); }
           }
           const playable = await this.#expand(itemIds, user,
             { deferRelatedNameAccess: true });

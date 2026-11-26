@@ -30,6 +30,7 @@ const nativeType = kind => 'MediaBrowser.Controller.Entities.' + kind;
 const id = number => nativeGuid('25220000-0000-0000-0000-' + String(number).padStart(12, '0'));
 const movieType = nativeType('Movies.Movie'), audioType = nativeType('Audio.Audio');
 const audioId = id(20), movies = [id(21), id(22), id(23)];
+const audioBookId = id(27);
 const artistType = nativeType('Audio.MusicArtist'), artistId = id(24), orphanArtistId = id(25);
 const features = [id(34), id(35)];
 const fixedDate = '2026-10-01 00:00:00';
@@ -44,6 +45,7 @@ async function seed(referenceRoot, current) {
   const { programDataPath, dataPath } = settings;
   const physical = path.join(programDataPath, 'media'), rootPath = path.join(programDataPath, 'root/default');
   const collection = path.join(rootPath, 'Contract Media'), audio = path.join(physical, 'Echo Track.flac');
+  const audioBook = path.join(physical, 'Narrated story.flac');
   const resolveId = (filename, type) => nativeGuid(getNewItemId(filename, type, { programDataPath,
     enableCaseSensitiveItemIds: settings.configuration.EnableCaseSensitiveItemIds }));
   const folderId = resolveId(physical, nativeType('Folder')), collectionId = resolveId(collection, nativeType('CollectionFolder'));
@@ -68,6 +70,7 @@ async function seed(referenceRoot, current) {
     await writeFile(path.join(library.Path, 'options.xml'), `<LibraryOptions><EnableRealtimeMonitor>false</EnableRealtimeMonitor><Enabled>${!library.disabled}</Enabled></LibraryOptions>`);
   }
   await copyFile(audioFixture, audio);
+  await copyFile(audioFixture, audioBook);
   const tile = path.join(tileDir, '0.jpg');
   await copyFile(tileFixture, tile);
   for (const filename of [audio, tile]) await utimes(filename, new Date('2026-10-01T00:00:00Z'), new Date('2026-10-01T00:00:00Z'));
@@ -100,6 +103,8 @@ async function seed(referenceRoot, current) {
       addItem({ Id: audioId, ParentId: folderId, TopParentId: folderId, Type: audioType, MediaType: 'Audio',
         Name: 'Echo Track', Path: audio, TotalBitrate: 192000, RunTimeTicks: 600000000n,
         Artists: 'Echo Artist', AlbumArtists: 'Echo Artist', Album: 'Frozen Audio', Data: '{"Container":"flac"}' });
+      addItem({ Id: audioBookId, ParentId: folderId, TopParentId: folderId, Type: nativeType('AudioBook'),
+        MediaType: 'Audio', Name: 'Narrated story', Path: audioBook });
       for (const [index, Name] of ['Echo', 'Echo Bloom', 'Other Echo Result'].entries()) {
         const tick = fixedDate + '.123456' + (6 + index);
         addItem({ Id: movies[index], ParentId: folderId, TopParentId: folderId, Type: movieType, IsMovie: true,
@@ -110,7 +115,7 @@ async function seed(referenceRoot, current) {
           ItemId: movies[index], StreamIndex: 0, StreamType: 1, Codec: 'h264', Width: index === 1 ? 1280 : 1920, Height: 1080,
         }));
       }
-      for (const ItemId of [audioId, ...movies]) for (const ParentItemId of [folderId, aggregate.Id]) {
+      for (const ItemId of [audioId, audioBookId, ...movies]) for (const ParentItemId of [folderId, aggregate.Id]) {
         database.insert('AncestorIds', { ItemId, ParentItemId });
       }
       for (const [Name, person] of Object.entries(people)) {
@@ -377,7 +382,7 @@ test('existing playback assets, date ticks, counts and search hints match the de
       { name: 'people pagination and credit role', route: '/Persons?SearchTerm=ledger&PersonTypes=Writer,Actor&StartIndex=1&Limit=1&EnableUserData=false', status: 200 },
       { name: 'people derive scope from credited media', route: '/Persons?ParentId=' + idKey(fixture.folderId) + '&AppearsInItemId=' + ids[0], status: 200 },
       { name: 'people uses favorite data', route: '/Persons?Filters=IsFavorite&SearchTerm=ledger', status: 200 },
-      { name: 'people counts the missing credited entity', route: '/Persons?SearchTerm=missing%20credit', status: 200, apiKey: true },
+      { name: 'people exclude credits without a Person item', route: '/Persons?SearchTerm=missing%20credit', status: 200, apiKey: true },
       { name: 'person detail resolves the normalized name', route: '/Persons/ada%20ledger', status: 200 },
       { name: 'missing person is not created', route: '/Persons/Missing%20credit', status: 404 },
       { name: 'people requires authentication', route: '/Persons', status: 401, anonymous: true },
@@ -447,6 +452,7 @@ test('existing playback assets, date ticks, counts and search hints match the de
     await changeVideoVersions(nodeOrigin, current.accessToken, () => readVersionState(database), t.signal, report.versions.node);
     assert.deepEqual(report.versions.node, report.versions.native);
     const observed = name => comparable(report.cases.find(entry => entry.sample.name === name).native).body;
+    assert.equal(observed('global counts').AudioBookCount, 1);
     assert.equal(observed('specified favorite counts').MovieCount, 1);
     assert.equal(observed('global hints').SearchHints.length, 4);
     assert.equal(observed('current user hints').SearchHints.length, 4);
@@ -456,7 +462,7 @@ test('existing playback assets, date ticks, counts and search hints match the de
     assert.deepEqual(observed('people search deduplicates credit roles').Items.map(item => item.Name), ['Ada Ledger', 'Bela Ledger']);
     assert.deepEqual(observed('people pagination and credit role').Items.map(item => item.Name), ['Bela Ledger']);
     assert.deepEqual(observed('people uses favorite data').Items.map(item => item.Name), ['Ada Ledger']);
-    assert.deepEqual(observed('people counts the missing credited entity'), { Items: [], StartIndex: 0, TotalRecordCount: 1 });
+    assert.deepEqual(observed('people exclude credits without a Person item'), { Items: [], StartIndex: 0, TotalRecordCount: 0 });
     assert.equal(observed('person detail resolves the normalized name').Id, idKey(fixture.people['Ada Ledger'].Id));
     assert.deepEqual(observed('item special features').map(item => item.Id), features.map(idKey));
     assert.deepEqual(observed('legacy item special features'), observed('item special features'));

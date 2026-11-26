@@ -22,6 +22,15 @@ const observedNativeServerId=native.http.responses.flatMap(response=>response.bo
 assert.equal(typeof observedNativeServerId,'string');
 const columns=tableDefinition('BaseItems').columns;
 
+test('repository-mode sorting looks up user state by item GUID for DatePlayed', () => {
+  const first = { Id: 'e5900000-0000-0000-0000-000000000001' };
+  const second = { Id: 'e5900000-0000-0000-0000-000000000002' };
+  const userData = new Map([[idKey(first.Id), { LastPlayedDate: '2025-01-01' }],
+    [idKey(second.Id), { LastPlayedDate: '2025-01-02' }]]);
+  const query = parseQuery(new URLSearchParams('SortBy=DatePlayed&SortOrder=Descending'));
+  assert.deepEqual(sortItems([first, second], query, userData, () => false), [second, first]);
+});
+
 test('actual ASP enum binding and GetOrderBy: 128 original cases and two partial-direction DLL controls',t=>{
   assert.equal(native.frozenJellyfin,true);assert.equal(native.audit.passed,true);assert.equal(native.summary.passed,false);
   assert.deepEqual(native.audit.statusCounts,{200:252,400:4});assert.equal(native.audit.endpointSnapshots,256);
