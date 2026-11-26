@@ -55,6 +55,15 @@ export async function captureDiscPlayback({ origin, token, itemId, detail, root,
       const media = await request(mediaUrl);
       assert.equal(media.status, 200, media.bytes.subarray(0, 180).toString());
       assert.ok(media.bytes.length > 188);
+      if (protocol === 'http') {
+        const staticUrl = new URL(stream);
+        staticUrl.searchParams.set('static', 'true');
+        const disc = await request(staticUrl);
+        assert.equal(disc.status, 200, disc.bytes.subarray(0, 180).toString());
+        assert.ok(disc.bytes.length > 188);
+        assert.equal(disc.bytes.length % 188, 0);
+        assert.equal(disc.bytes[0], 0x47);
+      }
       observed.mime = media.mime;
       observed.bytes = media.bytes.length;
       observed.sha256 = sha256(media.bytes);

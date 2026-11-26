@@ -320,7 +320,7 @@ export class PlaybackService {
     catch (error) { if (error.status === 404) return notFound(); throw error; }
   }
 
-  async file(itemId, { user, mediaSourceId, filename = false, playback = false } = {}) {
+  async file(itemId, { user, mediaSourceId, filename = false, playback = false, streamOptions } = {}) {
     let item = await this.library.getItemRecord(itemId, { user });
     if (playback && user && !user.Policy.EnableMediaPlayback) throw httpError(403, 'Media playback is not allowed.');
     if (mediaSourceId && mediaSourceId.toLowerCase() !== item.Id.replaceAll('-', '').toLowerCase()) {
@@ -336,6 +336,9 @@ export class PlaybackService {
       if (source?.Protocol === 'Http') return remoteStaticStreamResult(this.vfs, this.accessPath(item, source.Path, false),
         { headers: source.RequiredHttpHeaders, serverVersion: this.serverVersion });
       if (source && source.Protocol !== 'File') throw httpError(400, `Input protocol ${source.Protocol} cannot be streamed statically`);
+      if (streamOptions?.MediaType === 'Video' && ['Dvd', 'BluRay'].includes(source?.VideoType)) {
+        return this.remuxStream(item.Id, { ...streamOptions, user, MediaSourceId: source.Id, Container: streamOptions.Container || 'ts' });
+      }
     }
     return vfsStreamResult(this.vfs, this.accessPath(item), { contentType: getMimeType(item.Path), filename: filename ? path.win32.basename(item.Path).replaceAll('"', '') : undefined });
   }

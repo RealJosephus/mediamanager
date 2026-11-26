@@ -35,16 +35,49 @@ export function bindPlayback(context) {
   return result;
 }
 
+const subtitleMethods = ['Encode', 'Embed', 'External', 'Hls', 'Drop'];
+const codecName = /^[a-zA-Z0-9._,|\-]{0,40}$/u;
+const packedCodec = value => codecName.test(value) ? value : undefined;
+const packedBoolean = value => value.toLowerCase() === 'true';
+function packedFramerate(value, name) {
+  const text = value.trim();
+  if (!/^[+-]?(?:\d[\d,]*(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/iu.test(text)) throw new BindingError(name, `The value '${value}' is not valid.`);
+  return Math.fround(Number(text.replaceAll(',', '')));
+}
+function packedSubtitleMethod(value) {
+  const name = value.trim();
+  if (subtitleMethods.includes(name)) return name;
+  if (/^[+-]?\d+$/u.test(name)) {
+    const number = Number(name);
+    if (number >= -2147483648 && number <= 2147483647) return subtitleMethods[number] ?? number;
+  }
+}
+
+// StreamingHelpers.ParseParams applies these positional fields to the bound
+// request. Reserved positions and blanks keep the separately supplied value.
+const packedStreamingFields = [
+  null, ['DeviceId'], ['MediaSourceId'], ['Static', packedBoolean],
+  ['VideoCodec', packedCodec, true], ['AudioCodec', packedCodec], ['AudioStreamIndex', integerValue, true],
+  ['SubtitleStreamIndex', integerValue, true], ['VideoBitRate', integerValue, true], ['AudioBitRate', integerValue],
+  ['MaxAudioChannels', integerValue], ['MaxFramerate', packedFramerate, true], ['MaxWidth', integerValue, true],
+  ['MaxHeight', integerValue, true], ['StartTimeTicks', longValue],
+  ['Level', value => /-?[0-9]+(?:\.[0-9]+)?/u.test(value) ? value : undefined, true],
+  ['MaxRefFrames', integerValue, true], ['MaxVideoBitDepth', integerValue, true], ['Profile', packedCodec, true],
+  null, ['PlaySessionId'], null, ['LiveStreamId'], null, ['CopyTimestamps', packedBoolean, true],
+  ['SubtitleMethod', packedSubtitleMethod, true], ['TranscodingMaxAudioChannels', integerValue],
+  ['EnableSubtitlesInManifest', packedBoolean, true], ['Tag'], ['RequireAvc', packedBoolean, true],
+  ['SubtitleCodec', packedCodec], ['RequireNonAnamorphic', packedBoolean, true], ['DeInterlace', packedBoolean, true], ['TranscodeReasons'],
+];
+
 export function bindStreaming(context, kind) {
   const query = (context, name) => queryValue(context.query, name);
   const options = { MediaType: kind === 'Audio' ? 'Audio' : 'Video', Container: context.params.container ?? query(context, 'container'), MediaSourceId: query(context, 'mediaSourceId') };
-  for (const name of ['VideoCodec', 'AudioCodec', 'SubtitleCodec', 'SubtitleMethod', 'Profile', 'Level', 'DeviceId', 'PlaySessionId', 'SegmentContainer', 'TranscodeReasons', 'LiveStreamId']) options[name] = query(context, name);
+  for (const name of ['VideoCodec', 'AudioCodec', 'SubtitleCodec', 'SubtitleMethod', 'Profile', 'Level', 'DeviceId', 'PlaySessionId', 'SegmentContainer', 'TranscodeReasons', 'LiveStreamId', 'Tag']) options[name] = query(context, name);
   for (const name of ['AudioStreamIndex', 'VideoStreamIndex', 'SubtitleStreamIndex', 'AudioSampleRate', 'AudioChannels', 'MaxAudioChannels', 'TranscodingMaxAudioChannels', 'Width', 'Height', 'MaxWidth', 'MaxHeight', 'VideoBitRate', 'AudioBitRate', 'MaxVideoBitDepth', 'MaxAudioBitDepth', 'MaxRefFrames', 'SegmentLength', 'MinSegments', 'CpuCoreLimit']) options[name] = integerValue(query(context, name), name[0].toLowerCase() + name.slice(1));
   for (const name of ['AllowVideoStreamCopy', 'AllowAudioStreamCopy', 'EnableAutoStreamCopy', 'CopyTimestamps', 'DeInterlace', 'RequireAvc', 'RequireNonAnamorphic', 'EnableMpegtsM2TsMode', 'AlwaysBurnInSubtitleWhenTranscoding', 'EnableSubtitlesInManifest', 'EnableAudioVbrEncoding']) options[name] = booleanValue(query(context, name), name[0].toLowerCase() + name.slice(1));
   options.StreamOptions = Object.fromEntries([...context.query].filter(([name]) => /^[a-z0-9_]+-(?:profile|level|audiochannels|videobitdepth|audiobitdepth|maxrefframes|deinterlace|rangetype|rotation|codectag)$/i.test(name)).map(([name, value]) => [name.toLowerCase(), value]));
   if (options.SubtitleMethod != null) {
-    const methods = ['Encode', 'Embed', 'External', 'Hls', 'Drop'];
-    options.SubtitleMethod = methods.find(value => value.toLowerCase() === options.SubtitleMethod.toLowerCase()) ?? methods[integerValue(options.SubtitleMethod, 'subtitleMethod')];
+    options.SubtitleMethod = subtitleMethods.find(value => value.toLowerCase() === options.SubtitleMethod.toLowerCase()) ?? subtitleMethods[integerValue(options.SubtitleMethod, 'subtitleMethod')];
     if (!options.SubtitleMethod) throw new BindingError('subtitleMethod', `The value '${query(context, 'SubtitleMethod')}' is invalid.`);
   }
   for (const name of ['Framerate', 'MaxFramerate']) if (query(context, name) != null) {
@@ -53,7 +86,16 @@ export function bindStreaming(context, kind) {
     options[name] = value;
   }
   options.StartTimeTicks = longValue(query(context, 'startTimeTicks'), 'startTimeTicks', 0n);
-  if (query(context, 'params')) throw httpError(400, 'The requested streaming source is unavailable.');
+  options.Static = booleanValue(query(context, 'static'), 'static', false);
+  const values = query(context, 'params')?.split(';', packedStreamingFields.length) ?? [];
+  for (const [index, value] of values.entries()) {
+    const field = packedStreamingFields[index];
+    if (!field || !clrTrim(value)) continue;
+    const [name, convert, videoOnly] = field;
+    if (videoOnly && kind === 'Audio') continue;
+    const parsed = convert ? convert(value, name[0].toLowerCase() + name.slice(1)) : value;
+    if (parsed !== undefined) options[name] = parsed;
+  }
   return options;
 }
 
@@ -76,7 +118,7 @@ function bindUniversalAudioQuery(query) {
     const value = queryValue(query, name);
     if (value != null && clrTrim(value) !== '') {
       const parameter = name[0].toLowerCase() + name.slice(1);
-      if (!/^[a-zA-Z0-9._,|\-]{0,40}$/u.test(value)) {
+      if (!codecName.test(value)) {
         errors[parameter] = [`The field ${parameter} must match the regular expression '^[a-zA-Z0-9\\-\\._,|]{0,40}$'.`];
       } else options[name] = value;
     }
@@ -146,10 +188,14 @@ export function registerPlaybackRoutes(add, { playback, users }) {
   for (const kind of ['Videos', 'Audio']) for (const method of ['GET', 'HEAD']) {
     add(method, [`/${kind}/{itemId}/stream`, `/${kind}/{itemId}/stream.{container}`], async context => {
       const selected = await user(context);
-      if (booleanValue(query(context, 'static'), 'static', false)) return playback.file(itemId(context), { user: selected, mediaSourceId: query(context, 'mediaSourceId'), playback: true });
       const options = { ...bindStreaming(context, kind), user: selected };
+      // VideosController branches on its action argument. AudioHelper uses
+      // the request's Static flag after positional parameters are applied.
+      if (kind === 'Audio' ? options.Static : booleanValue(query(context, 'static'), 'static', false)) {
+        return playback.file(itemId(context), { user: selected, mediaSourceId: options.MediaSourceId, playback: true, streamOptions: options });
+      }
       return playback.remuxStream(itemId(context), options);
-    }, { public: context => booleanValue(query(context, 'static'), 'static', false) });
+    }, { public: context => booleanValue(query(context, 'static'), 'static', false) && (kind !== 'Audio' || bindStreaming(context, kind).Static) });
   }
   add('DELETE', '/Videos/ActiveEncodings', async context => {
     const deviceId = query(context, 'deviceId'), playSessionId = query(context, 'playSessionId');

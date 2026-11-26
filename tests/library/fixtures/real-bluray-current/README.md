@@ -55,7 +55,7 @@ creates any input.
 The first Linux component run acquired the entire original and completed both
 Native observations, then exposed an actual Node mapping difference: AC-3's
 standard ffprobe codec_tag_string appeared as CodecTag, while Native returned
-null. The designated MediaStreamInfo.cs maps the literal codec_tag_string?
-JSON property, including its question mark. Production normalization now uses
-that exact mapped input for stream and attachment tags. The complete probe
-comparison retains CodecTag; no field is dropped or substituted in the fixture.
+null. That revision of MediaStreamInfo.cs mapped the literal codec_tag_string?
+JSON property, including its question mark. The current Native reader maps
+codec_tag_string and returns AC-3 for the audio stream. Production reads this
+field for stream and attachment tags. The probe comparison checks CodecTag.

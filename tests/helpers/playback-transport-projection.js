@@ -39,6 +39,15 @@ export function playbackTransportSummary(body, token) {
   return projected;
 }
 
+// Supply explicit expectations for fields added after a historical capture.
+export function withStreamDiagnostics(body, errorsForStream) {
+  const MediaSources = body.MediaSources.map(source => ({ ...source, MediaStreams: source.MediaStreams.map(stream => {
+    const DirectPlayErrors = errorsForStream(stream);
+    return { ...stream, DirectPlayErrors, SupportsDirectPlay: DirectPlayErrors.length === 0 };
+  }) }));
+  return { ...body, MediaSources };
+}
+
 export function projectHlsRequestIdentities(text, identities) {
   return text.split(/(\r?\n)/u).map(line => {
     const trimmed = line.trimStart();

@@ -83,8 +83,7 @@ function streamBitrate(raw, format, isAudio, metadata) {
 function normalizeStream(raw, format, frames, isAudio) {
   if (!['audio', 'video', 'subtitle', 'data'].includes(raw.codec_type)) return null;
   const metadata = tags(raw.tags);
-  // The designated Native MediaStreamInfo maps this literal JSON name.
-  const codecTag = raw['codec_tag_string?'];
+  const codecTag = raw.codec_tag_string;
   const stream = { Type: { audio: 'Audio', video: 'Video', subtitle: 'Subtitle', data: 'Data' }[raw.codec_type],
     Index: raw.index ?? 0, Codec: raw.codec_name ?? null, Profile: raw.profile ?? null,
     Width: raw.width ?? null, Height: raw.height ?? null, Level: raw.level ?? null, PixelFormat: raw.pix_fmt ?? null,
@@ -143,7 +142,7 @@ export function normalizeProbe(raw, { path = null, protocol = 'Http', videoType 
   const streams = (raw.streams ?? []).map(stream => normalizeStream(stream, raw.format, raw.frames ?? [], isAudio)).filter(Boolean);
   const attachments = (raw.streams ?? []).filter(stream => stream.codec_type === 'attachment' || stream.disposition?.attached_pic === 1).map(stream => {
     const metadata = tags(stream.tags);
-    const codecTag = stream['codec_tag_string?'];
+    const codecTag = stream.codec_tag_string;
     return { Index: stream.index ?? 0, Codec: stream.codec_name ?? null, CodecTag: text(codecTag) ? codecTag : null, FileName: metadata.get('filename') ?? null, MimeType: metadata.get('mimetype') ?? null, Comment: metadata.get('comment') ?? null, DeliveryUrl: null };
   });
   const format = raw.format;

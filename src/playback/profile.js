@@ -238,8 +238,36 @@ export function subtitleProfile(source, stream, profile, container = source.Cont
   return { Method: 'Encode', Format: stream.Codec };
 }
 
+function directPlayStreamErrors(source, stream, profile, profiles, videoSource, options) {
+  if (stream.Type === 'Subtitle') {
+    const { Method } = subtitleProfile(source, stream, profile, source.Container, { ...options, PlayMethod: 'DirectPlay' });
+    return ['Embed', 'External', 'Drop'].includes(Method) ? 0 : reasons.SubtitleCodecNotSupported;
+  }
+  if (!['Audio', 'Video'].includes(stream.Type)) return 0;
+
+  const codec = `${stream.Type}Codec`;
+  const matchingCodec = profiles.filter(entry => containsContainer(get(entry, codec), stream.Codec));
+  const candidates = matchingCodec.length ? matchingCodec : profiles;
+  let mask = candidates.some(entry => containsContainer(get(entry, 'Container'), source.Container)) ? 0 : reasons.ContainerNotSupported;
+  if (!matchingCodec.length) return mask | reasons[`${codec}NotSupported`];
+
+  const type = stream.Type === 'Audio' && videoSource ? 'VideoAudio' : stream.Type;
+  mask |= compatibility(source, stream, profile, type);
+  if (stream.Type === 'Audio' && stream.IsExternal) mask |= reasons.AudioIsExternal;
+  return mask;
+}
+
 export function negotiateSource(source, item, profile, options = {}) {
   const video = item.MediaType !== 'Audio';
+  const directProfiles = get(profile, 'DirectPlayProfiles', []);
+  const profilesOf = type => directProfiles.filter(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), type));
+  const videoProfiles = profilesOf('Video');
+  const profiles = video ? videoProfiles : profilesOf('Audio');
+  for (const stream of source.MediaStreams) {
+    const failures = directPlayStreamErrors(source, stream, profile, stream.Type === 'Video' ? videoProfiles : profiles, video, options);
+    stream.DirectPlayErrors = reasonNames.filter(name => failures & reasons[name]);
+    stream.SupportsDirectPlay = failures === 0;
+  }
   const audioStreams = source.MediaStreams.filter(stream => stream.Type === 'Audio');
   let audio = (video ? audioStreams.find(stream => stream.Index === (options.AudioStreamIndex ?? source.DefaultAudioStreamIndex)) : undefined) ?? audioStreams.find(stream => stream.IsDefault) ?? audioStreams[0];
   const videoStream = source.MediaStreams.find(stream => stream.Type === 'Video' && !stream.IsAttachedPic);
@@ -261,7 +289,6 @@ export function negotiateSource(source, item, profile, options = {}) {
   let chosen;
   if (eligible) {
     const candidates = audioCandidates(source, audio, options.AudioStreamIndex);
-    const profiles = get(profile, 'DirectPlayProfiles', []).filter(entry => equal(enumName(get(entry, 'Type', 'Audio'), profileTypes), video ? 'Video' : 'Audio'));
     const analyzed = profiles.map((entry, index) => {
       let failed = 0;
       if (!containsContainer(get(entry, 'Container'), source.Container)) failed |= reasons.ContainerNotSupported;

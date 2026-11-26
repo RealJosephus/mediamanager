@@ -13,6 +13,7 @@ import { createMediaFixture } from './http-scenario.js';
 import { recordPlaybackBinding } from './binding-scenario.js';
 import { createPlaybackState } from './runtime-state.js';
 import { projectPlaybackInfoBody } from '../helpers/http-body-projection.js';
+import { withStreamDiagnostics } from '../helpers/playback-transport-projection.js';
 import libraryFixture from '../library/fixtures/reference-media.json' with { type: 'json' };
 import streamsFixture from '../library/fixtures/reference-streams.json' with { type: 'json' };
 import inputs from './fixtures/json-model-binding/http-input.json' with { type: 'json' };
@@ -43,7 +44,20 @@ async function seed(database) {
 const normalize = record => ({ ...record, body: projectPlaybackInfoBody(record.body, { status: record.status,
   path: value => value === nativeSubtitlePath || value === `${subtitleRoot}\\fixture.srt` ? '<synthetic-subtitle>' : value }) });
 
-test('104 native PlaybackInfo HTTP binding cases on PostgreSQL match complete responses', {
+function currentResponse(record) {
+  // These historical cases accept null and empty entries. Neither entry
+  // supplies a Video direct play profile for the recorded source.
+  if (!['profile-null-item', 'profile-empty-item'].includes(record.name)) return record;
+  const reasons = {
+    Video: ['ContainerNotSupported', 'VideoCodecNotSupported'],
+    Audio: ['ContainerNotSupported', 'AudioCodecNotSupported'],
+    Subtitle: ['SubtitleCodecNotSupported'],
+  };
+  const body = withStreamDiagnostics(record.body, stream => reasons[stream.Type] ?? []);
+  return { ...record, body };
+}
+
+test('104 PlaybackInfo HTTP binding cases on PostgreSQL match the recorded responses and current stream diagnostics', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
 }, async () => {
   assert.equal(inputs.length, 104);
@@ -65,8 +79,8 @@ test('104 native PlaybackInfo HTTP binding cases on PostgreSQL match complete re
 
     const actual = await recordPlaybackBinding(`http://127.0.0.1:${runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port}`, inputs);
     assert.equal(actual.length, expected.length);
-    const differences = expected.flatMap((record, index) => isDeepStrictEqual(normalize(actual[index]), normalize(record)) ? [] :
-      [{ name: record.name, expected: record, actual: actual[index] }]);
+    const differences = expected.map(currentResponse).flatMap((record, index) =>
+      isDeepStrictEqual(normalize(actual[index]), normalize(record)) ? [] : [{ name: record.name, expected: record, actual: actual[index] }]);
     if (process.env.MEDIAMANAGER_BINDING_EVIDENCE) {
       await mkdir(process.env.MEDIAMANAGER_BINDING_EVIDENCE, { recursive: true });
       await writeFile(path.join(process.env.MEDIAMANAGER_BINDING_EVIDENCE, 'postgres-durable-http.json'), `${exactJson(actual)}\n`);

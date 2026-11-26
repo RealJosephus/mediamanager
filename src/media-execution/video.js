@@ -16,6 +16,10 @@ const frameRate = video => video.ReferenceFrameRate ?? video.AverageFrameRate ??
 const formatProfile = value => lower(value).replace(/\s+/gu, '');
 const codecFactor = codec => ({ hevc: 0.6, vp9: 0.6, av1: 0.5 })[normalizeCodec(codec)] ?? 1;
 const maxTranscodingLevels = { h264: 51, hevc: 150, av1: 15 };
+const roundBitrate = value => {
+  const floor = Math.floor(value);
+  return value - floor === 0.5 ? floor + floor % 2 : Math.round(value);
+};
 
 export function normalizeTranscodingLevel(codec, value) {
   if (value == null || value === '') return;
@@ -32,16 +36,22 @@ function scaleBitrate(bitrate, input, output) {
   else if (bitrate <= 2000000) scale = Math.max(scale, 2.5);
   else if (bitrate <= 3000000) scale = Math.max(scale, 2);
   else if (bitrate >= 30000000) scale = 1;
-  return Math.round(bitrate * scale);
+  return roundBitrate(bitrate * scale);
 }
 
 export function outputVideoBitrate(video, request, codec) {
   if (!video || request.VideoBitRate == null) return 0;
   let bitrate = request.VideoBitRate;
   const upscale = request.Width > video.Width && request.Height > video.Height;
-  if (!upscale && video.BitRate != null) {
-    const input = video.BitRate;
-    bitrate = Math.min(bitrate, input <= 2000000 ? Math.round(input * 2.5) : input <= 3000000 ? input * 2 : input);
+  const input = video.BitRate;
+  if (input != null) {
+    if (!upscale) {
+      bitrate = Math.min(bitrate, input <= 2000000 ? roundBitrate(input * 2.5) : input <= 3000000 ? input * 2 : input);
+    }
+    if (video.BitDepth == null || video.BitDepth > 8) {
+      const factor = input <= 4000000 ? 1.5 : input <= 8000000 ? 1.2 : input <= 12000000 ? 1.1 : 1.05;
+      bitrate = roundBitrate(bitrate * factor);
+    }
   }
   return Math.min(scaleBitrate(bitrate, video.Codec, codec), request.VideoBitRate, 400000000);
 }
@@ -73,7 +83,7 @@ function copyHdrMetadata(video, codec, colorRange, rangeType, requested, capabil
   }
   const doviRetained = dovi && !removeDovi;
   const doviTag = doviRetained && supportsDovi
-    ? codec === 'av1' ? 'dav1' : rangeType === 'doviwithhlg' ? 'hvc1' : 'dvh1'
+    ? codec === 'av1' ? 'dav1' : video.DvProfile === 8 ? 'hvc1' : 'dvh1'
     : undefined;
   const doviCodec = doviRetained && video.DvProfile != null && video.DvLevel != null
     ? `${codec === 'av1' ? 'dav1' : 'dvh1'}.${String(video.DvProfile).padStart(2, '0')}.${String(video.DvLevel).padStart(2, '0')}`

@@ -21,7 +21,7 @@ import { hlsManifestProjection } from './layout-projection.js';
 import { readDeliveredHlsLayouts } from './hls-layout-reader.js';
 import { observeComparison } from '../comparison-observations.js';
 import { assertValidationOutputChild } from '../../tools/validation/paths.js';
-import { playbackTransportSummary, projectHlsRequestIdentities } from '../helpers/playback-transport-projection.js';
+import { playbackTransportSummary, projectHlsRequestIdentities, withStreamDiagnostics } from '../helpers/playback-transport-projection.js';
 
 const id = '22222222222222222222222222222222';
 const headersOf = response => ({ status: response.status, headers: Object.fromEntries(['content-type', 'content-length', 'accept-ranges', 'expires', 'cache-control', 'etag', 'last-modified'].map(key => [key, response.headers.get(key)])) });
@@ -68,7 +68,8 @@ test('native HLS manifest semantics, reader delivery, copy packets, seek and tas
     let lastSegment, lastBytes;
     for (const expected of reference.records) {
       const entry = reference.profiles.find(value => value.name === expected.name), actualInfo = await info(entry);
-      assert.deepEqual({ ...actualInfo, body: playbackTransportSummary(actualInfo.body, token) }, expected.info, expected.name + ' PlaybackInfo');
+      const expectedInfo = { ...expected.info, body: withStreamDiagnostics(expected.info.body, () => ['ContainerNotSupported']) };
+      assert.deepEqual({ ...actualInfo, body: playbackTransportSummary(actualInfo.body, token) }, expectedInfo, expected.name + ' PlaybackInfo');
       const masterUrl = origin + actualInfo.body.MediaSources[0].TranscodingUrl, playSessionId = actualInfo.body.PlaySessionId;
       const master = await fetch(masterUrl, { headers }), masterText = await master.text();
       const compareManifest = (response, text, wanted, label) => {

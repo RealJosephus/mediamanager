@@ -17,7 +17,7 @@ import { probeStreamRow } from '../../src/library/probe-service.js';
 import reference from './fixtures/remux-reference.json' with { type: 'json' };
 import extracted from './fixtures/extraction-reference.json' with { type: 'json' };
 import library from '../library/fixtures/reference-media.json' with { type: 'json' };
-import { playbackTransportSummary } from '../helpers/playback-transport-projection.js';
+import { playbackTransportSummary, withStreamDiagnostics } from '../helpers/playback-transport-projection.js';
 
 const itemId = '22222222-2222-2222-2222-222222222222';
 const id = itemId.replaceAll('-', '');
@@ -63,6 +63,7 @@ test('native progressive remux HTTP, packet hashes, shared output, multi-version
     assert.equal(login.status, 200);
     const token = (await login.json()).AccessToken, headers = { Authorization: `MediaBrowser Token="${token}"`, 'Content-Type': 'application/json' };
     const normalize = body => playbackTransportSummary(body, token);
+    const expectedInfo = body => withStreamDiagnostics(body, () => ['ContainerNotSupported']);
     const info = async (entry, sourceId = id) => {
       const response = await fetch(origin + `/Items/${sourceId}/PlaybackInfo`, { method: 'POST', headers, body: JSON.stringify({ DeviceProfile: entry.profile, MediaSourceId: sourceId, ...entry.options }) });
       assert.equal(response.status, 200); return response.json();
@@ -71,11 +72,11 @@ test('native progressive remux HTTP, packet hashes, shared output, multi-version
     for (const expected of reference.http) {
       const entry = reference.profiles.find(value => value.name === expected.name);
       if (entry.mediaType === 'Audio') {
-        assert.deepEqual(normalize(await info(entry, expected.body.MediaSources[0].Id)), reference.audioDisabled);
+        assert.deepEqual(normalize(await info(entry, expected.body.MediaSources[0].Id)), expectedInfo(reference.audioDisabled));
         await runtime.users.updatePolicy(user.Id, { ...policy, EnableAudioPlaybackTranscoding: true });
       }
       const body = await info(entry, expected.body.MediaSources[0].Id);
-      assert.deepEqual(normalize(body), expected.body, expected.name + ' PlaybackInfo');
+      assert.deepEqual(normalize(body), expectedInfo(expected.body), expected.name + ' PlaybackInfo');
       const url = body.MediaSources[0].TranscodingUrl; remuxUrl ??= url;
       const beforeHead = processes.length, beforeReads = fixture.requests.length;
       assert.deepEqual(headersOf(await fetch(origin + url, { method: 'HEAD', headers })), expected.head);

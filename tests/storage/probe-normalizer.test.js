@@ -19,3 +19,13 @@ test('normalization rejects malformed durations and oversized native integers', 
   assert.throws(() => normalizeProbe({ format: { duration: 'N/A' } }), { code: 'invalid-response' });
   assert.throws(() => normalizeProbe({ format: { size: '9223372036854775808' } }), { code: 'invalid-response' });
 });
+
+test('ffprobe codec tags survive stream and attachment projection', () => {
+  const info = normalizeProbe({ streams: [
+    { index: 0, codec_type: 'video', codec_name: 'mpeg2video', codec_tag_string: '[2][0][0][0]' },
+    { index: 1, codec_type: 'audio', codec_name: 'ac3', codec_tag_string: 'AC-3' },
+    { index: 2, codec_type: 'attachment', codec_name: 'ttf', codec_tag_string: 'font' },
+  ] });
+  assert.deepEqual(info.MediaStreams.map(stream => stream.CodecTag), [null, 'AC-3']);
+  assert.equal(info.MediaAttachments[0].CodecTag, 'font');
+});

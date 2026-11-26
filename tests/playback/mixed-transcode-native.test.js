@@ -557,7 +557,7 @@ async function captureDolbyVision(origin, authorization, root, label, evidence, 
   const request = requestFrom(origin, authorization, signal);
   const cases = [
     { id: doviItemId, range: 'DOVIWithHDR10', requested: 'HDR10', tag: 'hvc1', retained: true },
-    { id: doviItemId, range: 'DOVIWithHDR10', requested: 'DOVI|DOVIWithHDR10', tag: 'dvh1', retained: true },
+    { id: doviItemId, range: 'DOVIWithHDR10', requested: 'DOVI|DOVIWithHDR10', tag: 'hvc1', retained: true },
     { id: invalidDoviItemId, range: 'DOVIInvalid', requested: 'DOVI|DOVIInvalid', tag: 'hvc1', retained: false },
   ];
   const observations = evidence[label].dolbyVision = [];

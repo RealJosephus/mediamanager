@@ -21,7 +21,7 @@ import { defaultConfiguration } from '../../src/core/configuration-xml.js';
 import { createTestMediaEncoder } from '../helpers/media-encoder.js';
 import { extractionFixture } from './extraction-fixture.js';
 import reference from './fixtures/audio-hls-reference.json' with { type: 'json' };
-import { playbackTransportSummary, projectHlsRequestIdentities } from '../helpers/playback-transport-projection.js';
+import { playbackTransportSummary, projectHlsRequestIdentities, withStreamDiagnostics } from '../helpers/playback-transport-projection.js';
 import { startHttpSource } from '../storage/helpers/http-source.js';
 
 
@@ -170,7 +170,8 @@ test('native audio HLS manifests, copy packets, seek and task lifecycle on Postg
     let lastSegment, lastBytes;
     for (const expected of reference.records) {
       const entry = reference.profiles.find(value => value.name === expected.name), actualInfo = await info(entry);
-      assert.deepEqual({ ...actualInfo, body: playbackTransportSummary(actualInfo.body, token) }, expected.info, expected.name + ' PlaybackInfo');
+      const expectedInfo = { ...expected.info, body: withStreamDiagnostics(expected.info.body, () => ['ContainerNotSupported', 'AudioCodecNotSupported']) };
+      assert.deepEqual({ ...actualInfo, body: playbackTransportSummary(actualInfo.body, token) }, expectedInfo, expected.name + ' PlaybackInfo');
       const masterUrl = new URL(actualInfo.body.MediaSources[0].TranscodingUrl, origin), playSessionId = actualInfo.body.PlaySessionId;
       // The recorded manifests and packet hashes were captured with this
       // explicit copy request.
