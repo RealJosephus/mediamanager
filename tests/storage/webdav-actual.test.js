@@ -16,6 +16,7 @@ import { builtinRemoteAssetContract } from '../migration/helpers/builtin-remote-
 import { vfsStreamResult } from '../../src/http/binary-result.js';
 import { startActualWebDav } from './helpers/actual-webdav.js';
 import { remoteFileContract } from './remote-file-contract.js';
+import { verifyRemoteTvScan } from './helpers/remote-tv-scan.js';
 import { verifyRemoteMusicScan } from './helpers/remote-music-scan.js';
 
 export const requiredValidationServices = ['postgres', 'webdav'];
@@ -39,6 +40,22 @@ function wave() {
   result.write('data', 36); result.writeUInt32LE(1600, 40);
   return result;
 }
+
+test('remote TV scan reports both the original failure and a failed cleanup', async t => {
+  const setup = new Error('Cannot create the remote show directory');
+  const cleanup = new Error('Cannot delete the remote show directory');
+  const vfs = {
+    async mkdir() { throw setup; },
+    async delete() { throw cleanup; },
+  };
+  await assert.rejects(verifyRemoteTvScan(t, vfs, 'webdav'), error => {
+    assert.ok(error instanceof AggregateError);
+    assert.equal(error.cause, setup);
+    assert.deepEqual(error.errors, [setup, cleanup]);
+    assert.ok(error.message.includes(setup.message) && error.message.includes(cleanup.message));
+    return true;
+  });
+});
 
 test('actual external rclone WebDAV supports independent VFS access, writes, NFO and ffprobe', {
   skip: !executable ? 'An actual rclone WebDAV executable is required.' : false,
@@ -228,6 +245,22 @@ test('actual external rclone WebDAV supports independent VFS access, writes, NFO
     checks.push({ operation: 'paginated PROPFIND/directory mutation', passed: true, deletionSafe: false });
   });
 
+  await t.test('one Depth 1 response supplies 421 entries and a fresh enumeration sees edits', async () => {
+    const directory = path.join(service.media, 'large-listing');
+    await mkdir(directory);
+    for (let i = 0; i < 421; i++) await writeFile(path.join(directory, i + '.txt'), '');
+    const list = async () => {
+      const before = requests.length;
+      const result = await vfs.list('/network/large-listing');
+      assert.deepEqual(requests.slice(before).map(row => [row.method, row.depth, row.status]), [['PROPFIND', '1', 207]]);
+      assert.equal(result.deletionSafe, false);
+      return result.entries.map(row => row.name);
+    };
+    assert.equal((await list()).length, 421);
+    await rm(path.join(directory, '201.txt'));
+    assert.deepEqual(new Set(await list()), new Set(Array.from({ length: 421 }, (_, i) => i + '.txt').filter(name => name !== '201.txt')));
+  });
+
   await t.test('cross-directory MOVE, conflict refusal and delete use independent WebDAV methods', async () => {
     await vfs.mkdir('/network/destination');
     await vfs.rename('/network/second.nfo', '/network/destination/renamed.nfo');
@@ -299,6 +332,7 @@ test('actual external rclone WebDAV supports independent VFS access, writes, NFO
   });
 
   await t.test('weak WebDAV listings safely add ordinary music tracks to PostgreSQL', t => verifyRemoteMusicScan(t, vfs));
+  await t.test('a WebDAV TV library exposes new episodes after an ordinary refresh', t => verifyRemoteTvScan(t, vfs, 'webdav', service.baseUrl, service.authorization));
 
   await t.test('credentials stay scoped to the WebDAV origin and every protocol request is authenticated', () => {
     assert.ok(requests.length > 0);

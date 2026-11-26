@@ -606,7 +606,7 @@ test('WebDAV pagination re-enumerates, orders entries and detects directory chan
   assert.equal(listing.deletionSafe, false);
   for (const [status, code] of [[503, 'unavailable'], [401, 'authentication-required'], [429, 'rate-limited']]) {
     failureStatus = status;
-    failureCountdown = 2;
+    failureCountdown = 1;
     await assert.rejects(vfs.list('/network'), (error) => error.code === code
       && !JSON.stringify(error).includes('private partial-listing'));
   }
@@ -818,6 +818,37 @@ test('WebDAV authentication, remote failures and redirects fail closed without e
 });
 
 const redirectStatusesForTest = new Set([301, 302, 303, 307, 308]);
+
+test('aborting a VFS listing releases its in-flight Depth 1 body and the next list observes fresh contents', async t => {
+  const started = Promise.withResolvers(), closed = Promise.withResolvers();
+  let requests = 0;
+  const origin = await server(t, (request, response) => {
+    assert.equal(request.method, 'PROPFIND');
+    assert.equal(request.headers.depth, '1');
+    if (++requests === 1) {
+      response.on('close', () => closed.resolve(response.writableEnded));
+      response.writeHead(207, { 'Content-Type': 'application/xml' });
+      response.write('<d:multistatus xmlns:d="DAV:">');
+      started.resolve();
+    } else sendXml(response, [resource('/dav/', { directory: true }), resource('/dav/new.mkv')]);
+  });
+  const registry = new StorageRegistry();
+  t.after(() => registry.close());
+  registry.registerType('webdav', config => new WebDavAdapter(config));
+  await registry.createInstance('dav', 'webdav', { baseUrl: origin + '/dav/', pageSize: 1 });
+  const vfs = new VirtualFileSystem(registry);
+  vfs.mount({ path: '/network', instanceId: 'dav', capabilities: {} });
+  const controller = new AbortController();
+  const listing = vfs.list('/network', { signal: controller.signal });
+  await started.promise;
+  controller.abort();
+  await assert.rejects(listing, { code: 'cancelled' });
+  assert.equal(await closed.promise, false);
+  const fresh = await vfs.list('/network');
+  assert.deepEqual(fresh.entries.map(entry => entry.name), ['new.mkv']);
+  assert.equal(fresh.deletionSafe, false);
+  assert.equal(requests, 2);
+});
 
 test('WebDAV cancellation, timeout, close and early read close abort upstream work', async (t) => {
   let mode = 'metadata-hang';

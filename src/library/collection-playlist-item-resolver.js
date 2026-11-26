@@ -40,8 +40,12 @@ function claim(candidate, nativeType, name, parent, { playlist = false, file = f
   };
 }
 
-function strongSnapshot(snapshot) {
-  return snapshot?.listing?.deletionSafe === true && Array.isArray(snapshot.candidates);
+function canInspectMarkers(snapshot, collectionContext, confirmWeakDirectory) {
+  if (!Array.isArray(snapshot?.candidates)) return false;
+  // In a TV additions-only scan, a visible marker still wins. Without one,
+  // pass the directory to the TV resolver for its independent positive stat.
+  return snapshot.listing?.deletionSafe === true || (collectionContext?.collectionType === 'tvshows'
+    && typeof confirmWeakDirectory === 'function' && snapshot.listing?.consistency === 'weak' && snapshot.listing.complete === true);
 }
 
 function pathApi(value) {
@@ -56,14 +60,14 @@ export function createBoxSetItemResolver() {
     id: 'builtin-boxset-items',
     priority: 1,
     nativeTypes: { [boxSetNativeType]: { isFolder: true } },
-    async resolveDirectory({ parent, candidate, peekDirectory }) {
+    async resolveDirectory({ parent, candidate, peekDirectory, collectionContext, confirmWeakDirectory }) {
       if (candidate?.entry?.kind !== 'directory') return null;
       const name = nativeFileName(candidate.identityPath);
       if (!name) return null;
       const stripped = withoutMarker(name, '[boxset]');
       if (stripped !== null) return claim(candidate, boxSetNativeType, stripped, parent);
       const snapshot = await peekDirectory?.(candidate);
-      if (!strongSnapshot(snapshot)) return withheld;
+      if (!canInspectMarkers(snapshot, collectionContext, confirmWeakDirectory)) return withheld;
       const xmlPath = pathApi(candidate.identityPath).join(candidate.identityPath, 'collection.xml');
       return snapshot.candidates.some(child => child.identityPath === xmlPath)
         ? claim(candidate, boxSetNativeType, clrTrim(name), parent) : null;
@@ -87,7 +91,7 @@ export function createPlaylistItemResolver() {
       if (dot < 0 || !playlistExtensions.has(ordinalIgnoreCaseKey(name.slice(dot)))) return null;
       return claim(candidate, playlistNativeType, nativeFileNameWithoutExtension(name), parent, { playlist: true, file: true });
     },
-    async resolveDirectory({ parent, candidate, peekDirectory }) {
+    async resolveDirectory({ parent, candidate, peekDirectory, collectionContext, confirmWeakDirectory }) {
       if (candidate?.entry?.kind !== 'directory') return null;
       // Path.TrimEndingDirectorySeparator removes one trailing separator; it
       // must not acquire Node's basename normalization of arbitrary endings.
@@ -108,7 +112,7 @@ export function createPlaylistItemResolver() {
         if (['not-found', 'not-directory'].includes(error?.code)) return null;
         throw error;
       }
-      if (!strongSnapshot(snapshot)) return withheld;
+      if (!canInspectMarkers(snapshot, collectionContext, confirmWeakDirectory)) return withheld;
       return snapshot.candidates.some(child => child.entry.kind === 'file'
         && ordinalIgnoreCaseKey(child.identityPath).endsWith('PLAYLIST.XML'))
         ? claim(candidate, playlistNativeType, name, parent, { playlist: true }) : null;

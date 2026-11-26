@@ -119,7 +119,7 @@ export function createTvItemResolver({ localization, classifyIso, logger } = {})
       [seasonNativeType]: { isFolder: true },
       [episodeNativeType]: { isFolder: false }
     },
-    async resolveDirectory({ parent, root, collectionContext, candidate, deletionSafe, peekDirectory }) {
+    async resolveDirectory({ parent, root, collectionContext, candidate, deletionSafe, confirmWeakDirectory, peekDirectory }) {
       const override = exactCollectionOverride(collectionContext, candidate.identityPath);
       const parentType = nativeType(parent);
       const hasTvParent = [parent, ...(collectionContext?.parents ?? [])]
@@ -128,7 +128,11 @@ export function createTvItemResolver({ localization, classifyIso, logger } = {})
       if (collectionContext?.collectionType !== 'tvshows' && override !== 'tvshows' && !mixed) {
         return hasTvParent ? withheld : null;
       }
-      if (!deletionSafe || override != null && override !== 'tvshows') return withheld;
+      if (override != null && override !== 'tvshows') return withheld;
+      const weakDirectory = !deletionSafe && !mixed && await confirmWeakDirectory?.();
+      if (!deletionSafe && !weakDirectory) return withheld;
+      const readable = snapshot => snapshot?.listing?.deletionSafe === true
+        || weakDirectory && snapshot?.listing?.complete === true;
 
       if (mixed && !hasTvParent) {
         if (parent?.IsRoot === true) return null;
@@ -146,7 +150,7 @@ export function createTvItemResolver({ localization, classifyIso, logger } = {})
         const parsed = parseSeries(candidate);
         if (!parsed?.name) return withheld;
         const snapshot = await peekDirectory?.(candidate);
-        if (snapshot?.listing?.deletionSafe !== true) return withheld;
+        if (!readable(snapshot)) return withheld;
         return claim(candidate, seriesNativeType, {
           Name: parsed.name, IsFolder: true, MediaType: 'Unknown',
           ...(parsed.year == null ? {} : { initialColumns: { ProductionYear: parsed.year } })
@@ -156,6 +160,7 @@ export function createTvItemResolver({ localization, classifyIso, logger } = {})
       if (parentType === seriesNativeType) {
         const parsed = parseSeasonPath(candidate.identityPath, nativeContainingFolderPath(parent));
         if (parsed.SeasonNumber == null || !parsed.IsSeasonFolder) {
+          if (weakDirectory) return withheld;
           const episode = resolveEpisodePath('\\\\test\\' + candidate.entry.name, { directory: true });
           if (episode?.EpisodeNumber != null && episode.SeasonNumber != null) {
             return resolveEpisodeFolder(candidate, peekDirectory);
@@ -165,7 +170,7 @@ export function createTvItemResolver({ localization, classifyIso, logger } = {})
           if (containsVideo !== true) return withheld;
         } else {
           const snapshot = await peekDirectory?.(candidate);
-          if (snapshot?.listing?.deletionSafe !== true) return withheld;
+          if (!readable(snapshot)) return withheld;
         }
         const index = parsed.SeasonNumber;
         const options = collectionContext?.libraryOptions ?? {};
@@ -178,10 +183,11 @@ export function createTvItemResolver({ localization, classifyIso, logger } = {})
         }, 'children');
       }
 
+      if (weakDirectory) return withheld;
       if (hasTvParent) return resolveEpisodeFolder(candidate, peekDirectory);
       return null;
     },
-    async resolveFile({ parent, collectionContext, candidate, deletionSafe, signal }) {
+    async resolveFile({ parent, collectionContext, candidate, deletionSafe, confirmWeakFile, signal }) {
       if (parent == null) return null;
       const override = exactCollectionOverride(collectionContext, candidate.identityPath);
       const hasTvParent = [parent, ...(collectionContext?.parents ?? [])]
@@ -191,9 +197,11 @@ export function createTvItemResolver({ localization, classifyIso, logger } = {})
         return hasTvParent && recognizedVideo(candidate) ? withheld : null;
       }
       if (!recognizedVideo(candidate)) return null;
-      if (!deletionSafe || override != null && override !== 'tvshows') return withheld;
+      if (override != null && override !== 'tvshows') return withheld;
       const video = resolveOrdinaryVideoFile(candidate, { nativeType: episodeNativeType });
       if (!video) return withheld;
+      if (!deletionSafe && (!hasTvParent || video.ExtraType != null || video.VideoType !== 'VideoFile'
+        || video.IsShortcut || video.IsPlaceHolder || !await confirmWeakFile?.())) return withheld;
       if (video.ExtraType != null) return null;
       return claim(candidate, episodeNativeType, {
         Name: video.Name, IsFolder: false, MediaType: 'Video',

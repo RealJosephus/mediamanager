@@ -598,7 +598,7 @@ export class DirectoryItemResolverPipeline {
   }
 
   async resolve({ parent, root, collectionContext = null, candidates, peekDirectory, getExtraCandidates, resolveExtra,
-    onEnumerationReady, deletionSafe = true, confirmWeakFile, singleItem = false, signal } = {}) {
+    onEnumerationReady, deletionSafe = true, confirmWeakFile, confirmWeakDirectory, singleItem = false, signal } = {}) {
     if (!Array.isArray(candidates)) throw new TypeError('Directory resolution requires a sibling candidate array.');
     if (peekDirectory != null && typeof peekDirectory !== 'function') throw new TypeError('peekDirectory must be a function.');
     if (getExtraCandidates != null && typeof getExtraCandidates !== 'function') throw new TypeError('getExtraCandidates must be a function.');
@@ -734,6 +734,7 @@ export class DirectoryItemResolverPipeline {
         const resolver = this.#resolvers[index];
         if (typeof resolver[method] !== 'function') continue;
         if (!results.has(index)) results.set(index, await this.#call(resolver, method, { ...base, candidate,
+          ...(confirmWeakDirectory && method === 'resolveDirectory' ? { confirmWeakDirectory: () => confirmWeakDirectory(candidate) } : {}),
           ...(confirmWeakFile && method === 'resolveFile' ? { confirmWeakFile: () => confirmWeakFile(candidate) } : {}),
           available: singleCandidates.filter(value => !unavailable(value)) }, signal,
         { continueOnError: true }));

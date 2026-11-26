@@ -11,6 +11,7 @@ import { createNfoPlugin } from '../../plugins/nfo/plugin.js';
 import { builtinRemoteAssetContract } from '../migration/helpers/builtin-remote-assets.js';
 import { startActualAList } from './helpers/actual-alist.js';
 import { remoteFileContract } from './remote-file-contract.js';
+import { verifyRemoteTvScan } from './helpers/remote-tv-scan.js';
 import { verifyRemoteMusicScan } from './helpers/remote-music-scan.js';
 
 const executable = process.env.MEDIAMANAGER_ALIST_EXECUTABLE;
@@ -123,4 +124,5 @@ test('actual current-source AList supports VFS byte access, network NFO and ffpr
     checks.push({ operation: 'credential isolation', rawRequests: raw.length, passed: true });
   });
   await t.test('weak AList listings safely add ordinary music tracks to PostgreSQL', t => verifyRemoteMusicScan(t, vfs));
+  await t.test('an AList TV library exposes new episodes after an ordinary refresh', t => verifyRemoteTvScan(t, vfs, 'alist', service.baseUrl, service.token));
 });

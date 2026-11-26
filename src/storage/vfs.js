@@ -115,7 +115,7 @@ export class VirtualFileSystem {
       let complete = false;
       for (let pageCount = 0; pageCount < (options.maxPages ?? 100000); pageCount++) {
         checkAbort(options.signal);
-        const page = await resolved.adapter.listPage(resolved.path, { ...options, cursor });
+        const page = await resolved.adapter.listPage(resolved.path, { ...options, cursor, preferCompletePage: true });
         if (!page || !Array.isArray(page.entries) || typeof page.complete !== 'boolean' || typeof page.deletionSafe !== 'boolean') {
           throw new StorageError('invalid-response', 'The storage directory page is invalid.');
         }

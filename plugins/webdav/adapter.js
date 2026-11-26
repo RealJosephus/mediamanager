@@ -547,6 +547,11 @@ export class WebDavAdapter {
     if (!self) throw invalidResponse('WebDAV omitted the requested directory from its listing.');
     if (self.kind !== 'directory') throw new StorageError('not-directory', 'The WebDAV object is not a directory.');
     entries.sort((left, right) => left.name < right.name ? -1 : left.name > right.name ? 1 : 0);
+    // Depth 1 already returned every child. Aggregate consumers can use that
+    // response directly; independent cursors still validate their next read.
+    if (!cursor && options.preferCompletePage) return {
+      entries, complete: true, nextCursor: null, consistency: 'weak', snapshot: null, deletionSafe: false,
+    };
     const digest = observationDigest(entries);
     if (cursor && cursor.digest !== digest) throw new StorageError('version-changed', 'The WebDAV directory changed during enumeration.');
     const offset = cursor?.offset ?? 0;

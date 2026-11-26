@@ -24,6 +24,7 @@ import { getNewItemId } from '../core/identity.js';
 import { nativeGuid } from '../users/native.js';
 import { DotIgnoreRule } from './dot-ignore-rule.js';
 import { stateIgnoreFileAccess, stateOwnedFiles } from './state-owned-files.js';
+import { episodeNativeType, seasonNativeType, seriesNativeType } from './tv-item-resolver.js';
 import { audioNativeType } from './audio-item-resolver.js';
 
 const pathStyle = value => /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/u.test(value) ? 'windows' : 'posix';
@@ -210,12 +211,12 @@ export class FolderValidationService {
     const raw = { listing, ...this.#classifyEntries(accessPath, listing.entries) };
     const filtered = await this.#filterCandidates(raw, parent, root);
     const confirmed = new WeakSet();
-    const confirmWeakFile = !listing.deletionSafe && listing.complete === true && listing.consistency === 'weak'
+    const confirmWeakEntry = !listing.deletionSafe && listing.complete === true && listing.consistency === 'weak'
       ? async candidate => {
         try {
-          const file = await this.vfs.stat(candidate.accessPath);
-          if (file.kind !== 'file' || ['size', 'modified', 'version'].some(field =>
-            candidate.entry[field] != null && file[field] !== candidate.entry[field])) return false;
+          const entry = await this.vfs.stat(candidate.accessPath);
+          if (entry.kind !== candidate.entry.kind || ['size', 'modified', 'version'].some(field =>
+            candidate.entry[field] != null && entry[field] !== candidate.entry[field])) return false;
           confirmed.add(candidate);
           return true;
         } catch (error) {
@@ -255,13 +256,15 @@ export class FolderValidationService {
         applicationRootPath: this.applicationRootPath
       })).length > 0,
       deletionSafe: listing.deletionSafe === true,
-      confirmWeakFile,
+      confirmWeakFile: confirmWeakEntry,
+      confirmWeakDirectory: confirmWeakEntry,
       onEnumerationReady
     });
-    if (confirmWeakFile) {
-      const claims = resolution.claims.filter(claim => claim.resolverId === 'builtin-audio-items'
-        && claim.nativeType === audioNativeType && confirmed.has(claim.primary));
-      if (claims.length) return Object.freeze({ ...resolution, claims: Object.freeze(claims),
+    if (confirmWeakEntry) {
+      const claims = resolution.claims.filter(claim => confirmed.has(claim.primary)
+        && (claim.resolverId === 'builtin-audio-items' && claim.nativeType === audioNativeType
+          || claim.resolverId === 'builtin-tv-items' && [seriesNativeType, seasonNativeType, episodeNativeType].includes(claim.nativeType)));
+      if (claims.length || collectionContext?.collectionType === 'tvshows') return Object.freeze({ ...resolution, claims: Object.freeze(claims),
         deletionSafe: false, additionsOnly: true });
     }
     return Object.freeze({ ...resolution, deletionSafe: listing.deletionSafe === true });
@@ -437,7 +440,7 @@ export class FolderValidationService {
     catch { /* A progress observer cannot replace folder validation. */ }
   }
 
-  async #validateVerifiedTracks(parent, claims, { signal, progress, needsChildren }) {
+  async #validateConfirmedAdditions(parent, claims, { signal, progress, needsChildren }) {
     return this.store.serializeWrites(session => withFolderValidationScope({
       session, store: this.store, library: this.library, linkedChildren: this.loadContext.linkedChildren, parent,
     }, async scope => {
@@ -451,18 +454,18 @@ export class FolderValidationService {
         for (const claim of page) {
           throwIfAborted(signal);
           const position = ++ordinal;
-          // A confirmed ordinary file can refresh its existing track without
-          // authorizing any replacement or deletion from this weak listing.
-          const includeTrack = async item => {
-            if (needsChildren && item?.NativeType === audioNativeType && isFileProtocol(item)
+          // Revisit only the confirmed physical item. An absent or conflicting
+          // sibling retains its persisted identity, descendants and owned media.
+          const includeExisting = async item => {
+            if (needsChildren && item?.NativeType === claim.nativeType && isFileProtocol(item)
               && sameNativePath(item.Path, claim.identityPath)) await scope.valid(item, position, true);
             return Boolean(item);
           };
           if (existing.has(idKey(claim.Id))) {
-            if (needsChildren) await scope.withCurrent(claim.Id, includeTrack);
+            if (needsChildren) await scope.withCurrent(claim.Id, includeExisting);
             continue;
           }
-          if (await scope.withPath(claim.identityPath, includeTrack)) continue;
+          if (await scope.withPath(claim.identityPath, includeExisting)) continue;
           const entity = this.#retain(createResolvedItemEntity(claim, {
             parent, parents: loaded.parents, metadataConfiguration: this.metadataConfiguration, clock: this.clock,
           }));
@@ -677,7 +680,7 @@ export class FolderValidationService {
       const container = !resolution.additionsOnly && ['Series', 'MusicAlbum'].includes(itemType(parent));
       const options = { signal, allowRemoveRoot, progress, needsChildren: recursive || refreshChildMetadata && !container };
       const { created, children } = resolution.additionsOnly
-        ? await this.#validateVerifiedTracks(parent, resolution.claims, options)
+        ? await this.#validateConfirmedAdditions(parent, resolution.claims, options)
         : await this.#reconcileChildren(parent, resolution, options);
       if (recursive) await this.#validateSubFolders(children, {
         collectionType,
