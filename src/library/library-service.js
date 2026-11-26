@@ -3294,6 +3294,10 @@ export class LibraryService extends EventEmitter {
     });
   }
 
+  getOrCreatePerson(name) {
+    return this.#getItemByName(name, nativePersonIdentity, 'Person', 'MediaBrowser.Controller.Entities.Person');
+  }
+
   getStudio(name) {
     return this.#getItemByName(name, nativeStudioIdentity, 'Studio', 'MediaBrowser.Controller.Entities.Studio');
   }

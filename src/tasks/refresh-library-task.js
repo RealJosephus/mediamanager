@@ -3,6 +3,7 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { ScheduledTaskFileStore } from './scheduled-task-store.js';
 import { ScheduledTaskTriggerScheduler, cloneTaskTriggers, normalizeTaskTriggers } from './scheduled-task-triggers.js';
 import { parseJsonDateTime } from '../http/json-date-time.js';
+import { formatComposite } from '../core/composite-format.js';
 import { wireDate } from '../users/native.js';
 
 export const refreshLibraryTaskId = '7738148ffcd07979c7ceb148e06b3aed';
@@ -252,6 +253,7 @@ export class ScheduledTaskWorker extends EventEmitter {
   }
 
   #info() {
+    const description = this.#text(this.definition.descriptionKey, this.definition.description);
     return {
       Name: this.name,
       State: this.#state,
@@ -259,7 +261,7 @@ export class ScheduledTaskWorker extends EventEmitter {
       Id: this.id,
       ...(this.#lastExecutionResult == null ? {} : { LastExecutionResult: cloneResult(this.#lastExecutionResult) }),
       Triggers: cloneTaskTriggers(this.#triggers),
-      Description: this.#text(this.definition.descriptionKey, this.definition.description),
+      Description: this.definition.descriptionArguments ? formatComposite(description, this.definition.descriptionArguments()) : description,
       Category: this.#text(this.definition.categoryKey, this.definition.category),
       IsHidden: false,
       Key: this.key,

@@ -46,7 +46,7 @@ import { CollectionPosterVerifyPostScanTask } from './library/collection-poster-
 import { createCollectionRuntimeServices } from './library/collection-runtime-services.js';
 import { PostgresLinkedChildrenStore } from './library/postgres-linked-children.js';
 import { copyNativeItemRepositoryFrame, publishNativeItemLinks } from './library/native-item-entity.js';
-import { CleanDatabasePostScanTask } from './library/clean-database-post-scan-task.js';
+import { CleanDatabasePostScanTask, RefreshDatabaseStatisticsPostScanTask } from './library/clean-database-post-scan-task.js';
 import { SplashscreenPostScanTask } from './library/splashscreen-post-scan-task.js';
 import { ExtractionService } from './playback/extraction.js';
 import { SubtitleBurnSource } from './playback/subtitle-burn-source.js';
@@ -98,7 +98,8 @@ import { RefreshGuideTaskWorker, refreshGuideTaskId } from './tasks/refresh-guid
 import { KeyframeExtractionTaskWorker } from './tasks/keyframe-extraction-task.js';
 import { AudioNormalizationTaskWorker } from './tasks/audio-normalization-task.js';
 import { ChapterImagesTaskWorker } from './tasks/chapter-images-task.js';
-import { CleanActivityLogTaskWorker, DeleteCacheFilesTaskWorker } from './tasks/maintenance-tasks.js';
+import { RefreshPeopleTaskWorker } from './tasks/refresh-people-task.js';
+import { CleanActivityLogTaskWorker, CleanLogFilesTaskWorker, DeleteCacheFilesTaskWorker, DeleteTranscodeFilesTaskWorker } from './tasks/maintenance-tasks.js';
 import { ChapterImages } from './library/chapter-images.js';
 import { TrickplayImagesTaskWorker, TrickplayMoveImagesTaskWorker } from './tasks/trickplay-images-task.js';
 import { TrickplayGeneration } from './library/trickplay-generation.js';
@@ -528,7 +529,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     metadataImages.monitor = libraryMonitor;
   }
   const libraryScanLifecycle = libraryMonitor ? new LibraryScanLifecycle({ host: libraryScanHost,
-    monitor: libraryMonitor, postScanTasks: [splashscreenPostScanTask, artistsPostScanTask, collectionPosterVerifyPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, cleanDatabasePostScanTask], logger }) : undefined;
+    monitor: libraryMonitor, postScanTasks: [splashscreenPostScanTask, artistsPostScanTask, collectionPosterVerifyPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, cleanDatabasePostScanTask, new RefreshDatabaseStatisticsPostScanTask(store)], logger }) : undefined;
   const libraryScanner = libraryScanLifecycle ? new LibraryScanService({ lifecycle: libraryScanLifecycle, onError }) : undefined;
   if (libraryScanner) rollback.push(() => libraryScanner.close());
   const tasks = new ScheduledTaskManager({ scanner: libraryScanner, localization, onError, programDataPath, configurationDirectoryPath, dataPath });
@@ -536,6 +537,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
   await tasks.register({ create: options => new CleanActivityLogTaskWorker({ ...options, activities, getConfiguration: currentConfiguration }) });
   await tasks.register({ create: options => new DeleteCacheFilesTaskWorker({ ...options, applicationPaths, fileSystem,
     withStorageGeneration: configuredStorage.withGeneration }) });
+  await tasks.register({ create: options => new CleanLogFilesTaskWorker({ ...options, applicationPaths, getConfiguration: currentConfiguration }) });
+  if (applicationPaths.cachePath) await tasks.register({ create: options => new DeleteTranscodeFilesTaskWorker({ ...options, encodingPaths }) });
+  if (metadataScanner && libraryScanLifecycle) await tasks.register({ create: options => new RefreshPeopleTaskWorker({
+    ...options, store, library, lifecycle: libraryScanLifecycle, metadataScanner, logger }) });
   if (probe) {
     await tasks.register({ create: options => new KeyframeExtractionTaskWorker({ ...options, playback }) });
     await tasks.register({ create: options => new AudioNormalizationTaskWorker({ ...options, playback, probe }) });

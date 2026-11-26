@@ -461,11 +461,11 @@ async function compareComposition(t, scenarioFile) {
 }
 
 const options = { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000 };
-test('postgres: current native eight-task global scan creates and cleans nonempty by-name state', options,
+test('postgres: current native global scan creates and cleans nonempty by-name state', options,
   t => compareComposition(t, inputFile));
-test('postgres: cancelling the real Studio refresh preserves the eight-task committed prefix and releases resources', options,
+test('postgres: cancelling the real Studio refresh preserves the committed post-scan prefix and releases resources', options,
   t => compareComposition(t, cancellationInputFile));
-test('postgres: native Artist child aggregation and MusicGenres persist inside the real eight-task scan', options,
+test('postgres: native Artist child aggregation and MusicGenres persist inside the real post-scan pipeline', options,
   t => compareComposition(t, musicInputFile));
 test('postgres: the eighth native task removes orphan values and missing file Playlists after seven non-deleting tasks', options,
   t => compareComposition(t, cleanupInputFile));

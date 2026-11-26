@@ -29,7 +29,7 @@ async function missingAsUndefined(operation) {
   catch (error) { if (error.code !== 'ENOENT') throw error; }
 }
 
-async function cleanDirectory(fileSystem, root, cutoff, { exclude = [], signal, reportProgress, onError }) {
+async function cleanDirectory(fileSystem, root, cutoff, { exclude = [], includeFile = () => true, removeEmpty = true, signal, reportProgress, onError }) {
   if (!root || !(await missingAsUndefined(() => fileSystem.lstat(root)))?.isDirectory()) return;
   const files = [], subdirectories = [];
   const expired = async filename => {
@@ -51,8 +51,8 @@ async function cleanDirectory(fileSystem, root, cutoff, { exclude = [], signal, 
       if (entry.isDirectory()) {
         if (!(await missingAsUndefined(() => fileSystem.lstat(filename)))?.isDirectory()) continue;
         await collect(filename);
-        subdirectories.push(filename);
-      } else if (entry.isFile() && await expired(filename)) files.push(filename);
+        if (removeEmpty) subdirectories.push(filename);
+      } else if (entry.isFile() && includeFile(entry.name) && await expired(filename)) files.push(filename);
     }
   };
   await collect(root);
@@ -61,7 +61,7 @@ async function cleanDirectory(fileSystem, root, cutoff, { exclude = [], signal, 
     signal.throwIfAborted();
     try {
       if (await expired(filename)) await fileSystem.unlink(filename);
-    } catch (error) { if (error.code !== 'ENOENT') await onError?.(error); }
+    } catch (error) { if (error.code !== 'ENOENT') { if (!onError) throw error; await onError(error); } }
   }
   for (const directory of subdirectories) {
     signal.throwIfAborted();
@@ -76,6 +76,41 @@ function withinDirectory(root, filename) {
   return relative !== '..' && !relative.startsWith('..' + path.sep) && !path.isAbsolute(relative);
 }
 
+export class CleanLogFilesTaskWorker extends ScheduledTaskWorker {
+  constructor({ applicationPaths, getConfiguration, clock = () => new Date(), ...options }) {
+    const retention = () => getConfiguration().LogFileRetentionDays ?? 3;
+    super({ ...options, clock,
+      definition: { ...maintenance,
+        id: md5Guid('Emby.Server.Implementations.ScheduledTasks.Tasks.DeleteLogFileTask'), key: 'CleanLogFiles',
+        nameKey: 'TaskCleanLogs', name: 'Clean Log Directory',
+        descriptionKey: 'TaskCleanLogsDescription', description: 'Deletes log files that are more than {0} days old.',
+        descriptionArguments: () => [retention()],
+        defaultTriggers: [{ Type: 'IntervalTrigger', IntervalTicks: 864_000_000_000n }],
+      },
+      run: operation => cleanDirectory(fs, applicationPaths.logDirectoryPath, clock().valueOf() - retention() * dayMilliseconds,
+        { ...operation, includeFile: name => !name.startsWith('log_'), removeEmpty: false }),
+    });
+  }
+}
+
+export class DeleteTranscodeFilesTaskWorker extends ScheduledTaskWorker {
+  constructor({ encodingPaths, clock = () => new Date(), ...options }) {
+    super({ ...options, clock,
+      definition: { ...maintenance,
+        id: md5Guid('Emby.Server.Implementations.ScheduledTasks.Tasks.DeleteTranscodeFileTask'), key: 'DeleteTranscodeFiles',
+        nameKey: 'TaskCleanTranscode', name: 'Clean Transcode Directory',
+        descriptionKey: 'TaskCleanTranscodeDescription', description: 'Deletes transcode files more than one day old.',
+        defaultTriggers: [{ Type: 'StartupTrigger' }, { Type: 'IntervalTrigger', IntervalTicks: 864_000_000_000n }],
+      },
+      run: async operation => {
+        operation.reportProgress(50);
+        await cleanDirectory(fs, await encodingPaths.getTranscodePath(), clock().valueOf() - dayMilliseconds,
+          { ...operation, onError: options.onError ?? (() => {}) });
+      },
+    });
+  }
+}
+
 export class DeleteCacheFilesTaskWorker extends ScheduledTaskWorker {
   constructor({ applicationPaths, fileSystem, withStorageGeneration, clock = () => new Date(), ...options }) {
     super({ ...options, clock,
@@ -87,7 +122,7 @@ export class DeleteCacheFilesTaskWorker extends ScheduledTaskWorker {
       },
       run: async operation => {
         const { cachePath, tempPath } = applicationPaths;
-        const now = clock().valueOf(), cleanup = { ...operation, onError: options.onError };
+        const now = clock().valueOf(), cleanup = { ...operation, onError: options.onError ?? (() => {}) };
         if (cachePath && !(tempPath && withinDirectory(tempPath, cachePath))) await withStorageGeneration(async () => {
           // A metadata prefix can have no directory entry on its parent's backend.
           const roots = new Set([cachePath]);

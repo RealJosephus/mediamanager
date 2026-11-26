@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 import os from 'node:os';
 import { lstat, mkdir, mkdtemp, readFile, rm, stat, symlink, utimes, writeFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -26,9 +27,38 @@ test('native maintenance tasks clean committed activity rows and the owned cache
   database = await createPostgresTestDatabase(null, 'maintenance');
   const program = path.join(root, 'program'), cache = path.join(root, 'configured-cache');
   const temp = path.join(program, 'cache', 'temp');
-  runtime = await createTestRuntime({ database, programDataPath: program, serverId: 'maintenance-fixture',
-    configuration: { ...defaultConfiguration('server'), IsStartupWizardCompleted: true, ActivityLogRetentionDays: 7, CachePath: cache } });
   const daysAgo = days => new Date(Date.now() - days * 86_400_000);
+  const transcode = path.join(cache, 'transcodes'), staleSegment = path.join(transcode, 'old', 'segment.ts');
+  const freshSegment = path.join(transcode, 'playing.ts');
+  const logs = path.join(root, 'log', 'nested'), expiredLog = path.join(logs, 'ffmpeg.log');
+  const managedLog = path.join(logs, 'log_old.log'), recentLog = path.join(logs, 'recent.log');
+  for (const [filename, age] of [[staleSegment, 2], [freshSegment, 0], [expiredLog, 8], [managedLog, 30], [recentLog, 4]]) {
+    await mkdir(path.dirname(filename), { recursive: true });
+    await writeFile(filename, 'fixture');
+    await utimes(filename, daysAgo(age), daysAgo(age));
+  }
+  runtime = await createTestRuntime({ database, programDataPath: program, serverId: 'maintenance-fixture',
+    configuration: { ...defaultConfiguration('server'), IsStartupWizardCompleted: true, ActivityLogRetentionDays: 7, LogFileRetentionDays: 7, CachePath: cache } });
+  const owner = (await database.rows('BaseItems')).find(item => item.IsFolder);
+  const credit = { Name: 'Credit Fixture', PersonType: 'Actor' }, orphan = randomUUID(), duplicate = randomUUID(), original = randomUUID();
+  await database.insert('Peoples', { ...credit, Id: original });
+  await database.insert('Peoples', { ...credit, Id: duplicate });
+  await database.insert('Peoples', { ...credit, Id: orphan, Name: 'Orphan Fixture' });
+  for (const [PeopleId, Role] of [[original, 'First role'], [duplicate, 'Second role']]) {
+    await database.insert('PeopleBaseItemMap', { ItemId: owner.Id, PeopleId, Role, ListOrder: 0, SortOrder: null });
+  }
+  const returning = await runtime.library.getOrCreatePerson('Returning Fixture');
+  await database.insert('Peoples', { Id: returning.Id, Name: returning.Name, PersonType: 'Director' });
+  await database.insert('PeopleBaseItemMap', { ItemId: owner.Id, PeopleId: returning.Id, Role: '', ListOrder: 1, SortOrder: null });
+  await database.update('BaseItems', { Id: returning.Id }, { DateLastRefreshed: nativeDate(daysAgo(31)), Overview: 'Keep biography' });
+  const dead = await runtime.library.getOrCreatePerson('Uncredited Fixture');
+  const locked = await runtime.library.getOrCreatePerson('Locked Fixture');
+  await database.update('BaseItems', { Id: locked.Id }, { IsLocked: true, DateLastRefreshed: nativeDate(daysAgo(1)) });
+  runtime.libraryScanLifecycle.isScanRunning = true;
+  try {
+    await runtime.tasks.execute('866456ed0d44e15468124ce33d85961e');
+    assert.equal((await database.rows('Peoples', { where: { Id: orphan } })).length, 1);
+  } finally { runtime.libraryScanLifecycle.isScanRunning = false; }
   for (const [Name, age] of [['Expired activity', 8], ['Retained activity', 6]]) await database.insert('ActivityLogs', {
     Name, Type: 'RetentionFixture', UserId: '00000000-0000-0000-0000-000000000000', DateCreated: nativeDate(daysAgo(age)),
     LogSeverity: 2, RowVersion: 0n,
@@ -52,19 +82,26 @@ test('native maintenance tasks clean committed activity rows and the owned cache
   for (const [key, id, triggers] of [
     ['CleanActivityLog', 'b461ef918ab28520928183e794350e3c', []],
     ['DeleteCacheFiles', '241d4fcb19a1d557ee62428e411da609', [{ Type: 'IntervalTrigger', IntervalTicks: 864000000000 }]],
+    ['CleanLogFiles', '1c8ede62c521bea0bf851344f5b8ca40', [{ Type: 'IntervalTrigger', IntervalTicks: 864000000000 }]],
+    ['DeleteTranscodeFiles', '7d8088c10902f1bf4072ded42437bcfb', [{ Type: 'StartupTrigger' }, { Type: 'IntervalTrigger', IntervalTicks: 864000000000 }]],
+    ['RefreshPeople', '866456ed0d44e15468124ce33d85961e', [{ Type: 'IntervalTrigger', IntervalTicks: 6048000000000 }]],
   ]) {
     const task = tasks.find(task => task.Key === key);
     assert.ok(task, key);
     assert.equal(task.Id, id);
-    assert.equal(task.Category, 'Maintenance');
+    assert.equal(task.Category, key === 'RefreshPeople' ? 'Library' : 'Maintenance');
+    if (key === 'CleanLogFiles') assert.match(task.Description, /7 days/);
     assert.deepEqual(task.Triggers, triggers);
-    assert.equal((await request('/Running/' + id.toUpperCase(), 'POST')).status, 204);
-    const deadline = Date.now() + 5000;
+    const previous = task.LastExecutionResult?.StartTimeUtc;
+    // Leave the startup trigger in charge of cleaning the preexisting segment.
+    if (key !== 'DeleteTranscodeFiles') assert.equal((await request('/Running/' + id.toUpperCase(), 'POST')).status, 204);
+    const deadline = Date.now() + 15000;
     for (;;) {
       const result = await request('/' + id);
       assert.equal(result.status, 200);
       const status = await result.json();
-      if (status.LastExecutionResult && status.State === 'Idle') {
+      if (status.LastExecutionResult && status.State === 'Idle'
+        && (key === 'DeleteTranscodeFiles' || previous !== status.LastExecutionResult.StartTimeUtc)) {
         assert.equal(status.LastExecutionResult.Status, 'Completed', JSON.stringify(status.LastExecutionResult));
         break;
       }
@@ -77,8 +114,21 @@ test('native maintenance tasks clean committed activity rows and the owned cache
   try {
     const rows = await cold.rows('ActivityLogs', { where: { Type: 'RetentionFixture' } });
     assert.deepEqual(rows.map(row => row.Name), ['Retained activity']);
+    assert.deepEqual((await cold.rows('Peoples')).map(row => row.Name).sort(), [credit.Name, returning.Name]);
+    const links = (await cold.rows('PeopleBaseItemMap', { where: { ItemId: owner.Id } })).filter(row => row.PeopleId !== returning.Id);
+    assert.equal((await cold.rows('BaseItems', { where: { Id: dead.Id } })).length, 0);
+    assert.equal((await cold.rows('BaseItems', { where: { Id: locked.Id } }))[0]?.IsLocked, true);
+    const refreshed = (await cold.rows('BaseItems', { where: { Id: returning.Id } }))[0];
+    assert.equal(refreshed.Overview, 'Keep biography');
+    assert.ok(Date.parse(refreshed.DateLastRefreshed) > daysAgo(1).valueOf());
+    assert.equal(new Set(links.map(row => row.PeopleId)).size, 1);
+    assert.deepEqual(links.map(row => row.Role).sort(), ['First role', 'Second role']);
+    const person = (await cold.rows('BaseItems', { where: { Name: credit.Name } }))[0];
+    assert.equal(person?.Type, 'MediaBrowser.Controller.Entities.Person');
+    assert.ok(Date.parse(person.DateLastRefreshed) > daysAgo(1).valueOf());
   } finally { await cold.close(); }
-  for (const removed of [cacheOld, path.join(cache, 'old'), tempOld, path.join(temp, 'old'), path.join(temp, 'empty')])
+  for (const file of [freshSegment, managedLog, recentLog]) assert.equal(await readFile(file, 'utf8'), 'fixture');
+  for (const removed of [staleSegment, path.dirname(staleSegment), expiredLog, cacheOld, path.join(cache, 'old'), tempOld, path.join(temp, 'old'), path.join(temp, 'empty')])
     await assert.rejects(stat(removed), { code: 'ENOENT' });
   for (const retained of [cacheKeep, tempKeep, outside]) assert.equal(await readFile(retained, 'utf8'), path.basename(retained));
   assert.ok((await stat(cache)).isDirectory());

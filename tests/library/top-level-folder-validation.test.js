@@ -91,7 +91,7 @@ async function fixture(t, dialect) {
     onError: error => errors.push(error)
   });
   const tasks = runtime.libraryScanLifecycle.postScanTasks;
-  assert.deepEqual(tasks.map(task => task.name), ['Splashscreen', 'Artists', 'CollectionPosterVerify', 'Collections', 'Genres', 'MusicGenres', 'Studios', 'CleanDatabase']);
+  assert.deepEqual(tasks.map(task => task.name), ['Splashscreen', 'Artists', 'CollectionPosterVerify', 'Collections', 'Genres', 'MusicGenres', 'Studios', 'CleanDatabase', 'RefreshDatabaseStatistics']);
   assert.equal(runtime.libraryScanLifecycle.capabilities.runsPostScanTasks, true);
   return { runtime, database, adapter, stateRoot, firstPath, errors };
 }

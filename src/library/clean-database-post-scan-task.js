@@ -7,6 +7,15 @@ import { MetadataImageAssets } from '../metadata/image-assets.js';
 import { mapRecord } from './records.js';
 import { nativePlaylistIsFile, setNativePlaylistFileState } from './native-path.js';
 
+export class RefreshDatabaseStatisticsPostScanTask {
+  constructor(store) { this.store = store; this.name = 'RefreshDatabaseStatistics'; }
+
+  async run({ signal, reportProgress }) {
+    await this.store.run(db => db.refreshLibraryStatistics({ signal }), { signal });
+    reportProgress(100);
+  }
+}
+
 /** Capture selection in PostgreSQL while each ordinary deletion retains its
  * own file, persistence and event boundaries. */
 export class CleanDatabasePostScanTask {

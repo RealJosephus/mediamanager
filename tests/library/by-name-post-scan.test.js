@@ -365,7 +365,7 @@ test('postgres: runtime registers Genre, MusicGenre and Studio maintenance and s
   runtime = await createTestRuntime({ database, programDataPath: stateRoot, vfs, identityMap, serverId: 'by-name-post-scan',
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true, EnableNormalizedItemByNameIds: true } });
   const registered = runtime.libraryScanLifecycle.postScanTasks;
-  assert.deepEqual(registered.map(task => task.name), ['Splashscreen', 'Artists', 'CollectionPosterVerify', 'Collections', 'Genres', 'MusicGenres', 'Studios', 'CleanDatabase']);
+  assert.deepEqual(registered.map(task => task.name), ['Splashscreen', 'Artists', 'CollectionPosterVerify', 'Collections', 'Genres', 'MusicGenres', 'Studios', 'CleanDatabase', 'RefreshDatabaseStatistics']);
   assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, true); assert.equal(runtime.libraryScanLifecycle.capabilities.runsPostScanTasks, true);
   const template = native.results.find(entry => entry.kind === 'Genre' && entry.sample.Name === 'new names').before.rows.find(row => row.Type.endsWith('.Movie'));
   const movie = { ...template, Id: 'ba390000-0000-0000-0000-000000005001', Name: 'Movie source' };
@@ -389,13 +389,13 @@ test('postgres: runtime registers Genre, MusicGenre and Studio maintenance and s
   runtime.libraryScanHost.updateInheritedValues = () => { calls.push('inherited'); return inherited(); };
   const events = []; runtime.library.on('ItemAdded', ({ Item }) => events.push(guid(Item.Id)));
   await runtime.libraryScanLifecycle.runPostScanTasks();
-  assert.deepEqual(calls, ['Splashscreen', 'Artists', 'CollectionPosterVerify', 'Collections', 'Genres', 'refresh:' + guid(ids[0]), 'MusicGenres', 'refresh:' + guid(ids[1]), 'Studios', 'refresh:' + guid(ids[2]), 'CleanDatabase', 'inherited']);
+  assert.deepEqual(calls, ['Splashscreen', 'Artists', 'CollectionPosterVerify', 'Collections', 'Genres', 'refresh:' + guid(ids[0]), 'MusicGenres', 'refresh:' + guid(ids[1]), 'Studios', 'refresh:' + guid(ids[2]), 'CleanDatabase', 'RefreshDatabaseStatistics', 'inherited']);
   assert.deepEqual(events, ids.map(guid));
   const saved = [];
   for (const Id of ids) {
     const row = (await database.rows('BaseItems', { where: { Id } }))[0]; assert.ok(row.DateLastRefreshed); saved.push(row);
   }
   calls.length = 0; await runtime.libraryScanLifecycle.runPostScanTasks();
-  assert.deepEqual(calls, ['Splashscreen', 'Artists', 'CollectionPosterVerify', 'Collections', 'Genres', 'MusicGenres', 'Studios', 'CleanDatabase', 'inherited']); assert.deepEqual(events, ids.map(guid));
+  assert.deepEqual(calls, ['Splashscreen', 'Artists', 'CollectionPosterVerify', 'Collections', 'Genres', 'MusicGenres', 'Studios', 'CleanDatabase', 'RefreshDatabaseStatistics', 'inherited']); assert.deepEqual(events, ids.map(guid));
   for (const [index, Id] of ids.entries()) assert.deepEqual((await database.rows('BaseItems', { where: { Id } }))[0], saved[index]);
 });

@@ -996,6 +996,18 @@ export class PostgresDatabase {
   async initializeRuntimeSchema({ lockTimeoutMs = 30_000 } = {}) {
     return this.#initializeRuntimeSchema({ lockTimeoutMs, refreshStatistics: true });
   }
+  async refreshLibraryStatistics({ signal } = {}) {
+    const items = q(this.schemaName) + '.' + q('BaseItems');
+    const result = await this.client.query({ text: `SELECT EXISTS(SELECT 1 FROM ${items}
+      WHERE NOT "IsFolder" AND "Type" <> $1) AS populated`, values: [Buffer.from('PLACEHOLDER')], signal });
+    if (result.rows[0].populated) await this.#analyzeIndexedTables(signal);
+  }
+
+  async #analyzeIndexedTables(signal) {
+    const tables = [...new Set(postgresRuntimeIndexes.map(index => index.table))];
+    await this.client.query({ text: 'ANALYZE ' + tables.map(name => q(this.schemaName) + '.' + q(name)).join(', '), signal });
+  }
+
   async #initializeRuntimeSchema({ lockTimeoutMs, refreshStatistics }) {
     if (!Number.isSafeInteger(lockTimeoutMs) || lockTimeoutMs < 1) {
       throw new TypeError('lockTimeoutMs must be a positive integer');
@@ -1027,10 +1039,7 @@ export class PostgresDatabase {
       // every indexed table. A cold open only verifies the existing schema;
       // its fingerprint describes definitions, never statistics freshness.
       if (storedFingerprint === undefined || refreshStatistics) {
-        const indexedTables = [...new Set(postgresRuntimeIndexes.map(definition => definition.table))];
-        if (indexedTables.length) {
-          await database.client.query(`ANALYZE ${indexedTables.map(name => `${q(database.schemaName)}.${q(name)}`).join(', ')}`);
-        }
+        await database.#analyzeIndexedTables();
       }
       return Object.freeze({ fingerprint });
     }, { isolation: 'read-committed', lockTimeoutMs });

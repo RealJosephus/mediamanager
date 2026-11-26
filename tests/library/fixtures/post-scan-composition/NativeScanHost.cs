@@ -377,6 +377,7 @@ public sealed class NativeScanHost : IAsyncDisposable
         services.AddSingleton<MediaBrowser.Model.Globalization.ILocalizationManager>(localization);
         services.AddSingleton(naming);services.AddSingleton(new VideoListResolver(naming));services.AddSingleton(AppHost);
         services.AddSingleton<IDbContextFactory<JellyfinDbContext>>(Factory);
+        services.AddSingleton<IJellyfinDatabaseProvider>(new SqliteDatabaseProvider(Paths, loggerFactory.CreateLogger<SqliteDatabaseProvider>()) { DbContextFactory = Factory });
         services.AddSingleton<IPathManager>(pathManager);
         services.AddSingleton<MediaBrowser.Common.Configuration.IApplicationPaths>(Paths);
         services.AddSingleton<IImageEncoder>(new Jellyfin.Drawing.Skia.SkiaEncoder(loggerFactory.CreateLogger<Jellyfin.Drawing.Skia.SkiaEncoder>(),Paths));

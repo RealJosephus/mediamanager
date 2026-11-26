@@ -18,7 +18,8 @@ const aggregateLogicalPrefix = 'MediaBrowser.Controller.Entities.AggregateFolder
 const taskRoles = { SplashscreenPostScanTask: 'Splashscreen', ArtistsPostScanTask: 'Artists',
   CollectionPosterVerifyPostScanTask: 'CollectionPosterVerify', CollectionPostScanTask: 'Collections',
   GenresPostScanTask: 'Genres', MusicGenresPostScanTask: 'MusicGenres', StudiosPostScanTask: 'Studios',
-  CleanDatabaseScheduledTask: 'CleanDatabase', CleanDatabasePostScanTask: 'CleanDatabase' };
+  CleanDatabaseScheduledTask: 'CleanDatabase', CleanDatabasePostScanTask: 'CleanDatabase',
+  RefreshDatabaseStatisticsPostScanTask: 'RefreshDatabaseStatistics' };
 const dataManifest = nativeItemJsonValidationManifest();
 // VirtualChildren is serialized through the declared BaseItem element type;
 // Folder's contract adds only IsRoot to those common fields.
