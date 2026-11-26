@@ -18,7 +18,7 @@ import { resolveSeries } from './series-reference.js';
 import { createMetadataChildren } from './metadata-children.js';
 import { nativeContainingFolderPath, nativeFileName, nativeFileNameWithoutExtension, nativeContainsSubPath,
   setNativePlaylistFileState } from './native-path.js';
-import { nativeItemDescriptor, acquireNativeItemLinkOwner } from './native-item-entity.js';
+import { nativeItemDescriptor, acquireNativeItemLinkOwner, copyNativeItemState } from './native-item-entity.js';
 import { attachMetadataSortCache, metadataSortName } from '../metadata/sort-cache.js';
 import { probeFileChanged } from '../storage/probe-lifecycle.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
@@ -193,9 +193,10 @@ export function createMetadataContextLoader(options) {
       ? expandPath(targetRow.Path) : undefined;
     const preserveCollectionMembers = Boolean(dataPath && collectionPath && nativeContainsSubPath(collectionPath, dataPath,
       { windows: imagePathApiForRoot(collectionPath) === path.win32 }));
-    // A scan can retain a BoxSet from before a membership edit. Loading a
-    // fresh row baseline around that draft would make its old links writable.
-    if (preserveCollectionMembers) draft = undefined;
+    // A queued scan may retain the BoxSet from before a membership edit. Read the
+    // current repository frame and membership before refreshing that live receiver.
+    const collectionReceiver = preserveCollectionMembers ? draft : undefined;
+    if (collectionReceiver) draft = undefined;
     const targetType = draft?.Type ?? String(targetRow?.Type ?? '').split('.').at(-1);
     const targetName = draft?.Name ?? targetRow?.Name;
     // Discovery, hydration and the conflict baseline share this exact observed
@@ -228,13 +229,17 @@ export function createMetadataContextLoader(options) {
       }
       state = await loadState(scopedRows);
     }
-    const item = draft ?? state.byId.get(idKey(referenceId));
+    const storedItem = state.byId.get(idKey(referenceId));
+    if (collectionReceiver && storedItem) draft = copyNativeItemState(collectionReceiver, storedItem);
+    const item = draft ?? storedItem;
     if (!item) throw libraryError(404, 'Metadata item not found.');
     itemOwner = acquireNativeItemLinkOwner(item);
     // A supplied live entity owns its loaded, unknown or null link branch.
     // Repository-query entities can deliberately omit links; refreshing that
     // entity must keep unknown distinct from an authoritative empty set.
-    if (!draft && nativeItemDescriptor(item.NativeType).family === 'folder') item.LinkedChildren = await linkedChildren.load(db, item.Id);
+    if ((!draft || collectionReceiver) && nativeItemDescriptor(item.NativeType).family === 'folder') {
+      item.LinkedChildren = await linkedChildren.load(db, item.Id);
+    }
     const collectionsPath = dataPath && imagePathApiForRoot(dataPath).join(dataPath, 'collections');
     const declaredStateRoot = filename => typeof filename === 'string' && imagePathApiForRoot(filename).isAbsolute(filename)
       && [dataPath, programDataPath].filter(Boolean).find(root =>
