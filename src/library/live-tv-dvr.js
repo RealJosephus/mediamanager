@@ -135,9 +135,11 @@ export class LiveTvDvr {
   isActive(id) { return Boolean(id && this.#jobs.get(key(id))?.writing); }
 
   #runJob(job, timer, publication) {
-    job.storage = this.retainStorage?.() ?? { fileSystem: this.fileSystem, mediaFileSystem: this.mediaFileSystem };
+    job.storage = publication?.storage ?? this.retainStorage?.() ?? { fileSystem: this.fileSystem, mediaFileSystem: this.mediaFileSystem };
     return withCleanup(() => publication ? this.#resumePublication(job, publication) : this.#record(job, timer),
-      [() => Promise.allSettled(job.readers), () => job.storage.close?.()], 'Recording storage release failed.');
+      [() => Promise.allSettled(job.readers), () => {
+        if (this.#publications.get(key(timer.Id))?.storage !== job.storage) return job.storage.close?.();
+      }], 'Recording storage release failed.');
   }
 
   #publicationRoot(fileSystem) {
@@ -321,6 +323,7 @@ export class LiveTvDvr {
           if (!exists && !this.#pathReserved(target, job)) {
             job.path = target;
             job.publication = { spool: job.spool, readPath: job.readPath, path: target, seriesPath,
+              storage: job.storage, mediaBinding: job.storage.mediaBinding?.(target),
               timer, phase: 'capturing', retryCapture: false, due: 0, readers: job.readers };
             await this.#savePublication(fileSystem, job.publication);
             return fileSystem.open(job.readPath, 'wx');
@@ -352,25 +355,25 @@ export class LiveTvDvr {
 
   async #publishRecording(job, publication, size, signal) {
     const api = pathApi(publication.path), original = api.parse(publication.path);
-    const { fileSystem } = job.storage;
+    const { fileSystem, mediaFileSystem, mediaBinding } = job.storage;
     let suffix = 0, sourceHash;
     for (;;) {
       signal.throwIfAborted();
       const target = publication.path;
       let existing;
-      try { existing = await this.mediaFileSystem.stat(target, { signal }); }
+      try { existing = await mediaFileSystem.stat(target, { signal }); }
       catch (error) { if (!missing(error)) throw error; }
       if (!existing) {
         let handle;
         this.monitor?.reportFileSystemChangeBeginning(target);
         await withCleanup(async () => {
           handle = await fileSystem.openRead(publication.readPath, { signal });
-          await this.mediaFileSystem.writeFile(target, handle.stream, { flag: 'wx', size, signal });
+          await mediaFileSystem.writeFile(target, handle.stream, { flag: 'wx', size, signal });
         }, [() => handle?.close(), () => this.monitor?.reportFileSystemChangeComplete(target, false)], 'Recording publication failed.');
         return;
       }
       if (existing.isFile()) {
-        const targetHash = await this.#checksum(this.mediaFileSystem, target, size, signal);
+        const targetHash = await this.#checksum(mediaFileSystem, target, size, signal);
         if (targetHash !== null) {
           sourceHash ??= await this.#checksum(fileSystem, publication.readPath, size, signal);
           if (targetHash === sourceHash) return;
@@ -380,16 +383,23 @@ export class LiveTvDvr {
       while (this.#pathReserved(job.path, job, publication));
       // A restart must resume the last reserved name, including when the
       // remote write completed but its response or the timer update was lost.
-      await this.#savePublication(fileSystem, { ...publication, path: job.path });
-      publication.path = job.path;
+      const reservation = { path: job.path, mediaBinding: mediaBinding?.(job.path) };
+      await this.#savePublication(fileSystem, { ...publication, ...reservation });
+      Object.assign(publication, reservation);
     }
   }
 
   async #verifyCurrentCapture(publication) {
-    if (!publication.fileIdentity) return;
-    const direct = await this.#openLocalCapture(this.mediaFileSystem, publication, 'r');
-    if (!direct?.handle) throw captureUnavailable();
-    await direct.handle.close();
+    // Post-processors and library scans resolve the path in the live namespace.
+    if (publication.fileIdentity) {
+      const direct = await this.#openLocalCapture(this.mediaFileSystem, publication, 'r');
+      if (!direct?.handle) throw captureUnavailable();
+      await direct.handle.close();
+    } else if (publication.mediaBinding && this.retainStorage) {
+      const current = this.retainStorage();
+      try { if (publication.mediaBinding !== current.mediaBinding(publication.path)) throw captureUnavailable(); }
+      finally { await current.close(); }
+    }
   }
 
   async #scanRecording(publication) {
@@ -414,6 +424,12 @@ export class LiveTvDvr {
 
   async #resumePublication(job, publication) {
     const id = key(publication.timer.Id);
+    if (!publication.fileIdentity) {
+      // A restarted process can reacquire only the configured destination.
+      // Keep the spool pending if that identity now points at different bytes.
+      if (publication.mediaBinding && publication.mediaBinding !== job.storage.mediaBinding?.(publication.path)) throw captureUnavailable();
+      publication.storage = job.storage;
+    }
     if (publication.phase === 'capturing') {
       const current = this.#timers.get(id);
       if (current && Date.now() < recordingEnd(current)) {
@@ -451,8 +467,8 @@ export class LiveTvDvr {
         await this.#publishRecording(job, publication, size, signal);
         try {
           const configuration = await this.configuration.getConfiguration();
-          await this.saveAssets?.({ timer, filename: publication.path, seriesPath, configuration, signal, fileSystem: this.fileSystem });
-          await this.#enforceKeepUpTo(timer.SeriesTimerId, seriesPath);
+          await this.saveAssets?.({ timer, filename: publication.path, seriesPath, configuration, signal, fileSystem });
+          await this.#enforceKeepUpTo(timer.SeriesTimerId, seriesPath, job.storage.isCurrent);
         } catch (error) { this.#report(error); }
       }
       if (direct && !size) {
@@ -694,6 +710,7 @@ export class LiveTvDvr {
     this.#lifetime.abort(); clearTimeout(this.#wake);
     return this.#closing = withCleanup(async () => {
       await Promise.allSettled([this.#starting, ...[...this.#jobs.values()].map(job => job.done)]);
+      for (const publication of this.#publications.values()) await publication.storage?.close?.();
     }, [() => this.#bridge.close(), () => this.configuration.release()], 'Live TV recording shutdown failed.');
   }
 }

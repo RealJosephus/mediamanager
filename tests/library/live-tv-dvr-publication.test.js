@@ -415,3 +415,85 @@ for (const stage of ['timers', 'spool enumeration']) {
     assert.deepEqual(await fixture.fileSystem.readFile(fixture.timer.RecordingPath), footage);
   });
 }
+
+for (const restart of [false, true]) {
+  test(`a staged recording stays on its original mount through ${restart ? 'restart' : 'retry'} after a lost upload response`, { timeout: 20000 }, async t => {
+    const captured = Promise.withResolvers(), release = Promise.withResolvers();
+    const fixture = await recordingFixture(t, { beforeClose: release.resolve, stream: async function* () {
+      yield footage;
+      captured.resolve();
+      await release.promise;
+    } });
+    const { root, recordingRoot } = fixture;
+    const first = path.join(root, 'first-storage'), second = path.join(root, 'second-storage');
+    await mkdir(first);
+    await mkdir(path.join(second, 'Remote DVR'), { recursive: true });
+    const filename = path.join(root, 'storage.json');
+    const style = process.platform === 'win32' ? 'windows' : 'posix';
+    const definition = {
+      instances: [{ id: 'app', type: 'local', config: { root, writable: true } },
+        { id: 'dest', type: 'local', config: { root: first, writable: true } }],
+      mounts: [{ path: '/app', instanceId: 'app', capabilities: { create: true, replace: true, mkdir: true, rename: true, delete: true } },
+        { path: '/dest', instanceId: 'dest', capabilities: { create: true, mkdir: true } }],
+      prefixes: [{ identityRoot: root, accessRoot: '/app', style, returnAccess: 'Isolated DVR fixture' },
+        { identityRoot: recordingRoot, accessRoot: '/dest', style, returnAccess: 'Isolated DVR fixture' }],
+    };
+    await writeFile(filename, JSON.stringify(definition));
+    const storage = await openStorageFixture(t, filename);
+    storage.fileSystem.spoolRoot = path.join(root, 'spool');
+    const settings = { fileSystem: storage.fileSystem, mediaFileSystem: storage.mediaFileSystem, retainStorage: storage.retainGeneration };
+    const scanned = Promise.withResolvers();
+    const start = async retryMs => {
+      const run = fixture.newDvr(retryMs);
+      const scan = run.dvr.queueLibraryScan;
+      run.dvr.queueLibraryScan = () => { scan(); scanned.resolve(); };
+      Object.assign(run.dvr, settings);
+      await run.dvr.start();
+      return run;
+    };
+    let run;
+    try {
+      run = await start(restart ? 60000 : 100);
+      await captured.promise;
+      const original = storage.retainGeneration();
+      try {
+        const media = original.mediaFileSystem, write = media.writeFile.bind(media);
+        t.mock.method(media, 'writeFile', async (...args) => {
+          await write(...args);
+          throw new Error('Lost recording upload response');
+        }, { times: 1 });
+      } finally { original.close(); }
+      const next = storage.configuration();
+      next.instances.find(entry => entry.id === 'dest').config.root = second;
+      await storage.configure(next);
+      release.resolve();
+      await run.attempted;
+      assert.equal(fixture.timer.Status, 'InProgress');
+      if (restart) {
+        await run.dvr.close();
+        run = await start(100);
+        await run.attempted;
+        assert.equal(fixture.timer.Status, 'InProgress');
+        await storage.configure(definition);
+      }
+      await run.completed;
+      if (restart) assert.ok(fixture.failures.some(error => error.code === 'recording-unavailable'));
+      const firstFiles = await readdir(path.join(first, 'Remote DVR'));
+      const secondFiles = await readdir(path.join(second, 'Remote DVR'));
+      assert.deepEqual(secondFiles, [], 'Earlier recordings must not write bytes to the newly selected backend.');
+      assert.equal(fixture.timer.Status, 'Completed');
+      assert.deepEqual(firstFiles, [path.basename(fixture.timer.RecordingPath)]);
+      assert.deepEqual(await readFile(path.join(first, 'Remote DVR', firstFiles[0])), footage);
+      assert.equal(fixture.tuned, 1);
+      if (!restart) {
+        assert.deepEqual(fixture.scans, []);
+        assert.equal((await readdir(fixture.publicationRoot)).length, 1);
+        await storage.configure(definition);
+      }
+      await scanned.promise;
+      await run.dvr.close();
+      assert.deepEqual(fixture.scans, [fixture.timer.RecordingPath]);
+      assert.deepEqual(await readdir(fixture.publicationRoot), []);
+    } finally { release.resolve(); await run?.dvr.close(); }
+  });
+}
