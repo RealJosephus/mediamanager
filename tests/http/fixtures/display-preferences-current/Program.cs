@@ -61,12 +61,13 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions { Environme
 builder.Logging.ClearProviders(); builder.WebHost.UseUrls("http://127.0.0.1:0");
 builder.Services.AddSingleton(capture); builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton(capture.Users); builder.Services.AddSingleton(capture.Network);
-builder.Services.AddSingleton(Stub.Make<IServerConfigurationManager>((m, a) => m.Name is "get_Configuration" or "get_CommonConfiguration" ? new ServerConfiguration() : Stub.Default(m.ReturnType)));
+var serverConfiguration = new ServerConfiguration();
+builder.Services.AddSingleton(Stub.Make<IServerConfigurationManager>((m, a) => m.Name is "get_Configuration" or "get_CommonConfiguration" ? serverConfiguration : Stub.Default(m.ReturnType)));
 builder.Services.AddSingleton<IDisplayPreferencesManager>(capture.Manager);
 builder.Services.AddSingleton<IAuthorizationHandler, DefaultAuthorizationHandler>();
 builder.Services.AddAuthentication("fixture").AddScheme<AuthenticationSchemeOptions, FixtureAuthentication>("fixture", _ => { });
 builder.Services.AddAuthorization(options => options.DefaultPolicy = new AuthorizationPolicyBuilder("fixture").AddRequirements(new DefaultAuthorizationRequirement()).Build());
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyDisplayController()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), serverConfiguration).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyDisplayController()));
 var app = builder.Build();
 var results = new List<object>(); using var client = new HttpClient();
 try {

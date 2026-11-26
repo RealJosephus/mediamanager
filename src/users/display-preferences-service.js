@@ -12,7 +12,6 @@ export const displayPreferenceEnums = Object.freeze({
     'Playlists', 'Programs', 'Recordings', 'Schedule', 'Series', 'Shows', 'Songs', 'Suggestions', 'Trailers', 'Upcoming', 'Authors', 'Books',
     'Folders', 'Mixed', 'Photos', 'PhotoAlbums', 'SeriesTimers', 'Studios', 'Videos']
 });
-const emptyGuid = nativeGuid('00000000000000000000000000000000');
 const sectionDefaults = [1, 4, 5, 9, 8, 7, 6, 0];
 const booleanWhitespace = new RegExp(`^[${clrWhitespace}\\u0000]+|[${clrWhitespace}\\u0000]+$`, 'gu');
 const parseEnum = (value, type) => tryParseClrInt32Enum(value, displayPreferenceEnums[type], { ignoreCase: true });
@@ -73,42 +72,51 @@ export class DisplayPreferencesService {
     return pending;
   }
 
-  async #display(database, where) {
-    const current = (await database.rows('DisplayPreferences', { where, limit: 1 }))[0];
+  async #display(where, find) {
+    const current = await find();
     if (current) return current;
-    return this.#createDisplay(where);
-  }
-
-  #createDisplay(where) {
-    return this.store.transaction(database => database.insert('DisplayPreferences', {
-      ...where, ShowSidebar: false, ShowBackdrop: true, ScrollDirection: 0, IndexBy: null,
-      SkipForwardLength: 30000, SkipBackwardLength: 10000, ChromecastVersion: 0,
-      EnableNextVideoInfoOverlay: false, DashboardTheme: null, TvHome: null
-    }));
+    try {
+      return await this.store.transaction(database => database.insert('DisplayPreferences', {
+        ...where, ShowSidebar: false, ShowBackdrop: true, ScrollDirection: 0, IndexBy: null,
+        SkipForwardLength: 30000, SkipBackwardLength: 10000, ChromecastVersion: 0,
+        EnableNextVideoInfoOverlay: false, DashboardTheme: null, TvHome: null
+      }));
+    } catch (error) {
+      if (error?.code === '23505' && error.constraint === 'IX_DisplayPreferences_UserId_ItemId_Client') {
+        // The failed transaction has rolled back. Read the winner in a fresh snapshot.
+        const stored = await find();
+        if (stored) return stored;
+      }
+      throw error;
+    }
   }
 
   async #item(database, where) {
-    const current = (await database.rows('ItemDisplayPreferences', { where, limit: 1 }))[0];
+    const find = async connection => (await connection.rows('ItemDisplayPreferences', { where, limit: 1 }))[0];
+    const current = await find(database);
     if (current) return current;
-    // The native manager persists an empty ItemId until a POST saves this entity.
-    return this.store.transaction(database => database.insert('ItemDisplayPreferences', {
-      ...where, ItemId: emptyGuid, ViewType: 0, RememberIndexing: false, IndexBy: null,
-      RememberSorting: false, SortBy: 'SortName', SortOrder: 0
-    }));
+    // ItemDisplayPreferences has no unique scope index. Recheck under the store's writer lock.
+    return this.store.transaction(async database => {
+      const stored = await find(database);
+      if (stored) return stored;
+      return database.insert('ItemDisplayPreferences', {
+        ...where, ViewType: 0, RememberIndexing: false, IndexBy: null,
+        RememberSorting: false, SortBy: 'SortName', SortOrder: 0
+      });
+    });
   }
 
   get(displayPreferencesId, userId, client) {
     const where = { UserId: nativeGuid(userId), ItemId: itemIdentity(displayPreferencesId), Client: client };
     return this.#run(async database => {
       const custom = new Map();
-      let display = await database.transaction(async database => {
+      const display = await this.#display(where, () => database.transaction(async database => {
         const current = (await database.rows('DisplayPreferences', { where, limit: 1 }))[0];
         if (current) for await (const section of pages(database, 'HomeSection', { DisplayPreferencesId: current.Id })) {
           custom.set('homesection' + section.Order, lowerInvariant(enumText(section.Type, 'HomeSectionType')));
         }
         return current;
-      }, { readOnly: true, isolation: 'repeatable-read' });
-      display ??= await this.#createDisplay(where);
+      }, { readOnly: true, isolation: 'repeatable-read' }));
       const item = await this.#item(database, where);
       custom.set('chromecastVersion', lowerInvariant(enumText(display.ChromecastVersion, 'ChromecastVersion')));
       custom.set('skipForwardLength', String(display.SkipForwardLength));
@@ -156,7 +164,7 @@ export class DisplayPreferencesService {
   update(displayPreferencesId, userId, client, input) {
     const where = { UserId: nativeGuid(userId), ItemId: itemIdentity(displayPreferencesId), Client: client };
     return this.#run(async database => {
-      const display = await this.#display(database, where);
+      const display = await this.#display(where, async () => (await database.rows('DisplayPreferences', { where, limit: 1 }))[0]);
       display.IndexBy = parseEnum(input.IndexBy, 'IndexingKind');
       if (display.IndexBy != null) display.IndexBy = enumNumber(display.IndexBy, 'IndexingKind');
       display.ShowBackdrop = input.ShowBackdrop; display.ShowSidebar = input.ShowSidebar;
@@ -202,9 +210,8 @@ export class DisplayPreferencesService {
       const item = await this.#item(database, where);
       Object.assign(item, { SortBy: input.SortBy ?? 'SortName', SortOrder: enumNumber(input.SortOrder, 'SortOrder'),
         RememberIndexing: input.RememberIndexing, RememberSorting: input.RememberSorting, ItemId: where.ItemId });
-      // ExecuteDelete commits before SaveChanges inserts the replacement dictionary.
-      await this.store.transaction(database => database.deleteWhere('CustomItemDisplayPreferences', where));
       await this.store.transaction(async database => {
+        await database.deleteWhere('CustomItemDisplayPreferences', where);
         for (const [Key, Value] of custom) await database.insert('CustomItemDisplayPreferences', { ...where, Key, Value });
       });
       await this.store.transaction(database => database.update('ItemDisplayPreferences', { Id: item.Id }, item));
