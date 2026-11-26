@@ -27,8 +27,8 @@ function qualified(database, name) {
   return `${q(database.schemaName)}.${q(name)}`;
 }
 
-async function itemIds(database, text, values) {
-  const result = await queryPostgresLibraryStatement(database, { text, values });
+async function itemIds(database, text, values, signal) {
+  const result = await queryPostgresLibraryStatement(database, { text, values, ...(signal && { signal }) });
   return result.rows.map(row => row.Id == null ? null : decodeNativeTextBytes(row.Id)).filter(nonemptyId);
 }
 
@@ -53,7 +53,7 @@ function safeNonnegativeInteger(value, description) {
   return number;
 }
 
-export async function loadPostgresRowsByIds(database, ids) {
+export async function loadPostgresRowsByIds(database, ids, { signal } = {}) {
   const unique = [...new Map(ids.filter(nonemptyId).map(id => [idKey(id), id])).values()];
   if (!unique.length) return [];
   // Preserve stored Guid TEXT, including hexadecimal case and N/D formatting.
@@ -68,6 +68,7 @@ export async function loadPostgresRowsByIds(database, ids) {
       WHERE replace(${nativeTextSql(database.schemaName).guidLower("\"Id\"")}, '-', '') = ANY($1::text[])
       ORDER BY "Id" ASC`,
     values: [lookup],
+    ...(signal && { signal }),
   });
   const rows = [];
   for (const row of result.rows) {
@@ -140,7 +141,7 @@ export async function queryPostgresPlaylistLibraryRoots(database) {
  * type and per-path result bounds before rows cross the database boundary. */
 async function queryPostgresRowsByPaths(database, paths, {
   itemTypes = [],
-  maxOwnersPerPath = 2,
+  maxOwnersPerPath = 2, signal,
 } = {}) {
   const keys = [...new Map(paths.map(nativeTextPathKey).filter(value => value !== null)
     .map(value => [value.toString('hex'), value])).values()];
@@ -164,7 +165,7 @@ async function queryPostgresRowsByPaths(database, paths, {
       FROM matched
       WHERE $3::integer IS NULL OR collision_rank <= $3
       ORDER BY "Path" ASC, "Id" ASC`,
-    values: [keys, itemTypes, maxOwnersPerPath],
+    values: [keys, itemTypes, maxOwnersPerPath], ...(signal && { signal }),
   });
   return result.rows.map(row => Object.fromEntries(Object.entries(row).map(([key, value]) => {
     const column = tableDefinition('BaseItems').columns.find(column => column.name === key);
@@ -196,13 +197,14 @@ export async function countPostgresNullVideoTypeRows(database, ids) {
   return count;
 }
 
-async function loadPostgresDiscoveryRowsByIds(database, ids) {
+async function loadPostgresDiscoveryRowsByIds(database, ids, { signal } = {}) {
   const lookup = [...new Set(ids.filter(nonemptyId).map(idKey))];
   if (!lookup.length) return [];
   const result = await database.client.query({
     text: `SELECT * FROM ${qualified(database, 'BaseItems')}
       WHERE replace(${nativeTextSql(database.schemaName).guidLower("\"Id\"")}, '-', '') = ANY($1::text[])`,
     values: [lookup],
+    ...(signal && { signal }),
   });
   return result.rows.map(row => Object.fromEntries(Object.entries(row).map(([key, value]) => {
     const column = tableDefinition('BaseItems').columns.find(column => column.name === key);
@@ -367,7 +369,7 @@ export async function queryPostgresIdentitySelectorIds(database, ids) {
  * Media rows are intentionally excluded; they are selected by the page query.
  */
 export async function loadPostgresNavigationRows(database, parentId, {
-  deferBaseItemHydration = false,
+  deferBaseItemHydration = false, signal,
 } = {}) {
   const baseItems = qualified(database, 'BaseItems');
   const loadRows = deferBaseItemHydration ? loadPostgresDiscoveryRowsByIds : loadPostgresRowsByIds;
@@ -385,10 +387,10 @@ export async function loadPostgresNavigationRows(database, parentId, {
      SELECT child."Id" FROM roots root
      JOIN ${baseItems} child ON ${sql.guidKey('child."ParentId"')} = ${sql.guidKey('root."Id"')}
      WHERE root."Type" = 'UserRootFolder' OR ${leafType('child')} = 'Folder'`,
-    [NAVIGATION_TYPES]);
+    [NAVIGATION_TYPES], signal);
   if (nonemptyId(parentId)) ids.push(parentId);
 
-  const rows = new Map((await loadRows(database, ids)).map(row => [idKey(row.Id), row]));
+  const rows = new Map((await loadRows(database, ids, { signal })).map(row => [idKey(row.Id), row]));
   // CollectionFolder can bind a physical root by persisted location even when
   // PhysicalFolderIds is empty or stale. Resolve only those SQL-matched paths;
   // returning every Folder row would turn this navigation read into a library
@@ -405,9 +407,9 @@ export async function loadPostgresNavigationRows(database, parentId, {
   if (physicalLocations.length) {
     const locationIds = (await queryPostgresRowsByPaths(database, physicalLocations, {
       itemTypes: ['Folder'],
-      maxOwnersPerPath: null,
+      maxOwnersPerPath: null, signal,
     })).map(row => row.Id);
-    for (const row of await loadRows(database, locationIds)) rows.set(idKey(row.Id), row);
+    for (const row of await loadRows(database, locationIds, { signal })) rows.set(idKey(row.Id), row);
   }
   // Display parents, persisted parents and physical library roots form a finite
   // graph rooted in the navigation entities. Resolve it to a fixed point without
@@ -422,7 +424,7 @@ export async function loadPostgresNavigationRows(database, parentId, {
       }
     }
     if (!references.length) break;
-    const added = await loadRows(database, references);
+    const added = await loadRows(database, references, { signal });
     if (!added.length) break;
     for (const row of added) rows.set(idKey(row.Id), row);
   }
@@ -438,7 +440,7 @@ export async function loadPostgresNavigationRows(database, parentId, {
 export async function loadPostgresPageGraph(database, pageRows, navigationRows = [], {
   includeManualLinks = false,
   includeOwnedItems = false,
-  deferBaseItemHydration = false,
+  deferBaseItemHydration = false, signal,
 } = {}) {
   const loadRows = deferBaseItemHydration ? loadPostgresDiscoveryRowsByIds : loadPostgresRowsByIds;
   const rows = new Map([...navigationRows, ...pageRows].map(row => [idKey(row.Id), row]));
@@ -514,25 +516,25 @@ export async function loadPostgresPageGraph(database, pageRows, navigationRows =
         ) edge
       )
       SELECT DISTINCT "Id" FROM graph`,
-    values: [seeds, includeManualLinks === true, includeOwnedItems === true],
+    values: [seeds, includeManualLinks === true, includeOwnedItems === true], ...(signal && { signal }),
   }));
   const missingIds = result.rows.map(row => row.Id == null ? null : decodeNativeTextBytes(row.Id))
     .filter(nonemptyId).filter(id => !rows.has(idKey(id)));
-  for (const row of await loadRows(database, missingIds)) rows.set(idKey(row.Id), row);
+  for (const row of await loadRows(database, missingIds, { signal })) rows.set(idKey(row.Id), row);
 
   return [...rows.values()];
 }
 
 /** Discover a bounded item/navigation relationship graph, then hydrate it once. */
 export async function loadPostgresItemGraph(database, ids, {
-  includeManualLinks = false,
+  includeManualLinks = false, signal,
 } = {}) {
-  const requestedRows = await loadPostgresDiscoveryRowsByIds(database, ids);
+  const requestedRows = await loadPostgresDiscoveryRowsByIds(database, ids, { signal });
   const navigationRows = await loadPostgresNavigationRows(database, undefined,
-    { deferBaseItemHydration: true });
+    { deferBaseItemHydration: true, signal });
   const graphRows = await loadPostgresPageGraph(database, requestedRows, navigationRows,
-    { includeManualLinks, deferBaseItemHydration: true });
-  return loadPostgresRowsByIds(database, graphRows.map(row => row.Id));
+    { includeManualLinks, deferBaseItemHydration: true, signal });
+  return loadPostgresRowsByIds(database, graphRows.map(row => row.Id), { signal });
 }
 
 /**
@@ -664,7 +666,7 @@ export async function loadPostgresMetadataRows(database, referenceId, {
  * folded before ownership/version filtering, matching DTO aggregation without
  * materialising every descendant in the application process.
  */
-export async function queryPostgresFolderStats(database, folderIds, userId) {
+export async function queryPostgresFolderStats(database, folderIds, userId, { signal } = {}) {
   const ids = [...new Set(folderIds.filter(nonemptyId).map(idKey))];
   if (!ids.length || !nonemptyId(userId)) return new Map();
   const baseItems = qualified(database, 'BaseItems');
@@ -732,7 +734,7 @@ export async function queryPostgresFolderStats(database, folderIds, userId) {
       count(leaf_state."Id") FILTER (WHERE leaf_state."Played")::bigint AS "PlayedItemCount"
     FROM requested LEFT JOIN leaf_state ON ${nativeTextSql(database.schemaName).guidLower("leaf_state.\"FolderId\"")} = ${nativeTextSql(database.schemaName).guidLower("requested.\"Id\"")}
     GROUP BY requested."Id"`,
-    values: [ids, idKey(userId)],
+    values: [ids, idKey(userId)], ...(signal && { signal }),
   }));
   return new Map(result.rows.map(row => {
     const total = safeNonnegativeInteger(row.RecursiveItemCount, 'folder recursive-item count');

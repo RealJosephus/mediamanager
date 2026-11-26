@@ -2,11 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { getNewItemId } from '../../src/core/identity.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { dateText, dateTicks, idKey } from '../../src/library/records.js';
 import { declareNativeHttpTestFile } from '../helpers/native-http-test-file.js';
-import { currentUserViewScenario, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
+import { currentUserViewScenario, scenarioUserViewId, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
 import { createFixtureIdentityProjector, projectItemDataIdentities } from '../helpers/fixture-identity-projection.js';
 import { projectItemBody } from '../helpers/http-body-projection.js';
 import { recordItemFilterCandidate, validateFixture } from './item-filter-http-scenario.js';
@@ -110,8 +109,7 @@ test('Years and CollectionFolder Items HTTP match Native sources, full DTOs, win
         const data = JSON.parse(row.Data ?? '{}');
         if (!data.UserId) continue;
         assert.equal(idKey(data.UserId), idKey(fixture.userId));
-        const id = getNewItemId(`38_namedview_${idKey(user.Id)}${data.ViewType}`,
-          'MediaBrowser.Controller.Entities.UserView', { programDataPath: 'Z:\\OracleUserViews' });
+        const id = scenarioUserViewId(user.Id, data);
         fixtureToNode.set(idKey(row.Id), id); nodeToFixture.set(idKey(id), row.Id);
       }
       const identities = new Map([[idKey(fixture.userId), user.Id], ...fixtureToNode]);

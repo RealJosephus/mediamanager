@@ -240,8 +240,8 @@ test('the actual production CLI retains its selected target across HTTP restarts
     const until = async (label, operation, accept) => {
       const deadline = Date.now() + 45000; let last;
       for (;;) {
-        if (childResult) throw new Error('The real CLI exited before ' + label + '.', { cause: { ...childResult, stderr } });
         try { last = await operation(); if (accept(last)) return last; } catch (error) { last = error; }
+        if (childResult) throw new Error('The real CLI exited before ' + label + '.', { cause: { ...childResult, stderr } });
         if (Date.now() >= deadline) throw new Error('The real CLI did not reach ' + label + '.', { cause: last });
         await delay(50, undefined, { signal: t.signal });
       }
@@ -291,12 +291,37 @@ test('the actual production CLI retains its selected target across HTTP restarts
     await verifyRetained('after denied lifecycle requests');
     await publishProductionTarget(targetFile, nextTarget, { environment });
     assert.deepEqual(await readProductionTarget(targetFile), nextTarget);
+    async function whileQueriesBlocked(lifecycle) {
+      const lock = new pg.Client({ connectionString: isolatedConnectionString });
+      await lock.connect();
+      const requests = [];
+      try {
+        await lock.query('BEGIN');
+        await lock.query('LOCK TABLE ' + quoteIdentifier(database.schemaName) + '."BaseItems" IN ACCESS EXCLUSIVE MODE');
+        for (const route of ['/Years', '/Items/Suggestions']) {
+          requests.push(fetch(origin + route, { headers: { 'X-Emby-Token': token }, signal: t.signal })
+            .then(async response => { await response.text(); return response.status; }, () => null));
+        }
+        const waiting = async () => (await database.client.query(`SELECT pid FROM pg_stat_activity WHERE
+          $1 = ANY(pg_blocking_pids(pid)) AND query LIKE '%navigation-root-ids%'`, [lock.processID])).rows;
+        await until('both library queries blocked in PostgreSQL', waiting, rows => rows.length === 2);
+        const response = await lifecycle();
+        await until('both SQL queries cancelled while the lock is held', waiting, rows => rows.length === 0);
+        const statuses = await Promise.all(requests);
+        assert.ok(statuses.every(status => status == null || status >= 400), JSON.stringify(statuses));
+        return response;
+      } finally {
+        await lock.end();
+        await Promise.allSettled(requests);
+      }
+    }
     for (const [label, accessToken, remote] of [['LAN regular restart', regularToken, '10.44.0.3'],
       ['remote elevated restart', token, '203.0.113.10'], ['loopback anonymous restart', null, undefined]]) {
       const before = await resources(); assert.ok(before.schemas.length > 0); assert.ok(before.connections.length > 0);
       socket = new WebSocket(origin + '/socket?api_key=' + token); await once(socket, 'open', { signal: t.signal });
       const socketClosed = once(socket, 'close', { signal: t.signal });
-      const accepted = await call('/System/Restart', { method: 'POST', accessToken, remote });
+      const restart = () => call('/System/Restart', { method: 'POST', accessToken, remote });
+      const accepted = label === 'LAN regular restart' ? await whileQueriesBlocked(restart) : await restart();
       assert.equal(accepted.status, 204); assert.equal(accepted.text, ''); assert.equal(accepted.contentType, null);
       const closedSocket = await Promise.race([socketClosed, delay(30000, undefined, { signal: t.signal, ref: false }).then(() => {
         throw new Error('The actual old WebSocket did not close after the lifecycle response.');
@@ -314,7 +339,7 @@ test('the actual production CLI retains its selected target across HTTP restarts
       await verifyRetained(label);
     }
     const beforeShutdown = await resources();
-    const shutdown = await call('/System/Shutdown', { method: 'POST', remote: '203.0.113.10' });
+    const shutdown = await whileQueriesBlocked(() => call('/System/Shutdown', { method: 'POST', remote: '203.0.113.10' }));
     assert.equal(shutdown.status, 204); assert.equal(shutdown.text, ''); assert.equal(shutdown.contentType, null);
     const exited = await Promise.race([childClosed, delay(30000, undefined, { signal: t.signal, ref: false }).then(() => {
       throw new Error('The actual CLI did not exit after the completed shutdown response.');

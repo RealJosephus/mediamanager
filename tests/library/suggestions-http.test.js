@@ -2,11 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { getNewItemId } from '../../src/core/identity.js';
 import { idKey } from '../../src/library/records.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { declareNativeHttpTestFile } from '../helpers/native-http-test-file.js';
-import { currentUserViewScenario, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
+import { currentUserViewScenario, scenarioUserViewId, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
 import { recordItemFilterCandidate, validateFixture } from './item-filter-http-scenario.js';
 import { projectSingleSourceName } from '../helpers/single-source-name-projection.js';
 import { projectItemBody } from '../helpers/http-body-projection.js';
@@ -32,7 +31,7 @@ test('Suggestions HTTP match Native membership, permissions, complete DTOs, coun
   const nativeResponse = (name, endpoint = 'items') => http.records.find(record => record.name === name && record.endpoint === endpoint).response;
   const nativeAll = nativeResponse('global regular all').bodyJson.Items;
   const fixtureItem = key => fixture.items.find(item => item.key === key);
-  const nativePath = key => nativeAll.find(item => idKey(item.Id) === idKey(fixtureItem(key).id)).Path;
+  const nativePath = key => nativeRows.find(item => idKey(item.Id) === idKey(fixtureItem(key).id)).Path;
   const nativeDataRoot = path.dirname(nativePath('aggregate')), nativeLibraryRoot = path.dirname(nativePath('physicalA'));
   let nodeDataRoot;
   const actual = await recordItemFilterCandidate({ dialect: 'postgres', fixture,
@@ -52,8 +51,7 @@ test('Suggestions HTTP match Native membership, permissions, complete DTOs, coun
         const data = JSON.parse(row.Data ?? '{}');
         if (!data.UserId) continue;
         assert.equal(idKey(data.UserId), idKey(fixture.userId));
-        const id = getNewItemId(`38_namedview_${idKey(user.Id)}${data.ViewType}`,
-          'MediaBrowser.Controller.Entities.UserView', { programDataPath: 'Z:\\OracleUserViews' });
+        const id = scenarioUserViewId(user.Id, data);
         fixtureToNode.set(idKey(row.Id), id);
         nodeToFixture.set(idKey(id), row.Id);
       }
@@ -139,7 +137,9 @@ test('Suggestions HTTP match Native membership, permissions, complete DTOs, coun
     } catch (error) { difference.push({ name: testCase.name, endpoint, message: error.message }); }
   }
   const returnedIds = name => nativeResponse(name).bodyJson.Items.map(item => item.Id);
-  const movies = returnedIds('global movies'), scoped = returnedIds('explicit movies');
+  const movies = nativeResponse('global API all').bodyJson.Items.filter(item => item.Type === 'Movie').map(item => item.Id);
+  const scoped = returnedIds('explicit movies');
+  assert.deepEqual(returnedIds('global movies').sort(), [...scoped].sort());
   for (const key of ['movie-a', 'movie-duplicate', 'movie-b', 'movie-orphan', 'movie-extra']) assert.ok(movies.includes(idKey(fixtureItem(key).id)));
   for (const key of ['movie-virtual', 'movie-alternate', 'movie-owned']) assert.ok(!movies.includes(idKey(fixtureItem(key).id)));
   assert.ok(scoped.includes(idKey(fixtureItem('movie-a').id)));
@@ -148,8 +148,10 @@ test('Suggestions HTTP match Native membership, permissions, complete DTOs, coun
   assert.equal(full.Overview, fixtureItem('movie-a').overview); assert.equal(full.UserData.IsFavorite, true);
   assert.equal(full.UserData.PlayCount, 4); assert.equal(full.RunTimeTicks, 900000001);
   assert.ok(Object.hasOwn(full, 'Path')); assert.ok(Object.hasOwn(full, 'Etag')); assert.ok(Object.hasOwn(full, 'MediaSources'));
-  for (const name of ['global API all', 'zero regular all', 'missing user API all']) assert.deepEqual(
+  for (const name of ['zero regular all', 'explicit user all']) assert.deepEqual(
     sortItems(normalize(nativeResponse(name).bodyJson.Items, nativeDataRoot)), sortItems(normalize(nativeAll, nativeDataRoot)));
+  assert.deepEqual(sortItems(normalize(nativeResponse('missing user API all').bodyJson.Items, nativeDataRoot)),
+    sortItems(normalize(nativeResponse('global API all').bodyJson.Items, nativeDataRoot)));
   assert.deepEqual(actual.beforeReads, actual.afterReads); assert.deepEqual(actual.afterReads, actual.afterShutdown);
   assert.deepEqual(actual.userDataBeforeReads, actual.userDataAfterReads); assert.deepEqual(actual.filesystemBeforeReads, actual.filesystemAfterReads);
   assert.deepEqual(actual.filesystemAfterReads, actual.filesystemAfterShutdown);

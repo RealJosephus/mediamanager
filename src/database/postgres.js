@@ -4,7 +4,8 @@ import { nativeTextFunctionStatements, nativeTextFunctionsSha256, assertNativeTe
 import pg from 'pg';
 import { createHash } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { operationFailure } from '../core/operation-failure.js';
+import { addAbortListener } from 'node:events';
+import { operationFailure, withCleanup } from '../core/operation-failure.js';
 import { setTimeout as delay } from 'node:timers/promises';
 import { nativeModel, postgresStorageModel, quoteIdentifier as q, tableDefinition, columnDefinition, createTableSql, createIndexSql, dependencyOrder } from './model.js';
 import { parseNativeEnvelope, serializeNativeEnvelope } from './native-envelope.js';
@@ -117,6 +118,47 @@ const libraryStatementDefinitions = new WeakMap();
 const admittedLibraryQueries = new WeakMap();
 const libraryStatementLimit = 128;
 const libraryStatementByteLimit = 64 * 1024;
+
+async function dispatchCancellableQuery(client, args, signal, session, options) {
+  signal.throwIfAborted();
+  let pending = true, cancellation, cancellationFailure;
+  const listener = addAbortListener(signal, () => {
+    // Use a separate connection even if the operation pool is full. Leave the
+    // owner checked out until the cancellation and statement have both ended.
+    const control = new pg.Client({ ...options, connectionTimeoutMillis: options.connectionTimeoutMillis || 10_000,
+      query_timeout: 10_000 });
+    let transportError;
+    control.on('error', error => { transportError ??= error; });
+    cancellation = withCleanup(async () => {
+      await control.connect();
+      if (!pending) return;
+      const { rows } = await control.query('SELECT pg_catalog.pg_cancel_backend($1) AS cancelled', [client.processID]);
+      if (!rows[0]?.cancelled && pending) throw new Error('PostgreSQL did not signal the cancelled query.');
+    }, [() => control.end()], 'PostgreSQL query cancellation cleanup failed.').then(() => {
+      if (transportError) throw transportError;
+    }).catch(async error => {
+      cancellationFailure = error;
+      if (pending) {
+        session.discardConnection(error);
+        try { await client.end(); }
+        catch (disconnectError) { cancellationFailure = operationFailure([error, disconnectError], 'PostgreSQL query disconnect failed.'); }
+      }
+    });
+  });
+  try {
+    const result = await client.query(...args);
+    signal.throwIfAborted();
+    return result;
+  } catch (error) {
+    if (error?.code === '57014') signal.throwIfAborted();
+    throw error;
+  } finally {
+    pending = false;
+    listener[Symbol.dispose]();
+    if (cancellation) await cancellation;
+    if (cancellationFailure) throw operationFailure([signal.reason, cancellationFailure], 'PostgreSQL query cancellation failed.');
+  }
+}
 
 /** Reuse definitions of stable, schema-qualified library queries. The facade
  * and its hooks receive the original object; only the final physical dispatch
@@ -263,6 +305,7 @@ export class PostgresDatabase {
   #childPool;
   #createChildPool;
   #backgroundPools = new Map();
+  #queryTails = new WeakMap();
 
   constructor(pool, schema, { client, root, createChildPool = options => new pg.Pool(options) } = {}) {
     this.pool = pool;
@@ -412,8 +455,27 @@ export class PostgresDatabase {
   dispatchOperationQuery(client, ...args) {
     const root = this.root;
     const hook = root.queryHook;
-    if (!hook || root.queryHookContext.getStore()) return dispatchLibraryStatement(root, client, args);
+    if (!hook || root.queryHookContext.getStore()) return root.#dispatchPhysicalQuery(client, args);
     return root.queryHookContext.run(true, () => hook.call(root.client, ...args));
+  }
+
+  #dispatchPhysicalQuery(client, args) {
+    const previous = this.#queryTails.get(client), signal = args.length === 1 && args[0]?.signal;
+    const session = this.operationContext.getStore();
+    const execute = () => {
+      if (session?.client.discardedError) return Promise.reject(session.client.discardedError);
+      return signal ? dispatchCancellableQuery(client, args, signal, session, this.#poolOptions())
+        : dispatchLibraryStatement(this, client, args);
+    };
+    // The driver can queue ordinary queries on a session. Keep them behind a
+    // cancellable statement until its backend signal can no longer reach them.
+    const barrier = Boolean(signal || previous?.barrier);
+    const result = previous && barrier ? previous.result.then(execute, execute) : execute();
+    const current = { barrier, result: Promise.resolve(result) };
+    this.#queryTails.set(client, current);
+    const clear = () => { if (this.#queryTails.get(client) === current) this.#queryTails.delete(client); };
+    void current.result.then(clear, clear);
+    return result;
   }
 
   async configureConnection(client) {
@@ -1024,8 +1086,9 @@ export class PostgresDatabase {
             locking = false;
           }
           const result = await callback(this);
+          if (readOnly) signal?.throwIfAborted();
           committing = true;
-          const { command } = await this.client.query('COMMIT');
+          const { command } = await this.client.query(readOnly && signal ? { text: 'COMMIT', signal } : 'COMMIT');
           began = false;
           if (command === 'ROLLBACK') {
             committing = false;

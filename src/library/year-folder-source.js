@@ -17,7 +17,7 @@ const folder = item => item && nativeItemDescriptor(item.NativeType).family === 
 /** Read actual Folder Children/links before Years evaluates visibility. This
  * deliberately uses the native child owners rather than an Items repository
  * query; CollectionFolder, album tracks and BoxSet links have distinct sources. */
-export function createYearFolderSource({ library, database, state, user, virtualChildren }) {
+export function createYearFolderSource({ library, database, state, user, virtualChildren, signal }) {
   const linkedChildren = library.options.linkedChildren, manager = library.itemCreation;
   const metadata = createMetadataChildren({ store: library.store, library, linkedChildren,
     configuration: library.options.configuration, libraryOptions: library.options.libraryOptions });
@@ -69,7 +69,7 @@ export function createYearFolderSource({ library, database, state, user, virtual
       const target = owner ?? child;
       if (NAME_TYPES.has(child.Type) || child.Type === 'Year') return true;
       const graph = await library.load(database, user, { includeUserData: false,
-        baseRows: await loadPostgresItemGraph(database, [child.Id, target.Id]) });
+        baseRows: await loadPostgresItemGraph(database, [child.Id, target.Id], { signal }) });
       let failed = false, primary;
       try {
         library.adoptLiveItem(graph, child); library.adoptLiveItem(graph, target);

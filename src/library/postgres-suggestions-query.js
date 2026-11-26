@@ -56,7 +56,7 @@ export async function createPostgresSuggestionsQuery(database, input = {}, { use
         FROM (${plan.text}) candidate JOIN ${q(database.schemaName)}."BaseItems" item ON item."Id"=candidate."Id"
         WHERE candidate."Id" IS NOT NULL`, values: [...plan.values, nativeItemTypes.map(nativeTextBytes)], signal,
     }));
-    await database.client.query(`CREATE UNIQUE INDEX ON ${source}(ordinal)`);
+    await database.client.query({ text: `CREATE UNIQUE INDEX ON ${source}(ordinal)`, signal });
     const skip = Math.max(0, startIndex), take = limit == null || limit < 0 ? null : limit;
     const summary = (await database.client.query({ text: `/* suggestions-count */
       SELECT count(*) AS total, count(*) FILTER (WHERE resolvable AND ordinal>$1 AND ($2::bigint IS NULL OR ordinal<=$1+$2)) AS selected

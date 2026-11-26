@@ -8,7 +8,7 @@ import { createPostgresSuggestionsQuery, suggestionFailure } from './postgres-su
 export async function querySuggestions(library, database, input, {
   user, signal, visibilityFor, topParentIdsFor, filterItems, prefetchDtos,
 }) {
-  const navigationRows = await loadPostgresNavigationRows(database);
+  const navigationRows = await loadPostgresNavigationRows(database, undefined, { signal });
   const navigation = await library.load(database, user, { includeUserData: false, baseRows: navigationRows });
   let visibility;
   if (user) {
@@ -27,13 +27,16 @@ export async function querySuggestions(library, database, input, {
       if (!ids.length) break;
       let state, pageFailed = false, pageReason;
       try {
-        const rows = await loadPostgresRowsByIds(database, ids);
-        state = await library.load(database, user, { baseRows: await loadPostgresPageGraph(database, rows, navigationRows) });
+        const rows = await loadPostgresRowsByIds(database, ids, { signal });
+        state = await library.load(database, user, { baseRows: await loadPostgresPageGraph(database, rows, navigationRows, { signal }) });
         const items = ids.map(id => state.byId.get(idKey(id))).filter(Boolean);
         const accessible = await filterItems(items, state);
-        state.folderStats = await queryPostgresFolderStats(database, accessible.filter(item => item.IsFolder).map(item => item.Id), user?.Id);
+        state.folderStats = await queryPostgresFolderStats(database, accessible.filter(item => item.IsFolder).map(item => item.Id), user?.Id, { signal });
         await prefetchDtos(accessible, state, options);
-        for (const item of accessible) Items.push(await projectItem(item, state, user, options, library.options));
+        for (const item of accessible) {
+          signal?.throwIfAborted();
+          Items.push(await projectItem(item, state, user, options, library.options));
+        }
       } catch (reason) { pageFailed = true; pageReason = reason; throw reason; }
       finally {
         try { await state?.dispose({ session: database }); }

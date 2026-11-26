@@ -16,7 +16,7 @@ const field = (value, name) => value[name];
 export function createWebSocketServer(options) {
   const { authentication, sessions, activities, tasks, userData, users, library, refreshes, localization, configuration = {}, baseUrl = '', onError = () => {}, runBackground = operation => operation(), clock = () => Date.now() } = options;
   const getNetworkConfiguration = options.getNetworkConfiguration ?? (() => ({ BaseUrl: baseUrl }));
-  const wss = new WebSocketServer({ noServer: true, perMessageDeflate: false, maxPayload: 0 });
+  const wss = new WebSocketServer({ noServer: true, perMessageDeflate: false, maxPayload: 64 * 1024 });
   const connections = new Set();
   const transports = new Set();
   const connecting = new Set();

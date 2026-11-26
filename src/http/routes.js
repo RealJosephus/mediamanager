@@ -86,19 +86,18 @@ export function registerDomainRoutes(add, services) {
     if (!user && (required || id && !/^0{32}$/.test(id))) throw new HttpResult(404);
     return user;
   }
-  function optionalRequestUserId(context) {
-    let id = guid(context, 'userId', context.auth.UserId);
+  function optionalRequestUserId(context, id = guid(context, 'userId', context.auth.UserId)) {
     if (/^0{32}$/.test(id ?? '')) id = context.auth.UserId;
     if (id && id !== context.auth.UserId && !context.auth.IsAdministrator) throw httpError(403, 'Forbidden');
     return id;
   }
-  async function optionalRequestUser(context) {
-    const id = optionalRequestUserId(context);
+  async function optionalRequestUser(context, requestedId) {
+    const id = optionalRequestUserId(context, requestedId);
     return id && !/^0{32}$/.test(id) ? await users.getUser(id) : null;
   }
   registerYearRoutes(add, services, { optionalRequestUserId, sortNames: itemSortNames });
   registerTrailerRoutes(add);
-  registerSuggestionsRoutes(add, services);
+  registerSuggestionsRoutes(add, services, { optionalRequestUser });
   const controllerDtoOptions = (context, { userData = true } = {}) => {
     const enableImageTypes = commaEnums(context, 'enableImageTypes', itemImageTypes).map(String);
     const requestedFields = commaEnums(context, 'fields', controllerItemFields).filter(value => typeof value === 'string');
@@ -228,7 +227,7 @@ export function registerDomainRoutes(add, services) {
     try {
       const result = await library.queryItems(itemQuery(context), {
         user: await requestUser(context, { required: false, currentEmbyUser: true }), isApiKey: context.auth.IsApiKey,
-        embyClient: context.embyClient,
+        embyClient: context.embyClient, signal: context.signal,
       });
       if (context.embyClient) {
         delete result.StartIndex;
@@ -242,7 +241,7 @@ export function registerDomainRoutes(add, services) {
       if (error.status === 401 && error.message.includes(' is not permitted to access Library ')) return new HttpResult(401, error.message);
       throw error;
     }
-  });
+  }, { abortOnDisconnect: true });
   add('GET', '/LiveTv/Info', () => liveTv.getInfo(), { policy: 'LiveTvAccess' });
   add('GET', '/LiveTv/GuideInfo', () => liveTv.getGuideInfo(), { policy: 'LiveTvAccess' });
   add('GET', '/LiveTv/Programs/Recommended', async context => {

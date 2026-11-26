@@ -1323,8 +1323,8 @@ export class LibraryService extends EventEmitter {
     return selected;
   }
 
-  async queryItems(input = {}, { user = null, isApiKey = false, fromUserViewChildren = false, embyClient = false } = {}) {
-    return this.#queryItems(input, { user, isApiKey, fromUserViewChildren, embyClient }, true);
+  async queryItems(input = {}, { user = null, isApiKey = false, fromUserViewChildren = false, embyClient = false, signal } = {}) {
+    return this.#queryItems(input, { user, isApiKey, fromUserViewChildren, embyClient, signal }, true);
   }
 
   async queryRecommendedPrograms(input = {}, { user = null } = {}) {
@@ -1799,7 +1799,7 @@ export class LibraryService extends EventEmitter {
       },
       filterItems: (items, state) => this.#filterPostgresStandalonePage(db, items, user, state),
       prefetchDtos: (items, state, options) => this.#prefetchPostgresDtos(items, state, user, options),
-    }), { channelViews: Boolean(user), channelItems: true });
+    }), { channelViews: Boolean(user), channelItems: true, signal });
   }
 
   queryMovieRecommendations(input, { user, signal } = {}) {
@@ -1972,10 +1972,10 @@ export class LibraryService extends EventEmitter {
 
   queryYears(input = {}, { user = null, hasUser = Boolean(user), signal } = {}) {
     return this.#runWithStates(async db => {
-      let navigationRows = await loadPostgresNavigationRows(db, input.parentId);
+      let navigationRows = await loadPostgresNavigationRows(db, input.parentId, { signal });
       if (nonemptyId(input.parentId)) {
-        const rows = await loadPostgresRowsByIds(db, [input.parentId]);
-        navigationRows = await loadPostgresPageGraph(db, rows, navigationRows);
+        const rows = await loadPostgresRowsByIds(db, [input.parentId], { signal });
+        navigationRows = await loadPostgresPageGraph(db, rows, navigationRows, { signal });
       }
       const state = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
       let parent;
@@ -1998,12 +1998,12 @@ export class LibraryService extends EventEmitter {
         prepareVisibility: (plan, options) => this.#prepareFolderQueryVisibility(db, user, state, plan, options),
         memoryRatingContext: async () => postgresParentalRatingContext(this.options, await this.rootFolderPlan(state)),
         internalPlan: (query, consume) => this.#queryItems(query,
-          { user, fromUserViewChildren: true, checkParentAccess: false }, (_database, plan, owner) => consume(plan, owner)),
+          { user, signal, fromUserViewChildren: true, checkParentAccess: false }, (_database, plan, owner) => consume(plan, owner)),
       });
       const selected = dtoOptions({ ...input, fields: input.fields?.filter(field => field.toLowerCase() !== 'itemcounts') });
       const projectPage = async items => {
         const page = await this.load(db, user, { baseRows: await loadPostgresPageGraph(db,
-          await loadPostgresRowsByIds(db, items.map(item => item.Id)), navigationRows) });
+          await loadPostgresRowsByIds(db, items.map(item => item.Id), { signal }), navigationRows, { signal }) });
         let failed = false, primary;
         try {
           for (const item of items) this.adoptLiveItem(page, item);
@@ -2020,7 +2020,7 @@ export class LibraryService extends EventEmitter {
       const execute = item => queryYears({ library: this, database: db, input, user, hasUser,
         parent: this.adoptLiveItem(state, item), state, virtualChildren, specialChildren, visiblePage, projectPage, signal });
       return this.itemCreation ? this.itemCreation.withItem(parent.Id, item => execute(item ?? parent)) : execute(parent);
-    }, { channelViews: Boolean(user) });
+    }, { channelViews: Boolean(user), signal });
   }
 
   async #yearVisibilityPage(db, user, source, entries, signal) {
@@ -2618,18 +2618,20 @@ export class LibraryService extends EventEmitter {
   }
 
   async #queryItems(input, {
-    user = null, isApiKey = false, fromUserViewChildren = false, playedFolderScope = null, checkParentAccess = true, embyClient = false,
+    user = null, isApiKey = false, fromUserViewChildren = false, playedFolderScope = null, checkParentAccess = true, embyClient = false, signal,
   }, project) {
     const query = resolveOfficialRatingRanges(parseQuery(input, { allowNegativePaging: true, embyClient }), this.options.configuration);
+    const searchSignal = clrTrim(query.searchterm ?? '') ? signal : undefined;
     return this.#runWithStates(db => this.#queryItemsPostgres(db, query,
-      { user, isApiKey, fromUserViewChildren, playedFolderScope, checkParentAccess, project }), { channelViews: Boolean(user), channelItems: project === true && requestsItemField(query, 'CanDelete') });
+      { user, isApiKey, fromUserViewChildren, playedFolderScope, checkParentAccess, project, signal: searchSignal }),
+    { signal: searchSignal, channelViews: Boolean(user), channelItems: project === true && requestsItemField(query, 'CanDelete') });
   }
   async #queryItemsPostgres(db, query, {
-    user, isApiKey, fromUserViewChildren, playedFolderScope, checkParentAccess, project,
+    user, isApiKey, fromUserViewChildren, playedFolderScope, checkParentAccess, project, signal,
   }) {
     let ownedSearchCollation, folderLinks, folderCollections, primaryError, primaryFailed = false;
     try {
-    let navigationRows = await loadPostgresNavigationRows(db, query.parentid);
+    let navigationRows = await loadPostgresNavigationRows(db, query.parentid, { signal });
     const requestedParentRow = nonemptyId(query.parentid)
       ? navigationRows.find(row => sameId(row.Id, query.parentid)) : null;
     if (requestedParentRow) {
@@ -2742,6 +2744,7 @@ export class LibraryService extends EventEmitter {
         // access predicate in SQL, but must still run the view builder here.
         if (user) await this.userViews.views(navigation, user, { includeHidden: true });
         const results = await queryPostgresBuiltInSearch(db, query, {
+          signal,
           userId: user?.Id,
           parentId: searchParentId,
           visibility: baseVisibility,
@@ -2750,7 +2753,7 @@ export class LibraryService extends EventEmitter {
         });
         if (results.size) {
           const resolvedSearchCollation = await resolvePostgresSearchCollation(db,
-            this.options.configuration.UICulture || 'en-US');
+            this.options.configuration.UICulture || 'en-US', { signal });
           ownedSearchCollation = resolvedSearchCollation;
           searchScores = results;
           searchCollation = resolvedSearchCollation;
@@ -2759,11 +2762,13 @@ export class LibraryService extends EventEmitter {
           delete query.searchterm;
         }
       } catch (error) {
+        if (signal?.aborted) throw error;
         // SearchManager observes a failed provider and continues through the
         // ordinary item path when no provider produced a result.
         try { this.onError(error); } catch { /* Error observers do not alter the search result. */ }
       }
     }
+    signal?.throwIfAborted();
     const dispatch = itemsDispatch(query, explicitParent, navigation, user, undefined, { prepared });
     const { parent, isUserRoot, recursive, repository: repositoryQuery } = dispatch;
     if (!query.ids?.length && (isUserRoot || ['UserView', 'BoxSet'].includes(parent?.Type)
@@ -2973,6 +2978,7 @@ export class LibraryService extends EventEmitter {
     const boxSetMemoryOrder = !repositoryQuery && !recursive && !query.ids?.length
       && parent?.Type === 'BoxSet';
     const postgresQueryOptions = {
+      signal,
       scope,
       userId: user?.Id,
       includeOwnedItems: repositoryQuery && (query.ishd !== undefined || query.is4k !== undefined || query.is3d !== undefined
@@ -3065,6 +3071,7 @@ export class LibraryService extends EventEmitter {
     if (options && user?.Policy.AllowedTags?.length) options.fields.add('tags');
     const Items = [];
     const { total, startIndex } = await visitPostgresItemPages(db, pageQuery, postgresQueryOptions, async page => {
+      signal?.throwIfAborted();
       const graphRows = await loadPostgresPageGraph(db, page.rows, navigationRows);
       const state = await this.load(db, user, { baseRows: graphRows });
       await withCleanup(async () => {
@@ -3083,7 +3090,10 @@ export class LibraryService extends EventEmitter {
           ? await this.#filterPostgresStandalonePage(db, items, user, state, { skipRelatedNameCheck: true })
           : items;
         await this.#prefetchPostgresDtos(projectionItems, state, user, options);
-        for (const item of projectionItems) Items.push(await projectItem(item, state, user, options, this.options));
+        for (const item of projectionItems) {
+          signal?.throwIfAborted();
+          Items.push(await projectItem(item, state, user, options, this.options));
+        }
       }, [() => state.dispose({ session: db })], 'Item query page cleanup failed.');
     });
     const totalRecordCount = !project || searchScores ? total : dispatch.pageResult ? Items.length

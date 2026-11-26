@@ -63,7 +63,7 @@ export function createYearSpecialChildren({ library, database, state, user, navi
     signal?.throwIfAborted();
     if (!rows.length) return;
     const page = await library.load(database, user, { includeUserData: false,
-      baseRows: await loadPostgresPageGraph(database, rows, navigationRows) });
+      baseRows: await loadPostgresPageGraph(database, rows, navigationRows, { signal }) });
     let failed = false, primary;
     try { await append(rows.map(row => page.byId.get(idKey(row.Id))).filter(Boolean)); }
     catch (reason) { failed = true; primary = reason; throw reason; }
@@ -78,7 +78,7 @@ export function createYearSpecialChildren({ library, database, state, user, navi
       if (!rows.length) break;
       const selected = rows.filter(row => row.Id != null);
       const ids = selected.filter(row => row.__SlotKey == null).map(row => decodeNativeTextBytes(row.Id));
-      const stored = await loadPostgresRowsByIds(database, ids), byId = new Map(stored.map(row => [idKey(row.Id), row]));
+      const stored = await loadPostgresRowsByIds(database, ids, { signal }), byId = new Map(stored.map(row => [idKey(row.Id), row]));
       if (selected.every(row => row.__SlotKey == null)) await consumeRows(ids.map(id => byId.get(idKey(id))).filter(Boolean), append);
       else for (const row of selected) {
         if (row.__SlotKey != null) {

@@ -38,7 +38,7 @@ export async function withYearTraversal({ library, database, parent, user, hasUs
       });
       return await consume(source);
     }
-    const reader = createYearFolderSource({ library, database, state, user, virtualChildren });
+    const reader = createYearFolderSource({ library, database, state, user, virtualChildren, signal });
     rootSlot = await source.capture(parent);
     await source.enqueue({ path: [0n], slot: rootSlot, id: parent.Id });
     // Userless recursive links are read only after the entire initial physical

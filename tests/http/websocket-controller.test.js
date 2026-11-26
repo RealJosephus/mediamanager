@@ -57,6 +57,27 @@ async function connect(origin) {
   return { socket, received };
 }
 
+test('authenticated control messages accept 64 KiB and close with 1009 one byte over', { timeout: 5000 }, async t => {
+  const server = createServer();
+  const webSockets = createWebSocketServer({
+    authentication: { authenticate: async () => ({ IsAuthenticated: true }) },
+    sessions: new FakeSessions(),
+    localization: { negotiate: () => ({ uiCulture: 'en-US' }), run: (_locale, operation) => operation() }
+  });
+  webSockets.attach(server);
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  t.after(async () => { await webSockets.close(); await new Promise(resolve => server.close(resolve)); });
+  const { socket, received } = await connect(`http://127.0.0.1:${server.address().port}`);
+  const message = '{"MessageType":"KeepAlive"}'.padEnd(64 * 1024, ' ');
+  socket.send(message);
+  await received.next(reply => reply.MessageType === 'KeepAlive');
+  const closed = new Promise(resolve => socket.once('close', resolve));
+  socket.send(message, { fin: false });
+  socket.send(' ', { fin: true });
+  assert.equal(await closed, 1009);
+  assert.equal(received.messages.filter(reply => reply.MessageType === 'KeepAlive').length, 1);
+});
+
 test('one session sends UserDataChanged only to its most recently active open WebSocket', async t => {
   const server = createServer();
   const sessions = new FakeSessions();

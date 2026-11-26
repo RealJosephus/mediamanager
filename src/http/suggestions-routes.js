@@ -1,4 +1,4 @@
-import { BindingError, booleanValue, guidValue, httpError, integerValue, queryValue } from './binding.js';
+import { BindingError, booleanValue, guidValue, integerValue, queryValue } from './binding.js';
 import { enumName, itemKinds, mediaTypes } from '../sessions/binding.js';
 
 function commaEnums(query, name, names) {
@@ -28,16 +28,10 @@ function bind(context) {
   return { userId, input };
 }
 
-/** SuggestionsController deliberately does not substitute the authenticated
- * user when the optional selector is absent or Guid.Empty. */
-export function registerSuggestionsRoutes(add, { library, users }) {
+export function registerSuggestionsRoutes(add, { library }, { optionalRequestUser }) {
   add('GET', ['/Items/Suggestions', '/Users/{userId}/Suggestions'], async context => {
     const { userId, input } = bind(context);
-    let user = null;
-    if (userId && !/^0{32}$/u.test(userId)) {
-      if (userId !== context.auth.UserId && !context.auth.IsAdministrator) throw httpError(403, 'Forbidden');
-      user = await users.getUser(userId);
-    }
-    return library.querySuggestions(input, { user, signal: context.request?.signal });
-  });
+    const user = await optionalRequestUser(context, userId);
+    return library.querySuggestions(input, { user, signal: context.signal });
+  }, { abortOnDisconnect: true });
 }

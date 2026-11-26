@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { getNewItemId } from '../../src/core/identity.js';
+import { nativeUserViewIdentity } from '../../src/library/identity.js';
 import { idKey } from '../../src/library/records.js';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
@@ -11,8 +11,8 @@ import { createFixtureIdentityProjector } from './fixture-identity-projection.js
 export { filterEvidenceJson as userViewEvidenceJson } from '../../tools/compat/filter-reference-output.js';
 
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
-const namedViewId = (user, type) => idKey(getNewItemId(`38_namedview_${idKey(user)}${type}`,
-  'MediaBrowser.Controller.Entities.UserView', { programDataPath: 'Z:\\OracleUserViews' }));
+export const scenarioUserViewId = (user, data) => nativeUserViewIdentity(user, data.DisplayParentId, data.ViewType,
+  { programDataPath: 'Z:\\OracleUserViews' }).Id;
 
 /** Rebind only observed instance identities; Library A and all synthetic media stay literal. */
 export async function currentUserViewScenario(scenario, fixtureBytes, { signal, port = 19000 } = {}) {
@@ -44,8 +44,8 @@ export async function currentUserViewScenario(scenario, fixtureBytes, { signal, 
     const data = JSON.parse(row.Data ?? '{}');
     if (!data.UserId) continue;
     assert.equal(idKey(data.UserId), idKey(user.actualId));
-    assert.equal(idKey(row.Id), namedViewId(user.actualId, data.ViewType));
-    ids.set(idKey(row.Id), namedViewId(user.fixtureId, data.ViewType));
+    assert.equal(idKey(row.Id), idKey(scenarioUserViewId(user.actualId, data)));
+    ids.set(idKey(row.Id), idKey(scenarioUserViewId(user.fixtureId, data)));
   }
   const project = createFixtureIdentityProjector({ identities: ids, viewRows: stages.afterReads.database.baseItems });
   const originalHttp = await load('native-http.json');

@@ -58,14 +58,14 @@ export async function createApplication(services = {}) {
   const localization = services.localization ?? await createCoreLocalization({ serverCulture: services.configuration.UICulture || 'en-US' });
   const data = await loadLocalizationData();
   const routes = [];
-  function add(method, paths, run, { policy = 'Default', public: isPublic = false, body = false, allowForm = false, optionalBody = false, bindBody, bindQuery, bodyParameter, bodyType, bodyDocument = false, constraints = {} } = {}) {
+  function add(method, paths, run, { policy = 'Default', public: isPublic = false, body = false, allowForm = false, optionalBody = false, bindBody, bindQuery, bodyParameter, bodyType, bodyDocument = false, constraints = {}, abortOnDisconnect = false } = {}) {
     for (const path of Array.isArray(paths) ? paths : [paths]) {
       const names = [];
       const expression = path.split(/(\{\w+\})/).map(part => {
         if (/^\{\w+\}$/.test(part)) { names.push(part.slice(1, -1)); return '([^/]+)'; }
         return part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       }).join('');
-      routes.push({ method, path, pattern: new RegExp(`^${expression}/?$`, 'i'), names, run, policy, isPublic, body, allowForm, optionalBody, bindBody, bindQuery, bodyParameter, bodyType, bodyDocument, constraints });
+      routes.push({ method, path, pattern: new RegExp(`^${expression}/?$`, 'i'), names, run, policy, isPublic, body, allowForm, optionalBody, bindBody, bindQuery, bodyParameter, bodyType, bodyDocument, constraints, abortOnDisconnect });
     }
   }
   for (const method of ['GET', 'POST']) add(method, '/System/Ping', () => new HttpResult(200, 'MediaManager', { text: true }), { public: true });
@@ -162,12 +162,14 @@ export async function createApplication(services = {}) {
   const runInContext = services.runWithContext ?? (operation => operation());
   const handler = async (request, response) => {
     let phase = 'admission';
+    let disconnect;
     if (closing) { response.writeHead(503); response.end(); return; }
     activeRequests++;
     const written = Promise.withResolvers();
     const responseComplete = () => {
       response.off('finish', responseComplete);
       response.off('close', responseComplete);
+      if (!response.writableFinished) disconnect?.abort();
       written.resolve();
     };
     if (response.writableFinished || response.destroyed) written.resolve();
@@ -304,7 +306,13 @@ export async function createApplication(services = {}) {
         }
         if (queryError) throw queryError;
         phase = 'action';
-        const result = await route.run({ request, requestInfo, url, query: url.searchParams, queryInput, params, auth, embyPath, embyClient, remoteEndPoint, body, signal: shutdown.signal });
+        let signal = shutdown.signal;
+        if (route.abortOnDisconnect) {
+          disconnect = new AbortController();
+          if (response.destroyed && !response.writableFinished) disconnect.abort();
+          signal = AbortSignal.any([signal, disconnect.signal]);
+        }
+        const result = await route.run({ request, requestInfo, url, query: url.searchParams, queryInput, params, auth, embyPath, embyClient, remoteEndPoint, body, signal });
         if (result instanceof BinaryResult) {
           phase = 'response-stream';
           const abortStream = () => response.destroy();
@@ -316,6 +324,8 @@ export async function createApplication(services = {}) {
         }
         else send(result);
       } catch (error) {
+        if (disconnect?.signal.aborted && error === disconnect.signal.reason) return;
+        if (response.destroyed) { onError(error, { request, phase }); return; }
         if (error instanceof HttpResult) { send(error); return; }
         if (error instanceof BindingError) { send(new HttpResult(400, error.problem())); return; }
         onError(error, { request, phase });

@@ -117,6 +117,7 @@ export async function queryPostgresBuiltInSearch(database, query, {
   nameAccessTypes = [],
   signal,
 } = {}) {
+  signal?.throwIfAborted();
   // ItemsController passes Limit * 3 using Int32 arithmetic.
   const limit = query.limit == null ? 100 : Math.imul(query.limit, 3);
   const plan = buildPostgresSearchProviderPlan(database, query, { userId, parentId, visibility, nameAccessTypes, limit });

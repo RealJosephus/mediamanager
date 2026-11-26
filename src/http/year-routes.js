@@ -41,8 +41,8 @@ export function registerYearRoutes(add, { library, users }, { optionalRequestUse
     const input = bindList(context, sortNames), userId = optionalRequestUserId(context);
     const hasUser = Boolean(userId && !/^0{32}$/u.test(userId));
     const user = hasUser ? await users.getUser(userId) : null;
-    return library.queryYears(input, { user, hasUser, signal: context.request?.signal });
-  });
+    return library.queryYears(input, { user, hasUser, signal: context.signal });
+  }, { abortOnDisconnect: true });
   add('GET', '/Years/{year}', async context => {
     const year = integerValue(context.params.year, 'year');
     const userId = optionalRequestUserId(context);
