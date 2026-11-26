@@ -97,6 +97,7 @@ import { RefreshGuideTaskWorker, refreshGuideTaskId } from './tasks/refresh-guid
 import { KeyframeExtractionTaskWorker } from './tasks/keyframe-extraction-task.js';
 import { AudioNormalizationTaskWorker } from './tasks/audio-normalization-task.js';
 import { ChapterImagesTaskWorker } from './tasks/chapter-images-task.js';
+import { CleanActivityLogTaskWorker, DeleteCacheFilesTaskWorker } from './tasks/maintenance-tasks.js';
 import { ChapterImages } from './library/chapter-images.js';
 import { TrickplayImagesTaskWorker, TrickplayMoveImagesTaskWorker } from './tasks/trickplay-images-task.js';
 import { TrickplayGeneration } from './library/trickplay-generation.js';
@@ -148,7 +149,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const applicationPaths = { programDataPath, dataPath, configurationDirectoryPath, logDirectoryPath,
     defaultMetadataPath: programDataPath ? path.join(programDataPath, 'metadata') : metadataPath,
     metadataPath: clrTrim(configuration.MetadataPath ?? '') ? configuration.MetadataPath : (programDataPath ? path.join(programDataPath, 'metadata') : metadataPath),
-    cachePath: clrTrim(configuration.CachePath ?? '') ? configuration.CachePath : cachePath };
+    cachePath: clrTrim(configuration.CachePath ?? '') ? configuration.CachePath : cachePath,
+    tempPath: programDataPath && path.join(programDataPath, 'cache', 'temp') };
   if (logDirectoryPath) await mkdir(logDirectoryPath, { recursive: true });
   await store.transaction(database => initializeLiveTvState(database, { dataPath, logger }));
   const namedConfiguration = configurationDirectoryPath ? new NamedConfigurationStore({ configurationDirectoryPath, onError,
@@ -419,7 +421,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     registry.register(createPhotoMetadataPlugin({ imageProcessor, logger }));
     registry.register(createPhotoAlbumImagePlugin({ store, fileSystem, vfs, identityMap, metadataIdentityMap,
       get metadataPath() { return applicationPaths.metadataPath; },
-      tempPath: programDataPath && path.join(programDataPath, 'cache', 'temp'), images: metadataImages,
+      tempPath: applicationPaths.tempPath, images: metadataImages,
       get configuration() { return currentConfiguration(); }, expandPath: library.options.expandPath, logger }));
     registry.register(createCollectionFolderImagePlugin({ library, images: metadataImages }));
     registry.register(createChannelDynamicImagePlugin({ channels }));
@@ -529,6 +531,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   if (libraryScanner) rollback.push(() => libraryScanner.close());
   const tasks = new ScheduledTaskManager({ scanner: libraryScanner, localization, onError, programDataPath, configurationDirectoryPath, dataPath });
   rollback.push(() => tasks.close());
+  await tasks.register({ create: options => new CleanActivityLogTaskWorker({ ...options, activities, getConfiguration: currentConfiguration }) });
+  await tasks.register({ create: options => new DeleteCacheFilesTaskWorker({ ...options, applicationPaths, fileSystem,
+    withStorageGeneration: configuredStorage.withGeneration }) });
   if (probe) {
     await tasks.register({ create: options => new KeyframeExtractionTaskWorker({ ...options, playback }) });
     await tasks.register({ create: options => new AudioNormalizationTaskWorker({ ...options, playback, probe }) });

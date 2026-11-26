@@ -1,5 +1,7 @@
 import { EventEmitter } from 'node:events';
 import { nativeDate, nativeGuid, wireGuid } from '../users/native.js';
+import { quoteIdentifier } from '../database/model.js';
+import { nativeTextBytes } from '../database/native-text.js';
 
 const emptyUserId = '00000000000000000000000000000000';
 const userMessages = {
@@ -96,6 +98,12 @@ export class ActivityLogManager extends EventEmitter {
     return this.#record(() => ({ Name: this.localization.format('UserDownloadingItemWithValues', [user.Username, item.Name]),
       Type: 'UserDownloadingContent', UserId: auth.UserId ?? user.Id, ItemId: wireGuid(item.Id),
       ShortOverview: `App: ${auth.Client ?? ''}, Device: ${auth.Device ?? ''}` }));
+  }
+
+  cleanThrough(cutoff) {
+    const value = nativeTextBytes(nativeDate(cutoff));
+    return this.store.runDetached(() => this.store.transaction(database => database.client.query(
+      `DELETE FROM ${quoteIdentifier(database.schemaName)}."ActivityLogs" WHERE "DateCreated" <= $1`, [value])));
   }
 
   close() {

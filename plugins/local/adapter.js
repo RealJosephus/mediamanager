@@ -164,16 +164,18 @@ export class LocalAdapter {
       const target = await this.#target(value), before = await fs.lstat(target, { bigint: true });
       if (!before.isDirectory()) throw new StorageError('not-directory', 'Local object is not a directory.');
       const entries = [];
+      let skipped = false;
       for (const name of await fs.readdir(target)) {
         checkAbort(signal);
         const item = await fs.lstat(path.join(target, name), { bigint: true });
+        if (options.regularEntriesOnly && !item.isFile() && !item.isDirectory()) { skipped = true; continue; }
         if (item.isSymbolicLink()) throw new StorageError('permission-denied', 'Local directory contains a link.', { reason: 'link' });
         if (!item.isFile() && !item.isDirectory()) throw new StorageError('not-supported', 'Local directory contains a special file.');
         entries.push(entry(name, item));
       }
       const after = await fs.lstat(target, { bigint: true });
       if (version(before) !== version(after)) throw new StorageError('version-changed', 'The local directory changed during enumeration.');
-      return { entries, complete: true, nextCursor: null, snapshot: version(after), consistency: 'snapshot', deletionSafe: true };
+      return { entries, complete: true, nextCursor: null, snapshot: version(after), consistency: 'snapshot', deletionSafe: !skipped };
     });
   }
   openRead(value, options = {}) {
