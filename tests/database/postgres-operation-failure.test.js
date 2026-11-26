@@ -11,6 +11,30 @@ const apiKey = name => ({ Name: name, AccessToken: name, DateCreated: '2026-11-1
 const falsy = [['false', false], ['zero', 0], ['empty', ''], ['null', null], ['undefined', undefined]];
 const publicFields = { code: 'OPERATION_FAILURE', status: 409, statusCode: 503 };
 const publicError = () => Object.assign(new Error('Primary operation failure'), publicFields);
+
+test('a swallowed SQL error must not report a committed domain transaction', async t => {
+  const database = await createPostgresTestDatabase(t, 'commit_tag', { max: 1 });
+  const store = new DomainStore(database);
+  await database.client.query('CREATE TABLE commit_tag (id integer PRIMARY KEY)');
+  const insert = db => db.client.query('INSERT INTO commit_tag VALUES (1)');
+  const pid = (await database.client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid;
+  await assert.rejects(store.transaction(async db => {
+    await insert(db);
+    await assert.rejects(insert(db), { code: '23505' });
+    return 'saved';
+  }), /rolled back the transaction/u);
+  assert.deepEqual((await database.client.query('SELECT * FROM commit_tag')).rows, []);
+  assert.equal((await database.client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid, pid);
+
+  assert.equal(await store.transaction(async db => {
+    await insert(db);
+    await db.client.query('SAVEPOINT optional_write');
+    await assert.rejects(insert(db), { code: '23505' });
+    await db.client.query('ROLLBACK TO SAVEPOINT optional_write');
+    return 'saved';
+  }), 'saved');
+  assert.deepEqual((await database.client.query('SELECT * FROM commit_tag')).rows, [{ id: 1 }]);
+});
 const reasonCases = [
   { name: 'public', create: publicError },
   ...['message', 'code', 'status', 'statusCode'].map(property => ({ name: `getter-${property}`, property, create() {

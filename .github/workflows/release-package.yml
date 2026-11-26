@@ -5,9 +5,9 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['tools/release/**', 'tests/release/**', 'package.json', 'package-lock.json', '.github/workflows/release-package.yml']
+    paths: ['tools/release/**', 'tests/release/**', 'tools/ci/release-health.mjs', 'package.json', 'package-lock.json', '.github/workflows/release-package.yml']
   pull_request:
-    paths: ['tools/release/**', 'tests/release/**', 'package.json', 'package-lock.json', '.github/workflows/release-package.yml']
+    paths: ['tools/release/**', 'tests/release/**', 'tools/ci/release-health.mjs', 'package.json', 'package-lock.json', '.github/workflows/release-package.yml']
 
 permissions:
   contents: read
@@ -53,6 +53,22 @@ jobs:
             ConvertTo-Json | Set-Content -LiteralPath .test-output/delivery.json -Encoding utf8
       - name: Install offline and load the relocated runtime closure
         run: node .test-output/relocated/release-package/tools/release/prepare.js .test-output/relocated/release-package/.test-output/install-receipt.json
+      - name: Set up PostgreSQL for the installed server
+        uses: ankane/setup-postgres@b1a598d92f86cb2ed364411898d150d4eac6d5ca
+        with:
+          postgres-version: '17'
+          user: validation
+      - name: Prepare the external media runtime
+        shell: pwsh
+        env:
+          MEDIAMANAGER_VALIDATION_OUTPUT_ROOT: ${{ runner.temp }}/release-smoke-tools
+          MEDIAMANAGER_RELEASE_ASSET_TOKEN: ${{ github.token }}
+        run: ./tools/ci/setup-media.ps1
+      - name: Start the offline-installed server and check database readiness
+        working-directory: .test-output/relocated/release-package
+        env:
+          MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
+        run: node tools/ci/release-health.mjs
       - name: Preserve independently inspectable material receipts
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -63,6 +79,7 @@ jobs:
             .test-output/release-package/release.json
             .test-output/delivery.json
             .test-output/relocated/release-package/.test-output/install-receipt.json
+            .test-output/relocated/release-package/.test-output/health-receipt.json
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 30

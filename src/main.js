@@ -56,7 +56,7 @@ export async function startProductionInstance({ environment = process.env, args 
   if (!instance) throw new Error('MEDIAMANAGER_INSTANCE must point to a Jellyfin-compatible instance configuration directory.');
   const mediaEncoderOptions = readMediaEncoderStartupOptions({ args, environment });
   const networkStartup = readPublishedServerStartupOptions({ args, environment });
-  const settings = await readInstanceConfiguration(instance, { onError });
+  const settings = await readInstanceConfiguration(instance, { onError, requireExistingIdentity: true });
   const database = await PostgresDatabase.open({
     connectionString: environment.MEDIAMANAGER_POSTGRES,
     schema: environment.MEDIAMANAGER_POSTGRES_SCHEMA,

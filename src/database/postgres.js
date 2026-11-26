@@ -1025,8 +1025,13 @@ export class PostgresDatabase {
           }
           const result = await callback(this);
           committing = true;
-          await this.client.query('COMMIT');
+          const { command } = await this.client.query('COMMIT');
           began = false;
+          if (command === 'ROLLBACK') {
+            committing = false;
+            throw new Error('PostgreSQL rolled back the transaction instead of committing it.');
+          }
+          if (command !== 'COMMIT') throw new Error('PostgreSQL returned an unexpected transaction completion tag.');
           return result;
         } catch (error) {
           if (committing) {

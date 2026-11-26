@@ -29,13 +29,25 @@ export class ServerIdentity {
   getValue() { return this.#value ??= this.#load(); }
   async #load() {
     const { fileSystem, filename } = this;
-    try { return decodeServerIdentity(await fileSystem.readFile(filename)); }
-    catch (error) { if (error.code !== 'ENOENT') this.onError(error); }
+    let bytes;
+    try { bytes = await fileSystem.readFile(filename); }
+    catch (error) {
+      if (error.code !== 'ENOENT') {
+        this.onError(error);
+        return randomUUID().replaceAll('-', '');
+      }
+    }
+    if (bytes !== undefined) {
+      try { return decodeServerIdentity(bytes); }
+      catch (error) { this.onError(error); }
+    }
     const value = randomUUID().replaceAll('-', '');
     try {
       await fileSystem.mkdir(path.dirname(filename), { recursive: true });
-      await fileSystem.writeFile(filename, Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from(value)]));
+      await fileSystem.writeFile(filename, Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from(value)]),
+        { flag: bytes === undefined ? 'wx' : 'w' });
     } catch (error) {
+      if (bytes === undefined && error.code === 'EEXIST') return readServerIdentity(path.dirname(filename), { fileSystem });
       this.onError(error);
     }
     return value;

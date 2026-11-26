@@ -222,6 +222,21 @@ export async function createApplication(services = {}) {
           response.end(localization.text('StartupEmbyServerIsLoading'));
           return true;
         };
+        if (/^\/health\/?$/iu.test(applicationPath)) {
+          if (blocked()) { send(new HttpResult(503)); return; }
+          if (startupBlocked()) return;
+          let healthy = false;
+          try {
+            await services.store.run(database => database.client.query('SELECT 1'));
+            healthy = true;
+          } catch (error) { onError(error, { request, phase: 'database-health' }); }
+          response.writeHead(healthy ? 200 : 503, {
+            'Content-Type': 'text/plain', 'Cache-Control': 'no-store, no-cache',
+            'Pragma': 'no-cache', 'Expires': 'Thu, 01 Jan 1970 00:00:00 GMT',
+          });
+          response.end(request.method === 'HEAD' ? undefined : healthy ? 'Healthy' : 'Unhealthy');
+          return;
+        }
         if (/^\/System\/Info(?:\/Public)?\/?$/iu.test(path)) {
           response.appendHeader('Vary', 'Authorization, X-Emby-Authorization, X-Emby-Client, X-Emby-Token, X-MediaBrowser-Token');
         }

@@ -18,14 +18,16 @@ function instanceSettings(root, configuration, networkConfiguration, serverId) {
     serverName: configuration.ServerName || hostname() };
 }
 
-export async function readInstanceConfiguration(directory, { onError = () => {} } = {}) {
+export async function readInstanceConfiguration(directory, { onError = () => {}, requireExistingIdentity = false } = {}) {
   const root = path.resolve(directory), configurationDirectoryPath = path.join(root, 'config');
+  const dataPath = path.join(root, 'data', 'data');
+  const existingIdentity = requireExistingIdentity ? await readServerIdentity(dataPath) : undefined;
   const configuration = await loadConfigurationFile(path.join(configurationDirectoryPath, 'system.xml'), 'server', { onError });
   const named = new NamedConfigurationStore({ configurationDirectoryPath, onError });
   let network;
   try { network = await named.getConfiguration('network'); }
   finally { await named.close(); }
-  const serverId = await new ServerIdentity({ dataPath: path.join(root, 'data', 'data'), onError }).getValue();
+  const serverId = existingIdentity ?? await new ServerIdentity({ dataPath, onError }).getValue();
   return instanceSettings(root, configuration, network, serverId);
 }
 
