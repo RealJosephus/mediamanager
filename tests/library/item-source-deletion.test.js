@@ -27,12 +27,11 @@ test('a prepared source operation keeps its original storage target after reconf
   const finish = prepareItemSourceDeletion({ item: { Path: '/movies/film.mkv' }, accessPath: '/movies/film.mkv',
     vfs: storage.vfs, metadataVfs: storage.metadataVfs, fileLeaf: true });
   await storage.configure(config('replacement'));
-  const result = await Promise.allSettled([finish()]);
-  t.diagnostic(JSON.stringify({ result: result[0].status, adapterCalls: calls }));
-  assert.ok(!calls.some(([label]) => label === 'replacement'), 'A pending operation targeted the replacement backend');
+  await assert.rejects(finish(), { code: 'version-changed' });
+  assert.deepEqual(calls, []);
 });
 
-test('a timeout while checking a required media file must reach the caller', async t => {
+test('a timeout while checking a required media file must reach the caller', async () => {
   const mount = { root: '/' };
   const calls = [];
   const vfs = {
@@ -41,8 +40,43 @@ test('a timeout while checking a required media file must reach the caller', asy
     async delete() { calls.push('delete'); }
   };
   const finish = prepareItemSourceDeletion({ item: { Path: '/movies/film.mkv' }, accessPath: '/movies/film.mkv', vfs, fileLeaf: true });
-  const [result] = await Promise.allSettled([finish()]);
-  t.diagnostic(JSON.stringify({ result: result.status, calls }));
-  assert.equal(result.status, 'rejected');
-  assert.equal(result.reason.code, 'timeout');
+  await assert.rejects(finish(), { code: 'timeout' });
+  assert.deepEqual(calls, ['stat']);
+});
+
+for (const sidecar of [false, true]) {
+  test(`a mount switch during stat cannot redirect a ${sidecar ? 'sidecar' : 'recursive directory'} deletion`, async () => {
+    const mount = { root: '/' }, deleted = [];
+    let adapter = {};
+    const vfs = {
+      resolve: path => ({ adapter, mount, path, capabilities: { delete: true } }),
+      list: async () => ({ entries: [{ kind: 'file', name: 'film.srt' }] }),
+      async stat(path) {
+        if (path === (sidecar ? '/movies/film.srt' : '/movies/film')) adapter = {};
+        return { kind: path.endsWith('.mkv') || path.endsWith('.srt') ? 'file' : 'directory' };
+      },
+      delete: async path => { deleted.push(path); },
+    };
+    const accessPath = '/movies/film' + (sidecar ? '.mkv' : '');
+    const finish = prepareItemSourceDeletion({ item: { Path: accessPath }, vfs, accessPath, mixed: sidecar, fileLeaf: sidecar });
+    await assert.rejects(finish(), { code: 'version-changed' });
+    assert.deepEqual(deleted, sidecar ? [accessPath] : []);
+  });
+}
+
+test('a missing source and an unavailable optional subtitle still allow the other sidecars to be deleted', async () => {
+  const mount = { root: '/' }, deleted = [];
+  const vfs = {
+    resolve: path => ({ mount, path, capabilities: { delete: true } }),
+    list: async () => ({ entries: ['film.srt', 'film.nfo'].map(name => ({ kind: 'file', name })) }),
+    async stat(path) {
+      if (path.endsWith('.mkv')) throw new StorageError('not-found', 'Missing media');
+      if (path.endsWith('.srt')) throw new StorageError('timeout', 'Unavailable subtitle');
+      return { kind: path === '/movies' ? 'directory' : 'file' };
+    },
+    delete: async path => { deleted.push(path); },
+  };
+  const accessPath = '/movies/film.mkv';
+  await prepareItemSourceDeletion({ item: { Path: accessPath }, accessPath, vfs, mixed: true, fileLeaf: true })();
+  assert.deepEqual(deleted, ['/movies/film.nfo']);
 });

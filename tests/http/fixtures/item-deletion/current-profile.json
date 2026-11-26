@@ -15,10 +15,16 @@
       "sha256": "6e427257f60d21c9ea54e7b136358a9449e2e9dea96320ce39f7673015e82235"
     },
     {
+      "role": "oracleControls",
+      "filename": "CurrentApiRegistration.cs",
+      "bytes": 573,
+      "sha256": "d37d0f1b1db883058b2914da8256a5f885e7cedc4c286280f1dbc79f8fb890cb"
+    },
+    {
       "role": "oracleProject",
-      "filename": "Oracle.csproj",
-      "bytes": 526,
-      "sha256": "e21b6718889dadbf4dbb13a4a07c09a5b2fc53b18bb5a8419ad1afac5ff957f1"
+      "filename": "CurrentOracle.csproj",
+      "bytes": 613,
+      "sha256": "5159f60f71903ef82e402f92a849e8c26a92551c17f386249d3dcd912c607889"
     },
     {
       "role": "buildProperties",

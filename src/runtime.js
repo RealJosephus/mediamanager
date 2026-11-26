@@ -482,7 +482,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
     linkedChildReferences, metadataScanner, scheduler: libraryTaskScheduler, onError }) : undefined;
   library.folderValidation = folderValidation;
   const itemDeletion = itemCreation ? new ItemDeletionService({ store, library, loadContext, itemCreation,
-    updates: metadataUpdates, externalData, linkedChildReferences, vfs, metadataVfs, channelManager: channels, logger }) : undefined;
+    updates: metadataUpdates, externalData, linkedChildReferences, vfs, metadataVfs, withStorageGeneration: configuredStorage.withGeneration,
+    channelManager: channels, logger }) : undefined;
   library.itemDeletion = itemDeletion;
   const unsafeItemDeletion = itemCreation ? new UnsafeItemDeletionService({ store, library, itemCreation,
     externalData, vfs, identityMap, metadataIdentityMap, logger }) : undefined;

@@ -1,4 +1,5 @@
 import * as fs from 'node:fs/promises';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from './storage/index.js';
@@ -93,6 +94,8 @@ export async function createConfiguredStorage(filename, { environment = process.
   if (!plugins) throw new TypeError('Configured storage requires a plugin host.');
   filename ??= path.join(plugins.directory,'storage.json');
   let configuration, current, closing, closed = false, initializing = true, tail = Promise.resolve();
+  const operations = new AsyncLocalStorage();
+  const activeOwner = () => operations.getStore()?.owner ?? current;
   const extensions = new Map(), listeners = new Set(), beforeListeners = new Set(), retiring = new Set();
   const readerShutdown = new AbortController(), readers = new Set();
   const notify = async () => { for (const listener of listeners) await listener(); };
@@ -166,17 +169,26 @@ export async function createConfiguredStorage(filename, { environment = process.
       } catch (error) { await report(error); }
       return;
     }
-    // Recordings retain both file systems through publication.
-    trackRetirement(Promise.all([...owner.users, ...owner.reads]).then(() => closeStorage(owner)));
+    // Admitted operations retain both file systems until their last side effect.
+    trackRetirement((async () => {
+      while (owner.users.size || owner.reads.size) await Promise.all([...owner.users, ...owner.reads]);
+      await closeStorage(owner);
+    })());
   };
   const retain = pending => {
     const released = Promise.withResolvers();
     pending.add(released.promise);
     return () => { pending.delete(released.promise); released.resolve(); };
   };
+  async function withGeneration(operation) {
+    if (closed) throw Object.assign(new Error('Storage is closed.'), { status: 503 });
+    const owner = activeOwner(), scope = { owner }, release = retain(owner.users);
+    try { return await operations.run(scope, operation); }
+    finally { scope.owner = null; release(); }
+  }
   const retainGeneration = () => {
     if (closed) throw Object.assign(new Error('Storage is closed.'), { status: 503 });
-    const owner = current, { fileSystem, mediaFileSystem } = owner;
+    const owner = activeOwner(), { fileSystem, mediaFileSystem } = owner;
     return { fileSystem, mediaFileSystem, isCurrent: () => current === owner,
       mediaBinding(filename) {
         const { mount, path: backendPath } = mediaFileSystem.resolve(filename);
@@ -212,7 +224,8 @@ export async function createConfiguredStorage(filename, { environment = process.
   };
   const enqueue = operation => {
     if (closed) return Promise.reject(Object.assign(new Error('Storage is closed.'),{status:503}));
-    const promise = tail.then(operation); tail = promise.catch(()=>{}); return promise;
+    // Configuration and its listeners always operate on the live generation.
+    const promise = tail.then(() => operations.exit(operation)); tail = promise.catch(()=>{}); return promise;
   };
   try {
     try {
@@ -255,29 +268,29 @@ export async function createConfiguredStorage(filename, { environment = process.
       };
     });
     await change(configuration); initializing = false;
-    const vfs = dynamic(() => current.vfs, {
-      openRead: (filename, options) => openPinnedRead(current, 'openRead', filename, options),
-      openResponse: (filename, options) => openPinnedRead(current, 'openResponse', filename, options),
+    const vfs = dynamic(() => activeOwner().vfs, {
+      openRead: (filename, options) => openPinnedRead(activeOwner(), 'openRead', filename, options),
+      openResponse: (filename, options) => openPinnedRead(activeOwner(), 'openResponse', filename, options),
     });
-    const identityMap = dynamic(()=>current.identityMap), ignoreIdentityMap = dynamic(()=>current.ignoreIdentityMap);
-    const metadataIdentityMap=dynamic(()=>current.metadataIdentityMap);
-    const fileSystem = dynamic(()=>current.fileSystem);
-    const mediaFileSystem = dynamic(()=>current.mediaFileSystem);
-    const metadataPath = access => {
+    const identityMap = dynamic(()=>activeOwner().identityMap), ignoreIdentityMap = dynamic(()=>activeOwner().ignoreIdentityMap);
+    const metadataIdentityMap=dynamic(()=>activeOwner().metadataIdentityMap);
+    const fileSystem = dynamic(()=>activeOwner().fileSystem);
+    const mediaFileSystem = dynamic(()=>activeOwner().mediaFileSystem);
+    const metadataPath = (owner, access) => {
       let identity;
-      try { identity=current.identityMap.identityFor(access); }
+      try { identity=owner.identityMap.identityFor(access); }
       catch (error) { if (error.code==='not-found') return access; throw error; }
-      return current.metadataIdentityMap.resolve(identity);
+      return owner.metadataIdentityMap.resolve(identity);
     };
     const metadataVfs=new Proxy({}, {get(_target,key){
-      const value=current.vfs[key];if(typeof value!=='function')return value;
+      const vfs = activeOwner().vfs, value=vfs[key];if(typeof value!=='function')return value;
       if (key === 'openRead' || key === 'openResponse')
-        return (filename, options) => openPinnedRead(current, key, metadataPath(filename), options);
-      if(!['resolve','resolveFileHandle','capabilities','stat','list','write','mkdir','delete','rename'].includes(key))return value.bind(current.vfs);
-      return (...args)=>{args[0]=metadataPath(args[0]);if(key==='rename')args[1]=metadataPath(args[1]);return current.vfs[key](...args);};
+        return (filename, options) => { const owner = activeOwner(); return openPinnedRead(owner, key, metadataPath(owner, filename), options); };
+      if(!['resolve','resolveFileHandle','capabilities','stat','list','write','mkdir','delete','rename'].includes(key))return value.bind(vfs);
+      return (...args)=>{const owner=activeOwner();args[0]=metadataPath(owner,args[0]);if(key==='rename')args[1]=metadataPath(owner,args[1]);return owner.vfs[key](...args);};
     }});
     const unsubscribe=plugins.subscribe(()=>enqueue(notify));
-    return { vfs,identityMap,metadataVfs,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,retainGeneration,
+    return { vfs,identityMap,metadataVfs,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,retainGeneration,withGeneration,
       get portableMountContract() { return current.portableMountContract; },
       configuration:()=>clone(configuration), types:()=>[...extensions.keys()],
       status:()=>configuration.instances.map(instance=>({id:instance.id,type:instance.type,

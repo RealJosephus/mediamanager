@@ -71,13 +71,13 @@ function directoryDiscLayout(item) {
  * persistence service independently expands its ParentId/OwnerId closure. */
 export class ItemDeletionService {
   constructor({ store, library, loadContext, itemCreation, updates, externalData, linkedChildReferences,
-    vfs, metadataVfs = vfs, channelManager, logger = {}, now = () => new Date().toISOString() }) {
+    vfs, metadataVfs = vfs, withStorageGeneration = operation => operation(), channelManager, logger = {}, now = () => new Date().toISOString() }) {
     if (!store || !library || !itemCreation || !updates || !externalData || typeof loadContext !== 'function'
       || !linkedChildReferences || typeof linkedChildReferences.reroute !== 'function') {
       throw new TypeError('Item deletion requires mapped persistence, metadata and live entities.');
     }
     Object.assign(this, { store, library, loadContext, itemCreation, updates, externalData,
-      linkedChildReferences, vfs, metadataVfs, channelManager, logger, now });
+      linkedChildReferences, vfs, metadataVfs, withStorageGeneration, channelManager, logger, now });
   }
 
   async #context(item, { allowDirectoryDisc = false, cleanupOnly = false, relatedVersion = false,
@@ -269,7 +269,7 @@ export class ItemDeletionService {
     const ownChannels = !channelAccess && (item?.SourceType === 'Channel' && options.DeleteFromExternalProvider !== false || consumesVersions)
       ? this.channelManager?.admitOperation() : undefined;
     let task;
-    try { task = this.#deleteItem(item, options, parent, notifyParentItem, true, undefined, channelAccess ?? ownChannels); }
+    try { task = this.withStorageGeneration(() => this.#deleteItem(item, options, parent, notifyParentItem, true, undefined, channelAccess ?? ownChannels)); }
     catch (error) { task = Promise.reject(error); }
     return Promise.resolve(task).finally(() => ownChannels?.release());
   }

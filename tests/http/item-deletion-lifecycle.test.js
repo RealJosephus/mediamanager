@@ -14,6 +14,12 @@ import { guid, sameId } from '../../src/library/records.js';
 import { WebDavAdapter } from '../../plugins/webdav/adapter.js';
 import { startActualWebDav } from '../storage/helpers/actual-webdav.js';
 
+import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { createConfiguredStorage } from '../../src/storage-bootstrap.js';
+import { LocalAdapter } from '../../plugins/local/adapter.js';
+import { StorageError } from '../../src/storage/errors.js';
+
 const id = index => `ad100000-0000-0000-0000-${String(index).padStart(12, '0')}`;
 const enabled = { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES };
 const user = { Id: id(9), Policy: { EnableContentDeletion: true, EnableAllFolders: true, IsAdministrator: false,
@@ -169,4 +175,74 @@ test('postgres: generic batch deletion uses actual WebDAV and preserves the seco
   try { const chunks = []; for await (const chunk of handle.stream) chunks.push(chunk); assert.equal(Buffer.concat(chunks).toString(), 'second'); }
   finally { await handle.close(); }
   assert.equal(value.fixture.database.inTransaction, false);
+});
+
+function afterInternalCleanup(owner, hook) {
+  const external = owner.externalData, original = external.deleteInternalItemFiles.bind(external);
+  let done = false;
+  external.deleteInternalItemFiles = async (...args) => {
+    const result = await original(...args);
+    if (!done) { done = true; await hook(); }
+    return result;
+  };
+}
+
+test('the HTTP delete preserves a library row when the required source status times out', enabled, async t => {
+  const value = await setup(t), adapter = value.fixture.adapter;
+  const stat = adapter.stat.bind(adapter);
+  let armed = false, timedOut = false;
+  afterInternalCleanup(value.fixture.library.itemDeletion, () => { armed = true; });
+  adapter.stat = async (name, options) => {
+    if (armed && !timedOut && name === '/media/first.flac') {
+      timedOut = true;
+      throw new StorageError('timeout', 'Test media temporarily unavailable');
+    }
+    return stat(name, options);
+  };
+  const response = await value.request(2);
+  const [state] = await value.state();
+  assert.equal(timedOut, true);
+  assert.equal(response.status, 500);
+  assert.deepEqual(state, { ...untouched, internal: false });
+  assert.deepEqual(value.events, []);
+});
+
+test('an HTTP delete in flight only removes the approved file when a path is assigned to a new local mount', enabled, async t => {
+  const value = await setup(t), directory = await mkdtemp(path.join(tmpdir(), 'item-deletion-mounts-'));
+  const identityRoot = 'Z:\\GenericDelete';
+  const sourceFile = (generation, area) => path.join(directory, generation, area, 'media', 'first.flac');
+  const areas = ['library', 'metadata'];
+  for (const generation of ['original', 'replacement']) for (const area of areas) {
+    const file = sourceFile(generation, area);
+    await mkdir(path.dirname(file), { recursive: true });
+    await writeFile(file, generation);
+  }
+  const plugin = { type: 'local', create: config => LocalAdapter.open(config) };
+  const plugins = { directory, entries: () => [], bind: async (_kind, add) => add(plugin), subscribe: () => () => {} };
+  const storage = await createConfiguredStorage(path.join(directory, 'storage.json'), { plugins });
+  t.after(async () => { await storage.close(); await rm(directory, { recursive: true, force: true }); });
+  const config = generation => ({
+    instances: areas.map(id => ({ id, type: 'local', config: { root: path.join(directory, generation, id), writable: true } })),
+    mounts: [{ path: '/item-delete', instanceId: 'library', capabilities: { delete: true } },
+      { path: '/artwork', instanceId: 'metadata', capabilities: { delete: true } }],
+    prefixes: [{ identityRoot, accessRoot: '/item-delete/media', style: 'windows', returnAccess: 'Library fixture' },
+      { identityRoot, accessRoot: '/artwork/media', purpose: 'metadata', style: 'windows', returnAccess: 'Metadata fixture' }],
+  });
+  await storage.configure(config('original'));
+  const service = value.fixture.library.itemDeletion;
+  service.vfs = storage.vfs;
+  service.metadataVfs = storage.metadataVfs;
+  service.withStorageGeneration = storage.withGeneration;
+  let observed;
+  storage.subscribe(async () => { observed = await storage.mediaFileSystem.readFile(identityRoot + '\\first.flac', 'utf8'); });
+  afterInternalCleanup(service, () => storage.configure(config('replacement')));
+  const response = await value.request(2);
+  assert.equal(observed, 'replacement');
+  assert.equal(response.status, 204);
+  for (const area of areas) {
+    await assert.rejects(readFile(sourceFile('original', area)), { code: 'ENOENT' });
+    assert.equal(await readFile(sourceFile('replacement', area), 'utf8'), 'replacement');
+  }
+  assert.equal((await value.fixture.database.rows('BaseItems', { where: { Id: id(2) } })).length, 0);
+  assert.deepEqual(value.events, [{ id: guid(id(2)), parentId: guid(id(1)) }]);
 });

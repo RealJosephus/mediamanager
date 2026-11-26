@@ -15,6 +15,8 @@ function optionalFileError(error) {
   return ['io', 'not-found', 'permission-denied', 'unavailable', 'timeout', 'ENOENT', 'EIO', 'EACCES', 'EPERM'].includes(error.code);
 }
 
+const missingFile = error => error.code === 'not-found' || error.code === 'ENOENT';
+
 /** Preflight the authoritative mount before cleanup. Mixed-folder enumeration
  * stays at GetDeletePaths' native boundary, after internal metadata cleanup
  * and before the required file. Direct file entries share the parent mount;
@@ -27,27 +29,40 @@ export function prepareItemSourceDeletion({ item, accessPath, vfs, metadataVfs, 
     throw new StorageError('permission-denied', 'A media mount root cannot be deleted as an item source.');
   }
   let removeMetadata;
-  if(metadataVfs && metadataVfs!==vfs){
-    const metadata=metadataVfs.resolve(accessPath);
-    if(metadata.adapter!==source.adapter || metadata.path!==source.path)removeMetadata=prepareItemSourceDeletion({item,accessPath,vfs:metadataVfs,fileLeaf,mixed,actualSourceKind});
+  if (metadataVfs && metadataVfs !== vfs) {
+    const metadata = metadataVfs.resolve(accessPath);
+    if (metadata.adapter !== source.adapter || metadata.path !== source.path) {
+      removeMetadata = prepareItemSourceDeletion({ item, accessPath, vfs: metadataVfs, fileLeaf, mixed, actualSourceKind });
+    }
   }
   const directory = path.posix.dirname(accessPath);
+  const parent = mixed && vfs.resolve(directory);
   if (mixed) {
-    const parent = vfs.resolve(directory);
     requireCapability(parent, 'delete');
     if (parent.mount !== source.mount) {
       throw new StorageError('permission-denied', 'Mixed-folder files require the authoritative parent mount.');
     }
   }
 
+  // A configured VFS can switch generations at any await. Its operations
+  // resolve synchronously on entry, so check the original binding at dispatch.
+  function confirmBinding(target, backendPath) {
+    const resolved = vfs.resolve(target);
+    if (resolved.mount !== source.mount || resolved.adapter !== source.adapter || resolved.path !== backendPath) {
+      throw new StorageError('version-changed', 'The storage binding changed before source deletion.');
+    }
+  }
+
   return async () => {
     // BaseItem.GetDeletePaths selects its own Path's actual file-system kind.
     // A Book may resolve to an extension-named directory while IsFolder=false.
-    const targets = [{ path: accessPath, required: true, kind: actualSourceKind ? 'actual' : fileLeaf ? 'file' : 'directory' }];
+    const targets = [{ path: accessPath, backendPath: source.path, required: true, kind: actualSourceKind ? 'actual' : fileLeaf ? 'file' : 'directory' }];
     if (mixed) {
       let info;
+      confirmBinding(directory, parent.path);
       try { info = await vfs.stat(directory); } catch (error) { if (!optionalFileError(error)) throw error; }
       if (info?.kind === 'directory') {
+        confirmBinding(directory, parent.path);
         const listing = await vfs.list(directory);
         const filename = nativeFileNameWithoutExtension(item.Path);
         for (const entry of listing.entries) {
@@ -56,18 +71,19 @@ export function prepareItemSourceDeletion({ item, accessPath, vfs, metadataVfs, 
           if (dot < 0 || !localMetadataExtensions.has(ordinalIgnoreCaseKey(entry.name.slice(dot)))) continue;
           const stem = nativeFileNameWithoutExtension(entry.name);
           if (!ordinalIgnoreCaseEquals(stem.slice(0, filename.length), filename)) continue;
-          const target = path.posix.join(directory, entry.name), resolved = vfs.resolve(target);
-          requireCapability(resolved, 'delete');
-          if (resolved.mount !== source.mount || resolved.path === resolved.mount.root) {
-            throw new StorageError('version-changed', 'The sidecar mount changed before source deletion.');
-          }
-          targets.push({ path: target, required: false, kind: 'file' });
+          const target = path.posix.join(directory, entry.name), backendPath = path.posix.join(parent.path, entry.name);
+          confirmBinding(target, backendPath);
+          targets.push({ path: target, backendPath, required: false, kind: 'file' });
         }
       }
     }
     for (const target of targets) {
       let info;
-      try { info = await vfs.stat(target.path); } catch (error) { if (!optionalFileError(error)) throw error; continue; }
+      confirmBinding(target.path, target.backendPath);
+      try { info = await vfs.stat(target.path); } catch (error) {
+        if (missingFile(error) || !target.required && optionalFileError(error)) continue;
+        throw error;
+      }
       const kind = target.kind === 'actual' ? info.kind : target.kind;
       if (info.kind !== kind) {
         if (target.required && kind === 'file' && info.kind === 'directory') {
@@ -75,9 +91,10 @@ export function prepareItemSourceDeletion({ item, accessPath, vfs, metadataVfs, 
         }
         continue;
       }
+      confirmBinding(target.path, target.backendPath);
       try { await vfs.delete(target.path, { recursive: kind === 'directory' }); }
       catch (error) {
-        if (error.code === 'not-found' || !target.required && optionalFileError(error)) continue;
+        if (missingFile(error) || !target.required && optionalFileError(error)) continue;
         throw error;
       }
     }

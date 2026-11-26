@@ -329,7 +329,8 @@ test('deletion HTTP, PostgreSQL and DTO consumers use tracked current profiles w
     services: ['dotnet', 'jellyfinDll'],
     references: [
       'tests/Directory.Build.props',
-      'tests/http/fixtures/item-deletion/Oracle.csproj',
+      'tests/http/fixtures/item-deletion/CurrentApiRegistration.cs',
+      'tests/http/fixtures/item-deletion/CurrentOracle.csproj',
       'tests/http/fixtures/item-deletion/Program.cs',
       'tests/http/fixtures/item-deletion/input.json',
     ],
@@ -339,7 +340,8 @@ test('deletion HTTP, PostgreSQL and DTO consumers use tracked current profiles w
     services: ['dotnet', 'jellyfinDll', 'postgres'],
     references: [
       'tests/Directory.Build.props',
-      'tests/http/fixtures/item-deletion/Oracle.csproj',
+      'tests/http/fixtures/item-deletion/CurrentApiRegistration.cs',
+      'tests/http/fixtures/item-deletion/CurrentOracle.csproj',
       'tests/http/fixtures/item-deletion/Program.cs',
       'tests/http/fixtures/item-deletion/input.json',
     ],
