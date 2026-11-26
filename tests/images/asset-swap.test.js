@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readdir, rm, utimes, writeFile } from 'node:fs/promises';
+import { mkdtemp, readFile, readdir, rm, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { LocalAdapter } from '../../plugins/local/adapter.js';
@@ -62,6 +62,20 @@ test('an image swap that fails at the second publication restores both files and
   await assets.swap(left, right);
   assert.deepEqual(await assets.read(left), rightContents);
   assert.deepEqual(await assets.read(right), leftContents);
+});
+
+test('a failed recovery keeps the only staged copy of the original image', async t => {
+  const { root, adapter, assets, left, right, leftContents, rightContents } = await fixture(t);
+  const rename = adapter.rename.bind(adapter);
+  const failure = Object.assign(new Error('Controlled image move failure.'), { code: 'unavailable' });
+  let moves = 0;
+  adapter.rename = (...args) => ++moves >= 3 ? Promise.reject(failure) : rename(...args);
+  await assert.rejects(assets.swap(left, right), error => error instanceof AggregateError && error.cause === failure);
+  const [staged, published] = (await readdir(root)).sort();
+  assert.match(staged, /^\.image-swap-/u);
+  assert.equal(published, path.basename(left));
+  assert.deepEqual(await readFile(path.join(root, staged)), leftContents);
+  assert.deepEqual(await readFile(left), rightContents);
 });
 
 test('an overwrite-only image swap restores both files after an aborted publication and can be retried', async t => {

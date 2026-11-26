@@ -20,29 +20,48 @@ const modifiedDate = value => {
   return new Date(Number(seconds * 1000n)).toISOString().replace('.000Z', `.${String(fraction / 100n).padStart(7, '0')}Z`);
 };
 
-async function swapStoragePaths(vfs, left, right, signal) {
-  const directory = path.posix.join(path.posix.dirname(left), '.image-swap-' + randomUUID());
-  const staged = path.posix.join(directory, 'original');
-  await vfs.mkdir(directory, { signal });
+async function moveCompleted(vfs, source, target) {
+  try { await vfs.stat(source); return false; }
+  catch (error) { if (error?.code !== 'not-found') throw error; }
+  try { return (await vfs.stat(target)).kind === 'file'; }
+  catch (error) { if (error?.code !== 'not-found') throw error; return false; }
+}
+
+async function swapStoragePaths(vfs, left, right, signal, readResult) {
+  // Sibling renames also work on backends that cannot move files between
+  // directories. The last rename consumes the staged file.
+  const staged = path.posix.join(path.posix.dirname(left), '.image-swap-' + randomUUID());
+  signal?.throwIfAborted();
   const move = (source, target) => vfs.rename(source, target, { overwrite: false });
   const undo = [], errors = [];
+  const completed = async (source, target) => {
+    try { return await moveCompleted(vfs, source, target); }
+    catch (error) { errors.push(error); return false; }
+  };
   try {
-    await move(left, staged);
-    undo.push(() => move(staged, left));
-    await move(right, left);
-    undo.push(() => move(left, right));
-    await move(staged, right);
-    undo.length = 0;
-  } catch (error) { errors.push(error); }
+    for (const [source, target] of [[left, staged], [right, left], [staged, right]]) {
+      try { await move(source, target); }
+      catch (error) {
+        errors.push(error);
+        // A lost response can follow a completed rename. Include that move
+        // in recovery when the backend confirms where the file ended up.
+        if (await completed(source, target)) undo.push([target, source]);
+        throw error;
+      }
+      undo.push([target, source]);
+    }
+    return await readResult();
+  } catch (error) { if (!errors.length) errors.push(error); }
   while (undo.length) {
-    try { await undo.pop()(); }
-    catch (error) { errors.push(error); break; }
+    const [source, target] = undo.pop();
+    try { await move(source, target); }
+    catch (error) {
+      errors.push(error);
+      if (!await completed(source, target)) break;
+    }
   }
-  // A failed undo may leave the only copy in this directory. Nonrecursive
-  // cleanup removes an empty staging directory and preserves a surviving file.
-  try { await vfs.delete(directory, { recursive: false }); }
-  catch (error) { errors.push(error); }
-  if (errors.length) throw operationFailure(errors, 'Image swap or recovery failed.');
+  // If undo failed, the sibling can still hold the only copy of an image.
+  throw operationFailure(errors, 'Image swap or recovery failed.');
 }
 
 export class MetadataImageAssets {
@@ -201,9 +220,16 @@ export class MetadataImageAssets {
     const [a, b] = entries;
     if (a.vfs && a.vfs === b.vfs && a.resolved.mount === b.resolved.mount) {
       if (a.resolved.path === b.resolved.path) throw new Error('The image paths must be different.');
-      if (['rename', 'mkdir', 'delete'].every(capability => a.resolved.capabilities[capability])) {
-        await swapStoragePaths(a.vfs, a.accessPath, b.accessPath, options.signal);
-        return Promise.all(entries.map(entry => this.stat(entry.identity, options)));
+      if (a.resolved.capabilities.rename) {
+        try {
+          return await swapStoragePaths(a.vfs, a.accessPath, b.accessPath, options.signal,
+            () => Promise.all(entries.map(entry => this.stat(entry.identity, options))));
+        } catch (error) {
+          if (error instanceof AggregateError || error?.code !== 'not-supported'
+            || path.posix.dirname(a.resolved.path) === path.posix.dirname(b.resolved.path)) throw error;
+          // A backend may only allow sibling renames. Recovery restored both
+          // paths before trying the overwrite path for different directories.
+        }
       }
     }
     const originalBytes = await Promise.all(entries.map(entry => this.read(entry.identity, options)));

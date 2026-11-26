@@ -173,7 +173,7 @@ export class StorageFileSystem {
   async writeFile(identity, data, options = {}) { return this.#run(async () => {
     if (typeof options === 'string') options = { encoding: options };
     const bytes = typeof data === 'string' ? Buffer.from(data, options.encoding ?? 'utf8') : data;
-    await this.vfs.write(this.accessPath(identity), bytes, { signal: options.signal, modified: options.modified,
+    await this.vfs.write(this.accessPath(identity), bytes, { signal: options.signal, atomic: options.atomic, modified: options.modified,
       overwrite: !options.flag?.includes('x'), size: bytes instanceof Uint8Array ? BigInt(bytes.length) : options.size });
   }); }
   async mkdir(identity, options = {}) { return this.#run(async () => {

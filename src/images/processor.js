@@ -10,6 +10,15 @@ import { decodeJpegScaled } from './jpeg-codec/index.js';
 const supported = new Set(['jpeg', 'jpg', 'png', 'dng', 'webp', 'gif', 'bmp', 'ico', 'astc', 'ktx', 'pkm', 'wbmp', 'cr2', 'nef', 'arw', 'svg']);
 const extension = value => path.extname(value).slice(1).toLowerCase();
 const originalResult = image => ({ path: image.Path, mimeType: imageMime(image.Path), dateModified: image.DateModified, original: true });
+const pngSignature = Buffer.from('89504e470d0a1a0a', 'hex');
+const pngEnd = Buffer.from('0000000049454e44ae426082', 'hex');
+// Older cache writers could leave a prefix of the encoder output at its final name.
+function completeCacheEntry(bytes, format) {
+  if (format === 'Jpg') return bytes.length > 4 && bytes.readUInt16BE(0) === 0xffd8 && bytes.readUInt16BE(bytes.length - 2) === 0xffd9;
+  if (format === 'Webp') return bytes.length > 12 && bytes.toString('ascii', 0, 4) === 'RIFF'
+    && bytes.toString('ascii', 8, 12) === 'WEBP' && bytes.readUInt32LE(4) === bytes.length - 8;
+  return bytes.subarray(0, 8).equals(pngSignature) && bytes.subarray(-12).equals(pngEnd);
+}
 function checkSvg(bytes, filename) {
   if (extension(filename) !== 'svg') return;
   const text = bytes.toString('utf8');
@@ -85,9 +94,15 @@ export class ImageProcessor {
     const formats = options.SupportedOutputFormats ?? ['Jpg', 'Png'];
     const transparency = ['png', 'webp', 'gif', 'svg'].includes(extension(image.Path));
     const format = formats.includes('Webp') ? 'Webp' : transparency && formats.includes('Png') ? 'Png' : formats.find(value => ['Webp', 'Jpg', 'Png', 'Svg'].includes(value)) ?? 'Jpg';
-    const cache = cachePath && this.#cacheFile(cachePath, image, options, format);
+    let cache = cachePath && this.#cacheFile(cachePath, image, options, format);
     try {
-      if (cache) try { const bytes = await this.fileSystem.readFile(cache), info = await this.fileSystem.stat(cache); return { bytes, path: cache, mimeType: imageMime(cache), dateModified: info.mtime.toISOString(), original: false }; } catch (error) { if (error?.code !== 'ENOENT') throw error; }
+      if (cache) try {
+        const bytes = await this.fileSystem.readFile(cache);
+        if (completeCacheEntry(bytes, format)) {
+          const info = await this.fileSystem.stat(cache);
+          return { bytes, path: cache, mimeType: imageMime(cache), dateModified: info.mtime.toISOString(), original: false };
+        }
+      } catch (error) { if (error?.code !== 'ENOENT') throw error; }
       if (!supported.has(extension(image.Path))) return original;
       const bytes = await assets.read(image.Path, { signal }); checkSvg(bytes, image.Path);
       if (format === 'Svg' && extension(image.Path) !== 'svg') throw new Error('SVG output requires SVG input.');
@@ -99,7 +114,17 @@ export class ImageProcessor {
       const quality = Math.max(0, Math.min(100, options.Quality ?? 100));
       const output = stripCanvasColorProfile(await canvas.encode(format === 'Jpg' ? 'jpeg' : format === 'Webp' ? 'webp' : 'png', quality), format); signal.throwIfAborted();
       let dateModified = new Date().toISOString();
-      if (cache) { await this.fileSystem.mkdir(path.dirname(cache), { recursive: true }); await this.fileSystem.writeFile(cache, output, { signal }); dateModified = (await this.fileSystem.stat(cache)).mtime.toISOString(); }
+      if (cache) {
+        await this.fileSystem.mkdir(path.dirname(cache), { recursive: true });
+        try {
+          await this.fileSystem.writeFile(cache, output, { signal, atomic: true });
+          dateModified = (await this.fileSystem.stat(cache)).mtime.toISOString();
+        } catch (error) {
+          if (error?.code !== 'ENOTSUP') throw error;
+          // A mount without atomic publication can still serve the resized bytes.
+          cache = undefined;
+        }
+      }
       return { bytes: output, path: cache, mimeType: format === 'Svg' ? 'image/svg+xml' : imageMime('image' + imageExtension(format)), dateModified, original: false };
     } catch (error) { if (signal.aborted) throw error; this.logger.error(error, 'Error encoding image'); return original; }
   }

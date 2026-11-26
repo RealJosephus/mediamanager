@@ -105,7 +105,7 @@ export function registerSubtitleManagementRoutes(add, services) {
   const { store, library, metadata, playback, storage, libraryMonitor, libraryMonitorHost, onError = () => {} } = services;
   if (!library) return;
   const vfs = playback?.vfs ?? storage?.vfs, identityMap = playback?.identityMap ?? storage?.identityMap;
-  const mediaFiles = storage?.mediaFileSystem ?? (vfs && identityMap ? new StorageFileSystem({ vfs, identityMap }) : services.fileSystem);
+  const mediaFiles = vfs && identityMap ? new StorageFileSystem({ vfs, identityMap }) : storage?.mediaFileSystem ?? services.fileSystem;
   const metadataFiles = storage?.fileSystem ?? services.fileSystem ?? mediaFiles;
   const destinations = { library, mediaFiles, metadataFiles, libraryMonitor, libraryMonitorHost };
   const path = '/Videos/{itemId}/Subtitles', policy = 'SubtitleManagement';
