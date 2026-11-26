@@ -5,6 +5,7 @@ import { userInfo } from 'node:os';
 import { EventEmitter } from 'node:events';
 import { isDeepStrictEqual } from 'node:util';
 import { authenticatePassword, createPasswordHash } from '../core/password.js';
+import { nativeShadowViewIdentity, nativeUserViewIdentity } from '../library/identity.js';
 import { md5Guid } from '../core/identity.js';
 import { tableDefinition } from '../database/model.js';
 import { AUTHENTICATION_PROVIDER, PASSWORD_RESET_PROVIDER, permissionNames, preferenceNames, configurationFields,
@@ -381,6 +382,38 @@ export class UserService extends EventEmitter {
     const row = user.Preferences.find(row => row.Kind === Kind);
     if (row) { if (row.Value !== Value) await database.update('Preferences', { Id: row.Id }, { Value }, { rowVersion: row.RowVersion }); }
     else await database.insert('Preferences', { UserId: user.Id, Kind, Value, RowVersion: 0n });
+  }
+
+  async replaceLibraryPreferences(previous, next, viewType, options) {
+    const oldId = nativeGuid(previous.Id), newId = nativeGuid(next.Id);
+    const shadow = folder => nativeShadowViewIdentity(folder, viewType, options).Id;
+    const oldShadow = shadow(previous), newShadow = shadow(next);
+    if (oldId === newId && oldShadow === newShadow) return;
+    const kinds = ['EnabledFolders', 'BlockedMediaFolders', 'EnableContentDeletionFromFolders',
+      'LatestItemExcludes', 'MyMediaExcludes', 'GroupedFolders', 'OrderedViews'].map(name => preferenceNames.indexOf(name));
+    const libraryMap = new Map([[oldId, newId]]);
+    await this.store.transaction(async database => {
+      const rows = await database.rows('Preferences', { whereIn: { Kind: kinds } });
+      for (const row of rows) {
+        if (!row.Value) continue;
+        let map = libraryMap;
+        if (['MyMediaExcludes', 'OrderedViews'].includes(preferenceNames[row.Kind])) {
+          const named = id => nativeUserViewIdentity(row.UserId, id, viewType, options).Id;
+          map = new Map([...libraryMap, [oldShadow, newShadow], [named(oldId), named(newId)]]);
+        }
+        const seen = new Set(), rewritten = [];
+        for (const value of row.Value.split(',')) {
+          let id;
+          try { id = nativeGuid(value); } catch { rewritten.push(value); continue; }
+          const replacement = map.get(id) ?? id;
+          if (seen.has(replacement)) continue;
+          seen.add(replacement);
+          rewritten.push(id === replacement ? value : (value.includes('-') ? replacement : replacement.replaceAll('-', '')).toLowerCase());
+        }
+        const Value = rewritten.join(',');
+        if (Value !== row.Value) await database.update('Preferences', { Id: row.Id }, { Value }, { rowVersion: row.RowVersion });
+      }
+    });
   }
 
   async updateConfiguration(id, request) {

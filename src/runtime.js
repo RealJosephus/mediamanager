@@ -546,7 +546,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     }
   }
   await plugins.bind('task', extension => tasks.register(extension));
-  const libraryConfiguration = libraryScanLifecycle && libraryOptionsStore ? new LibraryConfigurationService({ fileSystem,
+  const libraryConfiguration = libraryScanLifecycle && libraryOptionsStore ? new LibraryConfigurationService({ fileSystem, users,
     programDataPath, optionsStore: libraryOptionsStore, get configuration() { return currentConfiguration(); }, configurationStore,
     mediaAssets: new MetadataImageAssets({ fileSystem, vfs, identityMap, get metadataPath() { return applicationPaths.metadataPath; }, stateRoots: [dataPath].filter(Boolean) }),
     lifecycle: libraryScanLifecycle, monitor: libraryMonitor, host: libraryScanHost, refreshes,

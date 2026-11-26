@@ -307,7 +307,7 @@ export class LibraryScanHost {
   withCachedChildren(parent, operation) {
     return this.store.run(db => withPostgresCachedFolderChildren({ session: db, library: this.library, item: parent }, async source => {
       const sql = nativeTextSql(db.schemaName);
-      const first = async (directory, containing) => {
+      const first = async (directory, containing, nativeType) => {
         await source.flush();
         const plan = source.pathPlan(), offset = plan.values.length;
         const target = `$${offset + 1}::bytea`;
@@ -315,11 +315,11 @@ export class LibraryScanHost {
           ${sql.pathWithin(target, 'source."Path"')}`
           : `${sql.ordinalIgnoreCaseKey('source."Path"')}=${sql.ordinalIgnoreCaseKey(target)}`;
         const row = (await db.client.query({ text: `SELECT source."SlotKey" FROM (${plan.text}) source
-          WHERE ${predicate} ORDER BY source."Ordinal" LIMIT 1`,
-        values: [...plan.values, nativeTextBytes(directory), ...(containing ? [folderTypes] : [])] })).rows[0];
+          WHERE ${predicate} ${nativeType ? `AND source."NativeType"=$${offset + 2}::bytea` : ''} ORDER BY source."Ordinal" LIMIT 1`,
+        values: [...plan.values, nativeTextBytes(directory), ...(containing ? [folderTypes] : nativeType ? [nativeTextBytes(nativeType)] : [])] })).rows[0];
         return row ? source.withRetainedSlot(row.SlotKey, child => child) : null;
       };
-      return operation(Object.freeze({ firstByPath: directory => first(directory, false),
+      return operation(Object.freeze({ firstByPath: (directory, nativeType) => first(directory, false, nativeType),
         firstContainingPath: directory => first(directory, true) }));
     }));
   }

@@ -4,6 +4,8 @@ import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
+import { nativeShadowViewIdentity, nativeUserViewIdentity } from '../../src/library/identity.js';
+import { nativeGuid, preferenceNames } from '../../src/users/native.js';
 import { idKey } from '../../src/library/records.js';
 import { defaultLibraryOptions } from '../../src/library/options.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
@@ -100,6 +102,47 @@ test('postgres: library structure HTTP preserves options, shortcuts, deferred re
   assert.deepEqual(await state.list(), []);
   assert.equal((await state.adapter.stat('/Movies/Present.txt')).kind, 'file'); assert.equal((await state.adapter.stat('/Additional/Present.txt')).kind, 'file');
   assert.match(await fs.readFile(path.join(state.configurationDirectoryPath, 'system.xml'), 'utf8'), /preserved/);
+});
+
+test('postgres: library rename rewrites per-user view and folder preferences across a rescan and restart', enabled, async t => {
+  const state = await setup(t);
+  const viewer = await state.runtime.users.createUser({ Name: 'Viewer' });
+  const imported = await state.runtime.users.createUser({ Name: 'Imported' });
+  assert.equal((await state.create('Movies')).status, 204);
+  const old = (await state.list())[0].ItemId;
+  const views = async () => (await state.request('/UserViews?userId=' + viewer.Id, { method: 'GET' })).body.Items.map(v => v.Id);
+  assert.ok((await views()).includes(old));
+  assert.equal((await state.request('/Users/' + viewer.Id + '/Configuration', { body: { OrderedViews: [old], MyMediaExcludes: [old] } })).status, 204);
+  assert.ok(!(await views()).includes(old));
+
+  const options = { programDataPath: state.programDataPath, configuration: state.configuration };
+  const derived = (Id, Name) => [nativeShadowViewIdentity({ Id, Name }, 'movies', options).Id,
+    nativeUserViewIdentity(imported.Id, Id, 'movies', options).Id].map(idKey);
+  const oldDerived = derived(old, 'Movies');
+  const kinds = ['EnabledFolders', 'BlockedMediaFolders', 'EnableContentDeletionFromFolders', 'LatestItemExcludes',
+    'MyMediaExcludes', 'GroupedFolders', 'OrderedViews'];
+  const raw = (id, extra) => [nativeGuid(id).toLowerCase(), ...extra, 'imported text'].join(',');
+  const userId = nativeGuid(imported.Id);
+  for (const name of kinds) {
+    const Kind = preferenceNames.indexOf(name), Value = raw(old, [old, ...oldDerived]);
+    const [row] = await state.database.rows('Preferences', { where: { UserId: userId, Kind } });
+    if (row) await state.database.update('Preferences', { Id: row.Id }, { Value });
+    else await state.database.insert('Preferences', { UserId: userId, Kind, Value, RowVersion: 0n });
+  }
+  assert.equal((await state.request('/Library/VirtualFolders/Name?name=Movies&newName=Renamed')).status, 204);
+  await state.runtime.libraryScanLifecycle.validateTopLibraryFolders({ removeRoot: true });
+  const current = (await state.list())[0].ItemId;
+  assert.ok(current && current !== old);
+  await state.reopen();
+  const user = (await state.request('/Users/' + viewer.Id, { method: 'GET' })).body;
+  assert.deepEqual(user.Configuration.OrderedViews, [current]);
+  assert.deepEqual(user.Configuration.MyMediaExcludes, [current]);
+  assert.ok(!(await views()).includes(current));
+  for (const name of kinds) {
+    const [row] = await state.database.rows('Preferences', { where: { UserId: userId, Kind: preferenceNames.indexOf(name) } });
+    const viewList = ['MyMediaExcludes', 'OrderedViews'].includes(name);
+    assert.equal(row.Value, raw(current, viewList ? derived(current, 'Renamed') : oldDerived), name);
+  }
 });
 
 test('postgres: library structure authorization, product identity and API messages are independent of request language', enabled, async t => {

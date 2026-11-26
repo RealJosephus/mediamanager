@@ -2,6 +2,8 @@ import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { decodeNativeText } from '../core/native-text.js';
 import { clrTrim } from '../metadata/whitespace.js';
+import { getNewItemId } from '../core/identity.js';
+import { collectionType } from './user-view-query.js';
 import { idKey, libraryError } from './records.js';
 import { nativeContainsSubPath, nativeFileNameWithoutExtension } from './native-path.js';
 import { nativeFileSystemPathsEqual } from './root-folder-file-data.js';
@@ -326,6 +328,13 @@ export class LibraryConfigurationService {
       if (!await this.#directoryExists(currentPath)) return { status: 404, body: 'The media collection does not exist.' };
       const samePath = ordinalIgnoreCaseKey(currentPath) === ordinalIgnoreCaseKey(newPath);
       if (!samePath && await this.#directoryExists(newPath)) return { status: 409, body: `The media library already exists at ${newPath}.` };
+      const root = await this.host.getUserRootFolder();
+      const type = 'MediaBrowser.Controller.Entities.CollectionFolder';
+      const old = await this.host.withCachedChildren(root, children => children.firstByPath(currentPath, type));
+      const folderId = directory => getNewItemId(directory, type, { programDataPath: this.programDataPath,
+        enableCaseSensitiveItemIds: this.configuration.EnableCaseSensitiveItemIds });
+      const previous = { Name: old?.Name ?? path.basename(currentPath), Id: old?.Id ?? folderId(currentPath) };
+      const next = { Name: path.basename(newPath), Id: folderId(newPath) };
       await this.monitor.stop();
       try {
         if (samePath) {
@@ -334,6 +343,7 @@ export class LibraryConfigurationService {
           currentPath = temporary;
         }
         await this.fileSystem.rename(await this.#statePath(currentPath), await this.#statePath(newPath));
+        await this.options.users?.replaceLibraryPreferences(previous, next, collectionType(old), this.options);
       } finally {
         await this.optionsStore.clear();
         if (refreshLibrary) this.#runInBackground(async () => {
