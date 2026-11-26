@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { nativeGuid, nativeDateFromUnixNanoseconds } from '../../users/native.js';
 import { imageTypes } from '../../metadata/image-paths.js';
+import { nonemptyId } from '../../library/records.js';
 import { metadataFields } from '../../library/metadata-context.js';
 import { tokenizeJson } from '../../core/json-tokens.js';
 
@@ -43,7 +44,17 @@ const kinds = [
 export const itemTypes = kinds.map(
   (kind) => kind && (kind.startsWith('MediaBrowser.') ? kind : entities + kind),
 );
-export const folders = new Set([1, 2, 3, 4, 6, 7, 9, 12, 13, 14, 16, 21, 23, 26, 29, 31, 32]);
+const folders = new Set([1, 2, 3, 4, 6, 7, 9, 12, 16, 26, 31, 32]);
+export const musicArtistType = itemTypes[13];
+export const nonFolderNameTypes = [itemTypes[14], itemTypes[21], itemTypes[23], itemTypes[29]];
+const mediaTypes = new Map([[5, 'Video'], [8, 'Video'], [10, 'Video'], [11, 'Audio'],
+  [15, 'Video'], [18, 'Video'], [20, 'Book'], [25, 'Photo']]);
+
+export function jellyfinItemDiscriminators(type, parentId) {
+  const kind = itemTypes.indexOf(type);
+  return { IsFolder: Number(type === musicArtistType ? Boolean(nonemptyId(parentId)) : folders.has(kind)),
+    MediaType: mediaTypes.get(kind) ?? null };
+}
 export const scalarFields = [
   'Name',
   'OriginalTitle',

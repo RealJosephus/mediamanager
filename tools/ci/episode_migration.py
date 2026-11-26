@@ -58,11 +58,12 @@ def verify_episodes(root, dll, jellyfin, emby, password):
             call("/Library/VirtualFolders?name=Episodes&collectionType=tvshows&refreshLibrary=true", "POST", {"LibraryOptions": options})
             for _ in range(180):
                 items = call(f"/Users/{account}/Items?Recursive=true&IncludeItemTypes=Episode&Fields=Path")["Items"]
-                if {str(location) for location in paths.values()} <= {item.get("Path") for item in items}:
+                probed_paths = {item.get("Path") for item in items if (item.get("RunTimeTicks") or 0) >= 1_700_000_000}
+                if {str(location) for location in paths.values()} <= probed_paths:
                     break
                 time.sleep(.5)
             else:
-                raise AssertionError(f"Emby did not discover all episodes: {items}")
+                raise AssertionError(f"Emby did not finish probing all episode durations: {items}")
         mapping = case / "identities.json"
         mapping.write_text(json.dumps({"users": {account: target_user}}))
         with sqlite3.connect(original / "data/library.db") as db:
@@ -114,6 +115,22 @@ def verify_episodes(root, dll, jellyfin, emby, password):
                 assert rows["ambiguous"][3] is None and rows["orphan"][3] is None, rows
                 show = rows["first"][2]
                 assert show and all(row[2] == show for row in rows.values()), rows
+                db.row_factory = sqlite3.Row
+                jellyfin_catalog = [dict(row) for row in db.execute("""SELECT Id,Type,ParentId,SeriesId,SeasonId,
+                    IndexNumber,ParentIndexNumber,PresentationUniqueKey,SeriesPresentationUniqueKey,IsVirtualItem,RunTimeTicks,
+                    OwnerId,PrimaryVersionId,TopParentId FROM BaseItems
+                    WHERE Id=? OR SeriesId=? ORDER BY Type,Id""", (show, show))]
+            source_database = (returned if moved else original) / "data/library.db"
+            with sqlite3.connect(source_database) as db:
+                db.row_factory = sqlite3.Row
+                emby_catalog = [dict(row) for row in db.execute("""SELECT hex(guid) AS Guid, Id,Type,ParentId,SeriesId,
+                    IndexNumber,ParentIndexNumber,PresentationUniqueKey,SeriesPresentationUniqueKey,RunTimeTicks
+                    FROM MediaItems WHERE Id=? OR SeriesId=? ORDER BY Type,Id""", (series, series))]
+            catalog_evidence = root / "results" / (schema_name + "-catalogs.json")
+            catalog_evidence.write_text(json.dumps({"emby": emby_catalog, "jellyfin": jellyfin_catalog}, indent=2) + "\n")
+            series_key = next(row["PresentationUniqueKey"] for row in jellyfin_catalog if row["Id"] == show)
+            assert series_key and all(row["SeriesPresentationUniqueKey"] == series_key
+                                      for row in jellyfin_catalog if row["SeriesId"] == show), catalog_evidence
             issues = json.loads(Path(receipt["report"]).read_text())["issues"]
             season_issues = {issue["id"]: issue["reason"] for issue in issues if issue["field"] == "SeasonId"}
             assert "multiple seasons" in season_issues[ids["ambiguous"]], season_issues

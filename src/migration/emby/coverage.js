@@ -21,7 +21,7 @@ const columns = {
     ...scalarFields,
     ...dateFields,
   ],
-  UserDatas: ['UserDataKeyId', 'userId', 'LastPlayedDateInt', ...stateFields],
+  UserDatas: ['UserDataKeyId', 'userId', 'LastPlayedDateInt', 'DateLastSearchedInt', ...stateFields],
   ListItems: ['ListId', 'ListItemId', 'ListItemOrder'],
   ItemLinks2: ['ItemId', 'Type', 'LinkedId', 'LinkOrder'],
   ItemPeople2: ['ItemId', 'PersonId', 'Role', 'PersonType', 'ListOrder'],

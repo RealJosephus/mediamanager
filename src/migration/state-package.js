@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { decodeServerIdentity } from '../core/server-identity.js';
-import { mkdir, readdir, lstat, rename, unlink, lutimes, realpath, open, mkdtemp, rmdir } from 'node:fs/promises';
+import fs, { mkdir, readdir, lstat, rename, unlink, lutimes, realpath, open, mkdtemp, rmdir } from 'node:fs/promises';
 import { constants as fsConstants } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -80,21 +80,21 @@ function sameFile(left, right) {
   return left.dev === right.dev && left.ino === right.ino;
 }
 
-async function assertPhysicalDirectory(root, directory, label) {
+async function assertPhysicalDirectory(root, directory, label, fileSystem = fs) {
   root = path.resolve(root); directory = path.resolve(directory);
   if (!inside(root, directory)) throw new Error(`${label} escapes its trusted root`);
-  const rootMetadata = await lstat(root);
+  const rootMetadata = await fileSystem.lstat(root);
   if (!rootMetadata.isDirectory() || rootMetadata.isSymbolicLink()) throw new Error(`${label} root is not a physical directory`);
-  const physicalRoot = await realpath(root);
+  const physicalRoot = await fileSystem.realpath(root);
   if (pathIdentity(physicalRoot) !== pathIdentity(root)) throw new Error(`${label} root must not use a symbolic-link or junction path`);
   const parts = path.relative(root, directory).split(path.sep).filter(Boolean);
   let current = root;
   for (const part of parts) {
     current = path.join(current, part);
-    const metadata = await lstat(current);
+    const metadata = await fileSystem.lstat(current);
     if (!metadata.isDirectory() || metadata.isSymbolicLink()) throw new Error(`${label} parent is not a physical directory`);
     const expected = path.resolve(physicalRoot, ...path.relative(root, current).split(path.sep).filter(Boolean));
-    if (pathIdentity(await realpath(current)) !== pathIdentity(expected)) throw new Error(`${label} parent must not use a symbolic link or junction`);
+    if (pathIdentity(await fileSystem.realpath(current)) !== pathIdentity(expected)) throw new Error(`${label} parent must not use a symbolic link or junction`);
   }
   return physicalRoot;
 }
@@ -446,23 +446,25 @@ async function validatePackagedPathBindings(directory, instanceState, systemFile
     }
   }
 }
-async function inventoryUnder(root, relative = '') {
-  const directory = path.join(root, relative);
-  await assertPhysicalDirectory(root, directory, 'State inventory');
-  const entries = await readdir(directory, { withFileTypes: true });
+export async function inventoryUnder(root, fileSystem = fs) {
   const files = [], directories = [];
-  for (const entry of entries.sort((a, b) => a.name < b.name ? -1 : 1)) {
-    const current = path.join(relative, entry.name);
-    const metadata = await lstat(path.join(root, current));
-    if (metadata.isSymbolicLink()) throw new Error(`State package refuses symbolic links: ${current}`);
-    if (entry.isDirectory()) {
-      directories.push(current);
-      const nested = await inventoryUnder(root, current);
-      directories.push(...nested.directories); files.push(...nested.files);
-    } else if (entry.isFile()) files.push(current);
-    else throw new Error(`Unsupported state file: ${current}`);
+  async function visit(relative) {
+    const directory = path.join(root, relative);
+    await assertPhysicalDirectory(root, directory, 'State inventory', fileSystem);
+    const entries = await fileSystem.readdir(directory, { withFileTypes: true });
+    for (const entry of entries.sort((a, b) => a.name < b.name ? -1 : 1)) {
+      const current = path.join(relative, entry.name);
+      const metadata = await fileSystem.lstat(path.join(root, current));
+      if (metadata.isSymbolicLink()) throw new Error(`State package refuses symbolic links: ${current}`);
+      if (entry.isDirectory()) {
+        directories.push(current);
+        await visit(current);
+      } else if (entry.isFile()) files.push(current);
+      else throw new Error(`Unsupported state file: ${current}`);
+    }
+    await assertPhysicalDirectory(root, directory, 'State inventory', fileSystem);
   }
-  await assertPhysicalDirectory(root, directory, 'State inventory');
+  await visit('');
   return { files, directories };
 }
 async function journal(destination, value) {

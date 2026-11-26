@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { constants } from 'node:fs';
 import { access, chmod, link, mkdir, readFile, readdir, rename, rm, stat, unlink, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { createStatePackage, verifyStatePackage, restoreStatePackage } from '../../src/migration/state-package.js';
+import { createStatePackage, verifyStatePackage, restoreStatePackage, inventoryUnder } from '../../src/migration/state-package.js';
 import { discoverInstanceState } from '../../src/migration/instance-state.js';
 import { cloneStoppedInstance } from '../../src/migration/instance-copy.js';
 import { readInstanceConfiguration } from '../../src/configuration.js';
@@ -14,6 +14,25 @@ import { createInstanceFixture } from './instance-fixture.js';
 
 const reservedRestorePaths = ['mediamanager-state.json', 'mediamanager-state.json.tmp', 'COMMITTED', 'COMMITTED.tmp',
   'manifest.json', 'manifest.json.tmp', 'progress.json', 'progress.json.tmp'];
+
+test('inventory preserves sorted depth-first paths through a 160,000-file subtree', async () => {
+  const root = path.resolve('virtual-state');
+  const names = (prefix, count) => Array.from({ length: count }, (_, i) => prefix + String(i).padStart(3, '0'));
+  const groups = names('group', 500), leaves = names('file', 320);
+  const entry = (name, directory) => ({ name, isDirectory: () => directory, isFile: () => !directory });
+  const tree = {
+    realpath: async filename => filename,
+    lstat: async filename => ({ isSymbolicLink: () => false, isDirectory: () => !path.basename(filename).startsWith('file') }),
+    async readdir(directory) {
+      if (directory === root) return [entry('tree', true)];
+      const parent = path.basename(directory) === 'tree';
+      return (parent ? groups : leaves).map(name => entry(name, parent)).reverse();
+    },
+  };
+  const { files, directories } = await inventoryUnder(root, tree);
+  assert.deepEqual(directories, ['tree', ...groups.map(group => path.join('tree', group))]);
+  assert.deepEqual(files, groups.flatMap(group => leaves.map(file => path.join('tree', group, file))));
+});
 const conflictingRestorePaths = [
   ...reservedRestorePaths.flatMap(value => [value, `${value.toUpperCase()}/jellyfin.db`]),
   'config/system.xml', 'CONFIG/SYSTEM.XML', 'config', 'config/system.xml/jellyfin.db',

@@ -8,7 +8,8 @@ import { resolveProductionEnvironment, verifyProductionDatabaseContract } from '
 import { readMediaEncoderStartupOptions } from './playback/media-encoder.js';
 import { readPublishedServerStartupOptions } from './network/startup.js';
 import { SystemLifecycle } from './system/lifecycle.js';
-import { hasImportedMarkerReader } from './migration/emby/files.js';
+import { readEmbyImportManifest } from './migration/emby/files.js';
+import { repairEmbyPostgresFolders } from './migration/emby/folder-classification.js';
 
 function optionalEnvironmentInteger(environment, name, minimum, description) {
   const raw = environment[name];
@@ -89,6 +90,8 @@ export async function startProductionInstance({ environment = process.env, args 
     if (!environment.MEDIAMANAGER_STORAGE && portableMountContract.mounts.length) {
       throw new Error('MEDIAMANAGER_STORAGE is required by the persisted portable VFS mount contract.');
     }
+    const embyImport = await readEmbyImportManifest(instance);
+    await repairEmbyPostgresFolders(database, embyImport?.originIdentity);
     let skipperProjection = false;
     if (database instanceof PostgresDatabase) {
       const format = quoteIdentifier(database.controlSchema) + '.intro_skipper_format';
@@ -100,7 +103,7 @@ export async function startProductionInstance({ environment = process.env, args 
       ...networkStartup,
       storageConfiguration: environment.MEDIAMANAGER_STORAGE, environment, portableMountContract,
       mediaEncoderOptions,
-      importedMarkerReader: await hasImportedMarkerReader(instance),
+      importedMarkerReader: embyImport?.embyChapterMarkers === true,
       skipperProjection,
       systemLifecycle,
       database,

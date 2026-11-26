@@ -69,15 +69,19 @@ export function alignIdentities(source, target, previous, explicit, freshManager
   }
   return readIdentityMap(map);
 }
+export function translatedKey(key, map) {
+  const [kind, id, user] = key.split('/');
+  if (kind === 'user') return 'user/' + (map.users[id] ?? id);
+  const item = map.items[id] ?? id;
+  return kind === 'item' ? 'item/' + item : [kind, item, map.users[user] ?? user].join('/');
+}
 export function translatedRows(rows, map, target, initialize) {
   const mapped = new Map();
   for (const [key, value] of rows) {
-    const [kind, id, user] = key.split('/');
-    let record = value,
-      k;
+    const [kind, id] = key.split('/');
+    const k = translatedKey(key, map);
+    let record = value;
     if (kind === 'item') {
-      const newId = map.items[id] ?? id;
-      k = 'item/' + newId;
       record = {
         ...value,
         ParentId: map.items[value.ParentId] ?? value.ParentId,
@@ -91,10 +95,7 @@ export function translatedRows(rows, map, target, initialize) {
       if (initialize && map.items[id] && [itemTypes[1], itemTypes[2]].includes(value.type) && target.has(k))
         record = target.get(k);
     } else if (kind === 'user') {
-      k = 'user/' + (map.users[id] ?? id);
       if (initialize && map.users[id] && target.has(k)) record = { ...value, Username: target.get(k).Username };
-    } else {
-      k = 'play/' + (map.items[id] ?? id) + '/' + (map.users[user] ?? user);
     }
     if (mapped.has(k)) throw new Error('Mapped identities collide: ' + k);
     mapped.set(k, record);

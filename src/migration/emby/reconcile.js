@@ -39,7 +39,13 @@ function projectStreams(rows, target, previousSource, previousTarget, sourceType
       issue?.('conflict', 'stream ' + index + ' retains the same ordinal with different native meanings; verify against the media');
       result.set(index, current);
     } else {
-      result.set(index, { ...row, StreamType: mapped });
+      const stream = { ...row, StreamType: mapped };
+      if (current) {
+        // An older catalog can describe the track without knowing this flag.
+        if (!Object.hasOwn(current, 'IsHearingImpaired')) delete stream.IsHearingImpaired;
+        else if (!Object.hasOwn(row, 'IsHearingImpaired')) stream.IsHearingImpaired = current.IsHearingImpaired;
+      }
+      result.set(index, stream);
     }
   }
   return [...result.values()].sort((a, b) => a.StreamIndex - b.StreamIndex);
@@ -49,12 +55,15 @@ function projectStreams(rows, target, previousSource, previousTarget, sourceType
 // have lower precision or a different set of expressible fields.
 export function changesBetween(source, target, baseSource, baseTarget, report, {
   legacyChapters = false, sourceType, pendingProviders, pendingProviderEdits, legacyProviderItems, rememberTargetEdit,
+  sourceHasSearchHistory = true, retainFieldBaseline, retainRowBaseline,
 } = {}) {
   const changes = [];
-  for (const key of new Set([...source.keys(), ...baseSource.keys()])) {
+  for (const key of new Set([...source.keys(), ...baseSource.keys(), ...target.keys(), ...baseTarget.keys()])) {
     let value = source.get(key), before = baseSource.get(key);
-    const current = target.get(key), previous = baseTarget.get(key);
+    const current = target.get(key);
+    let previous = baseTarget.get(key);
     const [kind, id] = key.split('/');
+    if (kind === 'search' && !sourceHasSearchHistory) continue;
     const pending = kind === 'item' && pendingProviders?.get(id);
     const owed = kind === 'item' && pendingProviderEdits?.get(id);
     const legacy = kind === 'item' && legacyProviderItems?.has(id);
@@ -64,11 +73,29 @@ export function changesBetween(source, target, baseSource, baseTarget, report, {
       const project = (rows, issue) => projectStreams(rows, current?.Streams, priorStreams, previous?.Streams, sourceType, issue);
       value = { ...value, Streams: project(value.Streams, (status, detail) => report(status, kind, id, 'Streams', detail)) };
       if (before?.Streams) before = { ...before, Streams: project(before.Streams) };
+      if (previous?.Streams && current?.Streams) {
+        const tracks = byStreamIndex(current.Streams);
+        // Older receipts omitted the flag. A still-empty target can accept
+        // a newly visible source value without inventing a target edit.
+        previous = { ...previous, Streams: previous.Streams.map(track => {
+          const now = tracks.get(track.StreamIndex);
+          return !Object.hasOwn(track, 'IsHearingImpaired') && now?.IsHearingImpaired === null
+            ? { ...track, IsHearingImpaired: null } : track;
+        }) };
+      }
     }
-    if (same(value, before) && !pending && !owed && !legacy && !targetProviderEdit) continue;
+    if (same(value, before)) {
+      if (!value || !current) {
+        if ((value || current) && !same(current, previous)) retainRowBaseline?.(key);
+        continue;
+      }
+      if (!pending && !owed && !legacy && !targetProviderEdit
+        && !(retainFieldBaseline && previous && !same(current, previous))) continue;
+    }
     if (!value) {
       if (!current) continue;
       if (!same(current, previous)) {
+        retainRowBaseline?.(key);
         report('conflict', kind, id, 'deletion', 'target has edits');
         continue;
       }
@@ -77,6 +104,7 @@ export function changesBetween(source, target, baseSource, baseTarget, report, {
     }
     if (!current) {
       if (previous) {
+        retainRowBaseline?.(key);
         report('conflict', kind, id, 'deletion', 'target removed a source-edited object');
         continue;
       }
@@ -102,7 +130,12 @@ export function changesBetween(source, target, baseSource, baseTarget, report, {
         }
         continue;
       }
-      if (same(value[name], before?.[name]) || same(value[name], current[name]) || matchesMarker(name, value[name], current[name])) continue;
+      if (same(value[name], current[name]) || matchesMarker(name, value[name], current[name])) continue;
+      const targetEdited = previous && !same(previous[name], current[name]);
+      if (same(value[name], before?.[name])) {
+        if (targetEdited && Object.hasOwn(before ?? {}, name) && Object.hasOwn(previous, name)) retainFieldBaseline?.(key, name);
+        continue;
+      }
       if (name === 'Chapters' && legacyChapters && before?.Chapters && previous?.Chapters) {
         const input = legacyChapterFields(value.Chapters), output = legacyChapterFields(current.Chapters);
         if (same(input, legacyChapterFields(before.Chapters)) || same(input, output)) continue;
@@ -117,11 +150,13 @@ export function changesBetween(source, target, baseSource, baseTarget, report, {
         else if (value[name]) report('conflict', kind, id, name, 'pre-existing or unrepresentable target markers');
         continue;
       }
-      if (previous && !same(previous[name], current[name])) {
+      if (targetEdited) {
+        if (before) retainFieldBaseline?.(key, name);
         report('conflict', kind, id, name, 'both endpoints edited');
         continue;
       }
       if (!before && !previous) {
+        retainRowBaseline?.(key);
         report('conflict', kind, id, name, 'identity already exists on the target');
         continue;
       }

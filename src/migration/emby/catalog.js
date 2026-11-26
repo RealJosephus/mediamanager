@@ -1,4 +1,5 @@
 import { nativeGuid } from '../../users/native.js';
+import { searchHistoryClient, searchHistoryKey } from '../../sessions/search-history.js';
 import { commonLibraryOptions, libraryLocations } from './libraries.js';
 import { readMarkers } from './chapter-markers.js';
 import {
@@ -62,12 +63,21 @@ export const streamFields = [
   'ColorPrimaries',
   'ColorSpace',
   'ColorTransfer',
+  'IsHearingImpaired',
 ];
 const chapterFields = ['ChapterIndex', 'StartPositionTicks', 'Name', 'ImagePath'];
 export const numeric = (name, value) => portableValue(name, value);
 export function fields(row, names) {
   const columns = new Map(Object.keys(row).map((k) => [k.toLowerCase(), k]));
-  return Object.fromEntries(names.map((name) => [name, numeric(name, row[columns.get(name.toLowerCase())])]));
+  const result = {};
+  for (const name of names) {
+    const column = columns.get(name.toLowerCase());
+    if (column !== undefined || name !== 'IsHearingImpaired') result[name] = numeric(name, row[column]);
+  }
+  return result;
+}
+export function jellyfinPlaybackState(row) {
+  return { ...fields(row, stateFields), LastPlayedDate: timeToSeconds(row.LastPlayedDate) };
 }
 export function schemaColumns(db, table, schema = 'main') {
   return new Set(
@@ -206,22 +216,22 @@ export function embyCatalog(db, serverId, report) {
     (r) => idMap.get(r.ListItemId),
   );
   const links =
-    'SELECT l.ItemId,l.Type,l.LinkedId,r.Name FROM ItemLinks2 l JOIN MediaItems r ON r.Id=l.LinkedId ORDER BY l.ItemId,l.Type,l.LinkOrder,l.LinkedId';
+    'SELECT l.ItemId,l.Type,l.LinkedId,r.Name FROM ItemLinks2 l JOIN MediaItems r ON r.Id=l.LinkedId WHERE l.Type IS NOT 6 ORDER BY l.ItemId,l.Type,l.LinkOrder,l.LinkedId';
   for (const r of scan(db, links)) {
     if (Number(r.Type) === 8) {
       const folder = items.get(r.ItemId);
       if (folder?.PhysicalFolders && items.has(r.LinkedId)) folder.PhysicalFolders.push(idMap.get(r.LinkedId));
       continue;
     }
-    if (Number(r.Type) === 6) {
-      const box = items.get(r.LinkedId);
-      if (box && items.has(r.ItemId)) box.Members.push(idMap.get(r.ItemId));
-      continue;
-    }
     const field = linkTypes[Number(r.Type)];
     if (field && items.has(r.ItemId) && r.Name) items.get(r.ItemId)[field].push(r.Name);
     else if (!field && ![7].includes(Number(r.Type)))
       report('origin-only', 'item', idMap.get(r.ItemId), 'ItemLinks2.Type', String(r.Type));
+  }
+  for (const { ItemId, LinkedId } of scan(db,
+    'SELECT ItemId,LinkedId FROM ItemLinks2 WHERE Type=6 ORDER BY LinkedId,LinkOrder,ItemId')) {
+    const box = items.get(LinkedId);
+    if (box && items.has(ItemId)) box.Members.push(idMap.get(ItemId));
   }
   for (const r of scan(
     db,
@@ -254,6 +264,7 @@ export function embyCatalog(db, serverId, report) {
     fields(r, streamFields),
   );
   const states = new Map();
+  const hasDateLastSearched = schemaColumns(db, 'UserDatas').has('DateLastSearchedInt');
   for (const r of scan(db, 'SELECT * FROM UserDatas ORDER BY userId,UserDataKeyId')) {
     const ids = shared.get(r.UserDataKeyId),
       user = userMap.get(r.userId);
@@ -268,9 +279,11 @@ export function embyCatalog(db, serverId, report) {
         LastPlayedDate: r.LastPlayedDateInt == null ? null : String(r.LastPlayedDateInt),
       });
       states.set(key, r);
+      if (hasDateLastSearched && r.DateLastSearchedInt != null)
+        register(rows, keyFor('search', id, user), { [searchHistoryKey]: String(r.DateLastSearchedInt) });
     }
   }
-  return { rows, items: rawItems, users, states, idMap, userMap, shared };
+  return { rows, items: rawItems, users, states, idMap, userMap, shared, hasDateLastSearched };
 }
 
 export function jellyfinCatalog(db, report) {
@@ -373,7 +386,7 @@ export function jellyfinCatalog(db, report) {
     'SELECT * FROM UserData ORDER BY ItemId,UserId,LastPlayedDate DESC,PlayCount DESC,PlaybackPositionTicks DESC,CustomDataKey',
   )) {
     const key = keyFor('play', guid(r.ItemId), guid(r.UserId));
-    const record = { ...fields(r, stateFields), LastPlayedDate: timeToSeconds(r.LastPlayedDate) };
+    const record = jellyfinPlaybackState(r);
     if (!rows.has(key)) {
       rows.set(key, record);
       states.set(key, [r]);
@@ -388,6 +401,12 @@ export function jellyfinCatalog(db, report) {
         ambiguous.set(key, names);
       }
     }
+  }
+  for (const row of statement(db, `SELECT ItemId,UserId,Value FROM CustomItemDisplayPreferences
+    WHERE Client=? AND Key=? AND Value IS NOT NULL ORDER BY ItemId,UserId`).iterate(searchHistoryClient, searchHistoryKey)) {
+    const user = guid(row.UserId), key = keyFor('search', guid(row.ItemId), user);
+    if (items.has(row.ItemId) && users.has(user)) register(rows, key, { [searchHistoryKey]: row.Value });
+    else report('origin-only', 'search', key, searchHistoryKey, 'missing item or user');
   }
   return { rows, items, users, states, ambiguous };
 }

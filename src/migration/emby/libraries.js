@@ -1,11 +1,11 @@
 import path from 'node:path';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { defaultLibraryOptions, deserializeLibraryOptions } from '../../library/options.js';
 import { serializeLibraryOptions } from '../../library/library-options-store.js';
 import { decodeConfigurationXml } from '../../core/configuration-xml.js';
 import { escapeXml, escapeXmlAttribute } from '../../core/xml.js';
 import { XmlTokenCursor } from '../../core/xml-stream.js';
-import { exists } from './files.js';
+import { assetInventory, directory as ordinaryDirectory, exists, inventory } from './files.js';
 import { editObjectFields, itemTypes, jsonProperty, same } from './format.js';
 
 const keys = [
@@ -159,12 +159,55 @@ export function editJellyfinLibraryOptions(bytes, value, fields) {
     declaration.replace(/(\sencoding\s*=\s*)(["'])[^"']+\2/u, '$1"utf-8"'));
   return Buffer.from(updated, 'utf8');
 }
-function filename(instance, folder) {
+function libraryDirectoryName(folder) {
   const candidate = folder.Path ? path.win32.basename(folder.Path) : folder.Name;
   if (!candidate || candidate === '.' || candidate === '..' || /[\\/:]/u.test(candidate))
     throw new Error('Cannot identify the options directory for ' + folder.Name);
-  return path.join(instance, 'data', 'root', 'default', candidate, 'options.xml');
+  return candidate;
 }
+const libraryConfigRoot = instance => path.join(instance, 'data', 'root', 'default');
+const filename = (instance, folder) => path.join(libraryConfigRoot(instance), libraryDirectoryName(folder), 'options.xml');
+
+export async function reconcileJellyfinLibraryRemovals(changes, instance, {
+  sourceRows, targetRows, previousSource, previousTargetAssets, report,
+}) {
+  const deletions = new Set(changes.filter(({ value }) => !value).map(({ key }) => key));
+  const libraries = new Map();
+  for (const [key, row] of targetRows) {
+    if (!key.startsWith('item/') || row.type !== itemTypes[4]) continue;
+    const name = libraryDirectoryName(row);
+    if (!libraries.has(name)) libraries.set(name, []);
+    libraries.get(name).push(key);
+  }
+  const replacements = new Set(changes.filter(({ key, value }) => key.startsWith('item/') && value?.type === itemTypes[4])
+    .map(({ value }) => libraryDirectoryName(value)));
+  const baseline = assetInventory(previousTargetAssets);
+  const excludedDirectories = new Set(), conflicts = new Set();
+  for (const [name, keys] of libraries) {
+    if (!keys.some(key => previousSource.get(key)?.type === itemTypes[4] && !sourceRows.has(key))) continue;
+    // Stale source-side files cannot recreate a deleted library or remove
+    // configuration from a library retained by the row reconciler.
+    excludedDirectories.add(name);
+    if (replacements.has(name) || keys.some(key => !deletions.has(key))) continue;
+    const directory = path.join(libraryConfigRoot(instance), name);
+    if (!await exists(directory)) continue;
+    const prefix = name + '/';
+    const current = (await lstat(directory)).isDirectory() ? await inventory(directory) : null;
+    const beforeMembers = Object.keys(baseline.members).filter(member => member.startsWith(prefix));
+    const beforeDirectories = new Set(baseline.directories.filter(member => member.startsWith(prefix)));
+    if (!current || !baseline.directories.includes(name) || Object.keys(current.members).length !== beforeMembers.length
+      || Object.entries(current.members).some(([member, hash]) => baseline.members[prefix + member] !== hash)
+      || current.directories.length !== beforeDirectories.size
+      || current.directories.some(member => !beforeDirectories.has(prefix + member))) {
+      for (const key of keys) {
+        conflicts.add(key);
+        report('conflict', 'item', key.slice(5), 'deletion', 'target library configuration directory has edits');
+      }
+    } else await rm(await ordinaryDirectory(directory), { recursive: true });
+  }
+  return { changes: changes.filter(({ key, value }) => value || !conflicts.has(key)), excludedDirectories };
+}
+
 export async function readJellyfinLibraryOptions(view, instance) {
   for (const [key, row] of view.rows) {
     if (!key.startsWith('item/') || row.type !== itemTypes[4]) continue;

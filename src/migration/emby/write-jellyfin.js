@@ -4,14 +4,16 @@ import {
   AUTHENTICATION_PROVIDER,
   PASSWORD_RESET_PROVIDER,
   permissionNames,
+  equalsIgnoreCase,
   upperInvariant,
 } from '../../users/native.js';
 import { cleanValue } from '../../library/records.js';
 import { itemTopParentId } from '../../library/item-save-tuple.js';
 import { tableDefinition, quoteIdentifier as q } from '../../database/model.js';
+import { searchHistoryClient, searchHistoryKey } from '../../sessions/search-history.js';
 import {
   itemTypes,
-  folders,
+  jellyfinItemDiscriminators,
   scalarFields,
   dateFields,
   stateFields,
@@ -22,9 +24,11 @@ import {
   locks,
   sqliteValue,
   editObjectFields,
+  same,
 } from './format.js';
-import { valueTypes } from './catalog.js';
+import { jellyfinPlaybackState, valueTypes } from './catalog.js';
 import { isMarkerField, writeMarker } from './chapter-markers.js';
+import { repairEmbySqliteFolders } from './folder-classification.js';
 
 export function insert(db, table, row, { schema, ignore = false } = {}) {
   const keys = Object.keys(row);
@@ -193,6 +197,7 @@ function refreshHierarchy(db, changes, previousRows, sourceRows, report) {
   const children = db.prepare('SELECT Id FROM BaseItems WHERE ParentId=?');
   const seasons = db.prepare('SELECT Id,Name,SeriesId FROM BaseItems WHERE ParentId=? AND Type=? AND IndexNumber=? LIMIT 2');
   const directEpisodes = db.prepare('SELECT Id FROM BaseItems WHERE ParentId=? AND Type=?');
+  const renameEpisodes = db.prepare('UPDATE BaseItems SET SeasonName=? WHERE Type=? AND SeasonId=?');
   const walk = (item) => {
     const seen = new Set([item.Id]);
     const parents = [];
@@ -213,6 +218,7 @@ function refreshHierarchy(db, changes, previousRows, sourceRows, report) {
     if (fields.includes('ParentId') || fields.includes('type')) physical.add(id);
     if (value?.type === episodeType && fields.some(field => ['SeriesId', 'ParentIndexNumber'].includes(field)))
       pending.add(id);
+    if (value?.type === seasonType && fields.includes('Name')) renameEpisodes.run(value.Name, episodeType, id);
     const previous = previousRows.get(key);
     if (!value || fields.some(field => ['IndexNumber', 'ParentId', 'type'].includes(field))) {
       if (previous?.type === seasonType && previous.ParentId) seasonParents.add(previous.ParentId);
@@ -265,41 +271,63 @@ function refreshHierarchy(db, changes, previousRows, sourceRows, report) {
       ...(season && seriesId && !item.SeriesId ? { SeriesId: seriesId } : {}),
     }, { Id: id });
   }
+
 }
-export async function writeJellyfin(db, changes, catalog, source, report, { adminUser, adminPassword, creditsEnd, skipperTarget } = {}) {
+
+function refreshSeriesKeys(db, targetRows, sourceRows, previousSource, previousTarget) {
+  const [seriesType, seasonType, episodeType] = itemTypes.slice(6, 9);
+  const mismatches = db.prepare(`SELECT child.Id,child.Type,child.SeriesId,child.SeriesPresentationUniqueKey,
+      NULLIF(series.PresentationUniqueKey,'') AS seriesKey
+    FROM BaseItems child LEFT JOIN BaseItems series ON series.Id=child.SeriesId AND series.Type=?
+    WHERE child.Type IN (?,?) AND NULLIF(child.SeriesPresentationUniqueKey,'') IS NOT NULLIF(series.PresentationUniqueKey,'')`);
+  const fillSeriesKey = db.prepare('UPDATE BaseItems SET SeriesPresentationUniqueKey=? WHERE Id=?');
+  for (const item of mismatches.all(seriesType, seasonType, episodeType)) {
+    const key = 'item/' + item.Id, origin = sourceRows.get(key);
+    if (origin?.type !== item.Type || origin.SeriesId !== item.SeriesId || origin.SeriesPresentationUniqueKey) continue;
+    const saved = previousTarget?.get(key);
+    if (saved && targetRows.get(key)?.SeriesPresentationUniqueKey !== saved.SeriesPresentationUniqueKey) continue;
+    if (item.SeriesPresentationUniqueKey) {
+      // Both sides of the receipt must account for a previously derived key.
+      const before = previousSource?.get(key);
+      if (!before || before.SeriesPresentationUniqueKey || before.SeriesId !== saved?.SeriesId ||
+          saved?.SeriesPresentationUniqueKey !== item.SeriesPresentationUniqueKey ||
+          previousTarget.get('item/' + saved.SeriesId)?.PresentationUniqueKey !== item.SeriesPresentationUniqueKey) continue;
+    }
+    fillSeriesKey.run(item.seriesKey, item.Id);
+  }
+}
+export async function writeJellyfin(db, changes, catalog, source, report, { adminUser, adminPassword, creditsEnd, skipperTarget, previousSource, previousTarget } = {}) {
+  let adminId;
+  if (adminUser != null) {
+    const matches = [...source.users].filter(([, row]) => equalsIgnoreCase(JSON.parse(row.data).Name, adminUser));
+    if (matches.length !== 1 || !adminPassword) {
+      throw new Error(`--admin-user must select exactly one Emby account (matched ${matches.length}). Check the source account names, resolve any duplicates and supply --admin-password-env.`);
+    }
+    adminId = matches[0][0];
+  }
   const adminHash = adminPassword ? await createPasswordHash(adminPassword) : null;
   const inaccessible = await createPasswordHash(randomBytes(48).toString('base64url'));
   const items = changes.filter((c) => c.key.startsWith('item/') && c.value);
+  const storedTypeAndParent = db.prepare('SELECT Type, ParentId FROM BaseItems WHERE Id=?');
   for (const { key, value } of items) {
     const [, id] = key.split('/');
-    if (!db.prepare('SELECT 1 FROM BaseItems WHERE Id=?').get(id)) {
-      const type = itemTypes.indexOf(value.type);
-      const mediaType = [5, 8, 10, 15, 18].includes(type)
-        ? 'Video'
-        : type === 11
-          ? 'Audio'
-          : type === 25
-            ? 'Photo'
-            : type === 20
-              ? 'Book'
-              : null;
+    if (!storedTypeAndParent.get(id)) {
       insert(db, 'BaseItems', {
         ...defaults('BaseItems'),
         Id: id,
         Type: value.type,
-        IsFolder: folders.has(type) ? 1 : 0,
-        MediaType: mediaType,
+        ...jellyfinItemDiscriminators(value.type, null),
       });
     }
   }
   for (const { key, value, fields } of changes) {
     const [kind, id] = key.split('/');
-    if (!value || kind === 'play') continue;
+    if (!value || (kind !== 'item' && kind !== 'user')) continue;
     if (kind === 'user') {
       if (!catalog.users.has(id)) {
         const account = source.users.get(id);
         const original = account ? JSON.parse(account.data) : {};
-        const admin = adminHash && value.Username === adminUser;
+        const admin = id === adminId;
         const internal = db.prepare('SELECT COALESCE(MAX(InternalId),0)+1 AS next FROM Users').get().next;
         insert(db, 'Users', {
           ...defaults('Users'),
@@ -363,22 +391,39 @@ export async function writeJellyfin(db, changes, catalog, source, report, { admi
       if (scalarFields.includes(field) || field === 'Album') patch[field] = sqliteValue(field, value[field]);
       else if (dateFields.includes(field)) patch[field] = fromSeconds(value[field]);
       else if (['ParentId', 'SeriesId'].includes(field)) patch[field] = knownParent(db, value[field]);
-      else if (field === 'type') {
-        patch.Type = value.type;
-        patch.IsFolder = folders.has(itemTypes.indexOf(value.type)) ? 1 : 0;
-      } else if (isMarkerField(field)) {
+      else if (field === 'type') patch.Type = value.type;
+      else if (isMarkerField(field)) {
         const target = catalog.rows?.get(key);
         writeMarker(db, 'jellyfin', id, id, field, value[field], target,
           fields.includes('RunTimeTicks') ? value.RunTimeTicks : target?.RunTimeTicks, report, creditsEnd, skipperTarget);
       } else changeRelations(db, id, field, value[field], report);
+    }
+    if (Object.hasOwn(patch, 'Type') || Object.hasOwn(patch, 'ParentId')) {
+      const stored = storedTypeAndParent.get(id);
+      const parent = Object.hasOwn(patch, 'ParentId') ? patch.ParentId : stored.ParentId;
+      const derived = jellyfinItemDiscriminators(patch.Type ?? stored.Type, parent);
+      patch.IsFolder = derived.IsFolder;
+      if (Object.hasOwn(patch, 'Type')) patch.MediaType = derived.MediaType;
     }
     if (Object.hasOwn(patch, 'Name')) patch.CleanName = cleanValue(patch.Name);
     update(db, 'BaseItems', patch, { Id: id });
   }
   for (const { key, value, fields } of changes.filter((c) => c.key.startsWith('play/'))) {
     const [, id, user] = key.split('/');
+    const customDataKey = id.replaceAll('-', '').toLowerCase();
+    const original = catalog.states.get(key);
     if (!value) {
-      db.prepare('DELETE FROM UserData WHERE ItemId=? AND UserId=?').run(id, user);
+      // Prefer the key written by exchange, then the native item GUID fallback.
+      const mapped = original?.find(row => row.CustomDataKey === customDataKey)
+        ?? original?.find(row => row.CustomDataKey === id.toLowerCase());
+      if (mapped && same(jellyfinPlaybackState(mapped), catalog.rows.get(key))) {
+        db.prepare('DELETE FROM UserData WHERE ItemId=? AND UserId=? AND CustomDataKey=?')
+          .run(mapped.ItemId, mapped.UserId, mapped.CustomDataKey);
+      } else if (mapped) {
+        report('conflict', 'play', key, 'deletion', 'mapped playback differs from the reconciled target record');
+      }
+      if (original?.some(row => row !== mapped))
+        report('conflict', 'play', key, 'deletion', 'preserved playback for other native custom keys');
       continue;
     }
     if (!knownParent(db, id) || !db.prepare('SELECT 1 FROM Users WHERE Id=?').get(user)) {
@@ -389,8 +434,7 @@ export async function writeJellyfin(db, changes, catalog, source, report, { admi
       fields.filter((f) => stateFields.includes(f)).map((f) => [f, sqliteValue(f, value[f])]),
     );
     if (fields.includes('LastPlayedDate')) data.LastPlayedDate = fromSeconds(value.LastPlayedDate);
-    if (catalog.states.has(key)) {
-      const original = catalog.states.get(key);
+    if (original) {
       for (const name of Object.keys(data)) {
         if (original.some((row) => row[name] !== original[0][name])) {
           report('conflict', 'play', key, name, 'target has differing native custom keys');
@@ -403,9 +447,19 @@ export async function writeJellyfin(db, changes, catalog, source, report, { admi
         ...defaults('UserData'),
         ItemId: id,
         UserId: user,
-        CustomDataKey: id.replaceAll('-', '').toLowerCase(),
+        CustomDataKey: customDataKey,
         ...data,
       });
+  }
+  const clearSearch = db.prepare('DELETE FROM CustomItemDisplayPreferences WHERE ItemId=? AND UserId=? AND Client=? AND Key=?');
+  const saveSearch = db.prepare(`INSERT INTO CustomItemDisplayPreferences (ItemId,UserId,Client,Key,Value) VALUES (?,?,?,?,?)
+    ON CONFLICT(UserId,ItemId,Client,Key) DO UPDATE SET Value=excluded.Value`);
+  for (const { key, value } of changes.filter(change => change.key.startsWith('search/'))) {
+    const [, id, user] = key.split('/');
+    if (!value) clearSearch.run(id, user, searchHistoryClient, searchHistoryKey);
+    else if (knownParent(db, id) && db.prepare('SELECT 1 FROM Users WHERE Id=?').get(user))
+      saveSearch.run(id, user, searchHistoryClient, searchHistoryKey, value[searchHistoryKey]);
+    else report('origin-only', 'search', key, 'identity', 'missing item or user');
   }
   for (const { key, value } of changes) {
     if (value) continue;
@@ -414,4 +468,6 @@ export async function writeJellyfin(db, changes, catalog, source, report, { admi
     if (kind === 'user') remove(db, 'Users', id, 'Id');
   }
   refreshHierarchy(db, changes, catalog.rows, source.rows, report);
+  refreshSeriesKeys(db, catalog.rows, source.rows, previousSource, previousTarget);
+  repairEmbySqliteFolders(db, source.rows);
 }

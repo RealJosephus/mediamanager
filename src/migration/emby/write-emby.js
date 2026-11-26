@@ -2,6 +2,8 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { mkdir, rename, writeFile } from 'node:fs/promises';
 import { tokenizeJson } from '../../core/json-tokens.js';
+import { searchHistoryKey } from '../../sessions/search-history.js';
+import { int64 } from '../../sessions/user-data.js';
 import { exists } from './files.js';
 import {
   itemTypes,
@@ -16,8 +18,9 @@ import {
   locks,
   editObjectFields,
   jsonProperty,
+  keyFor,
 } from './format.js';
-import { valueTypes, personTypes } from './catalog.js';
+import { valueTypes, personTypes, schemaColumns } from './catalog.js';
 import { isMarkerField, reserveChapterIndexes, writeMarker } from './chapter-markers.js';
 import { insert, update } from './write-jellyfin.js';
 import { editEmbyLibraryOptions } from './libraries.js';
@@ -56,6 +59,26 @@ async function renameExistingUser(db, user, id, username, root, report) {
 
 function remove(db, table, column, id) {
   db.prepare('DELETE FROM "' + table + '" WHERE "' + column + '"=?').run(id);
+}
+function saveUserData(db, where, values, fields = []) {
+  const now = Math.floor(Date.now() / 1000);
+  if (db.prepare('SELECT 1 FROM UserDatas WHERE UserDataKeyId=? AND userId=?').get(where.UserDataKeyId, where.userId)) {
+    if (fields.includes('Rating') || fields.includes('IsFavorite')) values.RatingLastModified = now;
+    if (fields.some(f => !['Rating', 'IsFavorite'].includes(f))) values.PlaystateLastModified = now;
+    update(db, 'UserDatas', values, where);
+  } else {
+    insert(db, 'UserDatas', {
+      ...where,
+      played: 0,
+      playCount: 0,
+      isFavorite: 0,
+      HideFromResume: 0,
+      playbackPositionTicks: 0,
+      RatingLastModified: now,
+      PlaystateLastModified: now,
+      ...Object.fromEntries(Object.entries(values).map(([key, value]) => [key[0].toLowerCase() + key.slice(1), value])),
+    });
+  }
 }
 function getKey(db, id) {
   const key = id.replaceAll('-', '').toLowerCase();
@@ -278,7 +301,7 @@ export async function writeEmby(db, changes, catalog, source, report, root) {
   }
   for (const { key, value, fields } of changes) {
     const [kind, id] = key.split('/');
-    if (!value || kind === 'play') continue;
+    if (!value || (kind !== 'item' && kind !== 'user')) continue;
     if (kind === 'user') {
       if (!userIds.has(id)) {
         const found = statement(
@@ -381,27 +404,54 @@ export async function writeEmby(db, changes, catalog, source, report, root) {
   }
   const processed = new Set();
   const plays = new Map(changes.filter((c) => c.key.startsWith('play/')).map((c) => [c.key, c]));
-  for (const { key, value } of plays.values()) {
-    const [, id, user] = key.split('/'),
+  const searches = changes.filter(change => change.key.startsWith('search/'));
+  const hasDateLastSearched = catalog.hasDateLastSearched ?? schemaColumns(db, 'UserDatas').has('DateLastSearchedInt');
+  const isSearched = hasDateLastSearched && db.prepare('SELECT 1 FROM UserDatas WHERE UserDataKeyId=? AND userId=? AND DateLastSearchedInt IS NOT NULL');
+  // A clear can release the last reason to keep a shared UserDatas row.
+  for (const { key, value } of [...searches, ...plays.values()]) {
+    const [kind, id, user] = key.split('/'),
       int = ids.get(id),
       account = userIds.get(user);
+    if (kind === 'search' && !hasDateLastSearched) {
+      report('origin-only', kind, key, searchHistoryKey, 'target UserDatas has no DateLastSearchedInt column');
+      continue;
+    }
     if (!int || !account) {
-      report('origin-only', 'play', key, 'identity', 'missing mapped account or item');
+      report('origin-only', kind, key, 'identity', 'missing mapped account or item');
       continue;
     }
     let keyId = statement(db, 'SELECT UserDataKeyId AS k FROM MediaItems WHERE Id=?').get(int).k;
     if (keyId == null) {
+      if (!value) continue;
       keyId = getKey(db, id);
       update(db, 'MediaItems', { UserDataKeyId: keyId }, { Id: int });
     }
-    const groupKey = keyId + '/' + account;
+    const groupKey = keyFor(kind, keyId, account);
     if (processed.has(groupKey)) continue;
     processed.add(groupKey);
     const group = catalog.shared.get(BigInt(keyId)) ?? [id];
-    const keys = group.map((item) => 'play/' + item + '/' + user);
+    const keys = group.map(item => keyFor(kind, item, user));
+    const where = { UserDataKeyId: keyId, userId: account };
+    if (kind === 'search') {
+      if (!keys.every(member => same(source.rows.get(member), value ?? undefined))) {
+        report('conflict', kind, key, searchHistoryKey, 'shared search history key: ' + group.join(','));
+      } else if (!value) {
+        update(db, 'UserDatas', { DateLastSearchedInt: null }, where);
+      } else {
+        let date;
+        try { date = int64(value[searchHistoryKey]); }
+        catch (error) { report('origin-only', kind, key, searchHistoryKey, error.message); continue; }
+        saveUserData(db, where, { DateLastSearchedInt: date });
+      }
+      continue;
+    }
     if (!value) {
       if (keys.some((k) => source.rows.has(k))) {
         report('conflict', 'play', key, 'deletion', 'shared playback key: ' + group.join(','));
+        continue;
+      }
+      if (isSearched && isSearched.get(keyId, account)) {
+        report('conflict', 'play', key, 'deletion', 'native user data row still holds search history');
         continue;
       }
       db.prepare('DELETE FROM UserDatas WHERE UserDataKeyId=? AND userId=?').run(keyId, account);
@@ -423,24 +473,7 @@ export async function writeEmby(db, changes, catalog, source, report, root) {
     for (const f of fields) if (stateFields.includes(f)) cols[f] = sqliteValue(f, value[f]);
     if (fields.includes('LastPlayedDate'))
       cols.LastPlayedDateInt = value.LastPlayedDate == null ? null : BigInt(value.LastPlayedDate);
-    const now = Math.floor(Date.now() / 1000);
-    if (db.prepare('SELECT 1 FROM UserDatas WHERE UserDataKeyId=? AND userId=?').get(keyId, account)) {
-      if (fields.includes('Rating') || fields.includes('IsFavorite')) cols.RatingLastModified = now;
-      if (fields.some((f) => !['Rating', 'IsFavorite'].includes(f))) cols.PlaystateLastModified = now;
-      update(db, 'UserDatas', cols, { UserDataKeyId: keyId, userId: account });
-    } else
-      insert(db, 'UserDatas', {
-        UserDataKeyId: keyId,
-        userId: account,
-        played: 0,
-        playCount: 0,
-        isFavorite: 0,
-        HideFromResume: 0,
-        playbackPositionTicks: 0,
-        RatingLastModified: now,
-        PlaystateLastModified: now,
-        ...Object.fromEntries(Object.entries(cols).map(([k, v]) => [k[0].toLowerCase() + k.slice(1), v])),
-      });
+    saveUserData(db, where, cols, fields);
   }
   for (const { key, value } of changes) {
     if (value) continue;

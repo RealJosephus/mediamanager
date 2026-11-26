@@ -5,14 +5,14 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { DatabaseSync } from 'node:sqlite';
 import { cloneDirectory, stateDirectory } from '../../src/migration/emby/files.js';
 
-export async function verifyProviderRoundtrip({ root, original, wireId, item, exchange, postgres, nativeProviders }) {
+export async function verifyProviderRoundtrip({ root, original, wireId, item, exchange, postgres, nativeProviders, adminUser }) {
   const instance = name => path.join(root, 'providers-' + name);
   const source = instance('source'), template = instance('template');
   const first = instance('manager'), emby = instance('emby'), second = instance('return'), repeated = instance('repeat');
   const originalFields = 'Tmdb=100|Imdb=tt1000|Tvdb=60|TvRage=600';
   await cloneDirectory(original, source);
   setProviders(source, originalFields);
-  await exchange('import', source, first, 'migration_providers');
+  await exchange('import', source, first, 'migration_providers', '--admin-user', adminUser, '--admin-password-env', 'MM_TEST_ADMIN');
   await makeOldReceipt(first);
   await cloneDirectory(source, template);
   setProviders(template, 'Tmdb=100|IMDB=tt2000|Tvdb=62|Private=private');

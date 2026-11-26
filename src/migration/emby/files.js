@@ -10,22 +10,24 @@ import {
   readdir,
   realpath,
   readFile,
+  rm,
+  rmdir,
   unlink,
   utimes,
   writeFile,
 } from 'node:fs/promises';
 
 export const stateDirectory = '.mediamanager-exchange';
-export async function hasImportedMarkerReader(instance) {
+export async function readEmbyImportManifest(instance) {
   let manifest;
   try {
     manifest = await readFile(path.join(instance, stateDirectory, 'manifest.json'), 'utf8');
   } catch (error) {
-    if (error.code === 'ENOENT') return false;
+    if (error.code === 'ENOENT') return null;
     throw error;
   }
   const lineage = JSON.parse(manifest);
-  return lineage.version === 1 && lineage.owner === 'jellyfin' && lineage.embyChapterMarkers === true;
+  return lineage.version === 1 && lineage.owner === 'jellyfin' ? lineage : null;
 }
 export async function exists(file) {
   try {
@@ -158,30 +160,127 @@ export async function sealState(
     baseHash: await fileHash(path.join(state, 'base.json')),
   });
 }
-export async function mergeAssets(from, to, oldA = {}, oldB = {}, report, { include = () => true } = {}) {
-  const a = (await exists(from)) ? await inventory(from) : { members: {}, directories: [] };
-  const b = (await exists(to)) ? await inventory(to) : { members: {}, directories: [] };
-  if (a.directories.length || Object.keys(a.members).length) await mkdir(to, { recursive: true, mode: 0o700 });
-  for (const d of a.directories) await mkdir(path.join(to, d), { recursive: true, mode: 0o700 });
-  for (const name of new Set([...Object.keys(oldA), ...Object.keys(a.members)])) {
-    if (!include(name)) continue;
-    const get = (members) => (Object.hasOwn(members, name) ? members[name] : undefined);
-    const input = get(a.members),
-      current = get(b.members);
-    if (input === get(oldA) || input === current) continue;
-    if (current !== get(oldB)) {
-      report('conflict', 'asset', name, 'bytes', 'target asset changed');
-      continue;
+export function assetInventory(saved = {}) {
+  if (Array.isArray(saved.directories)) return saved;
+  // Older baselines recorded file digests only. Recover the directories
+  // their files prove existed, including intermediate ancestors.
+  const directories = new Set();
+  for (const name of Object.keys(saved)) {
+    for (let parent = path.posix.dirname(name); parent !== '.' && !directories.has(parent); parent = path.posix.dirname(parent)) {
+      directories.add(parent);
     }
-    const target = path.join(to, name);
-    if (input) {
-      await mkdir(path.dirname(target), { recursive: true });
-      const source = path.join(from, name);
-      await copyFile(source, target);
-      const stat = await lstat(source);
-      await utimes(target, stat.atime, stat.mtime);
-      if ((await fileHash(target)) !== input) throw new Error('Asset changed during migration: ' + name);
-    } else if (current) await unlink(target);
   }
-  return { source: a.members, target: (await exists(to)) ? (await inventory(to)).members : {} };
+  return { members: saved, directories: [...directories].sort() };
+}
+
+function assetTree(snapshot) {
+  const root = new Map(), directories = new Map([['.', root]]);
+  for (const name of snapshot.directories) {
+    const children = new Map();
+    directories.get(path.posix.dirname(name)).set(path.posix.basename(name), { kind: 'directory', children });
+    directories.set(name, children);
+  }
+  for (const [name, digest] of Object.entries(snapshot.members)) {
+    directories.get(path.posix.dirname(name)).set(path.posix.basename(name), { kind: 'file', digest });
+  }
+  return root;
+}
+
+function sameAsset(left, right) {
+  if (left === right) return true;
+  if (!left || !right || left.kind !== right.kind) return false;
+  if (left.kind === 'file') return left.digest === right.digest;
+  return left.children.size === right.children.size && [...left.children]
+    .every(([name, asset]) => sameAsset(asset, right.children.get(name)));
+}
+
+function sourceOwnsTree(current, previousInput, name, include) {
+  if (!previousInput || current.kind !== previousInput.kind || !include(name)) return false;
+  if (current.kind === 'file') return true;
+  return [...current.children].every(([child, asset]) =>
+    sourceOwnsTree(asset, previousInput.children.get(child), `${name}/${child}`, include));
+}
+
+// A held file, directory, or absent name retains its last acknowledged state.
+// A child in conflict can still need its old ancestors after a directory deletion.
+function assetReceipt(observed, previous, held, include) {
+  if (!held.size) return observed;
+  const directories = new Set(), members = Object.create(null);
+  const isHeld = name => {
+    let included = true;
+    for (let part = name; part !== '.'; part = path.posix.dirname(part)) {
+      included &&= include(part);
+      // Native-only files such as options.xml still document the actual library
+      // directory. A retained file at an ancestor cannot also contain children.
+      if (held.has(part)) return included || Object.hasOwn(previous.members, part);
+    }
+    return false;
+  };
+  for (const [inventory, useHeld] of [[observed, false], [previous, true]]) {
+    for (const name of inventory.directories) if (isHeld(name) === useHeld) directories.add(name);
+    for (const [name, digest] of Object.entries(inventory.members)) if (isHeld(name) === useHeld) members[name] = digest;
+  }
+  for (const name of [...directories, ...Object.keys(members)]) {
+    for (let dir = path.posix.dirname(name); dir !== '.' && !directories.has(dir); dir = path.posix.dirname(dir)) directories.add(dir);
+  }
+  return { directories: [...directories].sort(), members };
+}
+
+export async function mergeAssets(from, to, oldA, oldB, report, { include = () => true } = {}) {
+  const read = async root => (await exists(root)) ? inventory(root) : assetInventory();
+  const source = await read(from), target = await read(to);
+  const baseSource = assetInventory(oldA), baseTarget = assetInventory(oldB), held = new Set();
+  const empty = new Map();
+  async function merge(input, current, previousInput, previousTarget, parent = '') {
+    for (const child of new Set([...previousInput.keys(), ...input.keys(), ...current.keys(), ...previousTarget.keys()])) {
+      const name = parent ? `${parent}/${child}` : child;
+      if (!include(name)) continue;
+      const a = input.get(child), b = current.get(child);
+      const oldSource = previousInput.get(child), oldTarget = previousTarget.get(child);
+      const destination = path.join(to, name);
+      if (b?.kind === 'directory' && (a?.kind === 'directory' || !a && oldSource?.kind === 'directory')) {
+        await merge(a?.children ?? empty, b.children, oldSource?.children ?? empty, oldTarget?.children ?? empty, name);
+        if (!a && oldTarget?.kind === 'directory') {
+          try { await rmdir(destination); }
+          catch (error) { if (!['ENOTEMPTY', 'EEXIST'].includes(error.code)) throw error; }
+        }
+        continue;
+      }
+      if (sameAsset(a, b)) continue;
+      if (oldSource?.kind === 'file' && oldTarget?.kind === 'file' && oldSource.digest !== oldTarget.digest) {
+        // Older receipts could acknowledge two different byte strings. They
+        // cannot establish which edit came first, even if neither side moved.
+        held.add(name);
+        report('conflict', 'asset', name, 'bytes', 'previous receipt has different digests for the same file');
+        continue;
+      }
+      if (sameAsset(a, oldSource)) {
+        if (oldB && !sameAsset(b, oldTarget)) held.add(name);
+        continue;
+      }
+      if (!sameAsset(b, oldTarget) || b?.kind === 'directory' && !sourceOwnsTree(b, oldSource, name, include)) {
+        held.add(name);
+        report('conflict', 'asset', name, a && b && a.kind !== b.kind ? 'kind' : 'bytes', 'target asset changed or contains independent members');
+        continue;
+      }
+      if (b && a?.kind !== b.kind) {
+        if (b.kind === 'directory') await rm(destination, { recursive: true });
+        else await unlink(destination);
+      }
+      if (!a) continue;
+      if (a.kind === 'directory') {
+        await mkdir(destination, { recursive: true, mode: 0o700 });
+        await merge(a.children, empty, empty, empty, name);
+      } else {
+        await mkdir(path.dirname(destination), { recursive: true, mode: 0o700 });
+        const filename = path.join(from, name);
+        await copyFile(filename, destination);
+        const stat = await lstat(filename);
+        await utimes(destination, stat.atime, stat.mtime);
+        if ((await fileHash(destination)) !== a.digest) throw new Error('Asset changed during migration: ' + name);
+      }
+    }
+  }
+  await merge(assetTree(source), assetTree(target), assetTree(baseSource), assetTree(baseTarget));
+  return { source: assetReceipt(source, baseSource, held, include), target: assetReceipt(await read(to), baseTarget, held, include) };
 }

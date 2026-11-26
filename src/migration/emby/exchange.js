@@ -5,14 +5,14 @@ import { DatabaseSync } from 'node:sqlite';
 import { canonicalNativeSqliteSchema } from '../../database/sqlite-schema.js';
 import { pinnedNativeSqliteMigrationHistory } from '../../database/native-envelope.js';
 import { nativeGuid } from '../../users/native.js';
-import { embyCatalog, jellyfinCatalog, schemaColumns } from './catalog.js';
+import { embyCatalog, jellyfinCatalog } from './catalog.js';
 import { changesBetween } from './reconcile.js';
-import { activeSystemRoots, alignIdentities, translatedRows } from './identities.js';
+import { activeSystemRoots, alignIdentities, translatedKey, translatedRows } from './identities.js';
 import { writeJellyfin } from './write-jellyfin.js';
 import { writeEmby } from './write-emby.js';
 import { openPublication } from './publication.js';
 import { originCoverage } from './coverage.js';
-import { readJellyfinLibraryOptions, writeJellyfinLibraryOptions } from './libraries.js';
+import { readJellyfinLibraryOptions, reconcileJellyfinLibraryRemovals, writeJellyfinLibraryOptions } from './libraries.js';
 import { activateMetadata, collectAssets, libraryRoot, metadataDirectory, projectAssetRows } from './assets.js';
 import {
   directory,
@@ -105,6 +105,29 @@ const silent = () => {};
 function getCatalog(type, db, id, report) {
   return type === 'emby' ? embyCatalog(db, id, report) : jellyfinCatalog(db, report);
 }
+// An observed edit is acknowledged only once it has reached the other side.
+// Keep the last comparison values in each endpoint's own ID and path space.
+function receiptRows(rows, previous, retainedFields, retainedRows, aliases) {
+  if (!retainedFields.size && !retainedRows.size) return rows;
+  const baseline = new Map(previous), result = new Map(rows);
+  for (const key of new Set([...rows.keys(), ...baseline.keys()])) {
+    const targetKey = aliases ? translatedKey(key, aliases) : key;
+    if (retainedRows.has(targetKey)) {
+      if (baseline.has(key)) result.set(key, baseline.get(key));
+      else result.delete(key);
+      continue;
+    }
+    const fields = retainedFields.get(targetKey);
+    if (!fields || !rows.has(key)) continue;
+    const copy = { ...rows.get(key) }, old = baseline.get(key);
+    for (const field of fields) {
+      if (Object.hasOwn(old ?? {}, field)) copy[field] = old[field];
+      else delete copy[field];
+    }
+    result.set(key, copy);
+  }
+  return result;
+}
 function indexProviderState(records, aliases) {
   const result = new Map();
   for (const record of records ?? []) {
@@ -151,7 +174,7 @@ export async function inspectEmby(root) {
           .all().map(row => ({ ...row, name: chapterMarkerName(row.type) })),
         issues: markerIssues,
       },
-      hasDateLastSearched: schemaColumns(db, 'UserDatas').has('DateLastSearchedInt'),
+      hasDateLastSearched: catalog.hasDateLastSearched,
       retainedSourceColumns: originCoverage(db),
     };
   } finally {
@@ -229,9 +252,10 @@ export async function exchange({
       stats,
       inputAssets,
       pathMaps,
-      retainedSourceColumns, importedMarkerReader,
+      retainedSourceColumns, importedMarkerReader, excludedLibraryDirectories,
       issues = preparationIssues ?? [];
     const providerState = { conflicts: [], targetEdits: [] };
+    const retainedFields = new Map(), retainedRows = new Set();
     let pendingProviders, sourceItemIds;
     const report = (status, kind, id, field, reason, evidence) => {
       const issue = { status, kind, id, field, reason };
@@ -293,6 +317,9 @@ export async function exchange({
         } else sourceView = getCatalog(sourceType, sourceDb, sourceId, report);
         if (skipperTarget && skipperTarget !== 'unknown') projectSkipper(targetDb, skipperTarget, report);
         targetView = getCatalog(targetType, targetDb, targetId, silent);
+        if (targetType === 'jellyfin' && !targetView.users.size && sourceView.users.size && !adminUser) {
+          throw new Error('Importing accounts into an empty target requires --admin-user <Emby-name> and --admin-password-env <variable>.');
+        }
         if (sourceType === 'jellyfin') await readJellyfinLibraryOptions(sourceView, captured);
         if (targetType === 'jellyfin') await readJellyfinLibraryOptions(targetView, target);
         const transferable =
@@ -362,20 +389,35 @@ export async function exchange({
           rows: translatedRows(sourceAssets.rows, aliases, targetAssets.rows, !baseline),
           users: new Map([...sourceView.users].map(([id, row]) => [aliases.users[id] ?? id, row])),
         };
-        const changes = changesBetween(
+        const previousSource = translatedRows(beforeSource.rows, aliases, targetAssets.rows, false);
+        let changes = changesBetween(
           aligned.rows,
           targetAssets.rows,
-          translatedRows(beforeSource.rows, aliases, targetAssets.rows, false),
+          previousSource,
           beforeTarget.rows,
           report,
           {
             sourceType, legacyChapters: baseline != null && !baseline.chapterMarkerVersion,
+            sourceHasSearchHistory: sourceView.hasDateLastSearched,
             pendingProviders, pendingProviderEdits, legacyProviderItems,
             rememberTargetEdit: (id, provider) => providerState.targetEdits.push({ id, provider }),
+            retainRowBaseline: baseline && (key => retainedRows.add(key)),
+            retainFieldBaseline(key, field) {
+              if (!retainedFields.has(key)) retainedFields.set(key, []);
+              retainedFields.get(key).push(field);
+            },
           },
         );
         targetDb.exec('BEGIN IMMEDIATE; PRAGMA defer_foreign_keys=ON');
         try {
+          if (targetType === 'jellyfin') {
+            const libraryRemovals = await reconcileJellyfinLibraryRemovals(changes, target, {
+              sourceRows: aligned.rows, targetRows: targetView.rows, previousSource,
+              previousTargetAssets: baseline?.assets?.libraries?.source, report,
+            });
+            changes = libraryRemovals.changes;
+            excludedLibraryDirectories = libraryRemovals.excludedDirectories;
+          }
           const writes = [...targetAssets.changes, ...changes];
           if (targetType === 'emby') await writeEmby(targetDb, writes, targetView, aligned, report, target);
           else {
@@ -384,6 +426,8 @@ export async function exchange({
               adminPassword,
               creditsEnd,
               skipperTarget,
+                previousSource,
+                previousTarget: beforeTarget.rows,
             });
             await writeJellyfinLibraryOptions(writes, target, report);
           }
@@ -424,7 +468,7 @@ export async function exchange({
       baseline?.assets?.libraries?.target,
       baseline?.assets?.libraries?.source,
       report,
-      { include: name => !/^[^/]+\/options\.xml$/iu.test(name) },
+      { include: name => !excludedLibraryDirectories?.has(name.split('/')[0]) && !/^[^/]+\/options\.xml$/iu.test(name) },
     );
     assets.paths = pathMaps;
     assets.libraryRoots = { source: inputAssets.libraryRoots, target: [libraryRoot(output, targetType)] };
@@ -433,8 +477,8 @@ export async function exchange({
       targetType,
       captured,
       sourceId,
-      sourceView.rows,
-      targetView.rows,
+      receiptRows(sourceView.rows, baseline?.target, retainedFields, retainedRows, aliases),
+      receiptRows(targetView.rows, baseline?.source, retainedFields, retainedRows),
       assets,
       aliases,
       inputAssets.extra ? inputAssets.directory : null,

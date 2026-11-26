@@ -426,7 +426,7 @@ if (process.env.MEDIAMANAGER_EMBY_ALTERNATE_ROOT) {
 }
 const settingsRoundtrip = await verifySettingsRoundtrip();
 const providerRoundtrip = await verifyProviderRoundtrip({
-  root, original, wireId, item, postgres,
+  root, original, wireId, item, postgres, adminUser: username,
   exchange: (mode, source, output, schema, ...options) => runEmby(mode, [...flags(source, output, schema), ...options], env),
   async nativeProviders(instance) {
     let providers;
@@ -491,7 +491,8 @@ async function verifySettingsRoundtrip() {
       await call('/Users/' + user.id + '/Password', 'POST', { NewPw: pw });
     }
   });
-  await runEmby('import', [...flags(source, manager, schema), '--mount-contract', contractFile], env);
+  await runEmby('import', [...flags(source, manager, schema), '--mount-contract', contractFile,
+    '--admin-user', username, '--admin-password-env', 'MM_TEST_ADMIN'], env);
   await cloneDirectory(source, template);
   const accounts = instance => new DatabaseSync(path.join(instance, 'data/users.db'));
   const originalAccounts = accounts(template);

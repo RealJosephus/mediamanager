@@ -26,6 +26,7 @@ const usage = [
   'emby:import -- --source <stopped-Emby-programdata> --output <new-MediaManager-instance> --schema <new-pg-schema> --postgres-url-env <variable> [--template <stopped-Jellyfin-instance>] [--mount-contract <json>] [--credits-end preserve|runtime] [--admin-user <Emby-name> --admin-password-env <variable>]',
   'emby:export -- --source <MediaManager-instance> --output <new-Emby-programdata> --schema <pg-schema> --postgres-url-env <variable> [--template <stopped-Emby-programdata>]',
   'Both directions accept --identity-map <users/items GUID JSON>, --asset-roots <JSON array of {id,identityRoot,directory}>, --metadata-root <physical source metadata directory> and --template-metadata-root <physical template metadata directory>.',
+  'Importing accounts into an empty target requires --admin-user and --admin-password-env. The administrator name must uniquely match an Emby account, ignoring case.',
 ].join('\n');
 export async function runEmby(command, argv, environment = process.env, { afterDatabaseCommit } = {}) {
   if (command === 'inspect') {
