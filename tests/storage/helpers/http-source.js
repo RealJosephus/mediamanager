@@ -21,11 +21,23 @@ export async function startHttpSource({ bytes = Buffer.from('0123456789') } = {}
       response.writeHead(name === '/denied' ? 403 : 404); response.end(name === '/denied' ? 'source denied body' : 'source missing body'); return;
     }
     if (name === '/multi') { response.writeHead(418); response.end(request.headers.range + '|' + request.headers['if-range']); return; }
-    if (name === '/gzip') {
+    if (name === '/gzip' || name === '/gzip-range') {
       const compressed = gzipSync(bytes);
-      response.writeHead(200, { 'Content-Encoding': 'gzip', 'Content-Length': compressed.length }); response.end(compressed); return;
+      const partial = name === '/gzip-range';
+      if (partial) response.setHeader('Content-Range', 'bytes 0-' + (compressed.length - 1) + '/' + compressed.length);
+      response.setHeader('Content-Encoding', 'gzip');
+      response.statusCode = partial ? 206 : 200;
+      if (partial && request.url.endsWith('?chunked')) {
+        response.write(compressed.subarray(0, 5)); response.end(compressed.subarray(5));
+      } else { response.setHeader('Content-Length', compressed.length); response.end(compressed); }
+      return;
     }
     if (name === '/chunked') { response.write(bytes.subarray(0, 3)); response.end(bytes.subarray(3)); return; }
+    if (name === '/chunked-range') {
+      const size = Number(new URL(request.url, 'http://127.0.0.1').searchParams.get('size'));
+      response.writeHead(206, { 'Content-Range': 'Bytes 2-4/10' });
+      response.write(bytes.subarray(2, 3)); response.end(bytes.subarray(3, 2 + size)); return;
+    }
     if (name === '/slow' || name === '/truncated') {
       response.writeHead(200, { 'Content-Length': bytes.length }); response.write(bytes.subarray(0, 3)); return;
     }

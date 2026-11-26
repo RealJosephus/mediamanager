@@ -5,6 +5,8 @@ import { once } from 'node:events';
 import { WebDavAdapter } from '../../plugins/webdav/adapter.js';
 import { StorageRegistry } from '../../src/storage/registry.js';
 import { VirtualFileSystem } from '../../src/storage/vfs.js';
+import { StorageFileSystem } from '../../src/storage/files.js';
+import { IdentityAccessMap } from '../../src/storage/identity-mapping.js';
 import { remoteFileContract } from './remote-file-contract.js';
 
 async function server(t, handler) {
@@ -143,6 +145,49 @@ test('WebDAV file operations preserve remote bytes and refuse nonrecursive direc
   const directoryDeletes = service.requests.filter(request => request.method === 'DELETE'
     && ['/dav/file-contract/nonempty', '/dav/file-contract/empty'].includes(request.path));
   assert.equal(directoryDeletes.length, 2, 'Only the two explicitly recursive directory deletes reach HTTP.');
+});
+
+test('concurrent recursive mkdir accepts a competing collection and preserves file and server failures', { timeout: 10000 }, async t => {
+  const bothCreating = Promise.withResolvers();
+  let creates = 0;
+  const service = await writableDav(t, { async before({ request, response, path, files }) {
+    if (request.method !== 'MKCOL') return;
+    if (path === '/dav/shows') {
+      if (++creates === 2) bothCreating.resolve();
+      await bothCreating.promise;
+    } else if (path === '/dav/file') files.set(path, Buffer.from('recording'));
+    else if (path === '/dav/denied') { response.writeHead(403); response.end(); return true; }
+  } });
+  const registry = new StorageRegistry(), capabilities = { mkdir: true };
+  registry.registerType('webdav', config => new WebDavAdapter(config));
+  t.after(() => registry.close());
+  await registry.createInstance('remote', 'webdav', { baseUrl: service.origin + '/dav/', capabilities });
+  const vfs = new VirtualFileSystem(registry), identityMap = new IdentityAccessMap();
+  vfs.mount({ path: '/network', instanceId: 'remote', capabilities });
+  identityMap.addPrefix({ identityRoot: '/dvr', accessRoot: '/network', style: 'posix', returnAccess: 'DVR recordings' });
+  const files = new StorageFileSystem({ vfs, identityMap });
+  const mkdir = name => files.mkdir('/dvr/' + name, { recursive: true });
+  await Promise.all([mkdir('shows'), mkdir('shows')]);
+  assert.equal(creates, 2);
+  await assert.rejects(files.mkdir('/dvr/shows'), { code: 'EEXIST' });
+  await assert.rejects(mkdir('file'), { code: 'EEXIST' });
+  await assert.rejects(mkdir('denied'), { code: 'EACCES' });
+
+  const failure = new Error('Failed to release the MKCOL response');
+  const adapter = new WebDavAdapter({ baseUrl: service.origin + '/dav/', capabilities }, {
+    async fetch(url, options) {
+      const response = await fetch(url, options);
+      if (options.method === 'MKCOL') {
+        const cancel = response.body.cancel.bind(response.body);
+        response.body.cancel = async () => { await cancel(); throw failure; };
+      }
+      return response;
+    },
+  });
+  t.after(() => assert.rejects(adapter.close(), error =>
+    error instanceof AggregateError && error.errors.length === 1 && error.errors[0].cause === failure));
+  await assert.rejects(adapter.mkdir('/shows', { recursive: true }), error =>
+    error.code === 'already-exists' && error.errors?.[1]?.cause === failure);
 });
 
 test('WebDAV exclusive publish preserves complete entities and keeps caller capabilities separate', async t => {

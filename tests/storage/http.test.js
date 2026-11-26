@@ -75,6 +75,13 @@ test('HTTP normal reads validate actual ranges, ignored ranges, redirects and de
   assert.ok(f.source.events.some(entry => entry.target === '/bytes?redirected=%2f+%252F'));
   const compressed = await f.vfs.openRead(f.access('/gzip'));
   assert.equal(compressed.contentLength, null); assert.deepEqual(await readStorageHandle(compressed), f.source.bytes);
+  for (const target of ['/gzip-range', '/gzip-range?chunked']) {
+    const compressedRange = await f.vfs.openResponse(f.access(target), { rangeHeader: 'bytes=0-' });
+    assert.equal(compressedRange.statusCode, 206); assert.equal(compressedRange.contentLength, null);
+    assert.deepEqual(await readStorageHandle(compressedRange), f.source.bytes);
+    const read = await f.vfs.openRead(f.access(target), { range: { start: 0 } });
+    await assert.rejects(readStorageHandle(read), { code: 'invalid-response' });
+  }
   const userAgent = 'Owned 中文 agent/1';
   assert.deepEqual(await readStorageHandle(await f.vfs.openResponse(f.access('/bytes?user-agent=1'), { requestHeaders: { 'User-Agent': userAgent } })), f.source.bytes);
   const received = await f.source.observe(entry => entry.target === '/bytes?user-agent=1');
@@ -90,6 +97,20 @@ async function startResponseServer(t, f) {
   t.after(async () => { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); });
   return { origin: `http://127.0.0.1:${server.address().port}`, errors };
 }
+
+test('chunked 206 readers finish only after the exact declared range has arrived', { timeout: 15000 }, async t => {
+  const f = await fixture(t);
+  for (const size of [3, 1, 4]) {
+    const access = f.access('/chunked-range?size=' + size);
+    for (const open of [() => f.vfs.openRead(access, { range: { start: 2, end: 4 } }),
+      () => f.vfs.openResponse(access, { rangeHeader: 'bytes=2-4' })]) {
+      const handle = await open();
+      assert.equal(handle.headers['content-length'], undefined);
+      if (size === 3) assert.equal((await readStorageHandle(handle)).toString(), '234');
+      else await assert.rejects(readStorageHandle(handle), { code: 'invalid-response' });
+    }
+  }
+});
 
 test('raw HTTP responses retain source status, headers, error body and unparsed Range/If-Range', { timeout: 15000 }, async t => {
   const f = await fixture(t), consumer = await startResponseServer(t, f);

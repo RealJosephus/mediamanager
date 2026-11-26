@@ -5,6 +5,7 @@ import { once } from 'node:events';
 import { mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { setTimeout as delay } from 'node:timers/promises';
 import { openStorageFixture } from './configured-fixture.js';
 import { startProductionInstance } from '../../src/main.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
@@ -24,7 +25,7 @@ const portableMountContract = {
 async function setup(t) {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'storage-bootstrap-'));
   const calls = [];
-  let slow = false;
+  let slow = false, heldRead;
   // This is an HTTP protocol fixture, not an actual AList service.
   const server = http.createServer(async (request, response) => {
     const parts = []; for await (const part of request) parts.push(part);
@@ -36,6 +37,14 @@ async function setup(t) {
     }
     response.setHeader('Content-Type', 'audio/wav'); response.setHeader('Accept-Ranges', 'bytes');
     response.setHeader('Content-Length', '10');
+    if (heldRead) {
+      const { promise } = heldRead;
+      heldRead = undefined;
+      response.write('0');
+      await promise;
+      if (!response.destroyed) response.end('123456789');
+      return;
+    }
     if (slow) { response.write('0'); return; }
     const range = /^bytes=(\d+)-(\d+)$/u.exec(request.headers.range ?? '');
     if (range) {
@@ -53,7 +62,8 @@ async function setup(t) {
   const filename = path.join(directory, 'storage.json');
   await writeFile(filename, JSON.stringify(configuration));
   t.after(async () => { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); await rm(directory, { recursive: true }); });
-  return { directory, filename, configuration, calls, environment: { ISOLATED_ALIST_TOKEN: token }, slow: () => { slow = true; } };
+  return { directory, filename, configuration, calls, environment: { ISOLATED_ALIST_TOKEN: token }, slow: () => { slow = true; },
+    holdNextRead: () => (heldRead = Promise.withResolvers()).resolve };
 }
 
 async function setupWebDav(t) {
@@ -312,6 +322,59 @@ test('production entry uses PostgreSQL and configured storage, then closes activ
   const reopened = await PostgresDatabase.open({ connectionString: environment.MEDIAMANAGER_POSTGRES,
     schema: environment.MEDIAMANAGER_POSTGRES_SCHEMA });
   await reopened.close();
+});
+
+test('saving storage configuration keeps active HTTP file reads on their original generation', {
+  skip: !process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE || !process.env.MEDIAMANAGER_TEST_POSTGRES,
+  timeout: 30000,
+}, async t => {
+  const fixture = await setup(t);
+  const application = await startProductionInstance({ environment: await isolatedInstance(fixture, t) });
+  t.after(() => application.close());
+  const origin = `http://127.0.0.1:${application.networkHost.listeners.find(entry => entry.scheme === 'http').port}`;
+  const request = (route, options = {}) => fetch(origin + route, { ...options,
+    headers: { Authorization: `MediaBrowser Token="${clientToken}"`, ...options.headers }, signal: t.signal });
+  const route = `/Items/${mediaId.replaceAll('-', '')}/File`, configRoute = '/Storage/Configuration';
+  const vfs = application.mediaStorage.vfs;
+  let definition = await (await request(configRoute)).json();
+  for (const changeOtherMount of [false, true]) {
+    const old = vfs.resolve('/media/media.wav'), release = fixture.holdNextRead();
+    try {
+      const first = await request(route);
+      assert.equal(first.status, 200);
+      assert.equal(first.headers.get('content-length'), '10');
+      const reader = first.body.getReader();
+      assert.equal(Buffer.from((await reader.read()).value).toString(), '0');
+
+      if (changeOtherMount) {
+        const other = path.join(fixture.directory, 'other');
+        await mkdir(other);
+        await writeFile(path.join(other, 'marker.txt'), 'unrelated mount');
+        definition.instances.push({ id: 'unrelated', type: 'local', config: { root: other, writable: false } });
+        definition.mounts.push({ path: '/unrelated', instanceId: 'unrelated', capabilities: {} });
+      }
+      const save = await request(configRoute, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(definition) });
+      assert.equal(save.status, 200);
+      definition = await save.json();
+      assert.notEqual(vfs.resolve('/media/media.wav').adapter, old.adapter);
+      assert.equal((await old.adapter.stat(old.path)).kind, 'file');
+      if (changeOtherMount) assert.equal((await vfs.stat('/unrelated/marker.txt')).kind, 'file');
+      const fresh = await request(route);
+      assert.equal(fresh.status, 200);
+      assert.equal(await fresh.text(), '0123456789');
+
+      release();
+      const chunks = [];
+      for (let next = await reader.read(); !next.done; next = await reader.read()) chunks.push(Buffer.from(next.value));
+      reader.releaseLock();
+      assert.equal(Buffer.concat(chunks).toString(), '123456789');
+      const deadline = Date.now() + 2000;
+      await assert.rejects(async () => {
+        while (Date.now() < deadline) { await old.adapter.stat(old.path); await delay(10, undefined, { signal: t.signal }); }
+      }, { code: 'closed' });
+    } finally { release(); }
+  }
 });
 
 test('production startup returns port errors and releases PostgreSQL resources for a subsequent start', {

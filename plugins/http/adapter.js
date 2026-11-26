@@ -170,6 +170,12 @@ export class HttpAdapter {
       const contentLength = decompress ? null : length(upstream.headers['content-length']);
       const responseHeaders = { 'accept-ranges': upstream.headers['accept-ranges'] ?? (upstream.statusCode === 206 ? 'bytes' : 'none') };
       const type = responseType(upstream.headers['content-type']), range = responseRange(upstream.headers['content-range']);
+      let expectedLength = contentLength;
+      if (upstream.statusCode === 206 && /^bytes \d+-/iu.test(range ?? '')) {
+        const { start, end } = parseContentRange(range);
+        expectedLength = end - start + 1n;
+        if (contentLength !== null && contentLength !== expectedLength) throw new StorageError('invalid-response', 'The HTTP source range length is inconsistent.');
+      }
       if (type !== undefined) responseHeaders['content-type'] = type;
       if (range !== undefined) responseHeaders['content-range'] = range;
       if (contentLength !== null) responseHeaders['content-length'] = String(contentLength);
@@ -180,14 +186,20 @@ export class HttpAdapter {
       }
       const stream = async function* () {
         let count = 0n;
+        // The static HTTP proxy decodes both ranges of an encoded entity
+        // and sources that compress the selected bytes. VFS byte reads
+        // always require the requested number of decoded bytes.
+        const compressedProxy = decoder && !options.range;
         try {
           for await (const chunk of decoder ?? upstream) {
             checkAbort(scope.signal);
             count += BigInt(chunk.byteLength);
-            if (contentLength !== null && count > contentLength) throw new StorageError('invalid-response', 'The HTTP source exceeded its declared length.');
+            if (expectedLength !== null && count > expectedLength && !compressedProxy) throw new StorageError('invalid-response', 'The HTTP source exceeded its declared length.');
             yield chunk;
           }
-          if (contentLength !== null && count !== contentLength) throw new StorageError('invalid-response', 'The HTTP source ended before its declared length.');
+          if (expectedLength !== null && count !== expectedLength && !(compressedProxy && BigInt(decoder.bytesWritten) === expectedLength)) {
+            throw new StorageError('invalid-response', 'The HTTP source body does not match its declared length.');
+          }
         } catch (cause) { throw scope.error(cause); }
         finally { await scope.close(); }
       };
@@ -208,7 +220,6 @@ export class HttpAdapter {
         if (!requestedRange) throw new StorageError('invalid-response', 'The HTTP source returned an unsolicited partial response.');
         const parsed = parseContentRange(response.headers['content-range']);
         range = { start: parsed.start, end: parsed.end }; totalSize = parsed.totalSize;
-        if (response.contentLength !== null && response.contentLength !== range.end - range.start + 1n) throw new StorageError('invalid-response', 'The HTTP source range length is inconsistent.');
         if (totalSize !== null) {
           const expected = resolveRange(requestedRange, totalSize);
           if (range.start !== expected.start || range.end !== expected.end) throw new StorageError('invalid-response', 'The HTTP source returned a different byte range.');

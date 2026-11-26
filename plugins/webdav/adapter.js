@@ -988,7 +988,11 @@ export class WebDavAdapter {
     requireCapability(this, 'mkdir');
     path = normalizePath(path);
     if (path === '/') throw new StorageError('permission-denied', 'The WebDAV root cannot be created.');
-    await this.#mutation('mkdir', path, { method: 'MKCOL', statuses: [201], options });
+    try { await this.#mutation('mkdir', path, { method: 'MKCOL', statuses: [201], options }); }
+    catch (error) {
+      if (!options.recursive || error.code !== 'already-exists' || error.errors) throw error;
+      if ((await this.stat(path, options)).kind !== 'directory') throw error;
+    }
   }
 
   async delete(path, options = {}) {

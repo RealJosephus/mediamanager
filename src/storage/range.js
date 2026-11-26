@@ -53,7 +53,7 @@ export function resolveRange(range, size) {
 }
 
 export function parseContentRange(value) {
-  const match = /^bytes (\d+)-(\d+)\/(\d+|\*)$/u.exec(value ?? '');
+  const match = /^bytes (\d+)-(\d+)\/(\d+|\*)$/iu.exec(value ?? '');
   if (!match) throw new StorageError('invalid-response', 'The backend returned an invalid byte range.');
   const start = BigInt(match[1]);
   const end = BigInt(match[2]);

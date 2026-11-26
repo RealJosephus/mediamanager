@@ -6,6 +6,7 @@ import { StorageFileSystem } from './storage/files.js';
 import { assertPortableMountStorageConfiguration } from './storage/portable-mount-contract.js';
 import { isWithin, joinPath, normalizePath } from './storage/paths.js';
 import { parseSourceUri } from './storage/uri.js';
+import { operationFailure } from './core/operation-failure.js';
 
 const clone = value => structuredClone(value);
 const object = value => value && typeof value === 'object' && !Array.isArray(value);
@@ -39,7 +40,8 @@ async function persist(filename, value) {
     await fs.rename(temporary,filename);
   } finally { await fs.rm(temporary,{force:true}); }
 }
-const dynamic = resolve => new Proxy({}, { get(_object,key) {
+const dynamic = (resolve, methods = {}) => new Proxy({}, { get(_object,key) {
+  if (Object.hasOwn(methods, key)) return methods[key];
   const owner = resolve(), value = owner[key]; return typeof value === 'function' ? value.bind(owner) : value;
 }, set(_object,key,value) { resolve()[key] = value; return true; } });
 
@@ -92,6 +94,7 @@ export async function createConfiguredStorage(filename, { environment = process.
   filename ??= path.join(plugins.directory,'storage.json');
   let configuration, current, closing, closed = false, initializing = true, tail = Promise.resolve();
   const extensions = new Map(), listeners = new Set(), beforeListeners = new Set(), retiring = new Set();
+  const readerShutdown = new AbortController(), readers = new Set();
   const notify = async () => { for (const listener of listeners) await listener(); };
   const report = async error => { try { await plugins.onError(error); } catch { /* Diagnostics cannot interrupt storage ownership transfer. */ } };
   const notifyBefore = async () => {
@@ -144,33 +147,58 @@ export async function createConfiguredStorage(filename, { environment = process.
       const mediaFileSystem = new StorageFileSystem({ vfs, identityMap });
       fileSystem.spoolRoot = current?.fileSystem.spoolRoot;
       return { registry,vfs,identityMap,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,unavailable,
-        portableMountContract:contract, definition, users: new Set() };
+        portableMountContract:contract, definition, users: new Set(), reads: new Set() };
     } catch (error) { await registry.close(); throw error; }
+  };
+  const trackRetirement = operation => {
+    const pending = operation.catch(report);
+    retiring.add(pending);
+    void pending.then(() => retiring.delete(pending));
   };
   const retire = async owner => {
     if (!owner.users.size) {
-      try { await closeStorage(owner); } catch (error) { await report(error); }
+      try {
+        await closeStorage(owner, () => {
+          if (!owner.reads.size) return owner.registry.close();
+          // Keep the response adapters available after joining file-system spools.
+          trackRetirement(Promise.all(owner.reads).then(() => owner.registry.close()));
+        });
+      } catch (error) { await report(error); }
       return;
     }
-    // The new configuration is live while a recording finishes with the
-    // files and adapters it admitted. Shutdown still joins this retirement.
-    const pending = Promise.all(owner.users).then(() => closeStorage(owner)).catch(report);
-    retiring.add(pending);
-    void pending.then(() => retiring.delete(pending));
+    // Recordings retain both file systems through publication.
+    trackRetirement(Promise.all([...owner.users, ...owner.reads]).then(() => closeStorage(owner)));
+  };
+  const retain = pending => {
+    const released = Promise.withResolvers();
+    pending.add(released.promise);
+    return () => { pending.delete(released.promise); released.resolve(); };
   };
   const retainGeneration = () => {
     if (closed) throw Object.assign(new Error('Storage is closed.'), { status: 503 });
     const owner = current, { fileSystem, mediaFileSystem } = owner;
-    const released = Promise.withResolvers();
-    owner.users.add(released.promise);
     return { fileSystem, mediaFileSystem, isCurrent: () => current === owner,
       mediaBinding(filename) {
         const { mount, path: backendPath } = mediaFileSystem.resolve(filename);
         const instance = owner.definition.instances.find(value => value.id === mount.instanceId);
         return createHash('sha256').update(JSON.stringify([instance.type, instance.config, backendPath])).digest('hex');
       },
-      close() { owner.users.delete(released.promise); released.resolve(); },
+      close: retain(owner.users),
     };
+  };
+  const openPinnedRead = async (owner, method, filename, options = {}) => {
+    if (closed) throw Object.assign(new Error('Storage is closed.'), { status: 503 });
+    const signal = options.signal ? AbortSignal.any([options.signal, readerShutdown.signal]) : readerShutdown.signal;
+    const release = retain(owner.reads);
+    const opening = Promise.resolve().then(() => owner.vfs[method](filename, { ...options, signal }));
+    let closingRead;
+    const close = () => closingRead ??= (async () => {
+      try { await (await opening.catch(() => undefined))?.close(); }
+      finally { readers.delete(close); release(); }
+    })();
+    readers.add(close);
+    try { return { ...await opening, close }; }
+    catch (error) { await close(); throw error; }
   };
   const change = async (definition, save = true, strictType) => {
     const candidate = await build(definition,{tolerateUnavailable:initializing || !save,strictType});
@@ -227,7 +255,11 @@ export async function createConfiguredStorage(filename, { environment = process.
       };
     });
     await change(configuration); initializing = false;
-    const vfs = dynamic(()=>current.vfs), identityMap = dynamic(()=>current.identityMap), ignoreIdentityMap = dynamic(()=>current.ignoreIdentityMap);
+    const vfs = dynamic(() => current.vfs, {
+      openRead: (filename, options) => openPinnedRead(current, 'openRead', filename, options),
+      openResponse: (filename, options) => openPinnedRead(current, 'openResponse', filename, options),
+    });
+    const identityMap = dynamic(()=>current.identityMap), ignoreIdentityMap = dynamic(()=>current.ignoreIdentityMap);
     const metadataIdentityMap=dynamic(()=>current.metadataIdentityMap);
     const fileSystem = dynamic(()=>current.fileSystem);
     const mediaFileSystem = dynamic(()=>current.mediaFileSystem);
@@ -239,7 +271,9 @@ export async function createConfiguredStorage(filename, { environment = process.
     };
     const metadataVfs=new Proxy({}, {get(_target,key){
       const value=current.vfs[key];if(typeof value!=='function')return value;
-      if(!['resolve','resolveFileHandle','capabilities','stat','list','openRead','write','mkdir','delete','rename'].includes(key))return value.bind(current.vfs);
+      if (key === 'openRead' || key === 'openResponse')
+        return (filename, options) => openPinnedRead(current, key, metadataPath(filename), options);
+      if(!['resolve','resolveFileHandle','capabilities','stat','list','write','mkdir','delete','rename'].includes(key))return value.bind(current.vfs);
       return (...args)=>{args[0]=metadataPath(args[0]);if(key==='rename')args[1]=metadataPath(args[1]);return current.vfs[key](...args);};
     }});
     const unsubscribe=plugins.subscribe(()=>enqueue(notify));
@@ -301,10 +335,16 @@ export async function createConfiguredStorage(filename, { environment = process.
       close:()=>{
         if(closing)return closing;
         closed=true;
+        readerShutdown.abort();
         return closing=(async()=>{
           unsubscribe(); listeners.clear(); beforeListeners.clear();
           await tail;
-          await Promise.all([...retiring, Promise.all(current.users).then(() => closeStorage(current))]);
+          const results = await Promise.allSettled([
+            ...[...readers].map(close => close()), ...retiring,
+            Promise.all([...current.users, ...current.reads]).then(() => closeStorage(current)),
+          ]);
+          const failures = results.filter(result => result.status === 'rejected').map(result => result.reason);
+          if (failures.length) throw operationFailure(failures, 'Storage could not close every reader and adapter.');
         })();
       },
     };
