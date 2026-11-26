@@ -4,7 +4,7 @@ import { decodeBase64Body } from './base64-body.js';
 import { withCleanup } from '../core/operation-failure.js';
 import { lowerInvariant } from '../core/identity.js';
 import { VIDEO_TYPES, idKey, nonemptyId } from '../library/records.js';
-import { nativeContainingFolderPath, nativeFileNameWithoutExtension } from '../library/native-path.js';
+import { nativeContainingFolderPath, nativeFileNameWithoutExtension, nativePathWithin } from '../library/native-path.js';
 import { defaultLibraryOptions } from '../library/options.js';
 import { internalImagePath } from '../metadata/image-paths.js';
 import { imagePathApi } from '../metadata/image-assets.js';
@@ -55,8 +55,10 @@ async function libraryOptions(library, item) {
     : configured?.[idKey(collection?.Id)] ?? configured?.[collection?.Id]) ?? defaultLibraryOptions();
 }
 
-async function saveSubtitle({ library, fileSystem, libraryMonitor, libraryMonitorHost }, item, subtitle, format, bytes, signal) {
+async function saveSubtitle({ library, mediaFiles, metadataFiles, libraryMonitor, libraryMonitorHost }, item, subtitle, format, bytes, signal) {
   const options = await libraryOptions(library, item);
+  const fileSystem = options.SaveSubtitlesWithMedia ? mediaFiles : metadataFiles;
+  if (!fileSystem) throw httpError(503, 'Subtitle storage is unavailable.');
   const folder = options.SaveSubtitlesWithMedia
     ? nativeContainingFolderPath(item) : internalImagePath(item, library.options.metadataPath);
   if (!folder) throw httpError(400, 'The subtitle destination is invalid.');
@@ -103,28 +105,33 @@ export function registerSubtitleManagementRoutes(add, services) {
   const { store, library, metadata, playback, storage, libraryMonitor, libraryMonitorHost, onError = () => {} } = services;
   if (!library) return;
   const vfs = playback?.vfs ?? storage?.vfs, identityMap = playback?.identityMap ?? storage?.identityMap;
-  const fileSystem = vfs && identityMap ? new StorageFileSystem({ vfs, identityMap }) : services.fileSystem;
+  const mediaFiles = storage?.mediaFileSystem ?? (vfs && identityMap ? new StorageFileSystem({ vfs, identityMap }) : services.fileSystem);
+  const metadataFiles = storage?.fileSystem ?? services.fileSystem ?? mediaFiles;
+  const destinations = { library, mediaFiles, metadataFiles, libraryMonitor, libraryMonitorHost };
   const path = '/Videos/{itemId}/Subtitles', policy = 'SubtitleManagement';
   const itemId = (_query, params) => guidValue(params.itemId, 'itemId');
   const providers = () => services.plugins?.entries('subtitle') ?? [];
   add('POST', path, context => withVisibleItem(library, context.queryInput, context.auth, async item => {
-    if (!fileSystem || !metadata) throw httpError(503, 'Subtitle storage is unavailable.');
+    if (!metadata) throw httpError(503, 'Subtitle storage is unavailable.');
     const upload = context.body, format = lowerInvariant(upload.Format);
     if (!formats.has(format)) throw httpError(400, "Unsupported subtitle format: '" + upload.Format + "'");
     const bytes = decodeBase64Body(upload.Data);
-    await saveSubtitle({ library, fileSystem, libraryMonitor, libraryMonitorHost }, item, upload, format, bytes, context.signal);
+    await saveSubtitle(destinations, item, upload, format, bytes, context.signal);
     queueRefresh(metadata, item, onError);
     return noContent();
   }, { video: true }), { policy, body: true, bindBody: bindUpload, bodyParameter: 'body', bodyType: dto, bindQuery: itemId });
 
   add('DELETE', path + '/{index}', context => withVisibleItem(library, context.queryInput.itemId, context.auth, async item => {
-    if (!fileSystem || !metadata || !store) throw httpError(503, 'Subtitle storage is unavailable.');
+    if (!metadata || !store) throw httpError(503, 'Subtitle storage is unavailable.');
     const stream = await store.run(async db => (await db.rows('MediaStreamInfos', {
       where: { ItemId: item.Id, StreamType: 2, StreamIndex: context.queryInput.index }, limit: 1,
     }))[0]);
     if (!stream) throw new RangeError('The subtitle stream was not found.');
     const identity = library.options.expandPath?.(stream.Path) ?? stream.Path;
     if (!identity) throw httpError(400, 'A subtitle path is required.');
+    const metadataPath = library.options.metadataPath;
+    const fileSystem = metadataPath && nativePathWithin(identity, internalImagePath(item, metadataPath)) ? metadataFiles : mediaFiles;
+    if (!fileSystem) throw httpError(503, 'Subtitle storage is unavailable.');
     libraryMonitor?.reportFileSystemChangeBeginning(identity);
     await withCleanup(async () => {
       try { await fileSystem.unlink(identity); }
@@ -151,7 +158,7 @@ export function registerSubtitleManagementRoutes(add, services) {
       const subtitle = await readRemoteSubtitle(providers(), context.queryInput.subtitleId, context.signal);
       const format = lowerInvariant(subtitle.format);
       if (!formats.has(format)) throw new Error('Invalid subtitle format: ' + format);
-      await saveSubtitle({ library, fileSystem, libraryMonitor, libraryMonitorHost }, item, {
+      await saveSubtitle(destinations, item, {
         Language: subtitle.language, IsForced: subtitle.forced, IsHearingImpaired: subtitle.hearingImpaired,
       }, format, subtitle.bytes, context.signal);
       queueRefresh(metadata, item, onError);

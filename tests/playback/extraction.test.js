@@ -1,3 +1,6 @@
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { SubtitleCache } from '../../src/playback/subtitle-cache.js';
+import { localStateStorage } from '../helpers/local-state-storage.js';
 import test from 'node:test';
 import { createTestMediaEncoder } from '../helpers/media-encoder.js';
 import assert from 'node:assert/strict';
@@ -269,4 +272,43 @@ test('SAMI source reads retain a falsy rejection before their actual handle-clos
   });
   assert.ok(read && closed, 'The actual HTTP/VFS body was read and its owned handle closed.');
   assert.deepEqual(processes, []); assert.ok(fixture.requests.some(request => request.method === 'GET'));
+});
+
+test('the warm subtitle must match the source that exists after a concurrent replacement', async t => {
+  const root = await mkdtemp(path.join(tmpdir(), 'mediamanager-subtitle-revision-'));
+  const storage = await localStateStorage(root);
+  const { fileSystem } = storage;
+  const sourceFile = path.join(root, 'track.sami');
+  const sami = text => '<SAMI>\n<HEAD>\n<TITLE>Subtitles</TITLE>\n</HEAD>\n<BODY>\n<SYNC Start=0><P>' + text
+    + '\n<SYNC Start=1200><P>&nbsp;\n</BODY>\n</SAMI>\n';
+  const stream = { Path: sourceFile, Type: 'Subtitle', Codec: 'sami', Index: 2, IsExternal: true, IsTextSubtitleStream: true };
+  const source = { Id: '12345678-1234-4123-8123-123456789abc', MediaStreams: [stream] };
+  const cache = new SubtitleCache({ fileSystem, dataPath: root });
+  const cachedFile = cache.paths(source.Id, stream.Index).filename;
+  const write = fileSystem.writeFile.bind(fileSystem);
+  let replaced = false;
+  t.mock.method(fileSystem, 'writeFile', async (filename, ...args) => {
+    await write(filename, ...args);
+    if (filename === cachedFile && !replaced) {
+      replaced = true;
+      await writeFile(sourceFile, sami('New replacement subtitle'));
+    }
+  });
+  let extraction;
+  try {
+    await writeFile(sourceFile, sami('Original cue'));
+    const mediaEncoder = await createTestMediaEncoder(t);
+    extraction = new ExtractionService({ vfs: fileSystem.vfs, mediaEncoder, subtitleCache: cache,
+      getEncodingOptions: () => defaultConfiguration('encoding') });
+    const request = () => extraction.subtitle(source, stream, fileSystem.accessPath(sourceFile), { signal: t.signal });
+    try { await request(); } catch (error) { if (error.code !== 'version-changed') throw error; }
+    assert.equal(replaced, true);
+    assert.match(await readFile(sourceFile, 'utf8'), /New replacement subtitle/);
+    const warm = await request();
+    assert.match(warm.bytes.toString('utf8'), /New replacement subtitle/);
+  } finally {
+    await extraction?.close();
+    await storage.close();
+    await rm(root, { recursive: true, force: true });
+  }
 });

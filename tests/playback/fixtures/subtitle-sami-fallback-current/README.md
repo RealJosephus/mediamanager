@@ -30,7 +30,7 @@ after a real FFmpeg HTTP read. The exact original outcomes remain in the capture
 an unknown branch is not turned into an invented successful result.
 
 Native `PathManager` chooses `data/subtitles/<id-prefix>/<GUID-D>/<index>.srt`.
-Native metadata is the literal source length, colon and UTC `DateTime.Ticks`.
+Native metadata records the input stream index, source length and UTC `DateTime.Ticks` for files, and the SHA-256 of the original subtitle path.
 Each capture creates independent input, configuration and cache roots. Every
 action retains before/after source, SRT and `.meta` bytes, SHA-256 and actual source
 stat. The originals retain paths, process identities, actual apphost arguments,

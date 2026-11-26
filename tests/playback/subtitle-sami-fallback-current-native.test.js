@@ -14,7 +14,7 @@ import { parseLosslessJson } from '../../src/core/json.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { VirtualFileSystem } from '../../src/storage/index.js';
 import { probeStreamRow } from '../../src/library/probe-service.js';
-import { subtitleSourceFingerprint } from '../../src/playback/subtitle-cache.js';
+import { subtitleCacheMetadata } from '../../src/playback/subtitle-cache.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString, postgresTestRow } from '../database/postgres-fixture.js';
 import { acquireTestResource } from '../helpers/test-resource-lease.js';
 import { filterEvidenceJson } from '../../tools/compat/filter-reference-output.js';
@@ -149,6 +149,7 @@ test('current Native File SAMI fallback consumes real FFmpeg SRT, independent me
     report.testInput = await describeFile(fileURLToPath(import.meta.url));
     captured = await captureCurrentSamiFallback({ output: path.join(output, 'native'), signal: t.signal }); report.native = captured.report;
     const input = captured.input, samples = input.cases.filter(sample => sample.protocol === 'File');
+    const first = samples[0], identityRoot = path.dirname(captured.native.cases.find(row => row.name === first.name).sourcePath);
     await fs.mkdir(sourceRoot, { recursive: true }); await fs.mkdir(cacheRoot); const config = path.join(node, 'config'); await fs.mkdir(config);
     await writeConfigurationFile(path.join(config, 'system.xml'), 'server', { ...defaultConfiguration('server'), IsStartupWizardCompleted: true });
     await writeConfigurationFile(path.join(config, 'network.xml'), 'network', { ...defaultConfiguration('network'), InternalHttpPort: 0,
@@ -158,28 +159,28 @@ test('current Native File SAMI fallback consumes real FFmpeg SRT, independent me
       { id: 'subtitle-cache', type: 'local', config: { root: cacheRoot, writable: true } }], mounts: [
       { path: '/media', instanceId: 'media', capabilities: {} },
       { path: '/subtitle-cache', instanceId: 'subtitle-cache', capabilities: { create: true, replace: true, mkdir: true, delete: true } }],
-    prefixes: [{ identityRoot: sourceRoot, accessRoot: '/media', style, purpose: 'library', returnAccess: 'Exact declared File-identity subtitle source.' },
+    prefixes: [{ identityRoot, accessRoot: '/media', style, purpose: 'library', returnAccess: 'Original Native subtitle identity in an isolated copy.' },
       { identityRoot: dataPath, accessRoot: '/subtitle-cache', style, purpose: 'metadata', returnAccess: 'Independent persistent metadata owner.' }] };
     await fs.writeFile(configurationFile, json(storageDefinition), { flag: 'wx' });
-    const imported = { name: 'native-cache-import', source: 'utf8-bom', extension: '.sami', streamIndex: 0,
-      mediaSourceId: 'f8900000-0000-0000-0000-000000000100', protocol: 'File' };
+    const imported = { ...first, name: 'native-cache-import', mediaSourceId: 'f8900000-0000-0000-0000-000000000100' };
     const preflight = { ...imported, name: 'readonly-cache-miss', mediaSourceId: 'f8900000-0000-0000-0000-000000000101' };
-    for (const sample of [...samples, imported, preflight]) {
+    for (const sample of [...samples, preflight]) {
       const source = input.sources.find(row => row.name === sample.source), filename = path.join(sourceRoot, sample.name + sample.extension);
       await fs.writeFile(filename, Buffer.from(source.base64, 'base64'), { flag: 'wx' }); await fs.utimes(filename, new Date(input.modifiedUtc), new Date(input.modifiedUtc));
-      sources.set(sample.name, { filename, source });
+      sources.set(sample.name, { filename, source, identity: path.join(identityRoot, path.basename(filename)) });
     }
+    sources.set(imported.name, sources.get(first.name));
     database = await createPostgresTestDatabase(null, 'sami_fallback'); schema = database.schemaName; lastDatabase = database;
     report.postgresSchemas = [schema, database.controlSchema]; await create(); token = (await runtime.apiKeys.create('Current SAMI fallback')).AccessToken;
     for (const sample of [...samples, imported, preflight]) {
       const Id = sample.mediaSourceId.toUpperCase(), source = sources.get(sample.name);
       await database.insert('BaseItems', postgresTestRow('BaseItems', { Id, Type: 'MediaBrowser.Controller.Entities.Movies.Movie', MediaType: 'Video',
-        Name: sample.name, SortName: sample.name, Path: source.filename, IsFolder: false, RunTimeTicks: 120000000n }));
+        Name: sample.name, SortName: sample.name, Path: source.identity, IsFolder: false, RunTimeTicks: 120000000n }));
       await database.insert('MediaStreamInfos', probeStreamRow(Id, { Type: 'Subtitle', Index: sample.streamIndex, Codec: 'sami', Language: 'eng',
-        IsExternal: true, IsTextSubtitleStream: true, SupportsExternalStream: true, Path: source.filename }));
+        IsExternal: true, IsTextSubtitleStream: true, SupportsExternalStream: true, Path: source.identity }));
     }
     report.databaseRows = await database.rows('MediaStreamInfos');
-    const first = samples[0], cache = paths(first), sourceAccess = runtime.extraction.vfs.resolve('/media/' + path.basename(sources.get(first.name).filename));
+    const cache = paths(first), sourceAccess = runtime.extraction.vfs.resolve('/media/' + path.basename(sources.get(first.name).filename));
     assert.equal(sourceAccess.capabilities.create, false); assert.equal(runtime.fileSystem.resolve(cache.filename).capabilities.create, true);
     for (const sample of samples) {
       const native = captured.native.cases.find(row => row.name === sample.name), source = sources.get(sample.name);
@@ -233,10 +234,14 @@ test('current Native File SAMI fallback consumes real FFmpeg SRT, independent me
         }
         action.after = await snapshot(sample);
         assert.deepEqual(stateValue(action.after), stateValue(expected.after), sample.name + '/' + definition.name + ': actual durable source/cache/meta after');
-        if (action.wire && action.after.source.exists && action.after.meta.exists && action.after.cache.bytes > 0)
-          assert.equal(action.after.meta.text, `${action.after.source.bytes}:${action.after.source.modifiedTicks}`, 'Persistent size:100ns-mtime is the exchange contract.');
       }
     }
+    report.sourceAfter = await Promise.all(samples.map(async sample => ({ name: sample.name, file: await file(sources.get(sample.name).filename) })));
+    for (const sample of samples) assert.deepEqual(fileValue(report.sourceAfter.find(row => row.name === sample.name).file),
+      fileValue(captured.native.cases.find(row => row.name === sample.name).actions.at(-1).after.source), sample.name + ': source input bytes remain unchanged except declared writes/deletes');
+    const importedSource = sources.get(imported.name);
+    await fs.writeFile(importedSource.filename, Buffer.from(importedSource.source.base64, 'base64'), { flag: 'wx' });
+    await fs.utimes(importedSource.filename, new Date(input.modifiedUtc), new Date(input.modifiedUtc));
     const nativeCache = captured.native.cases.find(row => row.name === first.name).actions.find(row => row.name === 'warm-srt');
     const importedPaths = paths(imported); await runtime.fileSystem.mkdir(importedPaths.directory, { recursive: true });
     await runtime.fileSystem.writeFile(importedPaths.filename, Buffer.from(nativeCache.after.cache.base64, 'base64'));
@@ -251,7 +256,8 @@ test('current Native File SAMI fallback consumes real FFmpeg SRT, independent me
     report.readonly = { hit: readonlyHit, miss: readonlyMiss, mediaReadsBefore: beforeReaders, mediaReadsAfter: report.readers.length };
     assert.equal(readonlyMiss.status, 500); assert.equal(report.readers.length, beforeReaders); assert.equal(conversions().length, count);
     const sourceInfo = await runtime.extraction.vfs.stat('/media/' + path.basename(sources.get(imported.name).filename));
-    assert.equal(subtitleSourceFingerprint(sourceInfo), nativeCache.after.meta.text, 'Actual source stat recreates the Native persistent stamp.');
+    const [importedMedia] = await runtime.library.getMediaSources(imported.mediaSourceId);
+    assert.equal(subtitleCacheMetadata(importedMedia, importedMedia.MediaStreams[0], sourceInfo), nativeCache.after.meta.text);
     await runtime.storage.configure(writable); instrumentMedia(); await releasedLeases();
     for (const command of conversions()) {
       const args = command.arguments;
@@ -260,9 +266,6 @@ test('current Native File SAMI fallback consumes real FFmpeg SRT, independent me
       await assert.rejects(fs.stat(args.at(-1)), { code: 'ENOENT' });
       report.cleanup.push({ generation: command.generation, removedTextOutput: args.at(-1) });
     }
-    report.sourceAfter = await Promise.all([...sources].map(async ([name, source]) => ({ name, file: await file(source.filename) })));
-    for (const sample of samples) assert.deepEqual(fileValue(report.sourceAfter.find(row => row.name === sample.name).file),
-      fileValue(captured.native.cases.find(row => row.name === sample.name).actions.at(-1).after.source), sample.name + ': source input bytes remain unchanged except declared writes/deletes');
     report.componentAcceptance = true;
   } catch (error) { failure(error); }
   finally {

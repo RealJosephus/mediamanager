@@ -171,7 +171,8 @@ test('current Native HTTP subtitle identities deliver raw responses, formatted t
       { identityRoot: dataPath, accessRoot: '/subtitle-cache', style, purpose: 'metadata', returnAccess: 'Independent persistent subtitle cache owner.' },
       { identityRoot: sourceRoot, accessRoot: '/unread-media', style, purpose: 'library', returnAccess: 'Controlled File media descriptor only; no media bytes are claimed.' }] };
     await fs.writeFile(storageFile, json(storageDefinition), { flag: 'wx' });
-    const imported = { name: 'native-http-cache-import', source: 'sami-bom', sourceTarget: '/source/native-cache.sami', mediaSourceId: 'f8a00000-0000-0000-0000-000000000100', streamIndex: 0, mediaProtocol: 'File' };
+    const handoffDefinition = captured.input.cases.find(value => value.name === 'http-sami-cache-lifecycle');
+    const imported = { ...handoffDefinition, name: 'native-http-cache-import', mediaSourceId: 'f8a00000-0000-0000-0000-000000000100' };
     const readonlyMiss = { ...imported, name: 'readonly-cache-miss', sourceTarget: '/source/readonly-miss.sami', mediaSourceId: 'f8a00000-0000-0000-0000-000000000101' };
     for (const definition of [...captured.input.cases, imported, readonlyMiss]) {
       const bytes = captured.input.sources.find(value => value.name === definition.source), filename = path.join(sourceRoot, definition.name + bytes.extension);
@@ -285,7 +286,6 @@ test('current Native HTTP subtitle identities deliver raw responses, formatted t
     report.readonly = { hit, miss, retainedCache: await snapshot(imported), missingCache: await snapshot(readonlyMiss) };
     assert.equal(report.readonly.missingCache.cache.exists, false); await runtime.storage.configure(writable);
     assert.deepEqual(await database.rows('MediaStreamInfos'), report.databaseRows, 'All original subtitle URL/query rows remain persistent.');
-    const handoffDefinition = captured.input.cases.find(value => value.name === 'http-sami-cache-lifecycle');
     const handoffState = await snapshot(handoffDefinition), handoffSrt = await request(handoffDefinition, { op: 'format', format: 'srt' }),
       handoffVtt = await request(handoffDefinition, { op: 'format', format: 'vtt' });
     assert.equal(handoffState.cache.exists, true);

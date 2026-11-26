@@ -16,14 +16,15 @@ export const errorValue = value => value == null || typeof value !== 'object' ? 
   : Object.fromEntries([...new Set([...Object.getOwnPropertyNames(value), ...(value instanceof Error ? ['name', 'message', 'code', 'status', 'cause', 'errors', 'stack'] : [])])]
     .map(key => [key, errorValue(value[key])]));
 const fileValue = value => value.exists ? { exists: true, bytes: value.bytes, base64: value.base64, sha256: value.sha256 } : { exists: false };
-const stateValue = value => ({ source: { ...fileValue(value.source), ...(value.source.exists ? { modifiedTicks: value.source.modifiedTicks } : {}) },
-  cache: fileValue(value.cache), meta: fileValue(value.meta) });
+const stateValue = (value, sample) => ({ source: { ...fileValue(value.source), ...(value.source.exists ? { modifiedTicks: value.source.modifiedTicks } : {}) },
+  cache: fileValue(value.cache), meta: sample.protocol === 'File' && value.meta.exists
+    ? { exists: true, revision: value.meta.text.slice(0, -64) } : fileValue(value.meta) });
 
 // Absolute input roots, PIDs, clocks, CLR errors and encoding-confidence details
 // remain in the originals. The independent-repeat comparison concerns bytes,
 // persistent source stamps, public responses and actual process closure.
 export const functionalSamiFallback = native => native.cases.map(sample => ({ name: sample.name, protocol: sample.protocol,
-  actions: sample.actions.map(action => ({ name: action.name, op: action.op, before: stateValue(action.before), after: stateValue(action.after),
+  actions: sample.actions.map(action => ({ name: action.name, op: action.op, before: stateValue(action.before, sample), after: stateValue(action.after, sample),
     ...(action.wire ? { wire: action.wire } : {}),
     ...(action.cancellation ? { cancelledAfterActualRead: action.cancellation.triggered } : {}),
   })),
@@ -60,18 +61,22 @@ async function assertOriginals(native, input, build, capture) {
   }
   for (const definition of input.cases) {
     const sample = native.cases.find(sample => sample.name === definition.name);
+    const sourceHash = hash(sample.sourcePath).toUpperCase();
     const original = Buffer.from(input.sources.find(source => source.name === definition.source).base64, 'base64');
     assert.equal(sample.actions[0].before.source.sha256, hash(original), definition.name + ': exact declared original bytes');
     assert.deepEqual(sample.actions.map(action => ({ name: action.name, op: action.op })), definition.actions.map(action => ({ name: action.name, op: action.op })));
     for (const action of sample.actions) {
       assert.equal(action.harnessError, undefined);
-      for (const state of [action.before, action.after]) for (const value of [state.source, state.cache, state.meta]) await assertFileBytes(value);
+      for (const state of [action.before, action.after]) {
+        for (const value of [state.source, state.cache, state.meta]) await assertFileBytes(value);
+        if (state.meta.exists) assert.ok(state.meta.text.endsWith(':' + sourceHash), sample.name + ': metadata binds the actual source path');
+      }
       if (action.wire) {
         assert.equal(Buffer.from(action.wire.base64, 'base64').length, action.wire.bytes);
         assert.equal(hash(Buffer.from(action.wire.base64, 'base64')), action.wire.sha256);
         if (action.streamAcquired) assert.equal(action.streamDisposed, true, 'The actual returned subtitle stream closed.');
         if (sample.protocol === 'File' && action.after.source.exists && action.after.cache.bytes > 0 && action.after.meta.exists)
-          assert.equal(action.after.meta.text, `${action.after.source.bytes}:${action.after.source.modifiedTicks}`, 'Native persistent source size/mtime metadata bytes.');
+          assert.equal(action.after.meta.text, `v2:0:${action.after.source.bytes}:${action.after.source.modifiedTicks}:${sourceHash}`);
       }
       if (action.after.cache.exists) assert.equal(action.cacheReopenedExclusively, true, 'The actual persistent cache was usable after consumption.');
       for (const process of action.processesAfter) assert.equal(process.Alive, false, 'The actual action process closed.');

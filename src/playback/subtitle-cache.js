@@ -1,7 +1,9 @@
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { nativeGuid } from '../users/native.js';
 import { requireCapability, StorageError } from '../storage/errors.js';
 import { decodeNativeTextEncoding } from '../core/native-text.js';
+import { streamInputIndex } from '../media-execution/input.js';
 
 const missing = error => ['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].includes(error?.code);
 const ioError = error => ['ENOENT', 'ENOTDIR', 'EISDIR', 'EEXIST', 'EBUSY', 'EIO', 'ENOSPC', 'EROFS', 'ETIMEDOUT',
@@ -20,6 +22,12 @@ export function subtitleSourceFingerprint(info) {
   if (!Number.isFinite(milliseconds)) throw new StorageError('invalid-response', 'The subtitle modification time is invalid.');
   const ticks = BigInt(milliseconds) * 10000n + BigInt((match[2] ?? '').padEnd(7, '0').slice(0, 7)) + 621355968000000000n;
   return String(info.size) + ':' + ticks;
+}
+
+export function subtitleCacheMetadata(source, stream, info) {
+  const identity = createHash('sha256').update(stream.Path || source.Path || '').digest('hex').toUpperCase();
+  const revision = subtitleSourceFingerprint(info) ?? '';
+  return `v2:${streamInputIndex(source, stream)}:${revision}:${identity}`;
 }
 
 /** Persist the SRT and source revision consumed by the Native subtitle reader. */
@@ -70,18 +78,14 @@ export class SubtitleCache {
     }
   }
 
-  async #load(paths, statSource) {
+  async #load(paths, expectedMetadata) {
     const cached = await this.#stat(paths.filename);
     if (!cached?.isFile() || cached.size === 0n) return null;
-    const source = await this.#source(statSource);
-    let fresh = !source;
-    if (source) {
-      const metadata = await this.#stat(paths.metadata);
-      if (!metadata?.isFile()) return null;
-      try { fresh = decodeNativeTextEncoding(await this.fileSystem.readFile(paths.metadata)) === subtitleSourceFingerprint(source); }
-      catch (error) { if (ioError(error)) { this.onError(error); return null; } throw error; }
-    }
-    if (!fresh) return null;
+    const metadata = await this.#stat(paths.metadata);
+    if (!metadata?.isFile()) return null;
+    const expected = expectedMetadata();
+    try { if (decodeNativeTextEncoding(await this.fileSystem.readFile(paths.metadata)) !== expected) return null; }
+    catch (error) { if (ioError(error)) { this.onError(error); return null; } throw error; }
     try { return await this.fileSystem.readFile(paths.filename); }
     catch (error) { if (missing(error)) error.status ??= 404; throw error; }
   }
@@ -93,7 +97,9 @@ export class SubtitleCache {
     const previous = this.#tails.get(paths.filename) ?? Promise.resolve();
     const operation = previous.catch(() => {}).then(async () => {
       abort(signal);
-      const cached = await this.#load(paths, statSource);
+      const before = await this.#source(statSource);
+      const revision = () => subtitleCacheMetadata(source, stream, before);
+      const cached = await this.#load(paths, revision);
       if (cached !== null) return { bytes: cached, format: 'srt', consistency: 'persistent' };
       for (const filename of [paths.filename, paths.metadata]) {
         const target = this.fileSystem.resolve(filename);
@@ -102,7 +108,13 @@ export class SubtitleCache {
       await this.fileSystem.mkdir(paths.directory, { recursive: true });
       const current = await this.#stat(paths.filename);
       const initial = current?.isFile() ? await this.fileSystem.readFile(paths.filename) : null;
-      const result = await produce(initial);
+      const result = await produce(initial, before);
+      if (!result.failed && result.exists && result.bytes.length) {
+        const after = await this.#source(statSource);
+        if (before?.version !== after?.version || revision() !== subtitleCacheMetadata(source, stream, after)) {
+          throw new StorageError('version-changed', 'The subtitle source changed during conversion.');
+        }
+      }
       const errors = [];
       if (result.exists && result.error?.code !== 'subtitle-start-failure') {
         try { await this.fileSystem.writeFile(paths.filename, result.bytes); }
@@ -122,8 +134,7 @@ export class SubtitleCache {
         throw primary;
       }
       try {
-        const latest = await this.#source(statSource);
-        if (latest) await this.fileSystem.writeFile(paths.metadata, subtitleSourceFingerprint(latest));
+        await this.fileSystem.writeFile(paths.metadata, revision());
       } catch (error) { if (ioError(error)) this.onError(error); else throw error; }
       return { bytes: result.bytes, format: 'srt', consistency: 'persistent' };
     });

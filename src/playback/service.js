@@ -10,7 +10,7 @@ import { HttpResult, httpError, notFound } from '../http/binding.js';
 import { vfsStreamResult, BinaryResult } from '../http/binary-result.js';
 import { remoteStaticStreamResult } from './remote-static.js';
 import { StorageError, checkAbort } from '../storage/errors.js';
-import { masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlaylist } from './hls.js';
+import { defaultVttTimestampMapMpegts, masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlaylist } from './hls.js';
 import { probeKeyframes } from '../media-execution/keyframes.js';
 import { isHlsManifest, liveHttpHlsUrl } from '../media-execution/input.js';
 import { MatroskaKeyframeService } from './matroska-keyframes.js';
@@ -524,13 +524,13 @@ export class PlaybackService {
     return ['srt', 'subrip', 'vtt', 'webvtt', 'ass', 'ssa', 'smi'].includes(format);
   }
 
-  async subtitleHlsPlaylist(itemId, mediaSourceId, segmentLength, { user, accessToken } = {}) {
+  async subtitleHlsPlaylist(itemId, mediaSourceId, segmentLength, { user, accessToken, vttTimestampMapMpegts } = {}) {
     const item = await this.library.getItemRecord(itemId, { user });
     if (item.MediaType !== 'Video') throw httpError(404, 'Video item not found.');
     const source = (await this.library.getMediaSources(item.Id, { user })).find(source => source.Id.toLowerCase() === mediaSourceId.toLowerCase());
     if (!source) throw httpError(404, 'Media source not found.');
     let text;
-    try { text = subtitlePlaylist(source, segmentLength, accessToken); }
+    try { text = subtitlePlaylist(source, segmentLength, accessToken, vttTimestampMapMpegts); }
     catch (error) { error.status ??= error.code === 'invalid-request' ? 400 : 500; throw error; }
     const bytes = Buffer.from(text);
     return BinaryResult.bytes(bytes, 'application/vnd.apple.mpegurl');
@@ -590,7 +590,10 @@ export class PlaybackService {
           // The Native WebVTT writer uses its host's line endings.
           bytes = Buffer.from(format === 'vtt' || format === 'webvtt' ? converted.replaceAll('\r\n', EOL) : converted);
         }
-        if (format === 'vtt' && options.addVttTimeMap) bytes = Buffer.from(bytes.toString('utf8').replaceAll('WEBVTT', 'WEBVTT\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000'));
+        if (format === 'vtt' && options.addVttTimeMap) {
+          const offset = options.vttTimestampMapMpegts ?? defaultVttTimestampMapMpegts;
+          bytes = Buffer.from(bytes.toString('utf8').replaceAll('WEBVTT', `WEBVTT\nX-TIMESTAMP-MAP=MPEGTS:${offset},LOCAL:00:00:00.000`));
+        }
         checkAbort(controller.signal);
         await BinaryResult.bytes(bytes, getMimeType(`subtitle.${format}`), { knownLength: format !== 'json' }).send(request, response);
       } catch (error) { failed = true; primary = error; }

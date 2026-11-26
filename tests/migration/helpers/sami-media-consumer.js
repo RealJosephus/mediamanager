@@ -81,7 +81,9 @@ async function observeConsumer({ stage, database, origin, token, itemId, identit
     const unsupported = await request(route('sami'), {}, true, 400);
     const cacheBytes = await readFile(cachePath), metadataBytes = await readFile(cachePath + '.meta');
     assert.ok(cacheBytes.length > 0, stage + ': unsupported SAMI writer leaves a readable persistent SRT');
-    assert.match(metadataBytes.toString('utf8'), /^\d+:\d+$/u);
+    const fingerprint = metadataBytes.toString('utf8');
+    assert.match(fingerprint, /^v2:\d+:\d+:\d+:[0-9A-F]{64}$/u);
+    assert.ok(fingerprint.endsWith(':' + sha(identity).toUpperCase()), stage + ': the cache identifies its original subtitle path');
     observation.unsupported = unsupported.record;
     observation.cache = { path: cachePath, before, bytes: cacheBytes.length, sha256: sha(cacheBytes), base64: cacheBytes.toString('base64'),
       metadata: { bytes: metadataBytes.length, sha256: sha(metadataBytes), base64: metadataBytes.toString('base64') } };
@@ -112,6 +114,7 @@ async function observeConsumer({ stage, database, origin, token, itemId, identit
   assert.equal(segmentUrl.searchParams.get('StartPositionTicks'), '0');
   assert.equal(segmentUrl.searchParams.get('CopyTimestamps'), 'true');
   assert.equal(segmentUrl.searchParams.get('AddVttTimeMap'), 'true');
+  assert.equal(segmentUrl.searchParams.get('VttTimestampMapMpegts'), '900000');
   const hlsSegment = await request(segmentUrl.href);
   assert.equal(hlsSegment.record.headers['content-type'], 'text/vtt');
   assert.match(hlsSegment.bytes.toString('utf8'), /^WEBVTT\r?\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00\.000\r?\n/u);

@@ -240,7 +240,10 @@ export function registerPlaybackRoutes(add, { playback, users }) {
     integerValue(context.params.index, 'index');
     const segmentLength = integerValue(query(context, 'segmentLength'), 'segmentLength');
     if (segmentLength == null) throw new BindingError('segmentLength', 'The segmentLength field is required.');
-    return playback.subtitleHlsPlaylist(itemId(context), context.params.mediaSourceId, segmentLength, { user: context.auth.User, accessToken: context.auth.Token });
+    return playback.subtitleHlsPlaylist(itemId(context), context.params.mediaSourceId, segmentLength, {
+      user: context.auth.User, accessToken: context.auth.Token,
+      vttTimestampMapMpegts: longValue(query(context, 'vttTimestampMapMpegts'), 'vttTimestampMapMpegts'),
+    });
   });
   for (const route of ['/Videos/{itemId}/{mediaSourceId}/Subtitles/{index}/Stream.{format}', '/Videos/{itemId}/{mediaSourceId}/Subtitles/{index}/{startPositionTicks}/Stream.{format}']) {
     add('GET', route, async context => playback.subtitle(guidValue(query(context, 'itemId') ?? context.params.itemId, 'itemId'),
@@ -249,6 +252,7 @@ export function registerPlaybackRoutes(add, { playback, users }) {
         startPositionTicks: longValue(query(context, 'startPositionTicks') ?? context.params.startPositionTicks, 'startPositionTicks', 0n),
         endPositionTicks: longValue(query(context, 'endPositionTicks'), 'endPositionTicks', 0n),
         copyTimestamps: booleanValue(query(context, 'copyTimestamps'), 'copyTimestamps', false),
-        addVttTimeMap: booleanValue(query(context, 'addVttTimeMap'), 'addVttTimeMap', false) }));
+        addVttTimeMap: booleanValue(query(context, 'addVttTimeMap'), 'addVttTimeMap', false),
+        vttTimestampMapMpegts: longValue(query(context, 'vttTimestampMapMpegts'), 'vttTimestampMapMpegts') }));
   }
 }

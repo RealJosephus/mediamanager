@@ -25,6 +25,7 @@ const failure = (code, message) => new StorageError(code, message);
 const lower = value => String(value ?? '').toLowerCase();
 const liveInitUri = /#EXT-X-MAP:URI="[^"\r\n]+"/u;
 const round = value => { const floor = Math.floor(value); return value - floor === 0.5 ? floor + floor % 2 : Math.round(value); };
+export const defaultVttTimestampMapMpegts = 900000n;
 const ticksPerSecond = 10000000n;
 const int64Minimum = -(2n ** 63n);
 const int64Maximum = 2n ** 63n - 1n;
@@ -429,7 +430,8 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
   const mediaSourceId = options.MediaSourceId ?? source.Id;
   if (subtitleGroup && options.SubtitleMethod !== 'Drop') {
     const selectedIndex = options.SubtitleMethod === 'Hls' ? selected?.Index : undefined;
-    for (const stream of subtitles) lines.push(`#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="${stream.DisplayTitle ?? ''}",DEFAULT=${stream.Index === selectedIndex ? 'YES' : 'NO'},FORCED=${stream.IsForced ? 'YES' : 'NO'},AUTOSELECT=YES,URI="${mediaSourceId}/Subtitles/${stream.Index}/subtitles.m3u8?SegmentLength=30&ApiKey=${token}",LANGUAGE="${stream.Language ?? 'Unknown'}"`);
+    const timestampMap = lower(options.SegmentContainer) === 'mp4' ? 0n : defaultVttTimestampMapMpegts;
+    for (const stream of subtitles) lines.push(`#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="${stream.DisplayTitle ?? ''}",DEFAULT=${stream.Index === selectedIndex ? 'YES' : 'NO'},FORCED=${stream.IsForced ? 'YES' : 'NO'},AUTOSELECT=YES,URI="${mediaSourceId}/Subtitles/${stream.Index}/subtitles.m3u8?SegmentLength=30&ApiKey=${token}&VttTimestampMapMpegts=${timestampMap}",LANGUAGE="${stream.Language ?? 'Unknown'}"`);
   }
   const hdr = videoOutput?.hdr;
   if (hdr?.standaloneDoviCodec) lines.push(streamInfo(bitrate, 'PQ', hdr.standaloneDoviCodec), variantUrl(parameters));
@@ -477,7 +479,7 @@ export function masterPlaylist(source, options = {}, query = '', tools) {
   return lines.join('\r\n');
 }
 
-export function subtitlePlaylist(source, segmentLength, accessToken = '') {
+export function subtitlePlaylist(source, segmentLength, accessToken = '', vttTimestampMapMpegts = defaultVttTimestampMapMpegts) {
   const runtime = BigInt(source.RunTimeTicks ?? -1);
   if (runtime <= 0n) throw failure('invalid-request', 'HLS subtitles are not supported for this media.');
   if (!Number.isSafeInteger(segmentLength) || segmentLength <= 0 || segmentLength > 86400) throw failure('invalid-request', 'The subtitle segment length must be positive.');
@@ -488,7 +490,7 @@ export function subtitlePlaylist(source, segmentLength, accessToken = '') {
     const length = runtime - position < segmentTicks ? runtime - position : segmentTicks;
     const seconds = Number(length) / 10000000;
     const end = runtime < position + segmentTicks ? runtime : position + segmentTicks;
-    lines.push(`#EXTINF:${seconds},`, `stream.vtt?CopyTimestamps=true&AddVttTimeMap=true&StartPositionTicks=${position}&EndPositionTicks=${end}&ApiKey=${accessToken}`);
+    lines.push(`#EXTINF:${seconds},`, `stream.vtt?CopyTimestamps=true&AddVttTimeMap=true&StartPositionTicks=${position}&EndPositionTicks=${end}&ApiKey=${accessToken}&VttTimestampMapMpegts=${vttTimestampMapMpegts}`);
   }
   lines.push('#EXT-X-ENDLIST', '');
   return lines.join('\r\n');

@@ -6,6 +6,7 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { ProbeReadBridge } from '../storage/probe-bridge.js';
+import { conditionalReadVersion } from '../storage/read-version.js';
 import { StorageError } from '../storage/errors.js';
 import { createNativeCharsetStreamDetector } from '../core/native-charset.js';
 import { isExternalSubtitleFallback, subtitleExtensionHint, subtitleExtractionFormat } from './subtitle-source.js';
@@ -116,7 +117,7 @@ export class ExtractionService {
     if (!this.supportsSubtitle(source, stream)) throw failure('not-supported', 'This subtitle requires an unsupported extraction or conversion branch.');
     if (isExternalSubtitleFallback(stream)) return this.#requestJob(randomUUID(), (ownerSignal, reportCleanupFailure) => this.subtitleCache.getOrCreate(source, stream, {
       signal: ownerSignal, statSource: /^https?:\/\//iu.test(stream.Path) ? () => null : () => this.vfs.stat(virtualPath),
-      produce: initial => this.#convertExternalText(source, stream, virtualPath, initial, ownerSignal, reportCleanupFailure),
+      produce: (initial, info) => this.#convertExternalText(source, stream, virtualPath, initial, info, ownerSignal, reportCleanupFailure),
     }), signal);
     const [format, muxer, subtitleCodec] = subtitleExtractionFormat(stream);
     const discType = !stream.IsExternal && ['Dvd', 'BluRay'].includes(source.VideoType) ? source.VideoType : undefined;
@@ -179,12 +180,14 @@ export class ExtractionService {
     }
   }
 
-  async #convertExternalText(source, stream, virtualPath, initial, signal, reportCleanupFailure) {
+  async #convertExternalText(source, stream, virtualPath, initial, info, signal, reportCleanupFailure) {
     let handle;
     const detector = createNativeCharsetStreamDetector();
     let encoding, detectionError, detectionFailed = false;
     try {
-      handle = await this.vfs.openRead(virtualPath, { signal });
+      const ifMatch = info && conditionalReadVersion(this.vfs, virtualPath, info);
+      handle = await this.vfs.openRead(virtualPath, { signal, ifMatch: ifMatch ?? undefined });
+      if (info?.version != null && handle.version != null && info.version !== handle.version) throw failure('version-changed', 'The subtitle source changed before charset detection.');
       for await (const chunk of handle.stream) { checkAbort(signal); detector.append(chunk); if (detector.done) break; }
       encoding = detector.finish().details?.[0]?.name ?? '';
     } catch (error) { detectionError = error; detectionFailed = true; }
@@ -200,7 +203,7 @@ export class ExtractionService {
     let lease, execution, bytes = Buffer.alloc(0), exists = false, remove = false, cleanupFailed = false;
     try {
       if (initial !== null) await writeFile(output, initial, { flag: 'wx' });
-      lease = await this.bridge.lease(virtualPath, { signal, expiresInMs: null, extensionHint: subtitleExtensionHint(stream) });
+      lease = await this.bridge.lease(virtualPath, { signal, version: info?.version, expiresInMs: null, extensionHint: subtitleExtensionHint(stream) });
       try {
         execution = await this.#run(buildExtractionArguments(lease.url, { kind: 'text-subtitle', muxer: 'srt', index: subtitleInputIndex(source, stream), encoding,
           directory, output }), { signal, redacted: lease.url, subtitle: true });

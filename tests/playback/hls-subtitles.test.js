@@ -56,6 +56,8 @@ function streamingOptions(urlText) {
 }
 
 const normalized = value => projectHlsRequestIdentities(value, { token, playSessionId: session });
+const currentSubtitleOffset = text => text.replace(
+  /((?:subtitles\.m3u8|stream\.vtt)\?[^"\r\n]*&ApiKey=<token>)/gu, '$1&VttTimestampMapMpegts=900000');
 
 test('HLS subtitle delivery, master renditions and subtitle playlist match the current native instance', () => {
   const source = sourceFixture();
@@ -67,9 +69,13 @@ test('HLS subtitle delivery, master renditions and subtitle playlist match the c
     if (name === 'externalDisabled') { url.searchParams.set('SubtitleMethod', 'External'); url.searchParams.set('EnableSubtitlesInManifest', 'false'); }
     if (name === 'selectedForced') url.searchParams.set('SubtitleStreamIndex', '4');
     if (name === 'dropEnabled') { url.searchParams.set('SubtitleMethod', 'Drop'); url.searchParams.set('EnableSubtitlesInManifest', 'true'); }
-    assert.equal(normalized(masterPlaylist(source, streamingOptions(url.pathname + url.search), url.search.slice(1))), expected.text, name);
+    assert.equal(normalized(masterPlaylist(source, streamingOptions(url.pathname + url.search), url.search.slice(1))), currentSubtitleOffset(expected.text), name);
   }
-  assert.equal(normalized(subtitlePlaylist(source, 30, token)), native.subtitlePlaylist.text);
+  assert.equal(normalized(subtitlePlaylist(source, 30, token)), currentSubtitleOffset(native.subtitlePlaylist.text));
+  const fmp4 = new URL(initialUrl.replaceAll('<token>', token).replaceAll('<session>', session), 'http://localhost');
+  fmp4.searchParams.set('SegmentContainer', 'mp4');
+  const fmp4Master = masterPlaylist(source, streamingOptions(fmp4.href), fmp4.search.slice(1));
+  assert.deepEqual([...fmp4Master.matchAll(/VttTimestampMapMpegts=(\d+)/gu)].map(match => match[1]), ['0', '0']);
   assert.throws(() => subtitlePlaylist({ ...source, RunTimeTicks: 0 }, 30, token), { code: 'invalid-request' });
   assert.throws(() => subtitlePlaylist(source, 0, token), { code: 'invalid-request' });
   assert.throws(() => subtitlePlaylist(source, 86401, token), { code: 'invalid-request' });
@@ -148,16 +154,26 @@ test('authenticated HTTP serves native master, subtitle manifest and timed WebVT
     const masterUrl = new URL(info.MediaSources[0].TranscodingUrl, origin);
     const master = await fetch(masterUrl, { headers });
     assert.equal(master.status, 200); assert.equal(master.headers.get('content-type'), native.master.contentType);
-    const masterText = await master.text(); assert.equal(projectHlsRequestIdentities(masterText, identities), native.master.text);
+    const masterText = await master.text(); assert.equal(projectHlsRequestIdentities(masterText, identities), currentSubtitleOffset(native.master.text));
     const mediaLine = masterText.split(/\r?\n/).find(line => line.startsWith('#EXT-X-MEDIA'));
     const subtitleUrl = new URL(/URI="([^"]+)"/.exec(mediaLine)[1], masterUrl);
     const manifest = await fetch(subtitleUrl, { headers });
     assert.equal(manifest.status, 200); assert.equal(manifest.headers.get('content-type'), native.subtitlePlaylist.contentType);
-    const manifestText = await manifest.text(); assert.equal(projectHlsRequestIdentities(manifestText, identities), native.subtitlePlaylist.text);
+    const manifestText = await manifest.text(); assert.equal(projectHlsRequestIdentities(manifestText, identities), currentSubtitleOffset(native.subtitlePlaylist.text));
     const segmentUrl = new URL(manifestText.split(/\r?\n/).find(line => line && !line.startsWith('#')), subtitleUrl);
     const segment = await fetch(segmentUrl, { headers });
     assert.equal(segment.status, 200); assert.equal(segment.headers.get('content-type'), native.subtitleSegment.contentType);
     assert.equal(await segment.text(), native.subtitleSegment.text.replaceAll('\r\n', EOL));
+    const custom = new URL(subtitleUrl);
+    const offset = '9223372036854775807';
+    custom.searchParams.set('VttTimestampMapMpegts', offset);
+    const customManifest = await fetch(custom, { headers });
+    assert.equal(customManifest.status, 200);
+    const customSegment = new URL((await customManifest.text()).split(/\r?\n/).find(line => line && !line.startsWith('#')), custom);
+    assert.equal(customSegment.searchParams.get('VttTimestampMapMpegts'), offset);
+    const customVtt = await fetch(customSegment, { headers });
+    assert.equal(customVtt.status, 200);
+    assert.equal(await customVtt.text(), native.subtitleSegment.text.replace('MPEGTS:900000', `MPEGTS:${offset}`).replaceAll('\r\n', EOL));
     const missing = await fetch(new URL(subtitleUrl.pathname, origin), { headers });
     assert.equal(missing.status, native.missingLength.status); assert.equal(missing.headers.get('content-type'), native.missingLength.contentType);
     const missingProblem = parseLosslessJson(await missing.text()), nativeProblem = parseLosslessJson(native.missingLength.text);
