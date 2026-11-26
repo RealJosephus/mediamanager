@@ -24,7 +24,7 @@ test('postgres: native mixed-separator version persistence follows the actual ho
   const root = path.join(validationOutputRoot(), 'video-version-platform-' + randomUUID()); await mkdir(root, { recursive: true });
   const selectedBytes = Buffer.from(json([sample])), selected = path.join(root, 'input.json'); await writeFile(selected, selectedBytes);
   const output = path.join(root, 'oracle');
-  const execution = await recordOracle({ project: 'tests/library/fixtures/video-version-ignore/PlatformOracle.csproj', output,
+  const execution = await recordOracle({ project: 'tests/library/fixtures/video-version-platform-current/Oracle.csproj', output,
     args: [selected, '{output}/native.json', '{output}/state'] });
   const nativeBytes = await readFile(path.join(output, 'native.json')), native = parseLosslessJson(nativeBytes.toString('utf8'));
   assert.equal(native.inputSha256, sha256(selectedBytes)); assert.equal(native.results.length, 1);

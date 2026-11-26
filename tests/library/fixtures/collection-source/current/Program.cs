@@ -49,7 +49,7 @@ var appHost = Stub.Make<IServerApplicationHost>((method, values) => method.Name 
     ? values![0] : Stub.Default(method.ReturnType));
 var factory = new SqlFactory(Path.Combine(root, "native.db"));
 using (var initial = factory.CreateDbContext()) initial.Database.EnsureCreated();
-var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, NullLogger<BaseItemRepository>.Instance);
+var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance);
 BaseItem.ItemRepository = repository;
 var manager = (LibraryManager)RuntimeHelpers.GetUninitializedObject(typeof(LibraryManager));
 void Field(string name, object value) => typeof(LibraryManager).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(manager, value);

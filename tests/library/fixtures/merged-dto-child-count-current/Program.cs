@@ -68,7 +68,7 @@ var fileSystem = new ManagedFileSystem(NullLogger<ManagedFileSystem>.Instance, p
 var localization = new LocalizationManager(configuration, NullLogger<LocalizationManager>.Instance); await localization.LoadAll();
 BaseItem.ConfigurationManager = configuration; BaseItem.LocalizationManager = localization;
 BaseItem.FileSystem = fileSystem; BaseItem.Logger = NullLogger<BaseItem>.Instance;
-var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, NullLogger<BaseItemRepository>.Instance);
+var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, localization, NullLogger<BaseItemRepository>.Instance);
 var links = new LinkedChildrenService(factory, new ItemTypeLookup(), repository);
 var counts = new ItemCountService(factory, new ItemTypeLookup(), repository);
 BaseItem.ItemRepository = repository; BaseItem.ItemCountService = counts;

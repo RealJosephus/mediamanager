@@ -60,7 +60,7 @@ foreach (var name in cases) {
     BaseItem.LocalizationManager = new LocalizationManager(config, NullLogger<LocalizationManager>.Instance);
     var appHost = Stub.Make<IServerApplicationHost>((method, values) => method.Name is "ReverseVirtualPath" or "ExpandVirtualPath" ? values![0] : Stub.Default(method.ReturnType));
     var factory = new SqlFactory(Path.Combine(root, "native.db")); using (var context = factory.CreateDbContext()) context.Database.EnsureCreated();
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, NullLogger<BaseItemRepository>.Instance); BaseItem.ItemRepository = repository;
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance); BaseItem.ItemRepository = repository;
     Guid Id(int number) => name == "guid-item-order" && number is 10 or 11
         ? Guid.Parse(number == 10 ? "01000000-0000-0000-0000-000000000010" : "00010000-0000-0000-0000-000000000011")
         : Guid.Parse("cd810000-0000-0000-0000-" + number.ToString("D12"));

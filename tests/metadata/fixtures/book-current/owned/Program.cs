@@ -77,7 +77,7 @@ foreach (var sample in input.EnumerateArray()) {
     var appHost = Stub.Make<IServerApplicationHost>((method, values) => method.Name is "ReverseVirtualPath" or "ExpandVirtualPath" ? values![0] : Stub.Default(method.ReturnType));
     var factory = new SqlFactory(Path.Combine(root, "native.db"));
     using (var initial = factory.CreateDbContext()) initial.Database.EnsureCreated();
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, NullLogger<BaseItemRepository>.Instance);
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance);
     BaseItem.ItemRepository = repository;
     var realPersistence = new ItemPersistenceService(factory, appHost, NullLogger<ItemPersistenceService>.Instance);
     var persistence = Stub.Make<IItemPersistenceService>((method, values) => {

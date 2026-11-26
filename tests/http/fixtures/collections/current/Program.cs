@@ -57,7 +57,7 @@ builder.Services.AddAuthentication("fixture").AddScheme<AuthenticationSchemeOpti
 builder.Services.AddAuthorization(options => options.AddPolicy(Policies.CollectionManagement,
     policy => policy.AddAuthenticationSchemes("fixture").RequireAuthenticatedUser()
         .AddRequirements(new UserPermissionRequirement(PermissionKind.EnableCollectionManagement))));
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyCollectionController()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), new ServerConfiguration()).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyCollectionController()));
 builder.Services.Replace(ServiceDescriptor.Transient<CollectionController>(_ => new CollectionController(capture.Manager, capture.Dto)));
 var application = builder.Build();
 application.UseMiddleware<ExceptionMiddleware>();

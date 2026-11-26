@@ -16,7 +16,6 @@ using MediaBrowser.Common.Api;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Configuration;
 using MediaBrowser.Controller.Library;
-using MediaBrowser.Controller.MediaEncoding;
 using MediaBrowser.Model.Configuration;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -60,8 +59,8 @@ builder.Services.AddAuthorization(options => {
     options.DefaultPolicy = new AuthorizationPolicyBuilder("fixture").AddRequirements(new DefaultAuthorizationRequirement()).Build();
     options.AddPolicy(Policies.RequiresElevation, policy => policy.AddAuthenticationSchemes("fixture").RequireClaim(ClaimTypes.Role, UserRoles.Administrator));
 });
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyConfigurationController()));
-builder.Services.Replace(ServiceDescriptor.Transient<ConfigurationController>(_ => new ConfigurationController(configuration, Stub.Make<IMediaEncoder>((method, _) => throw new InvalidOperationException("Unexpected encoder call: " + method.Name)))));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), configuration.Configuration).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyConfigurationController()));
+builder.Services.Replace(ServiceDescriptor.Transient<ConfigurationController>(_ => new ConfigurationController(configuration)));
 var app = builder.Build(); var observations = new List<object>(); using var client = new HttpClient();
 try {
     app.UseMiddleware<ExceptionMiddleware>(); app.UseAuthentication(); app.UseAuthorization(); app.MapControllers(); await app.StartAsync();

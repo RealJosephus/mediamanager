@@ -283,7 +283,8 @@ public sealed class NativeScanHost : IAsyncDisposable
             command.CommandText = "SELECT count(*) FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'";
             if (Convert.ToInt32(command.ExecuteScalar()) != 33) throw new IOException("The supplied full native schema must have 33 tables.");
         }
-        Repository = new BaseItemRepository(Factory, AppHost, new ItemTypeLookup(), Configuration, loggerFactory.CreateLogger<BaseItemRepository>());
+        var localization = new LocalizationManager(Configuration,loggerFactory.CreateLogger<LocalizationManager>());
+        Repository = new BaseItemRepository(Factory, AppHost, new ItemTypeLookup(), Configuration, localization, loggerFactory.CreateLogger<BaseItemRepository>());
         var actualPersistence = new ItemPersistenceService(Factory, AppHost, loggerFactory.CreateLogger<ItemPersistenceService>());
         var persistence = ForwardProxy.Make<IItemPersistenceService>((method, values) => {
             if (_observing && method.Name == "SaveItems") {
@@ -309,7 +310,6 @@ public sealed class NativeScanHost : IAsyncDisposable
             return method.ReturnType == typeof(void) ? null : ForwardProxy.Unused(method);
         });
         Monitor = monitor;
-        var localization = new LocalizationManager(Configuration,loggerFactory.CreateLogger<LocalizationManager>());
         Localization = localization;
         var naming = new NamingOptions();
         var pathManager = new PathManager(loggerFactory.CreateLogger<PathManager>(), Configuration, Paths);

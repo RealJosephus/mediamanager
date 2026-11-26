@@ -87,8 +87,8 @@
     {
       "role": "nativeScanHost",
       "filename": "current/NativeScanHost.cs",
-      "bytes": 32299,
-      "sha256": "d9a8972ebf16c386e7546ef0c19d7c2a35e0f29efd1df711659f51610789c63b"
+      "bytes": 32313,
+      "sha256": "9a7588408ea4a3b0f7cd37a06a7056396c0b858a31ef7267bef4d918b229a26f"
     },
     {
       "role": "nativeBookPhotoProviders",

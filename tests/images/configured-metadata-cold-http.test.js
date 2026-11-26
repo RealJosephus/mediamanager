@@ -14,7 +14,6 @@ import { currentColdMetadataImageNative, recordColdMetadataImageCandidate, pictu
   failureValue } from './fixtures/configured-metadata-cold-http/capture.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
-const current = await currentColdMetadataImageNative();
 const id = 'c01d0000-0000-0000-0000-000000000001';
 const nativeType = 'MediaBrowser.Controller.Entities.Movies.Movie';
 const writable = { create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true };
@@ -25,6 +24,7 @@ const project = (root, value) => value?.replace(root, '$STATE').replaceAll(path.
 test('postgres: a cold runtime at B reads a saved absolute A image through its explicit read-only metadata storage prefix', {
   skip: !postgresTestConnectionString, timeout: 120000,
 }, async t => {
+  const current = await currentColdMetadataImageNative();
   const root = path.join(current.output, 'candidate-state'), programDataPath = path.join(root, 'program'),
     configurationDirectoryPath = path.join(root, 'config'), first = path.join(root, 'metadata-a'), second = path.join(root, 'metadata-b'),
     mediaRoot = path.join(root, 'media'), storageFile = path.join(root, 'storage.json'), configurationFile = path.join(configurationDirectoryPath, 'system.xml');

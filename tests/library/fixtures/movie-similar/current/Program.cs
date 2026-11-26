@@ -1,3 +1,4 @@
+using Emby.Server.Implementations.Localization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -132,7 +133,7 @@ using (var db = factory.CreateDbContext())
         });
     db.SaveChanges();
 }
-var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration,
+var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, new LocalizationManager(configuration, NullLogger<LocalizationManager>.Instance),
     NullLogger<BaseItemRepository>.Instance);
 libraryProxy.Query = repository.GetItemList;
 var provider = new MovieSimilarItemsProvider(factory, repository, configuration, library);
@@ -277,7 +278,8 @@ public class ConfigurationProxy : DispatchProxy
 {
     public ServerConfiguration Data = new();
     protected override object? Invoke(MethodInfo? method, object?[]? args)
-        => method!.Name == "get_Configuration" ? Data : throw new NotSupportedException(method.Name);
+        => method!.Name switch { "get_Configuration" => Data, "add_ConfigurationUpdated" or "remove_ConfigurationUpdated" => null,
+            _ => throw new NotSupportedException(method.Name) };
 }
 public class ApplicationHostProxy : DispatchProxy
 {

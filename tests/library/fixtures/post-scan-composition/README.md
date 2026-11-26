@@ -1,4 +1,4 @@
-# Nonempty eight-task composition
+# Nonempty post-scan task composition
 
 This fixture runs Actions differentials; source changes alone do not constitute
 a recorded pass or release admission. The test builds and executes `Oracle.csproj` against
@@ -25,8 +25,9 @@ Studio through native `ItemPersistenceService`. It also saves two unreferenced
 by-name items, writes source/internal/extracted marker files, and inserts an
 unmapped ItemValue. An empty-root global scan must then create both live by-name
 items, refresh them, delete both dead items and their files, and remove the orphan
-value. All eight actual post-scan exports remain registered in their discovered
-order and are dispatched by `LibraryManager.ValidateMediaLibraryInternal`.
+value. The current host registers all nine post-scan exports in their discovered
+order. `LibraryManager.ValidateMediaLibraryInternal` dispatches them and ends
+with `RefreshDatabaseStatisticsPostScanTask` on the fixture's SQLite database.
 
 `music-input.json` adds two detached Audio rows through the same actual native
 persistence service. Their performer and album-artist names use both native
@@ -94,7 +95,7 @@ shutdown failure cannot hide the already observed cancellation and SQL state.
 The candidate imports only the seeded fixture entities and their pre-action value
 relations from this newly recorded SQLite state into an isolated PostgreSQL
 schema. It creates the same marker bytes under a fresh application root, then
-executes the runtime's original `libraryScanLifecycle.run` with its original eight
+executes the runtime's original `libraryScanLifecycle.run` with its nine registered
 task objects. The comparison covers all BaseItems columns of the fixture and
 created by-name entities, all ItemValues and ItemValuesMap rows, relevant added
 and removed events, real metadata refresh admission, task completion, and files.

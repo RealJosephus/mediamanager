@@ -33,6 +33,7 @@ const sourcePaths = [
   'Emby.Server.Implementations/Library/Validators/GenresValidator.cs', 'Emby.Server.Implementations/Library/Validators/StudiosValidator.cs',
   'Emby.Server.Implementations/Library/Validators/CollectionPosterVerifyPostScanTask.cs',
   'Emby.Server.Implementations/Data/CleanDatabaseScheduledTask.cs',
+  'Emby.Server.Implementations/Data/RefreshDatabaseStatisticsPostScanTask.cs',
   'MediaBrowser.Controller/Entities/Folder.cs', 'MediaBrowser.Controller/Entities/BaseItem.cs',
   'MediaBrowser.Controller/Entities/AggregateFolder.cs', 'MediaBrowser.Controller/Entities/UserRootFolder.cs',
   'MediaBrowser.Controller/Entities/CollectionFolder.cs', 'MediaBrowser.Controller/Entities/Movies/Movie.cs',

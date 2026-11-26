@@ -118,7 +118,7 @@ using (var initial = factory.CreateDbContext()) {
         resetRows[table] = initial.Database.ExecuteSqlRaw($"DELETE FROM \"{table}\"");
     transaction.Commit();
 }
-var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, NullLogger<BaseItemRepository>.Instance);
+var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance);
 BaseItem.ItemRepository = repository;
 object ChannelProjection(Channel channel) => new {
     type = channel.GetType().FullName, sourceType = channel.SourceType.ToString(), mediaType = channel.MediaType.ToString(),

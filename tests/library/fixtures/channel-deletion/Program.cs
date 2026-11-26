@@ -82,7 +82,7 @@ foreach (var lane in new[] { "permissions", "deletions" }) foreach (var sample i
         "GetPathProtocol" => MediaProtocol.File, "GetMediaStreams" => Array.Empty<MediaStream>(), "GetStaticMediaSources" => Array.Empty<MediaSourceInfo>(),
         "GetMediaAttachments" => Array.Empty<MediaAttachment>(), _ => Stub.Default(method.ReturnType) });
     var factory = new SqlFactory(Path.Combine(owned, "native.db")); using (var initial = factory.CreateDbContext()) initial.Database.EnsureCreated();
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, NullLogger<BaseItemRepository>.Instance); BaseItem.ItemRepository = repository;
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, localization, NullLogger<BaseItemRepository>.Instance); BaseItem.ItemRepository = repository;
     var realPersistence = new ItemPersistenceService(factory, appHost, NullLogger<ItemPersistenceService>.Instance);
     string source = Path.Combine(owned, "media", "target.bin"), internalMarker = "", externalMarker = Path.Combine(owned, "external", "marker");
     object State() {

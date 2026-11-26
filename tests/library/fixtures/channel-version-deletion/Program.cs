@@ -72,7 +72,7 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
         "GetMediaStreams" => Array.Empty<MediaStream>(), "GetMediaAttachments" => Array.Empty<MediaAttachment>(),
         _ => throw new InvalidOperationException("Media execution is outside this component: " + method.Name) });
     var factory = new SqlFactory(Path.Combine(owned, "native.db")); using (var initial = factory.CreateDbContext()) initial.Database.EnsureCreated();
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, NullLogger<BaseItemRepository>.Instance); BaseItem.ItemRepository = repository;
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, localization, NullLogger<BaseItemRepository>.Instance); BaseItem.ItemRepository = repository;
     var realPersistence = new ItemPersistenceService(factory, appHost, NullLogger<ItemPersistenceService>.Instance);
     var tracked = new List<Video>();
     object State() {

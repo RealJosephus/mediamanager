@@ -82,7 +82,7 @@ void EntityServices(ServerConfigurationManager configuration, ManagedFileSystem 
 var id = Guid.Parse("c01d0000-0000-0000-0000-000000000001");
 var warmPaths = Paths(); var warmConfiguration = new ServerConfigurationManager(warmPaths, NullLoggerFactory.Instance, serializer);
 var warmFiles = new ManagedFileSystem(NullLogger<ManagedFileSystem>.Instance, warmPaths, []); EntityServices(warmConfiguration, warmFiles);
-var warmHost = Host(warmPaths); var warmRepository = new BaseItemRepository(factory, warmHost, new ItemTypeLookup(), warmConfiguration, NullLogger<BaseItemRepository>.Instance);
+var warmHost = Host(warmPaths); var warmRepository = new BaseItemRepository(factory, warmHost, new ItemTypeLookup(), warmConfiguration, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance);
 BaseItem.ItemRepository = warmRepository;
 var persistence = new ItemPersistenceService(factory, warmHost, NullLogger<ItemPersistenceService>.Instance);
 var owner = new Movie { Id = id, Name = "Cold metadata image", ProductionYear = 2026, IsInMixedFolder = true,
@@ -117,7 +117,7 @@ var savedConfiguration = File.ReadAllBytes(configurationFile);
 // The library gateway returns only freshly deserialized real SQLite values.
 var coldPaths = Paths(); var coldConfiguration = new ServerConfigurationManager(coldPaths, NullLoggerFactory.Instance, serializer);
 var coldFiles = new ManagedFileSystem(NullLogger<ManagedFileSystem>.Instance, coldPaths, []); EntityServices(coldConfiguration, coldFiles);
-var coldRepository = new BaseItemRepository(factory, Host(coldPaths), new ItemTypeLookup(), coldConfiguration, NullLogger<BaseItemRepository>.Instance);
+var coldRepository = new BaseItemRepository(factory, Host(coldPaths), new ItemTypeLookup(), coldConfiguration, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance);
 BaseItem.ItemRepository = coldRepository;
 var coldLibrary = Stub.Make<ILibraryManager>((method, values) => method.Name == "GetItemById"
     ? coldRepository.RetrieveItem((Guid)values![0]!) : method.Name == "GetLibraryOptions" ? new LibraryOptions { SaveLocalMetadata = false } : Stub.Default(method.ReturnType));
@@ -128,11 +128,11 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions { Environme
 builder.Logging.AddProvider(new DiagnosticProvider(diagnostics));
 builder.WebHost.UseUrls("http://127.0.0.1:0");
 builder.Services.AddSingleton<MediaBrowser.Controller.Configuration.IServerConfigurationManager>(coldConfiguration);
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyImageController()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), coldConfiguration.Configuration).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyImageController()));
 builder.Services.Replace(ServiceDescriptor.Transient<ImageController>(_ => new ImageController(
     Stub.Make<IUserManager>((method, _) => Stub.Default(method.ReturnType)), coldLibrary,
     Stub.Make<MediaBrowser.Controller.Providers.IProviderManager>((method, _) => Stub.Default(method.ReturnType)), coldProcessor, coldFiles,
-    captureLoggers.CreateLogger<ImageController>(), coldConfiguration, coldPaths)));
+    captureLoggers.CreateLogger<ImageController>(), coldConfiguration, coldPaths, Stub.Make<ISchedulesDirectService>((method, _) => Stub.Default(method.ReturnType)))));
 var app = builder.Build(); var responses = new List<object>(); var failures = new List<Exception>(); var cleanup = new Dictionary<string, bool>();
 using var http = new HttpClient();
 try {

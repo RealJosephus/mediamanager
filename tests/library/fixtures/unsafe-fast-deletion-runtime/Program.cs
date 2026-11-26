@@ -75,7 +75,7 @@ foreach(var sample in samples) {
     });
     var factory = new SqlFactory(Path.Combine(root, "native.db"));
     using (var initial = factory.CreateDbContext()) initial.Database.EnsureCreated();
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, NullLogger<BaseItemRepository>.Instance);
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance);
     BaseItem.ItemRepository = repository;
     var persistence = new ItemPersistenceService(factory, appHost, NullLogger<ItemPersistenceService>.Instance);
 

@@ -60,8 +60,8 @@ builder.Services.AddSingleton<IAuthorizationHandler, FirstTimeSetupHandler>();
 builder.Services.AddAuthentication("fixture").AddScheme<AuthenticationSchemeOptions, FixtureAuthentication>("fixture", _ => { });
 builder.Services.AddAuthorization(options => options.AddPolicy(Policies.FirstTimeSetupOrElevated,
     policy => policy.AddAuthenticationSchemes("fixture").AddRequirements(new FirstTimeSetupRequirement())));
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyStructureController()));
-builder.Services.Replace(ServiceDescriptor.Transient<LibraryStructureController>(_ => new LibraryStructureController(capture.Configuration, capture.Library, capture.Monitor, capture.Directories)));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), capture.Configuration.Configuration).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyStructureController()));
+builder.Services.Replace(ServiceDescriptor.Transient<LibraryStructureController>(_ => new LibraryStructureController(capture.Configuration, capture.Library, capture.Monitor, capture.Directories, capture.Users)));
 var application = builder.Build();
 application.UseMiddleware<ExceptionMiddleware>(); application.UseAuthentication(); application.UseAuthorization(); application.MapControllers();
 await application.StartAsync();
@@ -107,7 +107,7 @@ File.WriteAllText(args[1], JsonSerializer.Serialize(new { inputSha256 = Convert.
 public class Capture {
     public static Guid Id(int index) => Guid.Parse($"ca200000-0000-0000-0000-{index:000000000000}");
     public static string? String(JsonElement sample, string key) => sample.TryGetProperty(key, out var value) ? value.GetString() : null;
-    public static bool Flag(JsonElement sample, string key) => sample.TryGetProperty(key, out var value) && value.GetBoolean();
+    public static bool Flag(JsonElement sample, string key) => sample.ValueKind == JsonValueKind.Object && sample.TryGetProperty(key, out var value) && value.GetBoolean();
     public static JsonSerializerOptions Json = new() { Converters = { new JsonStringEnumConverter() } };
     public JsonElement Sample;
     public ConcurrentQueue<object> Calls = new();

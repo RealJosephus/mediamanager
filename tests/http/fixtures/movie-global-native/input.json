@@ -64,7 +64,8 @@
     "Genres",
     "MusicGenres",
     "Studios",
-    "CleanDatabase"
+    "CleanDatabase",
+    "RefreshDatabaseStatistics"
   ],
   "declaredSeams": [
     "Independent fresh roots, fixed English configuration, offline providers, no images/discs/subtitles/lyrics/users/network content. Unused native dependencies fail closed.",

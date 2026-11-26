@@ -93,7 +93,7 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
         "GetResumeUserDataBatch" => new Dictionary<Guid, VersionResumeData>(), "GetUserData" => ReadUserData((BaseItem)values![1]!),
         _ => throw new InvalidOperationException("User data writes cannot execute.") });
     var factory = new SqlFactory(Path.Combine(owned, "native.db")); using (var initial = factory.CreateDbContext()) { initial.Database.EnsureCreated(); initial.Users.Add(user); initial.SaveChanges(); }
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, NullLogger<BaseItemRepository>.Instance); BaseItem.ItemRepository = repository;
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, localization, NullLogger<BaseItemRepository>.Instance); BaseItem.ItemRepository = repository;
     var realPersistence = new ItemPersistenceService(factory, appHost, NullLogger<ItemPersistenceService>.Instance);
     var persistence = Stub.Make<IItemPersistenceService>((method, values) => {
         persistenceCalls.Add(new { method = method.Name }); return Stub.Forward(realPersistence, method, values);

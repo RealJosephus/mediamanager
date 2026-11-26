@@ -98,7 +98,7 @@ foreach (var sample in input.EnumerateArray()) {
         ? values![0] : Stub.Default(method.ReturnType));
     var factory = new SqlFactory(Path.Combine(root, "native.db"));
     using (var initial = factory.CreateDbContext()) initial.Database.EnsureCreated();
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, NullLogger<BaseItemRepository>.Instance);
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance);
     BaseItem.ItemRepository = repository;
     var realPersistence = new ItemPersistenceService(factory, appHost, NullLogger<ItemPersistenceService>.Instance);
     var persistence = Stub.Make<IItemPersistenceService>((method, values) => {
@@ -264,7 +264,7 @@ async Task<HttpObservation> SecondDeleteHttp(ILibraryManager library, IServerCon
     builder.Services.AddSingleton(configuration);
     builder.Services.AddAuthentication("fixture").AddScheme<AuthenticationSchemeOptions, FixtureAuthentication>("fixture", _ => {});
     builder.Services.AddAuthorization(options => options.DefaultPolicy = new AuthorizationPolicyBuilder("fixture").RequireAuthenticatedUser().Build());
-    builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(parts =>
+    builder.Services.AddJellyfinApi([], new NetworkConfiguration(), configuration.Configuration).ConfigureApplicationPartManager(parts =>
         parts.FeatureProviders.Add(new OnlyLibraryController()));
     builder.Services.Replace(ServiceDescriptor.Transient<LibraryController>(_ => {
         var constructor = typeof(LibraryController).GetConstructors().Single();

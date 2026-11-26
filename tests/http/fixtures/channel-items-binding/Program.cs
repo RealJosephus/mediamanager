@@ -58,7 +58,7 @@ builder.Services.AddSingleton(Stub.Make<INetworkManager>((method, _) => method.N
 builder.Services.AddSingleton<IAuthorizationHandler, DefaultAuthorizationHandler>();
 builder.Services.AddAuthentication("fixture").AddScheme<AuthenticationSchemeOptions, ChannelAuthentication>("fixture", _ => { });
 builder.Services.AddAuthorization(value => value.DefaultPolicy = new AuthorizationPolicyBuilder("fixture").AddRequirements(new DefaultAuthorizationRequirement()).Build());
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyChannelController()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), configuration).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyChannelController()));
 var app = builder.Build(); var observations = new List<object>(); using var client = new HttpClient();
 try {
     app.UseMiddleware<ExceptionMiddleware>(); app.UseAuthentication(); app.UseAuthorization(); app.MapControllers(); await app.StartAsync();

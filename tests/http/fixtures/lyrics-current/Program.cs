@@ -111,7 +111,7 @@ builder.Services.AddHttpContextAccessor(); builder.Services.AddSingleton(Boundar
 builder.Services.AddSingleton<IAuthorizationHandler, DefaultAuthorizationHandler>();
 builder.Services.AddAuthentication("fixture").AddScheme<AuthenticationSchemeOptions, FixtureAuthentication>("fixture", _ => { });
 builder.Services.AddAuthorization(value => value.DefaultPolicy = new AuthorizationPolicyBuilder("fixture").AddRequirements(new DefaultAuthorizationRequirement()).Build());
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyController()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), config.Configuration).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyController()));
 var before = Streams(factory, input); var app = builder.Build(); var results = new List<object>(); using var client = new HttpClient();
 try {
     app.Use(async (context, next) => { var culture = capture.Sample.TryGetProperty("culture", out var value) ? value.GetString()! : "en-US"; CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(culture); CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture; await next(); });

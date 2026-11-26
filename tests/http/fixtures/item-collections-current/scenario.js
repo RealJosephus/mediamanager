@@ -9,6 +9,7 @@ import { dateTicks, idKey } from '../../../../src/library/records.js';
 import { SqliteDatabase } from '../../../../src/database/sqlite.js';
 import { PostgresDatabase } from '../../../../src/database/postgres.js';
 import { transferDatabase } from '../../../../src/migration/database-transfer.js';
+import { ScheduledTaskFileStore } from '../../../../src/tasks/scheduled-task-store.js';
 import { createTestRuntime } from '../../../helpers/runtime.js';
 import { projectItemBody, projectProblemTrace } from '../../../helpers/http-body-projection.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../../../database/postgres-fixture.js';
@@ -62,6 +63,14 @@ export async function rows(database) {
   }
   return result;
 }
+// The native component has no background scheduler. Keep its read-only observations
+// independent of the server's startup transcode cleanup.
+export async function disableTranscodeCleanup(root) {
+  const store = new ScheduledTaskFileStore({ taskId: '7d8088c10902f1bf4072ded42437bcfb',
+    programDataPath: root, configurationDirectoryPath: path.join(root, 'config') });
+  try { await store.saveTriggers([]); } finally { await store.close(); }
+}
+
 export async function prepareDirectories(root) {
   for (const name of ['root/default/A', 'root/default/B', 'data/playlists', 'data/collections', 'metadata', 'cache', 'config', 'media/A', 'media/B', 'neutral'])
     await mkdir(path.join(root, name), { recursive: true });
@@ -141,6 +150,7 @@ export async function openScenario(input, seedFilename, report, rootIds) {
       } }],
       prefixes: [{ identityRoot: root, accessRoot: '/collections', style, caseSensitive: process.platform !== 'win32', purpose: 'library', returnAccess: 'Same isolated absolute identity for both real repositories.' }],
     }));
+    await disableTranscodeCleanup(root);
     runtime = await createTestRuntime({ database, serverId: input.serverId, programDataPath: root, dataPath: path.join(root, 'data'), metadataPath: path.join(root, 'metadata'),
       configurationDirectoryPath: path.join(root, 'config'), configuration: { IsStartupWizardCompleted: true, UICulture: 'en-US', MetadataCountryCode: 'US', EnableCaseSensitiveItemIds: true },
       portableMountContract: mountContract, storageConfiguration: storageFilename,

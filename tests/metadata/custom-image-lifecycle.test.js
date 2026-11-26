@@ -10,7 +10,7 @@ import { dateTicks } from '../../src/library/records.js';
 import { currentPhotoNative, recordPhotoCandidate } from './fixtures/photo-current/capture.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
-const { input, native, report } = await currentPhotoNative('custom-lifecycle');
+
 const id = 'c1700000-0000-0000-0000-000000000001';
 const stamp = '2025-01-02T03:04:05.0000000Z';
 const identity = filename => 'Z:\\ChildrenMetadata\\CustomImages\\' + filename;
@@ -21,7 +21,8 @@ const comparePath = (a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0;
 const liveImages = images => images.map(value => ({ path: path.win32.basename(value.Path), type: value.Type,
   width: value.Width, height: value.Height, blurhash: value.BlurHash ?? (value.Blurhash == null ? null : Buffer.from(value.Blurhash).toString('utf8')) })).sort(comparePath);
 
-test('custom image lifecycle binds current Native assemblies, real SQLite, image inputs and both recordings', () => {
+test('custom image lifecycle binds current Native assemblies, real SQLite, image inputs and both recordings', async () => {
+  const { input, native, report } = await currentPhotoNative('custom-lifecycle');
   assert.equal(report.nativeExecutionRecorded, true); assert.equal(report.independentNativeCapturesAgree, true);
   assert.equal(report.historicalRecordingReused, false);
   assert.equal(native.sqlite.resolverObserved, true);
@@ -29,6 +30,7 @@ test('custom image lifecycle binds current Native assemblies, real SQLite, image
 });
 
 test('PostgreSQL custom providers share image mutations through processing, probe reload and native save prefixes', async t => {
+  const { input, native } = await currentPhotoNative('custom-lifecycle');
   const fixture = await setupChildrenFixture(t);
   fixture.host.images.processor = { getImageSize: async () => ({ Width: 8, Height: 6 }), getImageBlurHash: async () => 'controlled' };
   await fixture.adapter.mkdir('/aggregate'); await fixture.adapter.mkdir('/aggregate/CustomImages');

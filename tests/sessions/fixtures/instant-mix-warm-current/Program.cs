@@ -96,7 +96,7 @@ foreach (var sample in input.GetProperty("samples").EnumerateArray()) {
     });
     var factory = new SqlFactory(Path.Combine(root, "native.sqlite"));
     using (var initial = factory.CreateDbContext()) initial.Database.EnsureCreated();
-    var repository = new BaseItemRepository(factory, host, new ItemTypeLookup(), config, NullLogger<BaseItemRepository>.Instance);
+    var repository = new BaseItemRepository(factory, host, new ItemTypeLookup(), config, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance);
     BaseItem.ItemRepository = repository;
     var persistence = new ItemPersistenceService(factory, host, NullLogger<ItemPersistenceService>.Instance);
     var actual = (LibraryManager)RuntimeHelpers.GetUninitializedObject(typeof(LibraryManager));

@@ -85,7 +85,7 @@ BaseItem.FileSystem = new ManagedFileSystem(NullLogger<ManagedFileSystem>.Instan
 CollectionFolder.XmlSerializer = Stub.Make<IXmlSerializer>((method, _) => method.Name == "DeserializeFromFile" ? new LibraryOptions() : Stub.Default(method.ReturnType));
 CollectionFolder.ApplicationHost = appHost;
 Video.RecordingsManager = Stub.Make<IRecordingsManager>((method, _) => Stub.Default(method.ReturnType));
-var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, NullLogger<BaseItemRepository>.Instance);
+var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance);
 BaseItem.ItemRepository = repository;
 void Set(object target, string name, object value) => target.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(target, value);
 var library = (LibraryManager)RuntimeHelpers.GetUninitializedObject(typeof(LibraryManager));

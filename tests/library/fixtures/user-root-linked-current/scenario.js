@@ -11,7 +11,7 @@ import { newNativeItemEntity, nativeItemDescriptor } from '../../../../src/libra
 import { clearFolderChildIds, releaseCachedFolderChildren, setFolderChildren } from '../../../../src/library/folder-cache.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../../../database/postgres-fixture.js';
 import { assignTestLinks, readTestLinks } from '../../collection-test-consumers.js';
-import { errorRecord, files, rows, sha, within } from '../../../http/fixtures/item-collections-current/scenario.js';
+import { disableTranscodeCleanup, errorRecord, files, rows, sha, within } from '../../../http/fixtures/item-collections-current/scenario.js';
 
 export { errorRecord, files, rows, sha, within };
 export const itemProjection = item => ({ id: idKey(item.Id), nativeType: item.NativeType, name: item.Name,
@@ -59,6 +59,7 @@ export async function openRootScenario(input, native, report) {
       prefixes: [{ identityRoot: root, accessRoot: '/root-links', style, caseSensitive: process.platform !== 'win32',
         purpose: 'library', returnAccess: 'Same isolated absolute identity for native and PG.' }],
     }));
+    await disableTranscodeCleanup(root);
     runtime = await createTestRuntime({ database, serverId: input.serverId, programDataPath: root, dataPath: path.join(root, 'data'), metadataPath: path.join(root, 'metadata'),
       configurationDirectoryPath: path.join(root, 'config'), configuration: { IsStartupWizardCompleted: true, UICulture: 'en-US',
         MetadataCountryCode: 'US', CacheSize: 1024, EnableCaseSensitiveItemIds: true }, portableMountContract: mountContract,

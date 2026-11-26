@@ -65,7 +65,7 @@ builder.Services.AddAuthorization(options => {
     options.AddPolicy(Policies.RequiresElevation, new AuthorizationPolicyBuilder("fixture").RequireClaim(ClaimTypes.Role, UserRoles.Administrator).Build());
     options.AddPolicy(Policies.IgnoreParentalControl, new AuthorizationPolicyBuilder("fixture").AddRequirements(new DefaultAuthorizationRequirement(false)).Build());
 });
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyResetControllers()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), capture.Configuration.Configuration).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyResetControllers()));
 builder.Services.Replace(ServiceDescriptor.Transient<UserController>(_ => new UserController(capture.UserProxy, Stub.Empty<ISessionManager>(), capture.Network,
     Stub.Empty<IDeviceManager>(), Stub.Empty<IAuthorizationContext>(), capture.Configuration, NullLogger<UserController>.Instance,
     Stub.Empty<IQuickConnect>(), Stub.Empty<IPlaylistManager>())));

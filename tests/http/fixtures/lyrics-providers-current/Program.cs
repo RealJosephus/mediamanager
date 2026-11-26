@@ -96,7 +96,7 @@ builder.Services.AddAuthorization(value => {
     value.AddPolicy(Policies.LyricManagement, new AuthorizationPolicyBuilder("fixture")
         .AddRequirements(new UserPermissionRequirement(PermissionKind.EnableLyricManagement)).Build());
 });
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyController()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), config.Configuration).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyController()));
 var app = builder.Build(); var results = new List<object>(); using var client = new HttpClient();
 var originalHash = Hash(input.GetProperty("mediaPath").GetString()!);
 try {

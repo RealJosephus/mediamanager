@@ -1,3 +1,4 @@
+using Emby.Server.Implementations.Localization;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
@@ -61,7 +62,8 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
     });
     var fileSystem = new ManagedFileSystem(NullLogger<ManagedFileSystem>.Instance, paths, []);
     var factory = new SqlFactory(databaseFilename);
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, NullLogger<BaseItemRepository>.Instance);
+    var localization = new LocalizationManager(configuration, NullLogger<LocalizationManager>.Instance);
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, localization, NullLogger<BaseItemRepository>.Instance);
     var persistence = new ItemPersistenceService(factory, appHost, NullLogger<ItemPersistenceService>.Instance);
     BaseItem.ConfigurationManager = configuration; BaseItem.FileSystem = fileSystem; BaseItem.Logger = NullLogger<BaseItem>.Instance;
     BaseItem.ItemRepository = repository;
@@ -87,6 +89,7 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
             [typeof(IServerApplicationHost)] = appHost, [typeof(IServerConfigurationManager)] = configuration,
             [typeof(ILoggerFactory)] = NullLoggerFactory.Instance, [typeof(IItemRepository)] = source,
             [typeof(IItemPersistenceService)] = persistence, [typeof(IFileSystem)] = fileSystem,
+            [typeof(DotIgnoreIgnoreRule)] = new DotIgnoreIgnoreRule(), [typeof(MediaBrowser.Model.Globalization.ILocalizationManager)] = localization,
             [typeof(NamingOptions)] = new NamingOptions(), [typeof(IDirectoryService)] = new DirectoryService(fileSystem),
         };
         var constructor = typeof(LibraryManager).GetConstructors().Single();

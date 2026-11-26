@@ -1,3 +1,4 @@
+using Emby.Server.Implementations.Localization;
 // Executes the designated Jellyfin TV and Library controllers plus their real Shows selectors.
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -622,7 +623,7 @@ static async Task<object> RecordSimilarItemsManager(string filename)
     var denied = Make(deniedId, "manager-denied", "manager-denied-key");
     var duplicate = Make(duplicateId, "manager-duplicate-key", "manager-shared-key");
     var provider = new ControlledSeriesProvider { Controlled = [allowed, denied, duplicate] };
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration,
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, new LocalizationManager(configuration, NullLogger<LocalizationManager>.Instance),
         NullLogger<BaseItemRepository>.Instance);
     var manager = new SimilarItemsManager(
         NullLogger<SimilarItemsManager>.Instance,
@@ -740,7 +741,7 @@ static async Task<object> RecordSimilarProviderOrchestration(string root)
     ((SimilarPathsProxy)(object)paths).Cache = cacheRoot;
     var appHost = DispatchProxy.Create<IServerApplicationHost, ApplicationHostProxy>();
     var factory = new SqlFactory(databasePath);
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration,
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, new LocalizationManager(configuration, NullLogger<LocalizationManager>.Instance),
         NullLogger<BaseItemRepository>.Instance);
     var library = DispatchProxy.Create<ILibraryManager, LibraryProxy>();
     var libraryProxy = (LibraryProxy)(object)library;
@@ -1370,7 +1371,7 @@ static object RecordSqliteRepository(string filename)
             };
     }
 
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration,
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, new LocalizationManager(configuration, NullLogger<LocalizationManager>.Instance),
         NullLogger<BaseItemRepository>.Instance);
     var order = new[] { (ItemSortBy.SortName, SortOrder.Ascending) };
     InternalItemsQuery Query(User? user = null) => new(user)
@@ -1936,7 +1937,8 @@ public class ConfigurationProxy : DispatchProxy
 {
     public ServerConfiguration Data = new();
     protected override object? Invoke(MethodInfo? method, object?[]? args)
-        => method!.Name == "get_Configuration" ? Data : throw new NotSupportedException(method.Name);
+        => method!.Name switch { "get_Configuration" => Data, "add_ConfigurationUpdated" or "remove_ConfigurationUpdated" => null,
+            _ => throw new NotSupportedException(method.Name) };
 }
 
 public class ApplicationHostProxy : DispatchProxy

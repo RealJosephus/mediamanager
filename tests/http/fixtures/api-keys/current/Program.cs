@@ -49,7 +49,7 @@ builder.Services.AddAuthentication("fixture").AddScheme<AuthenticationSchemeOpti
     .AddScheme<AuthenticationSchemeOptions, FixtureAuthentication>(Jellyfin.Api.Constants.AuthenticationSchemes.CustomAuthentication, _ => { });
 builder.Services.AddAuthorization(options => options.AddPolicy(Policies.RequiresElevation, policy =>
     policy.AddAuthenticationSchemes(Jellyfin.Api.Constants.AuthenticationSchemes.CustomAuthentication).RequireClaim(ClaimTypes.Role, UserRoles.Administrator)));
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyApiKeyController()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), new ServerConfiguration()).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyApiKeyController()));
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>(); app.UseAuthentication(); app.UseAuthorization(); app.MapControllers(); await app.StartAsync();
 var address = app.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses.Single();

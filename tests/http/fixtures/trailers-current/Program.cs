@@ -95,7 +95,7 @@ builder.Services.AddSingleton(Stub.Make<INetworkManager>((method, _) => method.N
 builder.Services.AddSingleton<IAuthorizationHandler, DefaultAuthorizationHandler>();
 builder.Services.AddAuthentication("fixture").AddScheme<AuthenticationSchemeOptions, TrailerAuthentication>("fixture", _ => { });
 builder.Services.AddAuthorization(value => value.DefaultPolicy = new AuthorizationPolicyBuilder("fixture").AddRequirements(new DefaultAuthorizationRequirement()).Build());
-builder.Services.AddJellyfinApi([], new NetworkConfiguration())
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), configuration)
     .AddMvcOptions(value => value.Filters.Add(new BindingObserver(bindings)))
     .ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyTrailerControllers()));
 var app = builder.Build(); var observations = new List<object>(); using var client = new HttpClient();

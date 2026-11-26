@@ -5,6 +5,7 @@ using Emby.Server.Implementations.Collections;
 using Emby.Server.Implementations.Data;
 using Emby.Server.Implementations.Library;
 using Emby.Server.Implementations.Library.Validators;
+using Jellyfin.Database.Providers.Sqlite;
 using Jellyfin.Drawing;
 using Jellyfin.Drawing.Skia;
 using Jellyfin.LiveTv.Configuration;
@@ -103,7 +104,8 @@ public static class MovieProviders
             throw new IOException("The Movie fixture requires fresh, unconfigured Live TV recording state.");
         var timers = new TimerManager(logs.CreateLogger<TimerManager>(), configuration);
         var seriesTimers = new SeriesTimerManager(logs.CreateLogger<SeriesTimerManager>(), configuration);
-        var recordingMetadata = new RecordingsMetadataManager(logs.CreateLogger<RecordingsMetadataManager>(), configuration, manager);
+        var recordingMetadata = new RecordingsMetadataManager(logs.CreateLogger<RecordingsMetadataManager>(), configuration, manager,
+            ForwardProxy.Make<ISchedulesDirectService>((method, _) => ForwardProxy.Unused(method)));
         var recordingStreams = new StreamHelper();
         var unusedRecordingHttp = ForwardProxy.Make<IHttpClientFactory>((method, values) => ForwardProxy.Unused(method));
         var recordings = new RecordingsManager(logs.CreateLogger<RecordingsManager>(), configuration,
@@ -186,7 +188,8 @@ public static class MovieProviders
             new GenresPostScanTask(manager, logs.CreateLogger<GenresValidator>(), host.Repository),
             new MusicGenresPostScanTask(manager, logs.CreateLogger<MusicGenresValidator>(), host.Repository),
             new StudiosPostScanTask(manager, logs.CreateLogger<StudiosValidator>(), host.Repository),
-            new CleanDatabaseScheduledTask(manager, logs.CreateLogger<CleanDatabaseScheduledTask>(), host.Factory, host.PathManager)
+            new CleanDatabaseScheduledTask(manager, logs.CreateLogger<CleanDatabaseScheduledTask>(), host.Factory, host.PathManager),
+            new RefreshDatabaseStatisticsPostScanTask(new SqliteDatabaseProvider(host.Paths, logs.CreateLogger<SqliteDatabaseProvider>()) { DbContextFactory = host.Factory })
         };
         // Use the designated CoreAppHost's actual export order. In particular,
         // never reorder native tasks to match the candidate registration list.

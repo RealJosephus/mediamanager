@@ -75,7 +75,7 @@ builder.Services.AddAuthorization(options => {
     options.DefaultPolicy = new AuthorizationPolicyBuilder("fixture").AddRequirements(new DefaultAuthorizationRequirement()).Build();
     options.AddPolicy(Policies.RequiresElevation, policy => policy.AddAuthenticationSchemes("fixture").RequireClaim(ClaimTypes.Role, UserRoles.Administrator));
 });
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlySubtitleController()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), capture.Configuration.Configuration).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlySubtitleController()));
 builder.Services.Configure<MvcOptions>(options => options.Filters.Add(new PhysicalFileFailureFilter(capture)));
 builder.Services.Replace(ServiceDescriptor.Transient<SubtitleController>(services => new SubtitleController(capture.Configuration,
     Stub.Make<ILibraryManager>(), Stub.Make<ISubtitleManager>(), Stub.Make<ISubtitleEncoder>(), Stub.Make<IMediaSourceManager>(),

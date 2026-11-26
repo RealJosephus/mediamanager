@@ -1,3 +1,4 @@
+using Emby.Server.Implementations.Localization;
 using System.Data.Common;
 using System.Globalization;
 using System.Reflection;
@@ -201,7 +202,8 @@ sealed class NativeServices : IDisposable {
             ? values![0] : throw new NotSupportedException("Unused host collaborator: " + method.Name));
         var fileSystem = new ManagedFileSystem(NullLogger<ManagedFileSystem>.Instance, Paths, []);
         Factory = new SqlFactory(filename, Trace);
-        Repository = new BaseItemRepository(Factory, appHost, new ItemTypeLookup(), configuration, NullLogger<BaseItemRepository>.Instance);
+        var localization = new LocalizationManager(configuration, NullLogger<LocalizationManager>.Instance);
+        Repository = new BaseItemRepository(Factory, appHost, new ItemTypeLookup(), configuration, localization, NullLogger<BaseItemRepository>.Instance);
         Persistence = new ItemPersistenceService(Factory, appHost, NullLogger<ItemPersistenceService>.Instance);
         BaseItem.ConfigurationManager = configuration; BaseItem.FileSystem = fileSystem; BaseItem.Logger = NullLogger<BaseItem>.Instance;
         BaseItem.ItemRepository = Repository;
@@ -213,6 +215,7 @@ sealed class NativeServices : IDisposable {
             [typeof(IServerApplicationHost)] = appHost, [typeof(IServerConfigurationManager)] = configuration,
             [typeof(ILoggerFactory)] = NullLoggerFactory.Instance, [typeof(MediaBrowser.Controller.Persistence.IItemRepository)] = Repository,
             [typeof(MediaBrowser.Controller.Persistence.IItemPersistenceService)] = Persistence, [typeof(MediaBrowser.Model.IO.IFileSystem)] = fileSystem,
+            [typeof(DotIgnoreIgnoreRule)] = new DotIgnoreIgnoreRule(), [typeof(MediaBrowser.Model.Globalization.ILocalizationManager)] = localization,
             [typeof(NamingOptions)] = new NamingOptions(), [typeof(IDirectoryService)] = new DirectoryService(fileSystem),
             [typeof(Lazy<IProviderManager>)] = new Lazy<IProviderManager>(() => Providers),
         };

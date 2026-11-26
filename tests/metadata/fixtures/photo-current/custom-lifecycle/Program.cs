@@ -61,7 +61,7 @@ foreach (var sample in input.EnumerateArray()) {
     var appHost = Stub.Make<IServerApplicationHost>((method, values) => method.Name is "ReverseVirtualPath" or "ExpandVirtualPath" ? values![0] : Stub.Default(method.ReturnType));
     var factory = new SqlFactory(Path.Combine(root, "native.db"));
     using (var initial = factory.CreateDbContext()) initial.Database.EnsureCreated();
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, NullLogger<BaseItemRepository>.Instance);
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), config, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance);
     BaseItem.ItemRepository = repository;
     var persistence = new ItemPersistenceService(factory, appHost, NullLogger<ItemPersistenceService>.Instance);
     LibraryManager? manager = null;
@@ -77,7 +77,7 @@ foreach (var sample in input.EnumerateArray()) {
     var directory = new DirectoryService(fileSystem);
     manager = new LibraryManager(appHost, NullLoggerFactory.Instance, null!, null!, config, null!, new(() => null!), fileSystem,
         new(() => providers), new(() => null!), repository, persistence, null!, null!, new LinkedChildrenService(factory, new ItemTypeLookup(), repository),
-        processor, new NamingOptions(), directory, null!, null!, null!, BaseItem.LocalizationManager, null!, new(() => null!));
+        processor, new NamingOptions(), directory, null!, null!, new DotIgnoreIgnoreRule(), BaseItem.LocalizationManager, null!, new(() => null!));
     typeof(LibraryManager).GetField("_userRootFolder", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(manager, new UserRootFolder { Children = [] });
     var book = new Book { Id = Guid.Parse("c1700000-0000-0000-0000-000000000001"), Name = "Stored book",
         DateLastRefreshed = first ? DateTime.MinValue : new DateTime(2026, 10, 1) };

@@ -62,7 +62,7 @@ foreach (var sample in input.GetProperty("requests").EnumerateArray()) {
     builder.Services.AddAuthentication(AuthenticationSchemes.CustomAuthentication)
         .AddScheme<AuthenticationSchemeOptions, IdentityAuthentication>(AuthenticationSchemes.CustomAuthentication, _ => { });
     builder.Services.AddAuthorization(); builder.Services.AddJellyfinApiAuthorization();
-    builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlySystemController()));
+    builder.Services.AddJellyfinApi([], new NetworkConfiguration(), configuration).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlySystemController()));
     var app = builder.Build(); bool actualStop = false, normalOwnerStopped = false, stopped = false, disposed = false; int status; string body; string? contentType, allow;
     try {
         app.Use(async (context, next) => { context.Connection.RemoteIpAddress = remote; await next(); });

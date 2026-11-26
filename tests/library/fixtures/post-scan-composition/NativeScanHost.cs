@@ -261,7 +261,8 @@ public sealed class NativeScanHost : IAsyncDisposable
         DirectoryService = new DirectoryService(FileSystem);
         Factory = new SqlFactory(Path.Combine(CaseRoot,"native.db"));
         using (var initial = Factory.CreateDbContext()) initial.Database.EnsureCreated();
-        Repository = new BaseItemRepository(Factory, AppHost, new ItemTypeLookup(), Configuration, loggerFactory.CreateLogger<BaseItemRepository>());
+        var localization = new LocalizationManager(Configuration,loggerFactory.CreateLogger<LocalizationManager>());
+        Repository = new BaseItemRepository(Factory, AppHost, new ItemTypeLookup(), Configuration, localization, loggerFactory.CreateLogger<BaseItemRepository>());
         var actualPersistence = new ItemPersistenceService(Factory, AppHost, loggerFactory.CreateLogger<ItemPersistenceService>());
         Persistence = actualPersistence;
         var persistence = ForwardProxy.Make<IItemPersistenceService>((method, values) => {
@@ -290,7 +291,6 @@ public sealed class NativeScanHost : IAsyncDisposable
             Add("monitor-"+method.Name,new { scanRunning=Manager?.IsScanRunning });
             return method.ReturnType == typeof(void) ? null : ForwardProxy.Unused(method);
         });
-        var localization = new LocalizationManager(Configuration,loggerFactory.CreateLogger<LocalizationManager>());
         var naming = new NamingOptions();
         var pathManager = new PathManager(loggerFactory.CreateLogger<PathManager>(), Configuration, Paths);
         PathManager = pathManager;

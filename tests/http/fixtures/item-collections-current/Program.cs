@@ -113,7 +113,7 @@ var ratingResources = new[] {
 }).ToArray();
 BaseItem.ConfigurationManager = configuration; BaseItem.LocalizationManager = localization; BaseItem.FileSystem = fileSystem; BaseItem.Logger = NullLogger<BaseItem>.Instance;
 CollectionFolder.XmlSerializer = new MyXmlSerializer(); CollectionFolder.ApplicationHost = appHost;
-var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, NullLogger<BaseItemRepository>.Instance);
+var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, localization, NullLogger<BaseItemRepository>.Instance);
 var links = new LinkedChildrenService(factory, new ItemTypeLookup(), repository);
 var counts = new ItemCountService(factory, new ItemTypeLookup(), repository);
 var userData = new UserDataManager(configuration, factory);
@@ -256,7 +256,7 @@ builder.Services.AddSingleton(Stub.Make<INetworkManager>((method, _) => method.N
 builder.Services.AddSingleton<IAuthorizationHandler, DefaultAuthorizationHandler>();
 builder.Services.AddAuthentication("fixture").AddScheme<AuthenticationSchemeOptions, FixtureAuthentication>("fixture", _ => { });
 builder.Services.AddAuthorization(options => options.DefaultPolicy = new AuthorizationPolicyBuilder("fixture").AddRequirements(new DefaultAuthorizationRequirement()).Build());
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyLibraryController()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), settings).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyLibraryController()));
 var app = builder.Build(); var results = new List<object>(); var before = Evidence.Tables(databaseFilename);
 using var client = new HttpClient();
 try {
