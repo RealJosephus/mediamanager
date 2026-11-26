@@ -136,7 +136,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<ILogger<ExceptionMiddleware>>(services => new RequestCaptureLogger<ExceptionMiddleware>(httpDiagnostics, services.GetRequiredService<IHttpContextAccessor>()));
 builder.Services.AddAuthentication("fixture").AddScheme<AuthenticationSchemeOptions, FixtureAuthentication>("fixture", _ => { });
 builder.Services.AddAuthorization(options => options.DefaultPolicy = new AuthorizationPolicyBuilder("fixture").RequireAssertion(_ => true).Build());
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyHlsController()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), hostManager.Configuration).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyHlsController()));
 builder.Services.Configure<MvcOptions>(value => value.Filters.Add(new CaptureBindingFilter(bindingActions)));
 builder.Services.Replace(ServiceDescriptor.Transient<DynamicHlsController>(_ => new DynamicHlsController(null!, null!, null!, hostManager, null!, null!, null!,
     NullLogger<DynamicHlsController>.Instance, null!, null!, null!)));

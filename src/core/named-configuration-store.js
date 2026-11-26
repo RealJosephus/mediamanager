@@ -9,8 +9,8 @@ import { defaultConfiguration, readConfigurationDocument } from './configuration
 import { writeConfigurationFile } from './configuration-file.js';
 import { networkConfigurationBaseUrl } from './network-configuration.js';
 
-const roots = ['encoding', 'metadata', 'xbmcmetadata', 'network'];
-export const namedConfigurationRoot = key => roots.find(root => ordinalIgnoreCaseEquals(root, key));
+export const namedConfigurationRoots = Object.freeze(['encoding', 'metadata', 'xbmcmetadata', 'network']);
+export const namedConfigurationRoot = key => namedConfigurationRoots.find(root => ordinalIgnoreCaseEquals(root, key));
 const closed = () => Object.assign(new Error('Named configuration persistence is closing.'), { code: 'closed', status: 503 });
 const missing = key => Object.assign(new Error('Configuration with key ' + key + ' not found.'), { code: 'configuration-not-found', status: 404 });
 const existenceFailures = new Set(['ENOENT', 'ENOTDIR', 'EACCES', 'EPERM', 'EINVAL', 'ENAMETOOLONG', 'ELOOP', 'EIO', 'ENODEV', 'ENXIO', 'ERR_INVALID_ARG_VALUE']);

@@ -31,12 +31,12 @@ async function capture() {
     inputs: [], sourceBindings: [], captures: [], phaseAcceptance: false, releaseAcceptance: false,
     exclusions: ['whole Native application boot', 'Native EF persistence behind controlled consumer gateways', 'media executors', 'Node unknown-XML preservation is a separate instance-retention contract'] };
   try {
-    for (const name of ['Oracle.csproj', 'Program.cs', 'NfoConsumers.cs', 'input.js', 'profile.json', 'node-cases.js', 'node-host.js']) {
+    for (const name of ['Oracle.csproj', 'Program.cs', 'NfoConsumers.cs', 'input.js', 'profile.json', 'node-cases.js']) {
       const description = await describeFile(fileURLToPath(new URL(name, fixture)));
       assert.equal(description.available, true, name); report.inputs.push(description);
     }
     for (const name of [nfoImageSourcePath, 'src/core/resources/configuration-model.json', 'src/core/named-configuration-store.js',
-      'src/http/named-configuration-binding.js', 'plugins/nfo/parser.js', 'plugins/nfo/saver.js', 'plugins/nfo/plugin.js',
+      'src/http/named-configuration-binding.js', 'src/http/configuration-routes.js', 'tests/core/fixtures/named-configuration-current/node-host.js', 'plugins/nfo/parser.js', 'plugins/nfo/saver.js', 'plugins/nfo/plugin.js',
       'plugins/nfo/user-data-import.js', 'tests/metadata/nfo-configuration-current.js']) report.inputs.push(await describeFile(path.resolve(name)));
     const build = await verifyNativeBuild();
     report.build = { identitySha256: build.identitySha256, runtimeEntriesSha256: build.runtimeEntriesSha256,

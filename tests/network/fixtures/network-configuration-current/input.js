@@ -118,6 +118,8 @@ export const networkConfigurationInput = () => ({
     { name: 'raw-origin-form-system-path', key, method: 'GET', route: '///System/Info/Public' },
     { name: 'origin-form-preserves-leading-slashes', key, method: 'GET', initial: { BaseUrl: '///prefix' }, route: '///prefix/System/Configuration/network' },
     { name: 'ordinary-get-complete-json', key, method: 'GET', identity: 'regular' },
+    { name: 'uppercase-route-camelcase-fields', key, route: '/System/Configuration/NETWORK', method: 'POST',
+      body: '{"internalHttpPort":18123,"enableRemoteAccess":false,"certificatePath":null}' },
     { name: 'complete-manual-post', key, method: 'POST', body: JSON.stringify(networkValues) },
     { name: 'manual-default-object', key, method: 'POST', body: '{}' },
     { name: 'manual-case-sensitive-and-unknown', key, method: 'POST', body: '{"baseUrl":"ignored/","Future":{"n":1}}' },

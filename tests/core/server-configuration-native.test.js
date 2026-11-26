@@ -5,7 +5,7 @@ import * as fsSync from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import model from '../../src/core/resources/configuration-model.json' with { type: 'json' };
+import model from '../../src/core/configuration-model.js';
 import { NamedConfigurationStore } from '../../src/core/named-configuration-store.js';
 import { ServerConfigurationStore } from '../../src/core/server-configuration-store.js';
 import { parseLosslessJson } from '../../src/core/json.js';

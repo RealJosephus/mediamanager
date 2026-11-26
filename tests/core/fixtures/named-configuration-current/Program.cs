@@ -218,9 +218,8 @@ if (consume) {
         value.DefaultPolicy = new AuthorizationPolicyBuilder("fixture").AddRequirements(new DefaultAuthorizationRequirement()).Build();
         value.AddPolicy(Policies.RequiresElevation, policy => policy.AddAuthenticationSchemes("fixture").RequireClaim(ClaimTypes.Role, UserRoles.Administrator));
     });
-    builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyConfigurationController()));
-    builder.Services.Replace(ServiceDescriptor.Transient<ConfigurationController>(_ => new ConfigurationController(current.Manager,
-        Stub.Make<IMediaEncoder>((method, _) => throw new InvalidOperationException("Unexpected media executor call: " + method.Name)))));
+    builder.Services.AddJellyfinApi([], new NetworkConfiguration(), initial.Manager.Configuration).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlyConfigurationController()));
+    builder.Services.Replace(ServiceDescriptor.Transient<ConfigurationController>(_ => new ConfigurationController(current.Manager)));
     var app = builder.Build(); using var client = new HttpClient();
     try {
         app.UseMiddleware<ExceptionMiddleware>(); app.UseAuthentication(); app.UseAuthorization(); app.MapControllers(); await app.StartAsync();

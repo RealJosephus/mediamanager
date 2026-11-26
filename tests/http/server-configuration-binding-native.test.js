@@ -8,8 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { createTestApplication } from '../helpers/application.js';
 import { AuthenticationService } from '../../src/users/authentication-service.js';
 import { defaultConfiguration } from '../../src/core/configuration-xml.js';
-import { cloneNativeValue, parseLosslessJson, stringifyNativeJson } from '../../src/core/json.js';
-import { serverConfigurationDto } from '../../src/http/server-configuration-binding.js';
+import { cloneNativeValue, parseLosslessJson } from '../../src/core/json.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
 import { describeFile } from '../../tools/validation/inventory.js';
@@ -52,6 +51,8 @@ test('server configuration and metadata defaults match current MVC, typed setter
     const manifest = JSON.parse(await readFile(path.join(build.root, 'source-offer/jellyfin-source-manifest.json'), 'utf8'));
     report.sourceBindings = [];
     for (const relative of ['Jellyfin.Api/Controllers/ConfigurationController.cs', 'MediaBrowser.Model/Configuration/ServerConfiguration.cs',
+      'MediaBrowser.Model/Configuration/ServerConfigurationDto.cs', 'Jellyfin.Api/Helpers/ConfigurationMapper.cs',
+      'Jellyfin.Api/Helpers/ConfigurationJsonTypeInfoModifier.cs',
       'MediaBrowser.Model/Configuration/BaseApplicationConfiguration.cs', 'MediaBrowser.Model/Configuration/MetadataOptions.cs',
       'MediaBrowser.Model/System/CastReceiverApplication.cs', 'MediaBrowser.Model/Configuration/PathSubstitution.cs',
       'MediaBrowser.Model/Configuration/TrickplayOptions.cs', 'MediaBrowser.Model/Updates/RepositoryInfo.cs', 'MediaBrowser.Model/Dto/NameValuePair.cs',
@@ -128,7 +129,7 @@ test('server configuration and metadata defaults match current MVC, typed setter
       }
       activeRequest.open = false;
       const actual = { name: sample.name, status: response.status, contentType: response.headers.get('content-type'), text, json,
-        received: cloneNativeValue(received), live: serverConfigurationDto(configurationStore.configuration), currentRead, diagnostics: activeRequest.diagnostics,
+        received: cloneNativeValue(received), live: cloneNativeValue(configurationStore.configuration), currentRead, diagnostics: activeRequest.diagnostics,
         replacementFailed: activeRequest.replacementFailed, replacementFailure: activeRequest.replacementFailure };
       const expected = native.observations[index]; assert.equal(expected.name, sample.name);
       compare(sample.name + ': full public wire', wire(actual), wire(expected));
@@ -138,7 +139,7 @@ test('server configuration and metadata defaults match current MVC, typed setter
       if (sample.rejectReplacement) assert.equal(actual.replacementFailed, true, 'The real replacement callback must enter its controlled failure.');
       report.comparisons.push({ sample, actual, expected });
     }
-    assert.deepEqual(report.differences, [], stringifyNativeJson(report.differences.slice(0, 8)));
+    assert.equal(report.differences.length, 0, report.differences.slice(0, 8).map(row => row.name).join('\n'));
     report.componentAcceptance = true;
   } catch (error) { failed = true; failure = error; report.failure = errorObservation(error); report.failureRaw = inspect(error, { depth: null }); }
   finally {

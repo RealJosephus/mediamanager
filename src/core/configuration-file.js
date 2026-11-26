@@ -1,7 +1,7 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { EOL } from 'node:os';
-import model from './resources/configuration-model.json' with { type: 'json' };
+import model from './configuration-model.js';
 import { defaultConfiguration, readConfigurationDocument } from './configuration-xml.js';
 
 const schemaInstance = 'http://www.w3.org/2001/XMLSchema-instance';

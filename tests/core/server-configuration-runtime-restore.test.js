@@ -149,7 +149,7 @@ async function scenario(label, run) {
     assert.equal(configuration.status, 200); assert.match(configuration.contentType, /application\/json/u);
     assert.equal(info.status, 200); assert.equal(info.body.InternalMetadataPath, metadataPath); assert.equal(info.body.ItemsByNamePath, metadataPath);
     assert.equal(info.body.CachePath, cachePath); assert.equal(info.body.ProgramDataPath, state.programDataPath);
-    assert.equal(configuration.body.PreviousVersion, version); assert.equal(configuration.body.PreviousVersionStr, version);
+    assert.equal(Object.hasOwn(configuration.body, 'PreviousVersion'), false); assert.equal(configuration.body.PreviousVersionStr, version);
     if (expectedConfiguration) assert.deepEqual(configuration.body, expectedConfiguration);
     const system = await fs.readFile(path.join(root, 'config/system.xml'));
     stages.push({ label, generation: state.generation, schema: state.database.schemaName, configurationRequest: configuration.index,

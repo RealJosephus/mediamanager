@@ -1,6 +1,6 @@
 import { availableParallelism } from 'node:os';
 import { XMLValidator } from 'fast-xml-parser';
-import model from './resources/configuration-model.json' with { type: 'json' };
+import model from './configuration-model.js';
 import { XmlTokenCursor } from './xml-stream.js';
 import { clrTrim } from '../metadata/whitespace.js';
 import { wireGuid } from '../users/native.js';

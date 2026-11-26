@@ -1,11 +1,10 @@
 import model from '../core/resources/configuration-model.json' with { type: 'json' };
-import { defaultConfiguration } from '../core/configuration-xml.js';
-import { namedConfigurationRoot } from '../core/named-configuration-store.js';
-import { httpError } from './binding.js';
-import { bindJsonModel } from './json-model-binding.js';
+import { namedConfigurationRoots } from '../core/named-configuration-store.js';
+import { BindingError } from './binding.js';
+import { bindJsonModel, validateJsonModel } from './json-model-binding.js';
 import { networkConfigurationBaseUrl } from '../core/network-configuration.js';
 
-const configurationType = name => name === 'NetworkConfiguration' ? name : 'MediaBrowser.Model.Configuration.' + name;
+const configurationType = name => (name === 'NetworkConfiguration' ? 'MediaBrowser.Common.Net.' : 'MediaBrowser.Model.Configuration.') + name + 'Dto';
 function rule(type) {
   const nullable = ['string', 'object', 'array'].includes(type.kind) || type.nullable === true;
   if (type.kind === 'object') return { type: 'object', reference: type.reference, clrType: configurationType(type.reference), nullable };
@@ -21,27 +20,28 @@ function rule(type) {
   if (!clrType) throw new TypeError('Unsupported named configuration field.');
   return { type: kind, clrType, nullable };
 }
-const schema = { definitions: Object.fromEntries(['EncodingOptions', 'MetadataConfiguration', 'XbmcMetadataOptions', 'NetworkConfiguration'].map(name => [name, {
+const required = {
+  NetworkConfiguration: ['BaseUrl', 'LocalNetworkSubnets', 'LocalNetworkAddresses', 'KnownProxies', 'VirtualInterfaceNames',
+    'PublishedServerUriBySubnet', 'RemoteIPFilter'],
+  XbmcMetadataOptions: ['ReleaseDateFormat'],
+};
+const schema = { definitions: Object.fromEntries(namedConfigurationRoots.map(key => model.roots[key].type.reference).map(name => [name, {
   defaults: model.definitions[name].defaults,
   fields: Object.fromEntries(Object.entries(model.definitions[name].fields).map(([name, field]) => [name, rule(field.type)])),
-  ...(name === 'NetworkConfiguration' && { assign(result, name, value) { networkConfigurationBaseUrl(result); result[name] = value; } }),
+  required: required[name],
 }])) };
 
-// MVC owns the JsonDocument syntax boundary. The action decodes its contents
-// with JsonDefaults rather than typed MVC reference validation.
-export function bindNamedConfigurationDocument(_body, source) { return { source }; }
+export function namedConfigurationDto(key, value) {
+  const fields = schema.definitions[model.roots[key].type.reference].fields;
+  return Object.fromEntries(Object.keys(fields).map(name => [name, value[name]]));
+}
 
-export function deserializeNamedConfiguration(key, { source }) {
-  const name = namedConfigurationRoot(key);
-  if (!name) throw Object.assign(new Error('No configuration factory is registered for ' + key + '.'), { code: 'configuration-factory-not-found' });
-  const type = model.roots[name].type.reference;
-  let value;
-  try {
-    value = bindJsonModel(undefined, { source, caseInsensitiveProperties: false,
-      root: { ...rule(model.roots[name].type), nullable: true },
-      schema: { definitions: { ...schema.definitions, [type]: { ...schema.definitions[type], defaults: defaultConfiguration(name) } } } });
-  } catch (cause) { throw new Error('The named configuration could not be deserialized.', { cause }); }
-  if (value === null) throw httpError(400, "Body doesn't contain a valid configuration");
-  if (name === 'network') networkConfigurationBaseUrl(value);
-  return value;
+export function namedConfigurationBody(key) {
+  const root = rule(model.roots[key].type);
+  return { body: true, bodyType: root.clrType, bodyParameter: 'configuration', bindBody(body, source) {
+    const dto = bindJsonModel(body, { root, schema, source });
+    if (dto === null) throw new BindingError('', 'A non-empty request body is required.');
+    validateJsonModel(dto, { schema, root });
+    return key === 'network' ? networkConfigurationBaseUrl(dto) : dto;
+  } };
 }

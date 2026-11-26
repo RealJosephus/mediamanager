@@ -4,7 +4,7 @@ import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { inspect } from 'node:util';
-import model from '../../src/core/resources/configuration-model.json' with { type: 'json' };
+import model from '../../src/core/configuration-model.js';
 import { NamedConfigurationStore } from '../../src/core/named-configuration-store.js';
 import { ServerConfigurationStore } from '../../src/core/server-configuration-store.js';
 import { defaultConfiguration, readConfigurationDocument, parseConfigurationXml } from '../../src/core/configuration-xml.js';

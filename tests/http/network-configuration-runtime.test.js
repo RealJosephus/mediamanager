@@ -198,7 +198,7 @@ async function scenario(t, name, execute, { networkBytes, missingNetwork = false
   } catch (error) { report.failure = failureValue(error); throw error; }
 }
 
-test('postgres: network current, Startup failure prefix, hot LAN/remote rules and raw-key cold continuation share one XML owner', enabled, t => scenario(t, 'current', async state => {
+test('postgres: network current, Startup failure prefix, hot LAN/remote rules and case-insensitive routes share one XML owner', enabled, t => scenario(t, 'current', async state => {
   assert.equal((await state.request('/System/Configuration/network', { token: null })).status, 401);
   await state.runtime.startup.getUser();
   const reader = await state.runtime.users.createUser({ Name: 'Network configuration reader', Password: 'Network reader password' });
@@ -239,9 +239,9 @@ test('postgres: network current, Startup failure prefix, hot LAN/remote rules an
   assert.equal((await state.request('/System/Info/Public', { headers: { 'X-Forwarded-For': '198.51.100.9' } })).status, 503);
   const alternate = { ...await state.current(), EnableRemoteAccess: false, BaseUrl: '/cold', RemoteIPFilter: ['203.0.113.0/24'] };
   assert.equal((await state.request('/System/Configuration/NETWORK', { method: 'POST', body: alternate })).status, 204);
-  assert.equal((await state.request('/System/Configuration/NETWORK')).value.BaseUrl, '/cold');
-  assert.equal((await state.current()).BaseUrl, '/a');
-  assert.equal((await state.request('/System/Info/Public', { headers: { 'X-Forwarded-For': '203.0.113.9' } })).status, 200);
+  assert.equal(state.runtime.networkConfiguration.BaseUrl, '/cold');
+  assert.equal((await state.disk()).value.BaseUrl, '/cold');
+  assert.equal((await state.request('/System/Configuration/NETWORK')).status, 302);
   await state.reopen(); assert.equal(state.prefix, '/cold');
   assert.equal((await state.current()).EnableRemoteAccess, false);
   assert.equal((await state.request('/System/Info/Public', { headers: { 'X-Forwarded-For': '203.0.113.9' } })).status, 503);

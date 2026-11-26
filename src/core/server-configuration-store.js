@@ -2,7 +2,7 @@ import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { EventEmitter } from 'node:events';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import model from './resources/configuration-model.json' with { type: 'json' };
+import model from './configuration-model.js';
 import { defaultConfiguration, readConfigurationDocument } from './configuration-xml.js';
 import { writeConfigurationFile } from './configuration-file.js';
 import { ServerConfigurationPaths } from './server-configuration-paths.js';

@@ -129,7 +129,8 @@ test('full configuration replacement connects retained incoming writes to real r
       assert.equal(response.status, 200, label + ': ' + route); return response;
     };
     const configuration = await read('configuration', '/System/Configuration');
-    assert.deepEqual(retainedValues(configuration.body), expected, label + ': public server configuration');
+    assert.equal(Object.hasOwn(configuration.body, 'PreviousVersion'), false);
+    assert.deepEqual(retainedValues(configuration.body), { ...expected, PreviousVersion: undefined }, label + ': public server configuration');
     const info = await read('systemInfo', '/System/Info');
     assert.equal(info.body.ServerName, expected.ServerName);
     assert.deepEqual(info.body.CastReceiverApplications, expected.CastReceiverApplications);

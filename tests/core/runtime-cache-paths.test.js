@@ -87,7 +87,7 @@ test('configuration HTTP persists complete values and redirects subsequent runti
     };
     const before = await call('/System/Configuration'); assert.equal(before.status, 200);
     const next = { ...before.body, ServerName: 'Updated runtime', MetadataPath: metadataPath, CachePath: cachePath,
-      PreviousVersion: '4.5.6', CastReceiverApplications: [{ Id: 'next-receiver', Name: 'Next receiver' }] };
+      PreviousVersionStr: '4.5.6', CastReceiverApplications: [{ Id: 'next-receiver', Name: 'Next receiver' }] };
     const saved = await call('/System/Configuration', next);
     assert.equal(saved.status, 204); assert.equal(saved.text, '');
     const info = await call('/System/Info');
@@ -114,7 +114,7 @@ test('configuration HTTP persists complete values and redirects subsequent runti
     assert.equal(cold.CachePath, cachePath); assert.equal(cold.MetadataPath, metadataPath); assert.equal(cold.PreviousVersion, '4.5.6');
     // A saved null must remove the old known XML value, and an empty metadata
     // path selects the default. Empty cache configuration retains its active root.
-    const cleared = await call('/System/Configuration', { ...next, MetadataPath: '', CachePath: null, PreviousVersion: null });
+    const cleared = await call('/System/Configuration', { ...next, MetadataPath: '', CachePath: null, PreviousVersionStr: null });
     assert.equal(cleared.status, 204);
     const clearedInfo = await call('/System/Info');
     assert.equal(clearedInfo.body.InternalMetadataPath, path.join(programDataPath, 'metadata'));

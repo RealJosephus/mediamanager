@@ -4,13 +4,13 @@ import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { currentNfoConfiguration, nfoInput } from '../metadata/nfo-configuration-current.js';
-import { nfoComponentHost } from '../metadata/fixtures/nfo-configuration-current/node-host.js';
+import { namedComponentHost } from '../core/fixtures/named-configuration-current/node-host.js';
 import { disk } from '../metadata/fixtures/nfo-configuration-current/node-cases.js';
 import { namedHttpProjection, namedFailurePayload, namedError } from '../core/named-configuration-current.js';
 import { configurationJson } from '../core/fixtures/configuration/observations.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
-test('NFO manual JsonDocument actions match actual MVC, authorization, complete wire and persisted values', {
+test('Typed NFO configuration actions match actual MVC, authorization, complete wire and persisted values', {
   skip: !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 300000,
 }, async () => {
   const capture = await currentNfoConfiguration();
@@ -25,7 +25,7 @@ test('NFO manual JsonDocument actions match actual MVC, authorization, complete 
       if (Object.hasOwn(sample, 'xml')) await fs.writeFile(filename, sample.xml);
       if (sample.physical === 'target-directory') { await fs.unlink(filename); await fs.mkdir(filename); }
       const diagnostics = [], operationFailures = [], events = [];
-      host = nfoComponentHost({ configurationDirectoryPath: directory,
+      host = await namedComponentHost({ configurationDirectoryPath: directory,
         onFailure: entry => operationFailures.push({ owner: structuredClone(owner), ...entry,
           error: namedError(entry.error), failurePayload: namedFailurePayload(entry.error) }),
         onError: error => {

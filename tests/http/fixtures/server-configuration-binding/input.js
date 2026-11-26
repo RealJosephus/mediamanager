@@ -1,6 +1,14 @@
 const path = '/System/Configuration';
 const post = (name, body, options = {}) => ({ name, method: 'POST', path, body, ...options });
 
+// Explicit reference values exercise replacement independently of the native DTO initializer.
+const complete = changes => JSON.stringify({
+  MetadataPath: '', PreferredMetadataLanguage: 'en', MetadataCountryCode: 'US', ServerName: '', UICulture: '',
+  SortReplaceCharacters: [], SortRemoveCharacters: [], SortRemoveWords: [], MetadataOptions: [], ContentTypes: [],
+  CodecsUsed: [], PluginRepositories: [], PathSubstitutions: [], CorsHosts: [], CastReceiverApplications: [], TrickplayOptions: {},
+  ...changes,
+});
+
 export function serverConfigurationBindingInput() {
   return [
     ...['anonymous', 'invalid', 'regular', 'admin', 'apiKey'].map(identity => ({ name: 'read-' + identity, method: 'GET', path, identity })),
@@ -59,7 +67,12 @@ export function serverConfigurationBindingInput() {
     post('null-body', 'null'), post('array-body', '[]'), post('scalar-body', '42'), post('empty-body', ''),
     post('incomplete-body', '{"MinResumePct":'),
     post('wrong-content-type', '{}', { contentType: 'text/plain' }),
-    post('actual-replacement-failure', '{"ServerName":"Rejected replacement"}', { rejectReplacement: true }),
+    post('complete-dto-inherited-defaults', complete({})),
+    post('complete-dto-version-and-internal-fields', complete({ PreviousVersionStr: '01.002.3', PreviousVersion: '9.9', EnableObsoleteEndpoints: false })),
+    post('complete-dto-invalid-version-text', complete({ PreviousVersionStr: 'invalid' })),
+    post('complete-dto-nested-and-long', complete({ SlowResponseThresholdMs: '9223372036854775807',
+      MetadataOptions: [{ ItemType: 'Movie' }], ImageSavingConvention: 17, CastReceiverApplications: [{ Id: 'cast', Name: 'Receiver' }] }), { identity: 'apiKey' }),
+    post('actual-replacement-failure', complete({ ServerName: 'Rejected replacement' }), { rejectReplacement: true }),
     { name: 'camel-read', method: 'GET', path, accept: 'application/json; profile="CamelCase"' },
   ];
 }

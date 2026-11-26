@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "scope": "Independent current encoding/metadata named factories, manager, actual XML files and linked target, GetTranscodePath markers, MVC manual JsonDocument decode, authorization and exception middleware. No media executor or full production runtime is started.",
+  "scope": "Independent current encoding/metadata named factories, manager, actual XML files and linked target, GetTranscodePath markers, typed MVC configuration DTO binding, authorization and exception middleware. No media executor or full production runtime is started.",
   "sourcePaths": [
     "Emby.Server.Implementations/AppBase/BaseConfigurationManager.cs",
     "Emby.Server.Implementations/AppBase/BaseApplicationPaths.cs",
@@ -15,6 +15,10 @@
     "MediaBrowser.MediaEncoding/Configuration/EncodingConfigurationStore.cs",
     "MediaBrowser.Model/Configuration/EncodingOptions.cs",
     "MediaBrowser.Model/Configuration/MetadataConfiguration.cs",
+    "Jellyfin.Api/Helpers/ConfigurationMapper.cs",
+    "Jellyfin.Api/Helpers/ConfigurationJsonTypeInfoModifier.cs",
+    "MediaBrowser.Model/Configuration/EncodingOptionsDto.cs",
+    "MediaBrowser.Model/Configuration/MetadataConfigurationDto.cs",
     "Jellyfin.Api/Controllers/ConfigurationController.cs",
     "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
     "Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs",

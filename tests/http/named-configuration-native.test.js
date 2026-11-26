@@ -27,14 +27,14 @@ async function physicalDisk(filename, root) {
   return { bytes: bytes?.toString('base64') ?? null, directory, accepted: bytes === null ? null : error === null, value, error };
 }
 
-test('named JsonDocument actions match current MVC authorization, full wire, all public fields and actual persistence', {
+test('typed named configuration actions match current MVC authorization, full wire, all public fields and actual persistence', {
   skip: !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 300000,
 }, async () => {
   const captured = await currentNamedConfiguration();
-  const report = { scope: 'Current encoding/metadata controller, MVC JsonDocument, manual JsonDefaults binding, real manager and files.',
+  const report = { scope: 'Current encoding/metadata controller, MVC DTO binding, application routes, real manager and files.',
     nativeCapture: captured.output, comparisons: [], differences: [], cleanup: {}, componentAcceptance: false,
     phaseAcceptance: false, releaseAcceptance: false,
-    excluded: ['production route registration', 'production runtime consumers and media executors', 'PostgreSQL and full server restart'] };
+    excluded: ['production runtime consumers and media executors', 'PostgreSQL and full server restart'] };
   const compare = (name, actual, expected) => {
     try { assert.deepEqual(actual, expected, name); }
     catch (error) { report.differences.push({ name, actual, expected, message: error.message }); }
@@ -57,7 +57,7 @@ test('named JsonDocument actions match current MVC authorization, full wire, all
       if (sample.invalidXml) assert.equal(expectedCodecFailed, true, 'The retained original XML must produce an actual decoder failure.');
       const readAttempts = [];
       active = { sample, open: true, diagnostics: [], request: null };
-      host = namedComponentHost({ configurationDirectoryPath: directory, fileSystem: { ...fs, async readFile(name, ...args) {
+      host = await namedComponentHost({ configurationDirectoryPath: directory, fileSystem: { ...fs, async readFile(name, ...args) {
         const attempt = { owner: active?.request, filename: name, bytes: null, parserFailed: false, actualParserFailure: null, ioFailed: false, ioFailure: null };
         readAttempts.push(attempt);
         try {

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { setImmediate } from 'node:timers/promises';
 import { createTestApplication } from '../helpers/application.js';
 import { defaultConfiguration } from '../../src/core/configuration-xml.js';
-import { parseLosslessJson } from '../../src/core/json.js';
+import { parseLosslessJson, stringifyNativeJson } from '../../src/core/json.js';
 import { AuthenticationService } from '../../src/users/authentication-service.js';
 
 async function fixture(configurationStore) {
@@ -44,7 +44,9 @@ test('server configuration HTTP awaits replacement and preserves its actual fail
   } });
   const previous = value.configuration;
   try {
-    pending = value.call('/System/Configuration', '{"ServerName":"Saved server","PreviousVersionStr":"1.2.3","PreviousVersion":"4.5","SlowResponseThresholdMs":"9223372036854775807"}');
+    const dto = (await value.call('/System/Configuration')).body;
+    pending = value.call('/System/Configuration', stringifyNativeJson({ ...dto, ServerName: 'Saved server',
+      PreviousVersionStr: '1.2.3', PreviousVersion: '4.5', SlowResponseThresholdMs: 9223372036854775807n }));
     pending.then(() => { settled = true; }, () => { settled = true; });
     await Promise.race([entered.promise, pending.then(response => {
       throw new Error('Configuration replacement was not entered: ' + JSON.stringify(response));
@@ -55,14 +57,14 @@ test('server configuration HTTP awaits replacement and preserves its actual fail
     assert.deepEqual(await pending, { status: 204, contentType: null, text: '', body: '' });
     const read = await value.call('/System/Configuration');
     assert.equal(read.status, 200); assert.equal(read.body.ServerName, 'Saved server');
-    assert.equal(read.body.PreviousVersion, '4.5'); assert.equal(read.body.PreviousVersionStr, '4.5');
+    assert.equal(Object.hasOwn(read.body, 'PreviousVersion'), false); assert.equal(read.body.PreviousVersionStr, '1.2.3');
     assert.equal(read.body.SlowResponseThresholdMs, 9223372036854775807n);
     assert.equal(Object.hasOwn(read.body, 'NetworkConfiguration'), false);
     assert.equal(Object.hasOwn(read.body, 'BaseUrl'), false);
     previous.ServerName = 'Detached initial server'; incoming.ServerName = 'Late incoming server';
     const retainedRead = await value.call('/System/Configuration');
     assert.equal(retainedRead.status, 200); assert.equal(retainedRead.body.ServerName, 'Late incoming server');
-    assert.equal(retainedRead.body.PreviousVersion, '4.5'); assert.equal(retainedRead.body.PreviousVersionStr, '4.5');
+    assert.equal(Object.hasOwn(retainedRead.body, 'PreviousVersion'), false); assert.equal(retainedRead.body.PreviousVersionStr, '1.2.3');
     assert.deepEqual(value.errors, []);
     reject = true;
     const rejected = await value.call('/System/Configuration', '{}');

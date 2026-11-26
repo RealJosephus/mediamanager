@@ -262,9 +262,8 @@ public sealed class MiddlewareHost : IAsyncDisposable {
             value.AddPolicy(Policies.FirstTimeSetupOrElevated,policy=>policy.AddAuthenticationSchemes("fixture").AddRequirements(new FirstTimeSetupRequirement()));
         });
         var failures=new List<object>();
-        builder.Services.AddJellyfinApi([],initial).ConfigureApplicationPartManager(value=>value.FeatureProviders.Add(new NetworkControllerFeature()));
-        builder.Services.Replace(ServiceDescriptor.Transient<ConfigurationController>(_=>new ConfigurationController(fixture.Manager,
-            Stub.Make<IMediaEncoder>((method,_)=>throw new InvalidOperationException("Unexpected media executor: "+method.Name)))));
+        builder.Services.AddJellyfinApi([],initial,fixture.Manager.Configuration).ConfigureApplicationPartManager(value=>value.FeatureProviders.Add(new NetworkControllerFeature()));
+        builder.Services.Replace(ServiceDescriptor.Transient<ConfigurationController>(_=>new ConfigurationController(fixture.Manager)));
         builder.Services.AddSingleton<IWebSocketManager,EchoGateway>();
         var app=builder.Build();
         try {

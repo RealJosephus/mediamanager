@@ -1,7 +1,8 @@
 import { httpError, noContent } from './binding.js';
 import { bindLiveTvConfigurationDocument, deserializeLiveTvConfiguration } from './live-tv-configuration-binding.js';
 import { bindServerConfiguration, defaultMetadataOptions, serverConfigurationDto } from './server-configuration-binding.js';
-import { bindNamedConfigurationDocument, deserializeNamedConfiguration } from './named-configuration-binding.js';
+import { namedConfigurationBody, namedConfigurationDto } from './named-configuration-binding.js';
+import { namedConfigurationRoots } from '../core/named-configuration-store.js';
 
 export function registerConfigurationRoutes(add, services) {
   const { configurationStore, liveTv, namedConfiguration } = services;
@@ -15,7 +16,7 @@ export function registerConfigurationRoutes(add, services) {
     await configurationStore.replaceConfiguration(context.body);
     return noContent();
   }, { policy: elevated, body: true, bodyParameter: 'configuration',
-    bodyType: 'MediaBrowser.Model.Configuration.ServerConfiguration', bindBody: bindServerConfiguration });
+    bodyType: 'MediaBrowser.Model.Configuration.ServerConfigurationDto', bindBody: bindServerConfiguration });
   add('GET', '/System/Configuration/MetadataOptions/Default', defaultMetadataOptions, { policy: elevated });
   if (liveTv) {
     add('GET', '/System/Configuration/{key}', context => liveTv.getConfiguration(context.params.key), {
@@ -28,12 +29,13 @@ export function registerConfigurationRoutes(add, services) {
       constraints: { key: value => /^livetv$/iu.test(value) } });
   }
   if (namedConfiguration) {
-    const constraints = { key: value => !/^(?:livetv|branding)$/iu.test(value) };
-    add('GET', '/System/Configuration/{key}', context => namedConfiguration.getConfiguration(context.params.key), { constraints });
-    add('POST', '/System/Configuration/{key}', async context => {
-      await namedConfiguration.saveConfiguration(context.params.key, deserializeNamedConfiguration(context.params.key, context.body));
-      return noContent();
-    }, { policy: elevated, body: true, bodyDocument: true, bodyParameter: 'configuration',
-      bindBody: bindNamedConfigurationDocument, constraints });
+    for (const key of namedConfigurationRoots) {
+      const route = '/System/Configuration/' + key;
+      add('GET', route, async () => namedConfigurationDto(key, await namedConfiguration.getConfiguration(key)));
+      add('POST', route, async ({ body }) => {
+        await namedConfiguration.saveConfiguration(key, body);
+        return noContent();
+      }, { policy: elevated, ...namedConfigurationBody(key) });
+    }
   }
 }

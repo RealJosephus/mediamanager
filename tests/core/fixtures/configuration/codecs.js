@@ -1,6 +1,6 @@
 import * as core from '../../../../src/core/configuration-xml.js';
 import { createConfigurationWriter, loadConfigurationFile as load } from '../../../../src/core/configuration-file.js';
-import coreModel from '../../../../src/core/resources/configuration-model.json' with { type:'json' };
+import coreModel from '../../../../src/core/configuration-model.js';
 import nfoModel from '../../../../plugins/nfo/configuration-model.json' with { type:'json' };
 import tmdbModel from '../../../../plugins/tmdb/configuration-model.json' with { type:'json' };
 

@@ -42,7 +42,7 @@ test('postgres: named metadata POST reaches a retained file-save context and cur
       onError: error => report.errors.push(failureValue(error)) });
     origin = 'http://127.0.0.1:' + runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port;
   };
-  const call = async (route, body) => {
+  const call = async (route, body, status = body === undefined ? 200 : 204) => {
     const observation = { route, method: body === undefined ? 'GET' : 'POST', requestBody: body === undefined ? null : json(body) };
     report.http.push(observation);
     try {
@@ -53,7 +53,11 @@ test('postgres: named metadata POST reaches a retained file-save context and cur
       const bytes = Buffer.from(await response.arrayBuffer()), text = bytes.toString();
       Object.assign(observation, { status: response.status, headers: Object.fromEntries(response.headers), text, bodyBase64: bytes.toString('base64'),
         value: text && response.headers.get('content-type')?.includes('json') ? parseLosslessJson(text) : null });
-      assert.equal(response.status, body === undefined ? 200 : 204, route + ': ' + text);
+      assert.equal(response.status, status, route + ': ' + text);
+      if (status === 404) {
+        assert.equal(text, '');
+        assert.equal(response.headers.get('content-type'), null);
+      }
       return observation.value;
     } catch (error) { observation.failure = failureValue(error); throw error; }
   };
@@ -65,7 +69,18 @@ test('postgres: named metadata POST reaches a retained file-save context and cur
     database = await createPostgresTestDatabase(null, 'named_runtime');
     await create(); token = (await runtime.apiKeys.create('Named configuration runtime')).AccessToken;
     const metadataFile = path.join(configurationDirectoryPath, 'metadata.xml'), encodingFile = path.join(configurationDirectoryPath, 'encoding.xml');
-    await call('/System/Configuration/metadata', { UseFileCreationTimeForDateAdded: false });
+    await call('/System/Configuration/Metadata', { useFileCreationTimeForDateAdded: false });
+    const metadataXml = await fs.readFile(metadataFile);
+    assert.equal(parseConfigurationXml(metadataXml, 'metadata').UseFileCreationTimeForDateAdded, false);
+    const invalid = await call('/System/Configuration/metadata', { useFileCreationTimeForDateAdded: null }, 400);
+    assert.ok(invalid.errors['$.useFileCreationTimeForDateAdded']);
+    assert.deepEqual(await call('/System/Configuration/metadata'), { UseFileCreationTimeForDateAdded: false });
+    assert.deepEqual(await fs.readFile(metadataFile), metadataXml);
+    for (const body of [undefined, {}]) await call('/System/Configuration/unknown', body, 404);
+    await assert.rejects(fs.stat(path.join(configurationDirectoryPath, 'unknown.xml')), { code: 'ENOENT' });
+    await call('/System/Configuration/ENCODING', { encodingThreadCount: 8 });
+    assert.equal((await call('/System/Configuration/encoding')).EncodingThreadCount, 8);
+    assert.equal(parseConfigurationXml(await fs.readFile(encodingFile), 'encoding').EncodingThreadCount, 8);
     const initialDate = '2020-01-01T00:00:00.0000000Z', sourceBytes = Buffer.from('Opaque original file bytes; this date-only operation does not start a media executor.');
     let encoding = await call('/System/Configuration/encoding');
     for (const [index, scenario] of [{ before: false, after: true }, { before: true, after: false }].entries()) {
@@ -127,7 +142,11 @@ test('postgres: named metadata POST reaches a retained file-save context and cur
     await assert.rejects(database.rows('BaseItems'), /closed|not open/iu);
     database = await PostgresDatabase.open({ connectionString: postgresTestConnectionString, schema }); await create();
     assert.deepEqual(await call('/System/Configuration/metadata'), { UseFileCreationTimeForDateAdded: false });
-    assert.deepEqual(await call('/System/Configuration/encoding'), encoding);
+    // MediaEncoder writes its selected executable back to the options on startup.
+    const coldEncoding = { ...encoding };
+    if (runtime.mediaEncoder.encoderPath) coldEncoding.EncoderAppPathDisplay = runtime.mediaEncoder.encoderPath;
+    assert.deepEqual(await call('/System/Configuration/encoding'), coldEncoding);
+    assert.equal(parseConfigurationXml(await fs.readFile(encodingFile), 'encoding').EncodingThreadCount, 8);
     assert.equal((await call('/System/Info')).TranscodingTempPath, encoding.TranscodingTempPath);
     const coldRows = await audioRows();
     assert.deepEqual(coldRows, expectedRows); report.coldRows = coldRows; assert.deepEqual(report.errors, []);

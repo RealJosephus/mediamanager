@@ -50,7 +50,7 @@ builder.Services.AddSingleton(capture.Configuration); builder.Services.AddSingle
 builder.Services.AddSingleton(capture.Network); builder.Services.AddSingleton<IAuthorizationHandler, DefaultAuthorizationHandler>();
 builder.Services.AddAuthentication("fixture").AddScheme<AuthenticationSchemeOptions, FixtureAuthentication>("fixture", _ => { });
 builder.Services.AddAuthorization(options => options.AddPolicy("DefaultAuthorization", policy => policy.AddAuthenticationSchemes("fixture").AddRequirements(new DefaultAuthorizationRequirement())));
-builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyQuickConnectControllers()));
+builder.Services.AddJellyfinApi([], new NetworkConfiguration(), capture.Config).ConfigureApplicationPartManager(manager => manager.FeatureProviders.Add(new OnlyQuickConnectControllers()));
 builder.Services.Replace(ServiceDescriptor.Transient<QuickConnectController>(_ => new QuickConnectController(capture.Manager, capture.Authorization)));
 builder.Services.Replace(ServiceDescriptor.Transient<UserController>(_ => new UserController(capture.Users, capture.Sessions, capture.Network,
     Stub.Make<IDeviceManager>((m, a) => Stub.Default(m.ReturnType)), capture.Authorization, capture.Configuration,
