@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { createReadStream } from 'node:fs';
+import { setHostFileTimes } from '@mediamanager/plugin-sdk/storage/host-file-times';
 import {
   constants,
   chmod,
@@ -103,10 +104,14 @@ function timestampSeconds(micros) {
   const fraction = Number(BigInt(micros) - BigInt(whole) * 1000000n);
   return (value - whole) * 1e6 < fraction ? (Number(micros) + 0.5) / 1e6 : value;
 }
+function setMetadataTimes(target, atimeNs, mtimeUs) {
+  if (process.platform === 'win32') return setHostFileTimes(undefined, target, BigInt(mtimeUs) * 1000n, atimeNs);
+  return utimes(target, Number(atimeNs) / 1e9, timestampSeconds(mtimeUs));
+}
 async function restoreAttributes(source, target, permissionMask = 0o7777n) {
   const stat = await lstat(source, { bigint: true });
   await chmod(target, Number(stat.mode & permissionMask));
-  await utimes(target, Number(stat.atimeNs) / 1e9, timestampSeconds(stat.mtimeNs / 1000n));
+  await setMetadataTimes(target, stat.atimeNs, stat.mtimeNs / 1000n);
 }
 export async function cloneDirectory(source, destination, { skipState = false, metadataRoot } = {}) {
   await directory(source);
@@ -341,7 +346,12 @@ async function reconcileMetadataAttributes(to, { source, target, published, base
     if (output.mode !== desired.mode) await chmod(destination, desired.mode);
     if (output.mtimeUs !== desired.mtimeUs) {
       const stat = await lstat(destination, { bigint: true });
-      await utimes(destination, Number(stat.atimeNs) / 1e9, timestampSeconds(desired.mtimeUs));
+      await setMetadataTimes(destination, stat.atimeNs, desired.mtimeUs);
+      // A coarse destination can store a different time. Acknowledge what it
+      // published while retaining the old baseline for a pending conflict.
+      if (targetReceipt.mtimeUs === desired.mtimeUs) {
+        targetReceipt.mtimeUs = String((await lstat(destination, { bigint: true })).mtimeNs / 1000n);
+      }
     }
     receipts.source.attributes[name] = sourceReceipt;
     receipts.target.attributes[name] = targetReceipt;

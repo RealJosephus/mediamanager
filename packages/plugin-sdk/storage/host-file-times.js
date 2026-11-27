@@ -38,6 +38,7 @@ function bindWindows() {
   const closeHandle = library.func('int __stdcall CloseHandle(intptr_t)');
   const lastError = library.func('uint32_t __stdcall GetLastError()');
   const openExisting = 3, shareReadWriteDelete = 7, writeAttributes = 0x100, openReparsePoint = 0x00200000;
+  const backupSemantics = 0x02000000; // Permit opening directory handles as well as files.
   const asFileTime = nanoseconds => {
     const ticks = nanoseconds / 100n + windowsEpochTicks;
     if (ticks < 0n || ticks >= (1n << 63n)) throw new RangeError('Local file timestamp is outside the Windows range.');
@@ -54,7 +55,7 @@ function bindWindows() {
   return async (_fd, filename, accessed, modified) => {
     const times = [asFileTime(accessed), asFileTime(modified)];
     const handle = await call(createFile, [path.toNamespacedPath(filename), writeAttributes, shareReadWriteDelete,
-      null, openExisting, openReparsePoint, 0], filename, result => result === -1 || result === -1n);
+      null, openExisting, openReparsePoint | backupSemantics, 0], filename, result => result === -1 || result === -1n);
     let failure;
     try { await call(setFileTime, [handle, null, ...times], filename); }
     catch (error) { failure = error; }
@@ -69,7 +70,7 @@ function bindWindows() {
 
 // The SDK timestamps have 100 ns resolution. A JavaScript Date or a double
 // containing absolute Unix seconds can discard part of that value.
-export function setHostFileTimes(fd, filename, modified) {
+export function setHostFileTimes(fd, filename, modified, accessed = BigInt(Date.now()) * 1_000_000n) {
   setTimes ??= process.platform === 'win32' ? bindWindows() : bindPosix();
-  return setTimes(fd, filename, BigInt(Date.now()) * 1_000_000n, modified);
+  return setTimes(fd, filename, accessed, modified);
 }

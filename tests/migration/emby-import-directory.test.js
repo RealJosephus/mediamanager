@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { chmod, mkdir, readFile, readdir, stat, utimes, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, open, readFile, readdir, stat, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
+import { setHostFileTimes } from '@mediamanager/plugin-sdk/storage/host-file-times';
 import { exchange } from '../../src/migration/emby/exchange.js';
 import { inventory, mergeAssets } from '../../src/migration/emby/files.js';
 import { toBlob } from '../../src/migration/emby/format.js';
@@ -142,4 +143,35 @@ test('digest-only metadata receipts retain differing timestamps until both endpo
   const agreed = await mergeAssets(left, right, second.target, second.source, report, options);
   assert.deepEqual(issues, []);
   assert.deepEqual(agreed.source.attributes.poster, agreed.target.attributes.poster);
+});
+
+test('digest-only round trips preserve adjacent microseconds and report genuine one-microsecond edits in both directions', async t => {
+  const { directory } = await exchangeFixture(t);
+  async function setMicros(name, us) {
+    const file = process.platform === 'win32' ? null : await open(name, 'r');
+    try { await setHostFileTimes(file?.fd, name, us * 1000n); }
+    finally { await file?.close(); }
+    assert.equal((await stat(name, { bigint: true })).mtimeNs / 1000n, us);
+  }
+  const options = { attributes: true }, start = 1764500000000000n;
+  for (let i = 0; i < 40; i++) {
+    const left = path.join(directory, 'source-' + i), right = path.join(directory, 'target-' + i);
+    await mkdir(left);
+    const sourceFile = path.join(left, 'poster'), targetFile = path.join(right, 'poster');
+    await writeFile(sourceFile, 'cover');
+    const us = start + BigInt(i), issues = [], report = (...issue) => issues.push(issue.slice(0, 4));
+    await setMicros(sourceFile, us); await setMicros(left, us);
+    const base = await mergeAssets(left, right, undefined, undefined, report, options);
+    for (const [name, file] of [['', right], ['poster', targetFile]]) {
+      const actual = (await stat(file, { bigint: true })).mtimeNs / 1000n;
+      assert.equal(actual, us);
+      assert.equal(base.target.attributes[name].mtimeUs, String(actual));
+    }
+    await setMicros(sourceFile, us + 10n); await setMicros(targetFile, us + 11n);
+    const held = await mergeAssets(left, right, base.source.members, base.target.members, report, options);
+    await mergeAssets(right, left, held.target, held.source, report, options);
+    assert.deepEqual(issues, Array(2).fill(['conflict', 'asset', 'poster', 'mtimeUs']), String(us));
+    assert.equal((await stat(sourceFile, { bigint: true })).mtimeNs / 1000n, us + 10n);
+    assert.equal((await stat(targetFile, { bigint: true })).mtimeNs / 1000n, us + 11n);
+  }
 });
