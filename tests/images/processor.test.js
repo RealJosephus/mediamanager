@@ -154,14 +154,14 @@ test('processor shutdown aborts an active asset read and rejects queued work', a
   assert.deepEqual((await results).map(result => result.status), ['rejected', 'rejected']);
 });
 
-test('a backend without a strong version reuses a thumbnail only for matching bytes', async t => {
+for (const reliability of ['weak', undefined]) test('a backend with ' + reliability + ' version reliability reuses a thumbnail only for matching bytes', async t => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'image-content-version-'));
   const processor = new ImageProcessor({ fileSystem: testFileSystem, cachePath: directory });
   t.after(async () => { await processor.close(); await rm(directory, { recursive: true, force: true }); });
   const original = await readFile(path.join(root, 'grid.png'));
   let bytes = original;
   const image = { Path: 'poster.png', DateModified: '2024-01-01T00:00:00Z' };
-  const files = { stat: async () => ({ modified: image.DateModified, version: 'W/"poster"', versionReliability: 'weak' }),
+  const files = { stat: async () => ({ modified: image.DateModified, version: 'reported-poster-version', versionReliability: reliability }),
     read: async () => bytes };
   const resize = () => processor.process({ image, assets: files, Width: 4, SupportedOutputFormats: ['Png'] });
   const first = await resize();

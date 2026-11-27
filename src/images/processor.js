@@ -108,7 +108,7 @@ export class ImageProcessor {
     if (!supported.has(extension(image.Path))) return original;
     try {
       let bytes, version = source?.version;
-      if (cachePath && (!version || ['unavailable', 'weak'].includes(source.versionReliability))) {
+      if (cachePath && (!version || source.versionReliability !== 'strong')) {
         bytes = await assets.read(image.Path, { signal });
         version = 'sha256:' + createHash('sha256').update(bytes).digest('hex');
       }

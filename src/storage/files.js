@@ -3,6 +3,7 @@ import { Readable } from 'node:stream';
 import { randomUUID } from 'node:crypto';
 import { StorageError, requireCapability } from './errors.js';
 import { ownStorageAdapter } from './ownership.js';
+import { conditionalReadVersion } from './read-version.js';
 import { VirtualFileSystem } from './vfs.js';
 import { isWithin } from './paths.js';
 import { identityPathStyle } from './uri.js';
@@ -131,7 +132,7 @@ export class StorageFileSystem {
     const value = await this.vfs.stat(access, options), big = options.bigint === true;
     const mtimeNs = dateNs(value.modified), birthtimeNs = dateNs(value.created ?? value.modified);
     return { size: big ? value.size ?? 0n : Number(value.size ?? 0n), mtimeNs, birthtimeNs, ctimeNs: mtimeNs,
-      version: value.version, versionReliability: value.versionReliability,
+      version: value.version, versionReliability: conditionalReadVersion(this.vfs, access, value) ? 'strong' : 'unavailable',
       mtimeMs: big ? mtimeNs / 1000000n : Number(mtimeNs) / 1000000,
       birthtimeMs: big ? birthtimeNs / 1000000n : Number(birthtimeNs) / 1000000,
       mtime: new Date(Number(mtimeNs / 1000000n)), birthtime: new Date(Number(birthtimeNs / 1000000n)),

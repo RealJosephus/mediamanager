@@ -2,6 +2,7 @@
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { StorageFileSystem } from '../storage/files.js';
+import { conditionalReadVersion } from '../storage/read-version.js';
 import { fileURLToPath } from 'node:url';
 import { operationFailure } from '../core/operation-failure.js';
 
@@ -141,12 +142,17 @@ export class MetadataImageAssets {
   }
   async #stat(identity, options, roots) {
     try { const location = await this.#resolve(identity, options, roots); options.signal?.throwIfAborted();
-      if (location.accessPath) return { ...await this.vfs.stat(location.accessPath, options), Path: location.identity };
+      if (location.accessPath) {
+        const value = await this.vfs.stat(location.accessPath, options);
+        return { ...value, Path: location.identity,
+          versionReliability: conditionalReadVersion(this.vfs, location.accessPath, value) ? 'strong' : 'unavailable' };
+      }
       const value = await this.fileSystem.stat(location.localPath, { bigint: true });
-      const version = value.version ?? (value.ino != null && value.ctimeNs != null
-        ? [value.dev, value.ino, value.size, value.mtimeNs, value.ctimeNs].join(':') : null);
+      const hostVersion = value.ino != null && value.ctimeNs != null
+        ? [value.dev, value.ino, value.size, value.mtimeNs, value.ctimeNs].join(':') : null;
       return { Path: location.identity, name: path.basename(location.localPath), kind: value.isDirectory() ? 'directory' : 'file',
-        size: value.size, modified: modifiedDate(value), version, versionReliability: value.versionReliability };
+        size: value.size, modified: modifiedDate(value), version: hostVersion ?? value.version,
+        versionReliability: hostVersion ? 'strong' : value.versionReliability };
     } catch (error) { throw errorCode(error); }
   }
   async createDirectory(identity) {
