@@ -1,6 +1,7 @@
 import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { once } from 'node:events';
 import { mkdtemp, rm, mkdir } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -10,7 +11,11 @@ import { LibraryService } from '../../src/library/library-service.js';
 import { createMetadataContextLoader } from '../../src/library/metadata-context.js';
 import { MetadataRegistry } from '../../src/metadata/registry.js';
 import { MetadataRefreshHost } from '../../src/metadata/refresh-host.js';
-import { createPlaylistItemsPlugin } from '../../src/metadata/playlist-items.js';
+import { createPlaylistItemsPlugin, parseM3uPlaylist } from '../../src/metadata/playlist-items.js';
+import { preparePlaylistFile } from '../../src/library/playlist-file.js';
+import { PlaylistService } from '../../src/library/playlist-service.js';
+import { LocalAdapter } from '../../plugins/local/adapter.js';
+import { createTestApplication } from '../helpers/application.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { createPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
@@ -32,6 +37,12 @@ const ids = {
 
 const baseItem = values => postgresTestRow('BaseItems', { Data: '{}', ...values });
 
+test('extended M3U decodes each whole path as a single value', () => {
+  const paths = ['A+B & C.mp3', 'A%20B&x=y.mp3', 'A%26B.mp3', 'A&amp;B.mp3'];
+  assert.deepEqual(parseM3uPlaylist(['#EXTM3U', ...paths].join('\n')),
+    ['A+B & C.mp3', 'A B&x=y.mp3', 'A&B.mp3', 'A&amp;B.mp3']);
+});
+
 test('playlist refresh resolves real PostgreSQL library roots and persists ordered duplicate links',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
     const database = await createPostgresTestDatabase(t, 'playlist_items');
@@ -42,7 +53,10 @@ test('playlist refresh resolves real PostgreSQL library roots and persists order
     const library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId: 'playlist-items-test', programDataPath: stateRoot });
     const storage = new StorageRegistry();
     storage.registerType('memory', () => new MemoryStorageAdapter());
-    const adapter = await storage.createInstance('playlist-fixture', 'memory', {});
+    storage.registerType('local', configuration => LocalAdapter.open(configuration));
+    const mediaRoot = path.join(stateRoot, 'tracks');
+    await mkdir(mediaRoot);
+    const adapter = await storage.createInstance('playlist-fixture', 'local', { root: mediaRoot, writable: true });
     const vfs = new VirtualFileSystem(storage);
     vfs.mount({ path: '/fixture', instanceId: 'playlist-fixture',
       capabilities: { create: true, replace: true, delete: true } });
@@ -93,42 +107,65 @@ test('playlist refresh resolves real PostgreSQL library roots and persists order
       Type: 'MediaBrowser.Controller.Entities.CollectionFolder', Name: 'Nested', ParentId: ids.aggregate,
       IsFolder: true, Data: JSON.stringify({ CollectionType: 'music', PhysicalLocationsList: ['Z:\\IgnoredNested'] }) }));
     await database.insert('BaseItems', baseItem({ Id: ids.playlist,
-      Type: 'MediaBrowser.Controller.Playlists.Playlist', Name: 'External playlist',
+      Type: 'MediaBrowser.Controller.Playlists.Playlist', Name: 'External playlist', Data: '{"OpenAccess":true,"Shares":[]}',
       Path: 'Z:\\Fixture\\lists\\mix.m3u', ParentId: ids.folder, TopParentId: ids.folder,
       IsFolder: true }));
     for (const [Id, Name, Path] of [
-      [ids.songA, 'Song A', 'Z:\\Fixture\\SongA.mp3'],
+      [ids.songA, 'Song A', 'Z:\\Fixture\\Rhythm & Blues.mp3'],
       [ids.songB, 'Song B', 'Z:\\Fixture\\Song B.mp3']
     ]) await database.insert('BaseItems', baseItem({ Id,
       Type: 'MediaBrowser.Controller.Entities.Audio.Audio', Name, Path, ParentId: ids.folder,
       TopParentId: ids.folder, MediaType: 'Audio', IsFolder: false }));
 
-    await adapter.write('/SongA.mp3', Buffer.from('song-a'));
+    await adapter.write('/Rhythm & Blues.mp3', Buffer.from('song-a'));
     await adapter.write('/Song B.mp3', Buffer.from('song-b'));
     await adapter.mkdir('/lists');
-    await adapter.write('/lists/mix.m3u', Buffer.from('#EXTM3U\n../SongA.mp3\n../Song B.mp3\n../SongA.mp3\n'));
+    const tracks = ['Rhythm & Blues.mp3', 'Song B.mp3', 'Rhythm & Blues.mp3'].map((name, index) => ({
+      Ordinal: BigInt(index + 1), item: { Name: name, Path: 'Z:\\Fixture\\' + name, Type: 'Audio' },
+    }));
+    const spool = await preparePlaylistFile('Z:\\Fixture\\lists\\mix.m3u', {
+      count: async () => tracks.length,
+      page: async ({ after }) => ({ entries: tracks.filter(track => track.Ordinal > after), release() {} }),
+    }, { fileSystem: testFileSystem, spoolRoot });
+    try { await adapter.write('/lists/mix.m3u', Buffer.concat(await Array.fromAsync(spool.stream()))); }
+    finally { await spool.close(); }
 
     const loaded = await loadContext(ids.playlist);
     assert.equal(loaded.context.accessPath, '/fixture/lists/mix.m3u');
     assert.deepEqual(await loaded.context.playlistLibraryRoots(), ['Z:\\Fixture']);
-    assert.equal(await loaded.context.playlistFileExists('Z:\\Fixture\\SongA.mp3'), true);
-    assert.equal((await loaded.context.findMetadataItemByPath('Z:\\Fixture\\SongA.mp3', null)).Id,
+    assert.equal(await loaded.context.playlistFileExists('Z:\\Fixture\\Rhythm & Blues.mp3'), true);
+    assert.equal((await loaded.context.findMetadataItemByPath('Z:\\Fixture\\Rhythm & Blues.mp3', null)).Id,
       ids.songA);
-    assert.equal(await loaded.context.findMetadataItemByPath('Z:\\Fixture\\SongA.mp3', true), null);
+    assert.equal(await loaded.context.findMetadataItemByPath('Z:\\Fixture\\Rhythm & Blues.mp3', true), null);
     await loaded.dispose();
 
-    const refreshed = await host.refresh(ids.playlist,
-      { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None' });
-    assert.equal(refreshed.changed, true);
-    assert.equal(refreshed.Failures, 0);
-    assert.deepEqual((await database.rows('LinkedChildren', { where: { ParentId: ids.playlist },
-      orderBy: [{ column: 'SortOrder', direction: 'ASC' }] })).map(row => ({
-      child: row.ChildId, type: row.ChildType, order: row.SortOrder
-    })), [
-      { child: ids.songA, type: 0, order: 0 },
-      { child: ids.songB, type: 0, order: 1 },
-      { child: ids.songA, type: 0, order: 2 }
-    ]);
+    const user = { Id: '71000000000000000000000000000001', Policy: { IsAdministrator: true,
+      EnableAllFolders: true, EnabledFolders: [], BlockedMediaFolders: [], BlockedTags: [], AllowedTags: [],
+      BlockUnratedItems: [], EnableContentDeletionFromFolders: [] }, MaxParentalRatingScore: null, MaxParentalRatingSubScore: null };
+    const playlists = new PlaylistService({ store, library, linkedChildren, spoolRoot, programDataPath: stateRoot,
+      dataPath: stateRoot, fileSystem: testFileSystem, vfs, identityMap });
+    const app = await createTestApplication({ library, playlists, users: { getUser: async () => user },
+      authentication: { authenticate: async () => ({ IsAuthenticated: true, IsAdministrator: true, User: user, UserId: user.Id }), authorize() {} },
+      configuration: { IsStartupWizardCompleted: true } });
+    app.server.listen(0, '127.0.0.1');
+    await once(app.server, 'listening');
+    t.after(async () => {
+      app.beginClose(); await app.drainRequests(); await new Promise(resolve => app.server.close(resolve)); await playlists.close();
+    });
+    const expected = [ids.songA, ids.songB, ids.songA];
+    const refresh = { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None' };
+    for (const [stage, replace] of [['initial import', false], ['existing members', false], ['replace all metadata', true]]) {
+      const refreshed = await host.refresh(ids.playlist, { ...refresh, ReplaceAllMetadata: replace });
+      assert.equal(refreshed.Failures, 0, stage);
+      if (stage === 'initial import') assert.equal(refreshed.changed, true);
+      const rows = await database.rows('LinkedChildren', { where: { ParentId: ids.playlist }, orderBy: [{ column: 'SortOrder', direction: 'ASC' }] });
+      assert.deepEqual(rows.map(row => [row.ChildId, row.ChildType, row.SortOrder]), expected.map((id, i) => [id, 0, i]), stage);
+      const page = await fetch('http://127.0.0.1:' + app.server.address().port + '/Playlists/' + ids.playlist + '/Items?enableImages=false&enableUserData=false');
+      assert.equal(page.status, 200, stage);
+      const body = await page.json();
+      assert.equal(body.TotalRecordCount, 3, stage);
+      assert.deepEqual(body.Items.map(item => item.Id), expected.map(id => id.replaceAll('-', '')), stage);
+    }
 
     await adapter.write('/lists/mix.m3u', Buffer.from('../Song B.mp3\n'),
       { modified: '2026-10-10T13:00:00.000Z' });

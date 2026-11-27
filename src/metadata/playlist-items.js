@@ -8,7 +8,7 @@ import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { child, readXml } from '../core/xml.js';
 import { MetadataImageAssets } from './image-assets.js';
 import { StorageError } from '../storage/errors.js';
-import {parsePlaylistMemberRelation} from './playlist-member-source.js';
+import { decodeM3uPath, parsePlaylistMemberRelation } from './playlist-member-source.js';
 import {releaseNativeItemLinks} from '../library/native-item-entity.js';
 import { operationFailure } from '../core/operation-failure.js';
 
@@ -32,11 +32,6 @@ function lines(value) {
   return value.split(/\r|\n/u).filter(line => line.length > 0).map(line => line.trim());
 }
 
-function decodeUrlPath(value) {
-  const decoded = new URLSearchParams(`value=${value}`).get('value');
-  return value.replaceAll('+', ' ') === decoded ? value : decoded;
-}
-
 export function parseM3uPlaylist(value) {
   const source = lines(value);
   if (!source.length) throw new RangeError('Index was out of range.');
@@ -55,7 +50,7 @@ export function parseM3uPlaylist(value) {
       custom.add(property[1]); continue;
     }
     if (/^#(?!EXT)/u.test(line)) continue;
-    result.push(decodeUrlPath(line));
+    result.push(decodeM3uPath(line));
     custom = new Set();
   }
   return result;

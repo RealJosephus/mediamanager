@@ -11,7 +11,12 @@ import {XmlError} from '../core/xml.js';
 import { operationFailure } from '../core/operation-failure.js';
 async function* lines(source){let pending='';for await(const text of source){pending+=text;for(;;){const match=/[\r\n]/u.exec(pending);if(!match)break;
   const line=pending.slice(0,match.index);pending=pending.slice(match.index+1);if(line.length)yield clrTrim(line);}}if(pending.length)yield clrTrim(pending);}
-const decodeUrl=value=>{const decoded=new URLSearchParams(`value=${value}`).get('value');return value.replaceAll('+',' ')===decoded?value:decoded;};
+export function decodeM3uPath(value) {
+  // PlaylistsNET leaves literal plus signs alone unless the path contains a URL escape.
+  if (!/%[0-9a-f]{2}/iu.test(value)) return value;
+  // Decode the entire entry as one value, including literal ampersands.
+  return new URLSearchParams('path=' + value.replaceAll('&', '%26')).get('path');
+}
 const unescape=value=>value==null?value:value.replaceAll('&amp;','&').replaceAll('&apos;',"'").replaceAll('&quot;','"').replaceAll('&gt;','>').replaceAll('&lt;','<');
 async function parseText(source,extension,session,writer,onDropFailure){
   const temporary=q('playlist_parse_'+randomUUID().replaceAll('-',''));
@@ -34,7 +39,7 @@ async function parseText(source,extension,session,writer,onDropFailure){
         if(property){const result=await session.client.query(`INSERT INTO ${temporary}(name) VALUES ($1) ON CONFLICT DO NOTHING`,[nativeTextBytes(property[1])]);
           if(!result.rowCount)throw new TypeError('An item with the same key has already been added.');continue;}
         if(/^#(?!EXT)/u.test(line))continue;
-        await writer.append({Type:0,Path:decodeUrl(line)});await session.client.query(`DELETE FROM ${temporary}`);
+        await writer.append({Type:0,Path:decodeM3uPath(line)});await session.client.query(`DELETE FROM ${temporary}`);
       }
     }
     if(first&&extension!=='.pls')throw new RangeError('Index was out of range.');
