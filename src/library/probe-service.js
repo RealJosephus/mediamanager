@@ -187,12 +187,12 @@ export class ProbeService {
 
   async #externalCandidates(item, loaded, virtualPath, signal) {
     if (!probeFileProtocol(item) || item.SupportsLocalMetadata === false) return [];
-    const video = probeIsVideo(item), mapping = video ? this.identityMap : this.externalData.identityMap ?? this.identityMap;
+    const video = probeIsVideo(item), mapping = this.externalData.identityMap ?? this.identityMap;
     // Lyric sidecars are metadata I/O. Their explicit metadata mount can be
     // independent of the audio body, whose actual probe still uses identityMap.
     if (!video) virtualPath = mapping.resolve({ identityPath: item.Path,
       style: /^[A-Za-z]:[\\/]|^\\\\/u.test(item.Path) ? 'windows' : 'posix' });
-    const additionalDirectories = [...loaded?.context.externalStreamDirectories ?? []];
+    const additionalDirectories = [...loaded?.context?.externalStreamDirectories ?? []];
     if (loaded?.metadataPath) {
       const identityPath = internalImagePath(loaded.item, loaded.metadataPath);
       try {

@@ -29,7 +29,7 @@ export async function saveSubtitle({ library, mediaFiles, metadataFiles, library
   if (language.includes('/') || language.includes('\0') || api.sep === '\\' && language.includes('\\')) {
     throw libraryError(400, 'Language contains invalid characters.');
   }
-  const base = nativeFileNameWithoutExtension(item.Path, { windows: api.sep === '\\' }) + '.' + language
+  const base = nativeFileNameWithoutExtension(item.Path, { windows: imagePathApi(item.Path).sep === '\\' }) + '.' + language
     + (subtitle.IsForced ? '.forced' : '') + (subtitle.IsHearingImpaired ? '.sdh' : '');
   let target = api.join(folder, base + '.' + format);
   // Use exclusive creation on the actual mount. The numbered filenames also

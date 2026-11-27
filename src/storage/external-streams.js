@@ -42,19 +42,22 @@ export function parseExternalPath(filename, extra, type, naming = {}) {
   return info;
 }
 
+const pathApi = identity => /^(?:[A-Za-z]:[\\/]|[\\/]{2})/u.test(identity) ? path.win32 : path.posix;
+
 export async function externalCandidates(vfs, virtualPath, identityPath, {
   signal, naming, additionalDirectories = [], types = ['Subtitle', 'Audio'], sourceIsDirectory = false, useFullFileName = false,
 } = {}) {
-  const api = /^[A-Za-z]:[\\/]|^\\\\/u.test(identityPath) ? path.win32 : path.posix;
+  const api = pathApi(identityPath);
   const stem = useFullFileName ? api.basename(identityPath) : api.basename(identityPath, api.extname(identityPath));
   const directories = [sourceIsDirectory ? { virtualPath, identityPath }
     : { virtualPath: path.posix.dirname(virtualPath), identityPath: api.dirname(identityPath) }, ...additionalDirectories];
   const files = [];
   for (const directory of directories) {
+    const directoryApi = pathApi(directory.identityPath);
     const listing = await vfs.list(directory.virtualPath, { signal });
     for (const entry of listing.entries.filter(entry => entry.kind === 'file')) {
       const accessPath = path.posix.join(directory.virtualPath, entry.name);
-      if (accessPath !== virtualPath) files.push({ ...entry, virtualPath: accessPath, identityPath: api.join(directory.identityPath, entry.name) });
+      if (accessPath !== virtualPath) files.push({ ...entry, virtualPath: accessPath, identityPath: directoryApi.join(directory.identityPath, entry.name) });
     }
   }
   const idx = new Set(files.filter(file => path.posix.extname(file.virtualPath).toLowerCase() === '.idx').map(file => file.virtualPath.slice(0, -4)));

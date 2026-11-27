@@ -71,12 +71,12 @@ export class PlaybackService {
   }
 
   constructor(options) {
-    const { library, vfs, identityMap, sessions, activities, configuration = {}, getEncodingOptions,
+    const { library, vfs, identityMap, sidecarIdentityMap = identityMap, sessions, activities, configuration = {}, getEncodingOptions,
       getNetworkConfiguration = () => ({ BaseUrl: '' }),
       getSmartApiUrl = request => `${request.socket?.encrypted ? 'https' : 'http'}://${request.headers.host}`,
       serverVersion = '13.0.0', isLocalNetwork, probe, extraction, remux, hls, keyframes, getLiveTvMediaSources, getLiveStreams } = options;
     if (typeof getEncodingOptions !== 'function') throw new TypeError('Playback requires current encoding configuration.');
-    Object.assign(this, { library, vfs, identityMap, sessions, activities, getEncodingOptions, getNetworkConfiguration, getSmartApiUrl, serverVersion, isLocalNetwork, probe, extraction, remux, hls, getLiveTvMediaSources, getLiveStreams });
+    Object.assign(this, { library, vfs, identityMap, sidecarIdentityMap, sessions, activities, getEncodingOptions, getNetworkConfiguration, getSmartApiUrl, serverVersion, isLocalNetwork, probe, extraction, remux, hls, getLiveTvMediaSources, getLiveStreams });
     Object.defineProperty(this, 'configuration', { get() { const { configuration: current = configuration } = options; return current; } });
     this.keyframes = keyframes ?? (library?.store && vfs ? new MatroskaKeyframeService({
       store: library.store, vfs, onError: error => hls?.onError?.(error),
@@ -88,6 +88,11 @@ export class PlaybackService {
     if (!this.vfs || !this.identityMap) throw httpError(503, 'Media storage has not been configured.');
     return this.identityMap.resolve({ itemId: bindItem ? item.Id.replaceAll('-', '').toLowerCase() : undefined,
       identityPath, style: identityPathStyle(identityPath) });
+  }
+
+  #sidecarPath(identityPath) {
+    if (!this.vfs || !this.sidecarIdentityMap) throw httpError(503, 'Media storage has not been configured.');
+    return this.sidecarIdentityMap.resolve({ identityPath, style: identityPathStyle(identityPath) });
   }
 
   #canResolveSource(source) {
@@ -507,7 +512,7 @@ export class PlaybackService {
     if (!stream.Path) return new HttpResult(404, 'Audio stream file not found.', { text: true });
 
     const contentType = getMimeType(stream.Path);
-    const result = vfsStreamResult(this.vfs, this.accessPath(item, stream.Path, false), {
+    const result = vfsStreamResult(this.vfs, this.#sidecarPath(stream.Path), {
       contentType, requestHeaders: { 'User-Agent': `Jellyfin-Server/${this.serverVersion}` },
     });
     return new BinaryResult(async (request, response) => {
@@ -547,7 +552,7 @@ export class PlaybackService {
     if (!stream) throw httpError(404, 'Subtitle stream not found.');
     if (!format) {
       if (!stream.Path) throw httpError(404, 'Subtitle stream file not found.');
-      const accessPath = this.accessPath(item, stream.Path, false), contentType = getMimeType(stream.Path);
+      const accessPath = this.#sidecarPath(stream.Path), contentType = getMimeType(stream.Path);
       return /^https?:\/\//iu.test(stream.Path)
         ? remoteStaticStreamResult(this.vfs, accessPath, { serverVersion: this.serverVersion, contentType })
         : vfsStreamResult(this.vfs, accessPath, { contentType });
@@ -556,7 +561,7 @@ export class PlaybackService {
     const textFallback = isExternalSubtitleFallback(stream);
     if ((embedded || textFallback) && !this.extraction) throw httpError(503, 'Media extraction has not been configured.');
     const identityPath = embedded ? stream.Path || source.Path : stream.Path;
-    const accessPath = embedded && !stream.Path ? this.accessPath({ Id: source.Id, Path: source.Path }) : this.accessPath(item, identityPath, false);
+    const accessPath = embedded && !stream.Path ? this.accessPath({ Id: source.Id, Path: source.Path }) : this.#sidecarPath(identityPath);
     format = format.toLowerCase() === 'js' ? 'json' : format.toLowerCase();
     let inputFormat = subtitleInputFormat(stream);
     return new BinaryResult((request, response) => this.#prepareSubtitle(async () => {

@@ -88,6 +88,7 @@ import { NamedConfigurationStore } from './core/named-configuration-store.js';
 import { EncodingPaths } from './core/encoding-paths.js';
 import { FallbackFonts } from './playback/fallback-fonts.js';
 import { defaultConfiguration } from './core/configuration-xml.js';
+import { nativePathWithin } from './library/native-path.js';
 import { DotIgnoreRule } from './library/dot-ignore-rule.js';
 import { BrandingConfigurationStore } from './branding/configuration.js';
 import { BrandingService } from './branding/service.js';
@@ -371,8 +372,12 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const extraction = probe ? new ExtractionService({ vfs, bridge:probe.bridge, ...extractionOptions, mediaEncoder, getEncodingOptions,
     subtitleCache: new SubtitleCache({ fileSystem, dataPath, onError }) }) : undefined;
   if (extraction) rollback.push(() => extraction.close());
-  const subtitleBurn = extraction && new SubtitleBurnSource({ vfs, identityMap, extraction });
-  const remux = probe ? new RemuxService({ vfs, bridge:probe.bridge, identityMap, onError,
+  const sidecarIdentityMap = identityMap && { resolve(binding) {
+    const mapping = nativePathWithin(binding.identityPath, applicationPaths.metadataPath) ? metadataIdentityMap : identityMap;
+    return mapping.resolve(binding);
+  } };
+  const subtitleBurn = extraction && new SubtitleBurnSource({ vfs, identityMap: sidecarIdentityMap, extraction });
+  const remux = probe ? new RemuxService({ vfs, bridge:probe.bridge, identityMap: sidecarIdentityMap, onError,
     getCacheDirectory: () => applicationPaths.cachePath || getEncodingOptions().TranscodingTempPath
       ? encodingPaths.getTranscodePath() : tmpdir(),
     ...remuxOptions, mediaEncoder, subtitleBurn }) : undefined;
@@ -383,7 +388,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   if (hls) rollback.push(() => hls.close());
   sessions.playbackJobs = remux?.jobs;
   let liveTvMediaSources, liveStreams, liveStreamProbe;
-  const playback = new PlaybackService({ library, vfs, identityMap, sessions, activities, get configuration() { return currentConfiguration(); }, getEncodingOptions, getNetworkConfiguration, getSmartApiUrl, serverVersion, isLocalNetwork, probe, extraction, remux, hls,
+  const playback = new PlaybackService({ library, vfs, identityMap, sidecarIdentityMap, sessions, activities, get configuration() { return currentConfiguration(); }, getEncodingOptions, getNetworkConfiguration, getSmartApiUrl, serverVersion, isLocalNetwork, probe, extraction, remux, hls,
     getLiveTvMediaSources: () => liveTvMediaSources, getLiveStreams: () => liveStreams });
   const chapterImages = probe && applicationPaths.metadataPath && new ChapterImages({ playback, probe, fileSystem, applicationPaths,
     getConfiguration: currentConfiguration, onError });
