@@ -230,8 +230,7 @@ export class LibraryScanHost {
   }
 
   clearIgnoreRuleCache() {
-    if (!this.ignoreRule || this.ignoreRule.directoryCache?.size === 0) return;
-    this.ignoreRule.clearDirectoryCache();
+    this.ignoreRule?.clearDirectoryCache();
   }
 
   invalidateChildren(item) { setFolderChildren(item, null); }

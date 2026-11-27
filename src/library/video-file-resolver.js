@@ -1,3 +1,4 @@
+import { extraRules, isVideoExtraDirectory } from './video-extra-rules.js';
 import path from 'node:path';
 import { cleanMetadataName, parseMetadataName } from '../metadata/naming.js';
 import { clrTrim } from '../metadata/whitespace.js';
@@ -34,26 +35,6 @@ const audioExtensions = new Set([
   '.okt', '.opus', '.pls', '.ra', '.rf64', '.rm', '.s3m', '.sfx', '.shn', '.sid', '.stm', '.strm',
   '.ult', '.uni', '.vox', '.wav', '.wma', '.wv', '.xm', '.xsp', '.ymf'
 ]);
-const extraRules = Object.freeze([
-  ['DirectoryName', 'trailers', 2, 'Video'], ['DirectoryName', 'backdrops', 9, 'Video'],
-  ['DirectoryName', 'theme-music', 8, 'Audio'], ['DirectoryName', 'behind the scenes', 3, 'Video'],
-  ['DirectoryName', 'deleted scenes', 4, 'Video'], ['DirectoryName', 'interviews', 5, 'Video'],
-  ['DirectoryName', 'scenes', 6, 'Video'], ['DirectoryName', 'samples', 7, 'Video'],
-  ['DirectoryName', 'shorts', 11, 'Video'], ['DirectoryName', 'featurettes', 10, 'Video'],
-  ['DirectoryName', 'extras', 0, 'Video'], ['DirectoryName', 'extra', 0, 'Video'],
-  ['DirectoryName', 'other', 0, 'Video'], ['DirectoryName', 'clips', 1, 'Video'],
-  ['Filename', 'trailer', 2, 'Video'], ['Filename', 'sample', 7, 'Video'],
-  ['Filename', 'theme', 8, 'Audio'],
-  ['Suffix', '-trailer', 2, 'Video'], ['Suffix', '.trailer', 2, 'Video'],
-  ['Suffix', '_trailer', 2, 'Video'], ['Suffix', '- trailer', 2, 'Video'],
-  ['Suffix', '-sample', 7, 'Video'], ['Suffix', '.sample', 7, 'Video'],
-  ['Suffix', '_sample', 7, 'Video'], ['Suffix', '- sample', 7, 'Video'],
-  ['Suffix', '-scene', 6, 'Video'], ['Suffix', '-clip', 1, 'Video'],
-  ['Suffix', '-interview', 5, 'Video'], ['Suffix', '-behindthescenes', 3, 'Video'],
-  ['Suffix', '-deleted', 4, 'Video'], ['Suffix', '-deletedscene', 4, 'Video'],
-  ['Suffix', '-featurette', 10, 'Video'], ['Suffix', '-short', 11, 'Video'],
-  ['Suffix', '-extra', 0, 'Video'], ['Suffix', '-other', 0, 'Video']
-].map(([ruleType, token, extraType, mediaType]) => Object.freeze({ ruleType, token, extraType, mediaType })));
 const extraTypeNames = Object.freeze([
   'Unknown', 'Clip', 'Trailer', 'BehindTheScenes', 'DeletedScene', 'Interview', 'Scene', 'Sample',
   'ThemeSong', 'ThemeVideo', 'Featurette', 'Short'
@@ -71,10 +52,6 @@ const extraSuffixes = [
   '-trailer', '.trailer', '_trailer', '- trailer', '-sample', '.sample', '_sample', '- sample', '-scene',
   '-clip', '-interview', '-behindthescenes', '-deleted', '-deletedscene', '-featurette', '-short', '-extra', '-other'
 ];
-const extrasFolderNames = new Set([
-  'trailers', 'backdrops', 'theme-music', 'behind the scenes', 'deleted scenes', 'interviews', 'scenes',
-  'samples', 'shorts', 'featurettes', 'extras', 'extra', 'other', 'clips'
-]);
 const stackPattern = /^(.*?)(?:(?<=[\]\)}])|[ _.-]+)[([]?(cd|dvd|part|pt|disc|disk)[ _.-]*([0-9]+|[a-d])[)\]]?$/iu;
 const directoryStackPattern = /^(.*?)(?:(?<=[\]\)}])|[ _.-]+)[([]?(cd|dvd|part|pt|disc|disk)[ _.-]*([0-9]+|[a-d])[)\]]?(?:\.[^.]+)?$/iu;
 const withheld = Object.freeze({ withhold: true });
@@ -169,7 +146,7 @@ function matchedExtraRule(candidatePath, libraryRoot = '') {
   const directoryName = api.basename(directory);
   for (const rule of extraRules) {
     if (rule.mediaType === 'Audio' ? !audioExtensions.has(extension) : !videoExtensions.has(extension)) continue;
-    const match = rule.ruleType === 'Filename' ? ordinalIgnoreCase(stem, rule.token)
+    const match = rule.ruleType === 'Filename' ? ordinalIgnoreCase(trimmedStem, rule.token)
       : rule.ruleType === 'Suffix' ? endsWithOrdinalIgnoreCase(trimmedStem, rule.token)
         : ordinalIgnoreCase(directoryName, rule.token) && !ordinalIgnoreCase(directory, libraryRoot);
     if (match) return rule;
@@ -180,7 +157,7 @@ function matchedExtraRule(candidatePath, libraryRoot = '') {
 export function isPotentialVideoExtraCandidate(candidate) {
   if (!candidate?.entry || typeof candidate.identityPath !== 'string') return false;
   return candidate.entry.kind === 'directory'
-    ? extrasFolderNames.has(candidate.entry.name.toLowerCase())
+    ? isVideoExtraDirectory(candidate.entry.name)
     : candidate.entry.kind === 'file' && matchedExtraRule(candidate.identityPath) != null;
 }
 
@@ -234,7 +211,7 @@ function extraVideo(stem, extension) {
   const lower = stem.toLowerCase();
   const trimmed = lower.replace(/[0-9]+$/u, '');
   return /\bsample\b/iu.test(stem) || !stubExtensions.has(extension)
-    && (['trailer', 'sample'].includes(lower) || extraSuffixes.some(suffix => trimmed.endsWith(suffix)));
+    && (['trailer', 'sample'].includes(trimmed) || extraSuffixes.some(suffix => trimmed.endsWith(suffix)));
 }
 
 function recognizedVideo(candidate) {
@@ -571,7 +548,7 @@ async function resolveMultiDiscDirectory(directory, snapshot, nativeType, peekDi
   const qualified = [];
   const videoTypes = [];
   const directories = snapshot.candidates.filter(child => child?.entry?.kind === 'directory'
-    && !extrasFolderNames.has(child.entry.name.toLowerCase()));
+    && !isVideoExtraDirectory(child.entry.name));
   for (const child of directories) {
     const nested = await peekDirectory(child, { forExtras: true });
     const videoType = await nestedDiscVideoType(child, nested, peekDirectory);
@@ -687,7 +664,7 @@ export async function collectOwnedExtras(owner, versions, candidates, peekDirect
       }
       continue;
     }
-    if (!extrasFolderNames.has(candidate.entry.name.toLowerCase()) || typeof peekDirectory !== 'function') continue;
+    if (!isVideoExtraDirectory(candidate.entry.name) || typeof peekDirectory !== 'function') continue;
     const snapshot = await peekDirectory(candidate, { forExtras: true });
     if (!Array.isArray(snapshot?.candidates)) continue;
     scopes.push(candidate);
@@ -867,7 +844,7 @@ export function createVideoFileResolver({ localization, classifyIso, logger } = 
       if (untyped && (!parent || mixedVideoParentExcluded(parent, collectionContext))) return null;
       const policy = videoResolutionPolicy(collectionContext);
       if (!policy) return null;
-      if (extrasFolderNames.has(candidate.entry.name.toLowerCase()) && !sameId(parent?.Id, root?.Id)) return withheld;
+      if (isVideoExtraDirectory(candidate.entry.name) && !sameId(parent?.Id, root?.Id)) return withheld;
       if (typeof peekDirectory !== 'function') return withheld;
       const snapshot = await peekDirectory(candidate);
       // A weak or malformed peek cannot prove that this is an ordinary folder.
@@ -877,7 +854,7 @@ export function createVideoFileResolver({ localization, classifyIso, logger } = 
       const disc = await resolveDirectDiscDirectory(candidate, snapshot, policy.nativeType, peekDirectory);
       if (disc) return disc;
       const directDirectories = snapshot.candidates.filter(child => child?.entry?.kind === 'directory'
-        && !extrasFolderNames.has(child.entry.name.toLowerCase()));
+        && !isVideoExtraDirectory(child.entry.name));
       const groups = untyped && hasTvMarker(snapshot.candidates) ? []
         : resolveVideoGroups({ Path: candidate.identityPath }, snapshot.candidates, policy.parseName, true);
       if (!policy.collapseDirectory) {

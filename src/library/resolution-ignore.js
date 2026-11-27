@@ -1,3 +1,4 @@
+import { isVideoExtraDirectory } from './video-extra-rules.js';
 import { checkAbort } from '../storage/errors.js';
 import { repositoryTopParentId } from './records.js';
 
@@ -26,23 +27,6 @@ const ignoredTreeNames = Object.freeze([
   'system volume information',
   '.grab',
   '.zfs'
-]);
-
-const extrasFolderNames = Object.freeze([
-  'trailers',
-  'backdrops',
-  'theme-music',
-  'behind the scenes',
-  'deleted scenes',
-  'interviews',
-  'scenes',
-  'samples',
-  'shorts',
-  'featurettes',
-  'extras',
-  'extra',
-  'other',
-  'clips'
 ]);
 
 const audioFileExtensions = Object.freeze([
@@ -112,7 +96,7 @@ function isAudioFile(name) {
  * As in DotNet.Globbing, the generic hidden pattern applies to the final path
  * component only; named ignored directories and *.trickplay apply recursively.
  */
-export function matchesCoreResolutionIgnorePattern(identityPath) {
+export function matchesCoreResolutionIgnorePattern(identityPath, extraRule) {
   const components = pathComponents(identityPath);
   if (!components.length) return false;
   const folded = components.map(value => value.toLowerCase());
@@ -120,8 +104,10 @@ export function matchesCoreResolutionIgnorePattern(identityPath) {
 
   if (ignoredLeafNames.includes(leaf)) return true;
   if (sampleName(leaf, 'sample') || sampleName(leaf, 'minta')) return true;
-  if (components.length >= 2
-    && ['sample', 'minta'].includes(folded.at(-2))) return true;
+  // The sample-directory glob keeps these files out of the ordinary library.
+  // A movie's explicit directory rule has already established their owner.
+  const parent = folded.at(-2);
+  if (parent === 'minta' || parent === 'sample' && !(extraRule?.ruleType === 'DirectoryName' && extraRule.ruleToken === 'sample')) return true;
   if (folded.some(value => ignoredTreeNames.includes(value))) return true;
   if (folded.some(value => value.endsWith('.trickplay'))) return true;
   if (leaf.startsWith('.')) return true;
@@ -136,7 +122,8 @@ export function matchesCoreResolutionIgnorePattern(identityPath) {
 export function shouldIgnoreResolutionCandidate(candidate, {
   parent = null,
   root = null,
-  applicationRootPath = null
+  applicationRootPath = null,
+  extraRule
 } = {}) {
   const identityPath = candidate?.identityPath;
   const entry = candidate?.entry;
@@ -148,12 +135,12 @@ export function shouldIgnoreResolutionCandidate(candidate, {
   if (typeof applicationRootPath === 'string' && applicationRootPath
     && identityPath.includes(applicationRootPath)) return false;
 
-  if (matchesCoreResolutionIgnorePattern(identityPath)) return true;
+  if (matchesCoreResolutionIgnorePattern(identityPath, extraRule)) return true;
   if (parent == null) return false;
 
   if (entry.kind === 'directory') {
     if (isTopParent(parent, root)) return false;
-    return extrasFolderNames.includes(entry.name.toLowerCase())
+    return isVideoExtraDirectory(entry.name)
       && itemType(parent) !== 'UserRootFolder';
   }
 

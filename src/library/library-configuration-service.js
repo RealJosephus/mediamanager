@@ -168,6 +168,22 @@ export class LibraryConfigurationService {
       }
     }
   }
+  // Read the configured shortcuts directly. Looking up virtual folders here
+  // would re-enter item resolution while a scan is checking ignore rules.
+  async getLibraryRootPaths() {
+    if (!await this.#directoryExists(this.root)) return [];
+    const roots = [];
+    const entries = await this.fileSystem.readdir(await this.#statePath(this.root), { withFileTypes: true });
+    for (const entry of entries) {
+      const directory = path.join(this.root, entry.name);
+      if (!await this.#directoryExists(directory)) continue;
+      for await (const shortcut of this.#shortcutFiles(directory)) {
+        try { roots.push(await this.#resolveShortcut(shortcut)); }
+        catch (error) { this.onError(error); }
+      }
+    }
+    return roots;
+  }
   async #syncLibraryOptionsToLocations(directory, options) {
     const root = await this.host.getUserRootFolder();
     return this.host.withCachedChildren(root, async children => {

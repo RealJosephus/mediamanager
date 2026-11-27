@@ -157,6 +157,30 @@ function extraAt(snapshot, relativePath, nativeType) {
   return snapshot.items.find(item => idKey(item.Id) === idKey(deterministicId(relativePath, nativeType)));
 }
 
+test('postgres: numbered and directory samples retain their film owner across scans', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
+}, async t => {
+  const { database, adapter, validation, rootReference } = await fixture(t, 'postgres');
+  await adapter.mkdir('/Film/sample');
+  await adapter.write('/Film/sample/.ignore', Buffer.from('blocked.mkv'));
+  for (const file of ['Film.mkv', 'sample1.mkv', 'sample/preview.mkv', 'sample/blocked.mkv', 'sample/.hidden.mkv']) {
+    await adapter.write('/Film/' + file, Buffer.from(file));
+  }
+  for (let pass = 0; pass < 2; pass++) {
+    await validation.validateChildren(rootReference, ownedRefreshOptions);
+    const snapshot = await state(database);
+    assert.equal(snapshot.items.some(item => /blocked|hidden/u.test(item.Path)), false);
+    const movies = snapshot.items.filter(item => item.Type === movieNativeType);
+    assert.deepEqual(movies.map(item => item.Path), [movieFolderPath + '\\Film.mkv']);
+    for (const file of ['sample1.mkv', 'sample\\preview.mkv']) {
+      const sample = extraAt(snapshot, file, videoNativeType);
+      assert.ok(sample, file);
+      assert.equal(sample.ExtraType, 7, file);
+      assert.equal(idKey(sample.OwnerId), idKey(movies[0].Id), file);
+    }
+  }
+});
+
 for (const dialect of ['postgres']) test(`${dialect}: core-hidden extras do not change the primary movie mixed count`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {

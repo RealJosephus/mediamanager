@@ -63,7 +63,7 @@ export class OwnedExtraDiscovery {
       candidate => list(candidate.identityPath), loaded.libraryRuntimeOptions?.localization, {
         ownerIsDirectory: owner.IsFolder || ['Dvd', 'BluRay'].includes(owner.VideoType),
         resolveExtra: async ({ candidate, classification, isInMixedFolder }) => {
-          if (shouldIgnoreResolutionCandidate(candidate, { applicationRootPath: loaded.libraryRuntimeOptions?.programDataPath
+          if (shouldIgnoreResolutionCandidate(candidate, { extraRule: classification, applicationRootPath: loaded.libraryRuntimeOptions?.programDataPath
             && apiFor(loaded.libraryRuntimeOptions.programDataPath).join(loaded.libraryRuntimeOptions.programDataPath, 'root') })
             || await ignoreRule.shouldIgnore(candidate.identityPath)) return false;
           const draft = { Name: classification.resolvedName, columns: { IsInMixedFolder: isInMixedFolder },

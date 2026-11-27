@@ -410,7 +410,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
     get cachePath() { return metadataOptions.similarCachePath ?? applicationPaths.cachePath; },
     logger, now: metadataOptions.similarNow });
   library.similarItems = similarItems;
-  const ignoreRule = vfs && identityMap ? new DotIgnoreRule({ vfs, identityMap: ignoreIdentityMap }) : undefined;
+  const ignoreRule = vfs && identityMap ? new DotIgnoreRule({ vfs, identityMap: ignoreIdentityMap,
+    getLibraryRoots: () => library.configuration?.getLibraryRootPaths() ?? [] }) : undefined;
   let loadContext;
   let metadata;
   let metadataUpdates;
@@ -565,6 +566,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     programDataPath, optionsStore: libraryOptionsStore, get configuration() { return currentConfiguration(); }, configurationStore,
     mediaAssets: new MetadataImageAssets({ fileSystem, vfs, identityMap, get metadataPath() { return applicationPaths.metadataPath; }, stateRoots: [dataPath].filter(Boolean) }),
     lifecycle: libraryScanLifecycle, monitor: libraryMonitor, host: libraryScanHost, refreshes,
+    invalidateDirectory: () => ignoreRule?.clearDirectoryCache(),
     refreshQueue: () => metadata.getRefreshQueue(),
     admitMetadataDrain: () => metadata.admitShutdownDrain(),
     runBackground: operation => store.runDetached(() => loadContext.withDetachedScope(operation)),

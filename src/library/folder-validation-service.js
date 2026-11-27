@@ -251,7 +251,8 @@ export class FolderValidationService {
       candidates: filtered.candidates,
       peekDirectory,
       getExtraCandidates,
-      resolveExtra: async ({ candidate }) => (await filterResolutionCandidates([candidate], {
+      resolveExtra: async ({ candidate, classification }) => (await filterResolutionCandidates([candidate], {
+        extraRule: classification,
         ignoreRule: this.ignoreRule,
         applicationRootPath: this.applicationRootPath
       })).length > 0,
@@ -330,7 +331,8 @@ export class FolderValidationService {
         const raw = await snapshot(candidate?.identityPath ?? parent.Path);
         return filter(raw);
       },
-      resolveExtra: async ({ candidate }) => (await filterResolutionCandidates([candidate], {
+      resolveExtra: async ({ candidate, classification }) => (await filterResolutionCandidates([candidate], {
+        extraRule: classification,
         ignoreRule, applicationRootPath: this.applicationRootPath })).length > 0 });
     return Object.freeze({ ...resolution, deletionSafe: true });
   }

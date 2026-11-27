@@ -42,7 +42,7 @@ async function sourceSnapshot(database) {
   return tables;
 }
 
-async function fixture(t, { knownAncestors = true, seedMovie = true } = {}) {
+async function fixture(t, { knownAncestors = true, mappedRoot = true, seedMovie = true } = {}) {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'scan-ignore-runtime-'));
   const programDataPath = path.join(directory, 'data');
   const configuration = { UICulture: 'en-US', IsStartupWizardCompleted: true, LibraryScanFanoutConcurrency: 1,
@@ -65,7 +65,7 @@ async function fixture(t, { knownAncestors = true, seedMovie = true } = {}) {
   vfs.mount({ path: '/media', instanceId: 'media', capabilities: {} });
   const identityMap = new IdentityAccessMap();
   identityMap.addPrefix({ identityRoot, accessRoot: '/media', style: 'windows', returnAccess: 'Controlled runtime media namespace' });
-  const ignoreIdentityMap = knownAncestors
+  const ignoreIdentityMap = !mappedRoot ? new IdentityAccessMap() : knownAncestors
     ? await knownAncestorIgnoreIdentityMap({ registry, vfs, identityMap, identityRoots: [identityRoot] }) : identityMap;
   // Establish actual configuration and native top-level admission before adding
   // the existing Movie. The hidden sentinel satisfies the empty-root guard.
@@ -264,9 +264,9 @@ for (const mode of ['success', 'failure', 'cancel']) {
   });
 }
 
-test('postgres: runtime reports an unknown ignore ancestor without deleting existing children', pg, async t => {
+test('postgres: runtime reports an unmapped ignore lookup inside the library without deleting existing children', pg, async t => {
   const { nativeRetrievalFailure } = await nativeBoundaries();
-  const f = await fixture(t, { knownAncestors: false }), { database, runtime, movieId, errors } = f;
+  const f = await fixture(t, { mappedRoot: false }), { database, runtime, movieId, errors } = f;
   await assert.rejects(runtime.ignoreRule.shouldIgnore(moviePath), { code: 'ignore-search-unmapped', status: 501 });
   const observations = observePhysicalValidation(f), removed = [];
   runtime.library.on('ItemRemoved', event => removed.push(event.Item.Id));
@@ -300,3 +300,22 @@ test('postgres: runtime validates new children with inherited library content ty
     assert.equal(added.length, 1);
   });
 });
+
+for (const knownAncestors of [false, true]) {
+  test(`postgres: scan stops at the library root with ${knownAncestors ? 'an excluding' : 'an unmapped'} ancestor`, pg, async t => {
+    const f = await fixture(t, { knownAncestors, seedMovie: false });
+    if (knownAncestors) {
+      const access = f.ignoreIdentityMap.resolve({ identityPath: 'Z:\\.ignore', style: 'windows' });
+      const attachment = f.vfs.resolve(access);
+      await attachment.adapter.write(attachment.path, Buffer.from('*.mkv'));
+    }
+    f.runtime.ignoreRule.clearDirectoryCache();
+    const movieRows = () => f.database.rows('BaseItems', { where: { Id: f.movieId } });
+    assert.equal((await movieRows()).length, 0);
+    await f.runtime.itemCreation.withItem(f.rootId, async parent => {
+      const result = await f.runtime.library.validateChildren(parent, { refreshChildMetadata: false });
+      assert.ok(result.created.some(item => item.Id === f.movieId));
+    });
+    assert.equal((await movieRows()).length, 1);
+  });
+}

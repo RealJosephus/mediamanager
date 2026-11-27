@@ -81,3 +81,24 @@ for (const separator of ['/', '\\']) for (const knownAncestors of [true, false])
     assert.equal(rule.rulesCache.size, 1);
   });
 }
+
+test('nested configured roots share the outer boundary and a configuration change clears it', async () => {
+  let roots = ['/videos', '/videos/inner', '/video'];
+  const reads = [];
+  const rule = new DotIgnoreRule({ getLibraryRoots: () => roots, fileAccess: {
+    async info(file) {
+      reads.push(file);
+      return { mapped: true, entry: null };
+    }
+  } });
+  assert.equal(await rule.shouldIgnore('/videos/inner/film.mkv'), false);
+  assert.deepEqual(reads, ['/videos/inner/.ignore', '/videos/.ignore']);
+  roots = ['/videos/inner', '/video'];
+  rule.clearDirectoryCache();
+  reads.length = 0;
+  assert.equal(await rule.shouldIgnore('/videos/inner/film.mkv'), false);
+  assert.deepEqual(reads, ['/videos/inner/.ignore']);
+  reads.length = 0;
+  assert.equal(await rule.shouldIgnore('/videotapes/film.mkv'), false);
+  assert.deepEqual(reads, ['/videotapes/.ignore', '/.ignore']);
+});

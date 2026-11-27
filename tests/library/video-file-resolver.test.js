@@ -1105,12 +1105,14 @@ test('samples and extras remain unclaimed while unmatched stack-shaped home vide
 });
 
 test('trailing digits alone do not turn the native extra filename token into a suffix rule', async () => {
-  const file = candidate('trailer2.mp4');
-  const result = await resolve([file]);
+  const file = candidate('mytrailer2.mp4');
+  const exactToken = candidate('trailer2.mp4');
+  const result = await resolve([file, exactToken]);
 
   assert.equal(result.claims.length, 1);
   assert.equal(result.claims[0].nativeType, videoNativeType);
-  assert.equal(result.claims[0].draft.Name, 'trailer2');
+  assert.equal(result.claims[0].draft.Name, 'mytrailer2');
+  assert.deepEqual(result.unclaimedPaths, [exactToken.identityPath]);
 });
 
 test('pipeline advertises the narrow production-media capability scope without broadening it', () => {

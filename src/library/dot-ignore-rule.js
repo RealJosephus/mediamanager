@@ -10,10 +10,11 @@ const pathApi = value => /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/u.test
 
 export class DotIgnoreRule {
   #defaultFileAccess;
+  #libraryRoots;
   #recordingRoots = new Set();
-  constructor({ vfs, identityMap, fileAccess, processorCount = availableParallelism(), normalizePath = process.platform === 'win32' }) {
+  constructor({ vfs, identityMap, fileAccess, getLibraryRoots = () => [], processorCount = availableParallelism(), normalizePath = process.platform === 'win32' }) {
     if (!fileAccess && (!vfs || !identityMap)) throw new TypeError('Ignore rules require an explicit file reader.');
-    Object.assign(this, { vfs, identityMap, processorCount, normalizePath });
+    Object.assign(this, { vfs, identityMap, getLibraryRoots, processorCount, normalizePath });
     this.#defaultFileAccess = !fileAccess;
     this.fileAccess = fileAccess ?? {
       info: (identityPath, signal) => this.#mappedFileInfo(identityPath, signal),
@@ -24,7 +25,19 @@ export class DotIgnoreRule {
     this.rulesCache = new NativeLruCache(Math.max(32, Math.trunc(capacity / 4)));
   }
 
-  clearDirectoryCache() { this.directoryCache.clear(); }
+  clearDirectoryCache() {
+    this.#libraryRoots = undefined;
+    this.directoryCache = new NativeLruCache(this.directoryCache.capacity);
+  }
+  async #configuredRoots() {
+    const pending = this.#libraryRoots ??= Promise.resolve(this.getLibraryRoots())
+      .then(roots => new Set(roots.filter(Boolean).map(nativePathKey)));
+    try { return await pending; }
+    catch (error) {
+      if (this.#libraryRoots === pending) this.#libraryRoots = undefined;
+      throw error;
+    }
+  }
   setRecordingRoots(roots) {
     const next = new Set(roots.map(nativePathKey));
     if (next.size === this.#recordingRoots.size && [...next].every(root => this.#recordingRoots.has(root))) return;
@@ -35,6 +48,7 @@ export class DotIgnoreRule {
     const rule = new DotIgnoreRule({ ...this,
       fileAccess: this.#defaultFileAccess ? undefined : this.fileAccess });
     rule.directoryCache = this.directoryCache.clone();
+    rule.#libraryRoots = this.#libraryRoots;
     rule.rulesCache = this.rulesCache.clone();
     rule.#recordingRoots = this.#recordingRoots;
     return rule;
@@ -58,21 +72,28 @@ export class DotIgnoreRule {
   }
 
   async #findIgnoreFile(directory, signal) {
-    const cached = this.directoryCache.get(directory);
+    const cache = this.directoryCache;
+    const cached = cache.get(directory);
     if (cached) return cached;
     const api = pathApi(directory), checked = [directory];
+    const roots = await this.#configuredRoots();
+    let stopDirectory;
+    for (let current = directory; roots.size; current = api.dirname(current)) {
+      if (roots.has(nativePathKey(current))) stopDirectory = current;
+      if (api.dirname(current) === current) break;
+    }
     let complete = true, recordingRoot;
     const finish = (ignoreFile, known = complete, cacheRoot) => {
       const entry = { ignoreFile, complete: known };
       // Unknown mappings do not establish a cached native absence.
       if (known) for (const current of checked) {
-        if (!cacheRoot || nativePathWithin(current, cacheRoot)) this.directoryCache.set(current, entry);
+        if (!cacheRoot || nativePathWithin(current, cacheRoot)) cache.set(current, entry);
       }
       return entry;
     };
     for (let current = directory;; current = api.dirname(current)) {
       if (current !== directory) {
-        const parentCached = this.directoryCache.get(current);
+        const parentCached = cache.get(current);
         if (parentCached) return finish(parentCached.ignoreFile, complete && parentCached.complete);
       }
       const ignoreFile = api.join(current, '.ignore');
@@ -84,7 +105,7 @@ export class DotIgnoreRule {
       if (info.mapped && this.#recordingRoots.has(nativePathKey(current))) recordingRoot ??= current;
       if (info.entry?.kind === 'file') return finish(ignoreFile);
       if (current !== directory) checked.push(current);
-      if (api.dirname(current) === current) return finish(null);
+      if (current === stopDirectory || api.dirname(current) === current) return finish(null);
     }
   }
 
