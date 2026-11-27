@@ -8,6 +8,7 @@ import { resolveProductionEnvironment, verifyProductionDatabaseContract } from '
 import { readMediaEncoderStartupOptions } from './playback/media-encoder.js';
 import { readPublishedServerStartupOptions } from './network/startup.js';
 import { SystemLifecycle } from './system/lifecycle.js';
+import { BackupRestored } from './system/backups.js';
 import { readEmbyImportManifest } from './migration/emby/files.js';
 import { repairEmbyPostgresFolders } from './migration/emby/folder-classification.js';
 
@@ -119,6 +120,9 @@ export async function startProductionInstance({ environment = process.env, args 
     catch (closeError) {
       try { await onError(closeError); }
       catch { /* Cleanup reporting must never replace the startup failure. */ }
+    }
+    if (error instanceof BackupRestored) {
+      return startProductionInstance({ environment, args, onError, systemLifecycle, onApplication });
     }
     throw error;
   }

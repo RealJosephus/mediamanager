@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
 import { once } from 'node:events';
-import { mkdir, copyFile, writeFile } from 'node:fs/promises';
+import { mkdir, copyFile, writeFile, unlink } from 'node:fs/promises';
 import { randomUUID, createHash } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
@@ -116,7 +116,7 @@ test('the actual production CLI retains its selected target across HTTP restarts
     scope: 'Direct production src/main.js child processes in one fixture-owned PostgreSQL database; two verified transferred targets, installed Local plugins, authenticated HTTP, WebSocket, same-port restart, next-process selection and natural process exit. Native HTTP policy comparison is independent.',
     requests: [], stages: [], normalShutdown: {}, fixtureCleanup: {} };
   let database, nextDatabase, source, storage, nextStorage, child, childResult, childClosed, socket, failed = false, failure;
-  let stdout = '', stderr = '';
+  let stdout = '', stderr = '', backupFile;
   const secrets = new Set();
   const connectionString = ['win32', 'darwin'].includes(process.platform) ? process.env.MEDIAMANAGER_TEST_LIFECYCLE_POSTGRES
     : process.env.MEDIAMANAGER_TEST_POSTGRES;
@@ -227,11 +227,11 @@ test('the actual production CLI retains its selected target across HTTP restarts
     launchCli();
     report.process = { pid: child.pid, executable: process.execPath, entry: main, port, schema: database.schemaName };
     const origin = 'http://127.0.0.1:' + port;
-    const call = async (route, { method = 'GET', accessToken = token, remote, body, record = true } = {}) => {
+    const call = async (route, { method = 'GET', accessToken = token, remote, body, record = true, timeout = 2000 } = {}) => {
       const response = await fetch(origin + route, { method, headers: { Accept: 'application/json',
         ...(accessToken !== null && { 'X-Emby-Token': accessToken }), ...(remote && { 'X-Forwarded-For': remote }),
         ...(body !== undefined && { 'Content-Type': 'application/json' }) },
-        ...(body !== undefined && { body: JSON.stringify(body) }), signal: AbortSignal.any([t.signal, AbortSignal.timeout(2000)]) });
+        ...(body !== undefined && { body: JSON.stringify(body) }), signal: AbortSignal.any([t.signal, AbortSignal.timeout(timeout)]) });
       const text = await response.text(); let value = null; if (text) try { value = JSON.parse(text); } catch { value = text; }
       const result = { route, method, ...(remote && { remote }), status: response.status, contentType: response.headers.get('content-type'), text, body: value };
       if (record) report.requests.push(result);
@@ -338,6 +338,34 @@ test('the actual production CLI retains its selected target across HTTP restarts
       report.requests.push({ phase: label + ' actual old owners released', before, oldConnections, socketClose: closedSocket });
       await verifyRetained(label);
     }
+    const subtitles = path.join(instance, 'data/data/subtitles'), trickplay = path.join(instance, 'data/data/trickplay');
+    await mkdir(subtitles, { recursive: true }); await mkdir(trickplay, { recursive: true });
+    const inside = path.join(subtitles, 'backup.srt'), outside = path.join(trickplay, 'backup.bin');
+    await writeFile(inside, 'saved subtitle'); await writeFile(outside, 'before');
+    const backup = await call('/Backup/Create', { method: 'POST', body: { Metadata: true, Subtitles: true }, timeout: 30000 });
+    assert.equal(backup.status, 200, stderr);
+    backupFile = backup.body.Path;
+    assert.equal(path.dirname(backupFile), path.join(instance, 'data/data/backups'));
+    assert.deepEqual((await call('/Backup/Manifest?path=' + encodeURIComponent(backupFile))).body, backup.body);
+    const lateUser = await call('/Users/New', { method: 'POST', body: { Name: 'After backup' } });
+    assert.equal(lateUser.status, 200);
+    assert.equal((await call('/System/Configuration', { method: 'POST', body: { ...savedConfiguration, ServerName: 'After backup' } })).status, 204);
+    assert.equal((await call('/System/Configuration')).body.ServerName, 'After backup');
+    await storage.fileSystem.writeFile(witness, Buffer.from('changed metadata'));
+    await writeFile(inside, 'changed subtitle'); await writeFile(outside, 'after');
+    const restore = await call('/Backup/Restore', { method: 'POST', body: { ArchiveFileName: backupFile }, timeout: 30000 });
+    assert.equal(restore.status, 204, stderr); assert.equal(restore.text, '');
+    await until('restored configuration on the restarted listener', () => call('/System/Configuration', { record: false }),
+      value => value.status === 200 && value.body.ServerName === savedConfiguration.ServerName);
+    assert.equal((await call('/Users/' + lateUser.body.Id)).status, 404);
+    assert.deepEqual(await database.rows('Users', { where: { Id: nativeGuid(lateUser.body.Id) } }), []);
+    await verifyRetained('after actual backup restore');
+    assert.equal(await storage.fileSystem.readFile(inside, 'utf8'), 'saved subtitle');
+    assert.equal(await storage.fileSystem.readFile(outside, 'utf8'), 'after');
+    assert.equal((await call('/Users/New', { method: 'POST', body: { Name: 'After backup' } })).status, 200);
+    report.backup = { manifest: backup.body, restore: restore.status, savedConfigurationReloaded: true,
+      lateUserRemovedAndRecreated: true, metadata: report.original.sha256, subtitleRestored: true, excludedTrickplayRetained: true };
+    t.diagnostic(JSON.stringify(report.backup));
     const beforeShutdown = await resources();
     const shutdown = await whileQueriesBlocked(() => call('/System/Shutdown', { method: 'POST', remote: '203.0.113.10' }));
     assert.equal(shutdown.status, 204); assert.equal(shutdown.text, ''); assert.equal(shutdown.contentType, null);
@@ -387,6 +415,9 @@ test('the actual production CLI retains its selected target across HTTP restarts
       try { await close(); report.fixtureCleanup[name] = true; }
       catch (error) { cleanupFailures.push(error); }
     };
+    if (backupFile && path.dirname(backupFile) === path.join(root, 'instance/data/data/backups')) {
+      await cleanup('isolated backup archive', () => unlink(backupFile));
+    }
     if (socket) await cleanup('WebSocket', () => { socket.terminate(); socket = undefined; });
     if (child && !childResult) {
       report.fixtureCleanup.forcedProcessStop = true;

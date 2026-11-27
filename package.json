@@ -34,7 +34,8 @@
     "pg": "^8.23.0",
     "sharp": "0.35.4",
     "transliteration": "2.6.1",
-    "ws": "^8.21.3"
+    "ws": "^8.21.3",
+    "yazl": "3.3.1"
   },
   "devDependencies": {
     "acorn": "8.15.0",

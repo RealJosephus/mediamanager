@@ -44,6 +44,7 @@ import { registerActivityLogRoutes } from './activity-log-routes.js';
 import { registerMediaSegmentRoutes } from './media-segment-routes.js';
 import { registerLyricRoutes } from '../lyrics/routes.js';
 import { registerSystemLifecycleRoutes } from './system-lifecycle-routes.js';
+import { registerBackupRoutes } from './backup-routes.js';
 import { registerSystemInformationRoutes } from './system-information-routes.js';
 import { registerEnvironmentRoutes } from './environment-routes.js';
 import { registerClientLogRoutes } from './client-log-routes.js';
@@ -112,6 +113,7 @@ export async function createApplication(services = {}) {
   registerMediaSegmentRoutes(add, services);
   registerLyricRoutes(add, services);
   registerSystemLifecycleRoutes(add, services);
+  registerBackupRoutes(add, services);
   registerSystemInformationRoutes(add, services, localization);
   registerClientLogRoutes(add, services, localization);
   registerEnvironmentRoutes(add, { ...services, localization });

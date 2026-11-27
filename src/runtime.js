@@ -23,6 +23,7 @@ import { guid, nonemptyId, libraryError, sameId } from './library/records.js';
 import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
 import { createConfiguredStorage } from './storage-bootstrap.js';
 import { DomainStore } from './database/domain-store.js';
+import { SystemBackups } from './system/backups.js';
 import { ActivityLogManager } from './activity/manager.js';
 import { UserService, AuthenticationService, ApiKeyService, DeviceService, QuickConnectService, PasswordResetService } from './users/index.js';
 import { createAudioBookItemResolver, createAudioItemResolver, createBookItemResolver, createBoxSetItemResolver, createPhotoAlbumResolver, createPhotoItemResolver, createPlaylistItemResolver, createTvItemResolver, createVideoFileResolver, DirectoryItemResolverPipeline, FolderValidationService, LibraryDirectoryMonitor, LibraryMonitorHost, ItemCreationService, ItemDeletionService, LibraryMetadataScanService, LibraryScanHost, LibraryScanLifecycle, LibraryScanService, LibraryService, LinkedChildReferenceService, MusicGenresPostScanTask, PlaylistService, ResolvedItemLifecycleHost, SimilarItemsManager, TopLevelFolderValidationService } from './library/index.js';
@@ -192,6 +193,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const metadataVfs=usesConfiguredStorage?configuredStorage.metadataVfs:vfs;
   const metadataIdentityMap=usesConfiguredStorage?configuredStorage.metadataIdentityMap:identityMap;
   rollback.push(() => configuredStorage.close());
+  const backups = dataPath && new SystemBackups({ paths: applicationPaths, storage: configuredStorage, store, serverId, serverVersion });
+  await backups?.restorePending();
   const storageReadiness = { ready: false, error: null };
   const unavailableStorage = error => ['ENOTSUP','not-supported','unmapped-path'].includes(error?.code);
   const deferUnavailable = async operation => {
@@ -775,6 +778,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   services.applicationPaths = applicationPaths;
   services.networkHost = networkHost;
   services.systemLifecycle = systemLifecycle;
+  services.backups = backups;
   await plugins.connect({ ...services, get configuration() { return currentConfiguration(); }, vfs, identityMap, metadataVfs, metadataIdentityMap, loadContext, seriesLifecycle, metadataImages, spoolRoot, fileSystem });
   application = await createApplication({ ...services, get configuration() { return currentConfiguration(); }, onError });
   rollback.push(async () => { application.beginClose(); await application.drainRequests(); });
