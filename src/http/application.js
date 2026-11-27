@@ -187,7 +187,7 @@ export async function createApplication(services = {}) {
         response.statusCode = result.status;
         if (result.body === undefined || result.status === 204) { response.end(); return; }
         const accept = request.headers.accept ?? '';
-        const json = !result.text || accept.includes('application/json');
+        const json = !result.text || accept.toLowerCase().includes('application/json');
         const profile = jsonProfile(accept);
         response.setHeader('Content-Type', json ? 'application/json' + (profile ? '; profile="' + profile + '"' : '') + '; charset=utf-8' : 'text/plain; charset=utf-8');
         const body = json ? stringifyNativeJson(result.body, { camel: profile === 'CamelCase' }) : result.body;

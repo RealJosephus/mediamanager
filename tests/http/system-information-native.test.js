@@ -126,6 +126,7 @@ test('system storage and the log browser use the authoritative application and l
     const key = (name, route, status = 200, options = {}) => ({ name, route, status, ...options });
     const logRoute = name => '/System/Logs/Log?name=' + encodeURIComponent(name);
     const samples = [
+      key('mixed-case JSON ping', '/System/Ping', 200, { identity: 'anonymous', headers: { Accept: 'Application/JSON' } }),
       key('storage', '/System/Info/Storage'),
       key('list', '/System/Logs'),
       key('read by ordinal case-insensitive name', logRoute('CONTRACT-NEWEST.TXT')),
@@ -187,6 +188,10 @@ test('system storage and the log browser use the authoritative application and l
           assert.deepEqual(logs(entry.node), logs(entry.native));
           assert.deepEqual(logs(entry.node).map(log => log.Name), ['contract-newest.txt', 'contract-older.LOG']);
           assert.equal(entry.node.json.some(log => /contract-(raw|nested|subfolder)/u.test(log.Name)), false);
+        } else if (entry.sample.name === 'mixed-case JSON ping') {
+          assert.equal(entry.node.contentType, entry.native.contentType);
+          assert.equal(entry.native.text, '"Jellyfin Server"');
+          assert.equal(entry.node.text, '"MediaManager"');
         } else {
           assert.deepEqual(shape(entry.node), shape(entry.native));
           if (entry.sample.name === 'read by ordinal case-insensitive name') assert.equal(entry.node.text, selectedLogs['contract-newest.txt']);

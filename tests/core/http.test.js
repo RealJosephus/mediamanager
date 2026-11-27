@@ -53,6 +53,12 @@ test('HTTP keeps native culture data with fixed English messages and MediaManage
     if (reference.route.endsWith('/Options')) expected = expected.filter(item=>item.Value === 'en-US');
     assert.deepEqual(await response.json(),expected,reference.route+' '+reference.language);
   }
+  for (const method of ['GET', 'POST']) {
+    const ping = await fetch(base + '/System/Ping', { method, headers: { Accept: 'Application/JSON' } });
+    assert.equal(ping.status, 200);
+    assert.equal(ping.headers.get('content-type'), 'application/json; charset=utf-8');
+    assert.equal(await ping.text(), '"MediaManager"');
+  }
 });
 
 test('real authentication protects routes and missing routes never fabricate a result', {
