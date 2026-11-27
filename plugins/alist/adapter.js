@@ -354,6 +354,13 @@ export class AListAdapter {
       const version = response.headers.get('etag');
       if (options.ifMatch && version !== options.ifMatch) throw new StorageError(version ? 'version-changed' : 'not-supported', 'The backend did not prove the requested object version.');
       const rangeHonored = response.status === 206;
+      if (rangeHonored && options.ifRange) {
+        const condition = options.ifRange;
+        const matches = /^"[^"\r\n\0]*"$/u.test(condition)
+          ? version === condition
+          : !condition.startsWith('W/') && Date.parse(condition) === Date.parse(response.headers.get('last-modified'));
+        if (!matches) throw new StorageError('version-changed', 'AList did not confirm the requested range validator.');
+      }
       let range = null;
       let totalSize = null;
       const contentLength = lengthHeader(response.headers.get('content-length'));

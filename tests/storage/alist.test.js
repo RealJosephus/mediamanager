@@ -84,6 +84,7 @@ test('AList Range, suffix, If-Range, ignored ranges and 416 preserve actual upst
     if (request.url === '/api/fs/get') { json(response, { ...file('bytes'), raw_url: `${api}/raw` }); return; }
     requested.push(request.headers);
     response.setHeader('ETag', '"v1"');
+    response.setHeader('Last-Modified', 'Wed, 15 Nov 2023 12:00:00 GMT');
     response.setHeader('Accept-Ranges', 'bytes');
     response.setHeader('Content-Type', 'application/octet-stream');
     if (mode === 'range') { response.writeHead(206, { 'Content-Range': 'bytes 2-4/10', 'Content-Length': '3' }); response.end('234'); }
@@ -111,6 +112,10 @@ test('AList Range, suffix, If-Range, ignored ranges and 416 preserve actual upst
   assert.equal(full.totalSize, 10n);
   assert.equal((await read(full)).toString(), '0123456789');
   assert.equal(requested[2]['if-range'], '"old"');
+  mode = 'range';
+  const range = { start: 2, end: 4 };
+  assert.equal((await read(await adapter.openRead('/bytes', { range, ifRange: 'Wed, 15 Nov 2023 12:00:00 GMT' }))).toString(), '234');
+  await assert.rejects(adapter.openRead('/bytes', { range, ifRange: 'Thu, 16 Nov 2023 12:00:00 GMT' }), { code: 'version-changed' });
   mode = 'invalid';
   await assert.rejects(adapter.openRead('/bytes', { range: { start: 2, end: 4 } }), { code: 'invalid-response' });
   mode = 'outside';
