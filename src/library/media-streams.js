@@ -11,7 +11,17 @@ const equal = (a, b) => typeof a === 'string' && typeof b === 'string' && a.toLo
 const contains = (value, fragment) => (value ?? '').toLowerCase().includes(fragment.toLowerCase());
 const firstUpper = value => value ? value[0].toUpperCase() + value.slice(1) : value;
 const culture = value => value ? cultures.find(entry => [entry.display, entry.name, entry.short, ...entry.codes].some(name => equal(name, value))) : undefined;
-export const normalizeLanguage = value => !value ? [] : culture(value)?.name.includes('-') ? [culture(value).name] : culture(value)?.codes ?? [value];
+const legacyLanguageTags = new Map([['pob', 'pt-br'], ['pb', 'pt-br'], ['pop', 'pt-pt'], ['es-mx', 'es-419']]);
+
+export function normalizeLanguage(value) {
+  if (!value) return [];
+  const entry = culture(legacyLanguageTags.get(value.toLowerCase()) ?? value);
+  if (!entry) return [value];
+  const [base, region] = entry.short.split('-');
+  const codes = region ? [entry.short, ...entry.codes, ...culture(base)?.codes ?? []] : [...entry.codes];
+  codes.push(value);
+  return codes.filter((code, index) => codes.findIndex(other => equal(other, code)) === index);
+}
 
 function localized(key, options) {
   const selected = options.localization?.context.uiCulture || options.culture || options.configuration?.UICulture || 'en-US';

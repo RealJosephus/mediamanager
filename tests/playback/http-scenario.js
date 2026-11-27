@@ -60,14 +60,17 @@ export async function createMediaFixture({ port = 0, subtitleRoot } = {}) {
     async close() { await registry.close(); server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); } };
 }
 
-export async function recordPlayback(origin) {
+export async function recordPlayback(origin, { accessToken, negotiationOnly = false } = {}) {
   const authorization = token => `MediaBrowser Client="PlaybackExpansion", Device="Isolated", DeviceId="playback-http", Version="1"${token ? `, Token="${token}"` : ''}`;
-  const login = await fetch(origin + '/Users/AuthenticateByName', { method: 'POST', headers: { Authorization: authorization(), 'Content-Type': 'application/json' }, body: '{"Username":"CoreFlowAdmin","Pw":"isolated-core-flow-password"}' });
-  const user = await login.json();
-  if (!user.AccessToken) throw new Error('Isolated playback login failed.');
+  if (!accessToken) {
+    const login = await fetch(origin + '/Users/AuthenticateByName', { method: 'POST', headers: { Authorization: authorization(), 'Content-Type': 'application/json' }, body: '{"Username":"CoreFlowAdmin","Pw":"isolated-core-flow-password"}' });
+    accessToken = (await login.json()).AccessToken;
+    if (!accessToken) throw new Error('Isolated playback login failed.');
+  }
   const records = [];
   async function call(name, route, { method = 'GET', body, headers = {}, authenticated = true } = {}) {
-    const response = await fetch(origin + route, { method, headers: { ...(authenticated ? { Authorization: authorization(user.AccessToken) } : {}), 'Accept-Language': 'en-US', ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...headers }, body: body === undefined ? undefined : stringifyNativeJson(body) });
+    if (negotiationOnly && !name.startsWith('info-')) return;
+    const response = await fetch(origin + route, { method, headers: { ...(authenticated ? { Authorization: authorization(accessToken) } : {}), 'Accept-Language': 'en-US', ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...headers }, body: body === undefined ? undefined : stringifyNativeJson(body) });
     const bytes = Buffer.from(await response.arrayBuffer());
     let value;
     try { value = parseLosslessJson(bytes.toString()); } catch { value = { base64: bytes.toString('base64'), sha256: createHash('sha256').update(bytes).digest('hex') }; }
@@ -93,5 +96,5 @@ export async function recordPlayback(origin) {
   const sub = `/Videos/${movieId}/${movieId}/Subtitles/5`;
   for(const [name,route] of [['srt',sub+'/Stream.srt'],['vtt',sub+'/Stream.vtt'],['json',sub+'/Stream.js'],['offset',sub+'/20000000/Stream.vtt'],['copy',sub+'/20000000/Stream.vtt?copyTimestamps=true'],['time-map',sub+'/Stream.vtt?addVttTimeMap=true'],['same-format-offset',sub+'/20000000/Stream.srt'],['query-offset',sub+'/90000000/Stream.vtt?startPositionTicks=20000000']]) await call(`subtitle-${name}`,route);
   for(const [name,route] of [['subrip',sub+'/Stream.subrip'],['subrip-offset',sub+'/20000000/Stream.subrip'],['webvtt',sub+'/Stream.webvtt']]) await call(`subtitle-alias-${name}`,route);
-  return { records, accessToken: user.AccessToken };
+  return { records, accessToken };
 }

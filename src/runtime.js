@@ -213,7 +213,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const activities = new ActivityLogManager({ store, localization, onError });
   rollback.push(() => activities.close());
   const isLocalNetwork = address => network.isInLocalNetwork(address);
-  const users = new UserService({ store, serverId, activities, isLocalNetwork,
+  const users = new UserService({ store, serverId, activities, isLocalNetwork, getCulture: () => localization.context.culture,
     get castReceiverApplications() { return currentConfiguration().CastReceiverApplications ?? []; } });
   const liveTv = new LiveTvService({ users, configurationDirectoryPath, onError });
   rollback.push(() => liveTv.close());
@@ -454,6 +454,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       itemCreation, refresh: (reference, options) => metadata.refresh(reference, options), logger, now: metadataNow });
     metadata = new MetadataRefreshHost({ registry, loadContext, store, linkedChildren, vfs, logger, userData, probe, externalData, trickplay,
       images: metadataImages, updates: metadataUpdates, seriesLifecycle, now: metadataNow });
+    playback.metadata = metadata;
     cancelMetadata = () => metadata.cancel();
     rollback.push(async () => { await bookArchives.close(); await metadata.close(); });
     Object.assign(metadata, { saver });

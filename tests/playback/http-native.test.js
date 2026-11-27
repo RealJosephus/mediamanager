@@ -8,6 +8,8 @@ import { fileURLToPath } from 'node:url';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { createPlaybackState } from './runtime-state.js';
+import { recordCurrentNegotiation } from './current-negotiation.js';
+import { declareNativeHttpTestFile } from '../helpers/native-http-test-file.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { createTestRuntime } from '../helpers/runtime.js';
@@ -18,8 +20,11 @@ import streamsFixture from '../library/fixtures/reference-streams.json' with { t
 import { subtitleLayoutProjection } from './layout-projection.js';
 import { observeComparison } from '../comparison-observations.js';
 import { projectPlaybackTransportBody } from '../helpers/playback-transport-projection.js';
-const expected = parseLosslessJson(await readFile(new URL('./fixtures/http-reference.json', import.meta.url), 'utf8'));
-export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
+// The original capture still describes the controlled upstream byte and sidecar responses.
+const historical = parseLosslessJson(await readFile(new URL('./fixtures/http-reference.json', import.meta.url), 'utf8'));
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
+const enabled = Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE);
+const nativeCallback = declareNativeHttpTestFile({ enabled, port: 21672 });
 const readerFixture = new URL('../consumer-contracts/fixtures/readers/input.json', import.meta.url);
 const readerInput = await readFile(readerFixture);
 const readerOutput = path.join(validationOutputRoot(), 'playback-consumer-readers-' + randomUUID());
@@ -45,12 +50,16 @@ async function seed(database) {
   await database.update('BaseItems',{Id:'22222222-2222-2222-2222-222222222222'},{TotalBitrate:null});
 }
 
-test('native HTTP original bytes, complete negotiation and generated subtitle semantics on PostgreSQL',{skip:!process.env.MEDIAMANAGER_TEST_POSTGRES},async t=>{
+test('native HTTP original bytes, complete negotiation and generated subtitle semantics on PostgreSQL',{skip:!enabled},nativeCallback(async (t, port)=>{
   const schema = `playback_http_${Date.now()}`;
   let database, runtime, recorded, runtimePort, fixturePort;
   const delivered = [], layouts = [], substitutions = [];
   const state = await createPlaybackState();
   t.after(() => state.close());
+  const current = await recordCurrentNegotiation({ root: state.root, output: readerOutput, port, libraryFixture, streamsFixture });
+  assert.equal(current.records.length, 7);
+  const expected = { ...historical, records: historical.records.map(record => record.name.startsWith('info-')
+    ? current.records.find(entry => entry.name === record.name) : record) };
   const fixture = await createMediaFixture({subtitleRoot});
   try {
     database=await PostgresDatabase.open({connectionString:process.env.MEDIAMANAGER_TEST_POSTGRES,schema,create:true});await seed(database);
@@ -100,14 +109,18 @@ test('native HTTP original bytes, complete negotiation and generated subtitle se
         assert.match(record.body.PlaySessionId, /^[a-f0-9]{32}$/u);
         assert.equal(sessions.has(record.body.PlaySessionId), false); sessions.add(record.body.PlaySessionId);
       }
-      const path = value => value === identities.subtitleRoot || value.startsWith(identities.subtitleRoot + '\\')
-        || value.startsWith(identities.subtitleRoot + '/') ? '<subtitle-root>' + value.slice(identities.subtitleRoot.length) : value;
+      const path = value => {
+        if (value === identities.moviePath) return libraryFixture.tables.BaseItems.find(item => item.Id.replaceAll('-', '') === movieId).Path;
+        if (value === identities.subtitleRoot || value.startsWith(identities.subtitleRoot + '\\') || value.startsWith(identities.subtitleRoot + '/'))
+          return '<subtitle-root>' + value.slice(identities.subtitleRoot.length).replaceAll('\\', '/');
+        return value;
+      };
       return { ...record, body: projectPlaybackTransportBody(record.body, { status: record.status, token: identities.token, path }) };
     };
     for(let index=0;index<expected.records.length;index++) {
       if (generated.has(expected.records[index].name)) observeComparison(t, expected.records[index].name + ' generated delivery', actual.records[index], expected.records[index]);
       assert.deepEqual(contract(actual.records[index], candidateSessions, { token: actual.accessToken, subtitleRoot }),
-        contract(expected.records[index], nativeSessions, { token: expected.accessToken, subtitleRoot: expected.subtitleRoot }), expected.records[index].name);
+        contract(expected.records[index], nativeSessions, { token: current.accessToken, subtitleRoot: current.subtitleRoot, moviePath: current.moviePath }), expected.records[index].name);
     }
     const sub = `/Videos/${movieId}/${movieId}/Subtitles/5`;
     for (const [name, route, format] of [['subtitle-vtt', sub + '/Stream.vtt', 'vtt'],
@@ -167,6 +180,21 @@ test('native HTTP original bytes, complete negotiation and generated subtitle se
     assert.equal((await fetch(`http://127.0.0.1:${runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port}/Items/${movieId}/File`)).status,401);
     assert.equal(fixture.requests.length,before,'Unauthorized callers must not open storage.');
     fixture.setSlow(true);
+    const movieRowId = streamsFixture.rows[0].ItemId;
+    for (const StreamIndex of [2, 3]) {
+      await database.update('MediaStreamInfos', { ItemId: movieRowId, StreamIndex }, { Language: 'por' });
+    }
+    const origin = 'http://127.0.0.1:' + runtimePort;
+    const headers = { Authorization: 'MediaBrowser Token="' + actual.accessToken + '"', 'Content-Type': 'application/json' };
+    const configured = await fetch(origin + '/Users/Configuration', { method: 'POST', headers,
+      body: JSON.stringify({ ...streamsFixture.user, RememberAudioSelections: false, RememberSubtitleSelections: false,
+        PlayDefaultAudioTrack: false, AudioLanguagePreference: 'pt-br', SubtitleLanguagePreference: 'pt-br', SubtitleMode: 'Always' }) });
+    assert.equal(configured.status, 204);
+    const preferred = await fetch(origin + '/Items/' + movieId + '/PlaybackInfo', { headers });
+    assert.equal(preferred.status, 200);
+    const [selected] = (await preferred.json()).MediaSources;
+    assert.deepEqual([selected.DefaultAudioStreamIndex, selected.DefaultSubtitleStreamIndex], [2, 3]);
+
     const response=await fetch(`http://127.0.0.1:${runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port}/Items/${movieId}/File`,{headers:{Authorization:`MediaBrowser Token="${actual.accessToken}"`}});
     assert.equal(response.status,200);
     const reader=response.body.getReader();assert.equal((await reader.read()).done,false);await reader.cancel();
@@ -183,8 +211,9 @@ test('native HTTP original bytes, complete negotiation and generated subtitle se
     await mkdir(output, { recursive: false });
     await writeFile(path.join(output, 'postgres.json'), JSON.stringify({ actual: recorded, schema, subtitleRoot,
       runtimePort, fixturePort, delivered, layouts, substitutions, readerOutput, readerRecord,
+      historicalByteCapture: historical.source, currentNegotiation: current.preparation,
       upstreamRequests: fixture.requests, cancelledReads: fixture.cancelledReads,
       runtimeStopped: runtime.networkHost.listeners.every(entry => !entry.server.listening), fixtureStopped: fixture.server.listening === false },
       (_key, value) => typeof value === 'bigint' ? JSON.rawJSON(value.toString()) : value, 2) + '\n', { flag: 'wx' });
   }
-});
+}));

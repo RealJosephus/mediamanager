@@ -38,7 +38,7 @@ function universalAudioProfile(containers, options) {
   };
 }
 
-function selectUniversalAudioSource(sources, itemId, bitrate) {
+function negotiatedMediaSources(sources, itemId, bitrate) {
   const preferred = itemId.replaceAll('-', '').toLowerCase();
   const order = source => [source.Id.toLowerCase() === preferred ? 0 : 1,
     source.SupportsDirectPlay && source.Protocol === 'File' ? 0 : 1,
@@ -50,7 +50,7 @@ function selectUniversalAudioSource(sources, itemId, bitrate) {
       if (difference) return difference;
     }
     return 0;
-  })[0]?.source;
+  }).map(entry => entry.source);
 }
 
 export class PlaybackService {
@@ -112,10 +112,12 @@ export class PlaybackService {
     let sources = await this.library.getMediaSources(item.Id, { user, dynamicSources });
     const primary = sources[0];
     const shortcut = /\.strm$/iu.test(item.Path ?? '');
-    if (primary && primary.Type !== 'Placeholder' && (shortcut || !primary.MediaStreams.some(stream => stream.Type === item.MediaType))) {
-      if (!this.probe) throw httpError(503, 'Media probing has not been configured.');
-      await this.probe.refresh(item.Id, { force: true, signal, enableRemoteContentProbe: shortcut, metadataRefreshMode: 'FullRefresh' });
-      sources = await this.library.getMediaSources(item.Id, { user });
+    if (primary && primary.Type !== 'Placeholder' && (shortcut || ['Audio', 'Video'].includes(item.MediaType)
+      && !primary.MediaStreams.some(stream => stream.Type === item.MediaType))) {
+      if (this.metadata) await this.metadata.refresh(item.Id, { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'Default', IsAutomated: true, EnableRemoteContentProbe: true, signal });
+      else if (this.probe) await this.probe.refresh(item.Id, { force: true, signal, enableRemoteContentProbe: true, metadataRefreshMode: 'FullRefresh' });
+      else throw httpError(503, 'Media probing has not been configured.');
+      sources = await this.library.getMediaSources(item.Id, { user, dynamicSources });
     }
     return sources;
   }
@@ -150,7 +152,7 @@ export class PlaybackService {
         source.SupportsDirectStream = false;
       }
     }
-    const source = selectUniversalAudioSource(sources, item.Id, options.MaxStreamingBitrate);
+    const source = negotiatedMediaSources(sources, item.Id, options.MaxStreamingBitrate)[0];
     if (source.SupportsDirectPlay && source.Protocol === 'Http' && source.IsRemote
       && options.EnableRedirection !== false && options.EnableRemoteMedia === true) {
       return new BinaryResult(async (_request, response) => {
@@ -213,12 +215,13 @@ export class PlaybackService {
       if (!user) throw httpError(404, 'User not found.');
       await this.hls?.initialize();
       const limit = user.RemoteClientBitrateLimit > 0 ? user.RemoteClientBitrateLimit : this.configuration.RemoteClientBitrateLimit;
-      if (limit > 0 && this.isLocalNetwork && !this.isLocalNetwork(remoteEndPoint)) options.MaxStreamingBitrate = Math.min(options.MaxStreamingBitrate ?? limit, limit);
+      const requested = options.MaxStreamingBitrate ?? profile.MaxStreamingBitrate;
+      const max = limit > 0 && this.isLocalNetwork && !this.isLocalNetwork(remoteEndPoint) ? Math.min(requested ?? limit, limit) : requested;
       for (const source of sources) {
         const specific = options.MediaSourceId?.toLowerCase() === source.Id.toLowerCase();
         const policy = user.Policy;
         const mediaEncoder = this.hls?.mediaEncoder ?? this.remux?.mediaEncoder;
-        negotiateSource(source, item, profile, { ...options, AccessToken: auth.Token, DeviceId: auth.DeviceId, PlaySessionId: result.PlaySessionId,
+        negotiateSource(source, item, profile, { ...options, MaxStreamingBitrate: max, AccessToken: auth.Token, DeviceId: auth.DeviceId, PlaySessionId: result.PlaySessionId,
           EnableSubtitleExtraction: this.getEncodingOptions().EnableSubtitleExtraction,
           EnableRemuxing: policy.EnableMediaPlayback && (item.MediaType === 'Audio' ? policy.EnablePlaybackRemuxing || policy.EnableAudioPlaybackTranscoding
             : policy.EnablePlaybackRemuxing || policy.EnableAudioPlaybackTranscoding || policy.EnableVideoPlaybackTranscoding),
@@ -237,6 +240,7 @@ export class PlaybackService {
         }
         if (source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) { source.SupportsDirectPlay = false; source.SupportsDirectStream = false; }
       }
+      result.MediaSources = sources = negotiatedMediaSources(sources, item.Id, options.MaxStreamingBitrate);
     }
     if (item.Type === 'LiveTvChannel' && item.SourceType === 'LiveTV') for (const source of sources) if (!source.LiveStreamId) {
       source.SupportsTranscoding = false; delete source.TranscodingUrl; delete source.TranscodingContainer;
