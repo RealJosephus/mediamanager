@@ -14,13 +14,12 @@ import { writeEmby } from './write-emby.js';
 import { openPublication } from './publication.js';
 import { originCoverage } from './coverage.js';
 import { readJellyfinLibraryOptions, reconcileJellyfinLibraryRemovals, writeJellyfinLibraryOptions } from './libraries.js';
-import { activateMetadata, collectAssets, libraryRoot, metadataDirectory, projectAssetRows } from './assets.js';
+import { activateMetadata, cloneInstance, collectAssets, libraryRoot, metadataDirectory, projectAssetRows } from './assets.js';
 import {
   directory,
   exists,
   inside,
   stateDirectory,
-  cloneDirectory,
   openExchangeState,
   writeRowChunks,
   sealState,
@@ -250,7 +249,7 @@ export async function exchange({
   try {
     if (publication.pending) return await publish(publication.pending, true);
     const prior = await openExchangeState(source, sourceType);
-    await cloneDirectory(source, captured, { skipState: true });
+    await cloneInstance(source, captured, sourceType, metadataRoot);
     const preparationIssues = prepareSource ? await prepareSource(captured, jellyDb(captured), work) : [];
     await assertInput(captured, sourceType);
     const sourceDb = connect(captured, sourceType, sourceType !== 'jellyfin');
@@ -288,7 +287,7 @@ export async function exchange({
       if (sourceType === 'emby') retainedSourceColumns = originCoverage(sourceDb);
       sourceId = await identity(captured, sourceType, sourceDb);
       const seed = template ?? prior?.origin;
-      if (seed) await cloneDirectory(seed, target, { skipState: true });
+      if (seed) await cloneInstance(seed, target, targetType, template ? templateMetadataRoot : prior?.external);
       else if (targetType === 'jellyfin') await createJellyfin(target, sourceId);
       else
         throw new Error(
@@ -500,6 +499,7 @@ export async function exchange({
       baseline?.assets?.target,
       baseline?.assets?.source,
       report,
+      { attributes: true },
     );
     const libraries = (root, type) => path.join(root, type === 'emby' ? '' : 'data', 'root', 'default');
     // The destination writer applies library options using its native format.
@@ -522,7 +522,7 @@ export async function exchange({
       rowChunks,
       assets,
       aliases,
-      inputAssets.extra ? inputAssets.directory : null,
+      inputAssets,
       importedMarkerReader,
       providerState,
     );

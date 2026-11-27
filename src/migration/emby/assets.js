@@ -148,17 +148,21 @@ async function snapshotSidecars(entry, destination, selected, report) {
   }
   return captured;
 }
+function activeMetadata(instance, original, type, settings, override) {
+  if (override) return override;
+  if (!settings.identity || (type === 'emby' && inside(original, settings.setting))) return metadataDirectory(instance, type);
+  const local = relativeTo(original, settings.identity);
+  return local === null ? settings.identity : path.join(instance, local);
+}
+
+export async function cloneInstance(source, target, type, override) {
+  const metadataRoot = activeMetadata(source, source, type, await readSetting(source, type), override);
+  return cloneDirectory(source, target, { skipState: true, metadataRoot });
+}
+
 export async function collectAssets({ instance, original, type, stage, override, roots, rows = [], report }) {
-  const standard = metadataDirectory(instance, type),
-    settings = await readSetting(instance, type);
-  let active = standard;
-  if (settings.identity) {
-    const local = relativeTo(original, settings.identity);
-    if (local !== null && (type !== 'emby' || !inside(original, settings.setting)))
-      active = path.join(instance, local);
-    else if (type !== 'emby' || !inside(original, settings.setting)) active = settings.identity;
-  }
-  if (override) active = override;
+  const standard = metadataDirectory(instance, type), settings = await readSetting(instance, type);
+  const active = activeMetadata(instance, original, type, settings, override);
   if (active !== standard && (!(await exists(active)) || !path.isAbsolute(active)))
     throw new Error(
       'Configured metadata is unavailable. Supply --metadata-root with the stopped physical metadata directory.',
@@ -169,7 +173,7 @@ export async function collectAssets({ instance, original, type, stage, override,
     if (await exists(active)) {
       if (path.parse(active).root === active)
         throw new Error('A filesystem root cannot be captured as metadata');
-      await cloneDirectory(active, stage);
+      await cloneDirectory(active, stage, { metadataRoot: active });
     } else await mkdir(stage, { mode: 0o700 });
     const referenced = referencedFiles(rows, roots);
     for (const entry of roots) captured.set(entry.id,
@@ -189,7 +193,7 @@ export async function activateMetadata(target, type, effective, unused) {
   if (effective && path.resolve(effective) !== path.resolve(dir)) {
     if (await exists(dir)) await rename(dir, unused);
     await mkdir(path.dirname(dir), { recursive: true, mode: 0o700 });
-    await cloneDirectory(effective, dir);
+    await cloneDirectory(effective, dir, { metadataRoot: effective });
   }
   if (setting.setting)
     await writeFile(setting.file, rebaseSystemConfiguration(setting.bytes, { MetadataPath: '' }));

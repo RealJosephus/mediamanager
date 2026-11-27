@@ -86,14 +86,29 @@ export async function inventory(root, options) {
   const members = Object.create(null);
   for (const file of files)
     Object.defineProperty(members, file, { value: await fileHash(path.join(root, file)), enumerable: true });
-  return { directories, members };
+  const result = { directories, members };
+  if (options?.attributes) {
+    result.attributes = Object.create(null);
+    for (const name of [...files, ...directories, '']) {
+      const stat = await lstat(path.join(root, name), { bigint: true });
+      result.attributes[name] = { mode: Number(stat.mode & 0o7777n), mtimeUs: String(stat.mtimeNs / 1000n) };
+    }
+  }
+  return result;
 }
-async function restoreDirectoryAttributes(source, target) {
-  const stat = await lstat(source);
-  await chmod(target, stat.mode & 0o7777);
-  await utimes(target, stat.atimeMs / 1000, stat.mtimeMs / 1000);
+// utimes takes floating-point seconds. Some filesystems truncate the fraction
+// to microseconds, so keep a representational round-down from losing a tick on every clone.
+function timestampSeconds(micros) {
+  const value = Number(micros) / 1e6, whole = Math.floor(value);
+  const fraction = Number(BigInt(micros) - BigInt(whole) * 1000000n);
+  return (value - whole) * 1e6 < fraction ? (Number(micros) + 0.5) / 1e6 : value;
 }
-export async function cloneDirectory(source, destination, { skipState = false } = {}) {
+async function restoreAttributes(source, target, permissionMask = 0o7777n) {
+  const stat = await lstat(source, { bigint: true });
+  await chmod(target, Number(stat.mode & permissionMask));
+  await utimes(target, Number(stat.atimeNs) / 1e9, timestampSeconds(stat.mtimeNs / 1000n));
+}
+export async function cloneDirectory(source, destination, { skipState = false, metadataRoot } = {}) {
   await directory(source);
   if (inside(source, destination) || inside(destination, source))
     throw new Error('Source and destination overlap');
@@ -102,12 +117,10 @@ export async function cloneDirectory(source, destination, { skipState = false } 
   for (const name of before.directories) await mkdir(path.join(destination, name), { mode: 0o700 });
   for (const [name, sha] of Object.entries(before.members)) {
     const from = path.join(source, name),
-      to = path.join(destination, name),
-      stat = await lstat(from);
+      to = path.join(destination, name);
     await copyFile(from, to, constants.COPYFILE_EXCL);
     if ((await fileHash(to)) !== sha) throw new Error('Source changed while copying ' + name);
-    await chmod(to, stat.mode & 0o777);
-    await utimes(to, stat.atime, stat.mtime);
+    await restoreAttributes(from, to, metadataRoot && inside(metadataRoot, from) ? 0o7777n : 0o777n);
   }
   const after = await inventory(source, { skipState });
   if (JSON.stringify(after) !== JSON.stringify(before))
@@ -115,7 +128,7 @@ export async function cloneDirectory(source, destination, { skipState = false } 
   // Creating children changes their parent's mtime. Restore permissions and
   // times from the leaves up, after all destination entries exist.
   for (const name of ['', ...before.directories].reverse()) {
-    await restoreDirectoryAttributes(path.join(source, name), path.join(destination, name));
+    await restoreAttributes(path.join(source, name), path.join(destination, name));
   }
   return before;
 }
@@ -190,14 +203,15 @@ export async function sealState(
   rowChunks,
   assets,
   aliases,
-  external,
+  inputAssets,
   importedMarkerReader,
   providerState,
 ) {
   const state = path.join(root, stateDirectory);
-  const captured = await cloneDirectory(source, path.join(state, 'origin'), { skipState: true });
+  const captured = await cloneDirectory(source, path.join(state, 'origin'), { skipState: true, metadataRoot: inputAssets.directory });
+  const external = inputAssets.extra && inputAssets.directory;
   const assetHash = external
-    ? hash(JSON.stringify(await cloneDirectory(external, path.join(state, 'source-metadata'))))
+    ? hash(JSON.stringify(await cloneDirectory(external, path.join(state, 'source-metadata'), { metadataRoot: external })))
     : undefined;
   const base = { chapterMarkerVersion: 1, ...rowChunks, assets, aliases, providerState };
   await writeJson(path.join(state, 'base.json'), base);
@@ -228,21 +242,26 @@ function assetTree(snapshot) {
   const root = new Map(), directories = new Map([['.', root]]);
   for (const name of snapshot.directories) {
     const children = new Map();
-    directories.get(path.posix.dirname(name)).set(path.posix.basename(name), { kind: 'directory', children });
+    directories.get(path.posix.dirname(name)).set(path.posix.basename(name), { kind: 'directory', children, attributes: snapshot.attributes?.[name] });
     directories.set(name, children);
   }
   for (const [name, digest] of Object.entries(snapshot.members)) {
-    directories.get(path.posix.dirname(name)).set(path.posix.basename(name), { kind: 'file', digest });
+    directories.get(path.posix.dirname(name)).set(path.posix.basename(name), { kind: 'file', digest, attributes: snapshot.attributes?.[name] });
   }
   return root;
 }
 
-function sameAsset(left, right) {
+function changedAttributes(current, baseline) {
+  return baseline?.attributes && Object.entries(baseline.attributes).some(([field, value]) => value !== undefined && current?.attributes?.[field] !== value);
+}
+
+function sameAsset(left, right, compareAttributes = false) {
   if (left === right) return true;
   if (!left || !right || left.kind !== right.kind) return false;
+  if (compareAttributes && changedAttributes(left, right)) return false;
   if (left.kind === 'file') return left.digest === right.digest;
   return left.children.size === right.children.size && [...left.children]
-    .every(([name, asset]) => sameAsset(asset, right.children.get(name)));
+    .every(([name, asset]) => sameAsset(asset, right.children.get(name), compareAttributes));
 }
 
 function sourceOwnsTree(current, previousInput, name, include) {
@@ -256,7 +275,7 @@ function sourceOwnsTree(current, previousInput, name, include) {
 // A child in conflict can still need its old ancestors after a directory deletion.
 function assetReceipt(observed, previous, held, include) {
   if (!held.size) return observed;
-  const directories = new Set(), members = Object.create(null);
+  const directories = new Set(), members = Object.create(null), attributes = Object.create(null);
   const isHeld = name => {
     let included = true;
     for (let part = name; part !== '.'; part = path.posix.dirname(part)) {
@@ -270,15 +289,67 @@ function assetReceipt(observed, previous, held, include) {
   for (const [inventory, useHeld] of [[observed, false], [previous, true]]) {
     for (const name of inventory.directories) if (isHeld(name) === useHeld) directories.add(name);
     for (const [name, digest] of Object.entries(inventory.members)) if (isHeld(name) === useHeld) members[name] = digest;
+    for (const [name, value] of Object.entries(inventory.attributes ?? {})) if (isHeld(name) === useHeld) attributes[name] = value;
   }
   for (const name of [...directories, ...Object.keys(members)]) {
     for (let dir = path.posix.dirname(name); dir !== '.' && !directories.has(dir); dir = path.posix.dirname(dir)) directories.add(dir);
   }
-  return { directories: [...directories].sort(), members };
+  return { directories: [...directories].sort(), members, ...(observed.attributes || previous.attributes ? { attributes } : {}) };
 }
 
-export async function mergeAssets(from, to, oldA, oldB, report, { include = () => true } = {}) {
-  const read = async root => (await exists(root)) ? inventory(root) : assetInventory();
+function attributeFields(name, held, include, existingFile) {
+  for (let part = name; part !== '.'; part = path.posix.dirname(part)) {
+    if (part && !include(part)) return [];
+    // A content edit owns its timestamp. Access permissions can still merge independently.
+    if (held.has(part)) return part === name && existingFile ? ['mode'] : [];
+  }
+  return ['mode', 'mtimeUs'];
+}
+
+async function reconcileMetadataAttributes(to, { source, target, published, baseSource, baseTarget, held, include, report }, receipts) {
+  const known = new Set([...baseSource.directories, ...Object.keys(baseSource.members)]);
+  if (known.size || baseSource.attributes) known.add('');
+  // Apply directory times last. A child copy, rename or deletion changes its parent.
+  for (const name of [...Object.keys(source.members), ...source.directories.toReversed(), '']) {
+    const input = source.attributes?.[name], output = published.attributes?.[name];
+    if (!input || !output || Object.hasOwn(source.members, name) !== Object.hasOwn(published.members, name)) continue;
+    const existingFile = [source, target, baseSource, baseTarget].every(tree => Object.hasOwn(tree.members, name));
+    const fields = attributeFields(name, held, include, existingFile);
+    if (!fields.length) continue;
+    const before = Object.hasOwn(source.members, name) === Object.hasOwn(target.members, name) && target.attributes?.[name];
+    const oldInput = baseSource.attributes?.[name], oldTarget = baseTarget.attributes?.[name];
+    const desired = { ...output };
+    const sourceReceipt = { ...receipts.source.attributes[name] }, targetReceipt = { ...receipts.target.attributes[name] };
+    for (const field of fields) {
+      desired[field] = sourceReceipt[field] = targetReceipt[field] = input[field];
+      if (!before || input[field] === before[field]) continue;
+      const a = oldInput?.[field], b = oldTarget?.[field];
+      if (a !== undefined && input[field] !== a && before[field] === b) continue;
+      // If both endpoints independently wrote the same file, each write has its own time.
+      const sameNewBytes = field === 'mtimeUs' && Object.hasOwn(source.members, name) && source.members[name] === target.members[name]
+        && source.members[name] !== baseSource.members[name] && target.members[name] !== baseTarget.members[name];
+      desired[field] = before[field];
+      targetReceipt[field] = before[field];
+      if (sameNewBytes || before[field] === b) continue;
+      if (a === undefined && !known.has(name)) continue; // First observation of an existing template member.
+      if (input[field] !== a) report('conflict', 'asset', name || '.', field, 'asset attributes differ on both endpoints or lack a shared baseline');
+      // Keep target-only edits pending for the reverse trip, and conflicts pending until resolved.
+      sourceReceipt[field] = a;
+      targetReceipt[field] = b;
+    }
+    const destination = path.join(to, name);
+    if (output.mode !== desired.mode) await chmod(destination, desired.mode);
+    if (output.mtimeUs !== desired.mtimeUs) {
+      const stat = await lstat(destination, { bigint: true });
+      await utimes(destination, Number(stat.atimeNs) / 1e9, timestampSeconds(desired.mtimeUs));
+    }
+    receipts.source.attributes[name] = sourceReceipt;
+    receipts.target.attributes[name] = targetReceipt;
+  }
+}
+
+export async function mergeAssets(from, to, oldA, oldB, report, { include = () => true, attributes = false } = {}) {
+  const read = async root => (await exists(root)) ? inventory(root, { attributes }) : assetInventory();
   const source = await read(from), target = await read(to);
   const baseSource = assetInventory(oldA), baseTarget = assetInventory(oldB), held = new Set();
   const empty = new Map();
@@ -289,6 +360,11 @@ export async function mergeAssets(from, to, oldA, oldB, report, { include = () =
       const a = input.get(child), b = current.get(child);
       const oldSource = previousInput.get(child), oldTarget = previousTarget.get(child);
       const destination = path.join(to, name);
+      if (!a && b?.kind === 'directory' && changedAttributes(b, oldTarget)) {
+        held.add(name);
+        report('conflict', 'asset', name, 'deletion', 'target directory attributes changed');
+        continue;
+      }
       if (b?.kind === 'directory' && (a?.kind === 'directory' || !a && oldSource?.kind === 'directory')) {
         await merge(a?.children ?? empty, b.children, oldSource?.children ?? empty, oldTarget?.children ?? empty, name);
         if (!a && oldTarget?.kind === 'directory') {
@@ -305,11 +381,12 @@ export async function mergeAssets(from, to, oldA, oldB, report, { include = () =
         report('conflict', 'asset', name, 'bytes', 'previous receipt has different digests for the same file');
         continue;
       }
-      if (sameAsset(a, oldSource)) {
+      const changingKind = a?.kind !== b?.kind;
+      if (sameAsset(a, oldSource, changingKind)) {
         if (oldB && !sameAsset(b, oldTarget)) held.add(name);
         continue;
       }
-      if (!sameAsset(b, oldTarget) || b?.kind === 'directory' && !sourceOwnsTree(b, oldSource, name, include)) {
+      if (!sameAsset(b, oldTarget, changingKind) || b?.kind === 'directory' && !sourceOwnsTree(b, oldSource, name, include)) {
         held.add(name);
         report('conflict', 'asset', name, a && b && a.kind !== b.kind ? 'kind' : 'bytes', 'target asset changed or contains independent members');
         continue;
@@ -322,7 +399,7 @@ export async function mergeAssets(from, to, oldA, oldB, report, { include = () =
       if (a.kind === 'directory') {
         await mkdir(destination, { recursive: true, mode: 0o700 });
         await merge(a.children, empty, empty, empty, name);
-        await restoreDirectoryAttributes(path.join(from, name), destination);
+        await restoreAttributes(path.join(from, name), destination);
       } else {
         await mkdir(path.dirname(destination), { recursive: true, mode: 0o700 });
         const filename = path.join(from, name);
@@ -333,6 +410,10 @@ export async function mergeAssets(from, to, oldA, oldB, report, { include = () =
       }
     }
   }
+  if (attributes && source.attributes && !target.attributes) await mkdir(to, { recursive: true, mode: 0o700 });
   await merge(assetTree(source), assetTree(target), assetTree(baseSource), assetTree(baseTarget));
-  return { source: assetReceipt(source, baseSource, held, include), target: assetReceipt(await read(to), baseTarget, held, include) };
+  const published = await read(to);
+  const receipts = { source: assetReceipt(source, baseSource, held, include), target: assetReceipt(published, baseTarget, held, include) };
+  if (attributes) await reconcileMetadataAttributes(to, { source, target, published, baseSource, baseTarget, held, include, report }, receipts);
+  return receipts;
 }
