@@ -370,7 +370,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const probe = vfs && identityMap ? new ProbeService({ store, vfs, identityMap, mediaEncoder, probeOptions, localization, library, externalData }) : undefined;
   if (probe) rollback.push(() => probe.close());
   const extraction = probe ? new ExtractionService({ vfs, bridge:probe.bridge, ...extractionOptions, mediaEncoder, getEncodingOptions,
-    subtitleCache: new SubtitleCache({ fileSystem, dataPath, onError }) }) : undefined;
+    subtitleCache: new SubtitleCache({ fileSystem, dataPath, onError,
+      sourceBinding: usesConfiguredStorage ? configuredStorage.sourceBinding : undefined,
+      initialSourceBinding: usesConfiguredStorage ? identity => configuredStorage.initialSourceBinding(identity,
+        nativePathWithin(identity, applicationPaths.metadataPath)) : undefined }) }) : undefined;
   if (extraction) rollback.push(() => extraction.close());
   const sidecarIdentityMap = identityMap && { resolve(binding) {
     const mapping = nativePathWithin(binding.identityPath, applicationPaths.metadataPath) ? metadataIdentityMap : identityMap;

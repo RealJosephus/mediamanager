@@ -33,16 +33,17 @@ export function subtitleCacheMetadata(source, stream, info) {
 /** Persist the SRT and source revision consumed by the Native subtitle reader. */
 export class SubtitleCache {
   #tails = new Map();
+  #readOnlyImports = new Map();
   #pending = new Set();
   #closed = false;
   #closing;
 
-  constructor({ fileSystem, dataPath, onError = () => {} }) {
+  constructor({ fileSystem, dataPath, sourceBinding, initialSourceBinding, onError = () => {} }) {
     if (!fileSystem?.resolve || !fileSystem?.readFile || !fileSystem?.writeFile || !fileSystem?.stat || !fileSystem?.mkdir || !fileSystem?.unlink) {
       throw new TypeError('Subtitle caching requires its metadata storage filesystem.');
     }
     if (dataPath !== undefined && (typeof dataPath !== 'string' || !path.isAbsolute(dataPath))) throw new TypeError('Subtitle caching requires an absolute instance data path.');
-    Object.assign(this, { fileSystem, dataPath, onError });
+    Object.assign(this, { fileSystem, dataPath, sourceBinding, initialSourceBinding, onError });
   }
 
   get available() { return this.dataPath !== undefined; }
@@ -90,32 +91,55 @@ export class SubtitleCache {
     catch (error) { if (missing(error)) error.status ??= 404; throw error; }
   }
 
-  getOrCreate(source, stream, { statSource, produce, signal }) {
+  getOrCreate(source, stream, { virtualPath, statSource, produce, signal }) {
     abort(signal);
     if (this.#closed) return Promise.reject(new StorageError('closed', 'Subtitle caching is closed.'));
     const paths = this.paths(source.Id, stream.Index);
     const previous = this.#tails.get(paths.filename) ?? Promise.resolve();
     const operation = previous.catch(() => {}).then(async () => {
       abort(signal);
+      const binding = this.sourceBinding?.(virtualPath);
+      const marker = paths.metadata + '.storage';
+      let previousBinding;
+      if (binding) {
+        try { previousBinding = await this.fileSystem.readFile(marker, 'utf8'); }
+        catch (error) { if (!missing(error)) throw error; previousBinding = this.#readOnlyImports.get(marker); }
+      }
+      const sameStorage = previousBinding === undefined && binding && this.initialSourceBinding
+        ? this.initialSourceBinding(stream.Path || source.Path) === binding
+        : previousBinding === undefined || previousBinding === binding;
       const before = await this.#source(statSource);
       const revision = () => subtitleCacheMetadata(source, stream, before);
-      const cached = await this.#load(paths, revision);
-      if (cached !== null) return { bytes: cached, format: 'srt', consistency: 'persistent' };
+      const cached = sameStorage ? await this.#load(paths, revision) : null;
+      if (cached !== null) {
+        // A native .srt/.meta pair has no MediaManager storage receipt. Adopt
+        // it on its first validated hit, keeping the native format readable.
+        if (binding && previousBinding === undefined) {
+          if (this.fileSystem.resolve(marker).capabilities.create) await this.fileSystem.writeFile(marker, binding);
+          else this.#readOnlyImports.set(marker, binding);
+        }
+        if (binding !== this.sourceBinding?.(virtualPath)) throw new StorageError('version-changed', 'The subtitle storage changed during the read.');
+        return { bytes: cached, format: 'srt', consistency: 'persistent' };
+      }
       for (const filename of [paths.filename, paths.metadata]) {
         const target = this.fileSystem.resolve(filename);
         requireCapability(target, 'create'); requireCapability(target, 'replace');
       }
       await this.fileSystem.mkdir(paths.directory, { recursive: true });
       const current = await this.#stat(paths.filename);
-      const initial = current?.isFile() ? await this.fileSystem.readFile(paths.filename) : null;
+      const initial = sameStorage && current?.isFile() ? await this.fileSystem.readFile(paths.filename) : null;
       const result = await produce(initial, before);
       if (!result.failed && result.exists && result.bytes.length) {
         const after = await this.#source(statSource);
-        if (before?.version !== after?.version || revision() !== subtitleCacheMetadata(source, stream, after)) {
+        if (binding !== this.sourceBinding?.(virtualPath) || before?.version !== after?.version || revision() !== subtitleCacheMetadata(source, stream, after)) {
           throw new StorageError('version-changed', 'The subtitle source changed during conversion.');
         }
       }
       const errors = [];
+      if (binding && binding !== previousBinding && result.exists && result.error?.code !== 'subtitle-start-failure') {
+        // An interrupted replacement cannot authorize its bytes for either volume.
+        await this.fileSystem.writeFile(marker, 'pending');
+      }
       if (result.exists && result.error?.code !== 'subtitle-start-failure') {
         try { await this.fileSystem.writeFile(paths.filename, result.bytes); }
         catch (error) { errors.push(error); }
@@ -135,7 +159,12 @@ export class SubtitleCache {
       }
       try {
         await this.fileSystem.writeFile(paths.metadata, revision());
+        if (binding && binding !== previousBinding) {
+          await this.fileSystem.writeFile(marker, binding);
+          this.#readOnlyImports.delete(marker);
+        }
       } catch (error) { if (ioError(error)) this.onError(error); else throw error; }
+      if (binding !== this.sourceBinding?.(virtualPath)) throw new StorageError('version-changed', 'The subtitle storage changed during publication.');
       return { bytes: result.bytes, format: 'srt', consistency: 'persistent' };
     });
     this.#tails.set(paths.filename, operation); this.#pending.add(operation);

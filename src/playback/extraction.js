@@ -116,7 +116,7 @@ export class ExtractionService {
     if (!this.available) throw failure('unavailable', 'The ffmpeg extraction process is unavailable.');
     if (!this.supportsSubtitle(source, stream)) throw failure('not-supported', 'This subtitle requires an unsupported extraction or conversion branch.');
     if (isExternalSubtitleFallback(stream)) return this.#requestJob(randomUUID(), (ownerSignal, reportCleanupFailure) => this.subtitleCache.getOrCreate(source, stream, {
-      signal: ownerSignal, statSource: /^https?:\/\//iu.test(stream.Path) ? () => null : () => this.vfs.stat(virtualPath),
+      virtualPath, signal: ownerSignal, statSource: /^https?:\/\//iu.test(stream.Path) ? () => null : () => this.vfs.stat(virtualPath),
       produce: (initial, info) => this.#convertExternalText(source, stream, virtualPath, initial, info, ownerSignal, reportCleanupFailure),
     }), signal);
     const [format, muxer, subtitleCodec] = subtitleExtractionFormat(stream);

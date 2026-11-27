@@ -51,14 +51,18 @@ export class VirtualFileSystem {
     this.#mountRevision++;
   }
 
-  resolve(path) {
+  resolveMount(path) {
     path = normalizePath(path);
     const mount = [...this.#mounts.values()].filter((item) => isWithin(path, item.path))
       .sort((left, right) => right.path.length - left.path.length)[0];
     if (!mount) throw new StorageError('not-found', 'No storage mount resolves the virtual path.');
-    const adapter = this.#registry.getInstance(mount.instanceId);
-    return { adapter, capabilities: mountCapabilities(mount.capabilities, adapter), mount,
-      path: joinPath(mount.root, path.slice(mount.path === '/' ? 1 : mount.path.length)) };
+    return { mount, path: joinPath(mount.root, path.slice(mount.path === '/' ? 1 : mount.path.length)) };
+  }
+
+  resolve(path) {
+    const resolved = this.resolveMount(path);
+    const adapter = this.#registry.getInstance(resolved.mount.instanceId);
+    return { ...resolved, adapter, capabilities: mountCapabilities(resolved.mount.capabilities, adapter) };
   }
 
   #overlays(path) {

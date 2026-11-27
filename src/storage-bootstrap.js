@@ -187,14 +187,16 @@ export async function createConfiguredStorage(filename, { environment = process.
     try { return await operations.run(scope, operation); }
     finally { scope.owner = null; release(); }
   }
+  function binding(owner, resolved) {
+    const instance = owner.definition.instances.find(value => value.id === resolved.mount.instanceId);
+    return createHash('sha256').update(JSON.stringify([instance.type, instance.config, resolved.path])).digest('hex');
+  }
   const retainGeneration = () => {
     if (closed) throw Object.assign(new Error('Storage is closed.'), { status: 503 });
     const owner = activeOwner(), { fileSystem, mediaFileSystem } = owner;
     return { fileSystem, mediaFileSystem, isCurrent: () => current === owner,
       mediaBinding(filename) {
-        const { mount, path: backendPath } = mediaFileSystem.resolve(filename);
-        const instance = owner.definition.instances.find(value => value.id === mount.instanceId);
-        return createHash('sha256').update(JSON.stringify([instance.type, instance.config, backendPath])).digest('hex');
+        return binding(owner, mediaFileSystem.resolve(filename));
       },
       close: retain(owner.users),
     };
@@ -290,8 +292,19 @@ export async function createConfiguredStorage(filename, { environment = process.
       if(!['resolve','resolveFileHandle','capabilities','stat','list','write','mkdir','delete','rename'].includes(key))return value.bind(vfs);
       return (...args)=>{const owner=activeOwner();args[0]=metadataPath(owner,args[0]);if(key==='rename')args[1]=metadataPath(owner,args[1]);return owner.vfs[key](...args);};
     }});
+    const initial = { definition: current.definition, vfs: current.vfs, media: current.identityMap, metadata: current.metadataIdentityMap };
     const unsubscribe=plugins.subscribe(()=>enqueue(notify));
     return { vfs,identityMap,metadataVfs,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,retainGeneration,withGeneration,
+      sourceBinding(accessPath) {
+        const owner = activeOwner();
+        return binding(owner, owner.vfs.resolve(accessPath));
+      },
+      initialSourceBinding(identityPath, metadata) {
+        try {
+          const access = (metadata ? initial.metadata : initial.media).resolve({ identityPath });
+          return binding(initial, initial.vfs.resolveMount(access));
+        } catch (error) { if (error.code !== 'not-found') throw error; return null; }
+      },
       get configurationHash() { return activeOwner().configurationHash; },
       get portableMountContract() { return current.portableMountContract; },
       configuration:()=>clone(configuration), types:()=>[...extensions.keys()],
