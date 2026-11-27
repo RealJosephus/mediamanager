@@ -92,6 +92,15 @@ test('actual network probe metadata, external streams, locks and native SQLite r
   if(process.env.MEDIAMANAGER_PROBE_EVIDENCE){const evidence=path.join(process.env.MEDIAMANAGER_PROBE_EVIDENCE,mode);await mkdir(evidence,{recursive:true});await exportCurrentSqlite(db,path.join(evidence,'return.db'),{testOnlyAllowSyntheticEnvelope:true});await writeFile(path.join(evidence,'expected.json'),JSON.stringify({item:{Name:loaded.item.Name,Overview:loaded.item.Overview,ProductionYear:loaded.item.ProductionYear,OfficialRating:loaded.item.OfficialRating,Genres:loaded.item.Genres,Studios:loaded.item.Studios,DefaultVideoStreamIndex:data.DefaultVideoStreamIndex,SubtitleFiles:data.SubtitleFiles,AudioFiles:data.AudioFiles},streams,chapters},(_,v)=>typeof v==='bigint'?String(v):v,2));}
   await adapter.delete('/movie.en.forced.srt');
   assert.equal((await service.refresh(id)).changed,true);assert.equal((await db.rows('MediaStreamInfos',{where:{ItemId:id}})).some(stream=>stream.StreamType===2),false);
+  const creationTime = '2024-04-15T10:10:00Z';
+  const remux = await prepareFrozenVideo(directory, { name: 'remux', metadata: { creation_time: creationTime }, signal: t.signal });
+  assert.equal(new Date(remux.probe.format.tags.creation_time).toISOString(), new Date(creationTime).toISOString());
+  await adapter.write('/movie.mkv', remux.bytes);
+  await db.update('BaseItems', { Id: id }, { ProductionYear: 1999, PremiereDate: null });
+  await service.refresh(id, { force: true, replaceAllMetadata: true });
+  const [refreshedMovie] = await db.rows('BaseItems', { where: { Id: id }, columns: ['ProductionYear', 'PremiereDate'] });
+  assert.equal(Number(refreshedMovie.ProductionYear), 1999);
+  assert.equal(refreshedMovie.PremiereDate, null);
   await db.update('BaseItems',{Id:id},{IsLocked:true,Name:'Locked name',OfficialRating:'Locked rating'});
   await service.refresh(id,{force:true,replaceAllMetadata:true});
   assert.equal((await db.rows('BaseItems',{where:{Id:id}}))[0].Name,'Locked name');

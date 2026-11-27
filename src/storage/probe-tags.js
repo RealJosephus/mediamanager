@@ -117,9 +117,11 @@ export function descriptiveProbeInfo(raw, { isAudio = false } = {}) {
   const info = { Name: first('title', 'title-eng'), ForcedSortName: first('sort_name', 'title-sort', 'titlesort'), Overview: first('synopsis', 'description', 'desc', 'comment'),
     ParentIndexNumber: number(tags.get('season_number')), IndexNumber: number(tags.get('episode_sort')) ?? number(tags.get('episode_id')),
     ShowName: tags.has('show_name') ? tags.get('show_name') : 'show', ProductionYear: number(tags.get('date')),
-    PremiereDate: ['originaldate', 'retaildate', 'retail date', 'retail_date', 'date_released', 'date', 'creation_time'].map(key => date(tags.get(key))).find(Boolean) ?? null,
+    PremiereDate: ['originaldate', 'retaildate', 'retail date', 'retail_date', 'date_released', 'date'].map(key => date(tags.get(key))).find(Boolean) ?? null,
     Album: tags.get('album') ?? null, Artists: artists(first('artists') ?? first('artist'), !text(tags.get('artists'))), AlbumArtists: [],
     Genres: text(tags.get('genre')) ? distinct(split(tags.get('genre'), true)) : [], Studios: [], People: [], ProviderIds: {}, OfficialRating: null, OfficialRatingDescription: null, Video3DFormat: null, Timestamp: null };
+  const creationDate = date(tags.get('creation_time'));
+  if (creationDate) info.ContainerCreationDate = creationDate;
   if (info.ProductionYear == null && info.PremiereDate) info.ProductionYear = Number(info.PremiereDate.slice(0, 4));
   const studios = key => { const value = tags.get(key); if (value) info.Studios = distinct(split(value, true).filter(value => ![...info.Artists, ...info.AlbumArtists].some(artist => same(value, artist)))); };
   if (isAudio) {

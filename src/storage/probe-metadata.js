@@ -164,13 +164,18 @@ export function applyProbeMetadata(loaded, info, { replaceAllMetadata = false } 
       if (!item.Album || replace) item.Album = info.Album;
       if (!item.Artists?.length || replace) item.Artists = info.Artists;
     }
-    if (item.ExtraType == null) for (const key of ['ProductionYear', 'PremiereDate']) if (info[key] != null && (item[key] == null || replace)) item[key] = info[key];
+    if (item.ExtraType == null) {
+      if (info.ProductionYear != null && (item.ProductionYear == null || replace)) item.ProductionYear = info.ProductionYear;
+      const muxDate = info.ContainerCreationDate;
+      const date = info.PremiereDate ?? (muxDate && (item.ProductionYear == null || new Date(muxDate).getFullYear() === item.ProductionYear) ? muxDate : null);
+      if (date && (item.PremiereDate == null || replace)) item.PremiereDate = date;
+    }
     for (const key of ['IndexNumber', 'ParentIndexNumber']) if (info[key] != null && (item[key] == null || replace)) item[key] = info[key];
     if (!locked('Name')) {
       if (!empty(info.Name) && loaded.libraryOptions.EnableEmbeddedTitles && (item.ExtraType == null || loaded.libraryOptions.EnableEmbeddedExtrasTitles)) item.Name = info.Name;
       if (!empty(info.ForcedSortName)) item.ForcedSortName = info.ForcedSortName;
     }
-    if (item.ExtraType == null && item.PremiereDate != null && item.ProductionYear == null) item.ProductionYear = Number(item.PremiereDate.slice(0, 4));
+    if (item.ExtraType == null && item.PremiereDate != null && item.ProductionYear == null) item.ProductionYear = new Date(item.PremiereDate).getFullYear();
     if (!locked('Cast') && info.People.length && (replace || !loaded.context.people.length)) {
       people = [];
       for (const source of info.People) {
