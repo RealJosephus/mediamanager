@@ -76,6 +76,7 @@ export function translatedKey(key, map) {
   return kind === 'item' ? 'item/' + item : [kind, item, map.users[user] ?? user].join('/');
 }
 export function translatedRows(rows, map, target, initialize) {
+  if (!Object.keys(map.items).length && !Object.keys(map.users).length) return rows;
   const mapped = new Map();
   for (const [key, value] of rows) {
     const [kind, id] = key.split('/');

@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { isDeepStrictEqual } from 'node:util';
 import { createHash } from 'node:crypto';
 import { lstat, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { DatabaseSync } from 'node:sqlite';
@@ -20,7 +21,8 @@ import {
   inside,
   stateDirectory,
   cloneDirectory,
-  verifyState,
+  openExchangeState,
+  writeRowChunks,
   sealState,
   mergeAssets,
   writeJson,
@@ -102,14 +104,23 @@ async function createJellyfin(root, srcIdentity) {
   }
 }
 const silent = () => {};
-function getCatalog(type, db, id, report) {
-  return type === 'emby' ? embyCatalog(db, id, report) : jellyfinCatalog(db, report);
+const emptyRelation = Object.freeze([]);
+function getCatalog(type, db, id, report, peerRows) {
+  const catalog = type === 'emby' ? embyCatalog(db, id, report, peerRows) : jellyfinCatalog(db, report, peerRows);
+  // Relations have finished loading. The exchange compares these snapshots
+  // without mutating their arrays, so empty relations can share one value.
+  for (const row of catalog.rows.values()) {
+    for (const field of Object.keys(row)) {
+      if (Array.isArray(row[field]) && row[field].length === 0) row[field] = emptyRelation;
+    }
+  }
+  return catalog;
 }
 // An observed edit is acknowledged only once it has reached the other side.
 // Keep the last comparison values in each endpoint's own ID and path space.
 function receiptRows(rows, previous, retainedFields, retainedRows, aliases) {
   if (!retainedFields.size && !retainedRows.size) return rows;
-  const baseline = new Map(previous), result = new Map(rows);
+  const baseline = previous ?? new Map(), result = new Map(rows);
   for (const key of new Set([...rows.keys(), ...baseline.keys()])) {
     const targetKey = aliases ? translatedKey(key, aliases) : key;
     if (retainedRows.has(targetKey)) {
@@ -238,15 +249,13 @@ export async function exchange({
   }
   try {
     if (publication.pending) return await publish(publication.pending, true);
-    const prior = await verifyState(source, sourceType);
+    const prior = await openExchangeState(source, sourceType);
     await cloneDirectory(source, captured, { skipState: true });
     const preparationIssues = prepareSource ? await prepareSource(captured, jellyDb(captured), work) : [];
     await assertInput(captured, sourceType);
     const sourceDb = connect(captured, sourceType, sourceType !== 'jellyfin');
     let sourceId,
       targetId,
-      sourceView,
-      targetView,
       baseline,
       aliases,
       stats,
@@ -254,6 +263,8 @@ export async function exchange({
       pathMaps,
       retainedSourceColumns, importedMarkerReader, excludedLibraryDirectories,
       issues = preparationIssues ?? [];
+    const rowChunks = {}, previousTargetRows = new Map();
+    const state = path.join(target, stateDirectory);
     const providerState = { conflicts: [], targetEdits: [] };
     const retainedFields = new Map(), retainedRows = new Set();
     let pendingProviders, sourceItemIds;
@@ -306,6 +317,7 @@ export async function exchange({
           libraryRoot(seed ?? target, targetType),
           ...(baseline?.assets?.libraryRoots?.source ?? []),
         ];
+        let sourceView;
         const skipperSource = sourceType === 'jellyfin' && await attachSkipper(sourceDb, captured, report);
         const skipperTarget = targetType === 'jellyfin' && await attachSkipper(targetDb, target, report);
         if (skipperSource && skipperSource !== 'unknown') {
@@ -316,12 +328,26 @@ export async function exchange({
           } finally { sourceDb.exec('ROLLBACK'); }
         } else sourceView = getCatalog(sourceType, sourceDb, sourceId, report);
         if (skipperTarget && skipperTarget !== 'unknown') projectSkipper(targetDb, skipperTarget, report);
-        targetView = getCatalog(targetType, targetDb, targetId, silent);
+        const targetView = getCatalog(targetType, targetDb, targetId, silent, sourceView.rows);
         if (targetType === 'jellyfin' && !targetView.users.size && sourceView.users.size && !adminUser) {
           throw new Error('Importing accounts into an empty target requires --admin-user <Emby-name> and --admin-password-env <variable>.');
         }
         if (sourceType === 'jellyfin') await readJellyfinLibraryOptions(sourceView, captured);
         if (targetType === 'jellyfin') await readJellyfinLibraryOptions(targetView, target);
+        if (prior) {
+          // A return trip reverses the two endpoints. Verify one sealed chunk
+          // at a time and share unchanged rows with the matching live view.
+          for (const [endpoint, current] of [['target', sourceView.rows], ['source', targetView.rows]]) {
+            const records = new Map();
+            for await (const [key, previous] of prior.rows(endpoint)) {
+              if (baseline) {
+                const live = current.get(key);
+                records.set(key, isDeepStrictEqual(previous, live) ? live : previous);
+              }
+            }
+            if (baseline) baseline[endpoint] = records;
+          }
+        }
         const transferable =
           sourceType === 'jellyfin' ? activeSystemRoots(sourceView.rows, report) : sourceView.rows;
         inputAssets = await collectAssets({
@@ -364,7 +390,7 @@ export async function exchange({
           silent,
           baseline?.assets?.paths?.source,
         );
-        const oldSource = new Map(baseline?.target);
+        const oldSource = baseline?.target ?? new Map();
         const beforeSource = await projectAssetRows(
           sourceType === 'jellyfin' ? activeSystemRoots(oldSource, silent) : oldSource,
           inputAssets,
@@ -372,7 +398,7 @@ export async function exchange({
           sourceAssets.paths,
         );
         const beforeTarget = await projectAssetRows(
-          new Map(baseline?.source),
+          baseline?.source ?? new Map(),
           seedAssets,
           silent,
           targetAssets.paths,
@@ -426,8 +452,8 @@ export async function exchange({
               adminPassword,
               creditsEnd,
               skipperTarget,
-                previousSource,
-                previousTarget: beforeTarget.rows,
+              previousSource,
+              previousTarget: beforeTarget.rows,
             });
             await writeJellyfinLibraryOptions(writes, target, report);
           }
@@ -437,20 +463,36 @@ export async function exchange({
           targetDb.exec('ROLLBACK');
           throw error;
         }
-        targetView = getCatalog(targetType, targetDb, targetId, silent);
-        importedMarkerReader = targetType === 'jellyfin' && Boolean(targetDb.prepare(
-          'SELECT 1 FROM MediaSegments WHERE SegmentProviderId=? LIMIT 1').get(markerProviderId));
-        if (targetType === 'jellyfin') await readJellyfinLibraryOptions(targetView, target);
-        stats = {
-          sourceRecords: sourceView.rows.size,
-          targetRecords: targetView.rows.size,
-          changes: changes.length,
-        };
+        stats = { sourceRecords: sourceView.rows.size, changes: changes.length };
+        await mkdir(state, { mode: 0o700 });
+        rowChunks.source = await writeRowChunks(state, 'source',
+          receiptRows(sourceView.rows, baseline?.target, retainedFields, retainedRows, aliases));
+        if (baseline) {
+          for (const key of [...retainedRows, ...retainedFields.keys()]) {
+            if (baseline.source.has(key)) previousTargetRows.set(key, baseline.source.get(key));
+          }
+          delete baseline.source;
+          delete baseline.target;
+        }
       } finally {
         targetDb.close();
       }
     } finally {
       sourceDb.close();
+    }
+    // Re-open the committed destination after both input views and their
+    // comparison projections have gone out of scope. Only conflicts need
+    // rows from the previous target when sealing its new receipt.
+    const committedDb = connect(target, targetType, true);
+    try {
+      const committed = getCatalog(targetType, committedDb, targetId, silent);
+      importedMarkerReader = targetType === 'jellyfin' && Boolean(committedDb.prepare(
+        'SELECT 1 FROM MediaSegments WHERE SegmentProviderId=? LIMIT 1').get(markerProviderId));
+      if (targetType === 'jellyfin') await readJellyfinLibraryOptions(committed, target);
+      stats.targetRecords = committed.rows.size;
+      rowChunks.target = await writeRowChunks(state, 'target', receiptRows(committed.rows, previousTargetRows, retainedFields, retainedRows));
+    } finally {
+      committedDb.close();
     }
     const assets = await mergeAssets(
       inputAssets.directory,
@@ -477,8 +519,7 @@ export async function exchange({
       targetType,
       captured,
       sourceId,
-      receiptRows(sourceView.rows, baseline?.target, retainedFields, retainedRows, aliases),
-      receiptRows(targetView.rows, baseline?.source, retainedFields, retainedRows),
+      rowChunks,
       assets,
       aliases,
       inputAssets.extra ? inputAssets.directory : null,

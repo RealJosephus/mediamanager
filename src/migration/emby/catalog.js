@@ -67,12 +67,17 @@ export const streamFields = [
 ];
 const chapterFields = ['ChapterIndex', 'StartPositionTicks', 'Name', 'ImagePath'];
 export const numeric = (name, value) => portableValue(name, value);
-export function fields(row, names) {
-  const columns = new Map(Object.keys(row).map((k) => [k.toLowerCase(), k]));
-  const result = {};
+export function fields(row, names, result = {}, peer) {
+  let columns;
   for (const name of names) {
-    const column = columns.get(name.toLowerCase());
-    if (column !== undefined || name !== 'IsHearingImpaired') result[name] = numeric(name, row[column]);
+    let column = name;
+    if (!Object.hasOwn(row, name)) {
+      columns ??= new Map(Object.keys(row).map(key => [key.toLowerCase(), key]));
+      column = columns.get(name.toLowerCase());
+      if (column === undefined && name === 'IsHearingImpaired') continue;
+    }
+    const value = numeric(name, row[column]);
+    result[name] = typeof value === 'string' && peer?.[name] === value ? peer[name] : value;
   }
   return result;
 }
@@ -91,27 +96,26 @@ function guid(value) {
   return value ? nativeGuid(value) : null;
 }
 const scan = (db, sql) => statement(db, sql).iterate();
-function baseItem(row, type) {
-  return {
-    type,
-    ...fields(row, scalarFields),
-    ParentId: null,
-    SeriesId: null,
-    Providers: [],
-    LockedFields: [],
-    Images: [],
-    Members: [],
-    People: [],
-    Chapters: [],
-    IntroSkip: null,
-    CreditsSkip: null,
-    Streams: [],
-    Artists: [],
-    AlbumArtists: [],
-    Genres: [],
-    Studios: [],
-    Tags: [],
-  };
+const relations = ['Providers', 'LockedFields', 'Images', 'Members', 'People', 'Chapters',
+  'Streams', 'Artists', 'AlbumArtists', 'Genres', 'Studios', 'Tags'];
+const itemShapes = new Map();
+function baseItem(row, type, peer) {
+  // Build each native shape once. Adding all date and relation properties
+  // separately to every spread object creates a large property table per item.
+  let shape = itemShapes.get(type);
+  if (!shape) {
+    const names = ['type', ...scalarFields, 'ParentId', 'SeriesId', ...relations.slice(0, 6),
+      'IntroSkip', 'CreditsSkip', ...relations.slice(6), 'Container'];
+    if (type === itemTypes[8]) names.push('IndexNumberEnd');
+    if (type === itemTypes[4]) names.push('CollectionType', 'PhysicalFolders', 'Locations', 'Options');
+    names.push(...dateFields, 'Album');
+    shape = Object.fromEntries(names.map(name => [name, null]));
+    itemShapes.set(type, shape);
+  }
+  const item = { ...shape, type };
+  fields(row, scalarFields, item, peer);
+  for (const name of relations) item[name] = [];
+  return item;
 }
 function register(map, key, value) {
   if (map.has(key)) throw new Error('Duplicate mapped identity: ' + key);
@@ -130,7 +134,7 @@ function jsonUser(value) {
   return user;
 }
 
-export function embyCatalog(db, serverId, report) {
+export function embyCatalog(db, serverId, report, peerRows) {
   const items = new Map(),
     users = new Map(),
     idMap = new Map(),
@@ -154,12 +158,14 @@ export function embyCatalog(db, serverId, report) {
   for (const r of scan(db, 'SELECT * FROM MediaItems ORDER BY Id')) {
     const id = fromBlob(r.guid, serverId + '/item/' + r.Id);
     register(idMap, r.Id, id);
-    register(rawItems, id, r);
+    // Only these keys are needed by the relation pass and the destination writer.
+    register(rawItems, id, { Id: r.Id, Name: r.Name, AlbumId: r.AlbumId, ParentId: r.ParentId, SeriesId: r.SeriesId });
     if (!itemTypes[Number(r.type)]) {
       report('origin-only', 'item', id, 'type', String(r.type));
       continue;
     }
-    const item = baseItem(r, itemTypes[Number(r.type)]);
+    const key = keyFor('item', id);
+    const item = baseItem(r, itemTypes[Number(r.type)], peerRows?.get(key));
     item.Container = r.Container ?? null;
     if (Number(r.type) === 8) item.IndexNumberEnd = numeric('IndexNumberEnd', r.IndexNumberEnd);
     if (Number(r.type) === 4)
@@ -185,7 +191,7 @@ export function embyCatalog(db, serverId, report) {
       return false;
     });
     register(items, r.Id, item);
-    register(rows, keyFor('item', id), item);
+    register(rows, key, item);
     if (r.UserDataKeyId != null) {
       const group = shared.get(r.UserDataKeyId) ?? [];
       group.push(id);
@@ -286,7 +292,7 @@ export function embyCatalog(db, serverId, report) {
   return { rows, items: rawItems, users, states, idMap, userMap, shared, hasDateLastSearched };
 }
 
-export function jellyfinCatalog(db, report) {
+export function jellyfinCatalog(db, report, peerRows) {
   const rows = new Map(),
     items = new Map(),
     users = new Map(),
@@ -298,7 +304,8 @@ export function jellyfinCatalog(db, report) {
       report('origin-only', 'item', id, 'type', r.Type);
       continue;
     }
-    const item = baseItem(r, r.Type);
+    const key = keyFor('item', id);
+    const item = baseItem(r, r.Type, peerRows?.get(key));
     let data;
     try {
       data = r.Data ? JSON.parse(r.Data) : {};
@@ -321,7 +328,7 @@ export function jellyfinCatalog(db, report) {
     item.SeriesId = guid(r.SeriesId);
     item.Album = r.Album;
     items.set(r.Id, item);
-    register(rows, keyFor('item', id), item);
+    register(rows, key, item);
   }
   for (const r of scan(db, 'SELECT * FROM Users ORDER BY Id')) {
     users.set(guid(r.Id), r);

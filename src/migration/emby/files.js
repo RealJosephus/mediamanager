@@ -124,7 +124,7 @@ export async function writeJson(file, value) {
 }
 // The manifest authenticates base.json, which in turn binds the order and
 // content of each endpoint's chunks. Only the private publication stage writes them.
-async function writeRowChunks(state, endpoint, rows) {
+export async function writeRowChunks(state, endpoint, rows) {
   const hashes = [], records = [];
   let bytes = 0;
   async function flush() {
@@ -144,18 +144,16 @@ async function writeRowChunks(state, endpoint, rows) {
   return hashes;
 }
 
-async function readRowChunks(state, endpoint, hashes) {
+async function* readRowChunks(state, endpoint, hashes) {
   if (!Array.isArray(hashes)) throw new Error('Invalid migration row chunk manifest');
-  const rows = [];
   for (const [index, expected] of hashes.entries()) {
     const chunk = await readFile(path.join(state, endpoint + '-' + index + '.json'));
     if (hash(chunk) !== expected) throw new Error('Migration field baseline has changed');
-    for (const row of JSON.parse(chunk)) rows.push(row);
+    yield* JSON.parse(chunk);
   }
-  return rows;
 }
 
-export async function verifyState(root, kind) {
+export async function openExchangeState(root, kind) {
   const state = path.join(root, stateDirectory);
   if (!(await exists(state))) return null;
   await directory(state);
@@ -171,18 +169,25 @@ export async function verifyState(root, kind) {
   if (external && hash(JSON.stringify(await inventory(external))) !== meta.assetHash)
     throw new Error('Captured external metadata has changed');
   const base = JSON.parse(anchor);
-  if (meta.version === 2) {
-    for (const endpoint of ['source', 'target']) base[endpoint] = await readRowChunks(state, endpoint, base[endpoint]);
-  }
-  return { origin, external, originIdentity: meta.originIdentity, base };
+  const { source, target, ...baseFields } = base;
+  const endpoints = { source, target };
+  return { origin, external, originIdentity: meta.originIdentity, base: baseFields,
+    rows: endpoint => meta.version === 2 ? readRowChunks(state, endpoint, endpoints[endpoint]) : endpoints[endpoint] };
+}
+
+export async function verifyState(root, kind) {
+  const state = await openExchangeState(root, kind);
+  if (!state) return null;
+  const { rows, ...verified } = state;
+  for (const endpoint of ['source', 'target']) verified.base[endpoint] = await Array.fromAsync(rows(endpoint));
+  return verified;
 }
 export async function sealState(
   root,
   owner,
   source,
   originIdentity,
-  sourceRows,
-  targetRows,
+  rowChunks,
   assets,
   aliases,
   external,
@@ -190,13 +195,11 @@ export async function sealState(
   providerState,
 ) {
   const state = path.join(root, stateDirectory);
-  await mkdir(state, { mode: 0o700 });
   const captured = await cloneDirectory(source, path.join(state, 'origin'), { skipState: true });
   const assetHash = external
     ? hash(JSON.stringify(await cloneDirectory(external, path.join(state, 'source-metadata'))))
     : undefined;
-  const base = { chapterMarkerVersion: 1, source: await writeRowChunks(state, 'source', sourceRows),
-    target: await writeRowChunks(state, 'target', targetRows), assets, aliases, providerState };
+  const base = { chapterMarkerVersion: 1, ...rowChunks, assets, aliases, providerState };
   await writeJson(path.join(state, 'base.json'), base);
   await writeJson(path.join(state, 'manifest.json'), {
     version: 2,

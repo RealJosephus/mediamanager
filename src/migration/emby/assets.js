@@ -302,7 +302,7 @@ export async function projectAssetRows(rows, assets, report, remembered = {}) {
         result[field].push({ ...sub, [property]: targetPath });
       }
     }
-    mapped.set(key, result);
+    mapped.set(key, fields.length ? result : row);
     if (fields.length) changes.push({ key, value: result, fields });
   }
   return { rows: mapped, paths, changes };
