@@ -542,16 +542,21 @@ test('one owned mixed TV/music/version/part/STRM/Book/Photo graph survives cold 
     report.nodeChanged = await observe('node-changed'); report.nodeFiles = await sourceFiles(media, [...present]); report.nodeSidecars = await sidecarFiles(media);
     assert.equal(report.nodeChanged.retainedBook.dto.UserData.IsFavorite, true); assert.equal(report.nodeChanged.episode1.dto.UserData.Played, true);
     assert.equal(report.nodeChanged.episode1.dto.ProviderIds.JointUnknown, input.mutations.nodeEpisode.ProviderIds.JointUnknown);
+    report.nodeChangedTransfer = await readTransferDtos(report.nodeChanged, 'node-before-cold-dtos');
     await stopNode('node-before-cold'); const beforeCold = await itemSnapshot(database, Object.values(identities));
     const schema = database.schemaName; await database.close(); database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema });
-    await startNode(database); report.nodeCold = await observe('node-cold'); assert.deepEqual(report.nodeCold, report.nodeChanged);
-    assert.deepEqual(await itemSnapshot(database, Object.values(identities)), beforeCold); await stopNode('node-after-cold');
+    await startNode(database);
+    assert.deepEqual(await itemSnapshot(database, Object.values(identities)), beforeCold);
+    report.nodeCold = await observe('node-cold');
+    assert.deepEqual(report.nodeCold, report.nodeChangedTransfer);
+    report.nodeColdTransfer = await readTransferDtos(report.nodeCold, 'node-before-export-dtos');
+    await stopNode('node-after-cold');
     report.snapshots.nodeClosed = await completeSnapshot(database);
     const exported = path.join(root, 'node-export.db'); report.exported = await exportCurrentSqlite(database, exported); assert.equal(report.exported.verified, true);
     await withSqlite(exported, async source => assert.deepEqual(await completeSnapshot(source), report.snapshots.nodeClosed));
     await installStoppedExport({ root, instanceRoot, exported });
     native = current.start({ referenceRoot: instanceRoot, outputRoot: root, label: 'native-owned-continuation', origin }); await native.ready(); await idle();
-    report.nativeImported = await observe('native-imported'); assert.deepEqual(report.nativeImported, report.nodeCold);
+    report.nativeImported = await observe('native-imported'); assert.deepEqual(report.nativeImported, report.nodeColdTransfer);
     await materializePhase(media, 'native'); for (const file of media.files.filter(file => file.phase === 'native')) present.add(file.key);
     await scan('native-owned-joint-additions'); report.nativeContinued = await observe('native-continued');
     for (const file of media.files.filter(file => present.has(file.key) && !file.sourceOnly && !file.untypedAlternatePart)) {

@@ -4,6 +4,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { appendFile, mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { once } from 'node:events';
+import { waitForLibraryScan } from '../helpers/wait-for-reviewed-scan.js';
 import path from 'node:path';
 import os from 'node:os';
 import { isDeepStrictEqual } from 'node:util';
@@ -833,7 +834,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
       scanPhase = phase;
       let failure;
       try {
-        const completion = once(runtime.tasks, 'completed', { signal: AbortSignal.any([t.signal, AbortSignal.timeout(60_000)]) });
+        const completion = waitForLibraryScan(runtime.tasks, { signal: AbortSignal.any([t.signal, AbortSignal.timeout(60_000)]) });
         completion.catch(() => {});
         journal.record({ kind: 'refresh-request', scanPhase, phase: 'started' });
         const response = await post('', '/Library/Refresh');

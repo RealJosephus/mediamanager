@@ -68,7 +68,7 @@ foreach (var sample in input.RootElement.EnumerateArray()) {
     var appHost = (IServerApplicationHost)RuntimeHelpers.GetUninitializedObject(appHostType);
     typeof(ApplicationHost).GetField("<ApplicationPaths>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)!.SetValue(appHost, paths);
     var factory = new SqlFactory(Path.Combine(root, "native.db")); using (var initial = factory.CreateDbContext()) initial.Database.EnsureCreated();
-    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, NullLogger<BaseItemRepository>.Instance);
+    var repository = new BaseItemRepository(factory, appHost, new ItemTypeLookup(), configuration, BaseItem.LocalizationManager, NullLogger<BaseItemRepository>.Instance);
     BaseItem.ItemRepository = repository;
     var persistence = new ItemPersistenceService(factory, appHost, NullLogger<ItemPersistenceService>.Instance);
     var item = new Movie { Id = Guid.Parse("d9430000-0000-0000-0000-000000000041"), Name = "Original movie", ProductionYear = 2026,

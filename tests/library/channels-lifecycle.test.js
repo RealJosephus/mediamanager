@@ -134,7 +134,7 @@ test('an admitted filter query reaches real Views after Channel close and metada
     await assert.rejects(fixture.channels.getChannels(), { status: 503 });
     assert.equal(closed, false, 'The held real query still owns the provider reader.');
     proceed.resolve(); const result = await within(pending, 'admitted filter query drain'); await within(closing, 'channel close drain');
-    assert.deepEqual(result, { Genres: [], Tags: [], AudioLanguages: [], SubtitleLanguages: [] });
+    assert.deepEqual(result, { Genres: [], Tags: [], AudioLanguages: [], SubtitleLanguages: [], Years: [], OfficialRatings: [] });
     assert.equal(admissions, 2, 'Only the original reservation and the explicitly rejected new request entered admitOperation.');
     assert.equal(closed, true); assert.deepEqual(await fixture.snapshot(), before); assert.deepEqual(fixture.diagnostics, []); await fixture.released();
   } finally {

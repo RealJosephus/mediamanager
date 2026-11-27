@@ -50,6 +50,7 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray())
     var constructor = typeof(LibraryManager).GetConstructors().Single();
     var arguments = constructor.GetParameters().Select(parameter => parameter.ParameterType == typeof(IServerConfigurationManager) ? (object)config
         : parameter.ParameterType == typeof(IItemRepository) ? repository : parameter.ParameterType == typeof(IFileSystem) ? files
+        : parameter.ParameterType == typeof(DotIgnoreIgnoreRule) ? new DotIgnoreIgnoreRule()
         : parameter.ParameterType == typeof(ILoggerFactory) ? NullLoggerFactory.Instance
         : parameter.ParameterType == typeof(Emby.Naming.Common.NamingOptions) ? new Emby.Naming.Common.NamingOptions() : null).ToArray();
     var manager = (LibraryManager)constructor.Invoke(arguments);

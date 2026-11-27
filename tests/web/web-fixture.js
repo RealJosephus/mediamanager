@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
-import { once } from 'node:events';
+import { waitForLibraryScan } from '../helpers/wait-for-reviewed-scan.js';
 import { createServer } from 'node:http';
 import { copyFile, mkdir, mkdtemp, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises';
 import os from 'node:os';
@@ -260,7 +260,7 @@ export async function createWebServerFixture({ populated = false, audioFixture, 
         method: 'POST', body: { LibraryOptions: { PathInfos: [{ Path: mediaRoot }], EnableRealtimeMonitor: false,
           EnableInternetProviders: false, PreferredMetadataLanguage: 'en-US' } }
       })).status, 204);
-      const completed = once(application.tasks, 'completed', { signal: AbortSignal.timeout(90000) });
+      const completed = waitForLibraryScan(application.tasks, { signal: AbortSignal.timeout(90000) });
       assert.equal((await administratorRequest('/Library/Refresh', { method: 'POST' })).status, 204);
       const [{ Result }] = await completed;
       assert.equal(Result.Id, refreshLibraryTaskId);

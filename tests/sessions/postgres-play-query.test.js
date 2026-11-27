@@ -327,7 +327,9 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
     runtime.sessions.attachController(login.SessionInfo.Id, {
       isActive: () => true,
       supportsMediaControl: true,
-      sendMessage: async (messageType, messageId, data) => messages.push({ messageType, messageId, data }),
+      sendMessage: async (messageType, messageId, data) => {
+        if (messageType === 'Play') messages.push({ messageType, messageId, data });
+      },
     });
     phase('small catalogue and session ready');
 
