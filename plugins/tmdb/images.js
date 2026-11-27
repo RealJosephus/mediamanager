@@ -1,4 +1,4 @@
-import { PROVIDER_NAME, parseTmdbId } from './utils.js';
+import { PROVIDER_NAME, parseTmdbId, providerId } from './utils.js';
 
 export function createImageProviders(client) {
   const definitions = [
@@ -11,9 +11,10 @@ export function createImageProviders(client) {
     id: `Tmdb${type}ImageProvider`, name: PROVIDER_NAME, kind: 'image', imageSource: 'remote', itemTypes, order, imageTypes,
     async getImages(item, options = {}) {
       const language = item.MetadataLanguage; const country = item.MetadataCountryCode;
-      let id = parseTmdbId(item.ProviderIds?.Tmdb); let remote;
+      let id = parseTmdbId(providerId(item.ProviderIds, 'Tmdb')); let remote;
       if (type === 'Movie') {
-        if (!id && item.ProviderIds?.Imdb) id = (await client.find(item.ProviderIds.Imdb, 'imdb_id', language, country, options))?.movie_results?.[0]?.id;
+        const imdb = providerId(item.ProviderIds, 'Imdb');
+        if (!id && imdb) id = (await client.find(imdb, 'imdb_id', language, country, options))?.movie_results?.[0]?.id;
         if (id > 0) remote = await client.movie(id, null, null, null, options);
       } else if (type === 'Series') {
         if (id) remote = await client.series(id, null, null, null, options);
@@ -22,10 +23,11 @@ export function createImageProviders(client) {
       } else if (type === 'Person') {
         if (id) remote = await client.person(id, language, country, options);
       } else {
-        id = parseTmdbId(item.SeriesProviderIds?.Tmdb);
+        id = parseTmdbId(providerId(item.SeriesProviderIds, 'Tmdb'));
         if (id == null || item.IndexNumber == null) return [];
         remote = type === 'Season' ? await client.season(id, item.IndexNumber, null, null, null, options)
-          : await client.episode(id, item.ParentIndexNumber ?? 1, item.IndexNumber, item.SeriesDisplayOrder, null, null, null, options);
+          : await client.episode(id, item.ParentIndexNumber ?? 1, item.IndexNumber, item.SeriesDisplayOrder, null, null, null,
+            { ...options, episodeGroupId: providerId(item.SeriesProviderIds, 'TmdbEpisodeGroup') });
       }
       if (!remote?.images) return [];
       const groups = type === 'Person' ? [['profiles', 'Profile']] : type === 'Episode' ? [['stills', 'Still']]

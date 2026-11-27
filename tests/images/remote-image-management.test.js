@@ -38,6 +38,10 @@ test('remote image HTTP browses and downloads artwork supplied by the configured
   assert.equal(all.status, 200);
   assert.equal(all.body.TotalRecordCount, 4);
   assert.deepEqual(filenames(all.body.Images), posterFiles);
+  assert.equal(await database.update('BaseItemProviders', { ItemId: metadataMovieId, ProviderId: 'Tmdb' }, { ProviderId: 'tmdb' }), 1n);
+  const lower = await record('lowercase provider ID', endpoint + '?type=Primary&includeAllLanguages=true');
+  assert.equal(lower.status, 200);
+  assert.deepEqual(lower.body, all.body);
   const none = await record('negative limit', endpoint + '?limit=-1');
   assert.equal(none.body.TotalRecordCount, 3);
   assert.deepEqual(none.body.Images, []);

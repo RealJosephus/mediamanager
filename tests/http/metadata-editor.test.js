@@ -15,6 +15,8 @@ const ids = {
   hidden: '65000000-0000-0000-0000-000000000005',
   unknown: '65000000-0000-0000-0000-000000000006',
   virtual: '65000000-0000-0000-0000-000000000007',
+  series: '65000000-0000-0000-0000-000000000008',
+  season: '65000000-0000-0000-0000-000000000009',
   missing: '65000000-0000-0000-0000-000000000099'
 };
 
@@ -82,6 +84,16 @@ test('PostgreSQL: metadata editor service and HTTP route preserve the elevated r
       MediaType: 'Video', IsVirtualItem: true
     }));
 
+    await database.insert('BaseItems', item(ids.series, 'TV.Series', {
+      Name: 'Episode groups', ParentId: ids.folder, TopParentId: ids.folder, IsFolder: true
+    }));
+    await database.insert('BaseItems', item(ids.season, 'TV.Season', {
+      Name: 'Season 2', ParentId: ids.series, SeriesId: ids.series, TopParentId: ids.folder, IsFolder: true, IndexNumber: 2
+    }));
+    for (const [ItemId, ProviderId, ProviderValue] of [
+      [ids.series, 'Tmdb', '10'], [ids.series, 'TmdbEpisodeGroup', 'selected-group'], [ids.season, 'TmdbEpisodeGroup', 'season-group']
+    ]) await database.insert('BaseItemProviders', { ItemId, ProviderId, ProviderValue });
+
     const administrator = await runtime.users.createUser({ Name: 'MetadataAdmin', Password: 'admin-password' });
     const administratorRecord = await runtime.users.getUser(administrator.Id);
     await runtime.users.updatePolicy(administrator.Id, {
@@ -124,6 +136,19 @@ test('PostgreSQL: metadata editor service and HTTP route preserve the elevated r
     const adminResponse = await request(ids.movie, adminLogin.AccessToken);
     assert.equal(adminResponse.status, 200);
     assert.deepEqual(parseLosslessJson(await adminResponse.text()), parseLosslessJson(stringifyNativeJson(direct)));
+    const groupInfo = { Name: 'TheMovieDb', Key: 'TmdbEpisodeGroup', Type: 'ReleaseGroup' };
+    const seriesUrl = 'https://www.themoviedb.org/tv/10';
+    for (const [id, links] of [
+      [ids.series, [seriesUrl, seriesUrl + '/episode_group/selected-group']],
+      [ids.season, [seriesUrl + '/season/2', seriesUrl + '/episode_group/selected-group/group/season-group']]
+    ]) {
+      const editor = await request(id, adminLogin.AccessToken);
+      assert.equal(editor.status, 200);
+      assert.deepEqual((await editor.json()).ExternalIdInfos.filter(info => info.Key === groupInfo.Key), [groupInfo]);
+      const detail = await fetch(origin + '/Items/' + id, { headers: { Authorization: authorization(adminLogin.AccessToken) } });
+      assert.equal(detail.status, 200);
+      assert.deepEqual((await detail.json()).ExternalUrls.filter(link => link.Name === 'TMDB').map(link => link.Url), links);
+    }
     const keyResponse = await request(ids.movie, apiKey.AccessToken);
     assert.equal(keyResponse.status, 200);
     assert.deepEqual(parseLosslessJson(await keyResponse.text()), parseLosslessJson(stringifyNativeJson(direct)));

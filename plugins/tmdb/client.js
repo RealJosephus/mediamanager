@@ -139,6 +139,11 @@ export class TmdbClient {
   }
 
   async episodeGroup(seriesId, displayOrder, language, imageLanguages, countryCode, options) {
+    const selected = options?.episodeGroupId;
+    if (selected?.trim()) {
+      return this.#cached(JSON.stringify(['episode-group', selected, language]), () =>
+        this.request('tv/episode_group/' + encodeURIComponent(selected), { language: normalizeLanguage(language, countryCode) }, options));
+    }
     const groupType = { originalAirDate: 1, absolute: 2, dvd: 3, digital: 4, storyArc: 5, production: 6, tv: 7 }[displayOrder];
     if (!groupType) return null;
     return this.#cached(`group-${seriesId}-${displayOrder}-${language ?? ''}`, async () => {
@@ -149,7 +154,7 @@ export class TmdbClient {
   }
 
   episode(seriesId, season, number, displayOrder, language, imageLanguages, countryCode, options) {
-    return this.#cached(`episode-${seriesId}-s${season}e${number}-${displayOrder ?? ''}-${language ?? ''}`, async () => {
+    return this.#cached(JSON.stringify(['episode', seriesId, season, number, displayOrder, options?.episodeGroupId, language]), async () => {
       const group = await this.episodeGroup(seriesId, displayOrder, language, imageLanguages, countryCode, options);
       const episode = group?.groups?.find((entry) => entry.order === season)?.episodes?.find((entry) => entry.order === number - 1);
       return this.request(`tv/${seriesId}/season/${episode?.season_number ?? season}/episode/${episode?.episode_number ?? number}`, { language: normalizeLanguage(language, countryCode), include_image_language: imageLanguages, append_to_response: 'credits,images,external_ids,videos' }, options);

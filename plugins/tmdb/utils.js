@@ -1,4 +1,7 @@
 import { lowerInvariant } from '@mediamanager/plugin-sdk/core/identity';
+import { ordinalIgnoreCaseEquals } from '@mediamanager/plugin-sdk/storage/ordinal-comparer';
+
+export const providerId = (ids, name) => Object.entries(ids ?? {}).find(([key]) => ordinalIgnoreCaseEquals(key, name))?.[1];
 export const TMDB_ID = 'b8715ed1-6c47-4528-9ad3-f72deb539cd4';
 export const PROVIDER_NAME = 'TheMovieDb';
 

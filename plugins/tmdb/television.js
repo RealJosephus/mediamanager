@@ -1,4 +1,4 @@
-import { parseTmdbId, imageLanguages, cleanName, findBestMatch, parentalRating, mapCast, crewType, isTrailer, PROVIDER_NAME } from './utils.js';
+import { parseTmdbId, providerId, imageLanguages, cleanName, findBestMatch, parentalRating, mapCast, crewType, isTrailer, PROVIDER_NAME } from './utils.js';
 import { addPerson } from '@mediamanager/plugin-sdk/metadata/people';
 import { trySetProviderId } from '@mediamanager/plugin-sdk/metadata/provider-ids';
 import { parseSeriesStatus } from '@mediamanager/plugin-sdk/metadata/television';
@@ -105,11 +105,12 @@ export function createTelevisionProviders({ client, parseName }) {
     return { HasMetadata: true, QueriedById: false, ResultLanguage: language ?? remote.original_language, Item: item, People: people.length ? people : null };
   };
   const episodeMetadata = async (info, options = {}) => {
-    const id = parseTmdbId(info.SeriesProviderIds?.Tmdb);
+    const id = parseTmdbId(providerId(info.SeriesProviderIds, 'Tmdb'));
     if (info.IsMissingEpisode || id == null || info.IndexNumber == null) return { HasMetadata: false };
     const season = info.ParentIndexNumber ?? 1; const number = info.IndexNumber;
+    const episodeOptions = { ...options, episodeGroupId: providerId(info.SeriesProviderIds, 'TmdbEpisodeGroup') };
     const fetch = (index) => client.episode(id, season, index, info.SeriesDisplayOrder, info.MetadataLanguage,
-      imageLanguages(info.MetadataLanguage, info.MetadataCountryCode), info.MetadataCountryCode, options);
+      imageLanguages(info.MetadataLanguage, info.MetadataCountryCode), info.MetadataCountryCode, episodeOptions);
     let remote;
     if (info.IndexNumberEnd != null) {
       const results = [];
