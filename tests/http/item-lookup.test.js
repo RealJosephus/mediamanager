@@ -4,10 +4,50 @@ import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { idKey } from '../../src/library/records.js';
+import { nativeGuid } from '../../src/users/native.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
-import { createMetadataHttpFixture, identifiedTmdbId, metadataMovieId } from '../helpers/metadata-http-fixture.js';
+import { createMetadataHttpFixture, existingTmdbId, identifiedTmdbId, metadataMovieId } from '../helpers/metadata-http-fixture.js';
 
 export const requiredValidationServices = ['postgres'];
+
+test('removing a favorite survives identifying the movie back to its original TMDB entry', async t => {
+  const { database, runtime, request, reader } = await createMetadataHttpFixture(t);
+  const id = idKey(metadataMovieId), favorite = '/UserFavoriteItems/' + id;
+  const identify = async (tmdb, name) => {
+    const response = await request('/Items/RemoteSearch/Apply/' + id + '?replaceAllImages=false', { method: 'POST',
+      body: { Name: name, ProviderIds: { Tmdb: String(tmdb) }, SearchProviderName: 'TheMovieDb' } });
+    assert.equal(response.status, 204, response.bytes.toString());
+    const item = await request('/Items/' + id, { token: reader });
+    assert.equal(item.status, 200);
+    assert.equal(item.body.ProviderIds.Tmdb, String(tmdb));
+    return item.body.UserData;
+  };
+  const marked = await request(favorite, { method: 'POST', token: reader });
+  assert.equal(marked.status, 200);
+  assert.equal(marked.body.IsFavorite, true);
+  const [original] = await database.rows('UserData', { where: { ItemId: metadataMovieId, CustomDataKey: String(existingTmdbId) } });
+  const retention = '2027-02-14 00:00:00';
+  const originalKey = { ItemId: original.ItemId, UserId: original.UserId, CustomDataKey: original.CustomDataKey };
+  await database.update('UserData', originalKey, { RetentionDate: retention });
+  const other = await runtime.users.createUser({ Name: 'Another reader' });
+  const otherKey = { ...originalKey, UserId: nativeGuid(other.Id) };
+  await database.insert('UserData', { ...original, ...otherKey });
+
+  assert.equal((await identify(identifiedTmdbId, 'Identified feature')).IsFavorite, true);
+  const removed = await request(favorite, { method: 'DELETE', token: reader });
+  assert.equal(removed.status, 200);
+  assert.equal(removed.body.IsFavorite, false);
+  const rows = await database.rows('UserData', { where: { ItemId: original.ItemId, UserId: original.UserId } });
+  assert.deepEqual(new Set(rows.map(row => row.CustomDataKey)),
+    new Set([String(existingTmdbId), String(identifiedTmdbId), 'tt9876543', metadataMovieId.toLowerCase()]));
+  assert.ok(rows.every(row => !row.IsFavorite));
+  assert.equal(rows.find(row => row.CustomDataKey === original.CustomDataKey).RetentionDate, retention);
+  assert.equal((await database.rows('UserData', { where: otherKey }))[0].IsFavorite, true);
+  assert.equal((await identify(existingTmdbId, 'Existing feature')).IsFavorite, false);
+  const read = await request('/UserItems/' + id + '/UserData', { token: reader });
+  assert.equal(read.status, 200);
+  assert.equal(read.body.IsFavorite, false);
+});
 
 test('item lookup follows the public identify contract through runtime TMDB, metadata refresh and PostgreSQL', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 120000,

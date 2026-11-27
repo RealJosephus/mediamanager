@@ -192,17 +192,22 @@ export async function readUserDataRows(db, item, rows, suppliedKeys) {
   assignRating(data, data.Rating);
   return data;
 }
-function userDataRowsForSave(userId, item, data, keys) {
+function userDataRowsForSave(userId, item, data, keys, existing) {
   assignRating(data, data.Rating);
   const values = Object.fromEntries(fields.map((field) => [field, data[field]]));
-  values.RetentionDate = null;
   values.PlaybackPositionTicks = int64(values.PlaybackPositionTicks);
   data.Key = keys.at(-1);
-  return keys.map(key => ({ ItemId: item.Id, UserId: userId, CustomDataKey: key, ...values }));
+  // A metadata refresh can temporarily hide provider keys. Preserve those rows
+  // and their retention dates while updating the user's state on every alias.
+  return [
+    ...keys.map(key => ({ ItemId: item.Id, UserId: userId, CustomDataKey: key, RetentionDate: null, ...values })),
+    ...existing.filter(row => !keys.includes(row.CustomDataKey)).map(row => ({ ...row, ...values })),
+  ];
 }
 export async function saveUserData(db, userId, item, data) {
   const keys = await userDataKeys(db, item);
-  await upsertPostgresUserDataRows(db, userDataRowsForSave(userId, item, data, keys));
+  const existing = await loadPostgresUserDataRows(db, userId, [item.Id]);
+  await upsertPostgresUserDataRows(db, userDataRowsForSave(userId, item, data, keys, existing));
   return keys;
 }
 export function userDataDto(item, data) {
@@ -332,10 +337,10 @@ export class UserDataService extends EventEmitter {
     await this.store.serializeWrites(async () => {
       await this.store.transaction(async (db) => {
         const keys = (await postgresUserDataKeyMap(db, [item])).get(guidN(item.Id));
-        const data = await readUserDataRows(db, item,
-          await loadPostgresUserDataRows(db, userId, [item.Id]), keys);
+        const existing = await loadPostgresUserDataRows(db, userId, [item.Id]);
+        const data = await readUserDataRows(db, item, existing, keys);
         if (await mutate(data, db) === false) return;
-        await upsertPostgresUserDataRows(db, userDataRowsForSave(userId, item, data, keys));
+        await upsertPostgresUserDataRows(db, userDataRowsForSave(userId, item, data, keys, existing));
         const changeReferences = reason === 'PlaybackProgress' ? null : await this.#captureChangeReferences(db, item);
         event = { Keys: keys, UserData: { ...data }, SaveReason: reason,
           UserId: userId, Item: item, ChangeReferences: changeReferences };
@@ -428,9 +433,9 @@ export class UserDataService extends EventEmitter {
         const states = new Map();
         for (const version of stateItems) {
           const keys = keyMap.get(guidN(version.Id));
-          const data = await readUserDataRows(db, version,
-            existing.filter(row => sameGuid(row.ItemId, version.Id)), keys);
-          states.set(guidN(version.Id), { item: version, keys, data });
+          const rows = existing.filter(row => sameGuid(row.ItemId, version.Id));
+          const data = await readUserDataRows(db, version, rows, keys);
+          states.set(guidN(version.Id), { item: version, keys, data, rows });
         }
         const referenceIds = new Set();
         for (const { item } of states.values()) for (const value of [item.OwnerId, item.ParentId]) {
@@ -480,7 +485,7 @@ export class UserDataService extends EventEmitter {
         // earlier rows, and prevents subsequent saves.
         for (const operation of operations) {
           await this.store.transaction(db => upsertPostgresUserDataRows(db,
-            userDataRowsForSave(userId, operation.state.item, operation.data, operation.state.keys)));
+            userDataRowsForSave(userId, operation.state.item, operation.data, operation.state.keys, operation.state.rows)));
           operation.state.item.UserData = await this.store.run(db => loadPostgresUserDataRows(db, null,
             [operation.state.item.Id]));
           committedEvents.push(operation.event);
@@ -518,8 +523,8 @@ export class UserDataService extends EventEmitter {
         }
         for (const version of versions) {
           const keys = keyMap.get(guidN(version.Id));
-          const data = await readUserDataRows(db, version,
-            existing.filter(row => sameGuid(row.ItemId, version.Id)), keys);
+          const rows = existing.filter(row => sameGuid(row.ItemId, version.Id));
+          const data = await readUserDataRows(db, version, rows, keys);
           if (played) { data.Played = true; data.PlaybackPositionTicks = 0n; }
           else resetPlayed(data);
           const changeReferences = [{ id: version.Id, item: version }];
@@ -528,14 +533,14 @@ export class UserDataService extends EventEmitter {
             if (related) { changeReferences.push({ id: related.Id, item: related }); break; }
           }
           const savedData = { ...data };
-          operations.push({ version, keys, data: savedData,
+          operations.push({ version, keys, rows, data: savedData,
             event: { Keys: keys, UserData: savedData, SaveReason: 'TogglePlayed', UserId: userId,
               Item: version, ChangeReferences: changeReferences } });
         }
         });
         for (const operation of operations) {
           await this.store.transaction(db => upsertPostgresUserDataRows(db,
-            userDataRowsForSave(userId, operation.version, operation.data, operation.keys)));
+            userDataRowsForSave(userId, operation.version, operation.data, operation.keys, operation.rows)));
           operation.version.UserData = await this.store.run(db => loadPostgresUserDataRows(db, null,
             [operation.version.Id]));
           committedEvents.push(operation.event);
