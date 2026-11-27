@@ -53,11 +53,11 @@ test('restore checks server and engine versions before restart admission and aga
     serverId: active.serverId, serverVersion });
   const producer = server('13.10.0'), older = server('13.9.0');
   const options = { Database: false, Metadata: false, Subtitles: false, Trickplay: false };
-  const config = path.join(active.paths.configurationDirectoryPath, 'version-marker.txt');
+  const config = path.join(active.paths.configurationDirectoryPath, 'version-marker.xml');
   await mkdir(path.dirname(config), { recursive: true });
-  await writeFile(config, 'archived');
+  await writeFile(config, '<marker>archived</marker>');
   const archive = await producer.create(options);
-  await writeFile(config, 'current');
+  await writeFile(config, '<marker>current</marker>');
   const rejectAdmission = { admit() { assert.fail('An incompatible restore reserved a restart'); } };
   const pending = path.join(active.pending, 'request.json');
   assert.equal((await request('/Backup/Restore', { method: 'POST', body: { ArchiveFileName: archive.Path } })).status, 422);
@@ -72,13 +72,13 @@ test('restore checks server and engine versions before restart admission and aga
 
   await producer.stageRestore(archive.Path, { admit: () => ({ cancel() {} }) });
   await assert.rejects(older.restorePending(), { status: 422 });
-  assert.equal(await readFile(config, 'utf8'), 'current');
+  assert.equal(await readFile(config, 'utf8'), '<marker>current</marker>');
   const staged = await readFile(pending, 'utf8'), incompatible = JSON.parse(staged);
   incompatible.manifest.BackupEngineVersion = '1.1.0';
   await writeFile(pending, JSON.stringify(incompatible));
   await assert.rejects(producer.restorePending(), { status: 422 });
-  assert.equal(await readFile(config, 'utf8'), 'current');
+  assert.equal(await readFile(config, 'utf8'), '<marker>current</marker>');
   await writeFile(pending, staged);
   await assert.rejects(server('13.10.0.0').restorePending(), BackupRestored);
-  assert.equal(await readFile(config, 'utf8'), 'archived');
+  assert.equal(await readFile(config, 'utf8'), '<marker>archived</marker>');
 });

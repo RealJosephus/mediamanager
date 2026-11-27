@@ -9,7 +9,7 @@ import { postgresTestRow } from '../database/postgres-fixture.js';
 import { createMetadataHttpFixture } from '../helpers/metadata-http-fixture.js';
 import { startHttpSource } from '../storage/helpers/http-source.js';
 
-export const requiredValidationServices = ['postgres', 'ffmpeg', 'ffprobe'];
+export const requiredValidationServices = ['postgres'];
 
 test('a signed-in listener can use forced remote transcoding through PlaybackInfo, Universal Audio and HLS', { timeout: 120000 }, async t => {
   const { runtime, database, request, reader } = await createMetadataHttpFixture(t);
