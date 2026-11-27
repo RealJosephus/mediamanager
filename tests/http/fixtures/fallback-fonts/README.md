@@ -17,8 +17,6 @@ Each failed request is followed by a successful request to the restored file.
 The fault capture retains the executor's actual header commitment, final server
 headers, public status and every body byte received before EOF or transport
 failure. Its five second client deadline bounds only this failure observation.
-Native framing or body failures remain original observations; the report does
-not claim a zero difference comparison or release acceptance.
 
 The same input is now captured independently by Node in `node/raw.json`.
 Its result-send hook moves the actual owned file before the original result
@@ -26,9 +24,11 @@ executes; its open-read hook moves it after the original response selected its
 file headers and before delegating to mapped `LocalAdapter` access. Neither hook
 throws a selected error or manufactures HTTP output. Each actual storage error,
 response commitment, status, headers, body, transport outcome, restored file and
-complete subsequent response is retained. The report lists public comparison
-bits and keeps incomplete Native transport distinct from a complete Node error;
-these observations do not waive those public differences.
+complete subsequent response is retained. The test requires both hosts to agree
+on status, MIME type, received body bytes, body completion, transport failure,
+declared length and last modification time. The early removal returns a complete
+404. After file headers are selected, the small font returns zero body bytes and
+the larger font returns the error text. Both transfers end early.
 
 The Node resource tests open real mapped local files before rejecting the open
 or first public iterator pull. They cover primitive and structured failure

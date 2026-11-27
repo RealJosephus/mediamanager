@@ -132,7 +132,7 @@ function nativeWorker(options) {
   return { done, get message() { return result; } };
 }
 
-test('locked libass browser consumes real Native and Node missing-font responses without accepting their public HTTP differences', {
+test('locked libass worker and renderer report missing fonts from both hosts and the worker reads restored bytes', {
   skip: !enabled, timeout: 360000,
 }, async t => {
   const output = path.join(validationOutputRoot(), 'fallback-font-consumer-' + randomUUID()); await mkdir(output, { recursive: true });
