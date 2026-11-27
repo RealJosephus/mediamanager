@@ -3,6 +3,7 @@ import { lstat, open, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import { parseLosslessJson } from '../core/json.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
+import { identityPathStyle } from '../storage/uri.js';
 
 const guid = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/iu;
 const digest = /^[0-9a-f]{64}$/u;
@@ -20,7 +21,7 @@ const fail = message => { throw new TypeError(`Invalid media access plan: ${mess
 const keys = (value, allowed) => {
   if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).some(key => !allowed.includes(key))) fail('unknown or missing declaration object');
 };
-const pathApi = value => /^[A-Za-z]:[\\/]|^\\\\/u.test(value) ? path.win32 : path.posix;
+const pathApi = value => identityPathStyle(value) === 'windows' ? path.win32 : path.posix;
 const pathKey = value => {
   const api = pathApi(value); let normalized = api.normalize(value);
   if (normalized.length > api.parse(normalized).root.length) normalized = normalized.replace(/[\\/]+$/u, '');
@@ -28,8 +29,9 @@ const pathKey = value => {
 };
 function absolute(value) {
   if (typeof value !== 'string' || !value || /[\0\r\n]/u.test(value) || /(^|[\\/])\.\.?([\\/]|$)/u.test(value)
-    || !pathApi(value).isAbsolute(value) || value.includes('://') || /^\/(?:[\\/])/u.test(value)) fail('identity paths must be absolute filesystem paths without traversal');
-  if (pathApi(value) === path.win32 && !/^[A-Za-z]:[\\/]|^\\\\[^\\/]+[\\/][^\\/]+/u.test(value)) fail('Windows identities require a drive or UNC share');
+    || !pathApi(value).isAbsolute(value) || value.includes('://')) fail('identity paths must be absolute filesystem paths without traversal');
+  if ((pathApi(value) === path.win32 || /^[\\/]{2}/u.test(value))
+    && !/^(?:[A-Za-z]:[\\/]|(?:\\\\|\/\/)(?![?.][\\/])[^\\/]+[\\/][^\\/]+)/u.test(value)) fail('Windows identities require a drive or UNC share');
   return value;
 }
 function contains(root, filename) {
