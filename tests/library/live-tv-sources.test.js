@@ -12,7 +12,7 @@ import { LiveTvService } from '../../src/library/live-tv-service.js';
 import { liveTvConfigurationReader } from '../../src/core/live-tv-configuration-store.js';
 import { LiveTvSourcesService } from '../../src/library/live-tv-sources-service.js';
 import { bindListingsProviderInfo, bindSetChannelMapping, bindTunerHostInfo } from '../../src/http/live-tv-source-binding.js';
-import { deserializeLiveTvConfiguration } from '../../src/http/live-tv-configuration-binding.js';
+import { liveTvOptions } from '../helpers/live-tv-options.js';
 import { readConfigurationFile } from '../../src/core/configuration-file.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance'];
@@ -222,7 +222,7 @@ test('source managers match actual native validation, mapping, cache and failure
           if (operation?.failure === 'save') throw Object.assign(new Error('Controlled configuration save failure.'), { code: 'EIO' });
           return fs.open(...args);
         } } });
-        await liveTv.saveConfiguration(deserializeLiveTvConfiguration({ source: JSON.stringify(sample.configuration) }));
+        await liveTv.saveConfiguration(liveTvOptions(sample.configuration));
         liveTv.on('updating', ({ configuration }) => trace('save', configuration));
         service = new LiveTvSourcesService({ liveTv, plugins, fileSystem: fs, cachePath,
           refreshGuide: () => { trace('refresh'); if (operation.failure === 'refresh') throw new Error('Controlled refresh failure.'); },
@@ -325,9 +325,9 @@ test('source cache deletion uses filesystem codes and preserves the already save
     await fs.mkdir(path.join(cachePath, 'xmltv'), { recursive: true });
     await fs.writeFile(target, 'retained cache bytes');
     const liveTv = new LiveTvService({ configurationDirectoryPath });
-    await liveTv.saveConfiguration(deserializeLiveTvConfiguration({ source: JSON.stringify({
+    await liveTv.saveConfiguration(liveTvOptions({
       TunerHosts: [{ Id: tunerId, Type: 'controlled' }], ListingProviders: [{ Id: listingId, Type: 'controlled' }],
-    }) }));
+    }));
     const expected = structuredClone(await liveTv.getConfiguration());
     expected[kind === 'tuner' ? 'TunerHosts' : 'ListingProviders'] = [];
     const diagnostics = [];
@@ -364,9 +364,9 @@ test('source cache deletion uses filesystem codes and preserves the already save
 });
 
 test('provider metadata failures consume semantic support codes and retain channel values', { timeout: 30000 }, async t => {
-  const configuration = deserializeLiveTvConfiguration({ source: JSON.stringify({ ListingProviders: [
+  const configuration = liveTvOptions({ ListingProviders: [
     { Id: listingId, Type: 'controlled', EnableAllTuners: true, ChannelMappings: [] },
-  ] }) });
+  ] });
   for (const code of ['not-supported', 'EIO']) {
     const diagnostics = [], channels = [{ ...channel, ImageUrl: 'retained image' }], expected = structuredClone(channels);
     let admitted = 0, released = 0, calls = 0, phase = 'operation';
@@ -403,10 +403,10 @@ test('source cache cleanup follows the active root and retains old tuner and XML
   const liveTv = new LiveTvService({ configurationDirectoryPath: directory });
   let cachePath = first, service;
   try {
-    await liveTv.saveConfiguration(deserializeLiveTvConfiguration({ source: JSON.stringify({
+    await liveTv.saveConfiguration(liveTvOptions({
       TunerHosts: [{ Id: previousTuner, Type: 'controlled' }, { Id: tunerId, Type: 'controlled' }],
       ListingProviders: [{ Id: listingId, Type: 'controlled' }],
-    }) }));
+    }));
     service = new LiveTvSourcesService({ liveTv, plugins: { entries: () => [] }, fileSystem: fs,
       get cachePath() { return cachePath; }, refreshGuide: async () => {} });
     await service.deleteTunerHost(previousTuner);

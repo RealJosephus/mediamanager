@@ -22,8 +22,15 @@ function completeCacheEntry(bytes, format) {
 function checkSvg(bytes, filename) {
   if (extension(filename) !== 'svg') return;
   const text = bytes.toString('utf8');
-  // Until the complete native data-URI validator is ported, external resources are rejected before rasterization.
-  if (/<!DOCTYPE|<!ENTITY|(?:href\s*=\s*['"]\s*[^#'"\s])|url\s*\(\s*[^#\s)]|@import/i.test(text)) throw new Error('SVG external or nested resources are not supported.');
+  // Admit self-contained PNG image data. Other references still go through
+  // the external resource check, including data with a mismatched signature.
+  const references = text.replace(/(\bhref\s*=\s*)(['"])data:image\/png;base64,([a-z0-9+/=\s]+)\2/giu,
+    (attribute, prefix, quote, payload) => {
+      const png = Buffer.from(payload, 'base64');
+      return png.subarray(0, 8).equals(pngSignature) && png.subarray(-12).equals(pngEnd)
+        ? prefix + quote + '#' + quote : attribute;
+    });
+  if (/<!DOCTYPE|<!ENTITY|(?:href\s*=\s*['"]\s*[^#'"\s])|url\s*\(\s*[^#\s)]|@import/i.test(references)) throw new Error('SVG external or nested resources are not supported.');
 }
 async function run(pipeline, signal) {
   signal?.throwIfAborted();

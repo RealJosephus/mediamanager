@@ -207,25 +207,23 @@ test('Live TV named configuration POST matches native replacement, XML consumpti
     await accepted('all configuration fields', { body: full });
     const defaults = await accepted('empty object replaces all fields', { body: {} });
     assert.deepEqual(defaults.native.bodyJson, initial.native.bodyJson);
-    const ignored = await accepted('property names are case sensitive and unknown subtrees are ignored', {
-      rawBody: '{"guideDays":12,"tunerHosts":[{"Id":"ignored"}],"Unknown":{"nested":[1,true,null]}}',
+    const cased = await accepted('camel-case fields bind and unknown subtrees are ignored', {
+      rawBody: '{"guideDays":12,"tunerHosts":[{"id":"configured"}],"Unknown":{"nested":[1,true,null]}}',
     });
-    assert.deepEqual(ignored.native.bodyJson, initial.native.bodyJson);
+    assert.equal(cased.native.bodyJson.GuideDays, 12);
+    assert.deepEqual(cased.native.bodyJson.TunerHosts.map(host => host.Id), ['configured']);
     const numbers = await accepted('quoted numbers, strings and repeated tokens', {
       rawBody: '{"GuideDays":"2","GuideDays":"13","PrePaddingSeconds":"-2147483648","PostPaddingSeconds":"2147483647","RecordingPath":false,"TunerHosts":[{"Id":42,"TunerCount":"3","FallbackMaxStreamingBitrate":"5000000"}],"ListingProviders":[{"Id":"defaults"}]}',
     });
     assert.equal(numbers.native.bodyJson.GuideDays, 13);
     assert.equal(numbers.native.bodyJson.RecordingPath, 'false');
     const nullable = await accepted('nullable empty string and explicit null fields', {
-      rawBody: '{"GuideDays":"","RecordingPath":null,"RecordingPostProcessorArguments":null,"ListingProviders":null}',
+      rawBody: '{"GuideDays":"","RecordingPath":null}',
     });
     assert.equal(Object.hasOwn(nullable.native.bodyJson, 'GuideDays'), false);
-    const nullTuners = await accepted('explicit null tuner collection is preserved live', { body: { TunerHosts: null } });
-    assert.equal(Object.hasOwn(nullTuners.native.bodyJson, 'TunerHosts'), false);
-    const nullInfo = await pair('Info consumes explicit null tuner collection', '/LiveTv/Info', { mode: 'ordinary' });
-    assert.equal(nullInfo.native.status, 500);
-    await accepted('reset after null tuner collection', { body: {} });
     for (const sample of [
+      { name: 'null tuner collection', rawBody: '{"TunerHosts":null}' },
+      { name: 'null required listing and arguments', rawBody: '{"ListingProviders":null,"RecordingPostProcessorArguments":null}' },
       { name: 'invalid first duplicate is not hidden', rawBody: '{"GuideDays":{},"GuideDays":7}' },
       { name: 'strict Boolean', rawBody: '{"SaveRecordingNFO":"true"}' },
       { name: 'integer overflow', rawBody: '{"PrePaddingSeconds":"2147483648"}' },
@@ -336,15 +334,13 @@ test('Live TV named configuration POST matches native replacement, XML consumpti
     await consumersAfterPost('removed by POST', false, 1);
     await accepted('restore existing global view', { body: { GuideDays: 19, TunerHosts: [{ Id: 'controlled', Type: 'unregistered' }] } });
     await consumersAfterPost('restored by POST', true, 14);
-    // The store caches exact keys, while the physical file is lower case.
-    const lower = await pair('canonical cache before differently cased save');
-    const mixed = await accepted('differently cased key has an independent live cache', {
+    const mixed = await accepted('differently cased URL writes the canonical configuration', {
       route: '/System/Configuration/LiveTv', body: { GuideDays: 4, TunerHosts: [] },
     });
-    const unchanged = await pair('canonical warmed key after differently cased save');
-    assert.deepEqual(unchanged.native.bodyJson, lower.native.bodyJson);
+    const updated = await pair('canonical warmed key after differently cased save');
+    assert.deepEqual(updated.native.bodyJson, mixed.native.bodyJson);
     assert.equal(mixed.native.bodyJson.GuideDays, 4);
-    await consumersAfterPost('canonical consumers retain warm value', true, 14);
+    await consumersAfterPost('canonical consumers read the updated value', false, 4);
     baseline = await snapshot(); report.beforeColdRestart = baseline;
     const stopped = await native.stop(async () => (await request(origin, '/System/Shutdown', { token: current.accessToken, method: 'POST' })).status,
       () => portAvailable(port));

@@ -35,7 +35,7 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
             File.SetLastWriteTimeUtc(filename, DateTime.UtcNow.AddDays(action.TryGetProperty("ageDays", out var age) ? -age.GetDouble() : 0));
         }
         if (action.TryGetProperty("deleteCache", out var delete) && delete.GetBoolean()) File.Delete(filename);
-        if (client is null || action.TryGetProperty("restart", out var restart) && restart.GetBoolean()) { client?.Dispose(); client = new SchedulesDirect(NullLogger<SchedulesDirect>.Instance, factory, paths); }
+        if (client is null || action.TryGetProperty("restart", out var restart) && restart.GetBoolean()) { client?.Dispose(); client = new SchedulesDirect(NullLogger<SchedulesDirect>.Instance, factory, paths, null!); }
         string? error = null, value = null; bool? writable = null;
         try {
             await using var stream = await client.GetAvailableCountries(CancellationToken.None);
@@ -58,10 +58,10 @@ foreach (var kind in new[] { "absent", "today", "future", "past", "invalid", "in
     var fileBefore = File.Exists(filename) ? Convert.ToBase64String(File.ReadAllBytes(filename)) : null;
     var paths = Stub.Make<IApplicationPaths>((method, _) => method.Name == "get_CachePath" ? cachePath : Stub.Default(method.ReturnType));
     var factory = Stub.Make<IHttpClientFactory>((method, _) => throw new InvalidOperationException("Daily limit reads must not open HTTP clients."));
-    using var client = new SchedulesDirect(NullLogger<SchedulesDirect>.Instance, factory, paths);
-    var first = client.IsImageDailyLimitActive(); var afterInitialize = File.Exists(filename);
+    using var client = new SchedulesDirect(NullLogger<SchedulesDirect>.Instance, factory, paths, null!);
+    var first = !client.CanDownloadImage("https://schedulesdirect.test/owned/country-control"); var afterInitialize = File.Exists(filename);
     File.WriteAllText(filename, today.AddDays(-2).ToString("O"));
-    var second = client.IsImageDailyLimitActive();
+    var second = !client.CanDownloadImage("https://schedulesdirect.test/owned/country-control");
     limits.Add(new { kind, text, fileBefore, first, second, afterInitialize, afterOverwrite = File.Exists(filename) });
 }
 var tryDeleteMethod = typeof(SchedulesDirect).GetMethod("TryDeleteFile", BindingFlags.NonPublic | BindingFlags.Static)!;

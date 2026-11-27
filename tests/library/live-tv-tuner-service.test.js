@@ -12,7 +12,7 @@ import { PluginHost } from '../../src/plugins/host.js';
 import { LiveTvService } from '../../src/library/live-tv-service.js';
 import { LiveTvSourcesService } from '../../src/library/live-tv-sources-service.js';
 import { LiveTvTunerService } from '../../src/library/live-tv-tuner-service.js';
-import { deserializeLiveTvConfiguration } from '../../src/http/live-tv-configuration-binding.js';
+import { liveTvOptions } from '../helpers/live-tv-options.js';
 import { controlledProviderFailure } from './live-tv-failure-control.js';
 
 const failureFields = error => ({ message: error?.message, code: error?.code ?? null,
@@ -72,7 +72,7 @@ async function open(root, tuners, invoke, configuration = fixture().configuratio
       options: { 'tuner-service-controls': { tuners, invoke } } });
     await plugins.install(plugin);
     liveTv = new LiveTvService({ configurationDirectoryPath });
-    await liveTv.saveConfiguration(deserializeLiveTvConfiguration({ source: JSON.stringify(configuration) }));
+    await liveTv.saveConfiguration(liveTvOptions(configuration));
     sources = new LiveTvSourcesService({ liveTv, plugins, fileSystem: fs, cachePath, refreshGuide() { throw new Error('Reader operations cannot queue guide refresh.'); } });
     service = new LiveTvTunerService({ plugins, sources });
     return { service, sources, liveTv, plugins, close };

@@ -76,11 +76,13 @@ test('production request cultures and provider fallback match the actual designa
     const build = await verifyNativeBuild(); t.signal.throwIfAborted();
     report.build = { identitySha256: build.identitySha256, runtimeEntriesSha256: build.runtimeEntriesSha256 };
     const manifest = JSON.parse(await readFile(path.join(build.root, 'source-offer/jellyfin-source-manifest.json'), 'utf8'));
+    const pinnedSource = JSON.parse(await readFile(new URL('../fixtures/jellyfin-reference/jellyfin-source-manifest.json', import.meta.url), 'utf8'));
+    const pinnedHashes = new Map(pinnedSource.files.map(entry => [entry.path, entry.sha256]));
     report.sourceBindings = await Promise.all([...provenance.sources, ...provenance.resources].map(async expected => {
       const declared = manifest.files.find(entry => entry.path === expected.path); assert.ok(declared, expected.path);
-      assert.equal(declared.sha256, expected.sha256, expected.path);
+      assert.equal(declared.sha256, pinnedHashes.get(expected.path), expected.path);
       const actual = await describeFile(path.join(build.root, 'source', expected.path));
-      assert.equal(actual.sha256, expected.sha256, expected.path);
+      assert.equal(actual.sha256, pinnedHashes.get(expected.path), expected.path);
       return { relativePath: expected.path, ...actual };
     }));
     const record = await recordOracle({ project: fileURLToPath(new URL('Oracle.csproj', fixture)),

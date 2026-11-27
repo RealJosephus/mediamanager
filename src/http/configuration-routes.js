@@ -1,5 +1,5 @@
 import { httpError, noContent } from './binding.js';
-import { bindLiveTvConfigurationDocument, deserializeLiveTvConfiguration } from './live-tv-configuration-binding.js';
+import { bindLiveTvConfiguration } from './live-tv-configuration-binding.js';
 import { bindServerConfiguration, defaultMetadataOptions, serverConfigurationDto } from './server-configuration-binding.js';
 import { namedConfigurationBody, namedConfigurationDto } from './named-configuration-binding.js';
 import { namedConfigurationRoots } from '../core/named-configuration-store.js';
@@ -19,14 +19,12 @@ export function registerConfigurationRoutes(add, services) {
     bodyType: 'MediaBrowser.Model.Configuration.ServerConfigurationDto', bindBody: bindServerConfiguration });
   add('GET', '/System/Configuration/MetadataOptions/Default', defaultMetadataOptions, { policy: elevated });
   if (liveTv) {
-    add('GET', '/System/Configuration/{key}', context => liveTv.getConfiguration(context.params.key), {
-      constraints: { key: value => /^livetv$/iu.test(value) }
-    });
-    add('POST', '/System/Configuration/{key}', async context => {
-      await liveTv.saveConfiguration(deserializeLiveTvConfiguration(context.body), context.params.key);
+    add('GET', '/System/Configuration/LiveTv', () => liveTv.getConfiguration());
+    add('POST', '/System/Configuration/LiveTv', async context => {
+      await liveTv.saveConfiguration(context.body);
       return noContent();
-    }, { policy: elevated, body: true, bodyDocument: true, bodyParameter: 'configuration', bindBody: bindLiveTvConfigurationDocument,
-      constraints: { key: value => /^livetv$/iu.test(value) } });
+    }, { policy: elevated, body: true, bodyParameter: 'configuration',
+      bodyType: 'MediaBrowser.Model.LiveTv.LiveTvOptionsDto', bindBody: bindLiveTvConfiguration });
   }
   if (namedConfiguration) {
     for (const key of namedConfigurationRoots) {

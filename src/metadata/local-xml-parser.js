@@ -144,7 +144,7 @@ export async function parseLocalXml(xml, { type, externalIdInfos = [], signal, r
     const { node } = step, value = clrTrim(node.text);
     if (Object.hasOwn(strings, node.name)) item[strings[node.name]] = value;
     else if (node.name === 'Added') { const date = parseInvariantDate(node.text, { offsetMinutes: () => 0 }); if (date != null) item.DateCreated = date; }
-    else if (node.name === 'CriticRating') { const rating = single(node.text); if (rating != null) item.CriticRating = rating; }
+    else if (node.name === 'CriticRating') { const rating = single(node.text); if (rating != null) item.CriticRating = Number.isFinite(rating) ? rating : null; }
     else if (node.name === 'LockedFields' && value) item.LockedFields = node.text.split('|').map(value =>
       tryParseClrInt32Enum(value, metadataFields, { ignoreCase: true })).filter(value => value != null);
     else if (node.name === 'RunningTime' && value) { const minutes = int32(value.split(' ')[0]); if (minutes != null) item.RunTimeTicks = BigInt(minutes) * 600000000n; }
@@ -157,7 +157,7 @@ export async function parseLocalXml(xml, { type, externalIdInfos = [], signal, r
     else if (node.name === 'Trailer') trailer(item, value);
     else if (node.name === 'DisplayOrder' && type === 'BoxSet' && value) item.DisplayOrder = value;
     else if (node.name === 'ProductionYear') { const year = int32(node.text); if (year > 1850) item.ProductionYear = year; }
-    else if (['Rating', 'IMDBrating'].includes(node.name) && value) { const rating = single(value.replaceAll(',', '.'), { decimalOnly: true }); if (rating != null) item.CommunityRating = rating; }
+    else if (['Rating', 'IMDBrating'].includes(node.name) && value) { const rating = single(value.replaceAll(',', '.'), { decimalOnly: true }); if (rating != null) item.CommunityRating = Number.isFinite(rating) ? rating : null; }
     else if (['BirthDate', 'PremiereDate', 'FirstAired', 'DeathDate', 'EndDate'].includes(node.name)) {
       const date = parseInvariantDateExact(node.text, 'yyyy-MM-dd');
       if (date != null) {
