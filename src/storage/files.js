@@ -5,6 +5,7 @@ import { StorageError, requireCapability } from './errors.js';
 import { ownStorageAdapter } from './ownership.js';
 import { VirtualFileSystem } from './vfs.js';
 import { isWithin } from './paths.js';
+import { identityPathStyle } from './uri.js';
 import { operationFailure as collectedFailure } from '../core/operation-failure.js';
 
 const nativeCodes = { 'not-found': 'ENOENT', 'not-directory': 'ENOTDIR', 'is-directory': 'EISDIR',
@@ -45,7 +46,7 @@ const dateNs = value => {
   return BigInt(milliseconds - ((milliseconds % 1000) + 1000) % 1000) * 1000000n
     + BigInt(fraction.padEnd(9, '0').slice(0, 9));
 };
-const identityPathApi = identity => /^[A-Za-z]:[\\/]|^\\\\/u.test(identity) ? path.win32 : path.posix;
+const identityPathApi = identity => identityPathStyle(identity) === 'windows' ? path.win32 : path.posix;
 // These callers request a full read. Prefer the actual body length; never
 // turn an unknown length into zero or coerce an exact byte count to Number.
 const readSize = handle => handle.contentLength ?? handle.size ?? handle.totalSize ?? undefined;

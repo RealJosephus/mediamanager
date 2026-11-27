@@ -364,7 +364,8 @@ export class PlaybackService {
       await this.activities.downloading(user, item, auth);
     }
     if (item.Path == null || item.Path === '') throw httpError(400, 'A download path is required.');
-    const filename = path.basename(item.Path).replaceAll('"', '');
+    const pathApi = identityPathStyle(item.Path) === 'windows' ? path.win32 : path.posix;
+    const filename = pathApi.basename(item.Path).replaceAll('"', '');
     const options = { contentType: getMimeType(item.Path), filename, serverVersion: this.serverVersion };
     const accessPath = this.accessPath(item);
     return /^https?:\/\//iu.test(item.Path)

@@ -100,6 +100,28 @@ test('DVR writes the configured local release date to movie and episode NFOs', {
   });
 });
 
+test('DVR completes a movie recording on a mapped UNC share with either spelling', { timeout: 20000 }, async t => {
+  const share = '\\\\nas\\Recordings';
+  for (const configured of [share, '//nas/Recordings']) {
+    const fixture = await recordingFixture(t, { local: true, stream: async function* () { yield footage; } });
+    const directory = path.join(fixture.root, 'films');
+    await mkdir(directory);
+    fixture.fileSystem.vfs.mount({ path: '/unc', instanceId: 'local', root: '/films',
+      capabilities: { create: true, replace: true, mkdir: true, delete: true, rename: true } });
+    fixture.fileSystem.identityMap.addPrefix({ identityRoot: share, accessRoot: '/unc', style: 'windows',
+      caseSensitive: false, returnAccess: 'DVR test volume' });
+    Object.assign(fixture.timer, { IsMovie: true, ProductionYear: 2020 });
+    const { dvr, attempted } = fixture.newDvr(100);
+    dvr.configuration.getConfiguration = async () => ({ RecordingPath: configured });
+    await dvr.start(); await attempted; await dvr.close();
+    assert.deepEqual(fixture.failures, [], configured);
+    assert.equal(fixture.timer.Status, 'Completed', configured);
+    const names = ['Remote DVR (2020)', 'Remote DVR (2020).ts'];
+    assert.equal(fixture.timer.RecordingPath, path.win32.join(share, ...names));
+    assert.deepEqual(await readFile(path.join(directory, ...names)), footage);
+  }
+});
+
 test('DVR separates same-name series by the first provider result and uses the plain directory without a year', { timeout: 30000 }, async t => {
   const fixture = await recordingFixture(t, { local: true, stream: async function* () { yield footage; } });
   for (const [i, results] of [[1, [{ ProductionYear: 1980 }, { ProductionYear: 2000 }]],

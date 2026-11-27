@@ -11,6 +11,7 @@ import { postProcessRecording, recordTransportStream } from '../media-execution/
 import { httpMediaUrl, isHlsManifest, udpMediaUrl } from '../media-execution/input.js';
 import { LiveStreamReadBridge } from '../playback/live-stream-bridge.js';
 import { ordinalIgnoreCaseEquals, ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
+import { identityPathStyle } from '../storage/uri.js';
 import { guideChannelId } from './live-tv-guide-channel.js';
 import { isFileProtocol } from './owned-items.js';
 import { findPostgresLinkedChildByPath } from './postgres-linked-child-resolution.js';
@@ -28,7 +29,7 @@ const dateParts = value => {
   return [String(date.getFullYear()).padStart(4, '0'), two(date.getMonth() + 1), two(date.getDate()),
     two(date.getHours()), two(date.getMinutes()), two(date.getSeconds())];
 };
-const pathApi = filename => /^[A-Za-z]:[\\/]|^\\\\/u.test(filename) ? path.win32 : path.posix;
+const pathApi = filename => identityPathStyle(filename) === 'windows' ? path.win32 : path.posix;
 
 function recordingLocation(timer, configuration, dataPath, seriesYear) {
   const defaultPath = configuration.RecordingPath?.trim() ? configuration.RecordingPath : path.join(dataPath, 'livetv', 'recordings');

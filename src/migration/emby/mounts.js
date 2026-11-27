@@ -5,6 +5,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { parseLibraryOptions } from '../../library/options.js';
 import { canonicalIdentityRoot, canonicalPortableMountContract } from '../../storage/portable-mount-contract.js';
 import { ordinalIgnoreCaseKey } from '../../storage/ordinal-comparer.js';
+import { identityPathStyle } from '../../storage/uri.js';
 import { exists } from './files.js';
 
 export const savedMounts = (root) => path.join(root, 'config', 'mediamanager-mounts.json');
@@ -35,9 +36,8 @@ export async function embyLibraryMounts(root) {
   for (const info of paths) {
     const identityRoot = info?.Path;
     if (typeof identityRoot !== 'string' || !identityRoot) continue;
-    const windows = /^(?:[a-z]:[\\/]|\\\\|\/\/[^/]+\/[^/]+)/iu.test(identityRoot);
+    const pathStyle = identityPathStyle(identityRoot), windows = pathStyle === 'windows';
     if (!(windows ? path.win32 : path.posix).isAbsolute(identityRoot)) continue;
-    const pathStyle = windows ? 'windows' : 'posix';
     const normalized = canonicalIdentityRoot(identityRoot, pathStyle);
     const key = windows ? ordinalIgnoreCaseKey(normalized) : normalized;
     if (mounts.has(key)) continue;

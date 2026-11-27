@@ -5,7 +5,7 @@ import { ordinalIgnoreCaseKey } from './ordinal-comparer.js';
 const scheme = /^[A-Za-z][A-Za-z0-9+.-]*:/u;
 
 export function identityPathStyle(value) {
-  return /^(?:[A-Za-z]:|\\\\)/u.test(value ?? '') ? 'windows'
+  return /^(?:[A-Za-z]:|\\\\|\/\/[^\\/]+[\\/][^\\/]+)/u.test(value ?? '') ? 'windows'
     : scheme.test(value ?? '') ? 'uri' : 'posix';
 }
 
