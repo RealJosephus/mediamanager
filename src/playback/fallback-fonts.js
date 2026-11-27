@@ -13,6 +13,7 @@ const extensions = ['.woff', '.woff2', '.ttf', '.otf'];
 const maximumBytes = 20n * 1024n * 1024n;
 const pathApi = value => /^[A-Za-z]:[\\/]|^\\\\/u.test(value) ? path.win32 : path.posix;
 const closedError = () => Object.assign(new Error('Fallback font access is closing.'), { code: 'closed', status: 503 });
+const missingFile = error => ['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].includes(error?.code);
 const compare = (left, right) => left < right ? -1 : left > right ? 1 : 0;
 const dateWhitespace = new RegExp(`[${clrWhitespace}]+`, 'gu');
 const httpDateFormats = [
@@ -59,7 +60,7 @@ export class FallbackFonts {
     const pending = Promise.resolve().then(async () => {
       try { combined.throwIfAborted(); return await operation(combined, operationState); }
       catch (error) {
-        if (['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].includes(error?.code)) error.status ??= 404;
+        if (missingFile(error)) error.status ??= 404;
         throw error;
       }
     });
@@ -180,8 +181,9 @@ export class FallbackFonts {
       failed = true; primary = error;
       if (response.headersSent || cancelled(error, signal)) response.destroy();
       if (!cancelled(error, signal)) {
-        // An unpublished file selection must not frame the middleware's error body.
-        if (!response.headersSent) for (const [name, value] of previousHeaders) {
+        // PhysicalFile keeps its length and timestamp if the selected file
+        // disappears after the executor has set its headers.
+        if (!response.headersSent && !missingFile(error)) for (const [name, value] of previousHeaders) {
           if (value === undefined) response.removeHeader(name); else response.setHeader(name, value);
         }
         throw error;

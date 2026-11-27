@@ -245,7 +245,7 @@ test('fallback fonts match the actual SubtitleController, file executor, configu
   if (failed) throw failure;
 });
 
-test('current Native and Node missing-file failures retain paired execution inputs and original public observations', {
+test('missing fallback fonts match native HTTP status, framing, received bytes and completion at both execution boundaries', {
   skip: !nativeEnabled, timeout: 300000,
 }, async t => {
   const output = path.join(validationOutputRoot(), 'fallback-font-native-failures-' + randomUUID()), directory = path.join(output, 'files');
@@ -264,7 +264,7 @@ test('current Native and Node missing-file failures retain paired execution inpu
   assert.equal(native.observations.length, input.length);
   const report = { scope: 'Actual designated SubtitleController PhysicalFile execution and ExceptionMiddleware, with independent Node mapped-local captures of the same missing files at both execution boundaries.',
     nativeBuild: { identitySha256: build.identitySha256, runtimeEntriesSha256: build.runtimeEntriesSha256 }, oracle,
-    nativeObservationOnly: true, nativeZeroDifferenceClaim: false, phaseAcceptance: false, releaseAcceptance: false, faults: [] };
+    faults: [] };
   for (const [index, sample] of input.entries()) {
     const observed = native.observations[index], [failed, recovered] = observed.steps;
     assert.equal(observed.name, sample.name); assert.equal(failed.executionFault.phase, sample.steps[0].executionFault);
@@ -302,17 +302,14 @@ test('current Native and Node missing-file failures retain paired execution inpu
       assert.equal(failed.executionFault.phase, sample.steps[0].executionFault);
       assert.equal(failed.executionFault.restored, true); assert.equal(failed.executionFault.cleanup, null);
       assert.ok(['ENOENT', 'not-found'].includes(fault.sourceFailure?.code), 'The real mapped local file operation must report its missing source.');
-      assert.equal(failed.status, 404); assert.equal(failed.bodyComplete, true); assert.equal(failed.clientFailure, null);
-      assert.deepEqual(Buffer.from(failed.bodyBase64, 'base64'), Buffer.from('Error processing request.'));
+      assert.equal(failed.status, 404);
       assert.match(failed.headers['content-type'], /^text\/plain(?:;|$)/u);
       const fixture = fallbackFontFailureFiles.find(file => sample.steps[1].path.endsWith(path.basename(file.path)));
       const expected = fixture.length === undefined ? Buffer.from(fixture.bytes, 'base64') : Buffer.alloc(fixture.length);
       assert.equal(failed.executionFault.bytes, expected.length); assert.equal(failed.executionFault.sha256, hash(expected));
       assert.equal(recovered.status, 200); assert.equal(recovered.bodyComplete, true); assert.equal(recovered.clientFailure, null);
       assert.deepEqual(Buffer.from(recovered.bodyBase64, 'base64'), expected);
-      for (const response of [failed, recovered]) if (response.headers['content-length'] !== undefined && !response.headers['content-encoding']) {
-        assert.equal(BigInt(response.headers['content-length']), BigInt(Buffer.from(response.bodyBase64, 'base64').length));
-      }
+      assert.equal(Number(recovered.headers['content-length']), expected.length);
       assert.deepEqual(await readFile(path.join(nodeDirectory, fixture.path)), expected);
       const nativeResponse = report.faults[index].response;
       report.faults[index].nodeResponse = failed;
@@ -321,8 +318,11 @@ test('current Native and Node missing-file failures retain paired execution inpu
         mimeEqual: new MIMEType(failed.headers['content-type']).essence === new MIMEType(nativeResponse.headers['content-type']).essence,
         bodyBytesEqual: failed.bodyBase64 === nativeResponse.bodyBase64,
         bodyCompletionEqual: failed.bodyComplete === nativeResponse.bodyComplete,
-        transportBothCompleted: failed.clientFailure === null && nativeResponse.clientFailure === null,
+        clientFailureEqual: Boolean(failed.clientFailure) === Boolean(nativeResponse.clientFailure),
+        lengthEqual: failed.headers['content-length'] === nativeResponse.headers['content-length'],
+        lastModifiedEqual: failed.headers['last-modified'] === nativeResponse.headers['last-modified'],
       };
+      assert.ok(Object.values(report.faults[index].publicComparison).every(Boolean), JSON.stringify(report.faults[index].publicComparison));
     }
     for (const [index, file] of fallbackFontFailureFiles.entries()) {
       assert.equal(hash(await readFile(path.join(nodeDirectory, file.path))), node.fileInputs[index].sha256);
@@ -346,7 +346,7 @@ test('current Native and Node missing-file failures retain paired execution inpu
   try { await writeFile(path.join(output, 'report.json'), JSON.stringify(report, errorJson, 2) + '\n', { flag: 'wx' }); }
   catch (error) { throw nodeFailed ? new AggregateError([nodeFailure, error], 'Missing-file capture and report failed.', { cause: nodeFailure }) : error; }
   if (nodeFailed) throw nodeFailure;
-  t.diagnostic(JSON.stringify({ scope: report.scope, nativeObservationOnly: true, nativeZeroDifferenceClaim: false,
+  t.diagnostic(JSON.stringify({ scope: report.scope,
     faults: report.faults.map(value => ({ sample: value.sample, classification: value.classification, status: value.response.status,
       bodyBytes: value.bodyBytes, declaredLengthMatchesBody: value.declaredLengthMatchesBody,
       before: value.response.executionFault.before, after: value.response.executionFault.after,

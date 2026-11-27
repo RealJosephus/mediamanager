@@ -333,8 +333,14 @@ export async function createApplication(services = {}) {
         onError(error, { request, phase });
         if (response.headersSent) { if (!response.writableEnded) response.destroy(error); return; }
         if (phase === 'base-url-redirect') { response.writeHead(500); response.end(); return; }
+        const body = 'Error processing request.';
+        const declared = response.getHeader('Content-Length');
+        const length = declared === undefined ? undefined : Number(declared);
+        // A physical file result can already have selected its framing. An
+        // incomplete body ends with the connection so it cannot consume the next response.
+        if (request.method !== 'HEAD' && length !== undefined && length !== Buffer.byteLength(body)) response.shouldKeepAlive = false;
         response.writeHead(error?.status ?? error?.statusCode ?? 500, { 'Content-Type': 'text/plain' });
-        response.end('Error processing request.');
+        response.end(length < Buffer.byteLength(body) ? undefined : body);
       }
     });
     });
