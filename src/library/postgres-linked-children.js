@@ -184,7 +184,7 @@ export class PostgresLinkedChildrenStore {
           PRIMARY KEY(scope_id,slot_id));
         CREATE TABLE ${q(this.schemaName)}.item_states (scope_id uuid NOT NULL,slot_id uuid NOT NULL,
           state bytea NOT NULL,"Id" bytea NOT NULL,"OfficialRating" bytea,"CustomRating" bytea,"Name" bytea,"Path" bytea,"NativeType" bytea,
-          "PhysicalLocations" bytea[],"PreferredCountry" bytea,"Tags" bytea[],"FileSystemPathKey" bytea,"EndDateTicks" bigint,"AllImagesLocalOrSd" boolean,PRIMARY KEY(scope_id,slot_id));
+          "PhysicalLocations" bytea[],"PreferredCountry" bytea,"Tags" bytea[],"FileSystemPathKey" bytea,"EndDateTicks" bigint,"HasRemoteImage" boolean,PRIMARY KEY(scope_id,slot_id));
         CREATE TABLE ${q(this.schemaName)}.item_cohorts (view_id uuid NOT NULL,"Ordinal" bigint NOT NULL,
           scope_id uuid NOT NULL,slot_id uuid NOT NULL,PRIMARY KEY(view_id,"Ordinal"));
         CREATE TABLE ${q(this.schemaName)}.folder_child_ids (scope_id uuid NOT NULL,"Ordinal" bigint NOT NULL,

@@ -879,7 +879,7 @@ function responseContractFailures(records) {
       const body = response.bodyJson;
       if (scenario.responseFacets) {
         const fields = testCase.action === 'filters' ? ['Genres', 'Tags', 'OfficialRatings', 'Years']
-          : ['Genres', 'Tags', 'AudioLanguages', 'SubtitleLanguages'];
+          : ['Genres', 'Tags', 'AudioLanguages', 'SubtitleLanguages', 'Years', 'OfficialRatings'];
         if (response.contentType !== 'application/json; charset=utf-8' || !body
           || stable(Object.keys(body).sort()) !== stable(fields.sort())
           || fields.some(field => !Array.isArray(body[field]))) failures.push(`${label} facet JSON shape is invalid`);

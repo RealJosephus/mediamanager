@@ -315,9 +315,11 @@ test('PostgreSQL memory name, text-sort, rating, and visibility keys use frozen 
   assert.ok(plan.text.includes(ratingCall), 'rating sorts and child visibility share the full resolver');
   assert.doesNotMatch(plan.text, /regexp_replace\([^\n]+\)::(?:integer|bigint|numeric)/u);
   assert.doesNotMatch(plan.text, /lower\(i\."Name"\) COLLATE "C"/u);
-  assert.ok(plan.values.some(value => Buffer.isBuffer(value) && value.equals(nativeTextOrdinalIgnoreCaseKey('\u00C9'))));
-  assert.ok(plan.values.some(value => Buffer.isBuffer(value) && value.equals(nativeTextOrdinalIgnoreCaseKey('\u0130'))));
-  assert.ok(plan.values.some(value => Buffer.isBuffer(value) && value.equals(nativeTextOrdinalIgnoreCaseKey('\u1E9E'))));
+  // The prefix has raw and normalized branches. Folder range comparisons
+  // apply BaseItem.NormalizeSortNameFilter before building ordinal keys.
+  for (const key of ['\u00C9', 'E', 'I', 'ss']) {
+    assert.ok(plan.values.some(value => Buffer.isBuffer(value) && value.equals(nativeTextOrdinalIgnoreCaseKey(key))), key);
+  }
   assert.ok(plan.values.includes('KZ'));
 
   const aired = buildPostgresItemPageQuery(database, { sortby: ['AiredEpisodeOrder'] }, {

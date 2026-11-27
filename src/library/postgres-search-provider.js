@@ -12,10 +12,7 @@ function table(database, name) {
   return `${quote(database.schemaName)}.${quote(name)}`;
 }
 
-export async function resolvePostgresSearchCollation(database, culture, { signal, numeric = false } = {}) {
-  if (database?.dialect !== 'postgres' || database.connectionSession !== true || database.connectionActive !== true) {
-    throw new TypeError('PostgreSQL search collations require an active owned operation session.');
-  }
+export async function findPostgresCultureCollation(database, culture, { signal } = {}) {
   let canonical;
   try { [canonical] = Intl.getCanonicalLocales(culture || 'en-US'); }
   catch { [canonical] = Intl.getCanonicalLocales('en-US'); }
@@ -42,6 +39,14 @@ export async function resolvePostgresSearchCollation(database, culture, { signal
     || typeof row.Owner !== 'string' || typeof row.ActualVersion !== 'string') {
     throw new Error(`PostgreSQL has no verified ICU collation for '${canonical}'.`);
   }
+  return row;
+}
+
+export async function resolvePostgresSearchCollation(database, culture, { signal, numeric = false } = {}) {
+  if (database?.dialect !== 'postgres' || database.connectionSession !== true || database.connectionActive !== true) {
+    throw new TypeError('PostgreSQL search collations require an active owned operation session.');
+  }
+  const row = await findPostgresCultureCollation(database, culture, { signal });
   // CLR culture comparison leaves culturally equal strings tied. PostgreSQL's
   // deterministic ICU collations add a binary tie-breaker, which would change
   // stable paging for native ignorable characters such as the BOM.

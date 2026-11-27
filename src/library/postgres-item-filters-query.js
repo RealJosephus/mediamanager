@@ -40,14 +40,13 @@ export async function queryPostgresItemFilters(database, {
       `SELECT CASE WHEN "Type" = 2 THEN 'Genres' ELSE 'Tags' END AS "Kind", "Value", NULL::bytea AS "Name"
         FROM named_values`,
     ];
-    if (legacy) {
-      ctes.push(`sources AS (SELECT item.* FROM source_ids source JOIN ${table('BaseItems')} item
+    ctes.push(`sources AS (SELECT item.* FROM source_ids source JOIN ${table('BaseItems')} item
         ON ${same('item."Id"', 'source."Id"')})`);
-      facets.push(`SELECT DISTINCT 'Years', convert_to("ProductionYear"::text, 'UTF8'), NULL::bytea
+    facets.push(`SELECT DISTINCT 'Years', convert_to("ProductionYear"::text, 'UTF8'), NULL::bytea
         FROM sources WHERE "ProductionYear" > 0`,
       `SELECT DISTINCT 'OfficialRatings', "OfficialRating", NULL::bytea FROM sources
         WHERE "OfficialRating" IS NOT NULL AND octet_length("OfficialRating") > 0`);
-    } else if (includeLanguages) {
+    if (!legacy && includeLanguages) {
       append('stream_ids', plan(streamQuery, true));
       ctes.push(`languages AS (SELECT DISTINCT stream."StreamType",
           CASE WHEN stream."Language" IS NULL OR octet_length(stream."Language") = 0
@@ -72,7 +71,7 @@ export async function queryPostgresItemFilters(database, {
           "Value" NULLS FIRST`, values,
     })).rows;
     const result = legacy ? { Genres: [], Tags: [], OfficialRatings: [], Years: [] }
-      : { Tags: [], AudioLanguages: [], SubtitleLanguages: [] };
+      : { Tags: [], AudioLanguages: [], SubtitleLanguages: [], Years: [], OfficialRatings: [] };
     for (const row of rows) {
       const value = row.Value == null ? null : decodeNativeTextBytes(row.Value);
       result[row.Kind].push(row.Kind === 'Years' ? Number(value)

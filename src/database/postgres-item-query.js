@@ -18,6 +18,7 @@ import {
   postgresCollectionFolderMatchFunctionName,
   postgresExpandedPathKeyFunctionName,
 } from './postgres-runtime-schema.js';
+import { normalizeSortNameFilter } from '../library/sort-name-filter.js';
 import { lowerInvariant } from '../core/identity.js';
 import { cleanValue, idKey } from '../library/records.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
@@ -1222,17 +1223,30 @@ export function buildPostgresItemPageQuery(database, query, {
     addNamePredicate('i."SortName" IS NOT NULL');
   }
   if (hasNameStartsWith) {
+    const raw = String(query.namestartswith);
+    const padded = normalizeSortNameFilter(raw, memorySortConfiguration);
     if (resumableMode === 'memory' && !memoryUserViewFilter) {
-      const key = bind(nativeTextOrdinalIgnoreCaseKey(String(query.namestartswith)));
-      addNamePredicate(`substring(${ordinalKey(memorySortName())} FROM 1 FOR octet_length(${key}::bytea)) = ${key}::bytea`);
-    } else addNamePredicate(sql.sqliteLike(normalizedSortName(), bindNativeText(`${lowerInvariant(String(query.namestartswith))}%`)));
+      const prefix = (name, value) => {
+        const key = bind(nativeTextOrdinalIgnoreCaseKey(value));
+        return `substring(${ordinalKey(name)} FROM 1 FOR octet_length(${key}::bytea)) = ${key}::bytea`;
+      };
+      const name = memorySortName();
+      const unpadded = fromProject(`ltrim(${project(name)}, '0')`);
+      addNamePredicate(`(${prefix(name, padded)} OR ${prefix(unpadded, raw)})`);
+    } else {
+      const name = project(normalizedSortName());
+      const key = value => bind(nativeTextProjection(lowerInvariant(value)));
+      addNamePredicate(`(starts_with(${name}, ${key(padded)}) OR starts_with(ltrim(${name}, '0'), ${key(raw)}))`);
+    }
   }
-  if (hasNameStartsWithOrGreater) addNamePredicate(resumableMode === 'memory' && !memoryUserViewFilter
-    ? `${ordinalKey(memorySortName())} >= ${bind(nativeTextOrdinalIgnoreCaseKey(String(query.namestartswithorgreater)))}`
-    : `${normalizedSortName()} >= ${bindNativeText(lowerInvariant(String(query.namestartswithorgreater)))}`);
-  if (hasNameLessThan) addNamePredicate(resumableMode === 'memory' && !memoryUserViewFilter
-    ? `${ordinalKey(memorySortName())} < ${bind(nativeTextOrdinalIgnoreCaseKey(String(query.namelessthan)))}`
-    : `${normalizedSortName()} < ${bindNativeText(lowerInvariant(String(query.namelessthan)))}`);
+  const addNameBound = (operator, raw) => {
+    const bound = normalizeSortNameFilter(String(raw), memorySortConfiguration);
+    addNamePredicate(resumableMode === 'memory' && !memoryUserViewFilter
+      ? `${ordinalKey(memorySortName())} ${operator} ${bind(nativeTextOrdinalIgnoreCaseKey(bound))}`
+      : `${normalizedSortName()} ${operator} ${bindNativeText(lowerInvariant(bound))}`);
+  };
+  if (hasNameStartsWithOrGreater) addNameBound('>=', query.namestartswithorgreater);
+  if (hasNameLessThan) addNameBound('<', query.namelessthan);
   if (resumableMode !== 'memory' && hasSearchTerm) {
     const term = String(query.searchterm);
     const normalized = `%${cleanValue(term)}%`, original = `%${asciiLowerValue(term)}%`;

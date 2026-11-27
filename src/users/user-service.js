@@ -7,7 +7,8 @@ import { isDeepStrictEqual } from 'node:util';
 import { authenticatePassword, createPasswordHash } from '../core/password.js';
 import { nativeShadowViewIdentity, nativeUserViewIdentity } from '../library/identity.js';
 import { md5Guid } from '../core/identity.js';
-import { tableDefinition } from '../database/model.js';
+import { quoteIdentifier, tableDefinition } from '../database/model.js';
+import { findPostgresCultureCollation } from '../library/postgres-search-provider.js';
 import { AUTHENTICATION_PROVIDER, PASSWORD_RESET_PROVIDER, permissionNames, preferenceNames, configurationFields,
   configurationPreferences, policyPreferences, guidPreferences, subtitleModes, syncPlayModes, days, unratedItems,
   domainError, upperInvariant, nativeGuid, wireGuid, nativeDate, wireDate, enumValue, enumName, equalsIgnoreCase,
@@ -21,6 +22,7 @@ async function candidateUserIds(database, {
   publicOnly,
   authorizedDeviceId = null,
   requireRemoteAccess = false,
+  culture,
 }) {
   const parameters = [];
   const permission = (name, expected) => {
@@ -48,8 +50,12 @@ async function candidateUserIds(database, {
         AND ${nativeTextSql(database.schemaName).ordinalIgnoreCaseKey(nativeTextSql(database.schemaName).fromProjection('enabled."DeviceId"'))} = ${deviceKey}
     ))`);
   }
-  const result = await database.client.query(`SELECT u."Id" FROM "Users" u${predicates.length ? ` WHERE ${predicates.join(' AND ')}` : ''}
-    ORDER BY u."Username", u."Id"`, parameters);
+  const collation = await findPostgresCultureCollation(database, culture);
+  const username = nativeTextSql(database.schemaName).projection('u."Username"');
+  const order = username + ' COLLATE ' + quoteIdentifier(collation.Schema) + '.' + quoteIdentifier(collation.Name);
+  const result = await database.client.query('SELECT u."Id" FROM "Users" u'
+    + (predicates.length ? ' WHERE ' + predicates.join(' AND ') : '')
+    + ' ORDER BY ' + order + ', u."Username", u."Id"', parameters);
   return result.rows.map(row => decodeNativeTextBytes(row.Id));
 }
 
@@ -293,6 +299,7 @@ export class UserService extends EventEmitter {
         publicOnly,
         authorizedDeviceId,
         requireRemoteAccess,
+        culture: this.configurationOptions.getCulture?.() ?? 'en-US',
       });
       const result = [];
       const candidates = await this.loadUsers(database, ids);
@@ -305,7 +312,6 @@ export class UserService extends EventEmitter {
             || (!this.isLocalNetwork(remoteEndPoint) && !user.Policy.EnableRemoteAccess))) continue;
         result.push(user);
       }
-      result.sort((left, right) => left.Username.localeCompare(right.Username, 'en-US'));
       return result.map(user => this.getUserDto(user));
     });
   }

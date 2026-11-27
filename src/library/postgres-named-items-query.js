@@ -30,7 +30,7 @@ function context(database, kind) {
 /** Resolve source relations, filter the named entities, collapse and page in SQL. */
 export function buildPostgresNamedItemPlan(database, {
   kind, mediaQuery = {}, nameQuery = {}, scope = {}, userId, visibility,
-  topParentIds = [], startIndex = 0, limit, mediaItemIdsPlan,
+  topParentIds = [], startIndex = 0, limit, mediaItemIdsPlan, applyNameTagFilters = true,
   itemValueTypes = valueTypes[kind],
 } = {}) {
   const { sql, table, values, ctes, bind, append, same } = context(database, kind);
@@ -38,7 +38,7 @@ export function buildPostgresNamedItemPlan(database, {
     nameAccessTypes: ['Person', 'Genre', 'MusicGenre', 'Studio', 'Year', 'MusicArtist']
       .filter(type => mediaQuery.includeitemtypes?.includes(type)) }));
   append('name_ids', buildPostgresItemPageQuery(database, { ...nameQuery, includeitemtypes: [kind] }, {
-    userId, visibility, includeOrdinal: true, repositoryFolderPlayback: true,
+    userId, visibility: applyNameTagFilters || !visibility ? visibility : { ...visibility, allowedTags: [], blockedTags: [] }, includeOrdinal: true, repositoryFolderPlayback: true,
   }));
   const types = bind(itemValueTypes);
   const preferred = kind === 'MusicArtist'

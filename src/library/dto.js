@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { md5Guid, getNewItemId, lowerInvariant } from '../core/identity.js';
-import { readUserData, userDataDto, supportsPlayed, removeDiacritics } from '../sessions/user-data.js';
+import { readUserData, userDataDto, supportsPlayed } from '../sessions/user-data.js';
 import { loadStreams, selectDefaultTracks } from './media-streams.js';
 import { withNativeNulls, withNativeFloats } from '../core/json.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
@@ -10,7 +10,7 @@ import { nativePersonIdentity, nativeItemByNameFolderName } from './identity.js'
 import { projectExternalUrls } from './external-urls.js';
 import { readItemImageRows } from './image-order.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
-import { transliterateSortName } from './transliteration.js';
+import { normalizeSortNameFilter } from './sort-name-filter.js';
 import { mediaVersions, mediaSourceCount, versionChildren, commonVersionPrefix, isFileSource, sourceFileName, mediaSourceName, sortMediaSources } from './media-versions.js';
 import { dtoId, idKey, mapRecord, sameId, nonemptyId, NAME_TYPES, VIDEO_TYPES, dateText, dateTicks, MIN_DATE, cleanValue, repositoryCleanName, repositoryValue, unsupported } from './records.js';
 import { collectionType } from './user-view-query.js';
@@ -73,27 +73,6 @@ export function dtoOptions(query = {}, allFields = false) {
   return { fields: new Set(requested.map(field => field.toLowerCase())), enableImages: query.enableimages !== false, enableUserData: query.enableuserdata !== false, imageTypeLimit: query.imagetypelimit ?? 2147483647, imageTypes: query.enableimagetypes ?? itemImageTypes, addCurrentProgram: query.addcurrentprogram !== false };
 }
 
-const nativeDigit = /\p{Nd}/u;
-
-function padSortDigitChunks(value) {
-  if (!value.length) return value;
-  const chunks = [];
-  let start = 0;
-  let isDigit = nativeDigit.test(value[0]);
-  for (let index = 1; index < value.length; index++) {
-    // BaseItem.ModifySortChunks calls char.IsDigit on each UTF-16 code unit.
-    const nextIsDigit = nativeDigit.test(value[index]);
-    if (nextIsDigit === isDigit) continue;
-    const chunk = value.slice(start, index);
-    chunks.push(isDigit && chunk.length < 10 ? chunk.padStart(10, '0') : chunk);
-    start = index;
-    isDigit = nextIsDigit;
-  }
-  const chunk = value.slice(start);
-  chunks.push(isDigit && chunk.length < 10 ? chunk.padStart(10, '0') : chunk);
-  return chunks.join('');
-}
-
 export function sortName(item, { configuration = {} } = {}) {
   const type = String(item.Type ?? '').split('.').at(-1);
   const numbered = (value, width) => value == null ? ''
@@ -129,10 +108,7 @@ export function sortName(item, { configuration = {} } = {}) {
     value = value.replaceAll(` ${word} `, ' ');
     if (value.endsWith(` ${word}`)) value = value.slice(0, -(word.length + 1));
   }
-  for (const character of configuration.SortRemoveCharacters ?? [',', '&', '-', '{', '}', "'"]) value = value.replaceAll(character, '');
-  for (const character of configuration.SortReplaceCharacters ?? ['.', '+', '%']) value = value.replaceAll(character, ' ');
-  value = removeDiacritics(padSortDigitChunks(value));
-  return /[^\x00-\x7f]/.test(value) ? transliterateSortName(value) : value;
+  return normalizeSortNameFilter(value, configuration);
 }
 
 function byNameId(state, options, kind, name) {

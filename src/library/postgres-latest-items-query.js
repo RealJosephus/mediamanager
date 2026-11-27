@@ -84,7 +84,7 @@ export async function queryPostgresLatestItems(database, {
         ctes.push(`recent_series AS (
           SELECT "SeriesName", max(${date('source."DateCreated"')}) AS __max_date FROM source
           WHERE "SeriesName" IS NOT NULL GROUP BY "SeriesName"
-          ORDER BY __max_date DESC NULLS LAST, "SeriesName" LIMIT ${cap}
+          ORDER BY __max_date DESC NULLS LAST LIMIT ${cap}
         )`, `recent_episodes AS (
           SELECT episode.*, row_number() OVER (PARTITION BY episode."SeriesName"
             ORDER BY ${order('episode')}) AS __recent_order, recent.__max_date
@@ -114,8 +114,6 @@ export async function queryPostgresLatestItems(database, {
             WHERE ${same('access."Id"', 'choice.__container_id')})
             THEN choice.__container_id ELSE choice.__episode_id END AS "Id", __latest_date
           FROM series_choice choice
-          ORDER BY __latest_date DESC NULLS LAST, ${sql.guidKey('COALESCE(choice.__container_id, choice.__episode_id)')} COLLATE "C" DESC
-          LIMIT ${cap}
         )`);
       }
       const union = collectionType === 'movies' ? 'SELECT * FROM latest_movies'

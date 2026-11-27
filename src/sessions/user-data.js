@@ -550,14 +550,23 @@ export class UserDataService extends EventEmitter {
     if (phase === 'stop' && info.Failed) return false;
     const data = await this.mutate(user.Id, item, async (data) => {
       if (phase === 'start') {
-        data.PlayCount = (data.PlayCount + 1) | 0; data.LastPlayedDate = nativeDate(this.clock());
+        data.PlayCount = (data.PlayCount + 1) | 0;
+        if (!data.Played || !supportsResume(item)) data.LastPlayedDate = nativeDate(this.clock());
         if (supportsPlayed(item) && !supportsResume(item)) data.Played = true;
+        return;
+      }
+      if (info.PositionTicks != null) {
+        completed = updatePlayState(item, data, info.PositionTicks, this.configuration);
+        if (completed || data.PlaybackPositionTicks > 0n) data.LastPlayedDate = nativeDate(this.clock());
       } else if (phase === 'stop') {
-        if (info.PositionTicks != null) completed = updatePlayState(item, data, info.PositionTicks, this.configuration);
-        else { data.PlayCount = (data.PlayCount + 1) | 0; data.Played = supportsPlayed(item); data.PlaybackPositionTicks = 0n; completed = true; }
-      } else {
-        let changed = false;
-        if (info.PositionTicks != null) { updatePlayState(item, data, info.PositionTicks, this.configuration); changed = true; }
+        data.PlayCount = (data.PlayCount + 1) | 0;
+        data.Played = supportsPlayed(item);
+        data.PlaybackPositionTicks = 0n;
+        data.LastPlayedDate = nativeDate(this.clock());
+        completed = true;
+      }
+      if (phase === 'progress') {
+        let changed = info.PositionTicks != null;
         for (const [remember, field] of [['RememberAudioSelections', 'AudioStreamIndex'], ['RememberSubtitleSelections', 'SubtitleStreamIndex']]) {
           if (user[remember] ?? user.Configuration?.[remember]) { if (info[field] != null && data[field] !== info[field]) { data[field] = info[field]; changed = true; } }
           else if (data[field] != null) { data[field] = null; changed = true; }
@@ -574,7 +583,7 @@ export class UserDataService extends EventEmitter {
         });
       });
     }
-    return completed;
+    return phase === 'stop' && completed;
   }
 }
 function resetPlayed(data) { data.PlayCount = 0; data.PlaybackPositionTicks = 0n; data.LastPlayedDate = null; data.Played = false; }

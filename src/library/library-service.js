@@ -1734,7 +1734,8 @@ export class LibraryService extends EventEmitter {
     const rootFolders = await this.navigationChildren(state, user);
     const topIds = item => queryTopParentIds(item, state, user, rootFolders);
     let scope = {}, topParentIds = [];
-    if (parent) {
+    const virtualRoot = (legacy || input.recursive !== false) && ['UserRootFolder', 'AggregateFolder'].includes(parent?.Type);
+    if (parent && !virtualRoot) {
       if (legacy || input.recursive !== false || ['UserView', 'CollectionFolder'].includes(parent.Type)) {
         if (['UserView', 'CollectionFolder'].includes(parent.Type)) topParentIds = topIds(parent);
         scope = topParentIds.length ? { topParentIds } : { ancestorId: parent.Id };
@@ -1879,7 +1880,7 @@ export class LibraryService extends EventEmitter {
       if (legacy) return facets;
       const kind = types.length === 1 && ['MusicAlbum', 'MusicVideo', 'MusicArtist', 'Audio'].includes(types[0])
         ? 'MusicGenre' : 'Genre';
-      const genres = await queryPostgresNamedItemPage(db, { kind, mediaQuery: query, ...context, userId: user?.Id });
+      const genres = await queryPostgresNamedItemPage(db, { kind, mediaQuery: query, ...context, applyNameTagFilters: false, userId: user?.Id });
       return { Genres: genres.rows.map(row => ({ Name: row.Name ?? '', Id: idKey(row.Id) })), ...facets };
     }, { channelViews: Boolean(user) });
   }

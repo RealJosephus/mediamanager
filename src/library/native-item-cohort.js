@@ -54,20 +54,20 @@ function enqueue(entry, operation) {
 }
 async function flush(entry) { await entry.tail;if(entry.errorPresent)throw entry.error; }
 function stateValues(entry,slot,state) {
-  // Null means the native All predicate would throw when it is evaluated.
+  // Null means the native remote-image predicate would throw when it is evaluated.
   // Capture itself must not run a later Guide consumer's failure early.
-  let allLocalOrSd = true;
-  if (!Array.isArray(state.values.ImageInfos)) allLocalOrSd = null;
+  let hasRemoteImage = false;
+  if (!Array.isArray(state.values.ImageInfos)) hasRemoteImage = null;
   else for (const image of state.values.ImageInfos) {
-    if (typeof image?.Path !== 'string') { allLocalOrSd = null; break; }
+    if (typeof image?.Path !== 'string') { hasRemoteImage = null; break; }
     const path = ordinalIgnoreCaseKey(image.Path);
-    if (path.startsWith('HTTP') && !path.includes('SCHEDULESDIRECT')) { allLocalOrSd = false; break; }
+    if (path.startsWith('HTTP')) { hasRemoteImage = true; break; }
   }
   const type = state.values.NativeType.split('.').at(-1);
   const locations = ['AggregateFolder', 'CollectionFolder'].includes(type) ? state.values.PhysicalLocationsList
     : state.values.Path ? [state.values.Path] : [];
   return [entry.id,slot,serialize(plain(serializableState(state))),encode(state.values.Id),encode(state.values.OfficialRating),encode(state.values.CustomRating),encode(state.sorting.name),
-    state.values.EndDate == null ? null : dateTicks(state.values.EndDate), allLocalOrSd,encode(state.values.Path),encode(state.values.NativeType),
+    state.values.EndDate == null ? null : dateTicks(state.values.EndDate), hasRemoteImage,encode(state.values.Path),encode(state.values.NativeType),
     locations == null ? null : locations.map(encode), encode(state.values.PreferredMetadataCountryCode),
     state.values.Tags == null ? null : state.values.Tags.map(encode), encode(nativeFileSystemPathKey(state.values.Path))];
 }
@@ -75,10 +75,10 @@ async function writeStates(entry,session,rows) {
   if (!rows.length) return;
   const values = rows.flat(), placeholders = rows.map((row,index) => '(' + row.map((_value,field) => '$' + (index * row.length + field + 1)).join(',') + ')');
   try { await session.client.query({ name: entry.statementPrefix + '_write_' + rows.length,
-    text: `INSERT INTO ${entry.states}(scope_id,slot_id,state,"Id","OfficialRating","CustomRating","Name","EndDateTicks","AllImagesLocalOrSd","Path","NativeType","PhysicalLocations","PreferredCountry","Tags","FileSystemPathKey")
+    text: `INSERT INTO ${entry.states}(scope_id,slot_id,state,"Id","OfficialRating","CustomRating","Name","EndDateTicks","HasRemoteImage","Path","NativeType","PhysicalLocations","PreferredCountry","Tags","FileSystemPathKey")
     VALUES ${placeholders.join(',')} ON CONFLICT(scope_id,slot_id) DO UPDATE SET state=EXCLUDED.state,"Id"=EXCLUDED."Id",
     "OfficialRating"=EXCLUDED."OfficialRating","CustomRating"=EXCLUDED."CustomRating","Name"=EXCLUDED."Name",
-    "EndDateTicks"=EXCLUDED."EndDateTicks","AllImagesLocalOrSd"=EXCLUDED."AllImagesLocalOrSd","Path"=EXCLUDED."Path","NativeType"=EXCLUDED."NativeType",
+    "EndDateTicks"=EXCLUDED."EndDateTicks","HasRemoteImage"=EXCLUDED."HasRemoteImage","Path"=EXCLUDED."Path","NativeType"=EXCLUDED."NativeType",
     "PhysicalLocations"=EXCLUDED."PhysicalLocations","PreferredCountry"=EXCLUDED."PreferredCountry","Tags"=EXCLUDED."Tags","FileSystemPathKey"=EXCLUDED."FileSystemPathKey"`,
     values }); }
   catch (error) {
@@ -140,7 +140,7 @@ class NativeItemCohort {
     WHERE cohort.view_id=$1`,values:Object.freeze([this.id])});}
   /** Guide filtering inspects these live scalar projections in SQL. Invalid
    * image paths stay candidates so the native predicate fails at consumption. */
-  guideImagePlan(){active(this);return Object.freeze({text:`SELECT cohort."Ordinal",cohort.slot_id AS "SlotKey",state."Id",state."EndDateTicks",state."AllImagesLocalOrSd"
+  guideImagePlan(){active(this);return Object.freeze({text:`SELECT cohort."Ordinal",cohort.slot_id AS "SlotKey",state."Id",state."EndDateTicks",state."HasRemoteImage"
     FROM ${this.entry.rows} cohort JOIN ${this.entry.states} state ON state.scope_id=cohort.scope_id AND state.slot_id=cohort.slot_id
     WHERE cohort.view_id=$1`,values:Object.freeze([this.id])});}
   async captureSlot(item) {

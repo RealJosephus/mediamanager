@@ -26,6 +26,31 @@ const normalizeBody = (value, serverId, status) => projectItemBody(value, { serv
   date: (entry, { field }) => field === 'DateCreated' ? dateText(entry) : entry });
 const cases = candidateCasesFromTrackedInput(fixture);
 
+// The native preselection limits series groups by their maximum episode date alone.
+// Rows in the boundary bucket can differ across engines. The chosen DTO and the
+// later sort by maximum date and returned entity ID are still fully specified.
+function assertTvCutoff(response, full, limit) {
+  const candidates = full.map(dto => {
+    const entity = fixture.items.find(item => idKey(item.id) === dto.Id);
+    const seriesId = entity.type === 'Series' ? entity.id : entity.seriesId ?? entity.parentId;
+    const episodes = fixture.items.filter(item => item.type === 'Episode' && item.seriesId === seriesId);
+    assert.ok(episodes.length, entity.key);
+    return { dto, maxDate: episodes.map(item => item.dateCreated).sort().at(-1) };
+  });
+  const ordered = candidates.toSorted((a, b) => a.maxDate === b.maxDate
+    ? b.dto.Id.localeCompare(a.dto.Id, 'en') : b.maxDate.localeCompare(a.maxDate, 'en'));
+  assert.deepEqual(ordered.map(item => item.dto), full);
+  const boundary = ordered[limit - 1].maxDate, selected = new Set(response.map(row => row.Id));
+  assert.equal(response.length, limit);
+  assert.equal(selected.size, limit);
+  for (const item of ordered) {
+    if (item.maxDate > boundary) assert.ok(selected.has(item.dto.Id));
+    if (item.maxDate < boundary) assert.ok(!selected.has(item.dto.Id));
+  }
+  assert.deepEqual(response, ordered.filter(item => selected.has(item.dto.Id)).map(item => item.dto));
+  return { boundary, returned: response.map(({ Id, Name }) => ({ Id, Name })) };
+}
+
 for (const dialect of dialects) {
   test(`${dialect}: latest media matches 130 current native full HTTP array responses`, {
     skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
@@ -78,7 +103,7 @@ for (const dialect of dialects) {
         }
       },
     });
-    const differences = [];
+    const differences = [], tiedCutoffs = [];
     assert.equal(actual.httpCases, http.records.length);
     for (const item of actual.cases) {
       const records = http.records.filter(record => record.name === item.name);
@@ -88,7 +113,14 @@ for (const dialect of dialects) {
           assert.equal(endpoint.endpoint, native.endpoint);
           assert.equal(endpoint.response.status, native.response.status);
           assert.equal(endpoint.response.contentType, native.response.contentType);
-          if (native.response.status < 400 || native.response.bodyJson !== undefined) assert.deepEqual(normalizeBody(endpoint.response.body, actual.serverId, endpoint.response.status), normalizeBody(native.response.bodyJson, nativeServerId, native.response.status));
+          const limit = /^TV limit ([123])$/u.exec(item.name)?.[1];
+          if (limit) {
+            const full = http.records.filter(record => record.name === 'TV limit 20')[index];
+            const reference = normalizeBody(full.response.bodyJson, nativeServerId, 200);
+            const baseline = assertTvCutoff(normalizeBody(native.response.bodyJson, nativeServerId, 200), reference, Number(limit));
+            const postgres = assertTvCutoff(normalizeBody(endpoint.response.body, actual.serverId, 200), reference, Number(limit));
+            tiedCutoffs.push({ name: item.name, endpoint: endpoint.endpoint, native: baseline, postgres });
+          } else if (native.response.status < 400 || native.response.bodyJson !== undefined) assert.deepEqual(normalizeBody(endpoint.response.body, actual.serverId, endpoint.response.status), normalizeBody(native.response.bodyJson, nativeServerId, native.response.status));
           else assert.equal(endpoint.response.bodyText, native.response.bodyText);
         } catch (error) { differences.push({ name: item.name, endpoint: endpoint.endpoint, message: error.message }); }
       }
@@ -102,7 +134,7 @@ for (const dialect of dialects) {
         passed: differences.length === 0, phaseAcceptance: false, dialect, responses: http.records.length,
         comparedFields: 'Complete successful array JSON, status, content type and exact error body; all target media tables, metadata tree and UserData rows unchanged.',
         normalization: 'Declared DTO ServerId is bound to each actual isolated server; root ProblemDetails traceId retains presence and type, and typed DateCreated uses its full UTC 100 ns value. Opaque dictionaries and unknown fields stay literal.',
-        native: summary, differences,
+        native: summary, differences, tiedCutoffs,
       }), { flag: 'wx' });
     }
     assert.deepEqual(actual.afterReads, actual.beforeReads);

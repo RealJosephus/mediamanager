@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { normalizeSortNameFilter } from './sort-name-filter.js';
 import { lowerInvariant } from '../core/identity.js';
 import { clrTrim } from '../metadata/whitespace.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
@@ -118,20 +119,21 @@ export function collapseMemoryBoxSets(items, state, user, options, types) {
   return [...result.values(), ...(allTypes ? [] : items.filter(item => !types.includes(item.Type)))];
 }
 
-export function filterCollapsedNames(items, query, { memory = false, sortNameFor = item => item.SortName } = {}) {
+export function filterCollapsedNames(items, query, { memory = false, sortNameFor = item => item.SortName, configuration = {} } = {}) {
   const fold = memory ? ordinalIgnoreCaseKey
     : value => String(value).replace(/[A-Z]/gu, character => character.toLowerCase());
   const token = memory ? ordinalIgnoreCaseKey : lowerInvariant;
   const prefix = clrTrim(query.namestartswith ?? '') ? token(query.namestartswith) : null;
-  const lower = clrTrim(query.namestartswithorgreater ?? '') ? token(query.namestartswithorgreater) : null;
-  const upper = clrTrim(query.namelessthan ?? '') ? token(query.namelessthan) : null;
+  const padded = prefix == null ? null : token(normalizeSortNameFilter(query.namestartswith, configuration));
+  const lower = clrTrim(query.namestartswithorgreater ?? '') ? token(normalizeSortNameFilter(query.namestartswithorgreater, configuration)) : null;
+  const upper = clrTrim(query.namelessthan ?? '') ? token(normalizeSortNameFilter(query.namelessthan, configuration)) : null;
   if (prefix == null && lower == null && upper == null) return items;
   const compare = memory ? (left, right) => left < right ? -1 : left > right ? 1 : 0 : binaryCompare;
   return items.filter(item => {
     const stored = memory ? sortNameFor(item) : repositoryValue(item, 'SortName');
     if (stored == null) return false;
     const name = fold(stored);
-    return (prefix == null || name.startsWith(prefix))
+    return (prefix == null || name.startsWith(padded) || name.replace(/^0+/u, '').startsWith(prefix))
       && (lower == null || compare(name, lower) >= 0)
       && (upper == null || compare(name, upper) < 0);
   });

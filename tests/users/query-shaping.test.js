@@ -11,6 +11,12 @@ import { AUTHENTICATION_PROVIDER, PASSWORD_RESET_PROVIDER } from '../../src/user
 
 const userId = '11111111-1111-1111-1111-111111111111';
 const otherUserId = '22222222-2222-2222-2222-222222222222';
+function catalogResponse(query) {
+  assert.match(query.text, /FROM pg_catalog\.pg_collation/u);
+  assert.deepEqual(query.values, [['en-us-x-icu', 'en-x-icu', 'und-x-icu']]);
+  return { rows: [{ Schema: 'pg_catalog', Name: 'en-US-x-icu', Locale: 'en-US', Encoding: -1,
+    Owner: 'fixture', ActualVersion: 'fixture' }] };
+}
 const storeFor = database => ({
   database,
   run: operation => operation(database),
@@ -22,6 +28,7 @@ test('PostgreSQL user discovery and creation use parameterized aggregate/filter 
   const database = {
     dialect: 'postgres', schemaName: 'public',
     client: { async query(sql, parameters) {
+      if (typeof sql === 'object') return catalogResponse(sql);
       queries.push({ sql, parameters });
       if (sql.includes('COALESCE(MAX')) return { rows: [{ duplicate: false, maximum: 50000n }] };
       return { rows: [{ Id: nativeTextBytes(userId) }] };
@@ -60,6 +67,7 @@ test('PostgreSQL user listing filters and sorts identities in SQL then bulk-load
   const database = {
     dialect: 'postgres', schemaName: 'public',
     client: { async query(sql, parameters) {
+      if (typeof sql === 'object') return catalogResponse(sql);
       queries.push({ sql, parameters });
       return { rows: [{ Id: nativeTextBytes(otherUserId) }, { Id: nativeTextBytes(userId) }] };
     } },
@@ -88,6 +96,7 @@ test('PostgreSQL user listing filters and sorts identities in SQL then bulk-load
     { Id: userId, Name: 'Zulu' },
   ]);
   assert.equal(queries.length, 1);
+  assert.match(queries[0].sql, /COLLATE "pg_catalog"\."en-US-x-icu"/u);
   assert.match(queries[0].sql, /"EnableRemoteAccess"|"Permissions"/u);
   assert.match(queries[0].sql, /CROSS JOIN LATERAL unnest[\s\S]*mm_ordinal_ignore_case_key[\s\S]*ORDER BY/u);
   assert.doesNotMatch(queries[0].sql, /btrim\(/u,
