@@ -1,11 +1,13 @@
 import { randomUUID } from 'node:crypto';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
+import { parseConfigurationVersion } from '../core/configuration-xml.js';
 import { backupFormat, payloadPath, publicManifest, stageBackupArchive, verifyStagedPayload, withBackupArchive, writeBackupArchive } from './backup-archive.js';
 import { backupDestination, backupRoots, captureBackupFiles, restoreBackupFile } from './backup-files.js';
 import { captureBackupDatabase, restoreBackupDatabase, validateBackupDatabase } from './backup-database.js';
 
 const failure = (status, message) => Object.assign(new Error(message), { status });
+const backupEngineVersion = '1.0.0';
 export class BackupRestored extends Error {}
 
 export class SystemBackups {
@@ -49,7 +51,7 @@ export class SystemBackups {
     const stage = await fs.mkdtemp(path.join(this.directory, '.create-'));
     try {
       const filename = path.join(this.directory, 'jellyfin-backup-' + randomUUID() + '.zip');
-      const manifest = { DateCreated: new Date().toISOString(), ServerVersion: this.serverVersion, BackupEngineVersion: '1.0.0', Options: options };
+      const manifest = { DateCreated: new Date().toISOString(), ServerVersion: this.serverVersion, BackupEngineVersion: backupEngineVersion, Options: options };
       const descriptor = { format: backupFormat, serverId: this.serverId, metadataPath: this.paths.metadataPath };
       const temporary = path.join(stage, 'archive');
       await writeBackupArchive(temporary, stage, manifest, descriptor, save => this.storage.withGeneration(() =>
@@ -62,7 +64,23 @@ export class SystemBackups {
     } finally { await fs.rm(stage, { recursive: true, force: true }); }
   }
 
+  #checkVersions(manifest) {
+    const archived = parseConfigurationVersion(manifest.ServerVersion)?.split('.').map(Number);
+    const running = parseConfigurationVersion(this.serverVersion)?.split('.').map(Number);
+    if (!archived || !running) throw failure(422, 'Invalid backup or server version.');
+    for (const [index, part] of archived.entries()) {
+      // System.Version orders an omitted build or revision before zero.
+      const current = running[index] ?? -1;
+      if (part > current) throw failure(422, 'This backup requires a newer server version.');
+      if (part < current) break;
+    }
+    if (parseConfigurationVersion(manifest.BackupEngineVersion) !== backupEngineVersion) {
+      throw failure(422, 'Unsupported backup engine version.');
+    }
+  }
+
   #plan(stage, manifest, descriptor) {
+    this.#checkVersions(manifest);
     const options = manifest.Options;
     if (descriptor.format !== backupFormat || descriptor.serverId !== this.serverId ||
       (options.Metadata && descriptor.metadataPath !== this.paths.metadataPath) || !Array.isArray(descriptor.files)) {
@@ -92,6 +110,7 @@ export class SystemBackups {
     const filename = this.archivePath(value);
     const manifest = await this.manifest(value);
     if (!manifest) throw failure(422, 'Invalid backup archive.');
+    this.#checkVersions(manifest);
     if (!lifecycle) throw failure(503, 'The application has no lifecycle owner.');
     const reservation = lifecycle.admit('restart');
     let stage;
