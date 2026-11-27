@@ -88,20 +88,23 @@ export class ImageProcessor {
     this.#lifetime.signal.throwIfAborted();
     const signal = options.signal ? AbortSignal.any([options.signal, this.#lifetime.signal]) : this.#lifetime.signal;
     while (this.#pending.size >= Math.max(1, this.parallelLimit)) { await Promise.race([...this.#pending].map(task => task.catch(() => {}))); signal.throwIfAborted(); }
-    const task = this.#process({ ...options, signal }, this.cachePath); this.#pending.add(task);
+    const convert = () => this.#process({ ...options, signal }, this.cachePath, this.#options.storageCacheKey);
+    const task = this.#options.withStorageGeneration ? this.#options.withStorageGeneration(convert) : convert();
+    this.#pending.add(task);
     try { return await task; } finally { this.#pending.delete(task); }
   }
-  async #process({ item = {}, image, assets, signal, ...options }, cachePath) {
+  async #process({ item = {}, image, assets, signal, ...options }, cachePath, storageKey) {
     const original = originalResult(image), size = image.Width > 0 && image.Height > 0 ? { Width: image.Width, Height: image.Height } : undefined;
     signal.throwIfAborted();
-    try { await assets.stat(image.Path, { signal }); } catch (error) { if (error?.code === 'not-found') return original; throw error; }
+    let source;
+    try { source = await assets.stat(image.Path, { signal }); } catch (error) { if (error?.code === 'not-found') return original; throw error; }
     if (original.mimeType === 'image/gif') return original;
     const autoOrient = item.Type === 'Photo' && item.Orientation !== 'TopLeft' && item.Orientation !== 1;
     if (hasDefaultImageOptions(options, image.Path, size) && (!autoOrient || options.RequiresAutoOrientation === false)) return original;
     const formats = options.SupportedOutputFormats ?? ['Jpg', 'Png'];
     const transparency = ['png', 'webp', 'gif', 'svg'].includes(extension(image.Path));
     const format = formats.includes('Webp') ? 'Webp' : transparency && formats.includes('Png') ? 'Png' : formats.find(value => ['Webp', 'Jpg', 'Png', 'Svg'].includes(value)) ?? 'Jpg';
-    let cache = cachePath && this.#cacheFile(cachePath, image, options, format);
+    let cache = cachePath && this.#cacheFile(cachePath, image, options, format, storageKey, source?.version ?? source?.modified);
     try {
       if (cache) try {
         const bytes = await this.fileSystem.readFile(cache);
@@ -135,7 +138,7 @@ export class ImageProcessor {
       return { bytes: output, path: cache, mimeType: format === 'Svg' ? 'image/svg+xml' : imageMime('image' + imageExtension(format)), dateModified, original: false };
     } catch (error) { if (signal.aborted) throw error; this.logger.error(error, 'Error encoding image'); return original; }
   }
-  #cacheFile(cachePath, image, options, format) {
+  #cacheFile(cachePath, image, options, format, storageKey, version) {
     let value = `${image.Path},quality=${options.Quality ?? 100},datemodified=${dateTicks(image.DateModified)},f=${format}`;
     for (const key of ['Width', 'Height', 'MaxWidth', 'MaxHeight', 'FillWidth', 'FillHeight']) if (options[key] != null) value += `,${key.toLowerCase()}=${options[key]}`;
     if (options.PercentPlayed > 0) value += `,pp=${options.PercentPlayed}`;
@@ -143,7 +146,7 @@ export class ImageProcessor {
     if (options.Blur != null) value += `,blur=${options.Blur}`;
     if (options.BackgroundColor) value += `,b=${options.BackgroundColor}`;
     if (options.ForegroundLayer) value += `,fl=${options.ForegroundLayer}`;
-    const id = md5Guid(value + ',v=4'), guid = `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-${id.slice(16, 20)}-${id.slice(20)}`;
+    const id = md5Guid(JSON.stringify([value, storageKey, version, 5])), guid = `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-${id.slice(16, 20)}-${id.slice(20)}`;
     return path.join(cachePath, 'resized-images', guid[0], guid + imageExtension(format));
   }
   async close() { this.#lifetime.abort(); await Promise.allSettled(this.#pending); }

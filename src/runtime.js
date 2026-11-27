@@ -398,6 +398,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(() => { playback.beginClose(); return playback.drainSubtitlePreparations(); });
   const { cachePath: imageCachePath, ...imageProcessorOptions } = imageOptions;
   const imageProcessor = new ImageProcessor({ fileSystem,
+    withStorageGeneration: configuredStorage.withGeneration,
+    get storageCacheKey() { return configuredStorage.configurationHash; },
     get cachePath() { return imageCachePath ?? (applicationPaths.cachePath && path.join(applicationPaths.cachePath, 'images')); },
     logger, ...imageProcessorOptions });
   rollback.push(() => imageProcessor.close());

@@ -150,7 +150,8 @@ export async function createConfiguredStorage(filename, { environment = process.
       const mediaFileSystem = new StorageFileSystem({ vfs, identityMap });
       fileSystem.spoolRoot = current?.fileSystem.spoolRoot;
       return { registry,vfs,identityMap,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,unavailable,
-        portableMountContract:contract, definition, users: new Set(), reads: new Set() };
+        portableMountContract:contract, definition, configurationHash: createHash('sha256').update(JSON.stringify(definition)).digest('hex'),
+        users: new Set(), reads: new Set() };
     } catch (error) { await registry.close(); throw error; }
   };
   const trackRetirement = operation => {
@@ -291,6 +292,7 @@ export async function createConfiguredStorage(filename, { environment = process.
     }});
     const unsubscribe=plugins.subscribe(()=>enqueue(notify));
     return { vfs,identityMap,metadataVfs,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,retainGeneration,withGeneration,
+      get configurationHash() { return activeOwner().configurationHash; },
       get portableMountContract() { return current.portableMountContract; },
       configuration:()=>clone(configuration), types:()=>[...extensions.keys()],
       status:()=>configuration.instances.map(instance=>({id:instance.id,type:instance.type,
