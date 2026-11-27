@@ -132,15 +132,13 @@ test('book providers keep primary failures when the actual archive spools cannot
   const current = await fixture(t);
   const epub = await fs.readFile(new URL('../metadata/fixtures/book-opf-epub/assets/epub/malformed-container.epub', import.meta.url));
   const storedKey = Buffer.from('META-INF\\container.xml');
-  const hostKey = Buffer.from(path.join('META-INF', 'container.xml'));
+  const containerKey = Buffer.from('META-INF/container.xml');
   const local = epub.indexOf(storedKey);
   const central = epub.indexOf(storedKey, local + storedKey.length);
   assert.ok(local >= 0 && central > local);
-  if (!hostKey.equals(storedKey)) {
-    // Both ZIP headers use the host lookup key. The entry data and CRC stay intact.
-    hostKey.copy(epub, local);
-    hostKey.copy(epub, central);
-  }
+  // The malformed XML must be reachable through the standard EPUB container key.
+  containerKey.copy(epub, local);
+  containerKey.copy(epub, central);
   const comic = await fs.readFile(path.join(current.files, 'valid.zip'));
   const openArchive = current.service.openArchive;
   const [metadata, cover] = createBookEpubPlugin({ openArchive }).providers;

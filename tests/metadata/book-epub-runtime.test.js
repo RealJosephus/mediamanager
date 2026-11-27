@@ -95,7 +95,7 @@ async function setup(t) {
 test('EPUB executes all original provider cases against the current same-platform native build', async () => {
   const { native } = await actualNativeRun();
   assert.equal(native.results.length, 38); assert.equal(input.assets.length, 37);
-  const positive = native.results.find(value => value.name === (process.platform === 'win32' ? 'rich-with-cover' : 'standard-slashes'));
+  const positive = native.results.find(value => value.name === 'standard-slashes');
   assert.equal(positive.result.HasMetadata, true); assert.equal(positive.hasCover, true);
 });
 
@@ -127,7 +127,7 @@ test('EPUB controlled cancellation and read failures retain the actual prefix an
   const valid = Buffer.from('<package xmlns="http://www.idpf.org/2007/opf"><metadata/></package>');
   for (const mode of ['cancelled missing container', 'cancelled valid XML', 'cancelled invalid XML', 'ordinary read failure', 'cover cancelled before open']) await t.test(mode, async () => {
     let opened = 0, closed = 0, reads = 0;
-    const entries = mode === 'cancelled missing container' ? [] : [{ key: path.join('META-INF', 'container.xml') }, { key: 'OPS/package.opf' }];
+    const entries = mode === 'cancelled missing container' ? [] : [{ key: 'META-INF/container.xml' }, { key: 'OPS/package.opf' }];
     const signal = mode.startsWith('cancelled') || mode === 'cover cancelled before open' ? AbortSignal.abort() : undefined;
     const openArchive = async (_item, options) => {
       opened++; assert.equal(options.signal, undefined); assert.equal(options.zipOnly, true);

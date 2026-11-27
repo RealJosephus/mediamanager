@@ -16,9 +16,7 @@ const directoryName = filename => {
   const separator = Math.max(filename.lastIndexOf('/'), filename.lastIndexOf('\\'));
   return separator < 0 ? '' : filename.slice(0, separator).replaceAll('/', '\\');
 };
-// Native archive entry lookup uses host Path.Combine, independently of the
-// identity style used to access the EPUB file through the storage mapping.
-const containerKey = path.join('META-INF', 'container.xml');
+const containerKey = 'META-INF/container.xml';
 const archiveCleanupMessage = 'EPUB archive cleanup failed.';
 
 export function createBookEpubPlugin({ openArchive, logger = { error() {} } } = {}) {
@@ -54,7 +52,7 @@ export function createBookEpubPlugin({ openArchive, logger = { error() {} } } = 
         const entry = archive.findEntry(filename); if (!entry) return null;
         const reference = readOpfCoverPath(parseOpfDocument(await archive.read(entry, { signal })), directory);
         if (!reference) return null;
-        const image = archive.findEntry(reference.path); if (!image) return null;
+        const image = archive.findEntry(reference.path.replaceAll('\\', '/')); if (!image) return null;
         return { bytes: await archive.read(image, { signal }), mimeType: formatMimeType(reference.mimeType) };
       }, [() => archive.close()], archiveCleanupMessage);
     }

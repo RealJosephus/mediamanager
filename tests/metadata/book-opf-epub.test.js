@@ -238,7 +238,7 @@ test('Book local provider declarations preserve configured order without forced 
 });
 
 test('embedded EPUB reads original media while OPF sidecars read the independent metadata backend', async t => {
-  const fixture = await setup(t), name = process.platform === 'win32' ? 'rich-with-cover' : 'standard-slashes';
+  const fixture = await setup(t), name = 'standard-slashes';
   const filename = input.epubs.find(entry => entry.name === name).path;
   await fixture.metadata.write('/' + filename, Buffer.from('Different metadata backend object.'));
   const item = book(filename), expected = native.epubResults.find(entry => entry.name === name);
@@ -257,7 +257,7 @@ test('controlled EPUB archive seams preserve cancellation, failure prefixes and 
   const container = Buffer.from('<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfile full-path="OPS/package.opf"/></container>');
   for (const mode of ['cancelled missing container', 'cancelled valid XML', 'cancelled invalid XML', 'ordinary read failure', 'cover cancelled before open']) await t.test(mode, async () => {
     let opened = 0, closed = 0, reads = 0;
-    const entries = mode === 'cancelled missing container' ? [] : [{ key: path.join('META-INF', 'container.xml') }, { key: 'OPS/package.opf' }];
+    const entries = mode === 'cancelled missing container' ? [] : [{ key: 'META-INF/container.xml' }, { key: 'OPS/package.opf' }];
     const signal = mode.startsWith('cancelled') || mode === 'cover cancelled before open' ? AbortSignal.abort() : undefined;
     const openArchive = async (_item, options) => {
       opened++; assert.equal(options.signal, undefined); assert.equal(options.zipOnly, true);
