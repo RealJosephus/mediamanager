@@ -153,3 +153,24 @@ test('processor shutdown aborts an active asset read and rejects queued work', a
   await new Promise(resolve => setImmediate(resolve)); await processor.close();
   assert.deepEqual((await results).map(result => result.status), ['rejected', 'rejected']);
 });
+
+test('a backend without a strong version reuses a thumbnail only for matching bytes', async t => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'image-content-version-'));
+  const processor = new ImageProcessor({ fileSystem: testFileSystem, cachePath: directory });
+  t.after(async () => { await processor.close(); await rm(directory, { recursive: true, force: true }); });
+  const original = await readFile(path.join(root, 'grid.png'));
+  let bytes = original;
+  const image = { Path: 'poster.png', DateModified: '2024-01-01T00:00:00Z' };
+  const files = { stat: async () => ({ modified: image.DateModified, version: 'W/"poster"', versionReliability: 'weak' }),
+    read: async () => bytes };
+  const resize = () => processor.process({ image, assets: files, Width: 4, SupportedOutputFormats: ['Png'] });
+  const first = await resize();
+  assert.equal(first.original, false);
+  bytes = await readFile(path.join(root, 'alpha.png'));
+  const replaced = await resize();
+  assert.equal(replaced.original, false);
+  assert.notEqual(replaced.path, first.path);
+  assert.notDeepEqual(replaced.bytes, first.bytes);
+  bytes = original;
+  assert.equal((await resize()).path, first.path);
+});

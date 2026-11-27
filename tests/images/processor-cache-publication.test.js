@@ -8,6 +8,7 @@ import sharp from 'sharp';
 import { LocalAdapter } from '../../plugins/local/adapter.js';
 import { testFileSystem } from '../storage/plugin-files.js';
 import { ImageProcessor } from '../../src/images/processor.js';
+import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 
 async function setup(t, writeCache) {
   const cachePath = await mkdtemp(path.join(tmpdir(), 'mm-resize-'));
@@ -21,9 +22,10 @@ async function setup(t, writeCache) {
   const processor = new ImageProcessor({ cachePath, fileSystem, parallelLimit: 2 });
   t.after(async () => { await processor.close(); await rm(cachePath, { recursive: true, force: true }); });
   const source = fileURLToPath(new URL('./fixtures/processor/grid.png', import.meta.url));
+  const assets = new MetadataImageAssets({ fileSystem: testFileSystem, metadataPath: path.dirname(source) });
   const options = {
     image: { Path: source, DateModified: '2024-01-01T00:00:00Z', Width: 20, Height: 12 },
-    assets: { stat, read: name => { originalReads++; return readFile(name); } }, Width: 8, SupportedOutputFormats: ['Png']
+    assets: { stat: (...args) => assets.stat(...args), read: name => { originalReads++; return readFile(name); } }, Width: 8, SupportedOutputFormats: ['Png']
   };
   return { resize: () => processor.process(options), reads: () => originalReads };
 }

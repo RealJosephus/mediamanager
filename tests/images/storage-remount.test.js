@@ -9,22 +9,26 @@ import { createMetadataHttpFixture, metadataMovieId } from '../helpers/metadata-
 
 export const requiredValidationServices = ['postgres'];
 
-test('original and resized images follow a Local remount at the same media identity', {
+for (const remount of [true, false]) test(remount ? 'original and resized images follow a Local remount at the same media identity'
+  : 'cached thumbnails follow a same-size replacement of an instance poster with its original mtime', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
 }, async t => {
-  const { database, request, filename, programDataPath } = await createMetadataHttpFixture(t);
-  const first = path.dirname(filename), second = path.join(programDataPath, 'replacement-volume');
-  await mkdir(second);
+  const { runtime, database, request, filename, programDataPath } = await createMetadataHttpFixture(t);
+  const first = remount ? path.dirname(filename) : runtime.applicationPaths.metadataPath;
+  const second = remount ? path.join(programDataPath, 'replacement-volume') : first;
+  await mkdir(second, { recursive: true });
   const colors = [[255, 0, 0], [0, 0, 255]], originals = [];
   const stamp = new Date('2024-01-01T00:00:00Z'), name = 'poster.png';
-  for (const [index, directory] of [first, second].entries()) {
-    const [r, g, b] = colors[index];
+  for (const [r, g, b] of colors) {
     const bytes = await sharp({ create: { width: 16, height: 12, channels: 3, background: { r, g, b } } })
       .png({ compressionLevel: 0 }).toBuffer();
     originals.push(bytes);
+  }
+  async function publish(directory, bytes) {
     await writeFile(path.join(directory, name), bytes);
     await utimes(path.join(directory, name), stamp, stamp);
   }
+  await publish(first, originals[0]);
   assert.equal(originals[0].length, originals[1].length);
   await database.insert('BaseItemImageInfos', { Id: randomUUID().toUpperCase(), ItemId: metadataMovieId,
     Path: path.join(first, name), ImageType: 0, Width: 16, Height: 12, Blurhash: null, DateModified: '2024-01-01 00:00:00' });
@@ -40,12 +44,15 @@ test('original and resized images follow a Local remount at the same media ident
     assert.deepEqual(data, Buffer.alloc(8 * 6 * 3, Buffer.from(colors[index])));
   };
   await check(0);
-  const configuration = await request('/Storage/Configuration');
-  assert.equal(configuration.status, 200);
-  const local = configuration.body.instances.find(entry => entry.id === 'fixture-media');
-  assert.equal(local.config.root, first);
-  local.config.root = second;
-  const changed = await request('/Storage/Configuration', { method: 'POST', body: configuration.body });
-  assert.ok(changed.status >= 200 && changed.status < 300, JSON.stringify(changed.body));
+  await publish(second, originals[1]);
+  if (remount) {
+    const configuration = await request('/Storage/Configuration');
+    assert.equal(configuration.status, 200);
+    const local = configuration.body.instances.find(entry => entry.id === 'fixture-media');
+    assert.equal(local.config.root, first);
+    local.config.root = second;
+    const changed = await request('/Storage/Configuration', { method: 'POST', body: configuration.body });
+    assert.ok(changed.status >= 200 && changed.status < 300, JSON.stringify(changed.body));
+  }
   await check(1);
 });

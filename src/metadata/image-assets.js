@@ -142,7 +142,11 @@ export class MetadataImageAssets {
   async #stat(identity, options, roots) {
     try { const location = await this.#resolve(identity, options, roots); options.signal?.throwIfAborted();
       if (location.accessPath) return { ...await this.vfs.stat(location.accessPath, options), Path: location.identity };
-      const value = await this.fileSystem.stat(location.localPath, { bigint: true }); return { Path: location.identity, name: path.basename(location.localPath), kind: value.isDirectory() ? 'directory' : 'file', size: value.size, modified: modifiedDate(value) };
+      const value = await this.fileSystem.stat(location.localPath, { bigint: true });
+      const version = value.version ?? (value.ino != null && value.ctimeNs != null
+        ? [value.dev, value.ino, value.size, value.mtimeNs, value.ctimeNs].join(':') : null);
+      return { Path: location.identity, name: path.basename(location.localPath), kind: value.isDirectory() ? 'directory' : 'file',
+        size: value.size, modified: modifiedDate(value), version, versionReliability: value.versionReliability };
     } catch (error) { throw errorCode(error); }
   }
   async createDirectory(identity) {

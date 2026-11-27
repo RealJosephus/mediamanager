@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import { md5Guid } from '../core/identity.js';
 import { dateTicks } from '../library/records.js';
@@ -104,8 +105,14 @@ export class ImageProcessor {
     const formats = options.SupportedOutputFormats ?? ['Jpg', 'Png'];
     const transparency = ['png', 'webp', 'gif', 'svg'].includes(extension(image.Path));
     const format = formats.includes('Webp') ? 'Webp' : transparency && formats.includes('Png') ? 'Png' : formats.find(value => ['Webp', 'Jpg', 'Png', 'Svg'].includes(value)) ?? 'Jpg';
-    let cache = cachePath && this.#cacheFile(cachePath, image, options, format, storageKey, source?.version ?? source?.modified);
+    if (!supported.has(extension(image.Path))) return original;
     try {
+      let bytes, version = source?.version;
+      if (cachePath && (!version || ['unavailable', 'weak'].includes(source.versionReliability))) {
+        bytes = await assets.read(image.Path, { signal });
+        version = 'sha256:' + createHash('sha256').update(bytes).digest('hex');
+      }
+      let cache = cachePath && this.#cacheFile(cachePath, image, options, format, storageKey, version);
       if (cache) try {
         const bytes = await this.fileSystem.readFile(cache);
         if (completeCacheEntry(bytes, format)) {
@@ -113,8 +120,8 @@ export class ImageProcessor {
           return { bytes, path: cache, mimeType: imageMime(cache), dateModified: info.mtime.toISOString(), original: false };
         }
       } catch (error) { if (error?.code !== 'ENOENT') throw error; }
-      if (!supported.has(extension(image.Path))) return original;
-      const bytes = await assets.read(image.Path, { signal }); checkSvg(bytes, image.Path);
+      bytes ??= await assets.read(image.Path, { signal });
+      checkSvg(bytes, image.Path);
       if (format === 'Svg' && extension(image.Path) !== 'svg') throw new Error('SVG output requires SVG input.');
       let pipeline = sharp(bytes, { failOn: 'warning' }); if (autoOrient) pipeline = pipeline.autoOrient();
       const decoded = await run(pipeline.ensureAlpha().raw(), signal);

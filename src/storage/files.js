@@ -131,6 +131,7 @@ export class StorageFileSystem {
     const value = await this.vfs.stat(access, options), big = options.bigint === true;
     const mtimeNs = dateNs(value.modified), birthtimeNs = dateNs(value.created ?? value.modified);
     return { size: big ? value.size ?? 0n : Number(value.size ?? 0n), mtimeNs, birthtimeNs, ctimeNs: mtimeNs,
+      version: value.version, versionReliability: value.versionReliability,
       mtimeMs: big ? mtimeNs / 1000000n : Number(mtimeNs) / 1000000,
       birthtimeMs: big ? birthtimeNs / 1000000n : Number(birthtimeNs) / 1000000,
       mtime: new Date(Number(mtimeNs / 1000000n)), birthtime: new Date(Number(birthtimeNs / 1000000n)),
