@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
-import { chmod, mkdir, readFile, stat, utimes, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { chmod, mkdir, readFile, readdir, stat, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
 import { exchange } from '../../src/migration/emby/exchange.js';
-import { mergeAssets } from '../../src/migration/emby/files.js';
+import { inventory, mergeAssets } from '../../src/migration/emby/files.js';
 import { toBlob } from '../../src/migration/emby/format.js';
 import { exchangeFixture, exchangeId, stoppedEmby } from './emby-exchange-fixture.js';
 
@@ -51,6 +52,40 @@ test('Emby imports and returns metadata root, directory and file permissions and
     assert.equal((await stat(path.join(returned.output, 'ordinary-instance-file'))).mode & 0o7777, 0o750);
   }
 });
+
+async function checkResumedPublication(t, legacy) {
+  const fixture = await exchangeFixture(t);
+  const source = await stoppedEmby(fixture), output = path.join(fixture.directory, 'manager');
+  const input = path.join(source, 'metadata', 'poster.txt');
+  const stamp = new Date('2022-07-08T10:11:12Z'), changed = new Date('2025-08-09T12:13:14Z');
+  await mkdir(path.dirname(input), { recursive: true });
+  await writeFile(input, 'ordinary poster');
+  await utimes(input, stamp, stamp);
+  const args = { direction: 'import', source, output };
+  await assert.rejects(exchange({ ...args, afterDatabaseCommit() { throw new Error('Pause before publication'); } }), /Pause before publication/);
+  const work = (await readdir(fixture.directory, { withFileTypes: true })).find(entry => entry.isDirectory() && entry.name.startsWith('.mm-exchange-'));
+  const relative = path.join('data', 'metadata', 'poster.txt');
+  const target = path.join(fixture.directory, work.name, 'build', 'target');
+  const staged = path.join(target, relative);
+  if (legacy) {
+    // Recreate the exact ready.json and digest published by the preceding release.
+    const receipt = path.join(fixture.directory, work.name, 'ready.json');
+    const { result, inputHash } = JSON.parse(await readFile(receipt, 'utf8'));
+    const targetHash = createHash('sha256').update(JSON.stringify(await inventory(target))).digest('hex');
+    await writeFile(receipt, JSON.stringify({ result, inputHash, targetHash }));
+  }
+  assert.equal((await stat(staged)).mtimeMs, stamp.getTime());
+  await utimes(staged, changed, changed);
+  await assert.rejects(exchange(args), legacy ? /metadata attributes changed/u : /Prepared migration files have changed/u);
+  await assert.rejects(stat(output), { code: 'ENOENT' });
+  await utimes(staged, stamp, stamp);
+  await exchange(args);
+  assert.equal((await stat(path.join(output, relative))).mtimeMs, stamp.getTime());
+  assert.equal(await readFile(path.join(output, relative), 'utf8'), 'ordinary poster');
+}
+
+test('resumed Emby publication protects the timestamp of already sealed metadata', t => checkResumedPublication(t, false));
+test('a pre-upgrade publication verifies its original metadata timestamps before resuming', t => checkResumedPublication(t, true));
 
 test('independent metadata attributes merge and divergent times remain in conflict on the reverse trip', async t => {
   const { directory } = await exchangeFixture(t);

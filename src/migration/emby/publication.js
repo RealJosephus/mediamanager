@@ -2,10 +2,26 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { lstat, mkdir, open, readFile, readdir, rename, rm } from 'node:fs/promises';
-import { directory, exists, inventory, writeJson } from './files.js';
+import { metadataDirectory } from './assets.js';
+import { directory, exists, inventory, stateDirectory, writeJson } from './files.js';
 
 const digest = (value) => createHash('sha256').update(value).digest('hex');
-const seal = async (root) => digest(JSON.stringify(await inventory(root)));
+const seal = async (root, attributes) => digest(JSON.stringify(await inventory(root, { attributes })));
+
+async function verifyLegacyMetadata(root, direction) {
+  // The old publication digest already authenticates base.json and all file bytes.
+  // Use its recorded metadata attributes when resuming a pre-upgrade operation.
+  const metadata = metadataDirectory(root, direction === 'import' ? 'jellyfin' : 'emby');
+  if (!await exists(metadata)) return;
+  const base = JSON.parse(await readFile(path.join(root, stateDirectory, 'base.json'), 'utf8'));
+  const expected = base.assets?.target?.attributes;
+  const { attributes } = await inventory(metadata, { attributes: true });
+  if (!expected || Object.keys(attributes).length !== Object.keys(expected).length
+    || Object.entries(attributes).some(([name, value]) => expected[name]?.mode !== value.mode
+      || expected[name]?.mtimeUs !== value.mtimeUs)) {
+    throw new Error('Prepared migration metadata attributes changed or cannot be verified: ' + metadata);
+  }
+}
 
 // The operating system releases the SQLite lock when a process dies. The named
 // lock file stays in place so all concurrent or later opens lock the same inode.
@@ -52,7 +68,7 @@ export async function openPublication(output, request) {
       target,
       pending,
       async ready(result, inputHash) {
-        const next = { result, inputHash, targetHash: await seal(target) };
+        const next = { result, inputHash, sealVersion: 2, targetHash: await seal(target, true) };
         await writeJson(record + '.new', next);
         await rename(record + '.new', record);
         pending = next;
@@ -65,8 +81,10 @@ export async function openPublication(output, request) {
           throw new Error('Cannot determine which instance belongs to the prepared migration');
         const location = targetExists ? target : output;
         await directory(location);
-        if ((await seal(location)) !== p.targetHash)
+        if (p.sealVersion !== undefined && p.sealVersion !== 2) throw new Error('Unknown prepared migration seal version');
+        if ((await seal(location, p.sealVersion === 2)) !== p.targetHash)
           throw new Error('Prepared migration files have changed: ' + location);
+        if (p.sealVersion === undefined) await verifyLegacyMetadata(location, request.direction);
         return published;
       },
       async publish() {
