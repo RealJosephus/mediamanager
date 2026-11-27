@@ -377,12 +377,15 @@ export class PluginHost {
     fields:clone(this.#active.get(id)?.module.fields??this.#binding(id,record).fields),extensions:this.#active.get(id)?.entries.map(e=>e.kind)??[]}));}
   get(id) {const entry=this.list().find(entry=>entry.id===id);if(!entry)throw error(404,'Plugin not found.');return entry;}
   subscribe(listener) {this.#listeners.add(listener);return()=>this.#listeners.delete(listener);}
+  async #packageModule(record) {
+    const directory = await verifyRelease(this.directory, record.package);
+    return import(pathToFileURL(path.join(directory,record.package.manifest.mediamanager.entry)).href);
+  }
   async #change(id,next) {
     const previous=this.#state.plugins[id];
     if(next.package && (next.enabled || next.package.digest !== previous?.package?.digest
       || JSON.stringify(next.configuration) !== JSON.stringify(previous?.configuration))) {
-      const directory=await verifyRelease(this.directory,next.package);
-      const module=await import(pathToFileURL(path.join(directory,next.package.manifest.mediamanager.entry)).href);
+      const module=await this.#packageModule(next);
       if(typeof module.activate!=='function')throw new TypeError('Plugin entry must export activate(context).');
       await module.validateConfiguration?.(clone(this.#binding(id,next).getCurrent()));
     }
@@ -418,8 +421,7 @@ export class PluginHost {
     const record=this.#required(id);if(!object(configuration))throw error(400,'Plugin configuration must be an object.');
     const binding=this.#binding(id,record);
     if(record.configurationKey!==undefined) {
-      const directory=await verifyRelease(this.directory,record.package);
-      const module=await import(pathToFileURL(path.join(directory,record.package.manifest.mediamanager.entry)).href);
+      const module=await this.#packageModule(record);
       const value={...binding.getCurrent(),...configuration};
       await module.validateConfiguration?.(value);
       await binding.save(value);
@@ -432,7 +434,13 @@ export class PluginHost {
   uninstall(id) {return this.#enqueue(async()=>{const old=this.#required(id);return this.#change(id,{...old,package:null,enabled:false});});}
   async #notify(id) {for (const listener of this.#listeners) try { await listener(this.get(id)); } catch (e) { this.onError(e); }}
   clearCache(id) {return this.#enqueue(async()=>{const record=this.#required(id),failures=[];
-    try{await this.#stop(id);await fs.rm(path.join(this.directory,'cache',id),{recursive:true,force:true});}catch(e){failures.push(e);}
+    try {
+      await this.#stop(id);
+      const module = await this.#packageModule(record);
+      const cachePath = path.join(this.directory, 'cache', id);
+      await module.clearCache?.({ paths: this.paths, cachePath, options: this.options[id] ?? {} }, this.#services);
+      await fs.rm(cachePath, { recursive: true, force: true });
+    } catch(e){failures.push(e);}
     if(record.enabled)try{await this.#start(id,record);}catch(e){this.#failures.set(id,e.message);failures.push(e);}
     await this.#notify(id);
     if(failures.length===1)throw failures[0];if(failures.length)throw new AggregateError(failures,'Plugin cache cleanup and restart failed.');

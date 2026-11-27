@@ -215,6 +215,17 @@ export class LiveTvSourcesService {
     } catch (error) { if (isIo(error) || isUnauthorized(error) || error.code === 'ENOENT') this.#report(error); else throw error; }
   }
 
+  clearListingsCache(type, remove) {
+    return this.#run(true, async access => {
+      for (const info of sequence((await access.getConfiguration()).ListingProviders)) {
+        if (equals(info.Type, type)) {
+          await remove(info.Id);
+          if (info.Id != null) this.#epgChannels.delete(ordinalIgnoreCaseKey(info.Id));
+        }
+      }
+    });
+  }
+
   deleteListingsProvider(id = null) {
     return this.#run(true, async access => {
       const configuration = await access.getConfiguration();

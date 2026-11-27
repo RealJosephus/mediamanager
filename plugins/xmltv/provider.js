@@ -94,6 +94,14 @@ export function xmlTvProgramInfo(program, supplied = {}) {
   return result;
 }
 
+export function xmlTvCacheFile(root, id) {
+  const identity = id ?? '';
+  if (!path.isAbsolute(root) || typeof identity !== 'string' || /[\\/:\0]/u.test(identity)) {
+    throw error('invalid-path', 'The XMLTV cache identity must name an owned child file.');
+  }
+  return path.join(root, identity + '.xml');
+}
+
 /** XMLTV listings with owned cache files and mapped local source access. */
 export function createXmlTvListingsProvider(pathOptions = {}) {
   const { source, preferredMetadataLanguage = 'en', fetch: fetchImpl = globalThis.fetch,
@@ -122,10 +130,7 @@ export function createXmlTvListingsProvider(pathOptions = {}) {
     : typeof preferredMetadataLanguage === 'function' ? preferredMetadataLanguage() : preferredMetadataLanguage;
   const getXml = async (info, signal, rejectedVersion) => {
     const cacheRoot = path.resolve(getCachePath());
-    const identity = info.Id ?? '';
-    if (typeof identity !== 'string' || /[\\/:\0]/u.test(identity)) throw error('invalid-path', 'The XMLTV cache identity must name an owned child file.');
-    const filename = path.resolve(cacheRoot, identity + '.xml');
-    if (path.dirname(filename) !== cacheRoot) throw error('invalid-path', 'The XMLTV cache identity escapes its owned directory.');
+    const filename = xmlTvCacheFile(cacheRoot, info.Id);
     const existing = await exists(filename), current = now();
     const cached = existing && fileVersion(existing) !== rejectedVersion ? existing : null;
     const loadedFile = (stat, index) => ({ filename, version: fileVersion(stat), index });
