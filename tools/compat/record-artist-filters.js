@@ -388,7 +388,7 @@ const expectedCreatedArtists = new Map([
   ['Straße', 'straße'], ['STRASSE', 'strasse'],
 ]);
 
-function assertMainReadEffects(before, after, beforeFiles, afterFiles) {
+async function assertMainReadEffects(before, after, beforeFiles, afterFiles) {
   const ids = new Set(before.tables.BaseItems.map(row => row.Id));
   const added = after.tables.BaseItems.filter(row => !ids.has(row.Id));
   assert.deepEqual(after.tables.BaseItems.filter(row => ids.has(row.Id)), before.tables.BaseItems);
@@ -400,9 +400,10 @@ function assertMainReadEffects(before, after, beforeFiles, afterFiles) {
   assert.ok(added.every(row => row.Type === 'MediaBrowser.Controller.Entities.Audio.MusicArtist'
     && row.ParentId === null && row.TopParentId === null && row.IsFolder === 0));
   const newPaths = new Set(expectedCreatedArtists.keys());
-  assert.deepEqual(afterFiles.entries.filter(entry => !newPaths.has(entry.path)), beforeFiles.entries);
-  assert.deepEqual(new Set(afterFiles.entries.filter(entry => entry.type === 'directory' && newPaths.has(entry.path))
-    .map(entry => entry.path)), newPaths);
+  assert.deepEqual(afterFiles.entries.filter(entry => entry.type !== 'directory' || !newPaths.has(entry.path)), beforeFiles.entries);
+  // Distinct artist rows can resolve to the same directory on this volume.
+  // Keep the enumerated spellings in the snapshots for the candidate comparison.
+  for (const name of newPaths) assert.ok((await stat(path.join(artistMetadataPath, name))).isDirectory(), name);
 }
 const discoveryOnly = modeArgument === 'discover' ? new Set(fixture.cases.map(testCase => testCase.name)) : new Set();
 const probeExpectation = {
@@ -639,7 +640,7 @@ try {
   databaseStages.afterReads = relationshipSnapshot();
   filesystemStages.afterReads = await treeSnapshot(artistMetadataPath);
   if (modeArgument === 'main') {
-    assertMainReadEffects(databaseStages.beforeReads, databaseStages.afterReads, filesystemStages.beforeReads, filesystemStages.afterReads);
+    await assertMainReadEffects(databaseStages.beforeReads, databaseStages.afterReads, filesystemStages.beforeReads, filesystemStages.afterReads);
   } else if (probeExpectation) {
     const beforeIds = new Set(databaseStages.beforeReads.tables.BaseItems.map(row => row.Id));
     const newBaseItems = databaseStages.afterReads.tables.BaseItems.filter(row => !beforeIds.has(row.Id));
