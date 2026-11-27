@@ -43,7 +43,7 @@ function hasRelativeSegment(value) {
   return value.split(/[\\/]/u).some(segment => segment === '.' || segment === '..');
 }
 
-function canonicalIdentityRoot(value, style) {
+export function canonicalIdentityRoot(value, style) {
   if (typeof value !== 'string' || !value || value.includes('\0') || protocolPattern.test(value) && !windowsDrivePattern.test(value)) {
     throw new TypeError('A portable mount identityRoot must be an absolute filesystem path, not a URL');
   }

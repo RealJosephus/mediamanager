@@ -88,6 +88,11 @@ export async function inventory(root, options) {
     Object.defineProperty(members, file, { value: await fileHash(path.join(root, file)), enumerable: true });
   return { directories, members };
 }
+async function restoreDirectoryAttributes(source, target) {
+  const stat = await lstat(source);
+  await chmod(target, stat.mode & 0o7777);
+  await utimes(target, stat.atimeMs / 1000, stat.mtimeMs / 1000);
+}
 export async function cloneDirectory(source, destination, { skipState = false } = {}) {
   await directory(source);
   if (inside(source, destination) || inside(destination, source))
@@ -107,6 +112,11 @@ export async function cloneDirectory(source, destination, { skipState = false } 
   const after = await inventory(source, { skipState });
   if (JSON.stringify(after) !== JSON.stringify(before))
     throw new Error('Source generation changed during migration');
+  // Creating children changes their parent's mtime. Restore permissions and
+  // times from the leaves up, after all destination entries exist.
+  for (const name of ['', ...before.directories].reverse()) {
+    await restoreDirectoryAttributes(path.join(source, name), path.join(destination, name));
+  }
   return before;
 }
 export async function writeJson(file, value) {
@@ -309,6 +319,7 @@ export async function mergeAssets(from, to, oldA, oldB, report, { include = () =
       if (a.kind === 'directory') {
         await mkdir(destination, { recursive: true, mode: 0o700 });
         await merge(a.children, empty, empty, empty, name);
+        await restoreDirectoryAttributes(path.join(from, name), destination);
       } else {
         await mkdir(path.dirname(destination), { recursive: true, mode: 0o700 });
         const filename = path.join(from, name);

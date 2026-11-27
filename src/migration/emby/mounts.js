@@ -3,7 +3,8 @@ import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
 import { DatabaseSync } from 'node:sqlite';
 import { parseLibraryOptions } from '../../library/options.js';
-import { canonicalPortableMountContract } from '../../storage/portable-mount-contract.js';
+import { canonicalIdentityRoot, canonicalPortableMountContract } from '../../storage/portable-mount-contract.js';
+import { ordinalIgnoreCaseKey } from '../../storage/ordinal-comparer.js';
 import { exists } from './files.js';
 
 export const savedMounts = (root) => path.join(root, 'config', 'mediamanager-mounts.json');
@@ -34,14 +35,18 @@ export async function embyLibraryMounts(root) {
   for (const info of paths) {
     const identityRoot = info?.Path;
     if (typeof identityRoot !== 'string' || !identityRoot) continue;
-    const windows = /^(?:[a-z]:[\\/]|\\\\)/iu.test(identityRoot);
+    const windows = /^(?:[a-z]:[\\/]|\\\\|\/\/[^/]+\/[^/]+)/iu.test(identityRoot);
     if (!(windows ? path.win32 : path.posix).isAbsolute(identityRoot)) continue;
+    const pathStyle = windows ? 'windows' : 'posix';
+    const normalized = canonicalIdentityRoot(identityRoot, pathStyle);
+    const key = windows ? ordinalIgnoreCaseKey(normalized) : normalized;
+    if (mounts.has(key)) continue;
     const hash = createHash('sha256').update(identityRoot).digest('hex').slice(0, 14);
-    mounts.set(identityRoot, {
+    mounts.set(key, {
       mountId: 'library-' + hash,
       identityRoot,
       accessRoot: '/media/' + hash,
-      pathStyle: windows ? 'windows' : 'posix',
+      pathStyle,
       caseSensitive: !windows,
       returnPolicy: 'required',
     });
