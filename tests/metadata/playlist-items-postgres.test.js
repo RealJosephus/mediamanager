@@ -43,7 +43,7 @@ test('extended M3U decodes each whole path as a single value', () => {
     ['A+B & C.mp3', 'A B&x=y.mp3', 'A&B.mp3', 'A&amp;B.mp3']);
 });
 
-test('playlist refresh resolves real PostgreSQL library roots and persists ordered duplicate links',
+for (const trackName of ['Rhythm & Blues.mp3', 'Rhythm &amp; Blues.mp3']) test('playlist refresh preserves ordered duplicate links to ' + trackName,
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
     const database = await createPostgresTestDatabase(t, 'playlist_items');
     const store = new DomainStore(database);
@@ -111,16 +111,16 @@ test('playlist refresh resolves real PostgreSQL library roots and persists order
       Path: 'Z:\\Fixture\\lists\\mix.m3u', ParentId: ids.folder, TopParentId: ids.folder,
       IsFolder: true }));
     for (const [Id, Name, Path] of [
-      [ids.songA, 'Song A', 'Z:\\Fixture\\Rhythm & Blues.mp3'],
+      [ids.songA, 'Song A', 'Z:\\Fixture\\' + trackName],
       [ids.songB, 'Song B', 'Z:\\Fixture\\Song B.mp3']
     ]) await database.insert('BaseItems', baseItem({ Id,
       Type: 'MediaBrowser.Controller.Entities.Audio.Audio', Name, Path, ParentId: ids.folder,
       TopParentId: ids.folder, MediaType: 'Audio', IsFolder: false }));
 
-    await adapter.write('/Rhythm & Blues.mp3', Buffer.from('song-a'));
+    await adapter.write('/' + trackName, Buffer.from('song-a'));
     await adapter.write('/Song B.mp3', Buffer.from('song-b'));
     await adapter.mkdir('/lists');
-    const tracks = ['Rhythm & Blues.mp3', 'Song B.mp3', 'Rhythm & Blues.mp3'].map((name, index) => ({
+    const tracks = [trackName, 'Song B.mp3', trackName].map((name, index) => ({
       Ordinal: BigInt(index + 1), item: { Name: name, Path: 'Z:\\Fixture\\' + name, Type: 'Audio' },
     }));
     const spool = await preparePlaylistFile('Z:\\Fixture\\lists\\mix.m3u', {
@@ -133,10 +133,10 @@ test('playlist refresh resolves real PostgreSQL library roots and persists order
     const loaded = await loadContext(ids.playlist);
     assert.equal(loaded.context.accessPath, '/fixture/lists/mix.m3u');
     assert.deepEqual(await loaded.context.playlistLibraryRoots(), ['Z:\\Fixture']);
-    assert.equal(await loaded.context.playlistFileExists('Z:\\Fixture\\Rhythm & Blues.mp3'), true);
-    assert.equal((await loaded.context.findMetadataItemByPath('Z:\\Fixture\\Rhythm & Blues.mp3', null)).Id,
+    assert.equal(await loaded.context.playlistFileExists('Z:\\Fixture\\' + trackName), true);
+    assert.equal((await loaded.context.findMetadataItemByPath('Z:\\Fixture\\' + trackName, null)).Id,
       ids.songA);
-    assert.equal(await loaded.context.findMetadataItemByPath('Z:\\Fixture\\Rhythm & Blues.mp3', true), null);
+    assert.equal(await loaded.context.findMetadataItemByPath('Z:\\Fixture\\' + trackName, true), null);
     await loaded.dispose();
 
     const user = { Id: '71000000000000000000000000000001', Policy: { IsAdministrator: true,
