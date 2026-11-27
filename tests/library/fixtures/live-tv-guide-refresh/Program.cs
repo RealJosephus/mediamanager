@@ -190,8 +190,8 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
         Task Folders() { trace.Add(new { kind = "folders" }); return Task.CompletedTask; }
         var scanner = Stub.Make<ITunerHostManager>((method, values) => method.Name == "ScanForTunerDeviceChanges" ? Scan((CancellationToken)values![0]!) : Stub.Default(method.ReturnType));
         Task Scan(CancellationToken token) { token.ThrowIfCancellationRequested(); trace.Add(new { kind = "scan" }); return Task.CompletedTask; }
-        var sd = Stub.Make<ISchedulesDirectService>((method, _) => {
-            if (method.Name == "IsImageDailyLimitActive") { trace.Add(new { kind = "precache" }); return false; }
+        var sd = Stub.Make<ISchedulesDirectService>((method, values) => {
+            if (method.Name == "CanDownloadImage") { trace.Add(new { kind = "image-permission", url = (string?)values![0] }); return true; }
             throw new InvalidOperationException("Image network execution is forbidden.");
         });
         var logger = new CaptureLogger<GuideManager>(error => trace.Add(new { kind = "error", type = error.GetType().Name }));

@@ -1,0 +1,131 @@
+{
+  "POST /token": {
+    "code": 0,
+    "message": "OK",
+    "token": "test-token"
+  },
+  "GET /status": {
+    "systemStatus": [
+      {
+        "status": "Online"
+      }
+    ],
+    "lineups": [
+      {
+        "lineup": "A",
+        "modified": "2025-03-01T00:00:00Z"
+      }
+    ]
+  },
+  "GET /lineups": {
+    "lineups": [
+      {
+        "lineup": "A"
+      }
+    ]
+  },
+  "GET /headends": [
+    {
+      "lineups": [
+        {
+          "lineup": "A",
+          "name": "Regional"
+        }
+      ]
+    }
+  ],
+  "GET /lineups/A": {
+    "map": [
+      {
+        "stationID": "21",
+        "channel": "0007"
+      }
+    ],
+    "stations": [
+      {
+        "stationID": "21",
+        "name": "News",
+        "callsign": "NN"
+      }
+    ]
+  },
+  "POST /schedules/md5": {
+    "21": {
+      "2025-03-01": {
+        "md5": "day-hash"
+      }
+    }
+  },
+  "POST /schedules": [
+    {
+      "stationID": "21",
+      "metadata": {
+        "startDate": "2025-03-01",
+        "md5": "day-hash"
+      },
+      "programs": [
+        {
+          "programID": "EP012345678901",
+          "airDateTime": "2025-03-01T12:00:00Z",
+          "duration": 1800,
+          "md5": "air-hash",
+          "videoProperties": [
+            "hdtv"
+          ],
+          "audioProperties": [
+            "dd 5.1"
+          ]
+        }
+      ]
+    }
+  ],
+  "POST /programs": [
+    {
+      "programID": "EP012345678901",
+      "entityType": "Episode",
+      "titles": [
+        {
+          "title120": "Midday"
+        }
+      ],
+      "genres": [
+        "News"
+      ],
+      "episodeTitle150": "Regional news",
+      "metadata": [
+        {
+          "Gracenote": {
+            "season": 2,
+            "episode": 3
+          }
+        }
+      ],
+      "hasImageArtwork": true
+    }
+  ],
+  "POST /metadata/programs/": [
+    {
+      "programID": "EP012345678901",
+      "data": [
+        {
+          "uri": "first-poster.jpg",
+          "text": "yes",
+          "width": "200",
+          "height": "300"
+        },
+        {
+          "uri": "second-poster.jpg",
+          "text": "yes",
+          "width": "190",
+          "height": "300"
+        },
+        {
+          "uri": "wide.jpg",
+          "text": "yes",
+          "width": "1920",
+          "height": "1080"
+        }
+      ]
+    }
+  ]
+}

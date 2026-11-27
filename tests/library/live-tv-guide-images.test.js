@@ -86,7 +86,7 @@ async function setup(t, sample, { parallelism = 1, limit, onError = () => {}, up
   const updates = decorateUpdates?.(fixture.host.updates, fixture) ?? fixture.host.updates;
   const service = new LiveTvGuideImages({ store: fixture.store, linkedChildren: fixture.linkedChildren, loadContext: fixture.loadContext,
     itemCreation: fixture.library.itemCreation, updates, images: fixture.host.images, parallelism, onError,
-    isImageDailyLimitActive: limit ?? (() => sample.limits[Math.min(calls++, sample.limits.length - 1)]),
+    canDownloadImage: url => !(/schedulesdirect/iu.test(url) && (limit?.() ?? sample.limits[Math.min(calls++, sample.limits.length - 1)])),
     runWorker: operation => {
       const work = () => fixture.loadContext.withDetachedScope(operation);
       return childWorkers ? fixture.store.runChild(work) : fixture.store.runDetached(work);

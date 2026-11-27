@@ -42,7 +42,9 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
     var original = programs.Select(p => p.ImageInfos?.ToArray()).ToArray();
     var requests = new List<string>(); var updates = new List<object>(); var calls = 0; var errors = new List<string>();
     var limits = sample.GetProperty("limits").EnumerateArray().Select(value => value.GetBoolean()).ToArray();
-    var sd = Stub.Make<ISchedulesDirectService>((method, _) => method.Name == "IsImageDailyLimitActive" ? limits[Math.Min(calls++, limits.Length - 1)] : Stub.Default(method.ReturnType));
+    var sd = Stub.Make<ISchedulesDirectService>((method, values) => method.Name == "CanDownloadImage"
+        ? !(((string?)values![0])?.Contains("schedulesdirect", StringComparison.OrdinalIgnoreCase) == true && limits[Math.Min(calls++, limits.Length - 1)])
+        : Stub.Default(method.ReturnType));
     var library = (LibraryManager)RuntimeHelpers.GetUninitializedObject(typeof(LibraryManager));
     typeof(LibraryManager).GetField("_logger", BindingFlags.NonPublic | BindingFlags.Instance)!.SetValue(library, NullLogger<LibraryManager>.Instance);
     var provider = Stub.Make<IProviderManager>((method, values) => {
@@ -67,7 +69,7 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
         _ => Stub.Default(method.ReturnType)
     });
     Task Update(BaseItem item, ItemUpdateType reason, CancellationToken token) {
-        if (token.CanBeCanceled || reason != ItemUpdateType.ImageUpdate) throw new InvalidOperationException("Independent image save contract changed.");
+        if (reason != ItemUpdateType.ImageUpdate) throw new InvalidOperationException("Independent image save contract changed.");
         updates.Add(new { Id = item.Id.ToString("N"), Images = Images(item) }); return Task.CompletedTask;
     }
     BaseItem.LibraryManager = proxy;

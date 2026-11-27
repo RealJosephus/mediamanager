@@ -133,7 +133,7 @@ export async function setupScenario(t, sample) {
     diagnostics.push({ type: errorType(error), message: error?.message, stack: error?.stack });
   } };
   const images = new LiveTvGuideImages({ ...fixture, loadContext, itemCreation, updates, images: fixture.host.images, parallelism: 1,
-    isImageDailyLimitActive: () => { if (recording) trace.push({ kind: 'precache' }); return false; },
+    canDownloadImage: url => { if (recording) trace.push({ kind: 'image-permission', url }); return true; },
     runWorker: () => { throw new Error('Future fixture programs must not enter an image download worker.'); }, onError: nativeError });
   const providers = sample.services.map(service => ({ name: service.name,
     async getChannels({ signal, enableCache }) {

@@ -9,11 +9,6 @@ const failure = message => libraryError(500, message);
 const nullReference = () => Object.assign(new TypeError('Guide images require initialized collections and paths.'), { status: 500 });
 function imagePath(image) { if (typeof image?.Path !== 'string') throw nullReference(); return ordinalIgnoreCaseKey(image.Path); }
 const local = image => !imagePath(image).startsWith('HTTP');
-const sd = image => imagePath(image).includes('SCHEDULESDIRECT');
-function allLocalOrSd(item) {
-  if (!Array.isArray(item.ImageInfos)) throw nullReference();
-  return item.ImageInfos.every(image => local(image) || sd(image));
-}
 const imageRows = item => item.ImageInfos.map(image => ({ ...image, Blurhash: image.BlurHash == null ? null : Buffer.from(image.BlurHash, 'utf8') }));
 function restoreReferences(item, originals) {
   const values = item.ImageInfos;
@@ -33,15 +28,15 @@ export class LiveTvGuideImages {
   #closing;
   #work = new Set();
   #lifetime = new AbortController();
-  constructor({ store, linkedChildren, loadContext, itemCreation, updates, images, isImageDailyLimitActive,
+  constructor({ store, linkedChildren, loadContext, itemCreation, updates, images, canDownloadImage, reportImageSuccess, reportImageFailure,
     runWorker, onError = () => {}, parallelism = Math.min(availableParallelism(), 10) }) {
     if (typeof store?.run !== 'function' || !linkedChildren || typeof loadContext !== 'function'
       || typeof itemCreation?.registerItem !== 'function' || typeof updates?.update !== 'function'
-      || typeof images?.saveRemote !== 'function' || typeof isImageDailyLimitActive !== 'function'
+      || typeof images?.saveRemote !== 'function' || typeof canDownloadImage !== 'function'
       || typeof runWorker !== 'function' || typeof onError !== 'function' || !Number.isInteger(parallelism) || parallelism < 1 || parallelism > 10) {
       throw new TypeError('Guide image caching requires SQL cohorts, actual image and repository services, and owned workers.');
     }
-    Object.assign(this, { store, linkedChildren, loadContext, itemCreation, updates, images, isImageDailyLimitActive, runWorker, onError, parallelism });
+    Object.assign(this, { store, linkedChildren, loadContext, itemCreation, updates, images, canDownloadImage, reportImageSuccess, reportImageFailure, runWorker, onError, parallelism });
   }
 
   preCache(view, maxCacheDate) {
@@ -60,17 +55,16 @@ export class LiveTvGuideImages {
     const stopped = new AbortController(), active = new Set(); let workerFailure;
     const signal = AbortSignal.any([this.#lifetime.signal, stopped.signal]);
     try {
-      const limited = await this.isImageDailyLimitActive();
       await view.flush();
       selected = await this.store.run(async session => {
         if (session.inTransaction) throw new TypeError('Guide image selection requires a nontransaction session.');
         const source = view.guideImagePlan(), offset = source.values.length;
         const text = nativeTextSql(session.schemaName), id = `lower(replace(${text.projection('candidate."Id"')},'-',''))`;
         return view.view({ session, plan: { text: `WITH candidates AS (SELECT * FROM (${source.text}) programs
-            WHERE "EndDateTicks"<$${offset + 1} AND (NOT $${offset + 2} OR "AllImagesLocalOrSd" IS DISTINCT FROM TRUE)),
+            WHERE "EndDateTicks"<$${offset + 1} AND "HasRemoteImage" IS DISTINCT FROM FALSE),
           ranked AS (SELECT candidate.*,row_number() OVER(PARTITION BY ${id} ORDER BY "Ordinal") AS identity_ordinal FROM candidates candidate)
-          SELECT "Ordinal","SlotKey" FROM ranked WHERE identity_ordinal=1 OR ($${offset + 2} AND "AllImagesLocalOrSd" IS NULL) ORDER BY "Ordinal"`,
-          values: [...source.values, cutoff, limited] } });
+          SELECT "Ordinal","SlotKey" FROM ranked WHERE identity_ordinal=1 OR "HasRemoteImage" IS NULL ORDER BY "Ordinal"`,
+          values: [...source.values, cutoff] } });
       });
       // SQL owns filtering and identity winners. Only bounded slot keys, then
       // one live entity per worker, cross into Node.
@@ -85,7 +79,10 @@ export class LiveTvGuideImages {
           if (signal.aborted) break;
           after = BigInt(row.Ordinal);
           // The initial predicate is outside the worker body in native LINQ.
-          if (limited) await selected.withSlot(row.SlotKey, item => { allLocalOrSd(item); });
+          await selected.withSlot(row.SlotKey, item => {
+            if (!Array.isArray(item.ImageInfos)) throw nullReference();
+            item.ImageInfos.some(image => !local(image));
+          });
           const task = Promise.resolve().then(() => this.runWorker(() => selected.withSlot(row.SlotKey, item => this.#program(item, signal))))
             .catch(error => { workerFailure ??= error; stopped.abort(error); });
           active.add(task); task.finally(() => active.delete(task)).catch(() => {});
@@ -102,17 +99,31 @@ export class LiveTvGuideImages {
   }
 
   async #program(item, signal) {
-    if (await this.isImageDailyLimitActive() && allLocalOrSd(item)) return;
-    if (!Array.isArray(item.ImageInfos)) throw nullReference();
+    const rejected = new Set();
     for (let index = 0; index < item.ImageInfos.length; index++) {
       if (signal.aborted) return;
       const image = item.ImageInfos[index];
-      if (local(image) || sd(image) && await this.isImageDailyLimitActive()) continue;
+      if (local(image)) continue;
+      const url = image.Path;
+      if (!await this.canDownloadImage(url)) { rejected.add(image); continue; }
       try {
         const converted = await this.#convert(item, image);
         item.ImageInfos[index] = converted;
+        await this.reportImageSuccess?.(url);
+      } catch (error) {
+        if (await this.reportImageFailure?.(url, error)) rejected.add(image);
+        try { void Promise.resolve(this.onError(error, url, item)).catch(() => {}); } catch { /* Continue after logging. */ }
       }
-      catch (error) { try { void Promise.resolve(this.onError(error, image.Path, item)).catch(() => {}); } catch { /* Logging does not change per-image continuation. */ } }
+    }
+    if (rejected.size) {
+      item.ImageInfos = [...new Set(item.ImageInfos.filter(image => !rejected.has(image)))];
+      const retained = [...item.ImageInfos], loaded = await this.loadContext(item.Id, { draft: item });
+      try {
+        const rows = imageRows(item);
+        loaded.context.images = rows;
+        await this.updates.update(loaded, { Item: item, Images: rows }, ItemUpdateType.ImageUpdate, { signal });
+        restoreReferences(item, retained);
+      } finally { await loaded.dispose(); }
     }
   }
 
@@ -135,7 +146,7 @@ export class LiveTvGuideImages {
           try { await loaded.dispose(); } catch (error) { throw primary ? new AggregateError([primary, error], primary.message, { cause: primary }) : error; }
         }
       } catch (error) {
-        if (error.code === 'http-error' && [403, 404].includes(error.status)) continue;
+        if (error.sdCode == null && error.code === 'http-error' && [403, 404].includes(error.status)) continue;
         throw error;
       }
     }

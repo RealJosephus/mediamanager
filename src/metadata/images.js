@@ -359,6 +359,12 @@ export class MetadataImages {
   }
   async #readResponse(response, url, signal) {
     try {
+      if (/schedulesdirect/iu.test(url) && response.headers.get('content-type')?.includes('json')) {
+        const result = await response.json().catch(() => null);
+        throw Object.assign(new Error('Schedules Direct did not return an image.'), {
+          code: 'http-error', status: response.status, sdCode: result?.code,
+        });
+      }
       if (!response.ok) throw Object.assign(new Error(`Image download returned HTTP ${response.status}.`), { code: 'http-error', status: response.status });
       let mimeType = response.headers.get('content-type')?.split(';')[0];
       if (!mimeType && /\/imagecache\//i.test(url)) mimeType = 'image/png';

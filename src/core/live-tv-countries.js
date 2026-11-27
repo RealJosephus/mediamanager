@@ -21,8 +21,9 @@ function day(value, utc = true) {
   return utc ? date.toISOString().slice(0, 10) : `${String(date.getFullYear()).padStart(4, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
-/** SchedulesDirect.GetAvailableCountries is a raw-byte discovery/cache client.
- * This does not implement authenticated SD listings or its execution paths. */
+const imageKey = url => url.replace(/^.*?\/image\//iu, '').split('?')[0];
+
+/** Shared Schedules Direct country cache and per-image admission state. */
 export class LiveTvCountriesClient {
   #cache;
   #closed = false;
@@ -30,6 +31,12 @@ export class LiveTvCountriesClient {
   #work = new Set();
   #initialization;
   #imageLimitDate = null;
+  #metadataInitialization;
+  #metadataLimitDate = null;
+  #tokenGeneration = 0;
+  #rejectedImages;
+  #consecutiveFailures = 0;
+  #rejectionWrite = Promise.resolve();
   constructor(options = {}) {
     const { cachePath, fileSystem = fs, fetch = globalThis.fetch, now = () => new Date(), url = countryUrl,
       timeoutMs = 100000, userAgent } = options;
@@ -41,6 +48,7 @@ export class LiveTvCountriesClient {
     Object.assign(this, { fileSystem, fetch, now, url, timeoutMs, userAgent, pathOptions: options });
   }
   get cachePath() { return this.pathOptions.cachePath; }
+  get tokenGeneration() { return this.#tokenGeneration; }
 
   #admit(operation) {
     if (this.#closed) return Promise.reject(unavailable());
@@ -63,8 +71,8 @@ export class LiveTvCountriesClient {
     try { await this.fileSystem.unlink(filename); }
     catch (error) { if (!io(error)) throw error; }
   }
-  async #loadDailyLimitDate() {
-    const filename = path.join(this.cachePath, 'sd-image-limit.txt');
+  async #loadDailyLimitDate(name = 'sd-image-limit.txt') {
+    const filename = path.join(this.cachePath, name);
     if (!await this.#exists(filename)) return null;
     try {
       const text = trim(decodeNativeText(await this.fileSystem.readFile(filename)));
@@ -80,16 +88,78 @@ export class LiveTvCountriesClient {
     return null;
   }
 
-  isImageDailyLimitActive() {
+  async #limitActive(metadata) {
+    if (metadata) await (this.#metadataInitialization ??= this.#loadDailyLimitDate('sd-metadata-limit.txt').then(date => { this.#metadataLimitDate = date; }));
+    else await this.#initialize();
+    const date = metadata ? this.#metadataLimitDate : this.#imageLimitDate;
+    if (date === null) return false;
+    if (date >= day(this.now())) return true;
+    if (metadata) this.#metadataLimitDate = null;
+    else { this.#imageLimitDate = null; this.#consecutiveFailures = 0; }
+    await this.#tryDelete(path.join(this.cachePath, metadata ? 'sd-metadata-limit.txt' : 'sd-image-limit.txt'));
+    return false;
+  }
+  isImageDailyLimitActive() { return this.#admit(() => this.#limitActive(false)); }
+  isMetadataDailyLimitActive() { return this.#admit(() => this.#limitActive(true)); }
+
+  async #imageKeys() {
+    return this.#rejectedImages ??= (async () => {
+      const keys = new Set(), cutoff = day(new Date(this.now()).getTime() - 30 * 86400000);
+      const file = path.join(this.cachePath, 'sd-rejected-images.txt');
+      if (await this.#exists(file)) {
+        const lines = decodeNativeText(await this.fileSystem.readFile(file)).split(/\r?\n/u);
+        for (const line of lines) {
+          const match = /^(\d{4}-\d{2}-\d{2})\t(.+)$/u.exec(line);
+          if (match && match[1] >= cutoff && keys.size < 10000) keys.add(match[2]);
+        }
+      }
+      return keys;
+    })();
+  }
+  canDownloadImage(url) {
+    return this.#admit(async () => !/schedulesdirect/iu.test(url) || !await this.#limitActive(false)
+      && !(await this.#imageKeys()).has(imageKey(url)));
+  }
+  async #markLimit(metadata) {
+    await this.#limitActive(metadata);
+    const stamp = new Date(this.now());
+    if (metadata) this.#metadataLimitDate = day(stamp);
+    else this.#imageLimitDate = day(stamp);
+    try {
+      await this.fileSystem.mkdir(this.cachePath, { recursive: true });
+      await this.fileSystem.writeFile(path.join(this.cachePath, metadata ? 'sd-metadata-limit.txt' : 'sd-image-limit.txt'), stamp.toISOString());
+    } catch (error) { if (!io(error)) throw error; }
+  }
+  markImageLimit() { return this.#admit(() => this.#markLimit(false)); }
+  markMetadataLimit() { return this.#admit(() => this.#markLimit(true)); }
+  reportImageSuccess(url) { if (/schedulesdirect/iu.test(url)) this.#consecutiveFailures = 0; }
+  reportImageFailure(url, error) {
     return this.#admit(async () => {
-      await this.#initialize();
-      if (this.#imageLimitDate === null) return false;
-      if (this.#imageLimitDate < day(this.now())) {
-        this.#imageLimitDate = null;
-        await this.#tryDelete(path.join(this.cachePath, 'sd-image-limit.txt'));
+      if (!/schedulesdirect/iu.test(url)) return false;
+      const code = error.sdCode;
+      if (code == null) {
+        if (++this.#consecutiveFailures === 10) await this.#markLimit(false);
         return false;
       }
-      return true;
+      this.#consecutiveFailures = 0;
+      if ([1004, 1010, 4006].includes(code)) this.#tokenGeneration++;
+      if ([4009, 4010].includes(code)) await this.#markLimit(true);
+      if ([4009, 4010, 5002, 5003, 5004].includes(code)) await this.#markLimit(false);
+      if (code === 5000) {
+        const keys = await this.#imageKeys(), key = imageKey(url);
+        if (key && !/[\r\n\t]/u.test(key) && keys.size < 10000 && !keys.has(key)) {
+          keys.add(key);
+          const file = path.join(this.cachePath, 'sd-rejected-images.txt');
+          const write = this.#rejectionWrite.then(async () => {
+            await this.fileSystem.mkdir(this.cachePath, { recursive: true });
+            const prior = await this.#exists(file) ? await this.fileSystem.readFile(file, 'utf8') : '';
+            await this.fileSystem.writeFile(file, prior + day(this.now()) + '\t' + key + '\n');
+          });
+          this.#rejectionWrite = write.catch(() => {});
+          await this.#rejectionWrite;
+        }
+      }
+      return [1004, 1010, 4006, 5000, 5004].includes(code);
     });
   }
 

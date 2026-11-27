@@ -576,7 +576,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   if (liveTvRecordingFolders) rollback.push(() => liveTvRecordingFolders.close());
   let liveTvSources, liveTvTuners, liveTvGuideImages, liveTvGuide, liveTvCountries, guideTaskConfiguration, liveTvDvr;
   if (liveTvRecordingFolders && applicationPaths.cachePath && loadContext && itemCreation && itemDeletion && metadataScanner) {
-    liveTvCountries = new LiveTvCountriesClient({ get cachePath() { return applicationPaths.cachePath; }, userAgent: `MediaManager/${serverVersion}` });
+    liveTvCountries = new LiveTvCountriesClient({ fileSystem, get cachePath() { return applicationPaths.cachePath; }, userAgent: `MediaManager/${serverVersion}` });
     rollback.push(() => liveTvCountries.close());
     await liveTvCountries.initialize();
     liveTvSources = new LiveTvSourcesService({ liveTv, plugins, fileSystem, get cachePath() { return applicationPaths.cachePath; }, onError,
@@ -632,7 +632,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
       rollback.push(() => liveTvDvr.close());
     }
     liveTvGuideImages = new LiveTvGuideImages({ store, linkedChildren, loadContext, itemCreation, updates: metadataUpdates,
-      images: metadataImages, isImageDailyLimitActive: () => liveTvCountries.isImageDailyLimitActive(), onError,
+      images: metadataImages, canDownloadImage: url => liveTvCountries.canDownloadImage(url),
+      reportImageSuccess: url => liveTvCountries.reportImageSuccess(url),
+      reportImageFailure: (url, error) => liveTvCountries.reportImageFailure(url, error), onError,
       runWorker: operation => store.runChild(() => loadContext.withDetachedScope(operation)) });
     rollback.push(() => liveTvGuideImages.close());
     const guideServices = () => [liveTvTuners];
