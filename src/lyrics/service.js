@@ -147,3 +147,12 @@ export class LyricService {
     }, { signal });
   }
 }
+
+export function createLyricService(services) {
+  return new LyricService({ store: services.store, library: services.library,
+    vfs: services.storage?.vfs ?? services.playback?.vfs,
+    identityMap: services.storage?.identityMap ?? services.playback?.identityMap,
+    metadataIdentityMap: services.storage?.metadataIdentityMap, fileSystem: services.fileSystem,
+    monitor: services.libraryMonitor, directoryService: services.libraryMonitorHost, metadata: services.metadata,
+    providers: () => services.plugins?.entries('lyric') ?? [], logger: { error: services.onError ?? (() => {}) } });
+}

@@ -17,10 +17,7 @@ export async function queryPostgresLatestItems(database, {
   const ancestors = `${q(database.schemaName)}.${q('AncestorIds')}`;
   const type = alias => `substring(${sql.projection(`${alias}."Type"`)} from '[^.]+$')`;
   const same = (a, b) => `${sql.guidKey(a)} = ${sql.guidKey(b)}`;
-  const date = expression => {
-    const text = `regexp_replace(replace(${sql.projection(expression)}, 'T', ' '), '(Z|\\+00:00)$', '')`;
-    return `(split_part(${text}, '.', 1) || '.' || rpad(CASE WHEN strpos(${text}, '.') = 0 THEN '' ELSE split_part(${text}, '.', 2) END, 7, '0')) COLLATE "C"`;
-  };
+  const date = sql.utcDateTimeKey;
   const order = alias => `${date(`${alias}."DateCreated"`)} DESC NULLS LAST, ${sql.guidKey(`${alias}."Id"`)} COLLATE "C" DESC`;
   const repository = !channelQuery && groupItems && ['music', 'movies', 'tvshows', null].includes(collectionType);
   const presentationGrouping = !query.includeitemtypes?.length || query.includeitemtypes.some(type =>

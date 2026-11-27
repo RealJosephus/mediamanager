@@ -50,7 +50,7 @@ export async function searchRemoteSubtitles(providers, item, input, options, { s
     TwoLetterISOLanguageName: localization.findLanguage(input.language)?.TwoLetterISOLanguageName,
     IndexNumber: item.IndexNumber, ParentIndexNumber: item.ParentIndexNumber, ProductionYear: item.ProductionYear,
     MediaPath: item.Path, ProviderIds: item.ProviderIds instanceof Map ? Object.fromEntries(item.ProviderIds) : { ...item.ProviderIds },
-    RuntimeTicks: item.RunTimeTicks, IsPerfectMatch: input.isPerfectMatch ?? false, IsAutomated: false,
+    RuntimeTicks: item.RunTimeTicks, IsPerfectMatch: input.isPerfectMatch ?? false, IsAutomated: input.isAutomated ?? false,
     ...(item.Type === 'Episode' ? { IndexNumberEnd: item.IndexNumberEnd, SeriesName: item.SeriesName } : {}),
   };
   for (const provider of eligible) {

@@ -99,7 +99,9 @@ import { KeyframeExtractionTaskWorker } from './tasks/keyframe-extraction-task.j
 import { AudioNormalizationTaskWorker } from './tasks/audio-normalization-task.js';
 import { ChapterImagesTaskWorker } from './tasks/chapter-images-task.js';
 import { RefreshPeopleTaskWorker } from './tasks/refresh-people-task.js';
-import { CleanActivityLogTaskWorker, CleanLogFilesTaskWorker, DeleteCacheFilesTaskWorker, DeleteTranscodeFilesTaskWorker } from './tasks/maintenance-tasks.js';
+import { createLyricService } from './lyrics/service.js';
+import { DownloadMediaTaskWorker } from './tasks/download-media-tasks.js';
+import { CleanupUserDataTaskWorker, CleanActivityLogTaskWorker, CleanLogFilesTaskWorker, DeleteCacheFilesTaskWorker, DeleteTranscodeFilesTaskWorker } from './tasks/maintenance-tasks.js';
 import { ChapterImages } from './library/chapter-images.js';
 import { TrickplayImagesTaskWorker, TrickplayMoveImagesTaskWorker } from './tasks/trickplay-images-task.js';
 import { TrickplayGeneration } from './library/trickplay-generation.js';
@@ -534,6 +536,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   if (libraryScanner) rollback.push(() => libraryScanner.close());
   const tasks = new ScheduledTaskManager({ scanner: libraryScanner, localization, onError, programDataPath, configurationDirectoryPath, dataPath });
   rollback.push(() => tasks.close());
+  await tasks.register({ create: options => new CleanupUserDataTaskWorker({ ...options, databaseStore: store }) });
   await tasks.register({ create: options => new CleanActivityLogTaskWorker({ ...options, activities, getConfiguration: currentConfiguration }) });
   await tasks.register({ create: options => new DeleteCacheFilesTaskWorker({ ...options, applicationPaths, fileSystem,
     withStorageGeneration: configuredStorage.withGeneration }) });
@@ -740,6 +743,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
     ? loadContext.withDetachedScope(operation) : operation());
   services.libraryMonitor = libraryMonitor;
   services.libraryMonitorHost = libraryMonitorHost;
+  services.lyrics = createLyricService({ ...services, onError });
+  for (const key of ['DownloadLyrics', 'DownloadSubtitles']) {
+    await tasks.register({ create: options => new DownloadMediaTaskWorker({ ...options, key, services, onError }) });
+  }
   services.libraryTaskScheduler = libraryTaskScheduler;
   services.quickConnect = quickConnect;
   services.passwordResets = passwordResets;

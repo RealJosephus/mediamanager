@@ -3,18 +3,16 @@ import { bindJsonModel, validateJsonModel } from './json-model-binding.js';
 import { decodeBase64Body } from './base64-body.js';
 import { withCleanup } from '../core/operation-failure.js';
 import { lowerInvariant } from '../core/identity.js';
-import { VIDEO_TYPES, idKey, nonemptyId } from '../library/records.js';
-import { nativeContainingFolderPath, nativeFileNameWithoutExtension, nativePathWithin } from '../library/native-path.js';
-import { defaultLibraryOptions } from '../library/options.js';
+import { VIDEO_TYPES, nonemptyId } from '../library/records.js';
+import { nativePathWithin } from '../library/native-path.js';
+import { itemLibraryOptions } from '../library/options.js';
 import { internalImagePath } from '../metadata/image-paths.js';
-import { imagePathApi } from '../metadata/image-assets.js';
-import { StorageFileSystem } from '../storage/files.js';
+import { subtitleDestinations, saveSubtitle, downloadSubtitle, subtitleFormats } from '../playback/subtitle-storage.js';
 import { clrTrim } from '../metadata/whitespace.js';
 import { searchRemoteSubtitles, readRemoteSubtitle } from '../playback/remote-subtitles.js';
 import { BinaryResult } from './binary-result.js';
 import { getMimeType } from './mime-types.js';
 
-const formats = new Set(['ass', 'mks', 'sami', 'smi', 'srt', 'ssa', 'sub', 'sup', 'vtt']);
 const dto = 'Jellyfin.Api.Models.SubtitleDtos.UploadSubtitleDto';
 const strings = ['Language', 'Format', 'Data'];
 const flags = ['IsForced', 'IsHearingImpaired'];
@@ -48,50 +46,6 @@ async function withVisibleItem(library, itemId, auth, operation, { video = false
   }
 }
 
-async function libraryOptions(library, item) {
-  const collection = (await library.getCollectionFolders(item)).find(folder => folder.Type === 'CollectionFolder');
-  const configured = library.options.libraryOptions;
-  return (configured instanceof Map ? configured.get(idKey(collection?.Id)) ?? configured.get(collection?.Id)
-    : configured?.[idKey(collection?.Id)] ?? configured?.[collection?.Id]) ?? defaultLibraryOptions();
-}
-
-async function saveSubtitle({ library, mediaFiles, metadataFiles, libraryMonitor, libraryMonitorHost }, item, subtitle, format, bytes, signal) {
-  const options = await libraryOptions(library, item);
-  const fileSystem = options.SaveSubtitlesWithMedia ? mediaFiles : metadataFiles;
-  if (!fileSystem) throw httpError(503, 'Subtitle storage is unavailable.');
-  const folder = options.SaveSubtitlesWithMedia
-    ? nativeContainingFolderPath(item) : internalImagePath(item, library.options.metadataPath);
-  if (!folder) throw httpError(400, 'The subtitle destination is invalid.');
-  const api = imagePathApi(folder);
-  const language = lowerInvariant(subtitle.Language);
-  if (language.includes('/') || language.includes('\0') || api.sep === '\\' && language.includes('\\')) {
-    throw httpError(400, 'Language contains invalid characters.');
-  }
-  const base = nativeFileNameWithoutExtension(item.Path, { windows: api.sep === '\\' }) + '.' + language
-    + (subtitle.IsForced ? '.forced' : '') + (subtitle.IsHearingImpaired ? '.sdh' : '');
-  let target = api.join(folder, base + '.' + format);
-  // Use exclusive creation on the actual mount. The numbered filenames also
-  // cover two uploads which select the same initial name concurrently.
-  for (let index = 0; ; index++) {
-    signal?.throwIfAborted();
-    fileSystem.vfs.resolveFileHandle(fileSystem.accessPath(target), 'wx');
-    libraryMonitor?.reportFileSystemChangeBeginning(target);
-    const written = await withCleanup(async () => {
-      await fileSystem.mkdir(folder, { recursive: true });
-      try {
-        await fileSystem.writeFile(target, bytes, { flag: 'wx', signal });
-      } catch (error) {
-        if (!(error instanceof AggregateError) && ['EEXIST', 'already-exists'].includes(error?.code)) return false;
-        throw error;
-      }
-      await libraryMonitorHost?.invalidate(target);
-      return true;
-    }, [() => libraryMonitor?.reportFileSystemChangeComplete(target, false)], 'Subtitle save and monitor completion failed.');
-    if (written) return;
-    target = api.join(folder, base + '.' + index + '.' + format);
-  }
-}
-
 function queueRefresh(metadata, item, onError) {
   void metadata.queue(item.Id, refreshOptions, 0).catch(onError);
 }
@@ -102,19 +56,17 @@ function requiredRouteValue(value, name) {
 }
 
 export function registerSubtitleManagementRoutes(add, services) {
-  const { store, library, metadata, playback, storage, libraryMonitor, libraryMonitorHost, onError = () => {} } = services;
+  const { store, library, metadata, libraryMonitor, libraryMonitorHost, onError = () => {} } = services;
   if (!library) return;
-  const vfs = playback?.vfs ?? storage?.vfs, identityMap = playback?.identityMap ?? storage?.identityMap;
-  const mediaFiles = vfs && identityMap ? new StorageFileSystem({ vfs, identityMap }) : storage?.mediaFileSystem ?? services.fileSystem;
-  const metadataFiles = storage?.fileSystem ?? services.fileSystem ?? mediaFiles;
-  const destinations = { library, mediaFiles, metadataFiles, libraryMonitor, libraryMonitorHost };
+  const destinations = subtitleDestinations(services);
+  const { metadataFiles, mediaFiles } = destinations;
   const path = '/Videos/{itemId}/Subtitles', policy = 'SubtitleManagement';
   const itemId = (_query, params) => guidValue(params.itemId, 'itemId');
   const providers = () => services.plugins?.entries('subtitle') ?? [];
   add('POST', path, context => withVisibleItem(library, context.queryInput, context.auth, async item => {
     if (!metadata) throw httpError(503, 'Subtitle storage is unavailable.');
     const upload = context.body, format = lowerInvariant(upload.Format);
-    if (!formats.has(format)) throw httpError(400, "Unsupported subtitle format: '" + upload.Format + "'");
+    if (!subtitleFormats.has(format)) throw httpError(400, "Unsupported subtitle format: '" + upload.Format + "'");
     const bytes = decodeBase64Body(upload.Data);
     await saveSubtitle(destinations, item, upload, format, bytes, context.signal);
     queueRefresh(metadata, item, onError);
@@ -148,19 +100,14 @@ export function registerSubtitleManagementRoutes(add, services) {
   add('GET', remote + '/{language}', context => withVisibleItem(library, context.queryInput.itemId, context.auth, async item => {
     const active = providers();
     if (!active.length) return [];
-    return searchRemoteSubtitles(active, item, context.queryInput, await libraryOptions(library, item),
+    return searchRemoteSubtitles(active, item, context.queryInput, await itemLibraryOptions(library, item),
       { signal: context.signal, onError });
   }, { video: true }), { policy, bindQuery: (query, params) => ({ itemId: itemId(query, params),
     language: requiredRouteValue(params.language, 'language'), isPerfectMatch: booleanValue(queryValue(query, 'isPerfectMatch'), 'isPerfectMatch'),
   }) });
   add('POST', remote + '/{subtitleId}', context => withVisibleItem(library, context.queryInput.itemId, context.auth, async item => {
     try {
-      const subtitle = await readRemoteSubtitle(providers(), context.queryInput.subtitleId, context.signal);
-      const format = lowerInvariant(subtitle.format);
-      if (!formats.has(format)) throw new Error('Invalid subtitle format: ' + format);
-      await saveSubtitle(destinations, item, {
-        Language: subtitle.language, IsForced: subtitle.forced, IsHearingImpaired: subtitle.hearingImpaired,
-      }, format, subtitle.bytes, context.signal);
+      await downloadSubtitle(destinations, providers(), item, context.queryInput.subtitleId, context.signal);
       queueRefresh(metadata, item, onError);
     } catch (error) { onError(error); }
     return noContent();

@@ -1,7 +1,7 @@
 import { BindingError, HttpResult, badRequest, noContent, guidValue, queryValue, notFound, httpError } from '../http/binding.js';
 import { clrTrim } from '../metadata/whitespace.js';
 import { nativeFileName } from '../library/native-path.js';
-import { LyricService } from './service.js';
+import { createLyricService } from './service.js';
 
 export function bindLyricQuery(query, params, upload = false) {
   let itemId, fileName, failure;
@@ -45,12 +45,7 @@ async function uploadBytes(context) {
 }
 
 export function registerLyricRoutes(add, services) {
-  const lyrics = services.lyrics ?? new LyricService({ store: services.store, library: services.library,
-    vfs: services.storage?.vfs ?? services.playback?.vfs,
-    identityMap: services.storage?.identityMap ?? services.playback?.identityMap,
-    metadataIdentityMap: services.storage?.metadataIdentityMap, fileSystem: services.fileSystem,
-    monitor: services.libraryMonitor, directoryService: services.libraryMonitorHost, metadata: services.metadata,
-    providers: () => services.plugins?.entries('lyric') ?? [], logger: { error: services.onError ?? (() => {}) } });
+  const lyrics = services.lyrics ?? createLyricService(services);
   add('GET', '/Audio/{itemId}/Lyrics', async context => {
     const result = await lyrics.read(context.queryInput.itemId, { user: context.auth.User, signal: context.signal });
     return result ?? notFound();

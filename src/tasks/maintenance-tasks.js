@@ -1,6 +1,9 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { md5Guid } from '../core/identity.js';
+import { nativeTextSql } from '../database/native-text-sql.js';
+import { quoteIdentifier } from '../database/model.js';
+import { retainedUserDataItemId } from '../library/item-persistence.js';
 import { ScheduledTaskWorker } from './refresh-library-task.js';
 
 const dayMilliseconds = 86_400_000;
@@ -19,6 +22,28 @@ export class CleanActivityLogTaskWorker extends ScheduledTaskWorker {
         const { ActivityLogRetentionDays: days } = getConfiguration();
         if (days == null || days < 0) throw new Error(`Activity Log Retention days must be at least 0. Currently: ${days ?? ''}`);
         return activities.cleanThrough(new Date(clock().valueOf() - days * dayMilliseconds));
+      },
+    });
+  }
+}
+
+export class CleanupUserDataTaskWorker extends ScheduledTaskWorker {
+  constructor({ databaseStore, clock = () => new Date(), ...options }) {
+    super({ ...options, clock,
+      definition: { id: md5Guid('Emby.Server.Implementations.ScheduledTasks.Tasks.CleanupUserDataTask'),
+        key: 'CleanupUserDataTask', nameKey: 'CleanupUserDataTask', name: 'User data cleanup task',
+        descriptionKey: 'CleanupUserDataTaskDescription',
+        description: 'Cleans all user data (Watch state, favorite status etc) from media that is no longer present for at least 90 days.',
+        categoryKey: 'TasksMaintenanceCategory', category: 'Maintenance', defaultTriggers: [] },
+      run: async ({ signal, reportProgress }) => {
+        const cutoff = new Date(clock().valueOf() - 90 * dayMilliseconds).toISOString().replace('T', ' ').replace('Z', '0000');
+        await databaseStore.run(db => {
+          const sql = nativeTextSql(db.schemaName);
+          return db.client.query('DELETE FROM ' + quoteIdentifier(db.schemaName) + '."UserData" WHERE '
+            + sql.guidKey('"ItemId"') + ' = $1 AND ' + sql.utcDateTimeKey('"RetentionDate"') + ' < $2',
+          [retainedUserDataItemId.replaceAll('-', ''), cutoff]);
+        }, { signal });
+        reportProgress(100);
       },
     });
   }

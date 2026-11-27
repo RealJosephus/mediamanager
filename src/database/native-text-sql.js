@@ -7,6 +7,10 @@ export function nativeTextSql(schema) {
   const pathKey = expression => call('mm_native_path_key', [expression]);
   return Object.freeze({
     projection: expression => call('mm_bytes_text_projection', [expression]),
+    utcDateTimeKey: expression => {
+      const text = `regexp_replace(replace(${call('mm_bytes_text_projection', [expression])}, 'T', ' '), '(Z|\\+00:00)$', '')`;
+      return `(split_part(${text}, '.', 1) || '.' || rpad(CASE WHEN strpos(${text}, '.') = 0 THEN '' ELSE split_part(${text}, '.', 2) END, 7, '0')) COLLATE "C"`;
+    },
     fromProjection: expression => call('mm_text_utf8_key', [expression]),
     invariantLower: expression => call('mm_invariant_lower', [expression]),
     invariantCharUpper: expression => call('mm_invariant_char_upper', [expression]),

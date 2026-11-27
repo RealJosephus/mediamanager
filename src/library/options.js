@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { readXml } from '../core/xml.js';
-import { libraryError } from './records.js';
+import { libraryError, idKey } from './records.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { LibraryOptionsStore } from './library-options-store.js';
 
@@ -35,6 +35,13 @@ export function defaultLibraryOptions() {
   for (const name of arrayFields) defaults[name] = ['MetadataSavers', 'LocalMetadataReaderOrder', 'SubtitleDownloadLanguages'].includes(name) ? null : [];
   defaults.CustomTagDelimiters = ['/', '|', ';', '\\'];
   return defaults;
+}
+
+export async function itemLibraryOptions(library, item) {
+  const collection = (await library.getCollectionFolders(item)).find(folder => folder.Type === 'CollectionFolder');
+  const configured = library.options.libraryOptions;
+  return (configured instanceof Map ? configured.get(idKey(collection?.Id)) ?? configured.get(collection?.Id)
+    : configured?.[idKey(collection?.Id)] ?? configured?.[collection?.Id]) ?? defaultLibraryOptions();
 }
 
 export function createVirtualPathExpander(options) {

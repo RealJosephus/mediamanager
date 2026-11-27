@@ -3,19 +3,13 @@ import { lowerInvariant } from '../core/identity.js';
 import { nativeContainingFolderPath, nativeFileNameWithoutExtension } from '../library/native-path.js';
 import { internalImagePath } from '../metadata/image-paths.js';
 import { imagePathApi } from '../metadata/image-assets.js';
-import { defaultLibraryOptions } from '../library/options.js';
-import { idKey, libraryError } from '../library/records.js';
+import { itemLibraryOptions } from '../library/options.js';
+import { libraryError } from '../library/records.js';
 import { parseLyrics } from './parser.js';
 import { lyricFailure } from './failure.js';
 
 export const lyricRefreshOptions = () => ({ MetadataRefreshMode: 'Default', ImageRefreshMode: 'Default', IsAutomated: true,
   ReplaceAllMetadata: false, ReplaceAllImages: false, ForceSave: false, RemoveOldMetadata: false });
-
-export async function lyricLibraryOptions(library, item) {
-  const collection = (await library.getCollectionFolders(item)).find(folder => folder.Type === 'CollectionFolder'), configured = library.options.libraryOptions;
-  return (configured instanceof Map ? configured.get(idKey(collection?.Id)) ?? configured.get(collection?.Id)
-    : configured?.[idKey(collection?.Id)] ?? configured?.[collection?.Id]) ?? defaultLibraryOptions();
-}
 
 function containedPath(root, filename) {
   if (root == null) throw libraryError(400, "Value cannot be null. (Parameter 'path1')");
@@ -28,7 +22,7 @@ function containedPath(root, filename) {
 /** Parse a seekable byte value once, but save its original bytes verbatim. */
 export async function saveLyricBytes(service, item, format, bytes) {
   if (typeof format !== 'string' || !format.length) throw libraryError(400, "The value cannot be an empty string. (Parameter 'format')");
-  const options = await lyricLibraryOptions(service.library, item);
+  const options = await itemLibraryOptions(service.library, item);
   const parsed = parseLyrics('lyric.' + format, decodeNativeText(bytes));
   if (parsed === null) return null;
   await writeLyricBytes(service, item, format, bytes, options);

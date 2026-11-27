@@ -1,12 +1,12 @@
 # XMLTV listings package
 
-This official Node package registers the same `listings` extension used by installed third-party packages. It receives native `ListingsProviderInfo` values from the Live TV source manager; its package settings are empty. `connect()` supplies the metadata storage mapping and the server metadata language. The provider exposes `type: 'xmltv'`, `name: 'XmlTV'`, and its read-only owned `cachePath`.
+This official Node package registers the same `listings` extension used by installed third-party packages. It receives native `ListingsProviderInfo` values from the Live TV source manager; its package settings are empty. `connect()` supplies the metadata storage mapping and access to the current server configuration. Each guide read uses the server’s current preferred metadata language when the listings provider has no language override. The provider exposes `type: 'xmltv'`, `name: 'XmlTV'`, and its read-only owned `cachePath`.
 
 The implementation follows the designated workspace's `src/Jellyfin.LiveTv/Listings/XmlTvListingsProvider.cs` and `XmlTvProgramEtag.cs`. XML reader behavior follows `Jellyfin.XmlTv` `10.12.0-pre1`, source commit `6c8c302c8520e5f41cd51dd392ac631f97179d82` in [Jellyfin.XmlTv](https://github.com/jellyfin/Jellyfin.XmlTv/tree/6c8c302c8520e5f41cd51dd392ac631f97179d82). These adaptations retain the repository's GPL-2.0-only license.
 
 ## Source access and cache
 
-Local source paths resolve through `metadataIdentityMap` and `metadataVfs`. An existing host file without a mapping is unavailable. Only the owned cache uses direct filesystem access, under the host's general `cachePath/xmltv`, separate from image-cache overrides. A host without an application cache root uses the package's owned temporary cache directory.
+Local source paths resolve through `metadataIdentityMap` and `metadataVfs`. An existing host file without a mapping is unavailable. The provider reads and writes its cache under the host's general `cachePath/xmltv` through the same configured filesystem the source manager uses to invalidate it. A dedicated cache mount receives both operations. A host without an application cache root uses the package's owned temporary cache directory.
 
 Each native provider identity selects `<Id>.xml` and its fixed `<Id>.xml.tmp` temporary file. Fresh cache entries last one hour. Remote failures are remembered for one hour by the exact configured source path; a stale cache can satisfy a failed refresh. `validate()` clears that source's failure record. XML parsing happens after caching, so malformed fresh XML remains cached until expiry or explicit source-manager invalidation. Successful cache writes retain the exact downloaded or decompressed bytes.
 
