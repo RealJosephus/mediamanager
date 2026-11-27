@@ -232,7 +232,8 @@ export function createPlaylistItemsPlugin({ fileSystem, vfs,linkedChildren,spool
       }
     }
     if (errors.length) throw operationFailure(errors, 'The playlist metadata operation failed.');
-    return { Item: resultItem, HasMetadata: hasMetadata };
+    return { Item: resultItem, HasMetadata: hasMetadata,
+      OrderedPlaylistMembers: hasMetadata && ['.m3u', '.m3u8'].includes(itemExtension) };
   };
   const provider = {
     id: 'PlaylistItemsProvider', name: 'Playlist Item Provider', kind: 'local', itemTypes: ['Playlist'],

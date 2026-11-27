@@ -43,15 +43,19 @@ function firstBy(values, keyFor) {
   return values.filter(value => { const key = keyFor(value); if (seen.has(key)) return false; seen.add(key); return true; });
 }
 
-async function mergePlaylistSettings(source, target, { replaceData, dataPath, linkedChildren }) {
+async function mergePlaylistSettings(sourceResult, targetResult, { replaceData, dataPath, linkedChildren }) {
+  const source = sourceResult.Item, target = targetResult.Item;
   target.PlaylistMediaType = source.PlaylistMediaType;
   const targetPath = target.Path;
   const windows = /^[A-Za-z]:[\\/]|^\\\\/u.test(targetPath ?? dataPath ?? '');
   const external = Boolean(targetPath) && (!dataPath || !nativeContainsSubPath(targetPath, dataPath, { windows }));
   if (external) {
-    const replace = replaceData || await linkedChildren.count(target.LinkedChildren) === 0n;
+    // A successfully parsed M3U supplies the complete ordered membership.
+    // Keep that provenance through the intermediate provider result.
+    const replace = sourceResult.OrderedPlaylistMembers || replaceData || await linkedChildren.count(target.LinkedChildren) === 0n;
     publishNativeItemLinks(target, await linkedChildren.merge(source.LinkedChildren, target.LinkedChildren, { parentId: target.Id, replace }));
     await linkedChildren.flushReleases();
+    if (sourceResult.OrderedPlaylistMembers) targetResult.OrderedPlaylistMembers = true;
   }
   if (replaceData || !target.Shares?.length) target.Shares = cloneNativeItemValue(source.Shares ?? []);
   else target.Shares = firstBy([...source.Shares ?? [], ...target.Shares], share => idKey(share.UserId));
@@ -99,7 +103,7 @@ export async function mergeMetadata(sourceResult, targetResult, { lockedFields =
     if (source.DateCreated && !source.DateCreated.startsWith('0001-01-01')) target.DateCreated = source.DateCreated;
     if (replaceData || source.DateModified && !source.DateModified.startsWith('0001-01-01')) target.DateModified = source.DateModified ?? '0001-01-01T00:00:00';
     for (const key of ['PreferredMetadataCountryCode', 'PreferredMetadataLanguage']) put(key);
-    if (target.Type === 'Playlist') await mergePlaylistSettings(source, target, { replaceData, dataPath, linkedChildren });
+    if (target.Type === 'Playlist') await mergePlaylistSettings(sourceResult, targetResult, { replaceData, dataPath, linkedChildren });
     if (target.Type === 'BoxSet' && target.Path && (!dataPath || !nativeContainsSubPath(target.Path, dataPath,
       { windows: /^[A-Za-z]:[\\/]|^\\\\/u.test(target.Path) }))) {
       // BoxSet always concatenates source first and deduplicates, even for a
