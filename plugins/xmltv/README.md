@@ -1,34 +1,23 @@
-# XMLTV listings package
+# XMLTV listings
 
-This official Node package registers the same `listings` extension used by installed third-party packages. It receives native `ListingsProviderInfo` values from the Live TV source manager; its package settings are empty. `connect()` supplies the metadata storage mapping and access to the current server configuration. Each guide read uses the server’s current preferred metadata language when the listings provider has no language override. The provider exposes `type: 'xmltv'`, `name: 'XmlTV'`, and its read-only owned `cachePath`.
+Configure each XMLTV source in Live TV. The plugin registers the `xmltv` listings provider and reads its native `ListingsProviderInfo`. The provider uses the server’s current preferred metadata language as the fallback. The host manages guide rows and schedules refreshes. [Live TV extension contract](../../packages/plugin-sdk/live-tv/README.md)
 
-The implementation follows the designated workspace's `src/Jellyfin.LiveTv/Listings/XmlTvListingsProvider.cs` and `XmlTvProgramEtag.cs`. XML reader behavior follows `Jellyfin.XmlTv` `10.12.0-pre1`, source commit `6c8c302c8520e5f41cd51dd392ac631f97179d82` in [Jellyfin.XmlTv](https://github.com/jellyfin/Jellyfin.XmlTv/tree/6c8c302c8520e5f41cd51dd392ac631f97179d82). These adaptations retain the repository's GPL-2.0-only license.
+## Source and cache
 
-## Source access and cache
+Local sources use the metadata VFS identity map. A mapped Windows share accepts either slash spelling. HTTP sources follow redirects and select gzip from the final URL’s `.gz` or `.gzip` suffix before the query string. The download timeout is 15 minutes. A failed gzip transfer discards the temporary file. A previously published copy can satisfy the read. [Source and cache code](provider.js)
 
-Local source paths resolve through `metadataIdentityMap` and `metadataVfs`. An existing host file without a mapping is unavailable. The provider reads and writes its cache under the host's general `cachePath/xmltv` through the same configured filesystem the source manager uses to invalidate it. A dedicated cache mount receives both operations. A host without an application cache root uses the package's owned temporary cache directory.
+Both local and HTTP sources store the copied or decompressed bytes in `<Id>.xml`. A cache entry is fresh for one hour. After a failed refresh, the provider can serve a stale copy. Remote retry backoff lasts one hour and uses the exact source path. Validating the source clears its failure record. A caller cancellation removes the writer’s `<Id>.xml.tmp` and allows an immediate retry. IDs containing a path separator, NUL or colon are rejected. An admitted writer owns its temporary file until it closes. [Cache tests](../../tests/plugins/xmltv-cache.test.js)
 
-Each native provider identity selects `<Id>.xml` and its fixed `<Id>.xml.tmp` temporary file. Fresh cache entries last one hour. Remote failures are remembered for one hour by the exact configured source path; a stale cache can satisfy a failed refresh. `validate()` clears that source's failure record. XML parsing happens after caching, so malformed fresh XML remains cached until expiry or explicit source-manager invalidation. Successful cache writes retain the exact downloaded or decompressed bytes.
+To reload an edited guide, clear the plugin cache with `DELETE /Plugins/xmltv/Cache`, then query the saved provider’s lineups. Clearing drains active provider work and removes `<Id>.xml` and `<Id>.xml.tmp` for configured XMLTV IDs, including when the plugin is disabled. It uses the configured filesystem and cache root, normally the application’s `cachePath/xmltv`. Unrelated files in a shared guide cache survive. The host also clears the plugin’s private cache directory. [Cache implementation](index.js) · [Source management tests](../../tests/plugins/xmltv-source-management.test.js)
 
-Remote paths use the native `http` prefix check, HTTP success validation and redirects. Gzip is selected by the final response URL's `.gz` or `.gzip` extension before its query, rather than content type. As in the reference, a gzip copy failure may retain a nonempty decompressed prefix; the XML reader then judges that file. The configured download limit is fifteen minutes. Caller cancellation removes its temporary file and does not enter failure backoff. Provider shutdown rejects new work, cancels admitted I/O and waits for its source and file owners to close.
+## Native comparison
 
-Two deliberate safety differences remain subject to consumer review. Cache identities containing `/`, `\`, NUL or `:` are rejected before source access, preventing directory escape and Windows alternate streams. Valid non-GUID identities retain their original value. A rejected concurrent writer cannot unlink a temporary file owned by another admitted writer; abandoned temporary files can still be removed. The native provider does not establish these two boundaries. These differences are not a claim of full functional alignment or release acceptance.
+The mapping follows Jellyfin’s `XmlTvListingsProvider.cs` and `XmlTvProgramEtag.cs` and the pinned Jellyfin.XmlTv reader 10.12.0-pre1. The adaptations retain the project’s GPL-2.0-only license. [Reader source](https://github.com/jellyfin/Jellyfin.XmlTv/tree/6c8c302c8520e5f41cd51dd392ac631f97179d82)
 
-## Reader and mapped values
+| Contract | Regression |
+| --- | --- |
+| XML decoding, language and category order, channel numbers, partial dates, range boundaries and episode identity. Programme IDs retain the source offset and seven fractional digits. | [Provider and reader](../../tests/plugins/xmltv-reader-provider.test.js) |
+| ProgramInfo fingerprints use the native length-prefixed encoding, ordered collections and binary32 values. Matching requires the lowercase `xmltv-sha256-v1:` prefix and ordinal case-insensitive equality of the full value. | [Program Etag](../../tests/plugins/xmltv-etag.test.js) |
+| Installed packages, mapped paths, concurrent writers and shutdown. | [Plugin host](../../tests/plugins/xmltv.test.js) |
 
-The reader preserves the designated parser's language-group selection, category order, channel-number selection, partial XMLTV dates and offsets, exact range boundaries, episode/show identity rules, movie overrides, optional list behavior, first image/rating selection and adjacent-node advancement. DTDs are ignored without loading external resources or defining entities. XML byte encodings are decoded before the shared XML cursor validates the document. UTC values retain 100ns precision; programme identity uses the original offset with seven fractional digits.
-
-`program-etag.js` fingerprints mapped `ProgramInfo` fields with the native length-prefixed schema, ordered collections, ordinal dictionary order, UTC dates and binary32 round-trip text. A stored-match candidate requires the exact lowercase `xmltv-sha256-v1:` prefix, followed by ordinal-insensitive whole-value equality.
-
-This package supplies source channels, lineups and programmes. Guide database materialization, refresh scheduling and source configuration invalidation belong to their host consumers. It exposes no recording or transcoding executor.
-
-## Evidence scope
-
-The following tests are ready for remote validation; their presence does not imply they have passed:
-
-- `tests/plugins/xmltv-etag.test.js` invokes the actual internal native Etag helper, including null/error gates, collection order, unknown audio values and binary32 boundaries.
-- `tests/plugins/xmltv-reader-provider.test.js` invokes the actual designated provider and pinned reader. It compares channel/programme/lineup values, native `ParseDate`, error propagation, cache bytes and file cleanup, including encodings and malformed input.
-- `tests/plugins/xmltv-cache.test.js` uses a real isolated HTTP server for native and Node downloads, redirects, gzip, stale-cache fallback, backoff, validation retry and cancellation after body admission. The HttpClient timeout exception is injected at the HTTP handler boundary; this does not prove an elapsed fifteen-minute timeout. It records request and resource ledgers.
-- `tests/plugins/xmltv.test.js` loads installed and official packages through `PluginHost`, exercises mapped and unmapped real files, checks cache-identity rejection, holds concurrent real temporary-file writes and verifies shutdown waits for the admitted source owner.
-
-The native oracle records input/output and actual assembly hashes, versions, parser pin and private-input cleanup. Differential tests require `dotnet` and the designated `jellyfinDll`; production code has no .NET dependency. Phase and release acceptance remain false until their separate complete acceptance runs.
+Native comparisons require `dotnet` and the designated `jellyfinDll`. The timeout test injects the HTTP handler exception.
