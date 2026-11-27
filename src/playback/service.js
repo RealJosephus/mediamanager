@@ -12,6 +12,7 @@ import { remoteStaticStreamResult } from './remote-static.js';
 import { StorageError, checkAbort } from '../storage/errors.js';
 import { defaultVttTimestampMapMpegts, masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlaylist } from './hls.js';
 import { probeKeyframes } from '../media-execution/keyframes.js';
+import { audioCodecList } from '../media-execution/audio.js';
 import { isHlsManifest, liveHttpHlsUrl } from '../media-execution/input.js';
 import { MatroskaKeyframeService } from './matroska-keyframes.js';
 import { readTrickplayResolutions } from './trickplay.js';
@@ -51,6 +52,12 @@ function negotiatedMediaSources(sources, itemId, bitrate) {
     }
     return 0;
   }).map(entry => entry.source);
+}
+
+function remoteTranscodingOptions(source, policy) {
+  if (source.IsRemote && policy.ForceRemoteSourceTranscoding) return {
+    EnableDirectPlay: false, EnableDirectStream: false, AllowVideoStreamCopy: false, AllowAudioStreamCopy: false,
+  };
 }
 
 export class PlaybackService {
@@ -147,15 +154,12 @@ export class PlaybackService {
     const requestedSegmentContainer = requestedContainer === 'mp4' ? 'mp4' : 'ts';
     const hlsCopyContainers = new Map();
     for (const source of sources) {
-      if (hls && item.MediaType === 'Audio') {
+      const forced = remoteTranscodingOptions(source, user.Policy);
+      if (!forced && hls && item.MediaType === 'Audio') {
         hlsCopyContainers.set(source, universalAudioHlsCopyContainer(source, profile, maxBitrate ?? 8000000, requestedSegmentContainer));
       }
       negotiateSource(source, item, profile, { MaxStreamingBitrate: maxBitrate, MaxAudioChannels: options.MaxAudioChannels,
-        EnableTranscoding: false });
-      if (source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) {
-        source.SupportsDirectPlay = false;
-        source.SupportsDirectStream = false;
-      }
+        EnableTranscoding: false, ...forced });
     }
     const source = negotiatedMediaSources(sources, item.Id, options.MaxStreamingBitrate)[0];
     if (source.SupportsDirectPlay && source.Protocol === 'Http' && source.IsRemote
@@ -172,14 +176,16 @@ export class PlaybackService {
       return vfsStreamResult(this.vfs, this.accessPath(source, source.Path), { contentType: getMimeType(source.Path) });
     }
 
-    if (!user.Policy.EnableAudioPlaybackTranscoding || source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) {
+    const forced = remoteTranscodingOptions(source, user.Policy);
+    const audioCodec = forced && options.AudioCodec ? audioCodecList(options.AudioCodec).filter(codec => codec !== 'copy').join(',') : options.AudioCodec;
+    if (!user.Policy.EnableAudioPlaybackTranscoding || forced && audioCodec === '') {
       throw httpError(400, 'No compatible audio stream is available.');
     }
     const copyContainer = hlsCopyContainers.get(source);
     const container = hls ? copyContainer ?? requestedSegmentContainer : requestedContainer ?? 'mp3';
     const stream = {
-      MediaType: 'Audio', MediaSourceId: source.Id, Container: container, SegmentContainer: hls ? container : undefined,
-      AudioCodec: copyContainer ? 'copy' : options.AudioCodec ?? 'mp3', AudioSampleRate: options.MaxAudioSampleRate,
+      ...forced, MediaType: 'Audio', MediaSourceId: source.Id, Container: container, SegmentContainer: hls ? container : undefined,
+      AudioCodec: copyContainer ? 'copy' : audioCodec ?? 'mp3', AudioSampleRate: options.MaxAudioSampleRate,
       AudioBitRate: options.AudioBitRate ?? maxBitrate, MaxAudioChannels: options.MaxAudioChannels,
       AudioChannels: hls ? undefined : options.MaxAudioChannels,
       TranscodingMaxAudioChannels: options.TranscodingAudioChannels, MaxAudioBitDepth: options.MaxAudioBitDepth,
@@ -198,6 +204,7 @@ export class PlaybackService {
       SegmentContainer: container, AudioCodec: stream.AudioCodec, AudioBitRate: stream.AudioBitRate, AudioSampleRate: stream.AudioSampleRate,
       MaxAudioChannels: stream.MaxAudioChannels, TranscodingMaxAudioChannels: stream.TranscodingMaxAudioChannels,
       MaxAudioBitDepth: stream.MaxAudioBitDepth, EnableAudioVbrEncoding: stream.EnableAudioVbrEncoding,
+      allowAudioStreamCopy: stream.AllowAudioStreamCopy, allowVideoStreamCopy: stream.AllowVideoStreamCopy,
     }).filter(([, value]) => value != null));
     return this.#hlsPlaylist(source, 'master', { ...stream, QueryString: query.toString() });
   }
@@ -226,7 +233,8 @@ export class PlaybackService {
         const specific = options.MediaSourceId?.toLowerCase() === source.Id.toLowerCase();
         const policy = user.Policy;
         const mediaEncoder = this.hls?.mediaEncoder ?? this.remux?.mediaEncoder;
-        negotiateSource(source, item, profile, { ...options, MaxStreamingBitrate: max, AccessToken: auth.Token, DeviceId: auth.DeviceId, PlaySessionId: result.PlaySessionId,
+        negotiateSource(source, item, profile, { ...options, ...remoteTranscodingOptions(source, policy),
+          MaxStreamingBitrate: max, AccessToken: auth.Token, DeviceId: auth.DeviceId, PlaySessionId: result.PlaySessionId,
           EnableSubtitleExtraction: this.getEncodingOptions().EnableSubtitleExtraction,
           EnableRemuxing: policy.EnableMediaPlayback && (item.MediaType === 'Audio' ? policy.EnablePlaybackRemuxing || policy.EnableAudioPlaybackTranscoding
             : policy.EnablePlaybackRemuxing || policy.EnableAudioPlaybackTranscoding || policy.EnableVideoPlaybackTranscoding),
@@ -243,7 +251,6 @@ export class PlaybackService {
           source.SupportsTranscoding = false;
           delete source.TranscodingUrl;
         }
-        if (source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) { source.SupportsDirectPlay = false; source.SupportsDirectStream = false; }
       }
       result.MediaSources = sources = negotiatedMediaSources(sources, item.Id, options.MaxStreamingBitrate);
     }
@@ -306,7 +313,7 @@ export class PlaybackService {
           ? Math.min(options.MaxStreamingBitrate ?? limit, limit) : options.MaxStreamingBitrate;
         await this.hls?.initialize();
         const policy = user.Policy;
-        negotiateSource(result.MediaSource, item, profile, { ...options, MaxStreamingBitrate: max, AccessToken: auth.Token,
+        negotiateSource(result.MediaSource, item, profile, { ...options, ...remoteTranscodingOptions(result.MediaSource, policy), MaxStreamingBitrate: max, AccessToken: auth.Token,
           DeviceId: auth.DeviceId, EnableRemuxing: this.#canUseLiveInput(result.MediaSource) && policy.EnableMediaPlayback && (policy.EnablePlaybackRemuxing
             || policy.EnableAudioPlaybackTranscoding || policy.EnableVideoPlaybackTranscoding),
           PermitAudioEncoding: policy.EnableAudioPlaybackTranscoding === true, PermitVideoEncoding: policy.EnableVideoPlaybackTranscoding === true,
