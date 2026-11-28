@@ -13,17 +13,25 @@ const enabled = { skip: !postgresTestConnectionString };
 const movieIds = ['cb100000-0000-0000-0000-000000000001', 'cb100000-0000-0000-0000-000000000002'];
 const missingId = 'cb100000-0000-0000-0000-000000000099';
 
+async function checkpoint(phase, xml) {
+  const members = xml && [...xml.matchAll(/<Path>([^<]*)<\/Path>/gu)].map(match => match[1]);
+  await fs.appendFile(path.join(validationOutputRoot(), 'collection-audit-phases.jsonl'),
+    JSON.stringify({ at: new Date().toISOString(), phase, members }) + '\n');
+}
+
 async function setup(t, { baseUrl = '' } = {}) {
   const output = validationOutputRoot(); await fs.mkdir(output, { recursive: true });
   const root = await fs.mkdtemp(path.join(output, 'collections-http-'));
   const programDataPath = path.join(root, 'program'), dataPath = path.join(programDataPath, 'data'), metadataPath = path.join(programDataPath, 'metadata'), configurationDirectoryPath = path.join(root, 'config');
   let database, runtime;
   t.after(async () => {
+    if (baseUrl) await checkpoint('teardown-start');
     const failures = [];
     for (const cleanup of [() => runtime?.close(), () => dropPostgresTestDatabase(database), async () => {
       assert.equal(path.dirname(root), output); assert.ok(path.basename(root).startsWith('collections-http-'));
       await fs.rm(root, { recursive: true, force: true });
     }]) try { await cleanup(); } catch (error) { failures.push(error); }
+    if (baseUrl) await checkpoint('teardown-finished');
     if (failures.length) throw new AggregateError(failures, 'Collection HTTP cleanup failed.');
   });
   await fs.mkdir(configurationDirectoryPath, { recursive: true });
@@ -55,17 +63,20 @@ async function setup(t, { baseUrl = '' } = {}) {
   const apiKey = await runtime.apiKeys.create('Collection HTTP fixture');
   const headers = { Authorization: `MediaBrowser Token="${apiKey.AccessToken}"` };
   const request = async (suffix, { method = 'POST', authHeaders = headers, ...options } = {}) => {
+    if (baseUrl) await checkpoint(method + ' ' + suffix + ' sent');
     const response = await fetch(origin + suffix, { method, headers: authHeaders, ...options });
     const text = await response.text(); let body = null; try { body = JSON.parse(text); } catch { }
+    if (baseUrl) await checkpoint(method + ' ' + suffix + ' body read');
     await Promise.all(pendingEvents);
+    if (baseUrl) await checkpoint(method + ' ' + suffix + ' events drained');
     return { status: response.status, body, text };
   };
   const links = async value => (await database.rows('LinkedChildren', { where: { ParentId: value }, orderBy: [{ column: 'SortOrder', direction: 'ASC' }] })).map(row => idKey(row.ChildId));
   return { root, programDataPath, dataPath, events, queued, errors, added, request, links, headers,
     get database() { return database; }, get runtime() { return runtime; },
     async reopen() {
-      const schema = database.schemaName; await runtime.close();
-      database = await PostgresDatabase.open({ connectionString: postgresTestConnectionString, schema }); origin = await create();
+      const schema = database.schemaName; await checkpoint('old-runtime-close-start'); await runtime.close(); await checkpoint('old-runtime-closed');
+      database = await PostgresDatabase.open({ connectionString: postgresTestConnectionString, schema }); await checkpoint('database-reopened'); origin = await create(); await checkpoint('new-runtime-started');
     } };
 }
 
@@ -83,6 +94,7 @@ test('postgres: Collection HTTP create/add/remove persists actual rows, XML, eve
   assert.deepEqual(await readTestLinkIds(collection), [movieIds[0], movieIds[0], movieIds[1]].map(idKey));
   assert.equal(collection.OfficialRating, 'PG');
   const filename = path.join(collection.Path, 'collection.xml');
+  await checkpoint('after-add', await fs.readFile(filename, 'utf8'));
   assert.match(await fs.readFile(filename, 'utf8'), /Movie1\.mkv/);
   assert.equal((await state.request(`/Collections/${collectionId}/Items?ids=${movieIds[0]}`, { method: 'DELETE' })).status, 204);
   assert.deepEqual(await state.links(collection.Id), movieIds.map(idKey), 'Only the first matching live linked child is removed.');
@@ -90,12 +102,15 @@ test('postgres: Collection HTTP create/add/remove persists actual rows, XML, eve
   assert.deepEqual(state.events[1].ids, [movieIds[0], movieIds[0], movieIds[1]].map(idKey));
   assert.equal(state.queued.length, 3); assert.equal(state.queued[1].options.ForceSave, true);
   const xml = await fs.readFile(filename, 'utf8');
+  await checkpoint('after-first-delete', xml);
   await state.reopen();
   const cold = await state.runtime.itemCreation.getItemById(collectionId);
   assert.deepEqual(await readTestLinkIds(cold), movieIds.map(idKey));
+  await checkpoint('after-restart', await fs.readFile(filename, 'utf8'));
   assert.equal(await fs.readFile(filename, 'utf8'), xml);
   assert.equal((await state.request(`/Collections/${collectionId}/Items`, { method: 'DELETE' })).status, 204);
   assert.deepEqual(await state.links(cold.Id), movieIds.map(idKey));
+  await checkpoint('after-empty-delete', await fs.readFile(filename, 'utf8'));
 });
 
 test('postgres: Collection HTTP uses real user/device and API-key permissions before model binding and mutation', enabled, async t => {
