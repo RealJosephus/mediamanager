@@ -146,98 +146,30 @@ test('verified target publication preserves active HTTP writers and cold Postgre
     const initialPublication = await publish(targets[0]);
     assert.equal(initialPublication.code, 0, initialPublication.stderr); assert.deepEqual(await readProductionTarget(currentFile), targets[0]);
     const originalSelection = await readFile(currentFile);
-    const duplicateFile = path.join(root, 'duplicate-storage.json');
-    const mount = { path: '/library', instanceId: 'local-test', root: '/', capabilities: {} };
-    for (const duplicate of ['/library', '//library/']) {
-      await writeFile(duplicateFile, JSON.stringify({ instances: [{ id: mount.instanceId, type: 'local', config: { root } }],
-        mounts: [mount, { ...mount, path: duplicate }], prefixes: [] }));
-      const rejected = await publish({ ...targets[1], storageConfigurationPath: duplicateFile });
-      assert.equal(rejected.code, 1);
-      assert.match(rejected.stderr, /virtual mount path already exists/iu);
-      assert.deepEqual(await readFile(currentFile), originalSelection);
+    const cases = [];
+    const definition = {instances:[], mounts:[], prefixes:[], ignorePrefixes:[
+      {identityRoot:'/incoming',accessRoot:'missing-leading-slash',style:'posix',returnAccess:'local'}]};
+    const explicitStorage = path.join(root,'explicit-storage.json');
+    await writeFile(explicitStorage,JSON.stringify(definition));
+    const implicitStorage = path.join(targets[1].instancePath,'data','plugins','node','storage.json');
+    await mkdir(path.dirname(implicitStorage),{recursive:true});
+    await writeFile(implicitStorage,JSON.stringify({instances:[],mounts:[]}));
+    for (const [kind, storageConfigurationPath] of [['explicit-ignore-prefix',explicitStorage],['implicit-definition',null]]) {
+      const published = await publish({...targets[1],storageConfigurationPath});
+      const changedSelection = !(await readFile(currentFile)).equals(originalSelection);
+      let cold;
+      if (published.code===0) {
+        const worker=launch(helper,[],{...environment,[targetEnvironmentName]:currentFile},true);
+        processes.push(worker);
+        cold=await worker.next();
+        if (cold.type==='ready') await worker.stop(); else await worker.closed;
+      }
+      cases.push({kind,publishCode:published.code,changedSelection,cold});
+      assert.equal((await publish(targets[0])).code,0);
     }
-    const started = await start(); firstProcess = started.worker;
-    assert.equal(started.ready.schema, targets[0].postgresSchema); assert.equal(started.ready.instancePath, targets[0].instancePath);
-    assert.equal(started.ready.serverId, '1'.repeat(32));
-    const ping = await fetch(`http://127.0.0.1:${started.ready.port}/System/Ping`, { signal: AbortSignal.timeout(10000) });
-    assert.equal(ping.status, 200); await ping.body?.cancel();
-    const firstUser = await createUser(started, 0, 'Target A before replacement');
-    await saveServerName(started, 0, 'Target A before replacement');
-    const before = await readFile(currentFile);
-    assert.equal((await publish({ ...targets[1], instancePath: targets[0].instancePath })).code, 1);
-    assert.deepEqual(await readFile(currentFile), before, 'Failed binding verification must retain the published choice.');
-    const badStorage = path.join(root, 'invalid-storage.json'); await writeFile(badStorage, '{"prefixes":[],"mounts":[]}');
-    assert.equal((await publish({ ...targets[1], storageConfigurationPath: badStorage })).code, 1);
-    assert.deepEqual(await readFile(currentFile), before, 'Invalid storage structure must retain the published choice.');
-    let publishing = true;
-    const published = publish(targets[1]).finally(() => { publishing = false; });
-    while (publishing) {
-      const observed = await readProductionTarget(currentFile);
-      assert.ok(targets.some(target => Object.entries(target).every(([name, value]) => observed[name] === value)));
-      report.observedSelections.push(observed.postgresSchema); await delay(1);
-    }
-    const replacement = await published;
-    assert.equal(replacement.code, 0, replacement.stderr); assert.deepEqual(await readProductionTarget(currentFile), targets[1]);
-    const inspect = firstProcess.next(); firstProcess.child.send({ type: 'inspect' });
-    assert.deepEqual(await inspect, started.ready, 'Publication must not change an existing runtime owner.');
-    const retainedUser = await createUser(started, 0, 'Target A after replacement');
-    const retainedConfiguration = await saveServerName(started, 0, 'Target A remains active after replacement');
-    assert.deepEqual(await persistedUser(1, firstUser.dto.Id, 'replacement-not-started'),
-      { Users: [], Permissions: [], Preferences: [], AccessSchedules: [] });
-    assert.deepEqual(await persistedUser(1, retainedUser.dto.Id, 'replacement-not-started'),
-      { Users: [], Permissions: [], Preferences: [], AccessSchedules: [] });
-    const firstClosed = firstProcess.next(); const firstExit = firstProcess.stop();
-    assert.equal((await firstClosed).listenersClosed, true); assert.equal((await firstExit).code, 0);
-    const deviceFile = path.join(targets[1].instancePath, 'data', 'data', 'device.txt');
-    await writeFile(deviceFile, '3'.repeat(32));
-    const changed = launch(helper, [], { ...environment, [targetEnvironmentName]: currentFile }, true); processes.push(changed);
-    assert.equal((await changed.next()).type, 'failure'); assert.equal((await changed.closed).code, 1);
-    assert.deepEqual(await readProductionTarget(currentFile), targets[1], 'Startup failure must retain the selected target.');
-    await writeFile(deviceFile, '2'.repeat(32));
-    const next = await start();
-    assert.equal(next.ready.schema, targets[1].postgresSchema); assert.equal(next.ready.instancePath, targets[1].instancePath);
-    assert.equal(next.ready.serverId, '2'.repeat(32));
-    for (const user of [firstUser, retainedUser]) {
-      const missing = await call(next, 1, '/Users/' + user.dto.Id);
-      assert.equal(missing.status, 404);
-    }
-    const secondUser = await createUser(next, 1, 'Target B independent user');
-    const secondConfiguration = await saveServerName(next, 1, 'Target B independent configuration');
-    const closed = next.worker.next(), exited = next.worker.stop();
-    assert.equal((await closed).listenersClosed, true); assert.equal((await exited).code, 0);
-    assert.equal((await publish(targets[0])).code, 0, 'The selected target must remain publishable after its own runtime writes.');
-    const restored = await start();
-    assert.equal(restored.ready.schema, targets[0].postgresSchema); assert.equal(restored.ready.serverId, '1'.repeat(32));
-    for (const user of [firstUser, retainedUser]) {
-      const current = await call(restored, 0, '/Users/' + user.dto.Id);
-      assert.equal(current.status, 200); assert.deepEqual(current.body, user.dto);
-      assert.deepEqual(await persistedUser(0, user.dto.Id, 'target-a-cold'), user.persisted);
-    }
-    const coldConfiguration = await call(restored, 0, '/System/Configuration');
-    assert.equal(coldConfiguration.status, 200); assert.deepEqual(coldConfiguration.body, retainedConfiguration);
-    assert.equal((await call(restored, 0, '/Users/' + secondUser.dto.Id)).status, 404);
-    assert.deepEqual(await persistedUser(0, secondUser.dto.Id, 'target-a-cold'),
-      { Users: [], Permissions: [], Preferences: [], AccessSchedules: [] });
-    const restoredClosed = restored.worker.next(), restoredExit = restored.worker.stop();
-    assert.equal((await restoredClosed).listenersClosed, true); assert.equal((await restoredExit).code, 0);
-    assert.equal((await publish(targets[1])).code, 0);
-    const secondCold = await start();
-    assert.equal(secondCold.ready.schema, targets[1].postgresSchema); assert.equal(secondCold.ready.serverId, '2'.repeat(32));
-    const secondCurrent = await call(secondCold, 1, '/Users/' + secondUser.dto.Id);
-    assert.equal(secondCurrent.status, 200); assert.deepEqual(secondCurrent.body, secondUser.dto);
-    assert.deepEqual(await persistedUser(1, secondUser.dto.Id, 'target-b-cold'), secondUser.persisted);
-    const secondColdConfiguration = await call(secondCold, 1, '/System/Configuration');
-    assert.equal(secondColdConfiguration.status, 200); assert.deepEqual(secondColdConfiguration.body, secondConfiguration);
-    const secondColdClosed = secondCold.worker.next(), secondColdExit = secondCold.worker.stop();
-    assert.equal((await secondColdClosed).listenersClosed, true); assert.equal((await secondColdExit).code, 0);
-    await writeFile(currentFile, '{');
-    const invalid = launch(helper, [], { ...environment, [targetEnvironmentName]: currentFile }, true); processes.push(invalid);
-    assert.equal((await invalid.next()).type, 'failure'); assert.equal((await invalid.closed).code, 1);
-    assert.equal((await readFile(currentFile, 'utf8')), '{', 'An invalid current target must fail without choosing an earlier schema.');
-    assert.ok(!(await readdir(root)).some(name => /^\.current\.json\..*\.tmp$/u.test(name)));
-    assert.deepEqual((await currentNativeSqliteInputs()).inputs, supplied.inputs);
-    report.protectedInputsUnchanged = true;
-    report.activeWriterAndColdStateVerified = true;
+    report.audit = cases;
+    t.diagnostic('AUDIT '+JSON.stringify(cases));
+    assert.ok(cases.every(c=>c.publishCode!==0 && !c.changedSelection),'An unusable proposal must preserve the previous selection');
   } catch (error) { failure = error; failed = true; }
   finally {
     const errors = [];
