@@ -481,17 +481,21 @@ test('the actual production CLI retains its selected target across HTTP restarts
     const lastGood = (await call('/Storage/Configuration')).body;
     const incompatibleRoot = path.join(root, 'preexisting-data-file-volume');
     await mkdir(incompatibleRoot);
-    await writeFile(path.join(incompatibleRoot, 'data'), 'ordinary preexisting file');
+    await writeFile(path.join(incompatibleRoot, 'root'), 'ordinary preexisting file');
     const proposedStorage = structuredClone(lastGood);
-    const instanceBackend = config => config.instances.find(binding => binding.id === 'instance').config.root;
-    proposedStorage.instances.find(binding => binding.id === 'instance').config.root = incompatibleRoot;
+    const programData = path.join(instance, 'data');
+    const livePrefix = proposedStorage.prefixes.find(prefix => prefix.identityRoot === programData && prefix.purpose === 'application');
+    assert.ok(livePrefix, 'The Local plugin must declare the actual program-data root.');
+    const liveMount = proposedStorage.mounts.find(mount => mount.path === livePrefix.accessRoot);
+    const instanceBackend = config => config.instances.find(binding => binding.id === liveMount.instanceId).config.root;
+    proposedStorage.instances.find(binding => binding.id === liveMount.instanceId).config.root = incompatibleRoot;
     const changed = await call('/Storage/Configuration', { method: 'POST', body: proposedStorage, timeout: 30000 });
     const afterFailure = await call('/Storage/Configuration');
     const stateAfter = JSON.parse(await readFile(definitionFile, 'utf8'));
     const readinessAfter = (await call('/Storage/Status')).body?.application?.ready;
     const recovered = await call('/Storage/Configuration', { method: 'POST', body: lastGood, timeout: 30000 });
     const readinessRecovered = (await call('/Storage/Status')).body?.application?.ready;
-    t.diagnostic('AUDIT_STORAGE_CHANGE ' + JSON.stringify({ response: changed.status,
+    t.diagnostic('AUDIT_ACTIVE_STORAGE_CHANGE ' + JSON.stringify({ response: changed.status,
       newVolumeInLiveConfiguration: afterFailure.status === 200 && instanceBackend(afterFailure.body) === incompatibleRoot,
       newVolumeOnDisk: instanceBackend(stateAfter) === incompatibleRoot, readyAfter: readinessAfter,
       recoveryResponse: recovered.status, readyAfterRecovery: readinessRecovered }));
