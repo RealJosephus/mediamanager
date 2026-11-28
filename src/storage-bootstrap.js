@@ -168,15 +168,16 @@ export async function withArchivedStorage(definition, { plugins, environment = p
 function archiveBindings(owner) {
   const identities = new Map();
   return async filename => {
-    const resolved = owner.fileSystem.resolve(filename);
-    const adapter = resolved.adapter;
-    if (!identities.has(adapter)) {
-      // Local adapters expose filesystem device and directory IDs. An unrelated
-      // directory mounted at the same configured path must not inherit its backup.
-      const root = await adapter.fileStat?.('/', { bigint: true });
-      identities.set(adapter, root?.ino ? [String(root.dev), String(root.ino)] : null);
+    const { mount, path: backendPath, adapter } = owner.fileSystem.resolve(filename);
+    if (!identities.has(mount)) {
+      // Use the actual bound directory. A URL or configured path alone can
+      // point at a different volume between archive creation and restore.
+      const root = await adapter.fileStat?.(mount.root, { bigint: true });
+      identities.set(mount, root?.dev != null && root.ino ? [String(root.dev), String(root.ino)] : null);
     }
-    return createHash('sha256').update(JSON.stringify([binding(owner, resolved), identities.get(adapter)])).digest('hex');
+    const identity = identities.get(mount);
+    if (!identity) return null;
+    return createHash('sha256').update(JSON.stringify([mount.instanceId, backendPath, identity])).digest('hex');
   };
 }
 
