@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
+import { createServer } from 'node:http';
 import path from 'node:path';
 import test from 'node:test';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -35,7 +36,7 @@ test('observe public registration and optional backup scopes on separate mapped 
     const id='separate-'+name, accessRoot='/'+id;
     config.instances.push({id,type:'local',config:{root:physical,writable:true}});
     config.mounts.push({instanceId:id,path:accessRoot,capabilities:{create:true,replace:true,delete:true,rename:true,mkdir:true,atomicReplace:true}});
-    config.prefixes.push({identityRoot:logical,accessRoot,purpose:'metadata',style:process.platform==='win32'?'windows':'posix'});
+    config.prefixes.push({identityRoot:logical,accessRoot,purpose:'metadata',style:process.platform==='win32'?'windows':'posix',returnAccess:'Separate audit volume.'});
     cases.push({name,base,logical,prefix});
   }
   await get('/Storage/Configuration',{method:'POST',body:config});
@@ -53,6 +54,41 @@ test('observe public registration and optional backup scopes on separate mapped 
     }
   });
   await report('backup-mounts',{createStatus:200,options,cases:result},t);
+});
+
+test('observe two in-flight TMDB requests during runtime shutdown with actual loopback HTTP', {timeout:35000}, async t => {
+  const {runtime,request} = await createMetadataHttpFixture(t);
+  const arrived=[Promise.withResolvers(),Promise.withResolvers()], gone=[Promise.withResolvers(),Promise.withResolvers()];
+  const held=[], closed=[];
+  const server=createServer((req,res)=>{
+    if(!req.url.startsWith('/3/configuration?')) { res.writeHead(404);res.end();return; }
+    const index=held.length;held.push(res);closed.push(false);
+    res.on('close',()=>{closed[index]=true;gone[index]?.resolve();});arrived[index]?.resolve();
+  });
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  let stopping, detail, direct;
+  const bounded = (promise,ms) => Promise.race([promise.then(()=>true),delay(ms,false,{ref:false})]);
+  try {
+    await runtime.plugins.setEnabled('tmdb',false);
+    runtime.plugins.options.tmdb.baseUrl='http://127.0.0.1:'+server.address().port+'/3/';
+    await runtime.plugins.setEnabled('tmdb',true);
+    detail=request('/Items/RemoteSearch/Movie',{method:'POST',body:{SearchProviderName:'TheMovieDb',SearchInfo:{Name:'Audit movie',ProviderIds:{Tmdb:'701'}}}}).catch(e=>({error:e.name}));
+    assert.equal(await bounded(arrived[0].promise,6000),true,'movie search reached configuration');
+    direct=request('/Tmdb/ClientConfiguration').catch(e=>({error:e.name}));
+    assert.equal(await bounded(arrived[1].promise,6000),true,'direct configuration reached the upstream');
+    let finished=false;
+    stopping=runtime.close().then(()=>{finished=true;},e=>{finished=true;throw e;});
+    assert.equal(await bounded(gone[1].promise,5000),true,'direct request cancellation control');
+    await delay(600);
+    const sample={afterControlMs:600,upstreamMovieConfigurationClosed:closed[0],directUpstreamConfigurationClosed:closed[1],runtimeClosed:finished};
+    held[0].writeHead(200,{'Content-Type':'application/json'});held[0].end(JSON.stringify({images:{}}));
+    const [a,b]=await Promise.all([detail,direct]);await stopping;
+    await report('tmdb-shutdown',{...sample,movieSearchStatus:a.status,directStatus:b.status,runtimeClosedAfterUpstreamRelease:finished},t);
+  } finally {
+    for(const res of held)res.destroy();
+    server.closeAllConnections();await new Promise(resolve=>server.close(resolve));
+    await Promise.allSettled([detail,direct,stopping]);
+  }
 });
 
 test('observe caller cancellation while a cold TMDB movie request waits for upstream configuration', async t => {
