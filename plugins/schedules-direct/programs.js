@@ -65,7 +65,7 @@ export async function getSchedulePrograms(station, start, end, client) {
   let hashes = {};
   try { hashes = (await post('/schedules/md5', request(dates)))?.[station] ?? {}; }
   catch { signal?.throwIfAborted(); }
-  const days = new Map(), missing = [], previous = new Map();
+  const cachedDays = new Map(), freshDays = new Map(), missing = [], previous = new Map();
   const filename = date => cacheName('schedules', station, date);
   for (const [key, until] of retryTimes) if (until <= now()) retryTimes.delete(key);
   for (const date of dates) {
@@ -74,7 +74,7 @@ export async function getSchedulePrograms(station, start, end, client) {
     if (hash?.code) await applyCode(hash.code);
     const cached = await readCache(filename(date));
     if (cached?.Schedule) previous.set(date, cached);
-    if (hash?.md5 && hash.md5 === cached?.Md5) days.set(date, cached);
+    if (hash?.md5 && hash.md5 === cached?.Md5) cachedDays.set(date, cached);
     else if (!retryTimes.has(station + '|' + date)) missing.push(date);
   }
   if (missing.length) {
@@ -90,7 +90,7 @@ export async function getSchedulePrograms(station, start, end, client) {
     for (let index = 0; index < ids.length; index += 5000) {
       for (const detail of await post('/programs', ids.slice(index, index + 5000)) ?? []) {
         if (detail.code) await applyCode(detail.code);
-        else if (detail.programID) details.set(detail.programID, detail);
+        else if (detail.programID && !details.has(detail.programID)) details.set(detail.programID, detail);
       }
     }
     for (const row of fresh) {
@@ -99,18 +99,24 @@ export async function getSchedulePrograms(station, start, end, client) {
       if (!programs.every(Boolean)) continue;
       const result = { Md5: row.metadata.md5, Schedule: row, Programs: programs };
       if (result.Md5 && dayIds.every(id => details.has(id))) await writeCache(filename(date), result);
-      days.set(date, result);
+      freshDays.set(date, result);
     }
   }
   for (const date of dates) {
-    if (days.has(date) || [7020, 7030, 2200, 2201].includes(hashes[date]?.code)) continue;
+    if (cachedDays.has(date) || freshDays.has(date) || [7020, 7030, 2200, 2201].includes(hashes[date]?.code)) continue;
     if (!previous.has(date)) throw new Error('Could not get the schedule for station ' + station + ' on ' + date);
-    days.set(date, previous.get(date));
+    cachedDays.set(date, previous.get(date));
   }
   signal?.throwIfAborted();
   await client.pruneScheduleCache(station, dates);
-  const details = new Map([...days.values()].flatMap(row => row.Programs).map(detail => [detail.programID, detail]));
-  const airings = [...days.values()].flatMap(row => row.Schedule.programs).filter(row => row.airDateTime && details.has(row.programID));
+  const days = [...cachedDays.values(), ...freshDays.values()];
+  const details = new Map();
+  for (const day of days) {
+    for (const detail of day.Programs) {
+      if (detail.programID && !details.has(detail.programID)) details.set(detail.programID, detail);
+    }
+  }
+  const airings = days.flatMap(row => row.Schedule.programs).filter(row => row.airDateTime && details.has(row.programID));
   const near = row => Date.parse(row.airDateTime) + row.duration * 1000 < now() + 2 * day;
   const ids = [...new Set(airings.filter(row => near(row) && details.get(row.programID).hasImageArtwork).map(row => row.programID))];
   const images = [];
