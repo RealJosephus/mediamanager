@@ -54,11 +54,12 @@ export class SystemBackups {
       const manifest = { DateCreated: new Date().toISOString(), ServerVersion: this.serverVersion, BackupEngineVersion: backupEngineVersion, Options: options };
       const descriptor = { format: backupFormat, serverId: this.serverId, metadataPath: this.paths.metadataPath };
       const temporary = path.join(stage, 'archive');
-      await writeBackupArchive(temporary, stage, manifest, descriptor, save => this.storage.withGeneration(() =>
-        this.store.transaction(async db => {
-          if (options.Database) await captureBackupDatabase(db, save);
-          await captureBackupFiles(backupRoots(this.paths, options, this.storage.fileSystem), this.directory, save);
-        }, { readOnly: true, isolation: 'repeatable-read' })));
+      await writeBackupArchive(temporary, stage, manifest, descriptor, save => this.storage.withGeneration(async () => {
+        if (options.Database) {
+          await this.store.transaction(db => captureBackupDatabase(db, save), { readOnly: true, isolation: 'repeatable-read' });
+        }
+        await captureBackupFiles(backupRoots(this.paths, options, this.storage.fileSystem), this.directory, save);
+      }));
       await fs.rename(temporary, filename);
       return publicManifest(filename, manifest);
     } finally { await fs.rm(stage, { recursive: true, force: true }); }
