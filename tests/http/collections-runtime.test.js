@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import pg from 'pg';
+import { observeNativeResourceGraph } from '../../src/library/native-resource-graph.js';
 import path from 'node:path';
 import * as fs from 'node:fs/promises';
 import { createTestRuntime } from '../helpers/runtime.js';
@@ -13,12 +15,48 @@ const enabled = { skip: !postgresTestConnectionString };
 const movieIds = ['cb100000-0000-0000-0000-000000000001', 'cb100000-0000-0000-0000-000000000002'];
 const missingId = 'cb100000-0000-0000-0000-000000000099';
 
+let currentCase = '', currentStage = '';
+globalThis[Symbol.for('collection-close-sample')] = (database, links) => {
+  const started = Date.now(), pending = new Set();
+  let graphSnapshot, observing = false;
+  const timer = setInterval(async () => {
+    if (observing) return;
+    observing = true;
+    const sample = { at: new Date().toISOString(), caseName: currentCase, phase: currentStage,
+      elapsedMs: Date.now() - started, pending: [...pending].map(fn => String(fn)), active: process.getActiveResourcesInfo() };
+    try {
+      if (links?.resourceGraph) {
+        const observation = observeNativeResourceGraph(links.resourceGraph, event => {
+          if (event.event === 'observed') graphSnapshot = { roots: event.rootsCount, resources: event.resourcesCount,
+            entries: (event.roots || []).map(root => ({ references: root.references })) };
+        });
+        observation.release();
+        sample.graph = graphSnapshot;
+        sample.links = links[Symbol.for('collection-link-sample')]();
+      }
+      const observer = new pg.Client({ connectionString: postgresTestConnectionString, connectionTimeoutMillis: 3000, query_timeout: 3000 });
+      try {
+        await observer.connect();
+        sample.database = (await observer.query(`SELECT pid,state,wait_event_type,wait_event,pg_blocking_pids(pid) AS blockers,
+          clock_timestamp() - state_change AS time_in_state, substring(ltrim(query) from '^[A-Za-z]+') AS command,
+          md5(query) AS query_hash FROM pg_stat_activity WHERE datname=current_database() AND pid<>pg_backend_pid() ORDER BY pid`)).rows;
+      } finally { await observer.end(); }
+    } catch (error) { sample.observerError = error.code || error.name; }
+    try { await fs.appendFile(path.join(validationOutputRoot(), 'collection-quiet-waits.jsonl'), JSON.stringify(sample) + '\n'); }
+    finally { observing = false; }
+  }, 12000);
+  timer.unref();
+  return { pending, finish: () => clearInterval(timer) };
+};
+
 async function setup(t, { baseUrl = '' } = {}) {
+  currentCase = t.name; currentStage = 'setup';
   const output = validationOutputRoot(); await fs.mkdir(output, { recursive: true });
   const root = await fs.mkdtemp(path.join(output, 'collections-http-'));
   const programDataPath = path.join(root, 'program'), dataPath = path.join(programDataPath, 'data'), metadataPath = path.join(programDataPath, 'metadata'), configurationDirectoryPath = path.join(root, 'config');
   let database, runtime;
   t.after(async () => {
+    currentStage = 'test cleanup';
     const failures = [];
     for (const cleanup of [() => runtime?.close(), () => dropPostgresTestDatabase(database), async () => {
       assert.equal(path.dirname(root), output); assert.ok(path.basename(root).startsWith('collections-http-'));
@@ -64,12 +102,13 @@ async function setup(t, { baseUrl = '' } = {}) {
   return { root, programDataPath, dataPath, events, queued, errors, added, request, links, headers,
     get database() { return database; }, get runtime() { return runtime; },
     async reopen() {
-      const schema = database.schemaName; await runtime.close();
+      const schema = database.schemaName; currentStage = 'cold restart'; await runtime.close();
       database = await PostgresDatabase.open({ connectionString: postgresTestConnectionString, schema }); origin = await create();
     } };
 }
 
-test('postgres: Collection HTTP create/add/remove persists actual rows, XML, events and survives restart under BaseUrl', enabled, async t => {
+for (let iteration = 1; iteration <= 12; iteration++) {
+test('postgres: Collection HTTP create/add/remove persists actual rows, XML, events and survives restart under BaseUrl (iteration ' + iteration + ')', enabled, async t => {
   const state = await setup(t, { baseUrl: '/media' });
   const created = await state.request('/Collections?name=HTTP%20Collection&isLocked=true&parentId=' + missingId);
   assert.equal(created.status, 200); const collectionId = created.body.Id;
@@ -98,7 +137,7 @@ test('postgres: Collection HTTP create/add/remove persists actual rows, XML, eve
   assert.deepEqual(await state.links(cold.Id), movieIds.map(idKey));
 });
 
-test('postgres: Collection HTTP uses real user/device and API-key permissions before model binding and mutation', enabled, async t => {
+test('postgres: Collection HTTP uses real user/device and API-key permissions before model binding and mutation (iteration ' + iteration + ')', enabled, async t => {
   const state = await setup(t);
   const tokens = {};
   for (const [name, policy] of [['ordinary', {}], ['manager', { EnableCollectionManagement: true }], ['admin', { IsAdministrator: true }]]) {
@@ -118,7 +157,7 @@ test('postgres: Collection HTTP uses real user/device and API-key permissions be
   for (const name of ['manager', 'admin']) assert.equal((await state.request('/Collections?parentId=bad', { authHeaders: tokens[name] })).status, 400);
 });
 
-test('postgres: Collection creation retains the persisted prefix when initial members fail after string-array binding', enabled, async t => {
+test('postgres: Collection creation retains the persisted prefix when initial members fail after string-array binding (iteration ' + iteration + ')', enabled, async t => {
   const state = await setup(t);
   for (const [name, ids, status] of [['MissingMember', movieIds[0] + ',' + missingId, 400], ['MalformedMember', movieIds[0] + ',bad', 500]]) {
     const response = await state.request(`/Collections?name=${name}&ids=${ids}`);
@@ -133,7 +172,7 @@ test('postgres: Collection creation retains the persisted prefix when initial me
   assert.equal((await state.database.rows('BaseItems', { where: { Type: 'MediaBrowser.Controller.Entities.Movies.BoxSet' } })).length, 2);
 });
 
-test('postgres: Collection HTTP missing, wrong-type and empty IDs return native errors without member commits', enabled, async t => {
+test('postgres: Collection HTTP missing, wrong-type and empty IDs return native errors without member commits (iteration ' + iteration + ')', enabled, async t => {
   const state = await setup(t), created = await state.request('/Collections?name=Errors');
   const collectionId = created.body.Id;
   for (const reference of [missingId, movieIds[0], '00000000000000000000000000000000']) {
@@ -148,3 +187,5 @@ test('postgres: Collection HTTP missing, wrong-type and empty IDs return native 
   assert.equal(state.events.length, 2); assert.equal(state.queued.length, 2);
   assert.deepEqual(state.events[1].ids, []);
 });
+
+}

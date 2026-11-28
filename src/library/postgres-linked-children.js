@@ -96,6 +96,11 @@ export class PostgresLinkedChildrenStore {
     this.rows = `${q(this.schemaName)}.rows`;
     this.pins = `${q(this.schemaName)}.pins`;
   }
+  [Symbol.for('collection-link-sample')]() {
+    return { closing: this.#closing, closed: this.#closed, operations: this.#operations.size,
+      ownedReleases: this.#ownedReleases.size, pendingReleases: this.#pendingReleases.size,
+      liveSets: [...this.#entries.values()].filter(entry => entry.references > 0).slice(0,32).map(entry => ({ id: entry.id, references: entry.references })) };
+  }
   #active(owned = false) {
     if (this.#closed || !this.#initialized || !owned && this.#closing && this.#operationContext.getStore() !== this) {
       throw new Error('SQL link runtime is not active.');

@@ -834,7 +834,12 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(() => configurationStore?.off('updated', configurationUpdated));
   const close = () => closing ??= (async () => {
       const errors = [];
-      const attempt = async operation => { try { await operation(); } catch (error) { errors.push(error); } };
+      const observation = globalThis[Symbol.for('collection-close-sample')]?.(database, linkedChildren);
+      const attempt = async operation => {
+        observation?.pending.add(operation);
+        try { await operation(); } catch (error) { errors.push(error); }
+        finally { observation?.pending.delete(operation); }
+      };
       application.beginClose();
       playback.beginClose();
       // Keep the listeners available for shutdown responses until admitted
@@ -989,6 +994,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       await attempt(() => linkedChildren.flushReleases());
       await attempt(() => linkedChildren.close());
       await attempt(() => store.close());
+      observation?.finish();
       if (errors.length) throw new AggregateError(errors, 'The runtime could not close every resource.');
     })();
   const start = () => {
