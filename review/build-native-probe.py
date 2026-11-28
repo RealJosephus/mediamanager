@@ -78,5 +78,7 @@ code += original[p:before('    report.sources = ')] + """
 """ + original[before('  } catch (error) { primary = output.publicError(error); throw primary; }'):]
 code = code.replace("library-playback-http-", "review-playback-http-")
 code = code.replace("existing playback assets, date ticks, counts and search hints match the designated Native HTTP host","observe graphical subtitle bytes, ranges and storage paths at both HTTP hosts")
+code = code.replace("import { currentNativeReference } from '../../tools/compat/current-native-reference.js';",
+    "import { pathToFileURL } from 'node:url';\nconst { currentNativeReference } = await import(pathToFileURL(path.join(process.env.GITHUB_WORKSPACE,'tools/compat/current-native-reference.js')).href);")
 (target / 'tests/http/review-subtitle-probe.mjs').write_text(code, encoding='utf-8')
 

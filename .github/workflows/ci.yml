@@ -555,6 +555,8 @@ jobs:
           git show -s --format='{"head":"%H","tree":"%T"}' > "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/review/checkout.json"
           export MEDIAMANAGER_TEST_RESOURCE_ROOT="$RUNNER_TEMP/review-test-resource-leases"
           mkdir -p "$MEDIAMANAGER_TEST_RESOURCE_ROOT"
+          cmp tools/compat/current-native-reference.js "$GITHUB_WORKSPACE/tools/compat/current-native-reference.js"
+          cmp tools/validation/native-instance-inputs.js "$GITHUB_WORKSPACE/tools/validation/native-instance-inputs.js"
           python "$GITHUB_WORKSPACE/review/build-native-probe.py" .
           cp "$GITHUB_WORKSPACE/review/backup-probe.mjs" tests/http/review-backup-probe.mjs
           node --test --test-reporter=tap --test-concurrency=1 tests/http/review-backup-probe.mjs tests/http/review-subtitle-probe.mjs | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/review/probes.tap"
