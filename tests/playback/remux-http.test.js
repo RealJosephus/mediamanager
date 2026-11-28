@@ -143,7 +143,9 @@ test('native progressive remux HTTP, packet hashes, shared output, multi-version
     };
     const stop = async url => {
       const query = new URLSearchParams({ deviceId: url.searchParams.get('DeviceId'), playSessionId: url.searchParams.get('PlaySessionId') });
-      assert.equal((await fetch(origin + '/Videos/ActiveEncodings?' + query, { method: 'DELETE', headers })).status, 204);
+      const response = await fetch(origin + '/Videos/ActiveEncodings?' + query, { method: 'DELETE', headers });
+      assert.equal(response.status, 204);
+      return response.status;
     };
     const bytes = async response => {
       assert.equal(response.status, 200);
@@ -153,10 +155,11 @@ test('native progressive remux HTTP, packet hashes, shared output, multi-version
       assert.equal(runtime.remux.maxConcurrentRemuxes, 4);
       const bridge = runtime.remux.bridge, lease = bridge.lease;
       const releasing = Promise.withResolvers(), finishRelease = Promise.withResolvers(), resumePeers = Promise.withResolvers();
+      let released = false, releasedAtStop;
       t.mock.method(bridge, 'lease', async function (...args) {
         const acquired = await lease.apply(this, args);
         return { ...acquired, async release() {
-          await acquired.release(); releasing.resolve(); await finishRelease.promise;
+          await acquired.release(); releasing.resolve(); await finishRelease.promise; released = true;
         } };
       }, { times: 1 });
       const cancelled = new AbortController(), old = otherSession('disconnect-at-capacity');
@@ -182,21 +185,28 @@ test('native progressive remux HTTP, packet hashes, shared output, multi-version
         await releasing.promise;
 
         const stopJob = runtime.remux.jobs.stop, stopEntered = Promise.withResolvers();
-        t.mock.method(runtime.remux.jobs, 'stop', function (...args) {
-          stopEntered.resolve(); return stopJob.apply(this, args);
+        t.mock.method(runtime.remux.jobs, 'stop', async function (...args) {
+          stopEntered.resolve(); await stopJob.apply(this, args); releasedAtStop = released;
         });
         let acknowledged = false;
-        stopping = stop(old).then(() => { acknowledged = true; });
+        stopping = stop(old).then(status => { acknowledged = true; return status; });
         await stopEntered.promise;
         const duringCleanup = await fetch(otherSession('still-at-capacity'), { headers });
         assert.equal(duringCleanup.status, 429); await duringCleanup.arrayBuffer();
         assert.equal(acknowledged, false);
-        finishRelease.resolve(); await stopping;
-        const replacement = await fetch(otherSession('replacement'), { headers }).then(bytes);
+        finishRelease.resolve();
+        const stopStatus = await stopping;
+        assert.equal(releasedAtStop, true, 'the matching stop joined the retiring source');
+        const response = await fetch(otherSession('replacement'), { headers });
+        const replacement = await bytes(response);
         assert.ok(replacement.length > 0);
         resumePeers.resolve();
-        for (const output of await Promise.all(peers)) assert.deepEqual(output, replacement);
+        const outputs = await Promise.all(peers);
+        for (const output of outputs) assert.deepEqual(output, replacement);
         assert.equal(processes.length - beforeProcesses, 5);
+        t.diagnostic(JSON.stringify({ limit: runtime.remux.maxConcurrentRemuxes, fullStatus: atCapacity.status,
+          duringReleaseStatus: duringCleanup.status, releasedAtStop, stopStatus, replacementStatus: response.status,
+          replacementBytes: replacement.length, peerBytes: outputs.map(output => output.length) }));
       } finally {
         fixture.setDelay(0); cancelled.abort(); finishRelease.resolve(); resumePeers.resolve();
         await Promise.allSettled([abandoned, stopping, ...peers]);

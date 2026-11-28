@@ -14,8 +14,10 @@ the actual assembly hashes.
 
 The consumer compares endpoint requests, response bodies, success/null/failure,
 cache effects, actual retry waits and cancellation. Recovered Movie metadata
-proves a provider consequence. Retry waits include the final failed attempt,
-and configuration initialization continues independently of caller cancellation.
+proves a provider consequence. Retry waits include the final failed attempt.
+The native manager finishes configuration initialization after caller cancellation.
+The Node lookup cancels its configuration transport with the caller. The two
+cold cancellation cases assert the upstream requests made by each implementation.
 Content-Type and malformed/empty JSON cases exercise the same request boundary.
 
 Complete error observations and clocks remain in the run output. Request query

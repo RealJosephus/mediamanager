@@ -181,7 +181,17 @@ test('current TMDB manager and library transport preserve retry, cancellation, n
       const reference = native.results[index], candidate = await candidateCase(sample);
       report.cases.push({ name: sample.name, reference, candidate });
       try {
-        assert.deepEqual(functional(candidate), functional(reference), sample.name);
+        const expected = functional(reference), actual = functional(candidate);
+        if (sample.configurationOnCancel) {
+          // The native manager owns initialization; the HTTP lookup owns the Node transport.
+          for (const [result, statuses] of [[expected, sample.configurationOnCancel.native], [actual, sample.configurationOnCancel.node]]) {
+            assert.deepEqual(result.calls, [{ outcome: 'cancelled', value: null }], sample.name);
+            assert.deepEqual(result.requests.map(request => [request.path, request.status]),
+              statuses.map(status => ['/3/configuration', status]), sample.name);
+          }
+          expected.requests = expected.requests.slice(0, sample.configurationOnCancel.node.length);
+        }
+        assert.deepEqual(actual, expected, sample.name);
         verifyWaits(reference, sample); verifyWaits(candidate, sample);
       } catch (error) { report.differences.push({ name: sample.name, diagnostic: errorValue(error) }); }
       await writeFile(path.join(output, 'report.json'), json(report));

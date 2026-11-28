@@ -60,17 +60,21 @@ for (const includeDatabase of [false, true]) {
       config.prefixes.push({ identityRoot: trickplay, accessRoot: '/next-tiles', purpose: 'metadata',
         style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Replacement tile volume.' });
       assert.equal((await request('/Storage/Configuration', { method: 'POST', body: config })).status, 200);
-      assert.equal(await runtime.fileSystem.readFile(path.join(trickplay, 'tile'), 'utf8'), 'replacement volume');
+      const liveTile = await runtime.fileSystem.readFile(path.join(trickplay, 'tile'), 'utf8');
+      assert.equal(liveTile, 'replacement volume');
       resume.resolve();
       const result = await backup;
       assert.equal(result.status, 200);
       await withBackupArchive(result.body.Path, async archive => {
-        assert.equal(await text(archive.stream(archive.directory.get('Data/trickplay/tile'))), 'admitted volume');
+        const archivedTile = await text(archive.stream(archive.directory.get('Data/trickplay/tile')));
+        assert.equal(archivedTile, 'admitted volume');
         assert.equal(archive.directory.has('Database/catalog.json'), includeDatabase);
         if (includeDatabase) {
           const names = (await archivedRows(archive, database.schemaName, 'Users')).map(row => row.Username);
           assert.deepEqual(names.sort(), before);
         }
+        t.diagnostic(JSON.stringify({ includeDatabase, lockAvailableDuringFileRead: free, userStatusBeforeRelease: user.status,
+          createStatus: result.status, liveTile, archivedTile }));
       });
     } finally { resume.resolve(); await backup; }
   });

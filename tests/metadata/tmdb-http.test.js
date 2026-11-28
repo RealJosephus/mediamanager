@@ -60,6 +60,8 @@ test('cold movie searches release upstream HTTP on client disconnect and runtime
     const drained = Promise.all([once(second.response, 'close'), once(direct.response, 'close'), runtime.close()]);
     await Promise.race([drained, delay(5000, undefined, { ref: false }).then(() => assert.fail('Shutdown waited for an upstream response'))]);
     assert.deepEqual(upstream.requests.map(request => request.path), Array(3).fill('/3/configuration'));
+    t.diagnostic(JSON.stringify({ upstreamPaths: upstream.requests.map(request => request.path),
+      closedAfterDisconnect: first.response.destroyed, closedOnShutdown: [second.response.destroyed, direct.response.destroyed] }));
   } finally {
     caller.abort();
     for (const response of held) response.destroy();
