@@ -3,10 +3,11 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { execFile, spawn } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { once } from 'node:events';
-import { inspect, isDeepStrictEqual, promisify } from 'node:util';
+import { text } from 'node:stream/consumers';
+import { inspect, isDeepStrictEqual } from 'node:util';
 import { PluginHost } from '../../src/plugins/host.js';
 import { verifyRelease } from '../../src/plugins/package.js';
 import { StorageError } from '../../packages/plugin-sdk/storage/errors.js';
@@ -559,8 +560,10 @@ test('multilingual package digests survive locale changes and migrate only verif
       console.log(JSON.stringify({ locale: Intl.Collator().resolvedOptions().locale, status: result.status, digest: result.digest, error: result.error }));
     } finally { await host.close(); }`;
   const open = async (locale, install = false) => {
-    const { stdout } = await promisify(execFile)(process.execPath, ['--input-type=module', '--eval', script, directory, ...(install ? [source] : [])],
-      { env: { ...process.env, LANG: locale, LC_ALL: locale }, windowsHide: true });
+    const child = spawn(process.execPath, ['--input-type=module', '--eval', script, directory, ...(install ? [source] : [])],
+      { env: { ...process.env, LANG: locale, LC_ALL: locale }, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
+    const [[code], stdout, stderr] = await Promise.all([once(child, 'close'), text(child.stdout), text(child.stderr)]);
+    assert.equal(code, 0, stderr);
     return JSON.parse(stdout);
   };
   const installed = await open('en_US.UTF-8', true), cold = await open('sv_SE.UTF-8');
