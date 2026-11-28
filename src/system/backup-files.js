@@ -12,8 +12,8 @@ const portableName = name => name && name !== '.' && name !== '..' && !/[/\\:\x0
 export function backupRoots(paths, options, fileSystem) {
   const { configurationDirectoryPath, programDataPath, dataPath, defaultMetadataPath, metadataPath } = paths;
   const roots = [];
-  function add(prefix, root, { local = false, topOnly = false, metadata = false } = {}) {
-    if (root) roots.push({ prefix, root, files: local ? fs : fileSystem, local, topOnly, metadata, api: pathApi(root) });
+  function add(prefix, root, { local = false, topOnly = false } = {}) {
+    if (root) roots.push({ prefix, root, files: local ? fs : fileSystem, local, topOnly, api: pathApi(root) });
   }
   if (configurationDirectoryPath) {
     add('Config', configurationDirectoryPath, { local: true, topOnly: true });
@@ -25,8 +25,8 @@ export function backupRoots(paths, options, fileSystem) {
     add('Data/' + name, path.join(dataPath, name));
   }
   if (options.Metadata) {
-    add('Data/metadata', metadataPath, { metadata: true });
-    if (defaultMetadataPath !== metadataPath) add('Data/metadata-default', defaultMetadataPath, { metadata: true });
+    add('Data/metadata', metadataPath);
+    if (defaultMetadataPath !== metadataPath) add('Data/metadata-default', defaultMetadataPath);
   }
   return roots;
 }
@@ -42,12 +42,13 @@ export function backupDestination(roots, key) {
 }
 
 export async function captureBackupFiles(roots, backupDirectory, save) {
+  const prefixes = roots.find(root => !root.local)?.files.identityMap.exportState().prefixes ?? [];
   for (const root of roots) {
     // A bound subtree need not have a directory entry on its parent's backend.
     // Walk each visible binding once, in the same storage generation as the parent.
     const mounted = new Map();
-    if (root.metadata) {
-      for (const { identityRoot, accessRoot, style } of root.files.identityMap.exportState().prefixes) {
+    if (!root.local) {
+      for (const { identityRoot, accessRoot, style } of prefixes) {
         if (style !== identityPathStyle(root.root) || !nativePathWithin(identityRoot, root.root)
           || nativePathWithin(identityRoot, backupDirectory)) continue;
         const relative = root.api.relative(root.root, identityRoot);

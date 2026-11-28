@@ -352,25 +352,48 @@ test('the actual production CLI retains its selected target across HTTP restarts
     const configuration = await call('/Storage/Configuration');
     assert.equal(configuration.status, 200);
     const definition = configuration.body;
+    const mounted = [];
+    for (const name of ['subtitles', 'trickplay', 'playlists']) {
+      const parent = path.join(instance, 'data/data', name), identityRoot = path.join(parent, 'separate-volume');
+      const id = name + '-volume', volume = path.join(root, id), accessRoot = '/' + id;
+      await mkdir(parent, { recursive: true }); await mkdir(volume);
+      await assert.rejects(stat(identityRoot), { code: 'ENOENT' });
+      definition.instances.push({ id, type: 'local', config: { root: volume, writable: true } });
+      definition.mounts.push({ ...definition.mounts.find(mount => mount.instanceId === 'instance'), path: accessRoot, instanceId: id });
+      definition.prefixes.push({ identityRoot, accessRoot, purpose: 'metadata',
+        style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Independent ' + name + ' volume.' });
+      const file = path.join(volume, 'witness.txt'), ordinary = path.join(parent, 'ordinary.txt');
+      const key = 'Data/' + name + '/separate-volume/witness.txt';
+      await writeFile(file, 'mounted ' + name); await writeFile(ordinary, 'ordinary ' + name);
+      mounted.push({ name, identityRoot, accessRoot, file, ordinary, key });
+    }
     definition.instances.push({ id: 'artwork', type: 'local', config: { root: artworkRoot, writable: true } });
     definition.mounts.push({ ...definition.mounts.find(mount => mount.instanceId === 'instance'), path: '/artwork', instanceId: 'artwork' });
     definition.prefixes.push({ identityRoot: logical, accessRoot: '/artwork', purpose: 'metadata',
       style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Independent artwork volume.' });
     assert.equal((await call('/Storage/Configuration', { method: 'POST', body: definition, timeout: 30000 })).status, 200);
     await assert.rejects(stat(logical), { code: 'ENOENT' });
-    const backup = await call('/Backup/Create', { method: 'POST', body: { Metadata: true, Subtitles: true }, timeout: 30000 });
+    const selected = { Database: true, Metadata: true, Subtitles: true, Trickplay: true };
+    const backup = await call('/Backup/Create', { method: 'POST', body: selected, timeout: 30000 });
     assert.equal(backup.status, 200, stderr);
-    assert.equal(backup.body.Options.Metadata, true);
+    assert.deepEqual(backup.body.Options, selected);
     backupFile = backup.body.Path;
     assert.equal(path.dirname(backupFile), path.join(instance, 'data/data/backups'));
     assert.deepEqual((await call('/Backup/Manifest?path=' + encodeURIComponent(backupFile))).body, backup.body);
     const members = { ['Data/metadata/' + path.basename(witness)]: original, 'Data/metadata/mounted-artwork/poster.bin': originalPoster };
-    await withBackupArchive(backupFile, async archive => {
+    for (const { name, key } of mounted) {
+      members[key] = Buffer.from('mounted ' + name);
+      members['Data/' + name + '/ordinary.txt'] = Buffer.from('ordinary ' + name);
+    }
+    const checkMembers = async archive => {
+      const keys = archive.json('mediamanager.json').files.map(file => file.key);
+      assert.equal(new Set(keys).size, keys.length);
       for (const [key, expected] of Object.entries(members)) {
         assert.ok(archive.directory.has(key), key);
         assert.deepEqual(await buffer(archive.stream(archive.directory.get(key))), expected);
       }
-    });
+    };
+    await withBackupArchive(backupFile, checkMembers);
     const lateUser = await call('/Users/New', { method: 'POST', body: { Name: 'After backup' } });
     assert.equal(lateUser.status, 200);
     assert.equal((await call('/System/Configuration', { method: 'POST', body: { ...savedConfiguration, ServerName: 'After backup' } })).status, 204);
@@ -380,6 +403,9 @@ test('the actual production CLI retains its selected target across HTTP restarts
     assert.equal(await readFile(witness, 'utf8'), 'changed metadata');
     assert.equal(await readFile(poster, 'utf8'), 'changed mounted poster');
     await writeFile(inside, 'changed subtitle'); await writeFile(outside, 'after');
+    for (const { file, ordinary } of mounted) {
+      await writeFile(file, 'changed volume'); await writeFile(ordinary, 'changed parent');
+    }
     const restore = await call('/Backup/Restore', { method: 'POST', body: { ArchiveFileName: backupFile }, timeout: 30000 });
     assert.equal(restore.status, 204, stderr); assert.equal(restore.text, '');
     await until('restored configuration on the restarted listener', () => call('/System/Configuration', { record: false }),
@@ -390,20 +416,38 @@ test('the actual production CLI retains its selected target across HTTP restarts
     assert.deepEqual(await readFile(witness), original);
     assert.deepEqual(await readFile(poster), originalPoster);
     await assert.rejects(stat(logical), { code: 'ENOENT' });
+    const restoredStorage = await call('/Storage/Configuration');
+    assert.equal(restoredStorage.status, 200);
+    for (const { name, file, ordinary, identityRoot, accessRoot } of mounted) {
+      assert.ok(restoredStorage.body.prefixes.some(prefix => prefix.accessRoot === accessRoot));
+      assert.equal(await readFile(file, 'utf8'), 'mounted ' + name);
+      assert.equal(await readFile(ordinary, 'utf8'), 'ordinary ' + name);
+      await assert.rejects(stat(identityRoot), { code: 'ENOENT' });
+      await mkdir(identityRoot);
+      await writeFile(path.join(identityRoot, 'parent-only.bin'), 'hidden ' + name);
+    }
     // A directory later created on the parent volume must not duplicate or shadow the bound tree.
     await mkdir(logical);
     await writeFile(path.join(logical, 'parent-only.bin'), 'hidden parent volume');
-    const filesOnly = await call('/Backup/Create', { method: 'POST', body: { Database: false, Metadata: true }, timeout: 30000 });
+    const filesOnly = await call('/Backup/Create', { method: 'POST', body: { ...selected, Database: false }, timeout: 30000 });
     assert.equal(filesOnly.status, 200, stderr);
-    await withBackupArchive(filesOnly.body.Path, archive => {
-      assert.ok(archive.directory.has('Data/metadata/mounted-artwork/poster.bin'));
-      assert.equal(archive.directory.has('Data/metadata/mounted-artwork/parent-only.bin'), false);
+    await withBackupArchive(filesOnly.body.Path, async archive => {
+      await checkMembers(archive);
+      assert.ok([...archive.directory.keys()].every(key => !key.endsWith('/parent-only.bin')));
     });
+    assert.equal(await storage.fileSystem.readFile(outside, 'utf8'), 'before');
+    const subtitlesOnly = await call('/Backup/Create', { method: 'POST', body: { Database: false, Subtitles: true }, timeout: 30000 });
+    assert.equal(subtitlesOnly.status, 200);
+    await writeFile(inside, 'after subset backup'); await writeFile(outside, 'after');
+    const partialRestore = await call('/Backup/Restore', { method: 'POST', body: { ArchiveFileName: subtitlesOnly.body.Path }, timeout: 30000 });
+    assert.equal(partialRestore.status, 204);
+    await until('selected subtitle restored on the restarted listener', async () =>
+      (await call('/System/Configuration', { record: false })).status === 200 && await readFile(inside, 'utf8'), value => value === 'saved subtitle');
     assert.equal(await storage.fileSystem.readFile(inside, 'utf8'), 'saved subtitle');
     assert.equal(await storage.fileSystem.readFile(outside, 'utf8'), 'after');
     assert.equal((await call('/Users/New', { method: 'POST', body: { Name: 'After backup' } })).status, 200);
     report.backup = { manifest: backup.body, restore: restore.status, savedConfigurationReloaded: true,
-      lateUserRemovedAndRecreated: true, metadata: report.original.sha256, restoredMetadataMembers: Object.keys(members),
+      lateUserRemovedAndRecreated: true, metadata: report.original.sha256, restoredMembers: Object.keys(members),
       mountedPoster: bytesValue(await readFile(poster)), subtitleRestored: true, excludedTrickplayRetained: true };
     t.diagnostic(JSON.stringify(report.backup));
     const beforeShutdown = await resources();
