@@ -537,6 +537,26 @@ jobs:
           else
             node tools/ci/run.js
           fi
+      - name: Check out exact reviewed candidate independently
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: dbc5094c37d36947393f5c77c09c5a34273fcba8
+          path: .test-output/review-candidate
+          persist-credentials: false
+      - name: Run review observations on the pinned source
+        shell: bash
+        working-directory: .test-output/review-candidate
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = dbc5094c37d36947393f5c77c09c5a34273fcba8
+          test "$(git rev-parse 'HEAD^{tree}')" = 9b5e37272e4fd975ed21e824106bd0bf75851076
+          npm ci --bin-links=false
+          mkdir -p "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/review"
+          git show -s --format='{"head":"%H","tree":"%T"}' > "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/review/checkout.json"
+          python "$GITHUB_WORKSPACE/review/build-native-probe.py" .
+          cp "$GITHUB_WORKSPACE/review/backup-probe.mjs" tests/http/review-backup-probe.mjs
+          node --test --test-concurrency=1 tests/http/review-backup-probe.mjs tests/http/review-subtitle-probe.mjs | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/review/probes.tap"
+          git diff --exit-code
       - name: Audit database resources
         if: always() && steps.environment.outcome == 'success'
         run: node tools/ci/environment.js audit
