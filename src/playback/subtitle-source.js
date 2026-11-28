@@ -7,6 +7,7 @@ const copyMuxers = new Map([
 ]);
 
 export const isVobSubFormat = format => /dvdsub|vobsub/i.test(format ?? '');
+export const isPgsFormat = format => /pgs|^sup$/i.test(format ?? '');
 
 export function subtitleExtractionFormat(stream) {
   const codec = stream.Codec?.toLowerCase();
