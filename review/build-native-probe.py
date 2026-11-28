@@ -34,7 +34,7 @@ async function collect(origin, token) {
   const capacity = await get('/System/Info/Storage');
   data.capacityStatus = capacity.status;
   const storage = await capacity.json();
-  data.folders = Object.fromEntries(Object.entries(storage).filter(([name]) => name !== 'Libraries').map(([name, value]) => [name, {
+  data.folders = Object.fromEntries(Object.entries(storage).filter(([name,value]) => name !== 'Libraries' && value && typeof value === 'object').map(([name, value]) => [name, {
     keys: Object.keys(value), pathNonempty: Boolean(value.Path), resolvedNonempty: Boolean(value.ResolvedPath),
     samePath: value.Path === value.ResolvedPath }]));
   const url = (item, index, extension) => '/Videos/' + idKey(item) + '/' + idKey(item) + '/Subtitles/' + index + '/Stream.' + extension;
@@ -77,5 +77,6 @@ code += original[p:before('    report.sources = ')] + """
     assert.equal(report.native.pgsRange.sha256,report.fixture.rangeHash);
 """ + original[before('  } catch (error) { primary = output.publicError(error); throw primary; }'):]
 code = code.replace("library-playback-http-", "review-playback-http-")
+code = code.replace("existing playback assets, date ticks, counts and search hints match the designated Native HTTP host","observe graphical subtitle bytes, ranges and storage paths at both HTTP hosts")
 (target / 'tests/http/review-subtitle-probe.mjs').write_text(code, encoding='utf-8')
 

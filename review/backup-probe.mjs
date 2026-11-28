@@ -11,6 +11,7 @@ test('archive and restore metadata under independent metadata prefix', async t =
   const { request, runtime, programDataPath } = await createMetadataHttpFixture(t);
   const destination = path.join(validationOutputRoot(), 'review');
   await mkdir(destination, { recursive: true });
+  await writeFile(path.join(destination, 'routes.json'),JSON.stringify(runtime.implementedRoutes,null,2));
   const report = {};
   try {
     const metadata = runtime.applicationPaths.metadataPath;
