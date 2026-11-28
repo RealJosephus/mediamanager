@@ -233,6 +233,8 @@ class PluginScope {
   }
 }
 
+export const defaultPluginDirectory = programDataPath => path.join(programDataPath, 'plugins', 'node');
+
 export class PluginHost {
   #state={generation:randomUUID(),plugins:{}};
   #active=new Map();
@@ -247,7 +249,7 @@ export class PluginHost {
   static async open(options={}) {const host=new PluginHost(options);try{await host.#open();return host;}catch(e){await host.close().catch(()=>{});throw e;}}
   constructor(paths={}) {
     const {directory,programDataPath,configurationDirectoryPath,dataPath,imageCachePath,preinstalled=officialPackagesPath,options={},configurationBindings=new Map(),onError=()=>{}}=paths;
-    this.directory=directory??(programDataPath&&path.join(programDataPath,'plugins','node'));
+    this.directory=directory??(programDataPath && defaultPluginDirectory(programDataPath));
     this.paths={programDataPath,configurationDirectoryPath,dataPath,get metadataPath(){return paths.metadataPath;},get cachePath(){return paths.cachePath;},imageCachePath};this.preinstalled=preinstalled;this.options=options;this.onError=onError;
     this.configurationBindings=configurationBindings;
   }

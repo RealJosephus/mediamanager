@@ -32,12 +32,37 @@ function validate(configuration) {
   for (const binding of configuration.bindings ?? []) if (!fields(binding,['itemId','accessPath'])) throw new TypeError('Invalid item access binding.');
   for (const mount of configuration.mounts) if (!ids.has(mount.instanceId)) throw new TypeError('A storage mount refers to an unknown instance.');
 }
-export function validateStorageConfiguration(configuration) {
-  validate(configuration);
-  // Publication can validate the virtual namespace without opening any backend.
-  const namespace = new VirtualFileSystem(new StorageRegistry());
-  for (const mount of configuration.mounts) namespace.mount(mount, { deferred: true });
+function storageNamespace(definition, registry, portableMountContract) {
+  const vfs = new VirtualFileSystem(registry), identityMap = new IdentityAccessMap();
+  for (const mount of definition.mounts) vfs.mount(mount,{deferred:true});
+  const mediaPrefixes=definition.prefixes.filter(prefix=>prefix.purpose!=='metadata');
+  const metadataPrefixes=definition.prefixes.filter(prefix=>prefix.purpose==='metadata');
+  for (const prefix of mediaPrefixes) identityMap.addPrefix(prefix);
+  const metadataOverrides=new IdentityAccessMap();
+  for(const prefix of metadataPrefixes)metadataOverrides.addPrefix(prefix);
+  // Preserve declared identity/access namespaces while making nested roots
+  // discoverable when their parent is enumerated through another mount.
+  mountIdentityOverlays(vfs,definition.mounts,[mediaPrefixes,metadataPrefixes]);
+  const fallback=(method,value)=>{try{return metadataOverrides[method](value);}catch(error){if(error.code!=='not-found')throw error;return identityMap[method](value);}};
+  const metadataIdentityMap={resolve:value=>fallback('resolve',value),identityFor:value=>fallback('identityFor',value),
+    exportState:()=>({prefixes:[...identityMap.exportState().prefixes,...metadataOverrides.exportState().prefixes],bindings:identityMap.exportState().bindings})};
+  for (const binding of definition.bindings ?? []) identityMap.bind(binding.itemId,binding.accessPath);
+  let ignoreIdentityMap = identityMap;
+  if (definition.ignorePrefixes) {
+    ignoreIdentityMap = new IdentityAccessMap();
+    for (const prefix of [...mediaPrefixes,...definition.ignorePrefixes]) ignoreIdentityMap.addPrefix(prefix);
+  }
+  const contract = portableMountContract === undefined ? undefined : assertPortableMountStorageConfiguration(portableMountContract,definition);
+  return { vfs, identityMap, metadataIdentityMap, ignoreIdentityMap, contract };
 }
+
+export function validateStorageConfiguration(definition, portableMountContract) {
+  validate(definition);
+  storageNamespace(definition, new StorageRegistry(), portableMountContract);
+}
+
+export const defaultStorageConfigurationPath = pluginDirectory => path.join(pluginDirectory, 'storage.json');
+
 async function persist(filename, value) {
   const temporary = filename + '.' + randomUUID() + '.tmp';
   try {
@@ -97,7 +122,7 @@ function mountIdentityOverlays(vfs, declarations, groups) {
  * media root can use different plugins; the longest prefix wins. */
 export async function createConfiguredStorage(filename, { environment = process.env, portableMountContract, plugins, prepareConfiguration } = {}) {
   if (!plugins) throw new TypeError('Configured storage requires a plugin host.');
-  filename ??= path.join(plugins.directory,'storage.json');
+  filename ??= defaultStorageConfigurationPath(plugins.directory);
   let configuration, current, closing, closed = false, initializing = true, tail = Promise.resolve();
   const operations = new AsyncLocalStorage();
   const activeOwner = () => operations.getStore()?.owner ?? current;
@@ -117,7 +142,7 @@ export async function createConfiguredStorage(filename, { environment = process.
   };
   const build = async (definition, { tolerateUnavailable = false, strictType } = {}) => {
     validate(definition);
-    const registry = new StorageRegistry(), vfs = new VirtualFileSystem(registry), identityMap = new IdentityAccessMap(), unavailable = [];
+    const registry = new StorageRegistry(), unavailable = [];
     try {
       for (const extension of extensions.values()) registry.registerType(extension.type,
         (config, options) => extension.create(config,{...options,resolveCredential:credential}));
@@ -131,25 +156,8 @@ export async function createConfiguredStorage(filename, { environment = process.
           unavailable.push({id:instance.id,type:instance.type,error:error.message});
         }
       }
-      for (const mount of definition.mounts) vfs.mount(mount,{deferred:true});
-      const mediaPrefixes=definition.prefixes.filter(prefix=>prefix.purpose!=='metadata');
-      const metadataPrefixes=definition.prefixes.filter(prefix=>prefix.purpose==='metadata');
-      for (const prefix of mediaPrefixes) identityMap.addPrefix(prefix);
-      const metadataOverrides=new IdentityAccessMap();
-      for(const prefix of metadataPrefixes)metadataOverrides.addPrefix(prefix);
-      // Preserve declared identity/access namespaces while making nested roots
-      // discoverable when their parent is enumerated through another mount.
-      mountIdentityOverlays(vfs,definition.mounts,[mediaPrefixes,metadataPrefixes]);
-      const fallback=(method,value)=>{try{return metadataOverrides[method](value);}catch(error){if(error.code!=='not-found')throw error;return identityMap[method](value);}};
-      const metadataIdentityMap={resolve:value=>fallback('resolve',value),identityFor:value=>fallback('identityFor',value),
-        exportState:()=>({prefixes:[...identityMap.exportState().prefixes,...metadataOverrides.exportState().prefixes],bindings:identityMap.exportState().bindings})};
-      for (const binding of definition.bindings ?? []) identityMap.bind(binding.itemId,binding.accessPath);
-      let ignoreIdentityMap = identityMap;
-      if (definition.ignorePrefixes) {
-        ignoreIdentityMap = new IdentityAccessMap();
-        for (const prefix of [...mediaPrefixes,...definition.ignorePrefixes]) ignoreIdentityMap.addPrefix(prefix);
-      }
-      const contract = portableMountContract === undefined ? undefined : assertPortableMountStorageConfiguration(portableMountContract,definition);
+      const { vfs, identityMap, metadataIdentityMap, ignoreIdentityMap, contract } =
+        storageNamespace(definition, registry, portableMountContract);
       const fileSystem = new StorageFileSystem({ vfs, identityMap: metadataIdentityMap });
       const mediaFileSystem = new StorageFileSystem({ vfs, identityMap });
       fileSystem.spoolRoot = current?.fileSystem.spoolRoot;

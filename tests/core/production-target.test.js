@@ -156,6 +156,25 @@ test('verified target publication preserves active HTTP writers and cold Postgre
       assert.match(rejected.stderr, /virtual mount path already exists/iu);
       assert.deepEqual(await readFile(currentFile), originalSelection);
     }
+    const ignored = { identityRoot: '/incoming', accessRoot: 'relative', style: 'posix', returnAccess: 'Local' };
+    const explicit = path.join(root, 'invalid-ignore.json');
+    const implicit = path.join(targets[1].instancePath, 'data', 'plugins', 'node', 'storage.json');
+    await mkdir(path.dirname(implicit), { recursive: true });
+    await writeFile(explicit, JSON.stringify({ instances: [], mounts: [], prefixes: [], ignorePrefixes: [ignored] }));
+    await writeFile(implicit, JSON.stringify({ instances: [], mounts: [] }));
+    for (const [storageConfigurationPath, reason] of [[explicit, /absolute/iu], [null, /prefixes arrays/iu]]) {
+      const candidate = { ...targets[1], storageConfigurationPath };
+      const rejected = await publish(candidate);
+      assert.equal(rejected.code, 1);
+      assert.match(rejected.stderr, reason);
+      assert.deepEqual(await readFile(currentFile), originalSelection);
+      const invalid = launch(helper, [], { ...environment, [targetEnvironmentName]: proposal }, true);
+      processes.push(invalid);
+      const failedStart = await invalid.next();
+      assert.equal(failedStart.type, 'failure');
+      assert.match(failedStart.message, reason);
+      assert.equal((await invalid.closed).code, 1);
+    }
     const started = await start(); firstProcess = started.worker;
     assert.equal(started.ready.schema, targets[0].postgresSchema); assert.equal(started.ready.instancePath, targets[0].instancePath);
     assert.equal(started.ready.serverId, '1'.repeat(32));

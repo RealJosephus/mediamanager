@@ -6,8 +6,8 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { inspectInstanceConfiguration } from './configuration.js';
 import { PostgresDatabase } from './database/postgres.js';
 import { verifyPostgresTransferContract } from './database/postgres-transfer-contract.js';
-import { assertPortableMountStorageConfiguration } from './storage/portable-mount-contract.js';
-import { validateStorageConfiguration } from './storage-bootstrap.js';
+import { defaultPluginDirectory } from './plugins/host.js';
+import { defaultStorageConfigurationPath, validateStorageConfiguration } from './storage-bootstrap.js';
 
 const selectionNames = ['MEDIAMANAGER_INSTANCE', 'MEDIAMANAGER_POSTGRES_SCHEMA', 'MEDIAMANAGER_STORAGE'];
 // A plain spread loses Windows main-thread process.env's case-insensitive
@@ -102,11 +102,18 @@ export async function publishProductionTarget(filename, value, { environment = p
   const database = await PostgresDatabase.open({ connectionString, schema: target.postgresSchema, deferRuntimeSchemaInitialization: true });
   await withCleanup(async () => {
     const mounts = await verifyProductionDatabaseContract(database, settings.serverId);
-    if (target.storageConfigurationPath !== null) {
-      const storage = JSON.parse(await readFile(target.storageConfigurationPath, 'utf8'));
-      validateStorageConfiguration(storage);
-      assertPortableMountStorageConfiguration(mounts, storage);
-    } else if (mounts.mounts.length) throw new Error('Production target storage configuration is required by the persisted portable VFS mount contract.');
+    if (target.storageConfigurationPath === null && mounts.mounts.length) {
+      throw new Error('Production target storage configuration is required by the persisted portable VFS mount contract.');
+    }
+    const storageFile = target.storageConfigurationPath ?? defaultStorageConfigurationPath(defaultPluginDirectory(settings.programDataPath));
+    let contents;
+    try { contents = await readFile(storageFile, 'utf8'); }
+    catch (error) {
+      // With no explicit selection the first startup initializes a missing definition.
+      if (error.code === 'ENOENT' && target.storageConfigurationPath === null) return;
+      throw error;
+    }
+    validateStorageConfiguration(JSON.parse(contents), mounts);
   }, () => database.close(), 'Production target verification and PostgreSQL close failed.');
   const directory = await realpath(path.dirname(requested)), destination = path.join(directory, path.basename(requested));
   try {
