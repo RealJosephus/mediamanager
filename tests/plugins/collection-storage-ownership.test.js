@@ -2,6 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { waitForLibraryScan } from '../helpers/wait-for-reviewed-scan.js';
 import { setImmediate as immediate } from 'node:timers/promises';
 import { nativeDateFromUnixNanoseconds } from '../../src/users/native.js';
 import { createVirtualPathReverser } from '../../src/library/options.js';
@@ -297,10 +300,86 @@ test('Collection CreateItems owns its real Local generation until persistence an
     t.diagnostic(JSON.stringify(report.recoveredRefresh));
     if (Object.hasOwn(completion, 'error')) throw completion.error;
     assert.equal(committed.Name, 'Recovered generation');
+    assert.ok(committed.DateLastRefreshed);
     if (mode !== 'stop') await assert.rejects(fs.stat(path.join(oldTarget, path.basename(recovered.Path))), { code: 'ENOENT' });
     assert.deepEqual(await fs.readFile(path.join(newDirectory, 'sentinel.txt')), sentinel);
     report.observations = { ownedPathReads, releasedBeforeConsumer: ownedClosed, persistedPath: row.Path,
       originalModified: row.DateModified, replacementModified: nativeDateFromUnixNanoseconds(replacementInfo.mtimeNs),
       restrictedOperationsRejected: restricted, exactPrefix, originalMountRootProtected: true, recoveredPath: recovered.Path };
   });
+});
+
+test('discovery yields to a committed collection while an independent member change still conflicts with its refresh', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 90000,
+}, async t => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'collection-scan-race-'));
+  const db = await createPostgresTestDatabase(t, 'collection_scan_race');
+  const runtime = await createTestRuntime({ database: db, programDataPath: root, serverId: 'collection-scan-race',
+    configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true } });
+  const resumeScan = Promise.withResolvers(), scanning = Promise.withResolvers();
+  let releaseFrame, scan, holdName;
+  t.after(async () => {
+    resumeScan.resolve(); releaseFrame?.resolve();
+    try { await scan; } finally { try { await runtime.close(); } finally { await fs.rm(root, { recursive: true, force: true }); } }
+  });
+  const initial = waitForLibraryScan(runtime.tasks, { signal: t.signal });
+  const parent = await runtime.collections.getCollectionsFolder(true);
+  assert.equal((await initial)[0].Result.Status, 'Completed');
+  await runtime.metadata.drain();
+  const work = new AsyncLocalStorage();
+  const serialize = runtime.store.serializeWrites;
+  let readyForBatch = false;
+  t.mock.method(runtime.store, 'serializeWrites', async function (...args) {
+    if (work.getStore() === 'scan' && readyForBatch) {
+      readyForBatch = false; scanning.resolve(); await resumeScan.promise;
+    }
+    return serialize.apply(this, args);
+  });
+  const queue = runtime.metadata.queue, queued = [];
+  t.mock.method(runtime.metadata, 'queue', function (...args) {
+    const result = queue.apply(this, args); queued.push({ id: args[0], work: outcome(result) }); return result;
+  });
+  const load = runtime.metadata.loadContext;
+  let frame;
+  runtime.metadata.loadContext = Object.assign(async function (...args) {
+    const loaded = await load.apply(this, args);
+    if (holdName && loaded.item.Name === holdName && loaded.snapshot) {
+      holdName = null; frame.resolve(); await releaseFrame.promise;
+    }
+    return loaded;
+  }, load);
+  const holdFirstRefresh = name => {
+    holdName = name; frame = Promise.withResolvers(); releaseFrame = Promise.withResolvers();
+  };
+
+  const name = 'During discovery';
+  await fs.mkdir(path.join(parent.Path, name + ' [boxset]'));
+  scan = work.run('scan', () => runtime.folderValidation.validateChildren(parent, {
+    collectionType: 'boxsets', refreshChildMetadata: false, signal: t.signal,
+    reportProgress(value) { if (value === 8) readyForBatch = true; },
+  }));
+  await Promise.race([scanning.promise, scan.then(() => assert.fail('The scan did not reach its creation batch.'))]);
+  holdFirstRefresh(name);
+  const item = await runtime.collections.create({ Name: name });
+  await frame.promise;
+  const state = () => db.rows('BaseItems', { where: { Id: item.Id } });
+  const before = await state();
+  resumeScan.resolve();
+  assert.deepEqual((await scan).created, []);
+  assert.deepEqual(await state(), before);
+  releaseFrame.resolve();
+  assert.equal((await queued.find(entry => entry.id === item.Id).work).error, undefined);
+  assert.ok((await state())[0].DateLastRefreshed);
+
+  holdFirstRefresh('With concurrent edit');
+  const edited = await runtime.collections.create({ Name: holdName });
+  await frame.promise;
+  try { await runtime.collections.add(edited.Id, [item.Id]); } finally { releaseFrame.resolve(); }
+  const [first, next] = queued.filter(entry => entry.id === edited.Id);
+  const { error } = await first.work;
+  assert.equal(error?.code, 'metadata-conflict');
+  assert.equal(error.status, 409);
+  assert.equal((await next.work).error, undefined);
+  assert.deepEqual((await db.rows('LinkedChildren', { where: { ParentId: edited.Id } })).map(row => row.ChildId), [item.Id]);
+  assert.ok((await db.rows('BaseItems', { where: { Id: edited.Id } }))[0].DateLastRefreshed);
 });

@@ -485,6 +485,33 @@ export class FolderValidationService {
     }), { signal });
   }
 
+  async #createDiscoveredChildren(additions, parent, scope, signal) {
+    const drafts = [...additions.keys()];
+    const collections = drafts.filter(item => item.Type === 'BoxSet');
+    if (!collections.length) {
+      if (drafts.length) await this.library.createItems(drafts, parent, { signal });
+      return drafts;
+    }
+    // A collection can be committed after this directory captured its children.
+    // Recheck under the same writer lock as CreateItems, before it can save a stale draft.
+    return this.store.serializeWrites(async db => {
+      const rows = await loadPostgresRowsByIds(db, collections.map(item => item.Id), { signal });
+      const persisted = new Map(rows.map(row => [idKey(row.Id), row]));
+      const created = [];
+      for (const [item, ordinal] of additions) {
+        const row = persisted.get(idKey(item.Id));
+        if (!row) { created.push(item); continue; }
+        const filename = this.library.options.expandPath?.(row.Path) ?? row.Path;
+        if (row.Type !== item.NativeType || !sameNativePath(filename, item.Path)) {
+          throw new StorageError('version-changed', 'The discovered collection identity changed before creation.');
+        }
+        await this.itemCreation.withItem(row.Id, existing => scope.valid(existing, ordinal, true));
+      }
+      if (created.length) await this.library.createItems(created, parent, { signal });
+      return created;
+    }, { signal });
+  }
+
   async #reconcileChildren(parent, resolution, { signal, allowRemoveRoot, progress, needsChildren }) {
     return this.store.run(session => withFolderValidationScope({
       session, store: this.store, library: this.library,
@@ -500,7 +527,7 @@ export class FolderValidationService {
         clock: this.clock
       }))]));
       await scope.checkClaims(resolution.claims, resolution.deletionSafe, entities);
-      const created = [];
+      const additions = new Map();
       let processedChildren = 0;
       const childProcessed = () => {
         processedChildren++;
@@ -536,7 +563,7 @@ export class FolderValidationService {
               await scope.removed(replaced);
             }
           });
-          created.push(entity);
+          additions.set(entity, ordinal);
           await scope.valid(entity, ordinal, true);
         });
         childProcessed();
@@ -561,7 +588,7 @@ export class FolderValidationService {
           await this.library.deleteItem(item, { DeleteFileLocation: false }, parent, false);
         }
       });
-      if (created.length) await this.library.createItems(created, parent, { signal });
+      const created = await this.#createDiscoveredChildren(additions, parent, scope, signal);
       await scope.eachDeferred(async (oldPrimary, newPrimary) => {
         await this.#promoteVersion(newPrimary, signal);
         await this.linkedChildReferences.reroute(oldPrimary.Id, newPrimary.Id);
