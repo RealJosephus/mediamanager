@@ -43,7 +43,7 @@ async function fixture({ playlists, auth = {}, onError = () => {} } = {}) {
   };
 }
 
-test('playlist HTTP contract binds body-only creation and every managed playlist operation', async () => {
+test('playlist HTTP contract binds creation parameters and every managed playlist operation', async () => {
   const calls = [];
   const playlists = {
     async create(input) { calls.push(['create', input]); return { Id: ids.playlist }; },
@@ -64,12 +64,12 @@ test('playlist HTTP contract binds body-only creation and every managed playlist
   };
   const application = await fixture({ playlists });
   try {
-    const created = await application.request('/Playlists?name=ignored&ids=ffffffffffffffffffffffffffffffff', {
+    const created = await application.request(`/Playlists?name=Query%20Name&ids=bad,${ids.second},${ids.first}&mediaType=Audio`, {
       method: 'POST', body: { nAmE: 'Body Name', iDs: [ids.first, ids.second], mEdIaTyPe: 'Video' }
     });
     assert.deepEqual(created, { status: 200, data: { Id: ids.playlist } });
-    assert.deepEqual(calls.shift(), ['create', { name: 'Body Name', ids: [ids.first, ids.second],
-      user: owner, mediaType: 'Video', users: [], isPublic: true }]);
+    assert.deepEqual(calls.shift(), ['create', { name: 'Query Name', ids: [ids.second, ids.first],
+      user: owner, mediaType: 'Audio', users: [], isPublic: true }]);
 
     assert.deepEqual(await application.request(`/Playlists/${ids.playlist}`), {
       status: 200, data: { Shares: [], OpenAccess: true, ItemIds: [ids.first] }
@@ -157,13 +157,22 @@ test('playlist update binding preserves nullable members and rejects invalid DTO
   } finally { await application.close(); }
 });
 
-test('playlist HTTP contract rejects missing body, identity escalation and unavailable persistence', async () => {
+test('playlist creation validates supplied DTOs and authorizes the selected owner', async () => {
   const calls = [];
   const service = { async create(input) { calls.push(input); return { Id: ids.playlist }; } };
   const application = await fixture({ playlists: service });
   try {
     assert.equal((await application.request('/Playlists', { method: 'POST', body: {} })).status, 400);
     assert.equal((await application.request('/Playlists', { method: 'POST', body: { Name: 'Escalate', UserId: ids.other } })).status, 403);
+    assert.equal((await application.request('/Playlists?name=legacy&userId=' + ids.other, { method: 'POST' })).status, 403);
+    assert.equal((await application.request('/Playlists?name=legacy', { method: 'POST', body: {} })).status, 400);
+    assert.equal((await application.request('/Playlists?userId=' + ids.owner + '&ids=invalid&name=%20&mediaType=invalid',
+      { method: 'POST', body: { Name: 'Fallback', UserId: ids.other, Ids: [ids.first], MediaType: 'Video' } })).status, 200);
+    assert.deepEqual(calls.shift(), { name: 'Fallback', user: owner, ids: [ids.first], mediaType: 'Video', users: [], isPublic: true });
+    for (const body of [undefined, null]) {
+      assert.equal((await application.request('/Playlists?name=legacy&mediaType=2', { method: 'POST', body })).status, 200);
+      assert.deepEqual(calls.shift(), { name: 'legacy', user: owner, ids: [], mediaType: 'Audio', users: [], isPublic: false });
+    }
     assert.deepEqual(calls, []);
   } finally { await application.close(); }
 

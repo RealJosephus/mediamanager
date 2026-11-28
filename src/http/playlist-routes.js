@@ -1,35 +1,50 @@
-import { BindingError, HttpResult, guidValue, integerValue, member, noContent, queryValue, requireMember } from './binding.js';
+import { BindingError, HttpResult, commaGuidValues, guidValue, integerValue, member, noContent, queryValue } from './binding.js';
+import { bindJsonModel, validateJsonModel } from './json-model-binding.js';
+import { enumName, mediaTypes } from '../sessions/binding.js';
+import { clrTrim } from '../metadata/whitespace.js';
 
 const zeroGuid = '00000000000000000000000000000000';
 
-function arrayValue(value, name, convert) {
-  if (value == null) return [];
-  const values = Array.isArray(value) ? value : typeof value === 'string' ? value.split(',') : null;
-  if (!values) throw new BindingError(name, `The ${name} field must be an array.`);
-  return values.filter(entry => entry !== '').map(entry => convert(entry, name));
+const guid = { type: 'guid', clrType: 'System.Guid', preserveEmptyGuid: true };
+const permissions = 'MediaBrowser.Model.Entities.PlaylistUserPermissions';
+const createDto = 'Jellyfin.Api.Models.PlaylistDtos.CreatePlaylistDto';
+const createRoot = { type: 'object', reference: createDto, clrType: createDto, nullable: true };
+const createSchema = { definitions: {
+  [createDto]: { defaults: { Name: null, Ids: [], UserId: null, MediaType: null, Users: [], IsPublic: true },
+    required: ['Name', 'Ids', 'Users'], jsonRequired: ['Name'], fields: {
+      Name: { type: 'string', clrType: 'System.String', nullable: true },
+      Ids: { type: 'array', clrType: 'System.Collections.Generic.IReadOnlyList`1[System.Guid]', item: guid,
+        delimiter: ',', converterArrayRoot: true, nullable: true },
+      UserId: { ...guid, nullable: true },
+      MediaType: { type: 'enum', clrType: 'Jellyfin.Data.Enums.MediaType', nullable: true,
+        values: Object.fromEntries(mediaTypes.map((name, index) => [name, index])) },
+      Users: { type: 'array', clrType: 'System.Collections.Generic.IReadOnlyList`1[' + permissions + ']', nullable: true,
+        item: { type: 'object', reference: permissions, clrType: permissions } },
+      IsPublic: { type: 'boolean', clrType: 'System.Boolean' },
+    } },
+  [permissions]: { defaults: { UserId: zeroGuid, CanEdit: false }, fields: {
+    UserId: guid, CanEdit: { type: 'boolean', clrType: 'System.Boolean' },
+  } },
+} };
+
+function bindCreateBody(body, source) {
+  const options = { schema: createSchema, root: createRoot, source };
+  return validateJsonModel(bindJsonModel(body, options), options);
+}
+
+function bindCreateQuery(query) {
+  const name = queryValue(query, 'name'), userId = queryValue(query, 'userId');
+  const rawType = queryValue(query, 'mediaType');
+  let mediaType;
+  if (rawType) try { mediaType = enumName(rawType, mediaTypes); } catch { /* Native nullable enum binding leaves it unset. */ }
+  return { name: name && clrTrim(name) ? name : undefined, ids: commaGuidValues(query, 'ids'),
+    userId: guidValue(userId && clrTrim(userId), 'userId'), mediaType };
 }
 
 function queryArray(context, name, convert = value => value) {
   const values = [...context.query].filter(([key]) => key.toLowerCase() === name.toLowerCase()).map(([, value]) => value);
   const entries = values.length > 1 ? values : values[0]?.split(',') ?? [];
   return entries.filter(entry => entry !== '').map(entry => convert(entry, name));
-}
-
-function createBody(body) {
-  const Name = requireMember(body, 'Name');
-  if (typeof Name !== 'string') throw new BindingError('Name', 'The Name field must be a string.');
-  const rawPublic = member(body, 'IsPublic');
-  if (rawPublic != null && typeof rawPublic !== 'boolean') throw new BindingError('IsPublic', 'The IsPublic field must be a boolean.');
-  const rawUsers = member(body, 'Users');
-  if (rawUsers != null && !Array.isArray(rawUsers)) throw new BindingError('Users', 'The Users field must be an array.');
-  return {
-    name: Name,
-    ids: arrayValue(member(body, 'Ids'), 'Ids', guidValue),
-    userId: guidValue(member(body, 'UserId'), 'UserId'),
-    mediaType: member(body, 'MediaType'),
-    users: rawUsers ?? [],
-    isPublic: rawPublic ?? true
-  };
 }
 
 function nullableBoolean(body, name) {
@@ -103,11 +118,13 @@ export function registerPlaylistRoutes(add, { playlists, users }) {
   };
 
   add('POST', '/Playlists', async context => {
-    const input = createBody(context.body);
-    input.user = await effectiveUser(context, input.userId);
-    delete input.userId;
-    return service().create(input);
-  }, { body: true, bodyParameter: 'createPlaylistRequest' });
+    const query = context.queryInput, body = context.body;
+    const user = await effectiveUser(context, query.userId ?? body?.UserId);
+    const name = query.name ?? body?.Name;
+    if (name == null) throw Object.assign(new Error('A playlist name is required.'), { status: 500 });
+    return service().create({ name, ids: query.ids.length ? query.ids : body?.Ids ?? [], user,
+      mediaType: query.mediaType ?? body?.MediaType, users: body?.Users ?? [], isPublic: body?.IsPublic ?? false });
+  }, { body: true, optionalBody: true, bindBody: bindCreateBody, bindQuery: bindCreateQuery });
 
   add('GET', '/Playlists/{playlistId}', context => service().get(
     guidValue(context.params.playlistId, 'playlistId'), { user: currentUser(context) }));
