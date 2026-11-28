@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import pg from 'pg';
 import path from 'node:path';
 import * as fs from 'node:fs/promises';
 import { createTestRuntime } from '../helpers/runtime.js';
@@ -13,7 +14,61 @@ const enabled = { skip: !postgresTestConnectionString };
 const movieIds = ['cb100000-0000-0000-0000-000000000001', 'cb100000-0000-0000-0000-000000000002'];
 const missingId = 'cb100000-0000-0000-0000-000000000099';
 
+// Diagnostic-only observer. Normal requests incur no database sampling.
+function observeWaits(getRuntime) {
+  const destination = path.join(validationOutputRoot(), 'collection-audit-waits.jsonl');
+  let sampling = false;
+  const timer = setInterval(async () => {
+    if (sampling || Date.now() - lastCheckpointAt < 30000) return;
+    sampling = true;
+    const runtime = getRuntime();
+    const record = { at: new Date().toISOString(), latest: lastCheckpoint, idleMs: Date.now() - lastCheckpointAt,
+      activeResources: process.getActiveResourcesInfo(), pendingOperations: [...pendingOperations.values()] };
+    const pool = runtime?.store?.database?.pool;
+    if (pool) record.pool = { total: pool.totalCount, waiting: pool.waitingCount, idle: pool.idleCount };
+    const observer = new pg.Client({ connectionString: postgresTestConnectionString, connectionTimeoutMillis: 3000, query_timeout: 3000 });
+    try {
+      await observer.connect();
+      record.database = (await observer.query(`SELECT pid, state, wait_event_type, wait_event,
+        pg_blocking_pids(pid) AS blockers, clock_timestamp() - state_change AS time_in_state,
+        substring(ltrim(query) from '^[A-Za-z]+') AS command, md5(query) AS query_hash
+        FROM pg_stat_activity WHERE datname = current_database() AND pid <> pg_backend_pid()
+        ORDER BY pid`)).rows;
+    } catch (error) { record.observerError = error.code || error.name; }
+    finally { try { await observer.end(); } catch {} }
+    try { await fs.appendFile(destination, JSON.stringify(record) + '\n'); }
+    finally { sampling = false; }
+  }, 15000);
+  timer.unref();
+  return () => clearInterval(timer);
+}
+
+const pendingOperations = new Map();
+let lastCheckpoint = 'setup', lastCheckpointAt = Date.now();
+function trackOperations(runtime) {
+  for (const [owner, key, label] of [
+    [runtime.collections, 'add', 'collection.add'], [runtime.collections, 'remove', 'collection.remove'],
+    [runtime.collections, 'close', 'collections.close'], [runtime.collections.eventScope, 'drain', 'collectionEvents.drain'],
+    [runtime.linkedChildren, 'close', 'linkedChildren.close'], [runtime.networkHost, 'close', 'networkHost.close'],
+    [runtime.store, 'close', 'store.close'], [runtime.store?.database, 'close', 'database.close'],
+  ]) {
+    if (!owner || typeof owner[key] !== 'function' || !Object.isExtensible(owner)) continue;
+    const implementation = owner[key];
+    owner[key] = function (...args) {
+      const operation = Symbol();
+      pendingOperations.set(operation, { label, startedAt: new Date().toISOString() });
+      try {
+        const result = implementation.apply(this, args);
+        if (result?.then) result.then(() => pendingOperations.delete(operation), () => pendingOperations.delete(operation));
+        else pendingOperations.delete(operation);
+        return result;
+      } catch (error) { pendingOperations.delete(operation); throw error; }
+    };
+  }
+}
+
 async function checkpoint(phase, xml) {
+  lastCheckpoint = phase; lastCheckpointAt = Date.now();
   const members = xml && [...xml.matchAll(/<Path>([^<]*)<\/Path>/gu)].map(match => match[1]);
   await fs.appendFile(path.join(validationOutputRoot(), 'collection-audit-phases.jsonl'),
     JSON.stringify({ at: new Date().toISOString(), phase, members }) + '\n');
@@ -24,6 +79,7 @@ async function setup(t, { baseUrl = '' } = {}) {
   const root = await fs.mkdtemp(path.join(output, 'collections-http-'));
   const programDataPath = path.join(root, 'program'), dataPath = path.join(programDataPath, 'data'), metadataPath = path.join(programDataPath, 'metadata'), configurationDirectoryPath = path.join(root, 'config');
   let database, runtime;
+  const stopObserver = baseUrl ? observeWaits(() => runtime) : () => {};
   t.after(async () => {
     if (baseUrl) await checkpoint('teardown-start');
     const failures = [];
@@ -32,6 +88,7 @@ async function setup(t, { baseUrl = '' } = {}) {
       await fs.rm(root, { recursive: true, force: true });
     }]) try { await cleanup(); } catch (error) { failures.push(error); }
     if (baseUrl) await checkpoint('teardown-finished');
+    stopObserver();
     if (failures.length) throw new AggregateError(failures, 'Collection HTTP cleanup failed.');
   });
   await fs.mkdir(configurationDirectoryPath, { recursive: true });
@@ -47,6 +104,7 @@ async function setup(t, { baseUrl = '' } = {}) {
   const create = async () => {
     runtime = await createTestRuntime({ database, configuration, networkConfiguration: { BaseUrl: baseUrl }, programDataPath, dataPath, metadataPath, configurationDirectoryPath,
       serverId: 'collections-http', onError: error => errors.push(error) });
+    if (baseUrl) trackOperations(runtime);
     runtime.libraryConfiguration.sleep = async () => {};
     // Queue execution is covered by its own host tests; record the admission
     // after real Collection manager, XML and repository completion here.
