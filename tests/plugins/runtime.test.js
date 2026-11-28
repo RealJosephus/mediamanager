@@ -242,7 +242,7 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
   assert.equal((await request('POST',`/Plugins/${plugin}/Enabled`,{enabled:true})).status,200);
  }
  assert.equal((await request('POST','/Plugins/tmdb/Configuration',{unexpected:true},true,{failureStatus:400})).status,400);
- const initial=await fixturePackage(root),updated=await fixturePackage(root,{label:'updated'}),failed=await fixturePackage(root,{failure:'connect'});
+ const initial=await fixturePackage(root,{summaryRoute:true}),updated=await fixturePackage(root,{label:'updated'}),failed=await fixturePackage(root,{failure:'connect'});
  const failedEntry=path.join(failed,'index.js'),originalConnectSource=await fs.readFile(failedEntry),originalSource=originalConnectSource.toString('utf8');
  const declaration='async connect(){',start=originalSource.indexOf(declaration),end=originalSource.indexOf('}};',start+declaration.length);
  assert.ok(start>=0&&end>start,'The newly generated package must contain its original connect method.');
@@ -259,6 +259,11 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
  Object.assign(connectCapture,{originalSource:description(originalConnectSource),observedSource:description(observedConnectSource),manifest:description(manifestBytes),originalConnectBody:originalBody});
  await fs.writeFile(failedEntry,observedConnectSource);
  assert.equal((await request('POST','/Plugins/Install',{path:initial})).status,200);
+ assert.equal((await request('GET','/Plugins/LibrarySummary',undefined,false,{failureStatus:401})).status,401);
+ const summary=await request('GET','/plugins/librarysummary/',undefined,true,{token:login.AccessToken});
+ assert.equal(summary.status,200);assert.deepEqual(await summary.json(),{summary:'initial'});
+ assert.equal((await request('GET','/Plugins/fixture',undefined,true,{token:login.AccessToken,failureStatus:403})).status,403);
+ assert.equal((await (await request('GET','/Plugins/fixture')).json()).id,'fixture');
  assert.equal((await request('POST','/Plugins/fixture/Configuration',{message:'persisted'})).status,200);
  assert.equal((await (await request('GET','/Fixture/Echo')).json()).message,'persisted');
  const beforeFailedUpdate=runtime.plugins.get('fixture');
@@ -271,6 +276,7 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
  assertConnectFailure(failedUpdateObservation);assert.equal(afterFailedUpdate.digest,beforeFailedUpdate.digest);
  assert.equal((await (await request('GET','/Fixture/Echo')).json()).label,'initial');
  assert.equal((await request('POST','/Plugins/fixture/Update',{path:updated})).status,200);
+ assert.equal((await request('GET','/Plugins/LibrarySummary',undefined,true,{failureStatus:404})).status,404);
  assert.equal((await request('POST','/Plugins/fixture/Enabled',{enabled:false})).status,200);
  const missingLocal={type:'local',identityPath:path.join(root,'state'),requiredApplicationPath:true};
  await withMissingStorage('uninstall-local-storage',missingLocal,()=>runtime.plugins.uninstall('local'));const storageDefinition=runtime.storage.configuration();

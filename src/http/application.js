@@ -251,7 +251,8 @@ export async function createApplication(services = {}) {
           const match = route.pattern.exec(path);
           return match && route.names.every((name, index) => !route.constraints[name] || route.constraints[name](match[index + 1]));
         });
-        const route = matching.find(route => route.method === request.method);
+        const route = matching.find(route => route.method === request.method && route.names.length === 0)
+          ?? matching.find(route => route.method === request.method);
         if (!route) {
           if (blocked()) { send(new HttpResult(503)); return; }
           if (startupBlocked()) return;
