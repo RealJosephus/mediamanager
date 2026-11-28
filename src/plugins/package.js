@@ -2,6 +2,7 @@ import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import requestCultures from '../core/resources/request-cultures.json' with { type: 'json' };
 
 export const officialPackagesPath = fileURLToPath(new URL('../../plugins/', import.meta.url));
 const sdkPath = fileURLToPath(new URL('../../packages/plugin-sdk/', import.meta.url));
@@ -21,12 +22,19 @@ export async function physicalDirectory(directory, { missing = false } = {}) {
   return resolved;
 }
 
+const digestVersion = 2;
+function hashFiles(files) {
+  const hash = createHash('sha256');
+  for (const file of files) hash.update(file.name).update('\0').update(file.bytes).update('\0');
+  return hash.digest('hex');
+}
+
 export async function inspectPackage(directory, { installed = false } = {}) {
   directory = await physicalDirectory(directory);
   const files = []; let size = 0;
   const visit = async (relative = '') => {
     if (relative.split(path.sep).length > 32) throw new TypeError('Plugin package directory depth exceeds its limit.');
-    for (const entry of (await fs.readdir(path.join(directory, relative), { withFileTypes: true })).sort((a,b)=>a.name.localeCompare(b.name))) {
+    for (const entry of await fs.readdir(path.join(directory, relative), { withFileTypes: true })) {
       if (entry.name === 'node_modules' && !installed) continue;
       if (entry.name.toLowerCase() === 'node_modules') throw new TypeError('Plugin packages cannot contain dependency shadow directories.');
       if (entry.name.startsWith('.') || /[:\\]/.test(entry.name) || entry.isSymbolicLink()) throw new TypeError('Plugin packages cannot contain hidden files, links or alternate streams.');
@@ -55,9 +63,8 @@ export async function inspectPackage(directory, { installed = false } = {}) {
   if (manifest.scripts || Object.keys(manifest.dependencies ?? {}).some(name=>!['@mediamanager/plugin-sdk','fast-xml-parser'].includes(name))) {
     throw new TypeError('Plugin dependencies must be bundled; install scripts are not supported.');
   }
-  const hash = createHash('sha256');
-  for (const file of files) hash.update(file.name).update('\0').update(file.bytes).update('\0');
-  return { manifest, files, digest:hash.digest('hex') };
+  const ordered = files.toSorted((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
+  return { manifest, files, digest: hashFiles(ordered) };
 }
 
 export async function stagePackage(source, root) {
@@ -68,7 +75,7 @@ export async function stagePackage(source, root) {
   try {
     for (const file of inspected.files) { const target=path.join(directory,file.name); await fs.mkdir(path.dirname(target),{recursive:true}); await fs.writeFile(target,file.bytes,{flag:'wx'}); }
     await prepareDependencies(root, inspected.manifest);
-    return { release, digest:inspected.digest, manifest:inspected.manifest };
+    return { release, digestVersion, digest:inspected.digest, manifest:inspected.manifest };
   } catch(error) { await fs.rm(directory,{recursive:true,force:true}); throw error; }
 }
 
@@ -101,11 +108,46 @@ async function prepareDependencies(hostRoot, manifest) {
   }
 }
 
-export async function verifyRelease(root, descriptor) {
+// Unversioned releases hashed a depth-first walk with the process's default
+// collation. Only an exact match to the stored digest can authorize migration.
+function matchesLegacyDigest(files, expected) {
+  if (!/^[0-9a-f]{64}$/u.test(expected)) return false;
+  const entries = files.map((file, index) => ({ file, index, parts: file.name.split('/') }));
+  const tried = new Set();
+  for (const locale of [undefined, 'en-US', ...Intl.Collator.supportedLocalesOf(requestCultures)]) {
+    const { compare } = new Intl.Collator(locale);
+    const order = entries.toSorted((a, b) => {
+      for (let i = 0; i < Math.min(a.parts.length, b.parts.length); i++) {
+        if (a.parts[i] !== b.parts[i]) return compare(a.parts[i], b.parts[i]);
+      }
+      return a.parts.length - b.parts.length;
+    });
+    const key = order.map(entry => entry.index).join(',');
+    if (tried.has(key)) continue;
+    tried.add(key);
+    if (hashFiles(order.map(entry => entry.file)) === expected) return true;
+  }
+  return false;
+}
+
+async function checkedRelease(root, descriptor) {
   if (!/^[0-9a-f-]{36}$/.test(descriptor?.release ?? '')) throw new TypeError('Invalid plugin release identity.');
   const directory=path.join(root,'packages',descriptor.release), inspected=await inspectPackage(directory,{installed:true});
-  if(inspected.digest!==descriptor.digest) throw new Error('Installed plugin package integrity check failed.');
+  if (descriptor.digestVersion !== undefined && descriptor.digestVersion !== digestVersion) throw new TypeError('Unknown plugin digest version.');
+  if (inspected.digest !== descriptor.digest && (descriptor.digestVersion !== undefined || !matchesLegacyDigest(inspected.files, descriptor.digest))) {
+    throw new Error('Installed plugin package integrity check failed.');
+  }
   if(JSON.stringify(inspected.manifest)!==JSON.stringify(descriptor.manifest))throw new Error('Installed plugin manifest does not match its persisted descriptor.');
-  await prepareDependencies(root,inspected.manifest);
+  return { directory, digest: inspected.digest };
+}
+
+export async function upgradePackageDigest(root, descriptor) {
+  const { digest } = await checkedRelease(root, descriptor);
+  return { ...descriptor, digestVersion, digest };
+}
+
+export async function verifyRelease(root, descriptor) {
+  const { directory } = await checkedRelease(root, descriptor);
+  await prepareDependencies(root,descriptor.manifest);
   return directory;
 }

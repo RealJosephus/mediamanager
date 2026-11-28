@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { spawn } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { once } from 'node:events';
-import { inspect, isDeepStrictEqual } from 'node:util';
+import { inspect, isDeepStrictEqual, promisify } from 'node:util';
 import { PluginHost } from '../../src/plugins/host.js';
 import { verifyRelease } from '../../src/plugins/package.js';
 import { StorageError } from '../../packages/plugin-sdk/storage/errors.js';
@@ -542,4 +543,55 @@ test('a real interrupted update restores the last committed package after proces
   await fixture.reopen();assert.equal(fixture.host.get('fixture').status,'active');assert.equal(fixture.host.get('fixture').digest,before.digest);
   assert.equal((await fixture.host.entries('route')[0].handle({})).label,'initial');
   await assert.rejects(fs.stat(path.join(directory,'transaction.json')),{code:'ENOENT'});
+});
+
+test('multilingual package digests survive locale changes and migrate only verified old releases', async t => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'plugin-locales-'));
+  t.after(() => fs.rm(root, { recursive: true, force: true }));
+  const source = await fixturePackage(root), directory = path.join(root, 'host');
+  await fs.mkdir(path.join(source, 'labels'));
+  for (const file of ['ä.txt', 'z.txt', 'labels/ä.txt', 'labels/z.txt']) await fs.writeFile(path.join(source, file), file);
+  const module = new URL('../../src/plugins/host.js', import.meta.url).href;
+  const script = `import { PluginHost } from ${JSON.stringify(module)};
+    const host = await PluginHost.open({ directory: process.argv[1], preinstalled: false });
+    try {
+      const result = process.argv[2] ? await host.install(process.argv[2]) : host.get('fixture');
+      console.log(JSON.stringify({ locale: Intl.Collator().resolvedOptions().locale, status: result.status, digest: result.digest, error: result.error }));
+    } finally { await host.close(); }`;
+  const open = async (locale, install = false) => {
+    const { stdout } = await promisify(execFile)(process.execPath, ['--input-type=module', '--eval', script, directory, ...(install ? [source] : [])],
+      { env: { ...process.env, LANG: locale, LC_ALL: locale }, windowsHide: true });
+    return JSON.parse(stdout);
+  };
+  const installed = await open('en_US.UTF-8', true), cold = await open('sv_SE.UTF-8');
+  assert.equal(installed.status, 'active'); assert.equal(cold.status, 'active'); assert.equal(cold.digest, installed.digest);
+  if (process.platform === 'linux') {
+    assert.match(installed.locale, /^en\b/u); assert.match(cold.locale, /^sv\b/u);
+  }
+  // Produce the unversioned inventory independently, using the original per-directory order.
+  const hash = createHash('sha256');
+  const visit = async relative => {
+    const entries = await fs.readdir(path.join(source, relative), { withFileTypes: true });
+    for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name, 'en-US'))) {
+      const name = path.posix.join(relative, entry.name);
+      if (entry.isDirectory()) await visit(name);
+      else hash.update(name).update('\0').update(await fs.readFile(path.join(source, name))).update('\0');
+    }
+  };
+  await visit('');
+  const stateFile = path.join(directory, 'state.json'), legacy = JSON.parse(await fs.readFile(stateFile));
+  const descriptor = legacy.plugins.fixture.package;
+  delete descriptor.digestVersion; descriptor.digest = hash.digest('hex');
+  assert.notEqual(descriptor.digest, installed.digest);
+  await fs.writeFile(stateFile, JSON.stringify(legacy));
+  const migrated = await open('sv_SE.UTF-8'), reopened = await open('en_US.UTF-8');
+  for (const result of [migrated, reopened]) { assert.equal(result.status, 'active'); assert.equal(result.digest, installed.digest); }
+  const saved = JSON.parse(await fs.readFile(stateFile)).plugins.fixture.package;
+  assert.equal(saved.digestVersion, 2); assert.equal(saved.digest, installed.digest); assert.equal(saved.release, descriptor.release);
+  await fs.writeFile(stateFile, JSON.stringify(legacy));
+  await fs.writeFile(path.join(directory, 'packages', descriptor.release, 'labels', 'ä.txt'), 'changed bytes');
+  const damaged = await open('sv_SE.UTF-8');
+  assert.equal(damaged.status, 'failed'); assert.match(damaged.error, /integrity check failed/u);
+  assert.deepEqual(JSON.parse(await fs.readFile(stateFile)).plugins.fixture.package, descriptor);
+  t.diagnostic(JSON.stringify({ installed, cold, migrated, reopened, damaged }));
 });

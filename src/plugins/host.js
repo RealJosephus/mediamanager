@@ -7,7 +7,7 @@ import { validateMetadataExtension } from '../metadata/registry.js';
 import { acquireOperationLease } from '../migration/operation-lease.js';
 import { liveTvSignalPositions, validateLiveTvExtension, validateLiveTvResult, validateLiveTvStreamRequest,
   validateOwnedLiveTvStream } from './live-tv-contract.js';
-import { inspectPackage, stagePackage, verifyRelease, physicalDirectory, officialPackagesPath, validPluginId } from './package.js';
+import { inspectPackage, stagePackage, upgradePackageDigest, verifyRelease, physicalDirectory, officialPackagesPath, validPluginId } from './package.js';
 import { createConfigurationBinding } from '../../packages/plugin-sdk/configuration.js';
 import { lyricSignalPositions, validateLyricExtension, copyLyricProviderResult } from '../lyrics/contract.js';
 import { subtitleSignalPositions, validateSubtitleExtension, copySubtitleProviderResult } from '../playback/remote-subtitles.js';
@@ -289,8 +289,14 @@ export class PluginHost {
         }catch(e){this.onError(e);}
       }
     }
+    for (const [id, record] of Object.entries(this.#state.plugins)) {
+      if (record.package && record.package.digestVersion === undefined) {
+        try { record.package = await upgradePackageDigest(this.directory, record.package); }
+        catch (e) { this.#failures.set(id,e.message); this.onError(e); }
+      }
+    }
     await this.#persist();
-    for(const [id,record] of Object.entries(this.#state.plugins))if(record.package&&record.enabled) {
+    for(const [id,record] of Object.entries(this.#state.plugins))if(record.package&&record.enabled&&!this.#failures.has(id)) {
       try{await this.#start(id,record);}catch(e){this.#failures.set(id,e.message);this.onError(e);}
     }
     await this.#collectPackages();
