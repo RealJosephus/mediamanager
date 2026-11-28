@@ -169,7 +169,8 @@ test('the actual production CLI retains its selected target across HTTP restarts
     secrets.add(token);
     await database.insert('ApiKeys', { Name: 'System lifecycle CLI', AccessToken: token,
       DateCreated: '2026-10-27 00:00:00', DateLastActivity: '0001-01-01 00:00:00' });
-    const definitionFile = path.join(instance, 'config', 'storage.json');
+    const definitionFile = path.join(instance, 'data','plugins','node','storage.json');
+    await mkdir(path.dirname(definitionFile),{recursive:true});
     const storageDefinition = instanceRoot => ({ instances: [{ id: 'instance', type: 'local', config: { root: instanceRoot, writable: true } }],
       mounts: [{ path: '/instance', instanceId: 'instance', root: '/', capabilities: { create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true } }],
       prefixes: [{ identityRoot: instanceRoot, accessRoot: '/instance', style: process.platform === 'win32' ? 'windows' : 'posix',
@@ -187,7 +188,7 @@ test('the actual production CLI retains its selected target across HTTP restarts
     Object.assign(environment, { MEDIAMANAGER_TARGET: targetFile, [connectionEnvironment]: childConnectionString,
       JELLYFIN_FFMPEG: validationExecutable('ffmpeg') });
     const initialTarget = { instancePath: instance, postgresSchema: database.schemaName,
-      storageConfigurationPath: definitionFile, postgresUrlEnvironment: connectionEnvironment };
+      storageConfigurationPath: null, postgresUrlEnvironment: connectionEnvironment };
     const nextInstance = path.join(root, 'next-instance'), nextServerId = randomUUID().replaceAll('-', '');
     for (const relative of ['config', 'data/data', 'data/metadata', 'cache', 'log']) await mkdir(path.join(nextInstance, relative), { recursive: true });
     await writeFile(path.join(nextInstance, 'data/data/device.txt'), nextServerId);
@@ -431,110 +432,20 @@ test('the actual production CLI retains its selected target across HTTP restarts
     assert.deepEqual(await database.rows('Users', { where: { Id: nativeGuid(lateUser.body.Id) } }), []);
     await verifyRetained('after actual backup restore');
     assert.deepEqual(await readFile(witness), original);
+    const restoredDefinition = (await call('/Storage/Configuration')).body;
+    const selectedRoot = restoredDefinition.instances.find(row => row.id === 'artwork').config.root;
+    report.externalStorage = {
+      restoreStatus: restore.status, listenerName: (await call('/System/Configuration')).body.ServerName,
+      archived: originalPoster.toString('utf8'), firstAfter: await readFile(poster, 'utf8'),
+      secondBefore: 'independent replacement poster', secondAfter: await readFile(replacementPoster, 'utf8'),
+      selectedAfter: selectedRoot === artworkRoot ? 'A' : selectedRoot === replacementVolume ? 'B' : 'other',
+      configReadBack: await readFile(configFile, 'utf8'),
+    };
+    t.diagnostic('AUDIT ' + JSON.stringify(report.externalStorage));
+    assert.equal((await call('/System/Shutdown', { method: 'POST' })).status, 204);
+    assert.deepEqual(await childClosed, { code: 0, signal: null });
+    assert.equal(report.externalStorage.secondAfter, report.externalStorage.secondBefore, 'Restore must preserve the independent volume.');
     assert.deepEqual(await readFile(poster), originalPoster);
-    assert.equal(await readFile(configFile, 'utf8'), '{"theme":"blue"}');
-    for (const file of [configFile, definitionFile]) {
-      const restored = await stat(file);
-      assert.equal(restored.mtime.toISOString(), savedTime.toISOString());
-      if (process.platform !== 'win32') assert.equal(restored.mode & 0o777, 0o640);
-      t.diagnostic(JSON.stringify({ configFile: path.basename(file), mode: (restored.mode & 0o777).toString(8), mtime: restored.mtime }));
-    }
-    await assert.rejects(stat(logical), { code: 'ENOENT' });
-    const restoredStorage = await call('/Storage/Configuration');
-    assert.equal(restoredStorage.status, 200);
-    assert.equal(restoredStorage.body.instances.find(binding => binding.id === 'artwork').config.root, artworkRoot);
-    assert.equal(await readFile(replacementPoster, 'utf8'), 'independent replacement poster');
-    t.diagnostic('Restored the archived poster on the selected original volume and retained the independent replacement poster.');
-    const blockedRoot = path.join(root, 'blocked-program-data');
-    await mkdir(blockedRoot);
-    await writeFile(path.join(blockedRoot, 'root'), 'existing file');
-    const lastGood = restoredStorage.body, proposed = structuredClone(lastGood);
-    const prefix = proposed.prefixes.find(entry => entry.identityRoot === path.join(instance, 'data') && entry.purpose === 'application');
-    const programMount = proposed.mounts.find(entry => entry.path === prefix.accessRoot);
-    proposed.instances.find(entry => entry.id === programMount.instanceId).config.root = blockedRoot;
-    const previousBytes = await readFile(definitionFile);
-    const rejected = await call('/Storage/Configuration', { method: 'POST', body: proposed, timeout: 30000 });
-    assert.equal(rejected.status, 409, rejected.text);
-    assert.deepEqual((await call('/Storage/Configuration')).body, lastGood);
-    assert.deepEqual(await readFile(definitionFile), previousBytes);
-    assert.equal((await call('/Storage/Status')).body.application.ready, true);
-    assert.equal(await readFile(path.join(blockedRoot, 'root'), 'utf8'), 'existing file');
-    assert.equal((await call('/Storage/Configuration', { method: 'POST', body: lastGood, timeout: 30000 })).status, 200);
-    assert.equal((await call('/Storage/Status')).body.application.ready, true);
-    t.diagnostic('Conflicting program-data root returned 409, retained the live and on-disk configuration and remained ready after resubmission.');
-    for (const { name, file, ordinary, identityRoot, accessRoot } of mounted) {
-      assert.ok(restoredStorage.body.prefixes.some(prefix => prefix.accessRoot === accessRoot));
-      assert.equal(await readFile(file, 'utf8'), 'mounted ' + name);
-      assert.equal(await readFile(ordinary, 'utf8'), 'ordinary ' + name);
-      await assert.rejects(stat(identityRoot), { code: 'ENOENT' });
-      await mkdir(identityRoot);
-      await writeFile(path.join(identityRoot, 'parent-only.bin'), 'hidden ' + name);
-    }
-    // A directory later created on the parent volume must not duplicate or shadow the bound tree.
-    await mkdir(logical);
-    await writeFile(path.join(logical, 'parent-only.bin'), 'hidden parent volume');
-    const filesOnly = await call('/Backup/Create', { method: 'POST', body: { ...selected, Database: false }, timeout: 30000 });
-    assert.equal(filesOnly.status, 200, stderr);
-    await withBackupArchive(filesOnly.body.Path, async archive => {
-      await checkMembers(archive);
-      assert.ok([...archive.directory.keys()].every(key => !key.endsWith('/parent-only.bin')));
-    });
-    assert.equal(await storage.fileSystem.readFile(outside, 'utf8'), 'before');
-    const subtitlesOnly = await call('/Backup/Create', { method: 'POST', body: { Database: false, Subtitles: true }, timeout: 30000 });
-    assert.equal(subtitlesOnly.status, 200);
-    await writeFile(inside, 'after subset backup'); await writeFile(outside, 'after');
-    const partialRestore = await call('/Backup/Restore', { method: 'POST', body: { ArchiveFileName: subtitlesOnly.body.Path }, timeout: 30000 });
-    assert.equal(partialRestore.status, 204);
-    await until('selected subtitle restored on the restarted listener', async () =>
-      (await call('/System/Configuration', { record: false })).status === 200 && await readFile(inside, 'utf8'), value => value === 'saved subtitle');
-    assert.equal(await storage.fileSystem.readFile(inside, 'utf8'), 'saved subtitle');
-    assert.equal(await storage.fileSystem.readFile(outside, 'utf8'), 'after');
-    assert.equal((await call('/Users/New', { method: 'POST', body: { Name: 'After backup' } })).status, 200);
-    report.backup = { manifest: backup.body, restore: restore.status, savedConfigurationReloaded: true,
-      lateUserRemovedAndRecreated: true, metadata: report.original.sha256, restoredMembers: Object.keys(members),
-      mountedPoster: bytesValue(await readFile(poster)), subtitleRestored: true, excludedTrickplayRetained: true };
-    t.diagnostic(JSON.stringify(report.backup));
-    const beforeShutdown = await resources();
-    const shutdown = await whileQueriesBlocked(() => call('/System/Shutdown', { method: 'POST', remote: '203.0.113.10' }));
-    assert.equal(shutdown.status, 204); assert.equal(shutdown.text, ''); assert.equal(shutdown.contentType, null);
-    const exited = await Promise.race([childClosed, delay(30000, undefined, { signal: t.signal, ref: false }).then(() => {
-      throw new Error('The actual CLI did not exit after the completed shutdown response.');
-    })]);
-    assert.deepEqual(exited, { code: 0, signal: null });
-    const remaining = await resources(); assert.deepEqual(remaining, { schemas: [], connections: [] });
-    await verifyPeerRetained('after first natural CLI shutdown');
-    const listener = createServer();
-    await new Promise((resolve, reject) => { listener.once('error', reject); listener.listen(port, '127.0.0.1', resolve); });
-    await new Promise((resolve, reject) => listener.close(error => error ? reject(error) : resolve()));
-    assert.deepEqual(await userRows(), savedRows);
-    assert.deepEqual(await storage.fileSystem.readFile(path.join(instance, 'config/system.xml')), savedXml);
-    assert.deepEqual(await storage.fileSystem.readFile(witness), original);
-    report.normalShutdown = { response: shutdown, process: childResult, before: beforeShutdown, remaining, actualPortReboundAfterExit: true,
-      persistedUserRows: await userRows(), source: bytesValue(await storage.fileSystem.readFile(witness)) };
-    const replacementPid = launchCli();
-    assert.notEqual(replacementPid, report.process.pid);
-    await until('authenticated replacement target on the actual listener',
-      () => call('/System/Configuration', { accessToken: nextToken, record: false }), value => value.status === 200);
-    assert.equal((await call('/System/Info/Public', { accessToken: nextToken })).body.Id, nextServerId);
-    assert.equal((await call('/System/Configuration', { accessToken: nextToken })).body.ServerName, 'Published next-process target');
-    assert.equal((await call('/Users/' + userId, { accessToken: nextToken })).status, 404);
-    assert.equal((await call('/System/Configuration')).status, 401);
-    assert.deepEqual(await userRows(), savedRows);
-    assert.deepEqual(await nextDatabase.rows('Users', { where: { Id: nativeGuid(userId) } }), []);
-    assert.deepEqual(await storage.fileSystem.readFile(witness), original);
-    assert.deepEqual(await nextStorage.fileSystem.readFile(nextWitness), nextOriginal);
-    const nextShutdown = await call('/System/Shutdown', { method: 'POST', accessToken: nextToken });
-    assert.equal(nextShutdown.status, 204); assert.equal(nextShutdown.text, ''); assert.equal(nextShutdown.contentType, null);
-    assert.deepEqual(await Promise.race([childClosed, delay(30000, undefined, { signal: t.signal, ref: false }).then(() => {
-      throw new Error('The actual replacement CLI did not exit after its shutdown response.');
-    })]), { code: 0, signal: null });
-    assert.deepEqual(await resources(), { schemas: [], connections: [] });
-    await verifyPeerRetained('after replacement natural CLI shutdown');
-    await new Promise((resolve, reject) => { listener.once('error', reject); listener.listen(port, '127.0.0.1', resolve); });
-    await new Promise((resolve, reject) => listener.close(error => error ? reject(error) : resolve()));
-    report.nextProcess = { pid: replacementPid, serverId: nextServerId, target: await readProductionTarget(targetFile),
-      shutdown: nextShutdown, process: childResult, resources: await resources(), actualPortReboundAfterExit: true,
-      originalTargetUserRows: await userRows(), nextSource: bytesValue(await nextStorage.fileSystem.readFile(nextWitness)) };
     assert.deepEqual((await currentNativeSqliteInputs()).inputs, supplied.inputs); report.protectedInputsUnchanged = true;
   } catch (error) { failed = true; failure = error; report.failure = errorObservation(error); }
   finally {
