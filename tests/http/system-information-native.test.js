@@ -5,6 +5,7 @@ import { createServer } from 'node:http';
 import path from 'node:path';
 import test from 'node:test';
 import { readInstanceConfiguration } from '../../src/configuration.js';
+import { readConfigurationFile } from '../../src/core/configuration-file.js';
 import { getNewItemId } from '../../src/core/identity.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { dateText, idKey } from '../../src/library/records.js';
@@ -33,11 +34,39 @@ async function request(origin, { route, method = 'GET', token, headers, body }) 
   const response = await fetch(origin + route, { method, signal: AbortSignal.timeout(15000),
     headers: { Accept: 'application/json', 'Accept-Encoding': 'identity', Authorization: auth(token), Connection: 'close',
       ...(body === undefined ? {} : { 'Content-Type': 'application/json' }), ...headers },
-    ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+    ...(body === undefined ? {} : { body: Buffer.isBuffer(body) ? body : JSON.stringify(body) }) });
   const text = await response.text(), contentType = response.headers.get('content-type');
   return { status: response.status, contentType, text,
     length: response.headers.get('content-length'), range: response.headers.get('content-range'),
     ...(text && contentType?.includes('json') ? { json: JSON.parse(text) } : {}) };
+}
+
+async function checkEncodedConfiguration(origin, token, directory) {
+  const route = '/Startup/Configuration';
+  const initial = await request(origin, { route, token });
+  assert.equal(initial.status, 200);
+  const rows = [];
+  try {
+    let expectedName = initial.json.ServerName;
+    for (const [charset, encoding, name, expectedStatus] of [
+      ['utf-8', 'utf8', '配置 中文 A', 204],
+      ['utf-16', 'utf16le', '配置 中文 B', 204],
+      ['"UTF-16"', 'utf16le', '配置 中文 C', 204],
+      ['iso-8859-1', 'latin1', 'Unsupported charset', 415],
+    ]) {
+      const body = Buffer.from(JSON.stringify({ ...initial.json, ServerName: name }), encoding);
+      const update = await request(origin, { route, token, method: 'POST', headers: { 'Content-Type': 'application/json; charset=' + charset }, body });
+      assert.equal(update.status, expectedStatus, charset);
+      if (expectedStatus === 204) expectedName = name;
+      const get = await request(origin, { route, token });
+      const saved = await readConfigurationFile(path.join(directory, 'system.xml'), 'server');
+      assert.equal(get.status, 200);
+      assert.equal(get.json.ServerName, expectedName);
+      assert.equal(saved.ServerName, expectedName);
+      rows.push({ charset, status: update.status, readback: get.json.ServerName, persisted: saved.ServerName });
+    }
+    return rows;
+  } finally { assert.equal((await request(origin, { route, token, method: 'POST', body: initial.json })).status, 204); }
 }
 
 async function seedLibrary(settings) {
@@ -141,6 +170,7 @@ test('system storage and the log browser use the authoritative application and l
     ];
     const observe = (origin, sample) => request(origin, { ...sample,
       token: sample.identity === 'anonymous' ? undefined : sample.identity === 'reader' ? reader : current.accessToken });
+    report.charset = { native: await checkEncodedConfiguration(nativeOrigin, current.accessToken, settings.configurationDirectoryPath) };
     for (const sample of samples) report.cases.push({ sample, native: await observe(nativeOrigin, sample) });
     await stopNative();
     const sqlite = new SqliteDatabase(fixture.databasePath, { readOnly: true, requireMigrationHistory: true });
@@ -151,6 +181,8 @@ test('system storage and the log browser use the authoritative application and l
     } finally { sqlite.close(); }
     runtime = await createTestRuntime({ ...settings, cachePath, database });
     const nodeOrigin = `http://127.0.0.1:${runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port}`;
+    report.charset.node = await checkEncodedConfiguration(nodeOrigin, current.accessToken, settings.configurationDirectoryPath);
+    assert.deepEqual(report.charset.node, report.charset.native);
     const shape = ({ status, contentType, json, text, length, range }) => ({
       status, contentType, body: json === undefined ? text : projectProblemTrace(json, status),
       ...(status === 200 && contentType?.startsWith('text/plain') ? { length, range } : {}),

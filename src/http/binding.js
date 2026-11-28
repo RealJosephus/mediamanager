@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { MIMEType } from 'node:util';
 import { parseLosslessJson } from '../core/json.js';
 import { wireGuid } from '../users/native.js';
 import { clrTrim, clrWhitespace } from '../metadata/whitespace.js';
@@ -117,9 +118,17 @@ function unclosedJsonContainer(text) {
 
 export async function readBody(request, { allowForm = false, allowTextJson = false, optional = false, bind, objectType, document = false } = {}) {
   if (optional && !request.headers['transfer-encoding'] && !(Number(request.headers['content-length']) > 0)) return {};
-  const type = (request.headers['content-type'] ?? '').split(';')[0].trim().toLowerCase();
-  if (type !== 'application/json' && !type.endsWith('+json') && !(allowForm && type === 'application/x-www-form-urlencoded')
+  let media;
+  try { media = new MIMEType(request.headers['content-type']); } catch { throw unsupportedMediaType(); }
+  const type = media.essence, json = type === 'application/json' || type.endsWith('+json');
+  if (!json && !(allowForm && type === 'application/x-www-form-urlencoded')
     && !(allowTextJson && type === 'text/plain')) throw unsupportedMediaType();
+  let decoder;
+  if (json) {
+    try { decoder = new TextDecoder(media.params.get('charset') ?? 'utf-8', { fatal: true }); }
+    catch { throw unsupportedMediaType(); }
+    if (!['utf-8', 'utf-16le'].includes(decoder.encoding)) throw unsupportedMediaType();
+  }
   const chunks = [];
   let size = 0;
   for await (const chunk of request) {
@@ -127,7 +136,10 @@ export async function readBody(request, { allowForm = false, allowTextJson = fal
     if (size > 30_000_000) throw httpError(413, 'Request body too large.');
     chunks.push(chunk);
   }
-  const text = Buffer.concat(chunks).toString('utf8');
+  const bytes = Buffer.concat(chunks);
+  let text;
+  try { text = decoder ? decoder.decode(bytes) : bytes.toString('utf8'); }
+  catch { throw new BindingError('$', 'The request body is not valid JSON.'); }
   if (!text.length) { if (optional) return {}; throw new BindingError('', 'A non-empty request body is required.'); }
   const arrayStart = /^[ \t\r\n]*\[/.exec(text);
   if (objectType && arrayStart) {
