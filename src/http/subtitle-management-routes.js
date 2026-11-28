@@ -60,6 +60,7 @@ export function registerSubtitleManagementRoutes(add, services) {
   if (!library) return;
   const destinations = subtitleDestinations(services);
   const { metadataFiles, mediaFiles } = destinations;
+  const withStorageGeneration = services.storage?.withGeneration ?? (operation => operation());
   const path = '/Videos/{itemId}/Subtitles', policy = 'SubtitleManagement';
   const itemId = (_query, params) => guidValue(params.itemId, 'itemId');
   const providers = () => services.plugins?.entries('subtitle') ?? [];
@@ -73,10 +74,9 @@ export function registerSubtitleManagementRoutes(add, services) {
     return noContent();
   }, { video: true }), { policy, body: true, bindBody: bindUpload, bodyParameter: 'body', bodyType: dto, bindQuery: itemId });
 
-  add('DELETE', path + '/{index}', context => withVisibleItem(library, context.queryInput.itemId, context.auth, async item => {
-    if (!metadata || !store) throw httpError(503, 'Subtitle storage is unavailable.');
+  async function removeStoredSubtitle(item, index) {
     const stream = await store.run(async db => (await db.rows('MediaStreamInfos', {
-      where: { ItemId: item.Id, StreamType: 2, StreamIndex: context.queryInput.index }, limit: 1,
+      where: { ItemId: item.Id, StreamType: 2, StreamIndex: index }, limit: 1,
     }))[0]);
     if (!stream) throw new RangeError('The subtitle stream was not found.');
     const identity = library.options.expandPath?.(stream.Path) ?? stream.Path;
@@ -90,6 +90,11 @@ export function registerSubtitleManagementRoutes(add, services) {
       catch (error) { if (error instanceof AggregateError || !['ENOENT', 'not-found'].includes(error?.code)) throw error; }
     }, [() => libraryMonitor?.reportFileSystemChangeComplete(identity, false)], 'Subtitle deletion and monitor completion failed.');
     await libraryMonitorHost?.invalidate(identity);
+  }
+
+  add('DELETE', path + '/{index}', context => withVisibleItem(library, context.queryInput.itemId, context.auth, async item => {
+    if (!metadata || !store) throw httpError(503, 'Subtitle storage is unavailable.');
+    await withStorageGeneration(() => removeStoredSubtitle(item, context.queryInput.index));
     await metadata.refreshLiveItem(item, refreshOptions);
     return noContent();
   }), { policy: 'RequiresElevation', bindQuery: (query, params) => ({

@@ -46,8 +46,9 @@ export function decodeHttpLyrics(bytes, contentType) {
 /** Reads stored lyric stream descriptors only. Discovery/refresh and remote
  * provider installation are independent owners; no probe or generator runs. */
 export class LyricService {
-  constructor({ store, library, vfs, identityMap, metadataIdentityMap = identityMap, fileSystem, monitor, directoryService, metadata, providers = () => [], logger = {} }) {
-    Object.assign(this, { store, library, vfs, identityMap: metadataIdentityMap, monitor, directoryService, metadata, providers, logger });
+  constructor({ store, library, vfs, identityMap, metadataIdentityMap = identityMap, fileSystem, monitor, directoryService, metadata,
+    withStorageGeneration = operation => operation(), providers = () => [], logger = {} }) {
+    Object.assign(this, { store, library, vfs, identityMap: metadataIdentityMap, monitor, directoryService, metadata, withStorageGeneration, providers, logger });
     this.fileSystem = fileSystem ?? new StorageFileSystem({ vfs, identityMap: metadataIdentityMap });
   }
 
@@ -153,6 +154,7 @@ export function createLyricService(services) {
     vfs: services.storage?.vfs ?? services.playback?.vfs,
     identityMap: services.storage?.identityMap ?? services.playback?.identityMap,
     metadataIdentityMap: services.storage?.metadataIdentityMap, fileSystem: services.fileSystem,
+    withStorageGeneration: services.storage?.withGeneration,
     monitor: services.libraryMonitor, directoryService: services.libraryMonitorHost, metadata: services.metadata,
     providers: () => services.plugins?.entries('lyric') ?? [], logger: { error: services.onError ?? (() => {}) } });
 }

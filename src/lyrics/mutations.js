@@ -71,7 +71,7 @@ export function queueLyricRefresh(service, item) {
 /** File.Delete ignores absent files, rejects directories, and stops the stream
  * sequence at the first actual error; completed deletions are not rolled back. */
 export async function deleteLyricFiles(service, item) {
-  await service.streamPaths(item.Id, async pages => {
+  await service.withStorageGeneration(() => service.streamPaths(item.Id, async pages => {
     for await (const paths of pages) for (const identity of paths) {
       service.monitor?.reportFileSystemChangeBeginning(identity);
       let failed = false, primary;
@@ -89,7 +89,7 @@ export async function deleteLyricFiles(service, item) {
       }
       await service.directoryService?.invalidate(identity);
     }
-  });
+  }));
   if (!service.metadata) throw libraryError(501, 'Metadata refresh requires configured storage.');
   await service.metadata.refreshLiveItem(item, lyricRefreshOptions());
 }
