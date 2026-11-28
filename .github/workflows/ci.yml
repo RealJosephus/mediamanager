@@ -553,9 +553,8 @@ jobs:
           npm ci --bin-links=false
           mkdir -p "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/review"
           git show -s --format='{"head":"%H","tree":"%T"}' > "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/review/checkout.json"
-          python "$GITHUB_WORKSPACE/review/build-native-probe.py" .
-          cp "$GITHUB_WORKSPACE/review/backup-probe.mjs" tests/http/review-backup-probe.mjs
-          node --test --test-concurrency=1 tests/http/review-backup-probe.mjs tests/http/review-subtitle-probe.mjs | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/review/probes.tap"
+          cp "$GITHUB_WORKSPACE/review/guide-probe.mjs" tests/plugins/review-guide-probe.mjs
+          node --test tests/plugins/review-guide-probe.mjs | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/review/probes.tap"
           git diff --exit-code
       - name: Audit database resources
         if: always() && steps.environment.outcome == 'success'
