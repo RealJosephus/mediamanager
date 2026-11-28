@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import { setImmediate as immediate } from 'node:timers/promises';
+import { setImmediate as immediate, setTimeout as delay } from 'node:timers/promises';
 import { nativeGuid } from '../../src/users/native.js';
 import { nativeTextBytes } from '../../src/database/native-text.js';
 import { quoteIdentifier as q } from '../../src/database/model.js';
@@ -140,9 +140,15 @@ test('managed Playlist transactions retain actual backups, sidecars and rollback
         next.instances.find(instance => instance.id === 'playlist-spool').config.root = newSpool;
         transition = storage.configure(next);
       }
-      void transition.catch(() => {}); await changing.promise; await pending(transition); unsubscribe();
-      if (mode === 'stop') await assert.rejects(async () => oldAdapter.stat('/'), { status: 503 });
-      release.resolve(); const result = await updating; await transition; selected = false;
+      try {
+        await Promise.race([changing.promise, transition.then(() => { throw new Error('Storage finished before the transaction handover.'); }),
+          delay(30000, undefined, { signal: t.signal, ref: false }).then(() => {
+            throw new Error('Storage handover did not notify the admitted playlist transaction.');
+          })]);
+        await pending(transition);
+        if (mode === 'stop') await assert.rejects(async () => oldAdapter.stat('/'), { status: 503 });
+      } finally { unsubscribe(); release.resolve(); }
+      const result = await updating; await transition; selected = false;
       if (Object.hasOwn(result, 'error')) report.operationFailure = errorObservation(result.error);
       const after = await fs.readFile(oldFile), row = (await database.rows('BaseItems', { where: { Id: id } }))[0];
       if (phase === 'commit-rejection') {

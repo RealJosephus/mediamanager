@@ -79,7 +79,7 @@ import { BookArchiveService } from './storage/archive-reader.js';
 import { SyncPlayService } from './syncplay/service.js';
 import { UserViewService } from './library/user-view-service.js';
 import { ChannelService } from './library/channel-service.js';
-import { initializeLibraryRoot } from './library/root-initialization.js';
+import { initializeLibraryRoot, prepareLibraryRootDirectories } from './library/root-initialization.js';
 import { ScheduledTaskManager } from './tasks/index.js';
 import { AutoDiscoveryService } from './network/auto-discovery.js';
 import { MetadataEditorService } from './metadata/editor-service.js';
@@ -188,7 +188,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(() => plugins.close());
   const openStorage = async () => {
     if (!configuredStorage) {
-      configuredStorage = await createConfiguredStorage(storageConfiguration, { plugins, environment, portableMountContract });
+      configuredStorage = await createConfiguredStorage(storageConfiguration, { plugins, environment, portableMountContract, prepareConfiguration });
       rollback.push(() => configuredStorage.close());
     }
     return configuredStorage;
@@ -266,18 +266,29 @@ export async function createRuntime({ database, configuration, serverId, serverN
     rootInitialization = Object.freeze({ aggregateFolder: aggregate.item, playlistsFolder: playlists.item,
       freshAggregateFolder: aggregate.fresh, freshPlaylistsFolder: playlists.fresh });
   };
-  const initializeStorageRoots = async () => {
-    await initializeLibraryRoot({ fileSystem, store, programDataPath, dataPath, metadataPath: applicationPaths.metadataPath, configuration: currentConfiguration(),
-      onCommitted: adoptRootInitialization });
+  async function prepareMetadataSpool(files) {
     if (!spoolRoot) return;
     const directory = spoolRoot;
-    await fileSystem.mkdir(directory, { recursive: true });
-    const info = await fileSystem.lstat(directory);
+    await files.mkdir(directory, { recursive: true });
+    const info = await files.lstat(directory);
     if (!info.isDirectory() || info.isSymbolicLink()) throw new TypeError('Metadata spool storage requires an owned state directory.');
-    const root = await fileSystem.realpath(spoolStateRoot), actual = await fileSystem.realpath(directory), relative = path.relative(root, actual);
+    const root = await files.realpath(spoolStateRoot), actual = await files.realpath(directory), relative = path.relative(root, actual);
     if (relative === '..' || relative.startsWith('..' + path.sep) || path.isAbsolute(relative)) {
       throw new TypeError('Metadata spool storage must remain within its owned state root.');
     }
+  }
+  async function prepareConfiguration(files) {
+    // A playlist transaction can hold the database writer until handover.
+    // Prepare the actual candidate directories without taking that writer.
+    try {
+      await prepareLibraryRootDirectories(files, programDataPath, dataPath);
+      await prepareMetadataSpool(files);
+    } catch (error) { if (!unavailableStorage(error)) throw error; }
+  }
+  const initializeStorageRoots = async () => {
+    await initializeLibraryRoot({ fileSystem, store, programDataPath, dataPath, metadataPath: applicationPaths.metadataPath, configuration: currentConfiguration(),
+      onCommitted: adoptRootInitialization });
+    await prepareMetadataSpool(fileSystem);
   };
   storageReadiness.ready = await deferUnavailable(initializeStorageRoots);
   const libraryOptionsStore = programDataPath ? new LibraryOptionsStore({ fileSystem, programDataPath, dataPath,
@@ -706,7 +717,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(() => metadataEditor.close());
   const itemUpdates = new MetadataEditService({ library, loadContext, updates: metadataUpdates, refreshes: metadata });
   rollback.push(() => itemUpdates.close());
-  const reloadStorage = async () => {
+  const stopBeforeStorageObserver = configuredStorage.subscribeBeforeChange(() => libraryMonitor?.stop());
+  const stopAfterStorageObserver = configuredStorage.subscribe(async () => {
     storageReadiness.ready = false; storageReadiness.error = null;
     await deferUnavailable(() => configurationStore?.initialize());
     storageReadiness.ready = await deferUnavailable(async () => {
@@ -718,8 +730,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
       // Cold management mode defers the recorder until its storage is back.
       if (networkHost.coreStartupHasCompleted) await liveTvDvr?.start();
     });
-  };
-  const stopStorageObserver = configuredStorage.observeRuntime({ stop: () => libraryMonitor?.stop(), reload: reloadStorage });
+  });
+  const stopStorageObserver = () => { stopBeforeStorageObserver(); stopAfterStorageObserver(); };
   rollback.push(stopStorageObserver);
   const services = { storage: configuredStorage, storageReadiness, fileSystem, get configuration() { return currentConfiguration(); }, get networkConfiguration() { return getNetworkConfiguration(); }, getNetworkConfiguration, getSmartApiUrl, network, baseUrl, publicAddress, store, activities, users, devices, library, itemCreation, itemDeletion, unsafeItemDeletion, folderValidation, linkedChildReferences, playlists, topLevelValidation, libraryScanHost, libraryScanLifecycle, libraryScanner, metadataScanner, artistsPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, tasks, userData, sessions, syncPlay, refreshes, authentication, localization, playback, probe, externalData, extraction, remux, hls, images, imageProcessor, metadata, metadataUpdates, resolvedItemLifecycle, metadataEditor, itemUpdates, plugins, similarItems, ignoreRule, serverId, serverName, serverVersion };
   services.collectionPosterVerifyPostScanTask = collectionPosterVerifyPostScanTask;

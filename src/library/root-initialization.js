@@ -55,22 +55,12 @@ function committedFolder(row, runtimePath) {
   return item;
 }
 
-// A runtime without ApplicationPaths has no persistent root to initialize.
-// Persistent runtimes always create the real directories and run this before
-// library option loading or any public query; there is no test-only switch.
-export async function initializeLibraryRoot({ fileSystem, store, programDataPath, dataPath, metadataPath, configuration = {},
-  now = () => new Date().toISOString(), onCommitted = () => {} }) {
+export async function prepareLibraryRootDirectories(fileSystem, programDataPath, dataPath) {
   if (!programDataPath) return;
-  if (typeof onCommitted !== 'function') throw new TypeError('Root initialization requires a committed-item callback.');
   programDataPath = path.resolve(programDataPath);
   dataPath = path.resolve(dataPath ?? path.join(programDataPath, 'data'));
   const rootPath = path.join(programDataPath, 'root');
   const playlistPath = path.join(dataPath, 'playlists');
-  const identityOptions = { programDataPath, enableCaseSensitiveItemIds: configuration.EnableCaseSensitiveItemIds };
-  const rootId = nativeGuid(getNewItemId(rootPath, aggregateType, identityOptions));
-  const playlistId = nativeGuid(getNewItemId(playlistPath, playlistType, identityOptions));
-  const expandPath = createVirtualPathExpander({ programDataPath, dataPath, metadataPath });
-  const reversePath = createVirtualPathReverser({ programDataPath, dataPath, metadataPath });
   await fileSystem.mkdir(programDataPath, { recursive: true });
   const stateRoot = await fileSystem.realpath(programDataPath);
   // A default/in-tree data path remains confined by the program-data root.
@@ -88,6 +78,20 @@ export async function initializeLibraryRoot({ fileSystem, store, programDataPath
   await fileSystem.mkdir(playlistPath, { recursive: true });
   await checkDirectory(dataRoot, playlistPath, fileSystem);
   const directory = await fileSystem.stat(playlistPath, { bigint: true });
+  return { programDataPath, dataPath, rootPath, playlistPath, directory };
+}
+
+// A runtime without ApplicationPaths has no persistent root to initialize.
+export async function initializeLibraryRoot({ fileSystem, store, programDataPath: program, dataPath: data, metadataPath, configuration = {},
+  now = () => new Date().toISOString(), onCommitted = () => {} }) {
+  if (!program) return;
+  if (typeof onCommitted !== 'function') throw new TypeError('Root initialization requires a committed-item callback.');
+  const { programDataPath, dataPath, rootPath, playlistPath, directory } = await prepareLibraryRootDirectories(fileSystem, program, data);
+  const identityOptions = { programDataPath, enableCaseSensitiveItemIds: configuration.EnableCaseSensitiveItemIds };
+  const rootId = nativeGuid(getNewItemId(rootPath, aggregateType, identityOptions));
+  const playlistId = nativeGuid(getNewItemId(playlistPath, playlistType, identityOptions));
+  const expandPath = createVirtualPathExpander({ programDataPath, dataPath, metadataPath });
+  const reversePath = createVirtualPathReverser({ programDataPath, dataPath, metadataPath });
   return store.serializeWrites(async db => {
     const rootRecord = (await db.rows('BaseItems', { where: { Id: rootId } }))[0];
     const createdAggregate = rootRecord?.Type !== aggregateType;

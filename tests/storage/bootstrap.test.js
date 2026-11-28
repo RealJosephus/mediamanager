@@ -190,6 +190,25 @@ test('storage keeps unavailable instances recoverable and rejects invalid config
   assert.equal(fixture.calls.length, 0);
 });
 
+test('a failed reload restores the previously published storage configuration and permits another change', async t => {
+  const fixture = await setup(t), storage = await openStorageFixture(t, fixture.filename, { environment: fixture.environment });
+  const previous = storage.configuration(), next = structuredClone(previous);
+  next.mounts.find(mount => mount.path === '/media').root = '/replacement';
+  const observed = [], failure = new Error('Runtime rejected the replacement.');
+  const unsubscribe = storage.subscribe(() => {
+    const selected = storage.vfs.resolve('/media/media.wav').path;
+    observed.push(selected);
+    if (selected === '/replacement/media.wav') throw failure;
+  });
+  await assert.rejects(storage.configure(next), error => error === failure);
+  assert.deepEqual(observed, ['/replacement/media.wav', '/library/media.wav']);
+  assert.deepEqual(storage.configuration(), previous);
+  assert.deepEqual(JSON.parse(await readFile(fixture.filename, 'utf8')), previous);
+  unsubscribe();
+  await storage.configure(next);
+  assert.equal(storage.vfs.resolve('/media/media.wav').path, '/replacement/media.wav');
+});
+
 test('configured WebDAV instances keep credentials, roots and mount capabilities independent', async t => {
   const fixture = await setupWebDav(t);
   const storage = await openStorageFixture(t, fixture.filename, { environment: fixture.environment });
