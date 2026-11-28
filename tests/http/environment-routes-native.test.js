@@ -118,6 +118,18 @@ test('directory browser validation and navigation match the designated Native HT
     const expected = await wire(nativeOrigin, route, options), actual = await wire(nodeOrigin, route, options);
     report.checked.push({ route, options, expected, actual });
   };
+  for (const accept of ['*/*', 'text/plain', 'application/json', 'text/plain, application/json;q=0.1', 'text/plain, application/json;q=0']) {
+    const observe = async origin => {
+      const response = await fetch(origin + '/System/Ping', { headers: { Accept: accept }, signal: t.signal });
+      const raw = await response.text();
+      let jsonString = false;
+      try { jsonString = typeof JSON.parse(raw) === 'string'; } catch { /* Record raw text as received. */ }
+      return { status: response.status, contentType: response.headers.get('content-type'), jsonString, raw };
+    };
+    const expected = await observe(nativeOrigin), actual = await observe(nodeOrigin);
+    assert.equal(expected.status, 200); assert.equal(actual.status, 200);
+    t.diagnostic('AUDIT_NEGOTIATION ' + JSON.stringify({ accept, native: expected, candidate: actual }));
+  }
   await compare('/Environment/DefaultDirectoryBrowser');
   for (const accept of ['application/json', 'text/plain']) {
     await compare('/Environment/ParentPath?' + new URLSearchParams({ path: filename }), { accept });
