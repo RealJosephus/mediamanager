@@ -86,7 +86,7 @@ test('directory browser validation and navigation match the designated Native HT
   token = current.accessToken;
   output.addSecret(token);
   report.input = current.preparation;
-  report.sourceBindings = await current.sourceBindings(['Jellyfin.Api/Controllers/EnvironmentController.cs',
+  report.sourceBindings = await current.sourceBindings(['Jellyfin.Api/BaseJellyfinApiController.cs', 'Jellyfin.Api/Controllers/SystemController.cs', 'Jellyfin.Api/Controllers/EnvironmentController.cs',
     'Jellyfin.Api/Models/EnvironmentDtos/ValidatePathDto.cs', 'Emby.Server.Implementations/IO/ManagedFileSystem.cs']);
   const referenceRoot = path.join(root, 'reference');
   await cp(current.sourceRoot, referenceRoot, { recursive: true });
@@ -105,6 +105,20 @@ test('directory browser validation and navigation match the designated Native HT
   await listen(application.server, 0);
   const nodeOrigin = `http://127.0.0.1:${application.server.address().port}`;
 
+  report.ping = [];
+  for (const method of ['GET', 'POST']) {
+    for (const accept of [undefined, 'text/plain', 'application/json', 'text/plain, application/json;q=0']) {
+      const readPing = async origin => {
+        const response = await fetch(origin + '/System/Ping', { method, headers: accept ? { Accept: accept } : {}, signal: t.signal });
+        return { status: response.status, type: response.headers.get('content-type'), raw: await response.text() };
+      };
+      const expected = await readPing(nativeOrigin), actual = await readPing(nodeOrigin);
+      report.ping.push({ method, accept: accept ?? '*/*', expected, actual });
+      assert.deepEqual(expected, { status: 200, type: 'application/json; charset=utf-8', raw: '"Jellyfin Server"' });
+      assert.deepEqual(actual, { ...expected, raw: '"MediaManager"' });
+    }
+  }
+  t.diagnostic(JSON.stringify(report.ping));
   const wire = async (origin, route, { body, accept = 'application/json', authenticated = true } = {}) => {
     const response = await fetch(origin + route, { method: body === undefined ? 'GET' : 'POST',
       signal: AbortSignal.any([t.signal, AbortSignal.timeout(15000)]), headers: { Accept: accept,

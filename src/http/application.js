@@ -69,7 +69,7 @@ export async function createApplication(services = {}) {
       routes.push({ method, path, pattern: new RegExp(`^${expression}/?$`, 'i'), names, run, policy, isPublic, body, allowForm, optionalBody, bindBody, bindQuery, bodyParameter, bodyType, bodyDocument, constraints, abortOnDisconnect });
     }
   }
-  for (const method of ['GET', 'POST']) add(method, '/System/Ping', () => new HttpResult(200, 'MediaManager', { text: true }), { public: true });
+  for (const method of ['GET', 'POST']) add(method, '/System/Ping', () => 'MediaManager', { public: true });
   const isEmbyClient = context => detectEmbyClient(authentication, context);
   const clientSystemVersion = context => isEmbyClient(context) ? '4.9.5.0' : serverVersion;
   const publicSystemInfo = context => ({ LocalAddress: services.getSmartApiUrl ? services.getSmartApiUrl(context.request) : publicAddress || `http://${context.request.headers.host}${baseUrl}`,
