@@ -107,11 +107,19 @@ test('playlist HTTP contract binds creation parameters and every managed playlis
       { method: 'POST' })).status, 204);
     assert.deepEqual(calls.shift(), ['add', ids.playlist, [ids.first, ids.second], { user: owner, position: 1 }]);
 
+    assert.equal((await application.request(`/Playlists/${ids.playlist}/Items?iDs=${ids.first},${ids.second}&Ids=%20${ids.first}%20`,
+      { method: 'POST' })).status, 204);
+    assert.deepEqual(calls.shift(), ['add', ids.playlist, [ids.first], { user: owner, position: undefined }]);
+
     const upperEntry = ids.first.toUpperCase();
     assert.equal((await application.request(`/Playlists/${ids.playlist}/Items?entryIds=${upperEntry}`, {
       method: 'DELETE'
     })).status, 204);
     assert.deepEqual(calls.shift(), ['remove', ids.playlist, [upperEntry], { user: owner, isApiKey: false }]);
+
+    assert.equal((await application.request(`/Playlists/${ids.playlist}/Items?entryIds=%20a,b%20&EntryIds=&entryIds=%C2%A0c%C2%A0`,
+      { method: 'DELETE' })).status, 204);
+    assert.deepEqual(calls.shift(), ['remove', ids.playlist, ['a,b', '', 'c'], { user: owner, isApiKey: false }]);
 
     assert.equal((await application.request(`/Playlists/${ids.playlist}/Items/${upperEntry}/Move/0`, {
       method: 'POST'

@@ -96,4 +96,11 @@ test('effective playlist owner, shares and ordered item ids survive HTTP creatio
     const persisted = await request('/Playlists/' + result.body.Id, { token: reader });
     assert.equal(persisted.status, 200); assert.deepEqual(persisted.body.ItemIds, ids);
   }
+  const route = '/Playlists/' + delegated.body.Id + '/Items', parent = nativeGuid(delegated.body.Id);
+  const members = async () => (await database.rows('LinkedChildren', { where: { ParentId: parent },
+    orderBy: [{ column: 'SortOrder', direction: 'ASC' }] })).map(row => wireGuid(row.ChildId));
+  assert.equal((await request(route + '?entryIds=%20' + movie + '%20', { method: 'DELETE', token: reader })).status, 204);
+  assert.deepEqual(await members(), []);
+  assert.equal((await request(route + '?ids=' + movie + ',outdated,' + movie, { method: 'POST', token: reader })).status, 204);
+  assert.deepEqual(await members(), [movie, movie]);
 });

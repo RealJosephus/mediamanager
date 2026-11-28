@@ -62,14 +62,17 @@ export function guidValue(value, name, defaultValue) {
   catch { throw new BindingError(name, `The value '${value}' is not valid.`); }
 }
 
-// CommaDelimitedCollectionModelBinder ignores FormatException entries. It
-// splits only one value; repeated query values are converted individually.
-export function commaGuidValues(query, name) {
+// The native binder splits a single value and trims repeated values individually.
+export function commaStringValues(query, name) {
   const values = [...query].filter(([key]) => key.toLowerCase() === name.toLowerCase()).map(([, value]) => value);
   const entries = values.length > 1 ? values : values[0]?.split(',').filter(value => value !== '') ?? [];
+  return entries.map(clrTrim);
+}
+
+export function commaGuidValues(query, name) {
   const result = [];
-  for (const entry of entries) {
-    try { result.push(wireGuid(clrTrim(entry))); }
+  for (const entry of commaStringValues(query, name)) {
+    try { result.push(wireGuid(entry)); }
     catch { /* Actual native binder logs and discards malformed GUID values. */ }
   }
   return result;

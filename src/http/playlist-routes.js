@@ -1,4 +1,4 @@
-import { BindingError, HttpResult, commaGuidValues, guidValue, integerValue, member, noContent, queryValue } from './binding.js';
+import { BindingError, HttpResult, commaGuidValues, commaStringValues, guidValue, integerValue, member, noContent, queryValue } from './binding.js';
 import { bindJsonModel, validateJsonModel } from './json-model-binding.js';
 import { enumName, mediaTypes } from '../sessions/binding.js';
 import { clrTrim } from '../metadata/whitespace.js';
@@ -39,12 +39,6 @@ function bindCreateQuery(query) {
   if (rawType) try { mediaType = enumName(rawType, mediaTypes); } catch { /* Native nullable enum binding leaves it unset. */ }
   return { name: name && clrTrim(name) ? name : undefined, ids: commaGuidValues(query, 'ids'),
     userId: guidValue(userId && clrTrim(userId), 'userId'), mediaType };
-}
-
-function queryArray(context, name, convert = value => value) {
-  const values = [...context.query].filter(([key]) => key.toLowerCase() === name.toLowerCase()).map(([, value]) => value);
-  const entries = values.length > 1 ? values : values[0]?.split(',') ?? [];
-  return entries.filter(entry => entry !== '').map(entry => convert(entry, name));
 }
 
 function nullableBoolean(body, name) {
@@ -160,12 +154,12 @@ export function registerPlaylistRoutes(add, { playlists, users }) {
     const user = await effectiveUser(context, userId);
     const position = integerValue(queryValue(context.query, 'position'), 'position');
     await service().add(guidValue(context.params.playlistId, 'playlistId'),
-      queryArray(context, 'ids', guidValue), { user, position });
+      commaGuidValues(context.query, 'ids'), { user, position });
     return noContent();
   });
 
   add('DELETE', '/Playlists/{playlistId}/Items', async context => {
-    await service().remove(guidValue(context.params.playlistId, 'playlistId'), queryArray(context, 'entryIds'), {
+    await service().remove(guidValue(context.params.playlistId, 'playlistId'), commaStringValues(context.query, 'entryIds'), {
       user: context.auth.User, isApiKey: context.auth.IsApiKey
     });
     return noContent();
