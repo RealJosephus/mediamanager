@@ -145,6 +145,17 @@ test('verified target publication preserves active HTTP writers and cold Postgre
     source.close(); source = undefined;
     const initialPublication = await publish(targets[0]);
     assert.equal(initialPublication.code, 0, initialPublication.stderr); assert.deepEqual(await readProductionTarget(currentFile), targets[0]);
+    const originalSelection = await readFile(currentFile);
+    const duplicateFile = path.join(root, 'duplicate-storage.json');
+    const mount = { path: '/library', instanceId: 'local-test', root: '/', capabilities: {} };
+    for (const duplicate of ['/library', '//library/']) {
+      await writeFile(duplicateFile, JSON.stringify({ instances: [{ id: mount.instanceId, type: 'local', config: { root } }],
+        mounts: [mount, { ...mount, path: duplicate }], prefixes: [] }));
+      const rejected = await publish({ ...targets[1], storageConfigurationPath: duplicateFile });
+      assert.equal(rejected.code, 1);
+      assert.match(rejected.stderr, /virtual mount path already exists/iu);
+      assert.deepEqual(await readFile(currentFile), originalSelection);
+    }
     const started = await start(); firstProcess = started.worker;
     assert.equal(started.ready.schema, targets[0].postgresSchema); assert.equal(started.ready.instancePath, targets[0].instancePath);
     assert.equal(started.ready.serverId, '1'.repeat(32));

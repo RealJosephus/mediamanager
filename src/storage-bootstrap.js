@@ -32,7 +32,12 @@ function validate(configuration) {
   for (const binding of configuration.bindings ?? []) if (!fields(binding,['itemId','accessPath'])) throw new TypeError('Invalid item access binding.');
   for (const mount of configuration.mounts) if (!ids.has(mount.instanceId)) throw new TypeError('A storage mount refers to an unknown instance.');
 }
-export { validate as validateStorageConfiguration };
+export function validateStorageConfiguration(configuration) {
+  validate(configuration);
+  // Publication can validate the virtual namespace without opening any backend.
+  const namespace = new VirtualFileSystem(new StorageRegistry());
+  for (const mount of configuration.mounts) namespace.mount(mount, { deferred: true });
+}
 async function persist(filename, value) {
   const temporary = filename + '.' + randomUUID() + '.tmp';
   try {
