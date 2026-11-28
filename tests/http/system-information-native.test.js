@@ -8,7 +8,7 @@ import { readInstanceConfiguration } from '../../src/configuration.js';
 import { readConfigurationFile } from '../../src/core/configuration-file.js';
 import { getNewItemId } from '../../src/core/identity.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
-import { dateText, idKey } from '../../src/library/records.js';
+import { idKey } from '../../src/library/records.js';
 import { transferDatabase } from '../../src/migration/database-transfer.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
@@ -23,7 +23,8 @@ export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInsta
 const enabled = Boolean(process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MEDIAMANAGER_TEST_POSTGRES);
 const nativeCase = declareNativeHttpTestFile({ enabled });
 const fixtureTime = new Date('2025-11-07T15:23:17Z');
-const selectedLogs = { 'contract-older.LOG': 'older\n', 'contract-newest.txt': 'newest – 測試\n', 'contract-raw.dat': 'unlisted\n' };
+const selectedLogs = { 'contract-older.LOG': 'older\n', 'contract-newest.txt': 'newest – 測試\n',
+  'contract-fraction.log': 'fraction\n', 'contract-ticks.log': 'ticks\n', 'contract-raw.dat': 'unlisted\n' };
 const auth = token => `MediaBrowser Client="System information fixture", Device="Isolated", DeviceId="isolated-system-info", Version="1"${token ? `, Token="${token}"` : ''}`;
 const available = port => new Promise(resolve => {
   const probe = createServer();
@@ -136,8 +137,9 @@ test('system storage and the log browser use the authoritative application and l
     await mkdir(path.join(cachePath, 'images'), { recursive: true });
     await mkdir(path.join(logDirectoryPath, 'contract-subfolder.log'), { recursive: true });
     await writeFile(path.join(logDirectoryPath, 'contract-subfolder.log', 'contract-nested.log'), 'nested');
-    for (const [offset, [name, contents]] of Object.entries(selectedLogs).entries()) {
-      const filename = path.join(logDirectoryPath, name), timestamp = new Date(fixtureTime.valueOf() + offset * 1000);
+    const offsets = { 'contract-newest.txt': 1, 'contract-fraction.log': 0.125, 'contract-ticks.log': 0.1259765625 };
+    for (const [name, contents] of Object.entries(selectedLogs)) {
+      const filename = path.join(logDirectoryPath, name), timestamp = fixtureTime.valueOf() / 1000 + (offsets[name] ?? 0);
       await writeFile(filename, contents);
       await utimes(filename, timestamp, timestamp);
     }
@@ -187,8 +189,7 @@ test('system storage and the log browser use the authoritative application and l
       status, contentType, body: json === undefined ? text : projectProblemTrace(json, status),
       ...(status === 200 && contentType?.startsWith('text/plain') ? { length, range } : {}),
     });
-    const logs = response => response.json.filter(log => Object.hasOwn(selectedLogs, log.Name))
-      .map(log => ({ ...log, DateCreated: dateText(log.DateCreated), DateModified: dateText(log.DateModified) }));
+    const logs = response => response.json.filter(log => Object.hasOwn(selectedLogs, log.Name));
     const checkCapacity = async (folder, filename) => {
       assert.equal(folder.Path, filename);
       assert.equal(typeof folder.StorageType, 'string');
@@ -218,7 +219,10 @@ test('system storage and the log browser use the authoritative application and l
         } else if (entry.sample.name === 'list') {
           assert.equal(entry.node.contentType, entry.native.contentType);
           assert.deepEqual(logs(entry.node), logs(entry.native));
-          assert.deepEqual(logs(entry.node).map(log => log.Name), ['contract-newest.txt', 'contract-older.LOG']);
+          const listed = logs(entry.node);
+          assert.deepEqual(listed.map(log => log.Name), ['contract-newest.txt', 'contract-ticks.log', 'contract-fraction.log', 'contract-older.LOG']);
+          assert.equal(listed[0].DateModified, '2025-11-07T15:23:18.0000000Z');
+          assert.equal(listed[2].DateModified, '2025-11-07T15:23:17.125Z');
           assert.equal(entry.node.json.some(log => /contract-(raw|nested|subfolder)/u.test(log.Name)), false);
         } else if (entry.sample.name === 'mixed-case JSON ping') {
           assert.equal(entry.node.contentType, entry.native.contentType);

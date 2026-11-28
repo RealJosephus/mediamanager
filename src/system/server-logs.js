@@ -3,7 +3,7 @@ import { open, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { operationFailure } from '../core/operation-failure.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
-import { nativeDateFromUnixNanoseconds } from '../users/native.js';
+import { nativeDateFromUnixNanoseconds, wireDate } from '../users/native.js';
 
 const missing = error => ['ENOENT', 'ENOTDIR'].includes(error?.code);
 const fileEntry = entry => entry.isFile() || entry.isSymbolicLink();
@@ -31,8 +31,9 @@ export async function getServerLogs(directory, culture, signal) {
       DateModified: nativeDateFromUnixNanoseconds(info.mtimeNs) });
   }
   const compare = new Intl.Collator(culture).compare;
-  return result.sort((a, b) => b.DateModified.localeCompare(a.DateModified, 'en')
+  result.sort((a, b) => b.DateModified.localeCompare(a.DateModified, 'en')
     || b.DateCreated.localeCompare(a.DateCreated, 'en') || compare(a.Name, b.Name));
+  return result.map(log => ({ ...log, DateCreated: wireDate(log.DateCreated), DateModified: wireDate(log.DateModified) }));
 }
 
 export async function findServerLog(directory, name) {
