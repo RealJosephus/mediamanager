@@ -10,9 +10,17 @@ import { StorageFileSystem } from '../../src/storage/files.js';
 import { readZipDirectory } from '../../src/storage/zip-directory.js';
 import { BackupRestored, SystemBackups } from '../../src/system/backups.js';
 import { backupFormat, withBackupArchive, writeBackupArchive } from '../../src/system/backup-archive.js';
-import { createMetadataHttpFixture } from '../helpers/metadata-http-fixture.js';
+import { createMetadataHttpFixture, metadataMovieId } from '../helpers/metadata-http-fixture.js';
 
 export const requiredValidationServices = ['postgres'];
+
+async function archivedRows(archive, schema, name) {
+  const inventory = archive.json('Database/catalog.json').layout.tables;
+  const index = inventory.findIndex(table => table.schema === schema && table.name === name);
+  assert.notEqual(index, -1, name);
+  const pages = await text(archive.stream(archive.directory.get('Database/' + index + '.ndjson')));
+  return pages.split('\n').filter(Boolean).flatMap(line => JSON.parse(line));
+}
 
 for (const includeDatabase of [false, true]) {
   test('a slow file copy retains its storage generation and allows user writes, Database=' + includeDatabase, async t => {
@@ -60,10 +68,7 @@ for (const includeDatabase of [false, true]) {
         assert.equal(await text(archive.stream(archive.directory.get('Data/trickplay/tile'))), 'admitted volume');
         assert.equal(archive.directory.has('Database/catalog.json'), includeDatabase);
         if (includeDatabase) {
-          const tables = archive.json('Database/catalog.json').layout.tables;
-          const index = tables.findIndex(table => table.schema === database.schemaName && table.name === 'Users');
-          const pages = await text(archive.stream(archive.directory.get('Database/' + index + '.ndjson')));
-          const names = pages.trimEnd().split('\n').flatMap(line => JSON.parse(line).map(row => row.Username));
+          const names = (await archivedRows(archive, database.schemaName, 'Users')).map(row => row.Username);
           assert.deepEqual(names.sort(), before);
         }
       });
@@ -74,30 +79,32 @@ for (const includeDatabase of [false, true]) {
 test('a database backup retains one snapshot across tables when an independent transaction commits mid-export', async t => {
   const { database, request } = await createMetadataHttpFixture(t);
   const schema = quoteIdentifier(database.schemaName);
-  const names = ['BackupRevisionA', 'BackupRevisionB'];
-  const tables = names.map(name => schema + '.' + quoteIdentifier(name));
+  const tables = [
+    { name: 'BaseItemProviders', column: 'ProviderValue', key: { ItemId: metadataMovieId, ProviderId: 'ObsoleteFixture' } },
+    { name: 'BaseItems', column: 'Name', key: { Id: metadataMovieId } },
+  ];
   for (const table of tables) {
-    await database.client.query('CREATE TABLE ' + table + ' (revision integer)');
-    await database.client.query('INSERT INTO ' + table + ' VALUES (1)');
+    table.before = (await database.client.query('SELECT to_json(' + quoteIdentifier(table.column) + ') AS value FROM ' +
+      schema + '.' + quoteIdentifier(table.name))).rows.map(row => row.value).sort();
   }
+  const locked = schema + '."BaseItems"';
   let backup;
   try {
     await database.withConnection(writer => writer.transaction(async db => {
-      await db.client.query('LOCK TABLE ' + tables[1] + ' IN ACCESS EXCLUSIVE MODE');
+      await db.client.query('LOCK TABLE ' + locked + ' IN ACCESS EXCLUSIVE MODE');
       backup = request('/Backup/Create', { method: 'POST', body: { Database: true } });
       const deadline = AbortSignal.timeout(8000);
       while (!(await db.client.query("SELECT EXISTS (SELECT FROM pg_locks WHERE relation = $1::regclass AND mode = 'AccessShareLock' AND NOT granted) AS waiting",
-        [tables[1]])).rows[0].waiting) await delay(20, undefined, { signal: deadline });
-      for (const table of tables) await db.client.query('UPDATE ' + table + ' SET revision = 2');
+        [locked])).rows[0].waiting) await delay(20, undefined, { signal: deadline });
+      for (const { name, key, column } of tables) assert.equal(await db.update(name, key, { [column]: 'after snapshot' }), 1n);
     }));
     const result = await backup;
     assert.equal(result.status, 200);
     await withBackupArchive(result.body.Path, async archive => {
-      const inventory = archive.json('Database/catalog.json').layout.tables;
-      for (const [i, name] of names.entries()) {
-        const index = inventory.findIndex(table => table.schema === database.schemaName && table.name === name);
-        assert.deepEqual(JSON.parse(await text(archive.stream(archive.directory.get('Database/' + index + '.ndjson')))), [{ revision: 1 }]);
-        assert.deepEqual((await database.client.query('SELECT revision FROM ' + tables[i])).rows, [{ revision: 2 }]);
+      for (const { name, column, key, before } of tables) {
+        const rows = await archivedRows(archive, database.schemaName, name);
+        assert.deepEqual(rows.map(row => row[column]).sort(), before);
+        assert.equal((await database.rows(name, { where: key }))[0][column], 'after snapshot');
       }
     });
   } finally { await backup; }
