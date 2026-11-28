@@ -27,4 +27,13 @@ export function nfoMonitorPath(item, context = {}) {
 
 const timestamp = value => value == null ? -62135596800000 : new Date(typeof value === 'string' && /^\d{4}-\d\d-\d\d[ T]\d\d:\d\d:\d\d(?:\.\d+)?$/.test(value)
   ? value.replace(' ', 'T') + 'Z' : value).valueOf();
-export const nfoHasChanged = (modified, dateLastSaved) => timestamp(modified) - timestamp(dateLastSaved) > 60_000;
+function submillisecondTicks(value) {
+  const fraction = typeof value === 'string' && /\d\d:\d\d:\d\d\.\d{3}(\d{1,4})/u.exec(value);
+  return fraction ? Number(fraction[1].padEnd(4, '0')) : 0;
+}
+
+export function nfoHasChanged(modified, dateLastSaved) {
+  const milliseconds = timestamp(modified) - timestamp(dateLastSaved);
+  // At exactly one minute in Date precision, the remaining 100 ns ticks decide.
+  return milliseconds > 60_000 || milliseconds === 60_000 && submillisecondTicks(modified) > submillisecondTicks(dateLastSaved);
+}

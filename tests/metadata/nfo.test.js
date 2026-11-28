@@ -125,6 +125,15 @@ test('NFO paths match DVD, movie, owned video and series-season rules', async ()
   assert.equal(nfoHasChanged('2026-01-01T00:01:00.001Z', '2026-01-01T00:00:00Z'), true);
 });
 
+test('NFO change detection compares both file and saved times at native tick precision', () => {
+  const saved = '2026-01-01 00:00:00.0005000';
+  assert.equal(nfoHasChanged('2026-01-01T01:01:00.0004999+01:00', saved), false);
+  assert.equal(nfoHasChanged('2026-01-01T00:01:00.000500099Z', saved), false);
+  assert.equal(nfoHasChanged('2026-01-01T01:01:00.0005001+01:00', saved), true);
+  assert.equal(nfoHasChanged('2026-01-01T00:01:00.0000001Z', new Date('2026-01-01T00:00:00Z')), true);
+  assert.equal(nfoHasChanged('invalid', saved), false);
+});
+
 test('NFO saver retains custom tags and other provider IDs, writes actual streams, and uses midpoint-to-even runtime', async () => {
   const bytes = await serializeNfo({ Type: 'Movie', Name: '中文 & title', DateCreated: '2026-01-02T03:04:05Z', RunTimeTicks: 900000000n, ProviderIds: { Imdb: 'tt1234567', UnknownSource: '42' } }, {fileSystem: testFileSystem,  existingXml: '<movie><custom foo="bar">keep</custom><title>old</title></movie>', mediaStreams: [{ Type: 'Video', Codec: 'mpeg4', CodecTag: 'DIVX', Width: 1920 }] });
   assert.equal(bytes.subarray(0, 3).toString('hex'), 'efbbbf');
