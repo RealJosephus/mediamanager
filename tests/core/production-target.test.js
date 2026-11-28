@@ -158,6 +158,21 @@ test('verified target publication preserves active HTTP writers and cold Postgre
     const badStorage = path.join(root, 'invalid-storage.json'); await writeFile(badStorage, '{"prefixes":[],"mounts":[]}');
     assert.equal((await publish({ ...targets[1], storageConfigurationPath: badStorage })).code, 1);
     assert.deepEqual(await readFile(currentFile), before, 'Invalid storage structure must retain the published choice.');
+    const duplicateFile = path.join(root, 'duplicate-path.json');
+    const auditMount = { path: '/library', instanceId: 'local-audit', root: '/', capabilities: {} };
+    await writeFile(duplicateFile, JSON.stringify({ instances: [{ id: 'local-audit', type: 'local', config: { root, writable: true } }],
+      mounts: [auditMount, auditMount], prefixes: [] }));
+    const admission = await publish({ ...targets[1], storageConfigurationPath: duplicateFile });
+    const publishedChoice = await readProductionTarget(currentFile);
+    const cold = launch(helper, [], { ...environment, [targetEnvironmentName]: currentFile }, true); processes.push(cold);
+    const coldResult = await cold.next();
+    if (coldResult.type === 'ready') await cold.stop();
+    const coldExit = await cold.closed;
+    t.diagnostic('AUDIT_PUBLICATION ' + JSON.stringify({ publishExit: admission.code,
+      selectorPointsToDuplicate: publishedChoice.storageConfigurationPath === duplicateFile,
+      cold: coldResult.type, message: coldResult.message, coldExit: coldExit.code }));
+    assert.equal(admission.code, 0); assert.equal(coldResult.type, 'failure'); assert.match(coldResult.message, /mount path already exists/i);
+    assert.equal((await publish(targets[0])).code, 0);
     let publishing = true;
     const published = publish(targets[1]).finally(() => { publishing = false; });
     while (publishing) {

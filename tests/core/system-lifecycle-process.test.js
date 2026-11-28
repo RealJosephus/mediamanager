@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
 import { once } from 'node:events';
-import { mkdir, copyFile, readFile, stat, writeFile, unlink } from 'node:fs/promises';
+import { mkdir, copyFile, readFile, stat, writeFile, unlink, chmod, utimes } from 'node:fs/promises';
 import { buffer } from 'node:stream/consumers';
 import { randomUUID, createHash } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -169,7 +169,7 @@ test('the actual production CLI retains its selected target across HTTP restarts
     secrets.add(token);
     await database.insert('ApiKeys', { Name: 'System lifecycle CLI', AccessToken: token,
       DateCreated: '2026-10-27 00:00:00', DateLastActivity: '0001-01-01 00:00:00' });
-    const definitionFile = path.join(root, 'storage.json');
+    const definitionFile = path.join(instance, 'config', 'storage.json');
     const storageDefinition = instanceRoot => ({ instances: [{ id: 'instance', type: 'local', config: { root: instanceRoot, writable: true } }],
       mounts: [{ path: '/instance', instanceId: 'instance', root: '/', capabilities: { create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true } }],
       prefixes: [{ identityRoot: instanceRoot, accessRoot: '/instance', style: process.platform === 'win32' ? 'windows' : 'posix',
@@ -446,6 +446,38 @@ test('the actual production CLI retains its selected target across HTTP restarts
     assert.equal(await storage.fileSystem.readFile(inside, 'utf8'), 'saved subtitle');
     assert.equal(await storage.fileSystem.readFile(outside, 'utf8'), 'after');
     assert.equal((await call('/Users/New', { method: 'POST', body: { Name: 'After backup' } })).status, 200);
+    const auditConfig = path.join(instance, 'config', 'audit-reader.json');
+    await writeFile(auditConfig, '{"theme":"blue"}');
+    await chmod(auditConfig, 0o640);
+    const stamp = new Date('2020-01-02T03:04:05Z');
+    await utimes(auditConfig, stamp, stamp);
+    const auditBackup = await call('/Backup/Create', { method: 'POST', body: { Database: false, Metadata: true }, timeout: 30000 });
+    assert.equal(auditBackup.status, 200, stderr);
+    await withBackupArchive(auditBackup.body.Path, async archive => {
+      assert.ok(archive.directory.has('Config/storage.json'));
+      assert.ok(archive.directory.has('Config/audit-reader.json'));
+      assert.deepEqual(await buffer(archive.stream(archive.directory.get('Data/metadata/mounted-artwork/poster.bin'))), originalPoster);
+    });
+    const replacementVolume = path.join(root, 'replacement-artwork'), replacementPoster = path.join(replacementVolume, 'poster.bin');
+    await mkdir(replacementVolume);
+    await writeFile(replacementPoster, 'replacement independent data');
+    await writeFile(poster, 'former independent data');
+    const currentStorage = (await call('/Storage/Configuration')).body;
+    currentStorage.instances.find(binding => binding.id === 'artwork').config.root = replacementVolume;
+    assert.equal((await call('/Storage/Configuration', { method: 'POST', body: currentStorage, timeout: 30000 })).status, 200);
+    await writeFile(auditConfig, '{"theme":"red"}');
+    const auditRestore = await call('/Backup/Restore', { method: 'POST', body: { ArchiveFileName: auditBackup.body.Path }, timeout: 30000 });
+    assert.equal(auditRestore.status, 204, stderr);
+    await until('archived storage binding visible over HTTP', () => call('/Storage/Configuration', { record: false }),
+      reply => reply.status === 200 && reply.body.instances.find(binding => binding.id === 'artwork')?.config.root === artworkRoot);
+    const restoredStat = await stat(auditConfig);
+    const observed = { status: auditRestore.status, selectedAfterRestart: 'original-volume',
+      originalVolume: await readFile(poster, 'utf8'), replacementVolumeReceivedArchivedPoster: (await readFile(replacementPoster)).equals(originalPoster),
+      modeBefore: '640', modeAfter: (restoredStat.mode & 0o777).toString(8), mtimeBefore: stamp.toISOString(), mtimeAfter: restoredStat.mtime.toISOString(),
+      configContentAfter: await readFile(auditConfig, 'utf8') };
+    t.diagnostic('AUDIT_BACKUP ' + JSON.stringify(observed));
+    assert.equal(observed.originalVolume, 'former independent data'); assert.equal(observed.replacementVolumeReceivedArchivedPoster, true);
+    assert.equal(observed.modeAfter, '600'); assert.notEqual(observed.mtimeAfter, observed.mtimeBefore);
     report.backup = { manifest: backup.body, restore: restore.status, savedConfigurationReloaded: true,
       lateUserRemovedAndRecreated: true, metadata: report.original.sha256, restoredMembers: Object.keys(members),
       mountedPoster: bytesValue(await readFile(poster)), subtitleRestored: true, excludedTrickplayRetained: true };

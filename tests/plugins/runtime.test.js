@@ -258,7 +258,18 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
  const description=bytes=>({bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});
  Object.assign(connectCapture,{originalSource:description(originalConnectSource),observedSource:description(observedConnectSource),manifest:description(manifestBytes),originalConnectBody:originalBody});
  await fs.writeFile(failedEntry,observedConnectSource);
+ const entryPath=path.join(initial,'index.js'), plainSource=await fs.readFile(entryPath,'utf8');
+ const routeMarker="  await context.register('route',{method:'GET',path:'/Fixture/Echo'";
+ assert.ok(plainSource.includes(routeMarker));
+ await fs.writeFile(entryPath,plainSource.replace(routeMarker,
+  "  await context.register('route',{method:'GET',path:'/Plugins/LibrarySummary',handle:async()=>({marker:'plugin-summary'})});\n"+routeMarker));
  assert.equal((await request('POST','/Plugins/Install',{path:initial})).status,200);
+ const routeReply=await request('GET','/Plugins/LibrarySummary',undefined,true,{failureStatus:404});
+ const routeText=await routeReply.text();
+ const controlReply=await request('GET','/Fixture/Echo');
+ t.diagnostic('AUDIT_PLUGIN_ROUTE '+JSON.stringify({installed:runtime.plugins.get('fixture').installed,
+  readableRoute:controlReply.status,overlappingRoute:routeReply.status,returnedPluginMarker:routeText.includes('plugin-summary')}));
+ assert.equal(controlReply.status,200); assert.equal(routeReply.status,404);
  assert.equal((await request('POST','/Plugins/fixture/Configuration',{message:'persisted'})).status,200);
  assert.equal((await (await request('GET','/Fixture/Echo')).json()).message,'persisted');
  const beforeFailedUpdate=runtime.plugins.get('fixture');
