@@ -29,11 +29,11 @@ test('formatted PGS routes stream the selected SUP byte range and retain embedde
     }));
   }
 
-  const source = runtime.storage.mediaFileSystem.resolve(sidecar);
-  const openRead = source.adapter.openRead.bind(source.adapter), readers = [];
-  t.mock.method(source.adapter, 'openRead', async (location, options) => {
-    const handle = await openRead(location, options);
-    if (location !== source.path) return handle;
+  const files = runtime.storage.mediaFileSystem, accessPath = files.accessPath(sidecar), vfs = files.vfs;
+  const openResponse = vfs.openResponse.bind(vfs), readers = [];
+  t.mock.method(vfs, 'openResponse', async (location, options) => {
+    const handle = await openResponse(location, options);
+    if (location !== accessPath) return handle;
     const reader = { length: Number(handle.contentLength), closed: false };
     readers.push(reader);
     return { ...handle, close: async () => { await handle.close(); reader.closed = true; } };
