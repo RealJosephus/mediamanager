@@ -242,7 +242,16 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
   assert.equal((await request('POST',`/Plugins/${plugin}/Enabled`,{enabled:true})).status,200);
  }
  assert.equal((await request('POST','/Plugins/tmdb/Configuration',{unexpected:true},true,{failureStatus:400})).status,400);
- const initial=await fixturePackage(root,{summaryRoute:true}),updated=await fixturePackage(root,{label:'updated'}),failed=await fixturePackage(root,{failure:'connect'});
+ const templates=[
+   {path:'/{section}/{id}'}, {path:'/Known/{id}',policy:'RequiresElevation'}, {path:'/Known/Fixed'},
+ ];
+ const routes=[];
+ for (const [prefix, order] of [['Catalog', templates], ['ReverseCatalog', templates.toReversed()]]) {
+   for (const route of order) routes.push({...route,path:'/'+prefix+route.path});
+ }
+ const missingGroup=randomUUID();
+ routes.push({path:'/{section}/FixtureRouteKey'},{path:'/{section}/'+missingGroup});
+ const initial=await fixturePackage(root,{summaryRoute:true,routes}),updated=await fixturePackage(root,{label:'updated'}),failed=await fixturePackage(root,{failure:'connect'});
  const failedEntry=path.join(failed,'index.js'),originalConnectSource=await fs.readFile(failedEntry),originalSource=originalConnectSource.toString('utf8');
  const declaration='async connect(){',start=originalSource.indexOf(declaration),end=originalSource.indexOf('}};',start+declaration.length);
  assert.ok(start>=0&&end>start,'The newly generated package must contain its original connect method.');
@@ -262,6 +271,19 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
  assert.equal((await request('GET','/Plugins/LibrarySummary',undefined,false,{failureStatus:401})).status,401);
  const summary=await request('GET','/plugins/librarysummary/',undefined,true,{token:login.AccessToken});
  assert.equal(summary.status,200);assert.deepEqual(await summary.json(),{summary:'initial'});
+ for (const prefix of ['Catalog','ReverseCatalog']) {
+   const generic=await request('GET','/'+prefix+'/Other/reader',undefined,true,{token:login.AccessToken});
+   assert.deepEqual(await generic.json(),{path:'/'+prefix+'/{section}/{id}',params:{section:'Other',id:'reader'}});
+   const privileged='/'+prefix+'/Known/reader';
+   assert.equal((await request('GET',privileged,undefined,false,{failureStatus:401})).status,401);
+   assert.equal((await request('GET',privileged,undefined,true,{token:login.AccessToken,failureStatus:403})).status,403);
+   assert.deepEqual(await (await request('GET',privileged)).json(),{path:'/'+prefix+'/Known/{id}',params:{id:'reader'}});
+   const fixed=await request('GET','/'+prefix+'/known/fixed/',undefined,true,{token:login.AccessToken});
+   assert.deepEqual(await fixed.json(),{path:'/'+prefix+'/Known/Fixed',params:{}});
+ }
+ const invalidGroup=await request('GET','/SyncPlay/FixtureRouteKey',undefined,true,{token:login.AccessToken});
+ assert.deepEqual(await invalidGroup.json(),{path:'/{section}/FixtureRouteKey',params:{section:'SyncPlay'}});
+ assert.equal((await request('GET','/SyncPlay/'+missingGroup,undefined,true,{failureStatus:404})).status,404);
  assert.equal((await request('GET','/Plugins/fixture',undefined,true,{token:login.AccessToken,failureStatus:403})).status,403);
  assert.equal((await (await request('GET','/Plugins/fixture')).json()).id,'fixture');
  assert.equal((await request('POST','/Plugins/fixture/Configuration',{message:'persisted'})).status,200);

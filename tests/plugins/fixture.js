@@ -11,7 +11,7 @@ export async function pluginFixture(t, options = {}) {
   return {root,get host(){return host;},async reopen(){await host.close();host=await PluginHost.open({directory:path.join(root,'host'),preinstalled:false,...options});return host;}};
 }
 
-export async function fixturePackage(root, {id='fixture',version='0.1.0',label='initial',failure,wait=false,frozen=false,summaryRoute=false}={}) {
+export async function fixturePackage(root, {id='fixture',version='0.1.0',label='initial',failure,wait=false,frozen=false,summaryRoute=false,routes=[]}={}) {
   const directory=path.join(root,'source-'+randomUUID());await fs.mkdir(directory);
   const manifest={name:'@test/'+id,version,type:'module',mediamanager:{id,name:'Controlled test plugin',entry:'index.js'}};
   await fs.writeFile(path.join(directory,'package.json'),JSON.stringify(manifest));
@@ -36,6 +36,9 @@ export async function activate(context) {
   await context.register('metadata',{id:context.id,name:'Controlled test plugin',providers:[${frozen?'Object.freeze(provider)':'provider'}]});
   await context.register('route',{method:'GET',path:'/Fixture/Echo',handle:async()=>({label,message:context.getConfiguration().message??null})});
   ${summaryRoute ? "await context.register('route',{method:'GET',path:'/Plugins/LibrarySummary',handle:async()=>({summary:label})});" : ''}
+  for (const route of ${JSON.stringify(routes)}) {
+    await context.register('route', {method:'GET', ...route, handle:({params})=>({path:route.path,params})});
+  }
   await context.register('route',{method:'GET',path:'/Fixture/Wait',async handle({signal}){
     await record('route');await new Promise((resolve,reject)=>{if(signal.aborted)reject(signal.reason);else signal.addEventListener('abort',()=>reject(signal.reason),{once:true});});
   }});

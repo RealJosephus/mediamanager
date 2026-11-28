@@ -66,7 +66,14 @@ export async function createApplication(services = {}) {
         if (/^\{\w+\}$/.test(part)) { names.push(part.slice(1, -1)); return '([^/]+)'; }
         return part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       }).join('');
-      routes.push({ method, path, pattern: new RegExp(`^${expression}/?$`, 'i'), names, run, policy, isPublic, body, allowForm, optionalBody, bindBody, bindQuery, bodyParameter, bodyType, bodyDocument, constraints, abortOnDisconnect });
+      // Compare paths from left to right, as ASP.NET does for inbound routes.
+      // Literal segments precede constrained or compound segments, then ordinary parameters.
+      const precedence = path.split('/').map(segment => {
+        if (!/\{\w+\}/.test(segment)) return '0';
+        const parameter = /^\{(\w+)\}$/.exec(segment);
+        return parameter && !constraints[parameter[1]] ? '2' : '1';
+      }).join('');
+      routes.push({ method, path, precedence, pattern: new RegExp(`^${expression}/?$`, 'i'), names, run, policy, isPublic, body, allowForm, optionalBody, bindBody, bindQuery, bodyParameter, bodyType, bodyDocument, constraints, abortOnDisconnect });
     }
   }
   for (const method of ['GET', 'POST']) add(method, '/System/Ping', () => 'MediaManager', { public: true });
@@ -251,8 +258,10 @@ export async function createApplication(services = {}) {
           const match = route.pattern.exec(path);
           return match && route.names.every((name, index) => !route.constraints[name] || route.constraints[name](match[index + 1]));
         });
-        const route = matching.find(route => route.method === request.method && route.names.length === 0)
-          ?? matching.find(route => route.method === request.method);
+        let route;
+        for (const candidate of matching) {
+          if (candidate.method === request.method && (!route || candidate.precedence < route.precedence)) route = candidate;
+        }
         if (!route) {
           if (blocked()) { send(new HttpResult(503)); return; }
           if (startupBlocked()) return;
