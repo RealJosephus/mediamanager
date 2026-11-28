@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import path from 'node:path';
 import * as fs from 'node:fs/promises';
+import { setTimeout as delay } from 'node:timers/promises';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { idKey } from '../../src/library/records.js';
@@ -68,6 +69,46 @@ async function setup(t, { baseUrl = '' } = {}) {
       database = await PostgresDatabase.open({ connectionString: postgresTestConnectionString, schema }); origin = await create();
     } };
 }
+
+test('postgres: shutdown during a library refresh releases the user root loaded before the read transaction commits', enabled, async t => {
+  const { runtime, request } = await setup(t);
+  const loaded = Promise.withResolvers(), resume = Promise.withResolvers(), completed = Promise.withResolvers();
+  const deadline = delay(45000, undefined, { ref: false }).then(() => { throw new Error('Library scan shutdown did not reach its checkpoint.'); });
+  let snapshot, disposals = 0;
+  runtime.tasks.on('completed', ({ Result }) => { if (Result.Key === 'RefreshLibrary') completed.resolve(Result); });
+  const run = runtime.store.run.bind(runtime.store);
+  t.mock.method(runtime.store, 'run', (operation, options) => {
+    if (!options?.readOnly || !options.signal) return run(operation, options);
+    return run(async db => {
+      const result = await operation(db);
+      if (!snapshot && result?.liveUserRoot && typeof result.dispose === 'function') {
+        snapshot = result;
+        const dispose = result.dispose.bind(result);
+        result.dispose = async (...args) => { disposals++; return dispose(...args); };
+        loaded.resolve(options.signal);
+        await resume.promise;
+      }
+      return result;
+    }, options);
+  });
+  let closing;
+  try {
+    assert.equal((await request('/Library/Refresh')).status, 204);
+    const signal = await Promise.race([loaded.promise, deadline]);
+    assert.equal(snapshot.liveUserRoot, runtime.libraryScanHost.userRootFolder);
+    closing = runtime.close();
+    if (!signal.aborted) await Promise.race([new Promise(resolve => signal.addEventListener('abort', resolve, { once: true })), deadline]);
+    resume.resolve();
+    assert.equal((await Promise.race([completed.promise, deadline])).Status, 'Aborted');
+    assert.equal(disposals, 1, 'The cancelled scan must release the library snapshot that owns the hosted user root.');
+    await Promise.race([closing, deadline]);
+  } finally {
+    resume.resolve();
+    // Release a leaked snapshot after the assertion so a regression can still tear down its PostgreSQL schema.
+    if (snapshot && !disposals) await snapshot.dispose();
+    await closing;
+  }
+});
 
 test('postgres: Collection HTTP create/add/remove persists actual rows, XML, events and survives restart under BaseUrl', enabled, async t => {
   const state = await setup(t, { baseUrl: '/media' });

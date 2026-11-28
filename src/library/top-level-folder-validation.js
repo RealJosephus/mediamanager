@@ -154,11 +154,14 @@ export class TopLevelFolderValidationService {
   supports(item) { return ['AggregateFolder', 'UserRootFolder'].includes(itemType(item)); }
 
   async #state(signal) {
-    const state = await this.store.run(async db => this.library.load(db, null,
-      { includeUserData: false, baseRows: await loadPostgresNavigationRows(db) }),
-    { signal, readOnly: true, lockTimeoutMs: 250 });
-    this.#ownership.getStore().push(() => state.dispose());
-    return state;
+    return this.store.run(async db => {
+      const state = await this.library.load(db, null, {
+        includeUserData: false, baseRows: await loadPostgresNavigationRows(db)
+      });
+      // A cancelled read transaction can discard its result before COMMIT.
+      this.#ownership.getStore().push(() => state.dispose());
+      return state;
+    }, { signal, readOnly: true, lockTimeoutMs: 250 });
   }
 
   async #directChildren(parent, signal) {
