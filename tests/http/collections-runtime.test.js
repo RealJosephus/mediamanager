@@ -19,10 +19,10 @@ function observeWaits(getRuntime) {
   const destination = path.join(validationOutputRoot(), 'collection-audit-waits.jsonl');
   let sampling = false;
   const timer = setInterval(async () => {
-    if (sampling || Date.now() - lastCheckpointAt < 30000) return;
+    if (sampling || Date.now() - lastCheckpointAt < 15000) return;
     sampling = true;
     const runtime = getRuntime();
-    const record = { at: new Date().toISOString(), latest: lastCheckpoint, idleMs: Date.now() - lastCheckpointAt,
+    const record = { at: new Date().toISOString(), caseName: activeCase, latest: lastCheckpoint, idleMs: Date.now() - lastCheckpointAt,
       activeResources: process.getActiveResourcesInfo(), pendingOperations: [...pendingOperations.values()] };
     const pool = runtime?.store?.database?.pool;
     if (pool) record.pool = { total: pool.totalCount, waiting: pool.waitingCount, idle: pool.idleCount };
@@ -44,6 +44,12 @@ function observeWaits(getRuntime) {
 }
 
 const pendingOperations = new Map();
+let activeCase = null;
+globalThis[Symbol.for('mm-macos-close-observation')] = label => {
+  const operation = Symbol();
+  pendingOperations.set(operation, { label, startedAt: new Date().toISOString() });
+  return () => pendingOperations.delete(operation);
+};
 let lastCheckpoint = 'setup', lastCheckpointAt = Date.now();
 function trackOperations(runtime) {
   for (const [owner, key, label] of [
@@ -71,7 +77,7 @@ async function checkpoint(phase, xml) {
   lastCheckpoint = phase; lastCheckpointAt = Date.now();
   const members = xml && [...xml.matchAll(/<Path>([^<]*)<\/Path>/gu)].map(match => match[1]);
   await fs.appendFile(path.join(validationOutputRoot(), 'collection-audit-phases.jsonl'),
-    JSON.stringify({ at: new Date().toISOString(), phase, members }) + '\n');
+    JSON.stringify({ at: new Date().toISOString(), caseName: activeCase, phase, members }) + '\n');
 }
 
 async function setup(t, { baseUrl = '' } = {}) {
@@ -79,15 +85,21 @@ async function setup(t, { baseUrl = '' } = {}) {
   const root = await fs.mkdtemp(path.join(output, 'collections-http-'));
   const programDataPath = path.join(root, 'program'), dataPath = path.join(programDataPath, 'data'), metadataPath = path.join(programDataPath, 'metadata'), configurationDirectoryPath = path.join(root, 'config');
   let database, runtime;
-  const stopObserver = baseUrl ? observeWaits(() => runtime) : () => {};
+  activeCase = t.name;
+  const stopObserver = observeWaits(() => runtime);
+  await checkpoint('fixture-start');
   t.after(async () => {
-    if (baseUrl) await checkpoint('teardown-start');
+    await checkpoint('teardown-start');
     const failures = [];
-    for (const cleanup of [() => runtime?.close(), () => dropPostgresTestDatabase(database), async () => {
+    for (const [stage, cleanup] of [['close-runtime', () => runtime?.close()], ['drop-database', () => dropPostgresTestDatabase(database)], ['remove-root', async () => {
       assert.equal(path.dirname(root), output); assert.ok(path.basename(root).startsWith('collections-http-'));
       await fs.rm(root, { recursive: true, force: true });
-    }]) try { await cleanup(); } catch (error) { failures.push(error); }
-    if (baseUrl) await checkpoint('teardown-finished');
+    }]]) {
+      await checkpoint(stage + '-start');
+      try { await cleanup(); } catch (error) { failures.push(error); }
+      await checkpoint(stage + '-finished');
+    }
+    await checkpoint('teardown-finished');
     stopObserver();
     if (failures.length) throw new AggregateError(failures, 'Collection HTTP cleanup failed.');
   });
@@ -104,7 +116,7 @@ async function setup(t, { baseUrl = '' } = {}) {
   const create = async () => {
     runtime = await createTestRuntime({ database, configuration, networkConfiguration: { BaseUrl: baseUrl }, programDataPath, dataPath, metadataPath, configurationDirectoryPath,
       serverId: 'collections-http', onError: error => errors.push(error) });
-    if (baseUrl) trackOperations(runtime);
+    trackOperations(runtime);
     runtime.libraryConfiguration.sleep = async () => {};
     // Queue execution is covered by its own host tests; record the admission
     // after real Collection manager, XML and repository completion here.
@@ -117,16 +129,16 @@ async function setup(t, { baseUrl = '' } = {}) {
       });
     return `http://127.0.0.1:${runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port}${baseUrl}`;
   };
-  let origin = await create();
+  let origin = await create(); await checkpoint('initial-runtime-started');
   const apiKey = await runtime.apiKeys.create('Collection HTTP fixture');
   const headers = { Authorization: `MediaBrowser Token="${apiKey.AccessToken}"` };
   const request = async (suffix, { method = 'POST', authHeaders = headers, ...options } = {}) => {
-    if (baseUrl) await checkpoint(method + ' ' + suffix + ' sent');
+    await checkpoint(method + ' ' + suffix + ' sent');
     const response = await fetch(origin + suffix, { method, headers: authHeaders, ...options });
     const text = await response.text(); let body = null; try { body = JSON.parse(text); } catch { }
-    if (baseUrl) await checkpoint(method + ' ' + suffix + ' body read');
+    await checkpoint(method + ' ' + suffix + ' body read');
     await Promise.all(pendingEvents);
-    if (baseUrl) await checkpoint(method + ' ' + suffix + ' events drained');
+    await checkpoint(method + ' ' + suffix + ' events drained');
     return { status: response.status, body, text };
   };
   const links = async value => (await database.rows('LinkedChildren', { where: { ParentId: value }, orderBy: [{ column: 'SortOrder', direction: 'ASC' }] })).map(row => idKey(row.ChildId));

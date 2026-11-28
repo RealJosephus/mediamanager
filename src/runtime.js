@@ -834,7 +834,11 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(() => configurationStore?.off('updated', configurationUpdated));
   const close = () => closing ??= (async () => {
       const errors = [];
-      const attempt = async operation => { try { await operation(); } catch (error) { errors.push(error); } };
+      const attempt = async operation => {
+        const endObservation = globalThis[Symbol.for('mm-macos-close-observation')]?.(String(operation));
+        try { await operation(); } catch (error) { errors.push(error); }
+        finally { endObservation?.(); }
+      };
       application.beginClose();
       playback.beginClose();
       // Keep the listeners available for shutdown responses until admitted
