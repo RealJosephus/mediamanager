@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import pg from 'pg';
+import { observeNativeResourceGraph } from '../../src/library/native-resource-graph.js';
 import path from 'node:path';
 import * as fs from 'node:fs/promises';
 import { createTestRuntime } from '../helpers/runtime.js';
@@ -24,6 +25,10 @@ function observeWaits(getRuntime) {
     const runtime = getRuntime();
     const record = { at: new Date().toISOString(), caseName: activeCase, latest: lastCheckpoint, idleMs: Date.now() - lastCheckpointAt,
       activeResources: process.getActiveResourcesInfo(), pendingOperations: [...pendingOperations.values()] };
+    const graph = graphStates.get(runtime);
+    if (graph) record.graph = { lastClose: graph.lastClose, roots: [...graph.roots.values()].slice(0,24) };
+    const links = runtime?.linkedChildren;
+    if (links) record.links = links[Symbol.for('mm-macos-link-counts')]();
     const pool = runtime?.store?.database?.pool;
     if (pool) record.pool = { total: pool.totalCount, waiting: pool.waitingCount, idle: pool.idleCount };
     const observer = new pg.Client({ connectionString: postgresTestConnectionString, connectionTimeoutMillis: 3000, query_timeout: 3000 });
@@ -43,6 +48,24 @@ function observeWaits(getRuntime) {
   return () => clearInterval(timer);
 }
 
+const graphStates = new WeakMap();
+function observeGraph(runtime) {
+  const state = { roots: new Map(), lastClose: null };
+  graphStates.set(runtime, state);
+  observeNativeResourceGraph(runtime.linkedChildren.resourceGraph, event => {
+    if (event.root) {
+      const token = event.root.token;
+      if (event.root.references === 0) state.roots.delete(token);
+      else {
+        const prior = state.roots.get(token);
+        state.roots.set(token, { references: event.root.references, acquired: prior?.acquired || event.source,
+          lastEvent: event.event, lastChange: event.source });
+      }
+    }
+    if (event.event.startsWith('close-')) state.lastClose = { event: event.event,
+      rootCount: event.rootsCount, resourceCount: event.resourcesCount };
+  });
+}
 const pendingOperations = new Map();
 let activeCase = null;
 globalThis[Symbol.for('mm-macos-close-observation')] = label => {
@@ -116,7 +139,7 @@ async function setup(t, { baseUrl = '' } = {}) {
   const create = async () => {
     runtime = await createTestRuntime({ database, configuration, networkConfiguration: { BaseUrl: baseUrl }, programDataPath, dataPath, metadataPath, configurationDirectoryPath,
       serverId: 'collections-http', onError: error => errors.push(error) });
-    trackOperations(runtime);
+    trackOperations(runtime); observeGraph(runtime);
     runtime.libraryConfiguration.sleep = async () => {};
     // Queue execution is covered by its own host tests; record the admission
     // after real Collection manager, XML and repository completion here.
@@ -150,7 +173,8 @@ async function setup(t, { baseUrl = '' } = {}) {
     } };
 }
 
-test('postgres: Collection HTTP create/add/remove persists actual rows, XML, events and survives restart under BaseUrl', enabled, async t => {
+for (let iteration = 1; iteration <= 12; iteration++) {
+test('postgres: Collection HTTP create/add/remove persists actual rows, XML, events and survives restart under BaseUrl (iteration ' + iteration + ')', enabled, async t => {
   const state = await setup(t, { baseUrl: '/media' });
   const created = await state.request('/Collections?name=HTTP%20Collection&isLocked=true&parentId=' + missingId);
   assert.equal(created.status, 200); const collectionId = created.body.Id;
@@ -183,7 +207,7 @@ test('postgres: Collection HTTP create/add/remove persists actual rows, XML, eve
   await checkpoint('after-empty-delete', await fs.readFile(filename, 'utf8'));
 });
 
-test('postgres: Collection HTTP uses real user/device and API-key permissions before model binding and mutation', enabled, async t => {
+test('postgres: Collection HTTP uses real user/device and API-key permissions before model binding and mutation (iteration ' + iteration + ')', enabled, async t => {
   const state = await setup(t);
   const tokens = {};
   for (const [name, policy] of [['ordinary', {}], ['manager', { EnableCollectionManagement: true }], ['admin', { IsAdministrator: true }]]) {
@@ -203,7 +227,7 @@ test('postgres: Collection HTTP uses real user/device and API-key permissions be
   for (const name of ['manager', 'admin']) assert.equal((await state.request('/Collections?parentId=bad', { authHeaders: tokens[name] })).status, 400);
 });
 
-test('postgres: Collection creation retains the persisted prefix when initial members fail after string-array binding', enabled, async t => {
+test('postgres: Collection creation retains the persisted prefix when initial members fail after string-array binding (iteration ' + iteration + ')', enabled, async t => {
   const state = await setup(t);
   for (const [name, ids, status] of [['MissingMember', movieIds[0] + ',' + missingId, 400], ['MalformedMember', movieIds[0] + ',bad', 500]]) {
     const response = await state.request(`/Collections?name=${name}&ids=${ids}`);
@@ -218,7 +242,7 @@ test('postgres: Collection creation retains the persisted prefix when initial me
   assert.equal((await state.database.rows('BaseItems', { where: { Type: 'MediaBrowser.Controller.Entities.Movies.BoxSet' } })).length, 2);
 });
 
-test('postgres: Collection HTTP missing, wrong-type and empty IDs return native errors without member commits', enabled, async t => {
+test('postgres: Collection HTTP missing, wrong-type and empty IDs return native errors without member commits (iteration ' + iteration + ')', enabled, async t => {
   const state = await setup(t), created = await state.request('/Collections?name=Errors');
   const collectionId = created.body.Id;
   for (const reference of [missingId, movieIds[0], '00000000000000000000000000000000']) {
@@ -233,3 +257,5 @@ test('postgres: Collection HTTP missing, wrong-type and empty IDs return native 
   assert.equal(state.events.length, 2); assert.equal(state.queued.length, 2);
   assert.deepEqual(state.events[1].ids, []);
 });
+
+}
