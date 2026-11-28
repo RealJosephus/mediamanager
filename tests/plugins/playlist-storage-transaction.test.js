@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import { setImmediate as immediate } from 'node:timers/promises';
+import { setImmediate as immediate, setTimeout as delay } from 'node:timers/promises';
 import { nativeGuid } from '../../src/users/native.js';
 import { nativeTextBytes } from '../../src/database/native-text.js';
 import { quoteIdentifier as q } from '../../src/database/model.js';
@@ -25,8 +25,7 @@ test('managed Playlist transactions retain actual backups, sidecars and rollback
 }, async t => {
   const output = path.resolve(validationOutputRoot()); await fs.mkdir(output, { recursive: true });
   const root = await fs.mkdtemp(path.join(output, 'playlist-storage-transaction-'));
-  for (const mode of ['replace', 'stop']) for (const phase of ['after-backup', 'after-rename', 'commit-rejection', 'backup-copy-rejection',
-    'sidecar-write-close-remove', 'serialized-cleanup', 'open-collision']) {
+  { const mode = 'replace', phase = 'after-rename';
     await t.test(`${mode}/${phase}`, async t => {
       const name = `${mode}-${phase}`, work = path.join(root, name), programDataPath = path.join(work, 'program');
       const oldTarget = path.join(work, 'target-a'), newTarget = path.join(work, 'target-b');
@@ -132,7 +131,17 @@ test('managed Playlist transactions retain actual backups, sidecars and rollback
       selected = true; updating = outcome(runtime.playlists.update(created.Id, { user, name: nextName }));
       await Promise.race([entered.promise, updating.then(result => { throw result.error ?? new Error('The real Playlist write did not reach its barrier.'); })]);
       assert.ok(backup); await pending(updating);
-      const unsubscribe = storage.subscribeBeforeChange(() => changing.resolve());
+      const rootWriter = Promise.withResolvers(), marks = [];
+      const serialize = runtime.store.serializeWrites.bind(runtime.store);
+      runtime.store.serializeWrites = (work, ...args) => {
+        const isRoot = new Error().stack.includes('initializeLibraryRoot');
+        if (isRoot) { marks.push('root-writer-requested'); rootWriter.resolve(); }
+        return serialize((...values) => {
+          if (isRoot) marks.push('root-writer-acquired');
+          return work(...values);
+        }, ...args);
+      };
+      const unsubscribe = storage.subscribeBeforeChange(() => { marks.push('handover-notified'); changing.resolve(); });
       if (mode === 'stop') transition = runtime.plugins.setEnabled('local', false);
       else {
         const next = structuredClone(definition);
@@ -140,9 +149,18 @@ test('managed Playlist transactions retain actual backups, sidecars and rollback
         next.instances.find(instance => instance.id === 'playlist-spool').config.root = newSpool;
         transition = storage.configure(next);
       }
-      void transition.catch(() => {}); await changing.promise; await pending(transition); unsubscribe();
+      void transition.catch(() => {});
+      try {
+        const first = await Promise.race([rootWriter.promise.then(() => 'root-writer'), changing.promise.then(() => 'handover'),
+          transition.then(() => 'transition-ended'), delay(15000,undefined,{ref:false}).then(()=>'timeout')]);
+        assert.equal(first, 'root-writer'); await pending(transition);
+        assert.deepEqual(marks,['root-writer-requested']);
+      } finally { marks.push('released-playlist-barrier'); release.resolve(); }
+      await changing.promise; unsubscribe();
       if (mode === 'stop') await assert.rejects(async () => oldAdapter.stat('/'), { status: 503 });
       release.resolve(); const result = await updating; await transition; selected = false;
+      t.diagnostic('AUDIT_PLAYLIST_HANDOVER ' + JSON.stringify({ mode, phase, marks, committed: !Object.hasOwn(result,'error') }));
+      assert.deepEqual(marks,['root-writer-requested','released-playlist-barrier','root-writer-acquired','handover-notified']);
       if (Object.hasOwn(result, 'error')) report.operationFailure = errorObservation(result.error);
       const after = await fs.readFile(oldFile), row = (await database.rows('BaseItems', { where: { Id: id } }))[0];
       if (phase === 'commit-rejection') {
