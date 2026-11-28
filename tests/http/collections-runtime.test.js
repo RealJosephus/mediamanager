@@ -110,7 +110,8 @@ test('postgres: shutdown during a library refresh releases the user root loaded 
   }
 });
 
-test('postgres: Collection HTTP create/add/remove persists actual rows, XML, events and survives restart under BaseUrl', enabled, async t => {
+for (let iteration = 1; iteration <= 12; iteration++) {
+test(`postgres: Collection HTTP create/add/remove persists actual rows, XML, events and survives restart under BaseUrl (iteration ${iteration})`, enabled, async t => {
   const state = await setup(t, { baseUrl: '/media' });
   const created = await state.request('/Collections?name=HTTP%20Collection&isLocked=true&parentId=' + missingId);
   assert.equal(created.status, 200); const collectionId = created.body.Id;
@@ -139,7 +140,7 @@ test('postgres: Collection HTTP create/add/remove persists actual rows, XML, eve
   assert.deepEqual(await state.links(cold.Id), movieIds.map(idKey));
 });
 
-test('postgres: Collection HTTP uses real user/device and API-key permissions before model binding and mutation', enabled, async t => {
+test(`postgres: Collection HTTP uses real user/device and API-key permissions before model binding and mutation (iteration ${iteration})`, enabled, async t => {
   const state = await setup(t);
   const tokens = {};
   for (const [name, policy] of [['ordinary', {}], ['manager', { EnableCollectionManagement: true }], ['admin', { IsAdministrator: true }]]) {
@@ -159,7 +160,7 @@ test('postgres: Collection HTTP uses real user/device and API-key permissions be
   for (const name of ['manager', 'admin']) assert.equal((await state.request('/Collections?parentId=bad', { authHeaders: tokens[name] })).status, 400);
 });
 
-test('postgres: Collection creation retains the persisted prefix when initial members fail after string-array binding', enabled, async t => {
+test(`postgres: Collection creation retains the persisted prefix when initial members fail after string-array binding (iteration ${iteration})`, enabled, async t => {
   const state = await setup(t);
   for (const [name, ids, status] of [['MissingMember', movieIds[0] + ',' + missingId, 400], ['MalformedMember', movieIds[0] + ',bad', 500]]) {
     const response = await state.request(`/Collections?name=${name}&ids=${ids}`);
@@ -174,7 +175,7 @@ test('postgres: Collection creation retains the persisted prefix when initial me
   assert.equal((await state.database.rows('BaseItems', { where: { Type: 'MediaBrowser.Controller.Entities.Movies.BoxSet' } })).length, 2);
 });
 
-test('postgres: Collection HTTP missing, wrong-type and empty IDs return native errors without member commits', enabled, async t => {
+test(`postgres: Collection HTTP missing, wrong-type and empty IDs return native errors without member commits (iteration ${iteration})`, enabled, async t => {
   const state = await setup(t), created = await state.request('/Collections?name=Errors');
   const collectionId = created.body.Id;
   for (const reference of [missingId, movieIds[0], '00000000000000000000000000000000']) {
@@ -189,3 +190,4 @@ test('postgres: Collection HTTP missing, wrong-type and empty IDs return native 
   assert.equal(state.events.length, 2); assert.equal(state.queued.length, 2);
   assert.deepEqual(state.events[1].ids, []);
 });
+}
