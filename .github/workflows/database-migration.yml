@@ -5,6 +5,11 @@ on:
     paths:
       - 'src/database/**'
       - 'src/migration/**'
+      - 'src/storage/portable-mount-contract.js'
+      - 'tools/ci/initialize-native-instance.ps1'
+      - 'tools/ci/supply-current-sqlite.ps1'
+      - 'tools/ci/build-native.ps1'
+      - 'tools/validation/native-build-inputs.js'
       - 'tests/migration/emby-exchange.test.js'
       - 'tests/migration/database-cli.test.js'
       - 'tests/migration/jellyfin-generations.test.js'
@@ -23,6 +28,11 @@ on:
     paths:
       - 'src/database/**'
       - 'src/migration/**'
+      - 'src/storage/portable-mount-contract.js'
+      - 'tools/ci/initialize-native-instance.ps1'
+      - 'tools/ci/supply-current-sqlite.ps1'
+      - 'tools/ci/build-native.ps1'
+      - 'tools/validation/native-build-inputs.js'
       - 'tests/migration/emby-exchange.test.js'
       - 'tests/migration/database-cli.test.js'
       - 'tests/migration/jellyfin-generations.test.js'
@@ -146,6 +156,12 @@ jobs:
     env:
       MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
       MEDIAMANAGER_EMBY_INPUTS: ${{ needs.emby-inputs.outputs.selection }}
+      MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true'
+      MEDIAMANAGER_CI_NATIVE_INSTANCE: 'true'
+      MEDIAMANAGER_CI_NATIVE_SQLITE: 'true'
+      MEDIAMANAGER_CI_MATRIX_OS: ubuntu-24.04
+      MEDIAMANAGER_CI_SHARD: '1'
+      MEDIAMANAGER_CI_SHARDS: '1'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -153,11 +169,29 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version: 24.16.0
+      - name: Bind the checkout and isolated SDK paths
+        run: |
+          echo "DOTNET_INSTALL_DIR=$RUNNER_TEMP/mediamanager-dotnet" >> "$GITHUB_ENV"
+          echo "MEDIAMANAGER_CHECKOUT_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          echo "MEDIAMANAGER_CHECKOUT_TREE=$(git rev-parse 'HEAD^{tree}')" >> "$GITHUB_ENV"
       - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
         with:
           dotnet-version: |
             8.0.426
             10.0.401
+      - name: Verify isolated .NET installation
+        shell: pwsh
+        run: ./tools/ci/verify-dotnet.ps1
+      - name: Build and verify the current designated reference
+        shell: pwsh
+        run: |
+          ./tools/ci/build-native.ps1
+          $env:MEDIAMANAGER_NATIVE_BUILD_ROOT = Join-Path $env:RUNNER_TEMP 'mediamanager-native-build'
+          $env:MEDIAMANAGER_JELLYFIN_DLL = Join-Path $env:MEDIAMANAGER_NATIVE_BUILD_ROOT 'runtime/jellyfin.dll'
+          node --input-type=module --eval "const { verifyNativeBuild } = await import('./tools/validation/native-build-inputs.js'); await verifyNativeBuild();"
+          if ($LASTEXITCODE -ne 0) { throw 'Current native build verification failed.' }
+          "MEDIAMANAGER_NATIVE_BUILD_ROOT=$env:MEDIAMANAGER_NATIVE_BUILD_ROOT" >> $env:GITHUB_ENV
+          "MEDIAMANAGER_JELLYFIN_DLL=$env:MEDIAMANAGER_JELLYFIN_DLL" >> $env:GITHUB_ENV
       - uses: ankane/setup-postgres@b1a598d92f86cb2ed364411898d150d4eac6d5ca
         with:
           postgres-version: '17'
@@ -176,7 +210,26 @@ jobs:
         run: |
           ./tools/ci/fetch-emby-server.ps1 -Channel latest
           ./tools/ci/fetch-emby-server.ps1 -Channel '4.9.1.0' -Alternate
-      - name: Build both patched native references and exchange their stopped databases
+      - name: Initialize isolated native instance and controlled media seed
+        shell: pwsh
+        timeout-minutes: 10
+        run: ./tools/ci/initialize-native-instance.ps1
+      - name: Supply current stopped-instance SQLite input
+        shell: pwsh
+        timeout-minutes: 5
+        run: ./tools/ci/supply-current-sqlite.ps1
+      - name: Verify the current SQLite CLI roundtrip and migration tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s "$MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE"
+          mkdir -p "$RUNNER_TEMP/results"
+          cp "$RUNNER_TEMP/mediamanager-current-sqlite/input/receipt.json" "$RUNNER_TEMP/results/current-sqlite.json"
+          tap="$RUNNER_TEMP/results/database-cli.tap"
+          node --test --test-reporter=tap tests/migration/database-cli.test.js tests/migration/jellyfin-generations.test.js | tee "$tap"
+          grep -Eq '^ok [0-9]+ - real CLI roundtrip preserves the current native SQLite source in PostgreSQL$' "$tap"
+          grep -Fxq '# skipped 0' "$tap"
+      - name: Build the previous reference and exchange stopped databases across generations
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -186,24 +239,21 @@ jobs:
           echo '{"sdk":{"version":"10.0.401","rollForward":"disable"}}' > "$RUNNER_TEMP/builds/global.json"
           cp "$MEDIAMANAGER_EMBY_REFERENCE_ROOT/receipts/reference-input.json" "$RUNNER_TEMP/results/emby-latest-reference-input.json"
           cp "$MEDIAMANAGER_EMBY_ALTERNATE_ROOT/receipts/reference-input.json" "$RUNNER_TEMP/results/emby-fixed-reference-input.json"
-          node --test tests/migration/database-cli.test.js tests/migration/jellyfin-generations.test.js
-          dirs=()
-          for ref in tests/fixtures/recorded-native tests/fixtures/jellyfin-reference; do
-            archive=$(jq -r .archive.path "$ref/jellyfin-source-package.json")
-            sha=$(jq -r .archive.sha256 "$ref/jellyfin-source-package.json")
-            echo "$sha  $ref/$archive" | sha256sum --check
-            dir="$RUNNER_TEMP/builds/$(basename "$ref")"
-            unzip -q "$ref/$archive" -d "$dir"
-            (cd "$RUNNER_TEMP/builds" && dotnet build "$dir/jellyfin-source/Jellyfin.Server/Jellyfin.Server.csproj" -c Release --verbosity quiet)
-            dirs+=("$dir/jellyfin-source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll")
-          done
+          ref=tests/fixtures/recorded-native
+          archive=$(jq -r .archive.path "$ref/jellyfin-source-package.json")
+          sha=$(jq -r .archive.sha256 "$ref/jellyfin-source-package.json")
+          echo "$sha  $ref/$archive" | sha256sum --check
+          dir="$RUNNER_TEMP/builds/recorded-native"
+          unzip -q "$ref/$archive" -d "$dir"
+          (cd "$RUNNER_TEMP/builds" && dotnet build "$dir/jellyfin-source/Jellyfin.Server/Jellyfin.Server.csproj" -c Release --verbosity quiet)
+          previous="$dir/jellyfin-source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll"
           export MEDIAMANAGER_MARKER_PLUGIN="$RUNNER_TEMP/marker-reader/MediaManager.EmbyChapterMarkers.dll"
           dotnet build tools/jellyfin/EmbyChapterMarkers/EmbyChapterMarkers.csproj -c Release \
-            -p:JellyfinBin="$(dirname "${dirs[1]}")" -o "$(dirname "$MEDIAMANAGER_MARKER_PLUGIN")"
+            -p:JellyfinBin="$(dirname "$MEDIAMANAGER_JELLYFIN_DLL")" -o "$(dirname "$MEDIAMANAGER_MARKER_PLUGIN")"
           export MEDIAMANAGER_SKIPPER_ZIP="$RUNNER_TEMP/intro-skipper-v12.0.7.0.zip"
           gh api -H 'Accept: application/octet-stream' repos/intro-skipper/intro-skipper/releases/assets/775285725 > "$MEDIAMANAGER_SKIPPER_ZIP"
           echo "3c72de01810910cabb25c0f2d6090b6bb2c391e3b333d69f04de338dfa4edf06  $MEDIAMANAGER_SKIPPER_ZIP" | sha256sum --check
-          python tools/ci/verify-jellyfin-migration.py "${dirs[@]}"
+          python tools/ci/verify-jellyfin-migration.py "$previous" "$MEDIAMANAGER_JELLYFIN_DLL"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: jellyfin-emby-chapter-markers-${{ github.run_attempt }}

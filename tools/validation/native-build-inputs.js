@@ -20,6 +20,7 @@ const nugetConfigName = 'nuget.config';
 const producerContracts = Object.freeze({
   validate: { workflow: 'Cross-platform validation', workflowFile: 'ci.yml' },
   build: { workflow: 'Build native reference runtime', workflowFile: 'native-build.yml' },
+  jellyfin: { workflow: 'Database migration', workflowFile: 'database-migration.yml' },
 });
 const runnerByMatrix = Object.freeze({ 'ubuntu-24.04': 'Linux', 'windows-2025': 'Windows', 'macos-15': 'macOS' });
 const currentRunnerOs = Object.freeze({ win32: 'Windows', linux: 'Linux', darwin: 'macOS' })[process.platform];
@@ -167,7 +168,7 @@ function descriptorIndex(files, label) {
 
 function producerTriggerAllowed({ job, eventName, ref }) {
   if (eventName === 'workflow_dispatch') return /^refs\/(?:heads|tags)\//u.test(ref);
-  if (job !== 'validate') return false;
+  if (job !== 'validate' && job !== 'jellyfin') return false;
   if (eventName === 'push') return ref === 'refs/heads/main';
   return eventName === 'pull_request' && /^refs\/pull\/[1-9][0-9]*\/merge$/u.test(ref);
 }
@@ -192,7 +193,8 @@ function validateProducer(receipt, environment) {
     || runner.os !== currentRunnerOs || runner.architecture !== currentRunnerArchitecture
     || !/^[1-9][0-9]*$/u.test(runner.shard) || !/^[1-9][0-9]*$/u.test(runner.shards)
     || !Number.isSafeInteger(shard) || !Number.isSafeInteger(shards) || shard > shards
-    || receipt.producer.job === 'build' && (runner.shard !== '1' || runner.shards !== '1')) {
+    || receipt.producer.job !== 'validate' && (runner.shard !== '1' || runner.shards !== '1')
+    || receipt.producer.job === 'jellyfin' && runner.matrixOs !== 'ubuntu-24.04') {
     throw new Error('Native reference evidence is not from this runner platform and matrix shard.');
   }
   if (!commit(receipt.checkout?.head) || !commit(receipt.checkout?.tree)

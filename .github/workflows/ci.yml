@@ -417,38 +417,12 @@ jobs:
         if: env.MEDIAMANAGER_CI_NATIVE_INSTANCE == 'true'
         shell: pwsh
         timeout-minutes: 10
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $instanceRoot = Join-Path $env:RUNNER_TEMP 'mediamanager-native-instance'
-          $empty = Join-Path $instanceRoot 'empty'
-          $seeded = Join-Path $instanceRoot 'seeded'
-          $validationOutput = $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT
-          try {
-            $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $instanceRoot
-            node tools/compat/initialize-reference.mjs $empty
-            if ($LASTEXITCODE -ne 0) { throw 'Native instance initialization failed.' }
-            node tools/compat/prepare-media-reference.mjs $empty $seeded
-            if ($LASTEXITCODE -ne 0) { throw 'Controlled native media seed preparation failed.' }
-          } finally { $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $validationOutput }
-          "MEDIAMANAGER_NATIVE_INSTANCE_ROOT=$instanceRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "MEDIAMANAGER_TEST_NATIVE_INSTANCE=$(Join-Path $seeded 'instance')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        run: ./tools/ci/initialize-native-instance.ps1
       - name: Supply current stopped-instance SQLite input
         if: env.MEDIAMANAGER_CI_NATIVE_SQLITE == 'true'
         shell: pwsh
         timeout-minutes: 5
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $sqliteOutput = Join-Path $env:RUNNER_TEMP 'mediamanager-current-sqlite'
-          New-Item -ItemType Directory -Path $sqliteOutput | Out-Null
-          $sqliteRoot = Join-Path $sqliteOutput 'input'
-          $validationOutput = $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT
-          try {
-            $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $sqliteOutput
-            node tools/compat/prepare-current-sqlite.mjs $sqliteRoot
-            if ($LASTEXITCODE -ne 0) { throw 'Current native SQLite supply failed.' }
-          } finally { $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $validationOutput }
-          "MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE=$(Join-Path $sqliteRoot 'input.db')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          'MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE_MOUNT_CONTRACT_JSON={"mounts":[]}' | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        run: ./tools/ci/supply-current-sqlite.ps1
       - name: Build the designated Jellyfin Web client
         if: env.MEDIAMANAGER_CI_WEB_CLIENTS == 'true'
         shell: pwsh

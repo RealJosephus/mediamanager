@@ -873,14 +873,15 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   await assert.rejects(capture([ownPath], { MEDIAMANAGER_JELLYFIN_DLL: path.join(root, 'unverified.dll') }), /same-run runtime/u);
 });
 
-test('both native producers immediately verify the dependency-free restore and no-restore byte closure', async () => {
-  const [ci, dedicated, producer, verifier] = await Promise.all([
+test('native producers immediately verify the dependency-free restore and no-restore byte closure', async () => {
+  const [ci, dedicated, migration, producer, verifier] = await Promise.all([
     readFile(path.join(repositoryRoot, '.github/workflows/ci.yml'), 'utf8'),
     readFile(path.join(repositoryRoot, '.github/workflows/native-build.yml'), 'utf8'),
+    readFile(path.join(repositoryRoot, '.github/workflows/database-migration.yml'), 'utf8'),
     readFile(path.join(repositoryRoot, 'tools/ci/build-native.ps1'), 'utf8'),
     readFile(path.join(repositoryRoot, 'tools/validation/native-build-inputs.js'), 'utf8'),
   ]);
-  for (const workflow of [ci, dedicated]) {
+  for (const workflow of [ci, dedicated, migration]) {
     const build = workflow.indexOf('./tools/ci/build-native.ps1');
     const verify = workflow.indexOf('await verifyNativeBuild();', build);
     const nextStep = workflow.indexOf('\n      - name:', build + 1);
