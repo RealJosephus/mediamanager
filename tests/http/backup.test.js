@@ -8,6 +8,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { quoteIdentifier } from '../../src/database/model.js';
 import { StorageFileSystem } from '../../src/storage/files.js';
 import { readZipDirectory } from '../../src/storage/zip-directory.js';
+import { captureBackupDatabase } from '../../src/system/backup-database.js';
 import { BackupRestored, SystemBackups } from '../../src/system/backups.js';
 import { backupFormat, legacyBackupFormat, withBackupArchive, writeBackupArchive } from '../../src/system/backup-archive.js';
 import { createMetadataHttpFixture, metadataMovieId } from '../helpers/metadata-http-fixture.js';
@@ -187,21 +188,27 @@ test('restore checks server and engine versions before restart admission and aga
   assert.equal(await readFile(config, 'utf8'), '<marker>archived</marker>');
 });
 
-test('a backup without local file attributes restores its bytes with private staging permissions', async t => {
-  const { runtime } = await createMetadataHttpFixture(t);
+test('a legacy backup restores database rows and local files without archived file attributes', async t => {
+  const { runtime, database } = await createMetadataHttpFixture(t);
   const backups = runtime.backups;
   await mkdir(backups.directory, { recursive: true });
   const stage = await mkdtemp(path.join(backups.directory, '.old-format-'));
   const filename = path.join(backups.directory, 'old-format.zip'), key = 'Config/legacy.json';
   const contents = Buffer.from('{"version":1}');
+  const [original] = await database.rows('BaseItems', { where: { Id: metadataMovieId } });
   await writeBackupArchive(filename, stage, { DateCreated: new Date().toISOString(), ServerVersion: backups.serverVersion,
-    BackupEngineVersion: '1.0.0', Options: { Database: false, Metadata: false, Subtitles: false, Trickplay: false } },
-    { format: legacyBackupFormat, serverId: backups.serverId }, save => save(key, [contents]));
+    BackupEngineVersion: '1.0.0', Options: { Database: true, Metadata: false, Subtitles: false, Trickplay: false } },
+    { format: legacyBackupFormat, serverId: backups.serverId }, async save => {
+      await save(key, [contents]);
+      await backups.store.transaction(db => captureBackupDatabase(db, save), { readOnly: true, isolation: 'repeatable-read' });
+    });
+  await database.update('BaseItems', { Id: metadataMovieId }, { Name: 'changed after legacy backup' });
   await withBackupArchive(filename, archive => {
     assert.deepEqual(Object.keys(archive.json('mediamanager.json').files[0]).sort(), ['key', 'sha256', 'size']);
   });
   await backups.stageRestore(filename, { admit: () => ({ cancel() {} }) });
   await assert.rejects(backups.restorePending(), BackupRestored);
+  assert.deepEqual(await database.rows('BaseItems', { where: { Id: metadataMovieId } }), [original]);
   const restored = path.join(backups.paths.configurationDirectoryPath, 'legacy.json');
   assert.deepEqual(await readFile(restored), contents);
   if (process.platform !== 'win32') assert.equal((await stat(restored)).mode & 0o777, 0o600);
