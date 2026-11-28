@@ -258,12 +258,27 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
  const description=bytes=>({bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});
  Object.assign(connectCapture,{originalSource:description(originalConnectSource),observedSource:description(observedConnectSource),manifest:description(manifestBytes),originalConnectBody:originalBody});
  await fs.writeFile(failedEntry,observedConnectSource);
+ const auditEntry=path.join(initial,'index.js');
+ const beforeEntry=await fs.readFile(auditEntry,'utf8');
+ const anchor="  const provider=";
+ assert.ok(beforeEntry.includes(anchor));
+ await fs.writeFile(auditEntry,beforeEntry.replace(anchor,
+  "  await context.register('route',{method:'GET',path:'/AuditCatalog/{section}/{id}',handle:async()=>({handler:'generic'})});\n"+
+  "  await context.register('route',{method:'GET',path:'/AuditCatalog/Albums/{id}',handle:async()=>({handler:'albums'})});\n"+anchor));
  assert.equal((await request('POST','/Plugins/Install',{path:initial})).status,200);
+ const catalogRoutes=runtime.implementedRoutes;
+ const auditDir=path.join(validationOutputRoot(),'audit-route-specificity');await fs.mkdir(auditDir,{recursive:true});
+ const observe=async pathname=>{const r=await request('GET',pathname);return {pathname,status:r.status,body:await r.json()};};
+ const auditRoutes={registered:catalogRoutes,normal:await observe('/AuditCatalog/Shows/7'),specific:await observe('/AuditCatalog/Albums/7')};
+ await fs.writeFile(path.join(auditDir,'report.json'),JSON.stringify(auditRoutes,null,2));
+ console.log('AUDIT '+JSON.stringify({routeCount:catalogRoutes.length,normal:auditRoutes.normal,specific:auditRoutes.specific}));
+
  assert.equal((await request('GET','/Plugins/LibrarySummary',undefined,false,{failureStatus:401})).status,401);
  const summary=await request('GET','/plugins/librarysummary/',undefined,true,{token:login.AccessToken});
  assert.equal(summary.status,200);assert.deepEqual(await summary.json(),{summary:'initial'});
  assert.equal((await request('GET','/Plugins/fixture',undefined,true,{token:login.AccessToken,failureStatus:403})).status,403);
  assert.equal((await (await request('GET','/Plugins/fixture')).json()).id,'fixture');
+ assert.equal(auditRoutes.specific.body.handler,'albums');
  assert.equal((await request('POST','/Plugins/fixture/Configuration',{message:'persisted'})).status,200);
  assert.equal((await (await request('GET','/Fixture/Echo')).json()).message,'persisted');
  const beforeFailedUpdate=runtime.plugins.get('fixture');
