@@ -706,8 +706,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(() => metadataEditor.close());
   const itemUpdates = new MetadataEditService({ library, loadContext, updates: metadataUpdates, refreshes: metadata });
   rollback.push(() => itemUpdates.close());
-  const stopBeforeStorageObserver = configuredStorage.subscribeBeforeChange(() => libraryMonitor?.stop());
-  const stopAfterStorageObserver = configuredStorage.subscribe(async () => {
+  const reloadStorage = async () => {
     storageReadiness.ready = false; storageReadiness.error = null;
     await deferUnavailable(() => configurationStore?.initialize());
     storageReadiness.ready = await deferUnavailable(async () => {
@@ -719,8 +718,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
       // Cold management mode defers the recorder until its storage is back.
       if (networkHost.coreStartupHasCompleted) await liveTvDvr?.start();
     });
-  });
-  const stopStorageObserver = () => { stopBeforeStorageObserver(); stopAfterStorageObserver(); };
+  };
+  const stopStorageObserver = configuredStorage.observeRuntime({ stop: () => libraryMonitor?.stop(), reload: reloadStorage });
   rollback.push(stopStorageObserver);
   const services = { storage: configuredStorage, storageReadiness, fileSystem, get configuration() { return currentConfiguration(); }, get networkConfiguration() { return getNetworkConfiguration(); }, getNetworkConfiguration, getSmartApiUrl, network, baseUrl, publicAddress, store, activities, users, devices, library, itemCreation, itemDeletion, unsafeItemDeletion, folderValidation, linkedChildReferences, playlists, topLevelValidation, libraryScanHost, libraryScanLifecycle, libraryScanner, metadataScanner, artistsPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, tasks, userData, sessions, syncPlay, refreshes, authentication, localization, playback, probe, externalData, extraction, remux, hls, images, imageProcessor, metadata, metadataUpdates, resolvedItemLifecycle, metadataEditor, itemUpdates, plugins, similarItems, ignoreRule, serverId, serverName, serverVersion };
   services.collectionPosterVerifyPostScanTask = collectionPosterVerifyPostScanTask;

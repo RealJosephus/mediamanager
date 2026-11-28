@@ -98,13 +98,16 @@ function mountIdentityOverlays(vfs, declarations, groups) {
 export async function createConfiguredStorage(filename, { environment = process.env, portableMountContract, plugins } = {}) {
   if (!plugins) throw new TypeError('Configured storage requires a plugin host.');
   filename ??= path.join(plugins.directory,'storage.json');
-  let configuration, current, closing, closed = false, initializing = true, tail = Promise.resolve();
+  let configuration, current, closing, runtimeObserver, closed = false, initializing = true, tail = Promise.resolve();
   const operations = new AsyncLocalStorage();
   const activeOwner = () => operations.getStore()?.owner ?? current;
   const extensions = new Map(), listeners = new Set(), beforeListeners = new Set(), retiring = new Set();
   const readerShutdown = new AbortController(), readers = new Set();
   const notify = async () => { for (const listener of listeners) await listener(); };
   const report = async error => { try { await plugins.onError(error); } catch { /* Diagnostics cannot interrupt storage ownership transfer. */ } };
+  const stopRuntime = async () => {
+    try { await runtimeObserver?.stop(); } catch (error) { await report(error); }
+  };
   const notifyBefore = async () => {
     // A stopped observer's cleanup failure must not strand the other observers.
     for (const listener of beforeListeners) try { await listener(); } catch (error) { await report(error); }
@@ -221,24 +224,29 @@ export async function createConfiguredStorage(filename, { environment = process.
   };
   const change = async (definition, save = true, strictType) => {
     const candidate = await build(definition,{tolerateUnavailable:initializing || !save,strictType});
-    if (!initializing) await notifyBefore();
+    const prepare = save && !initializing && runtimeObserver;
+    if (!initializing) await stopRuntime();
     const scope = { owner: candidate };
     try {
       // Initialize the candidate in isolation. Other requests keep their live mounts
       // and a cold start keeps the last usable definition until initialization succeeds.
-      if (save && !initializing) await operations.run(scope, notify);
+      if (prepare) await operations.run(scope, prepare.reload);
       if (save) await persist(filename,definition);
     } catch (error) {
-      if (save && !initializing) {
-        await operations.run(scope, notifyBefore);
-        try { await notify(); }
+      if (prepare) {
+        await operations.run(scope, stopRuntime);
+        try { await runtimeObserver?.reload(); }
         catch (recovery) { throw operationFailure([error, recovery], 'Storage reconfiguration and recovery failed.'); }
         finally { await retire(candidate); }
       } else await retire(candidate);
       throw error;
     } finally { scope.owner = null; }
+    // A transfer notification admits observers to the published replacement
+    // while owners of unfinished uploads can still drain their old generation.
+    if (!initializing) await notifyBefore();
     const previous = current; current = candidate; configuration = clone(definition);
     if (previous) await retire(previous);
+    if (save && !initializing) await notify();
     return clone(configuration);
   };
   const enqueue = operation => {
@@ -276,6 +284,7 @@ export async function createConfiguredStorage(filename, { environment = process.
       return async () => {
         extensions.delete(extension.type);
         if (!initializing && !closed) await enqueue(async () => {
+          await stopRuntime();
           await notifyBefore();
           const owner = current;
           try { await closeStorage(owner, () => owner.registry.unregisterType(extension.type)); }
@@ -311,7 +320,7 @@ export async function createConfiguredStorage(filename, { environment = process.
       return (...args)=>{const owner=activeOwner();args[0]=metadataPath(owner,args[0]);if(key==='rename')args[1]=metadataPath(owner,args[1]);return owner.vfs[key](...args);};
     }});
     const initial = { definition: current.definition, vfs: current.vfs, media: current.identityMap, metadata: current.metadataIdentityMap };
-    const unsubscribe=plugins.subscribe(()=>enqueue(notify));
+    const unsubscribe=plugins.subscribe(()=>enqueue(async () => { await runtimeObserver?.reload(); await notify(); }));
     return { vfs,identityMap,metadataVfs,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,retainGeneration,withGeneration,
       // An archived definition on disk must describe the same generation as its files.
       withStableConfiguration: enqueue,
@@ -330,6 +339,10 @@ export async function createConfiguredStorage(filename, { environment = process.
       configuration:()=>clone(configuration), types:()=>[...extensions.keys()],
       status:()=>configuration.instances.map(instance=>({id:instance.id,type:instance.type,
         available:current.registry.hasInstance(instance.id),error:current.unavailable.find(entry=>entry.id===instance.id)?.error??null})),
+      observeRuntime(observer) {
+        runtimeObserver = observer;
+        return () => { if (runtimeObserver === observer) runtimeObserver = undefined; };
+      },
       subscribe:listener=>{listeners.add(listener);return()=>listeners.delete(listener);},
       subscribeBeforeChange:listener=>{beforeListeners.add(listener);return()=>beforeListeners.delete(listener);},
       configure:value=>enqueue(()=>change(clone(value))),
