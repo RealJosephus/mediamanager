@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdir, open, readFile, stat, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, open, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Readable } from 'node:stream';
 import { text } from 'node:stream/consumers';
@@ -186,4 +186,24 @@ test('restore checks server and engine versions before restart admission and aga
   await writeFile(pending, staged);
   await assert.rejects(server('13.10.0.0').restorePending(), BackupRestored);
   assert.equal(await readFile(config, 'utf8'), '<marker>archived</marker>');
+});
+
+test('a backup without local file attributes restores its bytes with private staging permissions', async t => {
+  const { runtime } = await createMetadataHttpFixture(t);
+  const backups = runtime.backups;
+  await mkdir(backups.directory, { recursive: true });
+  const stage = await mkdtemp(path.join(backups.directory, '.old-format-'));
+  const filename = path.join(backups.directory, 'old-format.zip'), key = 'Config/legacy.json';
+  const contents = Buffer.from('{"version":1}');
+  await writeBackupArchive(filename, stage, { DateCreated: new Date().toISOString(), ServerVersion: backups.serverVersion,
+    BackupEngineVersion: '1.0.0', Options: { Database: false, Metadata: false, Subtitles: false, Trickplay: false } },
+    { format: backupFormat, serverId: backups.serverId }, save => save(key, [contents]));
+  await withBackupArchive(filename, archive => {
+    assert.deepEqual(Object.keys(archive.json('mediamanager.json').files[0]).sort(), ['key', 'sha256', 'size']);
+  });
+  await backups.stageRestore(filename, { admit: () => ({ cancel() {} }) });
+  await assert.rejects(backups.restorePending(), BackupRestored);
+  const restored = path.join(backups.paths.configurationDirectoryPath, 'legacy.json');
+  assert.deepEqual(await readFile(restored), contents);
+  if (process.platform !== 'win32') assert.equal((await stat(restored)).mode & 0o777, 0o600);
 });

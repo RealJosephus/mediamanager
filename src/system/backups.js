@@ -106,6 +106,10 @@ export class SystemBackups {
       payloads.set(key, payloadPath(stage, index));
       if (options.Database && /^Database\/(?:catalog\.json|(?:0|[1-9]\d*)\.ndjson)$/u.test(key)) continue;
       const target = backupDestination(roots, key);
+      if ((file.mode !== undefined && (!target.local || !Number.isInteger(file.mode) || file.mode < 0 || file.mode > 0o777))
+        || (file.mtimeMs !== undefined && (!target.local || !Number.isFinite(file.mtimeMs) || !Number.isFinite(new Date(file.mtimeMs).getTime())))) {
+        throw failure(422, 'Invalid backup file attributes.');
+      }
       const relative = target.api.relative(this.directory, target.filename);
       if (!relative || !target.api.isAbsolute(relative) && relative !== '..' && !relative.startsWith('..' + target.api.sep)) {
         throw failure(422, 'A backup entry overlaps the backup directory.');
@@ -162,14 +166,14 @@ export class SystemBackups {
       if (catalog) await restoreBackupDatabase(db, payloads, catalog);
       for (const file of descriptor.files) {
         const target = destinations.get(file.key);
-        if (target?.local) await restoreBackupFile(target, payloads.get(file.key), file.size);
+        if (target?.local) await restoreBackupFile(target, payloads.get(file.key), file);
       }
       // The selected storage definition can itself be one of the Config files.
       const storage = await this.openStorage();
       await storage.withGeneration(async () => {
         for (const file of descriptor.files) {
           const target = destinations.get(file.key);
-          if (target && !target.local) await restoreBackupFile(target, payloads.get(file.key), file.size, storage.fileSystem);
+          if (target && !target.local) await restoreBackupFile(target, payloads.get(file.key), file, storage.fileSystem);
         }
       });
     });

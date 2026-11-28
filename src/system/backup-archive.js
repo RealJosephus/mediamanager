@@ -78,9 +78,9 @@ export const payloadPath = (stage, index) => path.join(stage, String(index));
 
 export async function writeBackupArchive(filename, stage, manifest, descriptor, capture) {
   const files = [];
-  await capture(async (key, stream) => {
+  await capture(async (key, stream, attributes) => {
     const digest = await copyAndHash(stream, payloadPath(stage, files.length), Number.MAX_SAFE_INTEGER);
-    files.push({ key, ...digest });
+    files.push({ key, ...digest, ...attributes });
     return digest.size;
   });
   const index = Buffer.from(JSON.stringify({ ...descriptor, files }));

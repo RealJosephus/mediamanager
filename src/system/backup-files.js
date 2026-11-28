@@ -75,9 +75,11 @@ export async function captureBackupFiles(roots, backupDirectory, save, fileSyste
         if (entry.isDirectory()) { await visit(filename, key); continue; }
         if (!entry.isFile()) continue;
         const before = await files.stat(filename, { bigint: true });
-        const size = await save(key, root.local ? createReadStream(filename) : files.createReadStream(filename));
+        const attributes = root.local ? { mtimeMs: Number(before.mtimeNs) / 1e6,
+          ...(process.platform !== 'win32' && { mode: Number(before.mode & 0o777n) }) } : undefined;
+        const size = await save(key, root.local ? createReadStream(filename) : files.createReadStream(filename), attributes);
         const after = await files.stat(filename, { bigint: true });
-        if (BigInt(size) !== before.size || before.size !== after.size || before.mtimeNs !== after.mtimeNs) {
+        if (BigInt(size) !== before.size || before.size !== after.size || before.mtimeNs !== after.mtimeNs || root.local && before.mode !== after.mode) {
           throw new Error('A source file changed during backup.');
         }
       }
@@ -87,7 +89,7 @@ export async function captureBackupFiles(roots, backupDirectory, save, fileSyste
   }
 }
 
-export async function restoreBackupFile(target, source, size, files) {
+export async function restoreBackupFile(target, source, { size, mode, mtimeMs }, files) {
   const { api, local, filename } = target;
   const directory = api.dirname(filename);
   if (local) {
@@ -101,6 +103,8 @@ export async function restoreBackupFile(target, source, size, files) {
     const temporary = api.join(directory, '.restore-' + randomUUID());
     try {
       await fs.copyFile(source, temporary, fs.constants.COPYFILE_EXCL);
+      if (mtimeMs !== undefined) await fs.utimes(temporary, new Date(), String(mtimeMs / 1000));
+      if (mode !== undefined && process.platform !== 'win32') await fs.chmod(temporary, mode);
       await fs.rename(temporary, filename);
     } finally { await fs.rm(temporary, { force: true }); }
   } else {

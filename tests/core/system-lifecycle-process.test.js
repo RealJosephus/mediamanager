@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
 import { once } from 'node:events';
-import { mkdir, copyFile, readFile, stat, writeFile, unlink } from 'node:fs/promises';
+import { mkdir, chmod, copyFile, readFile, stat, utimes, writeFile, unlink } from 'node:fs/promises';
 import { buffer } from 'node:stream/consumers';
 import { randomUUID, createHash } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -374,6 +374,13 @@ test('the actual production CLI retains its selected target across HTTP restarts
     assert.equal((await call('/Storage/Configuration', { method: 'POST', body: definition, timeout: 30000 })).status, 200);
     await assert.rejects(stat(logical), { code: 'ENOENT' });
     const selected = { Database: true, Metadata: true, Subtitles: true, Trickplay: true };
+    const configFile = path.join(instance, 'config', 'reader.json');
+    const savedTime = new Date('2020-01-02T03:04:05.125Z');
+    await writeFile(configFile, '{"theme":"blue"}');
+    for (const file of [configFile, definitionFile]) {
+      if (process.platform !== 'win32') await chmod(file, 0o640);
+      await utimes(file, savedTime, savedTime);
+    }
     const backup = await call('/Backup/Create', { method: 'POST', body: selected, timeout: 30000 });
     assert.equal(backup.status, 200, stderr);
     assert.deepEqual(backup.body.Options, selected);
@@ -408,6 +415,8 @@ test('the actual production CLI retains its selected target across HTTP restarts
     assert.equal((await call('/System/Configuration')).body.ServerName, 'After backup');
     await storage.fileSystem.writeFile(witness, Buffer.from('changed metadata'));
     await writeFile(poster, 'changed mounted poster');
+    await writeFile(configFile, '{"theme":"red"}');
+    if (process.platform !== 'win32') await chmod(configFile, 0o600);
     assert.equal(await readFile(witness, 'utf8'), 'changed metadata');
     assert.equal(await readFile(poster, 'utf8'), 'changed mounted poster');
     await writeFile(inside, 'changed subtitle'); await writeFile(outside, 'after');
@@ -423,6 +432,13 @@ test('the actual production CLI retains its selected target across HTTP restarts
     await verifyRetained('after actual backup restore');
     assert.deepEqual(await readFile(witness), original);
     assert.deepEqual(await readFile(poster), originalPoster);
+    assert.equal(await readFile(configFile, 'utf8'), '{"theme":"blue"}');
+    for (const file of [configFile, definitionFile]) {
+      const restored = await stat(file);
+      assert.equal(restored.mtime.toISOString(), savedTime.toISOString());
+      if (process.platform !== 'win32') assert.equal(restored.mode & 0o777, 0o640);
+      t.diagnostic(JSON.stringify({ configFile: path.basename(file), mode: (restored.mode & 0o777).toString(8), mtime: restored.mtime }));
+    }
     await assert.rejects(stat(logical), { code: 'ENOENT' });
     const restoredStorage = await call('/Storage/Configuration');
     assert.equal(restoredStorage.status, 200);

@@ -247,12 +247,13 @@ export async function createConfiguredStorage(filename, { environment = process.
     const promise = tail.then(() => operations.exit(operation)); tail = promise.catch(()=>{}); return promise;
   };
   try {
+    let saveDefaults = false;
     try {
       const text = await fs.readFile(filename,'utf8');
       try { configuration = JSON.parse(text); }
       catch { throw new TypeError('Storage configuration contains invalid JSON.'); }
     }
-    catch (error) { if (error.code !== 'ENOENT') throw error; configuration = {instances:[],mounts:[],prefixes:[]}; }
+    catch (error) { if (error.code !== 'ENOENT') throw error; configuration = {instances:[],mounts:[],prefixes:[]}; saveDefaults = true; }
     validate(configuration);
     // Defaults become ordinary persisted definitions. Removing a plugin never
     // removes identities, path bindings or configuration.
@@ -261,6 +262,7 @@ export async function createConfiguredStorage(filename, { environment = process.
       if (configuration.prefixes.some(prefix => prefix.purpose!=='metadata' && (definition.style === 'uri'
         ? prefix.style === 'uri' && parseSourceUri(prefix.identityRoot, { prefix: true }).canonical === parseSourceUri(definition.identityRoot, { prefix: true }).canonical
         : definition.style === 'windows' ? prefix.identityRoot.toLowerCase() === definition.identityRoot.toLowerCase() : prefix.identityRoot === definition.identityRoot))) continue;
+      saveDefaults = true;
       configuration.instances.push({id,type:extension.type,config:definition.config});
       configuration.mounts.push({path:accessRoot,instanceId:id,root:'/',capabilities:{...definition.capabilities}});
       configuration.prefixes.push({identityRoot:definition.identityRoot,accessRoot,style:definition.style,
@@ -286,7 +288,7 @@ export async function createConfiguredStorage(filename, { environment = process.
         });
       };
     });
-    await change(configuration); initializing = false;
+    await change(configuration, saveDefaults); initializing = false;
     const vfs = dynamic(() => activeOwner().vfs, {
       openRead: (filename, options) => openPinnedRead(activeOwner(), 'openRead', filename, options),
       openResponse: (filename, options) => openPinnedRead(activeOwner(), 'openResponse', filename, options),
