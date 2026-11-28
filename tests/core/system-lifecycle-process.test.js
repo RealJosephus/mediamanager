@@ -334,7 +334,10 @@ for (const location of ['config', 'external', 'default']) test(
       assert.equal(socket.readyState, WebSocket.CLOSED); socket = undefined;
       await until('actual old runtime schema removal', async () => (await database.client.query('SELECT nspname FROM pg_namespace WHERE nspname=ANY($1::text[])', [before.schemas])).rows, value => value.length === 0);
       await ready();
-      const oldConnections = (await database.client.query('SELECT pid,backend_start::text AS started,state FROM pg_stat_activity WHERE pid=ANY($1::integer[])', [before.connections.map(row => row.pid)])).rows;
+      // A new PostgreSQL backend can reuse an exited backend's Windows PID.
+      const oldConnections = (await database.client.query(`SELECT pid,backend_start::text AS started,state FROM pg_stat_activity
+        WHERE (pid,backend_start) IN (SELECT * FROM unnest($1::integer[],$2::timestamptz[]))`,
+        [before.connections.map(row => row.pid), before.connections.map(row => row.started)])).rows;
       assert.deepEqual(oldConnections, []); assert.equal(childResult, undefined);
       assert.equal(child.pid, report.process.pid);
       assert.deepEqual(await readProductionTarget(targetFile), nextTarget);
