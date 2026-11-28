@@ -36,7 +36,6 @@ export class RemuxService {
   #jobs = new Map();
   #lifetime = new AbortController();
   #preparing = new Set();
-  #retiring = new Set();
   #cache;
   #cacheReady;
   #liveBridge;
@@ -173,7 +172,7 @@ export class RemuxService {
   }
 
   #start(key, directory, source, virtualPath, plan, threads, options, input, timeoutMs) {
-    const active = [...this.#jobs.values(), ...this.#retiring].filter(job => !job.finished || job.readers.size > 0).length;
+    const active = [...this.#jobs.values()].filter(job => !job.finished || job.readers.size > 0).length;
     if (active >= this.maxConcurrentRemuxes) throw failure('busy', 'The remux concurrency limit has been reached.');
     const controller = new AbortController();
     const job = { key, directory, controller, options, cacheable: input.cacheable, size: 0, readers: new Set() };
@@ -206,7 +205,7 @@ export class RemuxService {
     this.#armIdle(job);
     let bytes = 0, entries = 0;
     for (const candidate of [...this.#jobs.values()].reverse()) {
-      if (!candidate.finished || candidate.readers.size) continue;
+      if (candidate.removing || !candidate.finished || candidate.readers.size) continue;
       if (entries >= this.maxConcurrentRemuxes || bytes + candidate.size > maxRetainedBytes) this.#remove(candidate).catch(this.onError);
       else { entries++; bytes += candidate.size; }
     }
@@ -335,15 +334,12 @@ export class RemuxService {
   #remove(job) {
     if (job.removing) return job.removing;
     job.controller.abort(failure('cancelled', 'Remuxing was stopped.'));
-    clearTimeout(job.idle);
-    if (this.#jobs.get(job.key) === job) this.#jobs.delete(job.key);
-    this.jobs.unregister(job);
-    this.#retiring.add(job);
+    clearTimeout(job.idle); job.idle = undefined;
+    // A concurrent DELETE for this session must join the same cleanup as the disconnected reader.
     job.removing = withCleanup(async () => { await job.done; await Promise.allSettled([...job.readers]); },
-      [() => job.file?.close(), () => job.workspace && this.#cache.remove(job.directory, job.workspace)], 'Remux output cleanup failed.');
-    job.removing.then(() => this.#retiring.delete(job), error => {
-      this.#retiring.delete(job); this.#cleanupErrors.push(error);
-    });
+      [() => job.file?.close(), () => job.workspace && this.#cache.remove(job.directory, job.workspace),
+        () => { this.#jobs.delete(job.key); this.jobs.unregister(job); }], 'Remux output cleanup failed.');
+    job.removing.catch(error => this.#cleanupErrors.push(error));
     return job.removing;
   }
 
@@ -352,7 +348,7 @@ export class RemuxService {
     const completion = Promise.withResolvers(); this.#closing = completion.promise;
     this.#lifetime.abort(failure('closed', 'Remuxing is closed.'));
     (async () => {
-      const jobs = [...this.#jobs.values(), ...this.#retiring];
+      const jobs = [...this.#jobs.values()];
       await Promise.allSettled(jobs.map(job => this.#remove(job)));
       await Promise.allSettled([...this.#preparing]);
       this.#cache.close();
