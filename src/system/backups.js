@@ -109,7 +109,7 @@ export class SystemBackups {
       if (options.Database && /^Database\/(?:catalog\.json|(?:0|[1-9]\d*)\.ndjson)$/u.test(key)) continue;
       const target = hasDefinition && key === storageDefinitionKey
         ? storageDefinitionTarget(this.storageConfigurationPath) : backupDestination(roots, key);
-      if (!target.local && (!hasDefinition || !/^[0-9a-f]{64}$/u.test(file.binding))) {
+      if (!target.local && (!hasDefinition || !/^[0-9a-f]{64}$/u.test(file.storageBinding))) {
         throw failure(422, 'This backup does not identify the original storage volume for ' + key + '.');
       }
       if (hasDefinition && key !== storageDefinitionKey && target.local && !path.relative(this.storageConfigurationPath, target.filename)) {
@@ -133,14 +133,14 @@ export class SystemBackups {
   async #withRestoreFiles({ payloads, destinations }, descriptor, operation) {
     if (!payloads.has(storageDefinitionKey)) return operation(); // Legacy local files and database rows.
     const definition = JSON.parse(await fs.readFile(payloads.get(storageDefinitionKey), 'utf8'));
-    return this.withRestoreStorage(definition, async (files, binding) => {
+    return this.withRestoreStorage(definition, async (files, getStorageBinding) => {
       for (const file of descriptor.files) {
         const target = destinations.get(file.key);
         if (!target || target.local) continue;
         let actual;
-        try { actual = await binding(target.filename); }
+        try { actual = await getStorageBinding(target.filename); }
         catch (cause) { throw Object.assign(failure(422, 'The archived volume is unavailable for ' + file.key + '.'), { cause }); }
-        if (actual !== file.binding) throw failure(422, 'The original storage volume does not match ' + file.key + '.');
+        if (actual !== file.storageBinding) throw failure(422, 'The original storage volume does not match ' + file.key + '.');
       }
       return operation(files);
     });

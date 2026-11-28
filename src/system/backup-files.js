@@ -97,7 +97,7 @@ export async function captureBackupFiles(roots, backupDirectory, save, storageCo
         if (entry.isDirectory()) { await visit(filename, key); continue; }
         if (!entry.isFile()) continue;
         const before = await files.stat(filename, { bigint: true });
-        const attributes = root.local ? fileAttributes(before) : { binding: await generation.archiveBinding(filename) };
+        const attributes = root.local ? fileAttributes(before) : { storageBinding: await generation.archiveBinding(filename) };
         const size = await save(key, root.local ? createReadStream(filename) : files.createReadStream(filename), attributes);
         const after = await files.stat(filename, { bigint: true });
         if (BigInt(size) !== before.size || before.size !== after.size || before.mtimeNs !== after.mtimeNs || root.local && before.mode !== after.mode) {

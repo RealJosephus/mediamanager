@@ -35,7 +35,7 @@ test('restore leaves both volumes and PostgreSQL intact when a WebDAV endpoint l
     const archive = await backups.create({ Database: true, Metadata: true, Subtitles: false, Trickplay: false });
     await withBackupArchive(archive.Path, zip => {
       const member = zip.json('mediamanager.json').files.find(file => file.key === 'Data/metadata/remote-art/' + key);
-      assert.equal(member.binding, null);
+      assert.equal(member.storageBinding, null);
     });
     const selection = await readFile(backups.storageConfigurationPath);
     await database.update('BaseItems', { Id: metadataMovieId }, { Name: 'current database' });
