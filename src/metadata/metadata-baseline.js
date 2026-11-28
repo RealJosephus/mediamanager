@@ -46,7 +46,12 @@ export async function assertMetadataBaseline(db, loaded) {
     return undefined;
   }
   const current = (await db.rows('BaseItems', { where: { Id: id } }))[0];
-  if (!isDeepStrictEqual(current, loaded.snapshot)) throw metadataConflict(itemChanged);
+  if (!isDeepStrictEqual(current, loaded.snapshot)) {
+    const expected = loaded.snapshot;
+    const fields = [...new Set([...Object.keys(current ?? {}), ...Object.keys(expected ?? {})])].filter(key=>!isDeepStrictEqual(current?.[key],expected?.[key]));
+    throw Object.assign(metadataConflict(itemChanged),{itemId:id, itemName:loaded.item.Name,
+      differences:fields.map(key=>({key,before:String(expected?.[key]).slice(0,300),after:String(current?.[key]).slice(0,300)}))});
+  }
   if (loaded.ownedExtraOwner) {
     const owner = loaded.ownedExtraOwner;
     const [row] = await db.rows('BaseItems', { where: { Id: owner.Id } });

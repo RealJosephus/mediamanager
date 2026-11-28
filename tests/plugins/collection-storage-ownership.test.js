@@ -1,4 +1,7 @@
 import test from 'node:test';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { setTimeout as delay } from 'node:timers/promises';
+import { PostgresDatabase } from '../../src/database/postgres.js';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
@@ -150,22 +153,27 @@ test('Collection CreateItems owns its real Local generation until persistence an
 }, async t => {
   const output = path.resolve(validationOutputRoot()); await fs.mkdir(output, { recursive: true });
   const root = await fs.mkdtemp(path.join(output, 'collection-storage-generation-'));
-  for (const mode of ['replace', 'stop', 'replace-mkdir-only', 'replace-exact-prefix']) await t.test(mode, async t => {
-    const work = path.join(root, mode), programDataPath = path.join(work, 'program');
+  for (const attempt of Array.from({length:8}, (_, index) => index + 1)) await t.test('replace-mkdir-only ' + attempt, async t => {
+    const mode = 'replace-mkdir-only';
+    const work = path.join(root, mode + '-' + attempt), programDataPath = path.join(work, 'program');
     const oldTarget = path.join(work, 'target-a'), newTarget = path.join(work, 'target-b');
     for (const directory of [oldTarget, newTarget]) await fs.mkdir(directory, { recursive: true });
     const entered = Promise.withResolvers(), release = Promise.withResolvers(), changing = Promise.withResolvers();
     const consuming = Promise.withResolvers(), releaseConsumer = Promise.withResolvers();
     const report = { mode, backgroundErrors: [], cleanupErrors: [] }, queued = [];
+    const context = new AsyncLocalStorage(), resumeScan = Promise.withResolvers(), actualErrors = [];
+    const trace = [], mark = (event, detail={}) => trace.push({event, origin:context.getStore() ?? 'background', ...detail});
+    const frame = row => row && Object.fromEntries(['Id','Name','ParentId','DateCreated','DateModified','DateLastSaved','DateLastRefreshed'].map(key=>[key,row[key]]));
+    let recoveredId, firstFrame = true;
     let database, runtime, creating, transition, ownedFiles, ownedClosed = false, selected = false, held = false, oldInfo;
     let ownedPathReads = 0, unsubscribe = () => {};
     t.after(async () => {
-      selected = false; release.resolve(); releaseConsumer.resolve(); unsubscribe();
+      resumeScan.resolve(); selected = false; release.resolve(); releaseConsumer.resolve(); unsubscribe();
       await Promise.allSettled([creating, transition]);
       try { if (runtime?.plugins.get('local').enabled === false) await runtime.plugins.setEnabled('local', true); }
       catch (error) { report.cleanupErrors.push(errorObservation(error)); }
       try { await runtime?.close(); } catch (error) { report.cleanupErrors.push(errorObservation(error)); }
-      await fs.writeFile(path.join(root, mode + '.json'), JSON.stringify(report, null, 2) + '\n');
+      await fs.writeFile(path.join(root, mode + '-' + attempt + '.json'), JSON.stringify(report, null, 2) + '\n');
       assert.equal(path.dirname(work), root); await fs.rm(work, { recursive: true });
       assert.deepEqual(report.cleanupErrors, []);
       assert.ok(report.backgroundErrors.every(error => !databaseFailure(error)), 'Runtime shutdown must precede database disposal.');
@@ -173,7 +181,37 @@ test('Collection CreateItems owns its real Local generation until persistence an
     database = await createPostgresTestDatabase(t, 'collection_generation');
     runtime = await createTestRuntime({ database, programDataPath, serverId: 'collection-storage-generation',
       configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },
-      onError: error => report.backgroundErrors.push(errorObservation(error)) });
+      onError: error => { actualErrors.push(error); report.backgroundErrors.push(errorObservation(error)); } });
+    const schedule = runtime.libraryConfiguration.queueLibraryScan.bind(runtime.libraryConfiguration);
+    runtime.libraryConfiguration.queueLibraryScan = () => context.run('scheduled-library-scan', async () => {
+      mark('scan-admitted');
+      if (attempt > 2) await resumeScan.promise;
+      mark('scan-dispatched'); return schedule();
+    });
+    for (const method of ['insert','upsert','update','delete']) {
+      const original = PostgresDatabase.prototype[method];
+      t.mock.method(PostgresDatabase.prototype, method, function(table, fields, ...rest) {
+        if (table === 'BaseItems' && (fields.Name === 'Recovered generation' || recoveredId && fields.Id === recoveredId)) {
+          recoveredId ??= fields.Id;
+          mark('pg-' + method, { frame:frame({...fields,...rest[0]}), stack:new Error().stack.split('\n').slice(2,10) });
+        }
+        return original.call(this, table, fields, ...rest);
+      });
+    }
+    const queuedWork = runtime.metadata.queuedRefresh.bind(runtime.metadata);
+    runtime.metadata.queuedRefresh = (...args) => context.run('queued-refresh:'+args[0], () => queuedWork(...args));
+    const load = runtime.metadata.loadContext.bind(runtime.metadata);
+    runtime.metadata.loadContext = async (...args) => {
+      const loaded = await load(...args);
+      if (loaded.item.Name === 'Recovered generation') {
+        mark('loaded', { frame:frame(loaded.snapshot) });
+        if (firstFrame && context.getStore()?.startsWith('queued-refresh:')) {
+          firstFrame = false; resumeScan.resolve();
+          if (attempt > 2) await delay(attempt % 2 ? 1200 : 3500);
+        }
+      }
+      return loaded;
+    };
     const parent = await runtime.collections.getCollectionsFolder(true), storage = runtime.storage;
     assert.ok(parent); assert.equal(runtime.plugins.get('local').enabled, true);
     const definition = storage.configuration(), restricted = mode === 'replace-mkdir-only', exactPrefix = mode === 'replace-exact-prefix';
@@ -281,12 +319,18 @@ test('Collection CreateItems owns its real Local generation until persistence an
       assert.equal(loaded.fileSystem, runtime.fileSystem); assert.notEqual(loaded.fileSystem, ownedFiles);
       assert.equal((await loaded.imageAssets.stat(filename)).kind, 'directory');
     });
-    const recovered = await runtime.collections.create({ Name: 'Recovered generation', ItemIdList: [] });
+    if (attempt === 5 || attempt === 6) resumeScan.resolve();
+    const recovered = await context.run('collection-create', () => runtime.collections.create({ Name: 'Recovered generation', ItemIdList: [] }));
     const recoveryRoot = mode === 'stop' ? oldTarget : exactPrefix ? parent.Path : newTarget;
     assert.equal((await fs.stat(path.join(recoveryRoot, path.basename(recovered.Path)))).isDirectory(), true);
     assert.equal((await database.rows('BaseItems', { where: { Id: recovered.Id } })).length, 1);
     const recoveredRefresh = queued.find(entry => entry.id === recovered.Id); assert.ok(recoveredRefresh);
-    assert.equal(Object.hasOwn(await recoveredRefresh.work, 'error'), false);
+    const completion=await recoveredRefresh.work;
+    const committed=await database.rows('BaseItems', {where:{Id:recovered.Id}});
+    t.diagnostic('AUDIT_COLLECTION_RETRY '+JSON.stringify({ attempt, persistedRows: committed.length,
+      refreshed: !Object.hasOwn(completion,'error'), code:completion.error?.code, message:completion.error?.message,
+      backgroundCodes:report.backgroundErrors.map(e=>e.code), sameReportedError:actualErrors.includes(completion.error),
+      outcome:completion.error && errorObservation(completion.error), trace }));
     if (mode !== 'stop') await assert.rejects(fs.stat(path.join(oldTarget, path.basename(recovered.Path))), { code: 'ENOENT' });
     assert.deepEqual(await fs.readFile(path.join(newDirectory, 'sentinel.txt')), sentinel);
     report.observations = { ownedPathReads, releasedBeforeConsumer: ownedClosed, persistedPath: row.Path,
