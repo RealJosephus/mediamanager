@@ -891,6 +891,14 @@ export function acquireNativeItemLinkOwner(item) {
 }
 
 function reportLinkOwnership(item, event) {
+  const allSites = globalThis[Symbol.for('collection-item-owner-sites')];
+  if (allSites) {
+    let sites = allSites.get(item);
+    if (event.phase === 'acquired') {
+      if (!sites) allSites.set(item, sites = new Map());
+      sites.set(event.owner, new Error('Held native item owner'));
+    } else sites?.delete(event.owner);
+  }
   for (const listener of linkOwnershipObservers.get(item) ?? []) {
     try { listener(event); } catch { /* Diagnostics cannot alter entity ownership. */ }
   }

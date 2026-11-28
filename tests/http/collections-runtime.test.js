@@ -15,6 +15,8 @@ const enabled = { skip: !postgresTestConnectionString };
 const movieIds = ['cb100000-0000-0000-0000-000000000001', 'cb100000-0000-0000-0000-000000000002'];
 const missingId = 'cb100000-0000-0000-0000-000000000099';
 
+Error.stackTraceLimit = 28;
+globalThis[Symbol.for('collection-item-owner-sites')] = new WeakMap();
 let currentCase = '', currentStage = '';
 globalThis[Symbol.for('collection-close-sample')] = (database, links) => {
   const started = Date.now(), pending = new Set();
@@ -32,6 +34,7 @@ globalThis[Symbol.for('collection-close-sample')] = (database, links) => {
         });
         observation.release();
         sample.graph = graphSnapshot;
+        sample.owners = links.resourceGraph[Symbol.for('collection-graph-owners')]();
         sample.links = links[Symbol.for('collection-link-sample')]();
       }
       const observer = new pg.Client({ connectionString: postgresTestConnectionString, connectionTimeoutMillis: 3000, query_timeout: 3000 });

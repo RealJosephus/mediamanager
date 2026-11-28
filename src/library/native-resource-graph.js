@@ -10,6 +10,7 @@ class NativeResourceGraph {
   #scope;
   #links;
   #entities = new WeakMap();
+  #diagnosticItems = new Map();
   #entityTokens = new WeakSet();
   #bindings = new Map();
   #resources = new Map();
@@ -32,6 +33,17 @@ class NativeResourceGraph {
     this.#scope = scope;
   }
 
+  [Symbol.for('collection-graph-owners')]() {
+    const ownerSites = globalThis[Symbol.for('collection-item-owner-sites')];
+    return [...this.#roots.values()].map(root => {
+      const rootItemId = root.entityId ?? this.#resources.get(root.resourceId)?.entityId;
+      const item = this.#diagnosticItems.get(rootItemId)?.deref();
+      return { kind: root.entityId ? 'entity' : 'resource', references: root.references,
+        item: item && { id: item.Id, type: item.Type, name: item.Name, path: item.Path },
+        graphLeases: [...root.diagnosticLeases.values()].map(error => error.stack),
+        itemOwners: [...(ownerSites?.get(item)?.values() ?? [])].map(error => error.stack) };
+    });
+  }
   [observeGraph](listener) {
     if (typeof listener !== 'function') throw new TypeError('A native resource observer is required.');
     (this.#observers ??= new Set()).add(listener);
@@ -129,6 +141,7 @@ class NativeResourceGraph {
       const id = Symbol('native entity');
       entity = Object.freeze({ id, retain: () => this.#root({ entityId: id }) });
       this.#entities.set(value, entity);
+      this.#diagnosticItems.set(id, new WeakRef(value));
       this.#entityTokens.add(entity);
     }
     return entity;
@@ -139,13 +152,15 @@ class NativeResourceGraph {
     if (resourceId && this.#resources.get(resourceId)?.state !== 'active') {
       throw new Error('The native cache resource has been retired.');
     }
-    const root = { token: Symbol('native root'), entityId, resourceId, references: 1 };
+    const root = { token: Symbol('native root'), entityId, resourceId, references: 1, diagnosticLeases: new Map() };
     this.#mutate(() => this.#roots.set(root.token, root));
     if (this.#observers) this.#observe('root-acquired', { root }, true);
     return this.#rootLease(root);
   }
 
   #rootLease(root) {
+    const diagnosticLease = Symbol();
+    root.diagnosticLeases.set(diagnosticLease, new Error('Held graph lease'));
     let released = false;
     const lease = {
       retain: () => {
@@ -171,6 +186,7 @@ class NativeResourceGraph {
       release: () => {
         if (released) return;
         released = true;
+        root.diagnosticLeases.delete(diagnosticLease);
         --root.references;
         if (this.#observers) this.#observe('root-released', { root }, true);
         if (root.references === 0) {
