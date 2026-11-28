@@ -28,7 +28,7 @@ export function registerItemLookupRoutes(add, services) {
   for (const type of remoteSearchTypes) {
     add('POST', '/Items/RemoteSearch/' + type, ({ body, signal }) => remoteMetadataSearch(type, body,
       { library, metadata, configuration: services.configuration, signal }),
-    { ...(type === 'Person' ? { policy } : {}), body: true, bodyParameter: 'query', ...remoteSearchBinding(type) });
+    { ...(type === 'Person' ? { policy } : {}), body: true, bodyParameter: 'query', abortOnDisconnect: true, ...remoteSearchBinding(type) });
   }
   add('POST', '/Items/RemoteSearch/Apply/{itemId}', context => {
     const { itemId, replaceAllImages } = context.queryInput;

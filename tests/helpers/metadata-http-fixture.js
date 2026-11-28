@@ -18,7 +18,7 @@ const emptyId = nativeGuid('00000000000000000000000000000000');
 const fixtureMedia = new URL('../fixtures/frozen-av/source.m2ts', import.meta.url);
 const credential = 'controlled-fixture';
 
-async function startTmdbFixture(signal) {
+async function startTmdbFixture(signal, onConfiguration) {
   const poster = await readFile(new URL('../images/fixtures/processor/grid.png', import.meta.url));
   const requests = [];
   let origin;
@@ -48,6 +48,7 @@ async function startTmdbFixture(signal) {
       response.statusCode = 401;
       json({ status_code: 7 });
     } else if (name === '/3/configuration') {
+      if (onConfiguration) return onConfiguration(response);
       json({ images: { secure_base_url: origin + '/images/', base_url: origin + '/images/', poster_sizes: supportedSizes,
         backdrop_sizes: supportedSizes, still_sizes: supportedSizes, logo_sizes: supportedSizes, profile_sizes: supportedSizes } });
     } else if (name === '/3/movie/' + existingTmdbId) json(seedMovie);
@@ -64,7 +65,7 @@ async function startTmdbFixture(signal) {
   return { origin, requests, poster, close: () => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve())) };
 }
 
-export async function createMetadataHttpFixture(t) {
+export async function createMetadataHttpFixture(t, { onTmdbConfiguration } = {}) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'mm-metadata-http-'));
   let upstream, database, runtime;
   t.after(async () => {
@@ -75,7 +76,7 @@ export async function createMetadataHttpFixture(t) {
     }
     if (errors.length) throw new AggregateError(errors, 'Metadata HTTP fixture cleanup failed.');
   });
-  upstream = await startTmdbFixture(t.signal);
+  upstream = await startTmdbFixture(t.signal, onTmdbConfiguration);
   const programDataPath = path.join(root, 'program'), config = path.join(root, 'config'), media = path.join(programDataPath, 'movies');
   await mkdir(media, { recursive: true });
   const filename = path.join(media, 'Initial.m2ts');
@@ -109,11 +110,11 @@ export async function createMetadataHttpFixture(t) {
   await runtime.users.createUser({ Name: 'Metadata HTTP Reader', Password: 'fixture-reader-password' });
   const reader = (await runtime.authentication.login({ Username: 'Metadata HTTP Reader', Pw: 'fixture-reader-password' },
     { Client: 'Metadata fixture', Device: 'Isolated', DeviceId: 'metadata-http-reader', Version: '1' }, { remoteEndPoint: '127.0.0.1' })).AccessToken;
-  const request = async (route, { method = 'GET', token = admin, body, accept = 'application/json', headers } = {}) => {
+  const request = async (route, { method = 'GET', token = admin, body, accept = 'application/json', headers, signal } = {}) => {
     const response = await fetch(baseUrl + route, { method, body: body === undefined ? undefined : JSON.stringify(body),
       headers: { Accept: accept, Connection: 'close', ...headers, ...(token ? { Authorization: `MediaBrowser Token="${token}"` } : {}),
         ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
-      signal: AbortSignal.any([t.signal, AbortSignal.timeout(15000)]) });
+      signal: AbortSignal.any([t.signal, AbortSignal.timeout(15000), ...(signal ? [signal] : [])]) });
     const bytes = Buffer.from(await response.arrayBuffer()), contentType = response.headers.get('content-type');
     return { status: response.status, bytes, contentType, headers: response.headers,
       body: bytes.length && /^application\/(?:problem\+)?json/.test(contentType ?? '') ? JSON.parse(bytes) : undefined };

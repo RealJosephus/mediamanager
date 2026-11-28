@@ -18,6 +18,37 @@ function fixtureClient(handler, options = {}) {
   return { client, calls };
 }
 
+test('all cold TMDB lookups cancel the configuration transport before requesting details', async () => {
+  const lookups = [
+    (client, options) => client.movie(1, 'en', null, 'US', options),
+    (client, options) => client.series(1, 'en', null, 'US', options),
+    (client, options) => client.collection(1, 'en', null, 'US', options),
+    (client, options) => client.person(1, 'en', 'US', options),
+    (client, options) => client.season(1, 1, 'en', null, 'US', options),
+    (client, options) => client.episode(1, 1, 1, 'dvd', 'en', null, 'US', options),
+    (client, options) => client.episodeGroup(1, 'dvd', 'en', null, 'US', options),
+    (client, options) => client.episodeGroup(1, 'dvd', 'en', null, 'US', { ...options, episodeGroupId: 'group' }),
+    (client, options) => client.find('tt123', 'imdb_id', 'en', 'US', options),
+    (client, options) => client.search('Movie', 'Title', 2001, 'en', 'US', options),
+    (client, options) => client.recommendations('Movie', 1, 1, 'en', options),
+  ];
+  for (const lookup of lookups) {
+    const started = Promise.withResolvers(), caller = new AbortController(), paths = [];
+    const client = new TmdbClient({ apiKey: 'fixture', fetch: async (url, { signal }) => {
+      paths.push(url.pathname); started.resolve(signal);
+      await new Promise((_, reject) => signal.addEventListener('abort', () => reject(signal.reason), { once: true }));
+    } });
+    const pending = lookup(client, { signal: caller.signal });
+    try {
+      const transport = await started.promise;
+      caller.abort();
+      assert.equal(transport.aborted, true);
+      await assert.rejects(pending, { name: 'AbortError' });
+      assert.deepEqual(paths, ['/3/configuration']);
+    } finally { client.close(); await Promise.allSettled([pending]); }
+  }
+});
+
 test('TMDB client source cache key deliberately reuses raw language across countries', async () => {
   const { client, calls } = fixtureClient((url) => Response.json({ id: 1, title: url.searchParams.get('language') }));
   assert.equal((await client.movie(1, 'es-419', 'es-AR,null,en', 'AR')).title, 'es-AR');

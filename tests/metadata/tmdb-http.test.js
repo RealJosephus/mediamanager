@@ -1,10 +1,13 @@
 import { openConfiguredPluginHost } from '../plugins/configuration-host.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { EventEmitter, once } from 'node:events';
+import { setTimeout as delay } from 'node:timers/promises';
 import { inspect } from 'node:util';
 import { createTestApplication } from '../helpers/application.js';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { createMetadataHttpFixture } from '../helpers/metadata-http-fixture.js';
 
 const remoteConfiguration = {
   images: {
@@ -29,6 +32,40 @@ const expectedImages = {
   SecureBaseUrl: 'https://images.invalid/',
   StillSizes: ['w185'],
 };
+
+test('cold movie searches release upstream HTTP on client disconnect and runtime shutdown', async t => {
+  const upstreamCalls = new EventEmitter(), held = [];
+  const { runtime, request, upstream } = await createMetadataHttpFixture(t, { onTmdbConfiguration(response) {
+    held.push(response); upstreamCalls.emit('configuration', response);
+  } });
+  const movie = signal => request('/Items/RemoteSearch/Movie', { method: 'POST', signal,
+    body: { SearchProviderName: 'TheMovieDb', SearchInfo: { ProviderIds: { Tmdb: '701' } } } });
+  const pending = [];
+  async function hold(start) {
+    const arrived = once(upstreamCalls, 'configuration', { signal: AbortSignal.timeout(5000) });
+    const request = start();
+    pending.push(request); request.catch(() => {});
+    const [response] = await arrived;
+    return { response, request };
+  }
+  const caller = new AbortController();
+  try {
+    const first = await hold(() => movie(caller.signal));
+    const second = await hold(() => movie());
+    const closed = once(first.response, 'close', { signal: AbortSignal.timeout(5000) });
+    caller.abort();
+    await Promise.all([closed, assert.rejects(first.request, { name: 'AbortError' })]);
+    assert.equal(second.response.destroyed, false);
+    const direct = await hold(() => request('/Tmdb/ClientConfiguration'));
+    const drained = Promise.all([once(second.response, 'close'), once(direct.response, 'close'), runtime.close()]);
+    await Promise.race([drained, delay(5000, undefined, { ref: false }).then(() => assert.fail('Shutdown waited for an upstream response'))]);
+    assert.deepEqual(upstream.requests.map(request => request.path), Array(3).fill('/3/configuration'));
+  } finally {
+    caller.abort();
+    for (const response of held) response.destroy();
+    await Promise.allSettled(pending);
+  }
+});
 
 async function applicationFixture(tmdbClient, onError = () => {}) {
   const plugins=await openConfiguredPluginHost({options:{tmdb:{fetch:async()=>Response.json(await tmdbClient.getClientConfiguration())}}});

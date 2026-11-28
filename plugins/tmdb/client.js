@@ -73,8 +73,10 @@ export class TmdbClient {
   close() { this.#lifetime.abort(); this.dispose(); this.#remoteConfiguration = undefined; }
 
   async getClientConfiguration(options) {
+    options?.signal?.throwIfAborted();
     if (!this.#remoteConfiguration) {
       const configuration = await this.request('configuration', {}, options);
+      options?.signal?.throwIfAborted();
       this.#lifetime.signal.throwIfAborted();
       if (!configuration) throw new Error('TMDB client configuration is unavailable.');
       validateImagePreferences(this.configuration, configuration);
@@ -94,12 +96,14 @@ export class TmdbClient {
     }
   }
 
-  async #cached(key, factory, cacheEmpty = true) {
+  async #cached(key, options, factory, cacheEmpty = true) {
+    options?.signal?.throwIfAborted();
     this.#expire(this.now());
     const current = this.#cache.get(key);
     if (current) return current.value;
-    await this.getClientConfiguration();
+    await this.getClientConfiguration(options);
     const value = await factory();
+    options?.signal?.throwIfAborted();
     this.#lifetime.signal.throwIfAborted();
     if (value && (cacheEmpty || value.results?.length)) {
       const now = this.now(), weight = estimateSize(value);
@@ -118,35 +122,35 @@ export class TmdbClient {
 
   movie(id, language, imageLanguages, countryCode, options) {
     const append = ['credits', 'releases', 'images', 'videos', ...(!this.configuration.ExcludeTagsMovies ? ['keywords'] : [])];
-    return this.#cached(`movie-${id}-${language ?? ''}`, () => this.request(`movie/${id}`, { language: normalizeLanguage(language, countryCode), include_image_language: imageLanguages, append_to_response: append.join(',') }, options));
+    return this.#cached(`movie-${id}-${language ?? ''}`, options, () => this.request(`movie/${id}`, { language: normalizeLanguage(language, countryCode), include_image_language: imageLanguages, append_to_response: append.join(',') }, options));
   }
 
   series(id, language, imageLanguages, countryCode, options) {
     const append = ['credits', 'aggregate_credits', 'images', 'external_ids', 'videos', 'content_ratings', 'episode_groups', ...(!this.configuration.ExcludeTagsSeries ? ['keywords'] : [])];
-    return this.#cached(`series-${id}-${language ?? ''}`, () => this.request(`tv/${id}`, { language: normalizeLanguage(language, countryCode), include_image_language: imageLanguages, append_to_response: append.join(',') }, options));
+    return this.#cached(`series-${id}-${language ?? ''}`, options, () => this.request(`tv/${id}`, { language: normalizeLanguage(language, countryCode), include_image_language: imageLanguages, append_to_response: append.join(',') }, options));
   }
 
   collection(id, language, imageLanguages, countryCode, options) {
-    return this.#cached(`collection-${id}-${language ?? ''}`, () => this.request(`collection/${id}`, { language: normalizeLanguage(language, countryCode), include_image_language: imageLanguages, append_to_response: 'images' }, options));
+    return this.#cached(`collection-${id}-${language ?? ''}`, options, () => this.request(`collection/${id}`, { language: normalizeLanguage(language, countryCode), include_image_language: imageLanguages, append_to_response: 'images' }, options));
   }
 
   person(id, language, countryCode, options) {
-    return this.#cached(`person-${id}-${language ?? ''}`, () => this.request(`person/${id}`, { language: normalizeLanguage(language, countryCode), append_to_response: 'images,external_ids' }, options));
+    return this.#cached(`person-${id}-${language ?? ''}`, options, () => this.request(`person/${id}`, { language: normalizeLanguage(language, countryCode), append_to_response: 'images,external_ids' }, options));
   }
 
   season(seriesId, number, language, imageLanguages, countryCode, options) {
-    return this.#cached(`season-${seriesId}-s${number}-${language ?? ''}`, () => this.request(`tv/${seriesId}/season/${number}`, { language: normalizeLanguage(language, countryCode), include_image_language: imageLanguages, append_to_response: 'credits,images,external_ids,videos' }, options));
+    return this.#cached(`season-${seriesId}-s${number}-${language ?? ''}`, options, () => this.request(`tv/${seriesId}/season/${number}`, { language: normalizeLanguage(language, countryCode), include_image_language: imageLanguages, append_to_response: 'credits,images,external_ids,videos' }, options));
   }
 
   async episodeGroup(seriesId, displayOrder, language, imageLanguages, countryCode, options) {
     const selected = options?.episodeGroupId;
     if (selected?.trim()) {
-      return this.#cached(JSON.stringify(['episode-group', selected, language]), () =>
+      return this.#cached(JSON.stringify(['episode-group', selected, language]), options, () =>
         this.request('tv/episode_group/' + encodeURIComponent(selected), { language: normalizeLanguage(language, countryCode) }, options));
     }
     const groupType = { originalAirDate: 1, absolute: 2, dvd: 3, digital: 4, storyArc: 5, production: 6, tv: 7 }[displayOrder];
     if (!groupType) return null;
-    return this.#cached(`group-${seriesId}-${displayOrder}-${language ?? ''}`, async () => {
+    return this.#cached(`group-${seriesId}-${displayOrder}-${language ?? ''}`, options, async () => {
       const series = await this.series(seriesId, language, imageLanguages, countryCode, options);
       const id = series?.episode_groups?.results?.find((group) => group.type === groupType)?.id;
       return id ? this.request(`tv/episode_group/${id}`, { language: normalizeLanguage(language, countryCode) }, options) : null;
@@ -154,7 +158,7 @@ export class TmdbClient {
   }
 
   episode(seriesId, season, number, displayOrder, language, imageLanguages, countryCode, options) {
-    return this.#cached(JSON.stringify(['episode', seriesId, season, number, displayOrder, options?.episodeGroupId, language]), async () => {
+    return this.#cached(JSON.stringify(['episode', seriesId, season, number, displayOrder, options?.episodeGroupId, language]), options, async () => {
       const group = await this.episodeGroup(seriesId, displayOrder, language, imageLanguages, countryCode, options);
       const episode = group?.groups?.find((entry) => entry.order === season)?.episodes?.find((entry) => entry.order === number - 1);
       return this.request(`tv/${seriesId}/season/${episode?.season_number ?? season}/episode/${episode?.episode_number ?? number}`, { language: normalizeLanguage(language, countryCode), include_image_language: imageLanguages, append_to_response: 'credits,images,external_ids,videos' }, options);
@@ -163,7 +167,7 @@ export class TmdbClient {
 
   find(id, source, language, countryCode, options) {
     const sourceName = { imdb_id: 'Imdb', tvdb_id: 'TvDb' }[source] ?? source;
-    return this.#cached(`find-${sourceName}-${id}-${language ?? ''}`, () => this.request(`find/${encodeURIComponent(id)}`, { external_source: source, language: normalizeLanguage(language, countryCode) }, options));
+    return this.#cached(`find-${sourceName}-${id}-${language ?? ''}`, options, () => this.request(`find/${encodeURIComponent(id)}`, { external_source: source, language: normalizeLanguage(language, countryCode) }, options));
   }
 
   async search(type, name, year, language, countryCode, options) {
@@ -175,12 +179,12 @@ export class TmdbClient {
     if (type !== 'BoxSet') query.include_adult = this.configuration.IncludeAdult;
     if (type === 'Movie') query.year = year ?? 0;
     if (type === 'Series' && year > 0) query.first_air_date_year = year;
-    const value = await this.#cached(key, () => this.request(`search/${apiType}`, query, options), false);
+    const value = await this.#cached(key, options, () => this.request(`search/${apiType}`, query, options), false);
     return value?.results ?? null;
   }
 
   async recommendations(type, id, page, language, options) {
-    await this.getClientConfiguration();
+    await this.getClientConfiguration(options);
     const result = await this.request(`${type === 'Movie' ? 'movie' : 'tv'}/${id}/recommendations`,
       { page, language }, options);
     return result?.results?.length ? { Results: result.results, TotalPages: result.total_pages } : { Results: [], TotalPages: 0 };
