@@ -116,6 +116,7 @@ for (const disconnect of [false, true]) test(`request drain waits for response $
     void release.promise.then(() => { bytes.push(Buffer.from(chunk)); callback(); });
   } });
   const request = new IncomingMessage(socket);
+  request.httpVersionMajor = 1; request.httpVersionMinor = 0;
   request.method = 'GET'; request.url = '/System/Ping';
   const response = new ServerResponse(request);
   response.assignSocket(socket);
@@ -136,7 +137,7 @@ for (const disconnect of [false, true]) test(`request drain waits for response $
     else release.resolve();
     await finished;
     await drain;
-    if (!disconnect) assert.match(Buffer.concat(bytes).toString(), /\r\n\r\nMediaManager$/u);
+    if (!disconnect) assert.match(Buffer.concat(bytes).toString(), /\r\n\r\n"MediaManager"$/u);
   } finally {
     release.resolve(); socket.destroy();
     await handling;
