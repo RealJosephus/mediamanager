@@ -50,6 +50,43 @@ test('Schedules Direct validates an account, adds its lineup and reuses complete
   assert.deepEqual(calls.filter(([, p]) => p === '/lineups/A').map(([method]) => method), ['PUT', 'GET']);
 });
 
+for (const fallback of [false, true]) {
+  test(`Schedules Direct uses the first ${fallback ? 'fallback' : 'matching'} cached detail for both airings across refreshes`, async t => {
+    const cachePath = await fs.mkdtemp(path.join(os.tmpdir(), 'sd-details-'));
+    t.after(() => fs.rm(cachePath, { recursive: true, force: true }));
+    const first = '2025-03-01', second = '2025-03-02', id = 'EP012345678901';
+    const scheduleRequests = [], detailRequests = [];
+    let day = first;
+    const provider = createSchedulesDirectProvider({ cachePath, fileSystem: fs, fetch: async (url, init) => {
+      const route = new URL(url).pathname.slice('/20141201'.length);
+      switch (route) {
+        case '/token': return Response.json({ message: 'OK', token: 'guide-token' });
+        case '/status': return Response.json({ systemStatus: [{ status: 'Online' }] });
+        case '/schedules/md5': return Response.json({ 21: {
+          [first]: { md5: fallback && day === second ? 'changed' : first }, [second]: { md5: second },
+        } });
+        case '/schedules':
+          scheduleRequests.push(JSON.parse(init.body));
+          return Response.json([{ metadata: { startDate: day, md5: day },
+            programs: [{ programID: id, airDateTime: day + 'T12:00:00Z', duration: 1800 }] }]);
+        case '/programs':
+          detailRequests.push(JSON.parse(init.body));
+          return Response.json([{ programID: id, titles: [{ title120: day === first ? 'Cached title' : 'Fresh title' }] }]);
+        default: assert.fail(route);
+      }
+    } });
+    const refresh = () => provider.getPrograms({ Username: 'guide', Password: 'fixture' }, '21', first + 'T12:00:00Z', day + 'T13:00:00Z');
+    assert.deepEqual((await refresh()).map(show => show.Name), ['Cached title']);
+    day = second;
+    const shows = await refresh();
+    assert.deepEqual(scheduleRequests, [[{ stationID: '21', date: [first] }], [{ stationID: '21', date: fallback ? [first, second] : [second] }]]);
+    assert.deepEqual(detailRequests, [[id], [id]]);
+    assert.deepEqual(shows.map(show => [show.ShowId, show.StartDate, show.Name]), [
+      [id, first + 'T12:00:00Z', 'Cached title'], [id, second + 'T12:00:00Z', 'Cached title'],
+    ]);
+  });
+}
+
 test('only a covered schedule window prunes days, scoped to its station', async t => {
   const cachePath = await fs.mkdtemp(path.join(os.tmpdir(), 'sd-window-'));
   t.after(() => fs.rm(cachePath, { recursive: true, force: true }));

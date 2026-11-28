@@ -109,13 +109,13 @@ export async function createMetadataHttpFixture(t) {
   await runtime.users.createUser({ Name: 'Metadata HTTP Reader', Password: 'fixture-reader-password' });
   const reader = (await runtime.authentication.login({ Username: 'Metadata HTTP Reader', Pw: 'fixture-reader-password' },
     { Client: 'Metadata fixture', Device: 'Isolated', DeviceId: 'metadata-http-reader', Version: '1' }, { remoteEndPoint: '127.0.0.1' })).AccessToken;
-  const request = async (route, { method = 'GET', token = admin, body, accept = 'application/json' } = {}) => {
+  const request = async (route, { method = 'GET', token = admin, body, accept = 'application/json', headers } = {}) => {
     const response = await fetch(baseUrl + route, { method, body: body === undefined ? undefined : JSON.stringify(body),
-      headers: { Accept: accept, Connection: 'close', ...(token ? { Authorization: `MediaBrowser Token="${token}"` } : {}),
+      headers: { Accept: accept, Connection: 'close', ...headers, ...(token ? { Authorization: `MediaBrowser Token="${token}"` } : {}),
         ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
       signal: AbortSignal.any([t.signal, AbortSignal.timeout(15000)]) });
     const bytes = Buffer.from(await response.arrayBuffer()), contentType = response.headers.get('content-type');
-    return { status: response.status, bytes, contentType,
+    return { status: response.status, bytes, contentType, headers: response.headers,
       body: bytes.length && /^application\/(?:problem\+)?json/.test(contentType ?? '') ? JSON.parse(bytes) : undefined };
   };
   return { runtime, database, upstream, request, programDataPath, filename, reader, errors };
