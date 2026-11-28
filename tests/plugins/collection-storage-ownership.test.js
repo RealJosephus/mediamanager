@@ -156,7 +156,7 @@ test('Collection CreateItems owns its real Local generation until persistence an
     for (const directory of [oldTarget, newTarget]) await fs.mkdir(directory, { recursive: true });
     const entered = Promise.withResolvers(), release = Promise.withResolvers(), changing = Promise.withResolvers();
     const consuming = Promise.withResolvers(), releaseConsumer = Promise.withResolvers();
-    const report = { mode, backgroundErrors: [], cleanupErrors: [] }, queued = [];
+    const report = { mode, backgroundErrors: [], cleanupErrors: [] }, queued = [], reported = new Map();
     let database, runtime, creating, transition, ownedFiles, ownedClosed = false, selected = false, held = false, oldInfo;
     let ownedPathReads = 0, unsubscribe = () => {};
     t.after(async () => {
@@ -173,7 +173,10 @@ test('Collection CreateItems owns its real Local generation until persistence an
     database = await createPostgresTestDatabase(t, 'collection_generation');
     runtime = await createTestRuntime({ database, programDataPath, serverId: 'collection-storage-generation',
       configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },
-      onError: error => report.backgroundErrors.push(errorObservation(error)) });
+      onError: error => {
+        reported.set(error, report.backgroundErrors.length);
+        report.backgroundErrors.push(errorObservation(error));
+      } });
     const parent = await runtime.collections.getCollectionsFolder(true), storage = runtime.storage;
     assert.ok(parent); assert.equal(runtime.plugins.get('local').enabled, true);
     const definition = storage.configuration(), restricted = mode === 'replace-mkdir-only', exactPrefix = mode === 'replace-exact-prefix';
@@ -286,7 +289,14 @@ test('Collection CreateItems owns its real Local generation until persistence an
     assert.equal((await fs.stat(path.join(recoveryRoot, path.basename(recovered.Path)))).isDirectory(), true);
     assert.equal((await database.rows('BaseItems', { where: { Id: recovered.Id } })).length, 1);
     const recoveredRefresh = queued.find(entry => entry.id === recovered.Id); assert.ok(recoveredRefresh);
-    assert.equal(Object.hasOwn(await recoveredRefresh.work, 'error'), false);
+    const completion = await recoveredRefresh.work;
+    const [committed] = await database.rows('BaseItems', { where: { Id: recovered.Id } });
+    report.recoveredRefresh = { id: recovered.Id, persistedName: committed?.Name, dateLastRefreshed: committed?.DateLastRefreshed,
+      ...(Object.hasOwn(completion, 'error') && { failure: errorObservation(completion.error),
+        backgroundErrorIndex: reported.get(completion.error) ?? null }) };
+    t.diagnostic(JSON.stringify(report.recoveredRefresh));
+    if (Object.hasOwn(completion, 'error')) throw completion.error;
+    assert.equal(committed.Name, 'Recovered generation');
     if (mode !== 'stop') await assert.rejects(fs.stat(path.join(oldTarget, path.basename(recovered.Path))), { code: 'ENOENT' });
     assert.deepEqual(await fs.readFile(path.join(newDirectory, 'sentinel.txt')), sentinel);
     report.observations = { ownedPathReads, releasedBeforeConsumer: ownedClosed, persistedPath: row.Path,
