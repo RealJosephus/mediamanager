@@ -82,6 +82,9 @@ export async function createApplication(services = {}) {
   // SystemController.GetSystemInfo permits session validation outside parental
   // schedules. Its SystemManager DTO reports the current application's state.
   add('GET', '/System/Info', async context => ({ ...publicSystemInfo(context),
+    // These legacy SystemInfo properties have fixed defaults in the native DTO.
+    CanSelfRestart: true, SystemArchitecture: 'X64', OperatingSystem: '', OperatingSystemDisplayName: '',
+    HasUpdateAvailable: false, EncoderLocation: 'System', CanLaunchWebBrowser: false,
     HasPendingRestart: services.networkHost?.hasPendingRestart ?? false, IsShuttingDown: closing, CompletedInstallations: [],
     WebSocketPortNumber: services.networkHost?.httpPort ?? 8096,
     SupportsLibraryMonitor: Boolean(services.libraryMonitor),

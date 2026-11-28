@@ -127,6 +127,8 @@ test('system storage and the log browser use the authoritative application and l
     report.reference = current.preparation;
     report.sources = await current.sourceBindings(['Jellyfin.Api/Controllers/SystemController.cs',
       'Emby.Server.Implementations/SystemManager.cs', 'Emby.Server.Implementations/IO/ManagedFileSystem.cs',
+      'MediaBrowser.Model/System/SystemInfo.cs', 'MediaBrowser.Model/System/PublicSystemInfo.cs',
+      'src/Jellyfin.Extensions/Json/Converters/JsonDateTimeConverter.cs', 'Jellyfin.Api/Controllers/StartupController.cs',
       'Jellyfin.Server.Implementations/StorageHelpers/StorageHelper.cs', 'Jellyfin.Api/Models/SystemInfoDtos/SystemStorageDto.cs']);
     await cp(current.sourceRoot, root, { recursive: true });
     await current.prepareClone(root, port);
@@ -159,6 +161,7 @@ test('system storage and the log browser use the authoritative application and l
     const samples = [
       key('mixed-case JSON ping', '/System/Ping', 200, { identity: 'anonymous', headers: { Accept: 'Application/JSON' } }),
       key('storage', '/System/Info/Storage'),
+      key('system info compatibility fields', '/System/Info'),
       key('list', '/System/Logs'),
       key('read by ordinal case-insensitive name', logRoute('CONTRACT-NEWEST.TXT')),
       key('read arbitrary enumerated file', logRoute('contract-raw.dat')),
@@ -216,6 +219,16 @@ test('system storage and the log browser use the authoritative application and l
             }
           }
           assert.deepEqual(entry.node.json.WebFolder, { Path: '', FreeSpace: -1, UsedSpace: -1 });
+        } else if (entry.sample.name === 'system info compatibility fields') {
+          const defaults = { CanSelfRestart: true, SystemArchitecture: 'X64', OperatingSystem: '', OperatingSystemDisplayName: '',
+            HasUpdateAvailable: false, EncoderLocation: 'System', CanLaunchWebBrowser: false };
+          for (const { json } of [entry.native, entry.node]) {
+            for (const [key, value] of Object.entries(defaults)) {
+              assert.ok(Object.hasOwn(json, key), key);
+              assert.equal(typeof json[key], typeof value, key);
+              assert.equal(json[key], value, key);
+            }
+          }
         } else if (entry.sample.name === 'list') {
           assert.equal(entry.node.contentType, entry.native.contentType);
           assert.deepEqual(logs(entry.node), logs(entry.native));
