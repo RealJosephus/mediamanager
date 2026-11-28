@@ -478,6 +478,24 @@ test('the actual production CLI retains its selected target across HTTP restarts
     t.diagnostic('AUDIT_BACKUP ' + JSON.stringify(observed));
     assert.equal(observed.originalVolume, 'former independent data'); assert.equal(observed.replacementVolumeReceivedArchivedPoster, true);
     assert.equal(observed.modeAfter, '600'); assert.notEqual(observed.mtimeAfter, observed.mtimeBefore);
+    const lastGood = (await call('/Storage/Configuration')).body;
+    const incompatibleRoot = path.join(root, 'preexisting-data-file-volume');
+    await mkdir(incompatibleRoot);
+    await writeFile(path.join(incompatibleRoot, 'data'), 'ordinary preexisting file');
+    const proposedStorage = structuredClone(lastGood);
+    const instanceBackend = config => config.instances.find(binding => binding.id === 'instance').config.root;
+    proposedStorage.instances.find(binding => binding.id === 'instance').config.root = incompatibleRoot;
+    const changed = await call('/Storage/Configuration', { method: 'POST', body: proposedStorage, timeout: 30000 });
+    const afterFailure = await call('/Storage/Configuration');
+    const stateAfter = JSON.parse(await readFile(definitionFile, 'utf8'));
+    const readinessAfter = (await call('/Storage/Status')).body?.application?.ready;
+    const recovered = await call('/Storage/Configuration', { method: 'POST', body: lastGood, timeout: 30000 });
+    const readinessRecovered = (await call('/Storage/Status')).body?.application?.ready;
+    t.diagnostic('AUDIT_STORAGE_CHANGE ' + JSON.stringify({ response: changed.status,
+      newVolumeInLiveConfiguration: afterFailure.status === 200 && instanceBackend(afterFailure.body) === incompatibleRoot,
+      newVolumeOnDisk: instanceBackend(stateAfter) === incompatibleRoot, readyAfter: readinessAfter,
+      recoveryResponse: recovered.status, readyAfterRecovery: readinessRecovered }));
+    assert.equal(recovered.status, 200); assert.equal(readinessRecovered, true);
     report.backup = { manifest: backup.body, restore: restore.status, savedConfigurationReloaded: true,
       lateUserRemovedAndRecreated: true, metadata: report.original.sha256, restoredMembers: Object.keys(members),
       mountedPoster: bytesValue(await readFile(poster)), subtitleRestored: true, excludedTrickplayRetained: true };
