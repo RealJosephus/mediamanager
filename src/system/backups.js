@@ -11,8 +11,8 @@ const backupEngineVersion = '1.0.0';
 export class BackupRestored extends Error {}
 
 export class SystemBackups {
-  constructor({ paths, storage, store, serverId, serverVersion }) {
-    Object.assign(this, { paths, storage, store, serverId, serverVersion });
+  constructor({ paths, openStorage, store, serverId, serverVersion }) {
+    Object.assign(this, { paths, openStorage, store, serverId, serverVersion });
     this.directory = path.join(paths.dataPath, 'backups');
     this.pending = path.join(this.directory, '.restore');
   }
@@ -54,12 +54,21 @@ export class SystemBackups {
       const manifest = { DateCreated: new Date().toISOString(), ServerVersion: this.serverVersion, BackupEngineVersion: backupEngineVersion, Options: options };
       const descriptor = { format: backupFormat, serverId: this.serverId, metadataPath: this.paths.metadataPath };
       const temporary = path.join(stage, 'archive');
-      await writeBackupArchive(temporary, stage, manifest, descriptor, save => this.storage.withGeneration(async () => {
-        if (options.Database) {
-          await this.store.transaction(db => captureBackupDatabase(db, save), { readOnly: true, isolation: 'repeatable-read' });
-        }
-        await captureBackupFiles(backupRoots(this.paths, options, this.storage.fileSystem), this.directory, save);
-      }));
+      const storage = await this.openStorage();
+      const roots = backupRoots(this.paths, options);
+      await writeBackupArchive(temporary, stage, manifest, descriptor, async save => {
+        let generation;
+        try {
+          await storage.withStableConfiguration(async () => {
+            generation = storage.retainGeneration();
+            await captureBackupFiles(roots.filter(root => root.local), this.directory, save);
+          });
+          if (options.Database) {
+            await this.store.transaction(db => captureBackupDatabase(db, save), { readOnly: true, isolation: 'repeatable-read' });
+          }
+          await captureBackupFiles(roots.filter(root => !root.local), this.directory, save, generation.fileSystem);
+        } finally { generation?.close(); }
+      });
       await fs.rename(temporary, filename);
       return publicManifest(filename, manifest);
     } finally { await fs.rm(stage, { recursive: true, force: true }); }
@@ -87,7 +96,7 @@ export class SystemBackups {
       (options.Metadata && descriptor.metadataPath !== this.paths.metadataPath) || !Array.isArray(descriptor.files)) {
       throw failure(422, 'This backup is incompatible with the active instance or its metadata root.');
     }
-    const roots = backupRoots(this.paths, options, this.storage.fileSystem);
+    const roots = backupRoots(this.paths, options);
     const payloads = new Map(), destinations = new Map();
     for (const [index, file] of descriptor.files.entries()) {
       const { key, size, sha256 } = file;
@@ -144,17 +153,23 @@ export class SystemBackups {
   async restorePending() {
     try { await fs.access(this.pending); } catch (error) { if (error.code === 'ENOENT') return; throw error; }
     const { manifest, descriptor } = JSON.parse(await fs.readFile(path.join(this.pending, 'request.json'), 'utf8'));
-    await this.storage.withGeneration(async () => {
-      const { payloads, destinations } = this.#plan(this.pending, publicManifest('', manifest), descriptor);
-      for (const file of descriptor.files) await verifyStagedPayload(payloads.get(file.key), file);
-      const catalog = manifest.Options.Database && JSON.parse(await fs.readFile(payloads.get('Database/catalog.json'), 'utf8'));
-      // The listener is still closed. A failed file replacement rolls back SQL
-      // and leaves the complete request available for an idempotent cold retry.
-      await this.store.transaction(async db => {
-        if (catalog) await restoreBackupDatabase(db, payloads, catalog);
+    const { payloads, destinations } = this.#plan(this.pending, publicManifest('', manifest), descriptor);
+    for (const file of descriptor.files) await verifyStagedPayload(payloads.get(file.key), file);
+    const catalog = manifest.Options.Database && JSON.parse(await fs.readFile(payloads.get('Database/catalog.json'), 'utf8'));
+    // The listener is still closed. A failed file replacement rolls back SQL
+    // and leaves the complete request available for an idempotent cold retry.
+    await this.store.transaction(async db => {
+      if (catalog) await restoreBackupDatabase(db, payloads, catalog);
+      for (const file of descriptor.files) {
+        const target = destinations.get(file.key);
+        if (target?.local) await restoreBackupFile(target, payloads.get(file.key), file.size);
+      }
+      // The selected storage definition can itself be one of the Config files.
+      const storage = await this.openStorage();
+      await storage.withGeneration(async () => {
         for (const file of descriptor.files) {
           const target = destinations.get(file.key);
-          if (target) await restoreBackupFile(target, payloads.get(file.key), file.size);
+          if (target && !target.local) await restoreBackupFile(target, payloads.get(file.key), file.size, storage.fileSystem);
         }
       });
     });

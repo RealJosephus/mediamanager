@@ -295,6 +295,8 @@ export async function createConfiguredStorage(filename, { environment = process.
     const initial = { definition: current.definition, vfs: current.vfs, media: current.identityMap, metadata: current.metadataIdentityMap };
     const unsubscribe=plugins.subscribe(()=>enqueue(notify));
     return { vfs,identityMap,metadataVfs,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,retainGeneration,withGeneration,
+      // An archived definition on disk must describe the same generation as its files.
+      withStableConfiguration: enqueue,
       sourceBinding(accessPath) {
         const owner = activeOwner();
         return binding(owner, owner.vfs.resolve(accessPath));

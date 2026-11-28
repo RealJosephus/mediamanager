@@ -169,7 +169,7 @@ test('the actual production CLI retains its selected target across HTTP restarts
     secrets.add(token);
     await database.insert('ApiKeys', { Name: 'System lifecycle CLI', AccessToken: token,
       DateCreated: '2026-10-27 00:00:00', DateLastActivity: '0001-01-01 00:00:00' });
-    const definitionFile = path.join(root, 'storage.json');
+    const definitionFile = path.join(instance, 'config', 'storage.json');
     const storageDefinition = instanceRoot => ({ instances: [{ id: 'instance', type: 'local', config: { root: instanceRoot, writable: true } }],
       mounts: [{ path: '/instance', instanceId: 'instance', root: '/', capabilities: { create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true } }],
       prefixes: [{ identityRoot: instanceRoot, accessRoot: '/instance', style: process.platform === 'win32' ? 'windows' : 'posix',
@@ -394,6 +394,14 @@ test('the actual production CLI retains its selected target across HTTP restarts
       }
     };
     await withBackupArchive(backupFile, checkMembers);
+    const replacementVolume = path.join(root, 'replacement-artwork');
+    const replacementPoster = path.join(replacementVolume, 'poster.bin');
+    await mkdir(replacementVolume);
+    await writeFile(replacementPoster, 'independent replacement poster');
+    const changedStorage = (await call('/Storage/Configuration')).body;
+    changedStorage.instances.find(binding => binding.id === 'artwork').config.root = replacementVolume;
+    assert.equal((await call('/Storage/Configuration', { method: 'POST', body: changedStorage, timeout: 30000 })).status, 200);
+    assert.equal((await call('/Storage/Configuration')).body.instances.find(binding => binding.id === 'artwork').config.root, replacementVolume);
     const lateUser = await call('/Users/New', { method: 'POST', body: { Name: 'After backup' } });
     assert.equal(lateUser.status, 200);
     assert.equal((await call('/System/Configuration', { method: 'POST', body: { ...savedConfiguration, ServerName: 'After backup' } })).status, 204);
@@ -418,6 +426,9 @@ test('the actual production CLI retains its selected target across HTTP restarts
     await assert.rejects(stat(logical), { code: 'ENOENT' });
     const restoredStorage = await call('/Storage/Configuration');
     assert.equal(restoredStorage.status, 200);
+    assert.equal(restoredStorage.body.instances.find(binding => binding.id === 'artwork').config.root, artworkRoot);
+    assert.equal(await readFile(replacementPoster, 'utf8'), 'independent replacement poster');
+    t.diagnostic('Restored the archived poster on the selected original volume and retained the independent replacement poster.');
     for (const { name, file, ordinary, identityRoot, accessRoot } of mounted) {
       assert.ok(restoredStorage.body.prefixes.some(prefix => prefix.accessRoot === accessRoot));
       assert.equal(await readFile(file, 'utf8'), 'mounted ' + name);

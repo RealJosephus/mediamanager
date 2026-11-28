@@ -186,15 +186,21 @@ export async function createRuntime({ database, configuration, serverId, serverN
     imageCachePath: imageOptions.cachePath, onError, ...pluginOptions,
     configurationBindings: new Map([...(pluginOptions.configurationBindings ?? []), ['xbmcmetadata', nfoBinding]]) });
   rollback.push(() => plugins.close());
-  configuredStorage = await createConfiguredStorage(storageConfiguration, { plugins, environment, portableMountContract });
+  const openStorage = async () => {
+    if (!configuredStorage) {
+      configuredStorage = await createConfiguredStorage(storageConfiguration, { plugins, environment, portableMountContract });
+      rollback.push(() => configuredStorage.close());
+    }
+    return configuredStorage;
+  };
+  const backups = dataPath && new SystemBackups({ paths: applicationPaths, openStorage, store, serverId, serverVersion });
+  await backups?.restorePending();
+  await openStorage();
   fileSystem = configuredStorage.fileSystem;
   const usesConfiguredStorage=Boolean(storageConfiguration || !vfs);
   if (usesConfiguredStorage) ({ vfs, identityMap, ignoreIdentityMap } = configuredStorage);
   const metadataVfs=usesConfiguredStorage?configuredStorage.metadataVfs:vfs;
   const metadataIdentityMap=usesConfiguredStorage?configuredStorage.metadataIdentityMap:identityMap;
-  rollback.push(() => configuredStorage.close());
-  const backups = dataPath && new SystemBackups({ paths: applicationPaths, storage: configuredStorage, store, serverId, serverVersion });
-  await backups?.restorePending();
   const storageReadiness = { ready: false, error: null };
   const unavailableStorage = error => ['ENOTSUP','not-supported','unmapped-path'].includes(error?.code);
   const deferUnavailable = async operation => {

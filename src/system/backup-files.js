@@ -9,11 +9,11 @@ const pathApi = identity => identityPathStyle(identity) === 'windows' ? path.win
 const configFile = name => /\.(?:xml|json)$/iu.test(name);
 const portableName = name => name && name !== '.' && name !== '..' && !/[/\\:\x00-\x1f]/u.test(name);
 
-export function backupRoots(paths, options, fileSystem) {
+export function backupRoots(paths, options) {
   const { configurationDirectoryPath, programDataPath, dataPath, defaultMetadataPath, metadataPath } = paths;
   const roots = [];
   function add(prefix, root, { local = false, topOnly = false } = {}) {
-    if (root) roots.push({ prefix, root, files: local ? fs : fileSystem, local, topOnly, api: pathApi(root) });
+    if (root) roots.push({ prefix, root, local, topOnly, api: pathApi(root) });
   }
   if (configurationDirectoryPath) {
     add('Config', configurationDirectoryPath, { local: true, topOnly: true });
@@ -41,9 +41,10 @@ export function backupDestination(roots, key) {
   throw new Error('Backup entry is outside the selected file scopes.');
 }
 
-export async function captureBackupFiles(roots, backupDirectory, save) {
-  const prefixes = roots.find(root => !root.local)?.files.identityMap.exportState().prefixes ?? [];
+export async function captureBackupFiles(roots, backupDirectory, save, fileSystem) {
+  const prefixes = fileSystem?.identityMap.exportState().prefixes ?? [];
   for (const root of roots) {
+    const files = root.local ? fs : fileSystem;
     // A bound subtree need not have a directory entry on its parent's backend.
     // Walk each visible binding once, in the same storage generation as the parent.
     const mounted = new Map();
@@ -54,7 +55,7 @@ export async function captureBackupFiles(roots, backupDirectory, save) {
         const relative = root.api.relative(root.root, identityRoot);
         if (!relative) continue;
         const directory = root.api.join(root.root, relative);
-        if (root.files.accessPath(directory) !== accessRoot) continue;
+        if (files.accessPath(directory) !== accessRoot) continue;
         const parts = relative.split(root.api.sep);
         if (!parts.every(portableName)) throw new Error('A backup filename cannot be represented in this archive.');
         mounted.set(accessRoot, { directory, prefix: [root.prefix, ...parts].join('/') });
@@ -63,19 +64,19 @@ export async function captureBackupFiles(roots, backupDirectory, save) {
     async function visit(directory, prefix, optional = false) {
       let entries;
       try {
-        if (!(await root.files.lstat(directory)).isDirectory()) throw new Error('Backup source must be a directory.');
-        entries = await root.files.readdir(directory, { withFileTypes: true });
+        if (!(await files.lstat(directory)).isDirectory()) throw new Error('Backup source must be a directory.');
+        entries = await files.readdir(directory, { withFileTypes: true });
       } catch (error) { if (optional && error.code === 'ENOENT') return; throw error; }
       for (const entry of entries) {
         if (root.topOnly && (!entry.isFile() || !configFile(entry.name))) continue;
         if (!portableName(entry.name)) throw new Error('A backup filename cannot be represented in this archive.');
         const filename = root.api.join(directory, entry.name), key = prefix + '/' + entry.name;
-        if (!root.api.relative(backupDirectory, filename) || mounted.size && mounted.has(root.files.accessPath(filename))) continue;
+        if (!root.api.relative(backupDirectory, filename) || mounted.size && mounted.has(files.accessPath(filename))) continue;
         if (entry.isDirectory()) { await visit(filename, key); continue; }
         if (!entry.isFile()) continue;
-        const before = await root.files.stat(filename, { bigint: true });
-        const size = await save(key, root.local ? createReadStream(filename) : root.files.createReadStream(filename));
-        const after = await root.files.stat(filename, { bigint: true });
+        const before = await files.stat(filename, { bigint: true });
+        const size = await save(key, root.local ? createReadStream(filename) : files.createReadStream(filename));
+        const after = await files.stat(filename, { bigint: true });
         if (BigInt(size) !== before.size || before.size !== after.size || before.mtimeNs !== after.mtimeNs) {
           throw new Error('A source file changed during backup.');
         }
@@ -86,8 +87,8 @@ export async function captureBackupFiles(roots, backupDirectory, save) {
   }
 }
 
-export async function restoreBackupFile(target, source, size) {
-  const { files, api, local, filename } = target;
+export async function restoreBackupFile(target, source, size, files) {
+  const { api, local, filename } = target;
   const directory = api.dirname(filename);
   if (local) {
     // An existing symlink in the host configuration tree must never redirect a restore.

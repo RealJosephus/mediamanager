@@ -154,7 +154,7 @@ test('elevated Backup routes create, list and read genuine archives with selecta
 test('restore checks server and engine versions before restart admission and again before cold writes', async t => {
   const { runtime, request } = await createMetadataHttpFixture(t);
   const active = runtime.backups;
-  const server = serverVersion => new SystemBackups({ paths: active.paths, store: active.store, storage: active.storage,
+  const server = serverVersion => new SystemBackups({ paths: active.paths, store: active.store, openStorage: active.openStorage,
     serverId: active.serverId, serverVersion });
   const producer = server('13.10.0'), older = server('13.9.0');
   const options = { Database: false, Metadata: false, Subtitles: false, Trickplay: false };
