@@ -101,8 +101,7 @@ export async function createConfiguredStorage(filename, { environment = process.
   const notify = async () => { for (const listener of listeners) await listener(); };
   const report = async error => { try { await plugins.onError(error); } catch { /* Diagnostics cannot interrupt storage ownership transfer. */ } };
   const notifyBefore = async () => {
-    // Once a candidate is built and persisted, the ownership transfer must
-    // finish even if a stopped observer reports a cleanup failure.
+    // A stopped observer's cleanup failure must not strand the other observers.
     for (const listener of beforeListeners) try { await listener(); } catch (error) { await report(error); }
   };
   const credential = reference => {
@@ -217,12 +216,24 @@ export async function createConfiguredStorage(filename, { environment = process.
   };
   const change = async (definition, save = true, strictType) => {
     const candidate = await build(definition,{tolerateUnavailable:initializing || !save,strictType});
-    try { if (save) await persist(filename,definition); }
-    catch (error) { await candidate.registry.close(); throw error; }
     if (!initializing) await notifyBefore();
+    const scope = { owner: candidate };
+    try {
+      // Initialize the candidate in isolation. Other requests keep their live mounts
+      // and a cold start keeps the last usable definition until initialization succeeds.
+      if (save && !initializing) await operations.run(scope, notify);
+      if (save) await persist(filename,definition);
+    } catch (error) {
+      if (save && !initializing) {
+        await operations.run(scope, notifyBefore);
+        try { await notify(); }
+        catch (recovery) { throw operationFailure([error, recovery], 'Storage reconfiguration and recovery failed.'); }
+        finally { await retire(candidate); }
+      } else await retire(candidate);
+      throw error;
+    } finally { scope.owner = null; }
     const previous = current; current = candidate; configuration = clone(definition);
     if (previous) await retire(previous);
-    if (save && !initializing) await notify();
     return clone(configuration);
   };
   const enqueue = operation => {

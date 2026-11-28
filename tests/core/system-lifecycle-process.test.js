@@ -429,6 +429,23 @@ test('the actual production CLI retains its selected target across HTTP restarts
     assert.equal(restoredStorage.body.instances.find(binding => binding.id === 'artwork').config.root, artworkRoot);
     assert.equal(await readFile(replacementPoster, 'utf8'), 'independent replacement poster');
     t.diagnostic('Restored the archived poster on the selected original volume and retained the independent replacement poster.');
+    const blockedRoot = path.join(root, 'blocked-program-data');
+    await mkdir(blockedRoot);
+    await writeFile(path.join(blockedRoot, 'root'), 'existing file');
+    const lastGood = restoredStorage.body, proposed = structuredClone(lastGood);
+    const prefix = proposed.prefixes.find(entry => entry.identityRoot === path.join(instance, 'data') && entry.purpose === 'application');
+    const programMount = proposed.mounts.find(entry => entry.path === prefix.accessRoot);
+    proposed.instances.find(entry => entry.id === programMount.instanceId).config.root = blockedRoot;
+    const previousBytes = await readFile(definitionFile);
+    const rejected = await call('/Storage/Configuration', { method: 'POST', body: proposed, timeout: 30000 });
+    assert.equal(rejected.status, 409, rejected.text);
+    assert.deepEqual((await call('/Storage/Configuration')).body, lastGood);
+    assert.deepEqual(await readFile(definitionFile), previousBytes);
+    assert.equal((await call('/Storage/Status')).body.application.ready, true);
+    assert.equal(await readFile(path.join(blockedRoot, 'root'), 'utf8'), 'existing file');
+    assert.equal((await call('/Storage/Configuration', { method: 'POST', body: lastGood, timeout: 30000 })).status, 200);
+    assert.equal((await call('/Storage/Status')).body.application.ready, true);
+    t.diagnostic('Conflicting program-data root returned 409, retained the live and on-disk configuration and remained ready after resubmission.');
     for (const { name, file, ordinary, identityRoot, accessRoot } of mounted) {
       assert.ok(restoredStorage.body.prefixes.some(prefix => prefix.accessRoot === accessRoot));
       assert.equal(await readFile(file, 'utf8'), 'mounted ' + name);

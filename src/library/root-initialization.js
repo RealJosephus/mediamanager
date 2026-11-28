@@ -20,7 +20,7 @@ async function checkDirectory(root, directory, fileSystem) {
       const resolved = await fileSystem.realpath(existing);
       if (!within(root, resolved) || !(await fileSystem.stat(existing)).isDirectory()) {
         throw Object.assign(new Error('Native library root directories must stay inside the isolated instance.'), {
-          code: 'UNSAFE_LIBRARY_ROOT_PATH', path: directory,
+          code: 'UNSAFE_LIBRARY_ROOT_PATH', status: 409, path: directory,
         });
       }
       return;
