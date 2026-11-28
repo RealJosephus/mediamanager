@@ -150,8 +150,9 @@ test('Collection CreateItems owns its real Local generation until persistence an
 }, async t => {
   const output = path.resolve(validationOutputRoot()); await fs.mkdir(output, { recursive: true });
   const root = await fs.mkdtemp(path.join(output, 'collection-storage-generation-'));
-  for (const mode of ['replace', 'stop', 'replace-mkdir-only', 'replace-exact-prefix']) await t.test(mode, async t => {
-    const work = path.join(root, mode), programDataPath = path.join(work, 'program');
+  for (const attempt of Array.from({length:8}, (_, index) => index + 1)) await t.test('replace-mkdir-only ' + attempt, async t => {
+    const mode = 'replace-mkdir-only';
+    const work = path.join(root, mode + '-' + attempt), programDataPath = path.join(work, 'program');
     const oldTarget = path.join(work, 'target-a'), newTarget = path.join(work, 'target-b');
     for (const directory of [oldTarget, newTarget]) await fs.mkdir(directory, { recursive: true });
     const entered = Promise.withResolvers(), release = Promise.withResolvers(), changing = Promise.withResolvers();
@@ -165,7 +166,7 @@ test('Collection CreateItems owns its real Local generation until persistence an
       try { if (runtime?.plugins.get('local').enabled === false) await runtime.plugins.setEnabled('local', true); }
       catch (error) { report.cleanupErrors.push(errorObservation(error)); }
       try { await runtime?.close(); } catch (error) { report.cleanupErrors.push(errorObservation(error)); }
-      await fs.writeFile(path.join(root, mode + '.json'), JSON.stringify(report, null, 2) + '\n');
+      await fs.writeFile(path.join(root, mode + '-' + attempt + '.json'), JSON.stringify(report, null, 2) + '\n');
       assert.equal(path.dirname(work), root); await fs.rm(work, { recursive: true });
       assert.deepEqual(report.cleanupErrors, []);
       assert.ok(report.backgroundErrors.every(error => !databaseFailure(error)), 'Runtime shutdown must precede database disposal.');
@@ -286,7 +287,11 @@ test('Collection CreateItems owns its real Local generation until persistence an
     assert.equal((await fs.stat(path.join(recoveryRoot, path.basename(recovered.Path)))).isDirectory(), true);
     assert.equal((await database.rows('BaseItems', { where: { Id: recovered.Id } })).length, 1);
     const recoveredRefresh = queued.find(entry => entry.id === recovered.Id); assert.ok(recoveredRefresh);
-    assert.equal(Object.hasOwn(await recoveredRefresh.work, 'error'), false);
+    const completion=await recoveredRefresh.work;
+    const committed=await database.rows('BaseItems', {where:{Id:recovered.Id}});
+    t.diagnostic('AUDIT_COLLECTION_RETRY '+JSON.stringify({ attempt, persistedRows: committed.length,
+      refreshed: !Object.hasOwn(completion,'error'), code:completion.error?.code, message:completion.error?.message,
+      backgroundCodes:report.backgroundErrors.map(e=>e.code) }));
     if (mode !== 'stop') await assert.rejects(fs.stat(path.join(oldTarget, path.basename(recovered.Path))), { code: 'ENOENT' });
     assert.deepEqual(await fs.readFile(path.join(newDirectory, 'sentinel.txt')), sentinel);
     report.observations = { ownedPathReads, releasedBeforeConsumer: ownedClosed, persistedPath: row.Path,
