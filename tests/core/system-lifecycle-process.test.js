@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
 import { once } from 'node:events';
-import { mkdir, copyFile, writeFile, unlink } from 'node:fs/promises';
+import { mkdir, copyFile, readFile, stat, writeFile, unlink } from 'node:fs/promises';
+import { buffer } from 'node:stream/consumers';
 import { randomUUID, createHash } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
@@ -15,6 +16,7 @@ import { transferDatabase } from '../../src/migration/database-transfer.js';
 import { discoverInstanceState } from '../../src/migration/instance-state.js';
 import { publishProductionTarget, readProductionTarget } from '../../src/production-target.js';
 import { nativeGuid } from '../../src/users/native.js';
+import { withBackupArchive } from '../../src/system/backup-archive.js';
 import { quoteIdentifier, tableDefinition } from '../../src/database/model.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { currentNativeSqliteInputs } from '../../tools/validation/current-native-sqlite-inputs.js';
@@ -342,16 +344,41 @@ test('the actual production CLI retains its selected target across HTTP restarts
     await mkdir(subtitles, { recursive: true }); await mkdir(trickplay, { recursive: true });
     const inside = path.join(subtitles, 'backup.srt'), outside = path.join(trickplay, 'backup.bin');
     await writeFile(inside, 'saved subtitle'); await writeFile(outside, 'before');
+    const logical = path.join(path.dirname(witness), 'mounted-artwork');
+    const artworkRoot = path.join(root, 'artwork-volume'), poster = path.join(artworkRoot, 'poster.bin');
+    const originalPoster = Buffer.from('Archived poster on an independent volume.\0');
+    await mkdir(artworkRoot);
+    await writeFile(poster, originalPoster);
+    const configuration = await call('/Storage/Configuration');
+    assert.equal(configuration.status, 200);
+    const definition = configuration.body;
+    definition.instances.push({ id: 'artwork', type: 'local', config: { root: artworkRoot, writable: true } });
+    definition.mounts.push({ ...definition.mounts.find(mount => mount.instanceId === 'instance'), path: '/artwork', instanceId: 'artwork' });
+    definition.prefixes.push({ identityRoot: logical, accessRoot: '/artwork', purpose: 'metadata',
+      style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Independent artwork volume.' });
+    assert.equal((await call('/Storage/Configuration', { method: 'POST', body: definition, timeout: 30000 })).status, 200);
+    await assert.rejects(stat(logical), { code: 'ENOENT' });
     const backup = await call('/Backup/Create', { method: 'POST', body: { Metadata: true, Subtitles: true }, timeout: 30000 });
     assert.equal(backup.status, 200, stderr);
+    assert.equal(backup.body.Options.Metadata, true);
     backupFile = backup.body.Path;
     assert.equal(path.dirname(backupFile), path.join(instance, 'data/data/backups'));
     assert.deepEqual((await call('/Backup/Manifest?path=' + encodeURIComponent(backupFile))).body, backup.body);
+    const members = { ['Data/metadata/' + path.basename(witness)]: original, 'Data/metadata/mounted-artwork/poster.bin': originalPoster };
+    await withBackupArchive(backupFile, async archive => {
+      for (const [key, expected] of Object.entries(members)) {
+        assert.ok(archive.directory.has(key), key);
+        assert.deepEqual(await buffer(archive.stream(archive.directory.get(key))), expected);
+      }
+    });
     const lateUser = await call('/Users/New', { method: 'POST', body: { Name: 'After backup' } });
     assert.equal(lateUser.status, 200);
     assert.equal((await call('/System/Configuration', { method: 'POST', body: { ...savedConfiguration, ServerName: 'After backup' } })).status, 204);
     assert.equal((await call('/System/Configuration')).body.ServerName, 'After backup');
     await storage.fileSystem.writeFile(witness, Buffer.from('changed metadata'));
+    await writeFile(poster, 'changed mounted poster');
+    assert.equal(await readFile(witness, 'utf8'), 'changed metadata');
+    assert.equal(await readFile(poster, 'utf8'), 'changed mounted poster');
     await writeFile(inside, 'changed subtitle'); await writeFile(outside, 'after');
     const restore = await call('/Backup/Restore', { method: 'POST', body: { ArchiveFileName: backupFile }, timeout: 30000 });
     assert.equal(restore.status, 204, stderr); assert.equal(restore.text, '');
@@ -360,11 +387,24 @@ test('the actual production CLI retains its selected target across HTTP restarts
     assert.equal((await call('/Users/' + lateUser.body.Id)).status, 404);
     assert.deepEqual(await database.rows('Users', { where: { Id: nativeGuid(lateUser.body.Id) } }), []);
     await verifyRetained('after actual backup restore');
+    assert.deepEqual(await readFile(witness), original);
+    assert.deepEqual(await readFile(poster), originalPoster);
+    await assert.rejects(stat(logical), { code: 'ENOENT' });
+    // A directory later created on the parent volume must not duplicate or shadow the bound tree.
+    await mkdir(logical);
+    await writeFile(path.join(logical, 'parent-only.bin'), 'hidden parent volume');
+    const filesOnly = await call('/Backup/Create', { method: 'POST', body: { Database: false, Metadata: true }, timeout: 30000 });
+    assert.equal(filesOnly.status, 200, stderr);
+    await withBackupArchive(filesOnly.body.Path, archive => {
+      assert.ok(archive.directory.has('Data/metadata/mounted-artwork/poster.bin'));
+      assert.equal(archive.directory.has('Data/metadata/mounted-artwork/parent-only.bin'), false);
+    });
     assert.equal(await storage.fileSystem.readFile(inside, 'utf8'), 'saved subtitle');
     assert.equal(await storage.fileSystem.readFile(outside, 'utf8'), 'after');
     assert.equal((await call('/Users/New', { method: 'POST', body: { Name: 'After backup' } })).status, 200);
     report.backup = { manifest: backup.body, restore: restore.status, savedConfigurationReloaded: true,
-      lateUserRemovedAndRecreated: true, metadata: report.original.sha256, subtitleRestored: true, excludedTrickplayRetained: true };
+      lateUserRemovedAndRecreated: true, metadata: report.original.sha256, restoredMetadataMembers: Object.keys(members),
+      mountedPoster: bytesValue(await readFile(poster)), subtitleRestored: true, excludedTrickplayRetained: true };
     t.diagnostic(JSON.stringify(report.backup));
     const beforeShutdown = await resources();
     const shutdown = await whileQueriesBlocked(() => call('/System/Shutdown', { method: 'POST', remote: '203.0.113.10' }));
