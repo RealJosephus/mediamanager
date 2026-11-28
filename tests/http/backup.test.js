@@ -4,6 +4,8 @@ import path from 'node:path';
 import { Readable } from 'node:stream';
 import { text } from 'node:stream/consumers';
 import test from 'node:test';
+import { setTimeout as delay } from 'node:timers/promises';
+import { quoteIdentifier } from '../../src/database/model.js';
 import { StorageFileSystem } from '../../src/storage/files.js';
 import { readZipDirectory } from '../../src/storage/zip-directory.js';
 import { BackupRestored, SystemBackups } from '../../src/system/backups.js';
@@ -15,6 +17,10 @@ export const requiredValidationServices = ['postgres'];
 for (const includeDatabase of [false, true]) {
   test('a slow file copy retains its storage generation and allows user writes, Database=' + includeDatabase, async t => {
     const { runtime, database, request, programDataPath } = await createMetadataHttpFixture(t);
+    const storedNames = async () => database.withConnection(async db => (await db.client.query(
+      'SELECT to_json("Username") AS name FROM ' + quoteIdentifier(db.schemaName) + '."Users"')).rows.map(row => row.name).sort());
+    const before = await storedNames();
+    assert.ok(before.length > 0);
     const { dataPath } = runtime.applicationPaths;
     const subtitles = path.join(dataPath, 'subtitles'), trickplay = path.join(dataPath, 'trickplay');
     const next = path.resolve(programDataPath, '../next-trickplay'), slow = path.join(subtitles, 'held.srt');
@@ -58,13 +64,44 @@ for (const includeDatabase of [false, true]) {
           const index = tables.findIndex(table => table.schema === database.schemaName && table.name === 'Users');
           const pages = await text(archive.stream(archive.directory.get('Database/' + index + '.ndjson')));
           const names = pages.trimEnd().split('\n').flatMap(line => JSON.parse(line).map(row => row.Username));
-          assert.ok(names.includes('Metadata HTTP Reader'));
-          assert.ok(!names.includes(name));
+          assert.deepEqual(names.sort(), before);
         }
       });
     } finally { resume.resolve(); await backup; }
   });
 }
+
+test('a database backup retains one snapshot across tables when an independent transaction commits mid-export', async t => {
+  const { database, request } = await createMetadataHttpFixture(t);
+  const schema = quoteIdentifier(database.schemaName);
+  const names = ['BackupRevisionA', 'BackupRevisionB'];
+  const tables = names.map(name => schema + '.' + quoteIdentifier(name));
+  for (const table of tables) {
+    await database.client.query('CREATE TABLE ' + table + ' (revision integer)');
+    await database.client.query('INSERT INTO ' + table + ' VALUES (1)');
+  }
+  let backup;
+  try {
+    await database.withConnection(writer => writer.transaction(async db => {
+      await db.client.query('LOCK TABLE ' + tables[1] + ' IN ACCESS EXCLUSIVE MODE');
+      backup = request('/Backup/Create', { method: 'POST', body: { Database: true } });
+      const deadline = AbortSignal.timeout(8000);
+      while (!(await db.client.query("SELECT EXISTS (SELECT FROM pg_locks WHERE relation = $1::regclass AND mode = 'AccessShareLock' AND NOT granted) AS waiting",
+        [tables[1]])).rows[0].waiting) await delay(20, undefined, { signal: deadline });
+      for (const table of tables) await db.client.query('UPDATE ' + table + ' SET revision = 2');
+    }));
+    const result = await backup;
+    assert.equal(result.status, 200);
+    await withBackupArchive(result.body.Path, async archive => {
+      const inventory = archive.json('Database/catalog.json').layout.tables;
+      for (const [i, name] of names.entries()) {
+        const index = inventory.findIndex(table => table.schema === database.schemaName && table.name === name);
+        assert.deepEqual(JSON.parse(await text(archive.stream(archive.directory.get('Database/' + index + '.ndjson')))), [{ revision: 1 }]);
+        assert.deepEqual((await database.client.query('SELECT revision FROM ' + tables[i])).rows, [{ revision: 2 }]);
+      }
+    });
+  } finally { await backup; }
+});
 
 test('elevated Backup routes create, list and read genuine archives with selectable payloads', async t => {
   const { runtime, request, reader, errors } = await createMetadataHttpFixture(t);
