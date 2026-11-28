@@ -543,3 +543,30 @@ test('a real interrupted update restores the last committed package after proces
   assert.equal((await fixture.host.entries('route')[0].handle({})).label,'initial');
   await assert.rejects(fs.stat(path.join(directory,'transaction.json')),{code:'ENOENT'});
 });
+
+test('audit observes an unchanged multilingual plugin after a process locale switch', async t => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'plugin-locale-audit-'));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const source = await fixturePackage(directory);
+  await fs.writeFile(path.join(source, 'ä.txt'), 'translated label');
+  await fs.writeFile(path.join(source, 'z.txt'), 'other label');
+  const hostUrl = new URL('../../src/plugins/host.js', import.meta.url).href;
+  const code = `import { PluginHost } from ${JSON.stringify(hostUrl)};
+    const host = await PluginHost.open({directory:process.argv[1],preinstalled:false,onError:()=>{}});
+    try {
+      const result = process.argv[2] ? await host.install(process.argv[2]) : host.get('fixture');
+      process.stdout.write(JSON.stringify({locale:Intl.Collator().resolvedOptions().locale,status:result.status,error:result.error}));
+    } finally { await host.close(); }`;
+  const runHost = async (locale, install=false) => {
+    const args=['--input-type=module', '--eval',code,path.join(directory,'host'),...(install?[source]:[])];
+    const child=spawn(process.execPath,args,{env:{...process.env,LANG:locale,LC_ALL:locale},stdio:['ignore','pipe','pipe']});
+    let out='',err='';child.stdout.on('data',b=>out+=b);child.stderr.on('data',b=>err+=b);
+    const [exit]=await once(child,'close');assert.equal(exit,0,err);
+    return JSON.parse(out);
+  };
+  const installed=await runHost('en_US.UTF-8',true), sameLocale=await runHost('en_US.UTF-8');
+  const otherLocale=await runHost('sv_SE.UTF-8'), returned=await runHost('en_US.UTF-8');
+  t.diagnostic('AUDIT_PLUGIN_LOCALE '+JSON.stringify({installed,sameLocale,otherLocale,returned}));
+  assert.equal(installed.status,'active');assert.equal(sameLocale.status,'active');
+  assert.equal(otherLocale.status,'failed');assert.equal(returned.status,'active');
+});
