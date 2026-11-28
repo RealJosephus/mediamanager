@@ -283,7 +283,7 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
  }
  const invalidGroup=await request('GET','/SyncPlay/FixtureRouteKey',undefined,true,{token:login.AccessToken});
  assert.deepEqual(await invalidGroup.json(),{path:'/{section}/FixtureRouteKey',params:{section:'SyncPlay'}});
- assert.equal((await request('GET','/SyncPlay/'+missingGroup,undefined,true,{failureStatus:404})).status,404);
+ assert.equal((await request('GET','/SyncPlay/'+missingGroup,undefined,true,{token:login.AccessToken,failureStatus:404})).status,404);
  assert.equal((await request('GET','/Plugins/fixture',undefined,true,{token:login.AccessToken,failureStatus:403})).status,403);
  assert.equal((await (await request('GET','/Plugins/fixture')).json()).id,'fixture');
  assert.equal((await request('POST','/Plugins/fixture/Configuration',{message:'persisted'})).status,200);
