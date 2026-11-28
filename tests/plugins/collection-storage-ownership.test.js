@@ -1,4 +1,8 @@
 import test from 'node:test';
+import pg from 'pg';
+import { isDeepStrictEqual } from 'node:util';
+import { setTimeout as duration } from 'node:timers/promises';
+import { PostgresDatabase } from '../../src/database/postgres.js';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
@@ -146,11 +150,11 @@ test('Collection creation preserves actual filesystem and PostgreSQL failure pre
 });
 
 test('Collection CreateItems owns its real Local generation until persistence and releases it before later consumers', {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 180000,
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 420000,
 }, async t => {
   const output = path.resolve(validationOutputRoot()); await fs.mkdir(output, { recursive: true });
   const root = await fs.mkdtemp(path.join(output, 'collection-storage-generation-'));
-  for (const mode of ['replace', 'stop', 'replace-mkdir-only', 'replace-exact-prefix']) await t.test(mode, async t => {
+  for (const [iteration,mode] of ['replace','stop','replace-mkdir-only','replace-exact-prefix',...Array(7).fill('replace-mkdir-only')].entries()) await t.test(mode+'-'+iteration, async t => {
     const work = path.join(root, mode), programDataPath = path.join(work, 'program');
     const oldTarget = path.join(work, 'target-a'), newTarget = path.join(work, 'target-b');
     for (const directory of [oldTarget, newTarget]) await fs.mkdir(directory, { recursive: true });
@@ -177,6 +181,45 @@ test('Collection CreateItems owns its real Local generation until persistence an
         reported.set(error, report.backgroundErrors.length);
         report.backgroundErrors.push(errorObservation(error));
       } });
+    const audit={mode,iteration,writes:[],reads:[],loads:[]}, snapshots=new Map();
+    let active=false;
+    const label='Recovered generation', schema=q(database.schemaName);
+    await database.client.query('CREATE TABLE '+schema+'.audit_rows(seq bigserial PRIMARY KEY,op text,pid integer,statement text,prior jsonb,current jsonb)');
+    const nameHex=nativeTextBytes(label).toString('hex');
+    await database.client.query('CREATE FUNCTION '+schema+'.audit_fn() RETURNS trigger LANGUAGE plpgsql AS $fn$ BEGIN '+
+      'IF (TG_OP <> \'DELETE\' AND NEW."Name" = decode(\''+nameHex+'\',\'hex\')) OR (TG_OP <> \'INSERT\' AND OLD."Name" = decode(\''+nameHex+'\',\'hex\')) THEN '+
+      'INSERT INTO '+schema+'.audit_rows(op,pid,statement,prior,current) VALUES (TG_OP,pg_backend_pid(),left(current_query(),2000),to_jsonb(OLD),to_jsonb(NEW)); END IF; RETURN NULL; END $fn$');
+    await database.client.query('CREATE TRIGGER audit_collection_row AFTER INSERT OR DELETE OR UPDATE ON '+schema+'."BaseItems" FOR EACH ROW EXECUTE FUNCTION '+schema+'.audit_fn()');
+    const sqlMethod=pg.Client.prototype.query,oldLimit=Error.stackTraceLimit;
+    Error.stackTraceLimit=32;t.after(()=>{Error.stackTraceLimit=oldLimit;});
+    t.mock.method(pg.Client.prototype,'query',function(statement,...args){
+      const sql=typeof statement==='string'?statement:statement?.text;
+      if(active && typeof sql==='string' && /(?:INSERT|UPDATE|DELETE)/i.test(sql) && /"BaseItems"/i.test(sql) && audit.writes.length<1800) {
+        audit.writes.push({pid:this.processID,sql:sql.slice(0,2000),stack:new Error().stack.split('\n').slice(2,28)});
+      }
+      return sqlMethod.call(this,statement,...args);
+    });
+    const originalLoad=runtime.metadata.loadContext;
+    runtime.metadata.loadContext=Object.assign(async function(...args) {
+      const loaded=await originalLoad.apply(runtime.metadata,args);
+      if(active && loaded?.item.Name===label && loaded.snapshot) {
+        snapshots.set(loaded.item.Id,loaded.snapshot);
+        audit.loads.push({id:loaded.item.Id,time:loaded.snapshot.DateLastSaved});
+        if (iteration>=5) await duration([35,250,1000][iteration%3]);
+      }
+      return loaded;
+    },originalLoad);
+    const originalRows=PostgresDatabase.prototype.rows;
+    t.mock.method(PostgresDatabase.prototype,'rows',async function(table,options) {
+      const result=await originalRows.call(this,table,options);
+      const snapshot=snapshots.get(options?.where?.Id);
+      if(active && table==='BaseItems' && snapshot && new Error().stack.includes('assertMetadataBaseline')) {
+        const row=result[0];const keys=[...new Set([...Object.keys(snapshot),...Object.keys(row??{})])];
+        const diff=Object.fromEntries(keys.filter(k=>!isDeepStrictEqual(snapshot[k],row?.[k])).map(k=>[k,[String(snapshot[k]),String(row?.[k])]]));
+        audit.reads.push({id:options.where.Id,diff});
+      }
+      return result;
+    });
     const parent = await runtime.collections.getCollectionsFolder(true), storage = runtime.storage;
     assert.ok(parent); assert.equal(runtime.plugins.get('local').enabled, true);
     const definition = storage.configuration(), restricted = mode === 'replace-mkdir-only', exactPrefix = mode === 'replace-exact-prefix';
@@ -284,6 +327,7 @@ test('Collection CreateItems owns its real Local generation until persistence an
       assert.equal(loaded.fileSystem, runtime.fileSystem); assert.notEqual(loaded.fileSystem, ownedFiles);
       assert.equal((await loaded.imageAssets.stat(filename)).kind, 'directory');
     });
+    active=true;
     const recovered = await runtime.collections.create({ Name: 'Recovered generation', ItemIdList: [] });
     const recoveryRoot = mode === 'stop' ? oldTarget : exactPrefix ? parent.Path : newTarget;
     assert.equal((await fs.stat(path.join(recoveryRoot, path.basename(recovered.Path)))).isDirectory(), true);
@@ -294,6 +338,17 @@ test('Collection CreateItems owns its real Local generation until persistence an
     report.recoveredRefresh = { id: recovered.Id, persistedName: committed?.Name, dateLastRefreshed: committed?.DateLastRefreshed,
       ...(Object.hasOwn(completion, 'error') && { failure: errorObservation(completion.error),
         backgroundErrorIndex: reported.get(completion.error) ?? null }) };
+    active=false;
+    const {rows:events}=await database.client.query('SELECT op,pid,statement,prior,current FROM '+schema+'.audit_rows ORDER BY seq');
+    audit.events=events.map(({op,pid,statement,prior,current})=>{
+      const changed=prior && current?Object.keys(current).filter(k=>!isDeepStrictEqual(prior[k],current[k])):undefined;
+      return {op,pid,statement,changed,changes:changed?.map(k=>[k,prior[k],current[k]]),
+        streams:audit.writes.filter(w=>w.pid===pid && w.sql===statement).map(w=>w.stack)};
+    });
+    audit.outcome=report.recoveredRefresh;
+    const dir=path.join(output,'audit-collection-observation',mode+'-'+iteration);await fs.mkdir(dir,{recursive:true});
+    await fs.writeFile(path.join(dir,'report.json'),JSON.stringify(audit,null,2));
+    t.diagnostic('AUDIT '+JSON.stringify({iteration,mode,failure:audit.outcome.failure?.code??null,reads:audit.reads,events:audit.events.map(e=>({op:e.op,changed:e.changed}))}));
     t.diagnostic(JSON.stringify(report.recoveredRefresh));
     if (Object.hasOwn(completion, 'error')) throw completion.error;
     assert.equal(committed.Name, 'Recovered generation');
