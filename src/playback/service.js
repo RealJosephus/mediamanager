@@ -4,7 +4,7 @@ import { EOL } from 'node:os';
 import { negotiateSource, universalAudioHlsCopyContainer } from './profile.js';
 import { decodeSubtitle, convertSubtitle } from './subtitles.js';
 import { normalizeSubtitleBytes } from './subtitle-charset.js';
-import { isExternalSubtitleFallback, subtitleInputFormat } from './subtitle-source.js';
+import { isExternalSubtitleFallback, isVobSubFormat, subtitleInputFormat } from './subtitle-source.js';
 import { identityPathStyle } from '../storage/uri.js';
 import { HttpResult, httpError, notFound } from '../http/binding.js';
 import { vfsStreamResult, BinaryResult } from '../http/binary-result.js';
@@ -553,12 +553,12 @@ export class PlaybackService {
     return BinaryResult.bytes(bytes, 'application/vnd.apple.mpegurl');
   }
 
-  async subtitle(itemId, mediaSourceId, index, format, options = {}) {
+  async subtitle(itemId, mediaSourceId, index, requestedFormat, options = {}) {
     const item = await this.library.getItemRecord(itemId, { user: options.user });
     const source = (await this.library.getMediaSources(item.Id, { user: options.user })).find(source => source.Id.toLowerCase() === mediaSourceId.toLowerCase());
     const stream = source?.MediaStreams.find(stream => stream.Type === 'Subtitle' && stream.Index === index);
     if (!stream) throw httpError(404, 'Subtitle stream not found.');
-    if (!format) {
+    if (!requestedFormat) {
       if (!stream.Path) throw httpError(404, 'Subtitle stream file not found.');
       const accessPath = this.#sidecarPath(stream.Path), contentType = getMimeType(stream.Path);
       return /^https?:\/\//iu.test(stream.Path)
@@ -570,8 +570,7 @@ export class PlaybackService {
     if ((embedded || textFallback) && !this.extraction) throw httpError(503, 'Media extraction has not been configured.');
     const identityPath = embedded ? stream.Path || source.Path : stream.Path;
     const accessPath = embedded && !stream.Path ? this.accessPath({ Id: source.Id, Path: source.Path }) : this.#sidecarPath(identityPath);
-    format = format.toLowerCase() === 'js' ? 'json' : format.toLowerCase();
-    let inputFormat = subtitleInputFormat(stream);
+    requestedFormat = requestedFormat.toLowerCase() === 'js' ? 'json' : requestedFormat.toLowerCase();
     return new BinaryResult((request, response) => this.#prepareSubtitle(async () => {
       const controller = new AbortController();
       const abort = () => controller.abort();
@@ -580,7 +579,7 @@ export class PlaybackService {
       if (request.aborted || response.destroyed) abort();
       let handle, failed = false, primary, cleanupFailed = false;
       try {
-        let bytes;
+        let bytes, inputFormat = subtitleInputFormat(stream);
         if (embedded || textFallback) {
           const extracted = await this.extraction.subtitle(source, stream, accessPath, { signal: this.#subtitleOwner.signal });
           bytes = extracted.bytes;
@@ -598,7 +597,7 @@ export class PlaybackService {
           bytes = Buffer.concat(chunks);
         }
         checkAbort(this.#subtitleOwner.signal);
-        if (inputFormat === 'mks' && /^(?:dvdsub|vobsub)$/i.test(format)) throw httpError(400, 'Unsupported file extension: mks.');
+        const format = inputFormat === 'mks' && isVobSubFormat(requestedFormat) ? 'mks' : requestedFormat;
         if (stream.IsTextSubtitleStream) bytes = normalizeSubtitleBytes(bytes);
         const text = stream.IsTextSubtitleStream ? new TextDecoder('utf-8', { ignoreBOM: true }).decode(bytes) : null;
         if (textFallback && !['srt', 'subrip', 'vtt', 'webvtt', 'json', 'ass', 'ssa', 'ttml'].includes(format)) throw httpError(400, `Unsupported format: ${format}`);

@@ -89,7 +89,7 @@ test('actual PGS, VobSub and S_TEXT/SSA containers match the frozen extraction o
     'WEBVTT\r\n\r\n00:00:01.180 --> 00:00:06.850\r\nLike an angel with pity on nobody');
 });
 
-test('VobSub advertisement retains native failure while manual MKS serves native packets', async t => {
+test('VobSub codec links and explicit MKS serve the extracted Matroska subtitle packets', async t => {
   const entry = reference.sources.find(value => value.name === 'vobsub.mks');
   const source = structuredClone(entry.source);
   const profile = { SubtitleProfiles: [{ Format: 'dvdsub', Container: 'mks', Method: 'External' }] };
@@ -132,18 +132,11 @@ test('VobSub advertisement retains native failure while manual MKS serves native
   });
   const origin = `http://127.0.0.1:${server.address().port}`;
 
-  const advertised = await fetch(origin + delivery.DeliveryUrl);
-  assert.equal(advertised.status, 400);
-  assert.equal(advertised.headers.get('content-type'), 'text/plain');
-  assert.equal(await advertised.text(), 'Error processing request.');
-  const manual = await fetch(origin + delivery.DeliveryUrl.replace('/Stream.dvdsub', '/Stream.mks'));
-  const bytes = Buffer.from(await manual.arrayBuffer());
-  assert.equal(manual.status, 200);
-  assert.equal(manual.headers.get('content-type'), 'video/x-matroska');
-  assert.deepEqual(packetProjection(await probe(bytes)), packetProjection(reference.outputs.find(value => value.source === 'vobsub.mks').packetProjection));
-
-  const nativeBroken = await fetch(origin + '/vobsub');
-  assert.equal(nativeBroken.status, 400);
-  assert.equal(nativeBroken.headers.get('content-type'), 'text/plain');
-  assert.equal(await nativeBroken.text(), 'Error processing request.');
+  const expected = packetProjection(reference.outputs.find(value => value.source === 'vobsub.mks').packetProjection);
+  for (const route of [delivery.DeliveryUrl, delivery.DeliveryUrl.replace('/Stream.dvdsub', '/Stream.mks'), '/vobsub']) {
+    const response = await fetch(origin + route);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('content-type'), 'video/x-matroska');
+    assert.deepEqual(packetProjection(await probe(Buffer.from(await response.arrayBuffer()))), expected);
+  }
 });

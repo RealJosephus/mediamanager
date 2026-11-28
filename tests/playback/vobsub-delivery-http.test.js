@@ -22,7 +22,6 @@ const fixtureRead = async (name, sha256) => {
   return bytes;
 };
 const nativeHttp = JSON.parse(await fixtureRead('native-http.json', '63b20a16948cf0433d29a03d9756b01800ffc40e66d768c7d7bb1e2d7861b322'));
-assert.equal(nativeHttp.records['advertised-vobsub'].status, 400);
 assert.equal(nativeHttp.records['manual-mks'].status, 200);
 const nativePackets = JSON.parse(nativeHttp.records['manual-mks'].probe.stdout);
 const recordedInput = JSON.parse(await fixtureRead('input.json', '07dbda5582284806967f80241ea88513cb74cf8327319f3601e03ec0ef7de40e'));
@@ -103,9 +102,9 @@ function packetProjection(value) {
   };
 }
 
-test('PostgreSQL: native VobSub advertisement fails and authenticated manual MKS remains readable', {
+test('PostgreSQL: authenticated PlaybackInfo DVDSub link delivers the native Matroska subtitle packets', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
-}, async () => {
+}, async t => {
   const schema = `vobsub_delivery_${randomBytes(8).toString('hex')}`;
   const fixture = await extractionFixture({ '/source.mkv': mediaBytes });
   const isolatedRoot = await mkdtemp(path.join(tmpdir(), 'vobsub-delivery-'));
@@ -133,7 +132,7 @@ test('PostgreSQL: native VobSub advertisement fails and authenticated manual MKS
     const profile = { MaxStreamingBitrate: 10_000_000,
       DirectPlayProfiles: [{ Type: 'Video', Container: 'mkv', VideoCodec: 'h264', AudioCodec: 'aac' }],
       TranscodingProfiles: [], ContainerProfiles: [], CodecProfiles: [],
-      SubtitleProfiles: [{ Format: 'vobsub', Container: 'mks', Method: 'External' }] };
+      SubtitleProfiles: [{ Format: 'dvdsub', Container: 'mks', Method: 'External' }] };
     const playback = await fetch(origin + `/Items/${itemRouteId}/PlaybackInfo`, { method: 'POST',
       headers: { Authorization: authorization(token), 'Content-Type': 'application/json' },
       body: JSON.stringify({ MediaSourceId: itemRouteId, SubtitleStreamIndex: 3,
@@ -145,7 +144,7 @@ test('PostgreSQL: native VobSub advertisement fails and authenticated manual MKS
     assert.equal(subtitle.DeliveryMethod, 'External');
     assert.equal(subtitle.Codec.toLowerCase(), 'dvdsub');
     const advertised = new URL(subtitle.DeliveryUrl, origin);
-    assert.match(advertised.pathname, /\/Stream\.vobsub$/u);
+    assert.match(advertised.pathname, /\/Stream\.dvdsub$/u);
     assert.equal(advertised.searchParams.get('ApiKey'), token);
     assert.deepEqual(await snapshot(database, isolatedRoot), before);
 
@@ -154,36 +153,24 @@ test('PostgreSQL: native VobSub advertisement fails and authenticated manual MKS
     const rejected = await fetch(anonymous);
     assert.equal(rejected.status, 401);
     assert.deepEqual(await snapshot(database, isolatedRoot), before);
-    const response = await fetch(advertised);
-    const bytes = Buffer.from(await response.arrayBuffer());
-    const expectedError = nativeHttp.records['advertised-vobsub'];
-    assert.equal(response.status, expectedError.status);
-    assert.equal(response.headers.get('content-type'), expectedError.headers['content-type']);
-    assert.equal(bytes.length, expectedError.bytes);
-    assert.equal(createHash('sha256').update(bytes).digest('hex'), expectedError.sha256);
-    assert.equal(bytes.toString('utf8'), expectedError.bodyUtf8);
-    responses.push({ suffix: 'vobsub', status: response.status, contentType: response.headers.get('content-type'),
-      bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') });
-    const afterAdvertisement = await snapshot(database, isolatedRoot);
-    assert.deepEqual(afterAdvertisement, before);
-    stages.push({ stage: 'afterAdvertisement', ...afterAdvertisement });
-    for (const suffix of ['mks', 'MKS']) {
-      const manual = new URL(advertised);
-      manual.pathname = manual.pathname.replace('/Stream.vobsub', '/Stream.' + suffix);
-      const delivered = await fetch(manual);
+    for (const suffix of ['dvdsub', 'vobsub', 'mks', 'MKS']) {
+      const url = new URL(advertised);
+      if (suffix !== 'dvdsub') url.pathname = url.pathname.replace('/Stream.dvdsub', '/Stream.' + suffix);
+      const delivered = await fetch(url);
       const deliveredBytes = Buffer.from(await delivered.arrayBuffer());
-      assert.equal(delivered.status, nativeHttp.records['manual-mks'].status);
-      assert.equal(delivered.headers.get('content-type'), nativeHttp.records['manual-mks'].headers['content-type']);
+      assert.equal(delivered.status, 200);
+      assert.equal(delivered.headers.get('content-type'), 'video/x-matroska');
+      assert.equal(deliveredBytes.subarray(0, 4).toString('hex'), '1a45dfa3');
       const projection = packets(deliveredBytes);
       assert.deepEqual(projection, packetProjection(nativePackets));
       responses.push({ suffix, status: delivered.status, contentType: delivered.headers.get('content-type'),
         bytes: deliveredBytes.length, packetProjection: projection });
-      const afterManual = await snapshot(database, isolatedRoot);
-      assert.deepEqual(afterManual, before);
-      stages.push({ stage: 'afterManual' + suffix, ...afterManual });
+      const after = await snapshot(database, isolatedRoot);
+      assert.deepEqual(after, before);
+      stages.push({ stage: 'after-' + suffix, ...after });
     }
-    assert.equal(runtimeErrors.length, 1);
-    assert.equal(runtimeErrors[0].status, 400);
+    t.diagnostic(JSON.stringify(responses));
+    assert.deepEqual(runtimeErrors, []);
     assert.equal(fixture.requests.some(entry => entry.authorization), false);
   } finally {
     if (runtime) { await runtime.close(); cleanup.runtimeClosed = true; cleanup.portReleased = runtime.networkHost.listeners.every(entry => !entry.server.listening); }

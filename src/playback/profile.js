@@ -2,7 +2,7 @@ import { guid } from '../library/records.js';
 import { member } from '../http/binding.js';
 import { stringifyNativeJson, withNativeFloats } from '../core/json.js';
 import { videoColorRange } from '../library/media-streams.js';
-import { isExternalSubtitleFallback, subtitleExtractionFormat, subtitleInputFormat } from './subtitle-source.js';
+import { isExternalSubtitleFallback, isVobSubFormat, subtitleExtractionFormat, subtitleInputFormat } from './subtitle-source.js';
 import { supportsSubtitleTextConversion } from './subtitles.js';
 
 const get = (object, name, fallback) => member(object ?? {}, name) ?? fallback;
@@ -194,10 +194,9 @@ function audioCandidates(source, selected, requestedIndex) {
 const isTextFormat = format => /microdvd/i.test(format ?? '') || !/(?:pgs|dvdsub|vobsub|dvbsub)/i.test(format ?? '') && !/^(?:sup|sub)$/i.test(format ?? '');
 const textStream = stream => stream.IsTextSubtitleStream ?? (Boolean(stream.Codec || stream.IsExternal) && isTextFormat(stream.Codec));
 const canConvert = (stream, format) => textStream(stream) && !/^(?:ass|ssa)$/i.test(stream.Codec) && !/^(?:ass|ssa)$/i.test(format);
-const vobSubFormat = format => /(?:dvdsub|vobsub)/i.test(format ?? '');
-const vobSubMksDeliveryProfile = profile => vobSubFormat(get(profile, 'Format'))
+const vobSubMksDeliveryProfile = profile => isVobSubFormat(get(profile, 'Format'))
   && String(get(profile, 'Container', '')).trim() !== '' && containsContainer(get(profile, 'Container'), 'mks');
-const vobSubMksProfile = (profile, stream) => vobSubMksDeliveryProfile(profile) && vobSubFormat(stream.Codec)
+const vobSubMksProfile = (profile, stream) => vobSubMksDeliveryProfile(profile) && isVobSubFormat(stream.Codec)
   && (!stream.IsExternal || /\.mks$/i.test(stream.Path ?? ''));
 export function subtitleProfile(source, stream, profile, container = source.Container, options = {}) {
   const profiles = get(profile, 'SubtitleProfiles', []).filter(entry => !get(entry, 'Language') || containsContainer(get(entry, 'Language'), stream.Language || 'und'));

@@ -6,11 +6,13 @@ const copyMuxers = new Map([
   ['ass', 'ass'], ['ssa', 'ass'], ['srt', 'srt'], ['subrip', 'srt'], ['pgssub', 'sup'],
 ]);
 
+export const isVobSubFormat = format => /dvdsub|vobsub/i.test(format ?? '');
+
 export function subtitleExtractionFormat(stream) {
   const codec = stream.Codec?.toLowerCase();
   const muxer = copyMuxers.get(codec);
   if (muxer) return [muxer === 'srt' ? 'srt' : stream.Codec, muxer];
-  if (/dvdsub|vobsub/i.test(codec ?? '')) return ['mks', 'matroska'];
+  if (isVobSubFormat(codec)) return ['mks', 'matroska'];
   if (stream.IsTextSubtitleStream === true && (!stream.IsExternal || /\.mks$/iu.test(stream.Path ?? ''))) {
     return ['srt', 'srt', 'srt'];
   }
