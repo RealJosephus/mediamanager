@@ -65,7 +65,7 @@ async function startTmdbFixture(signal, onConfiguration) {
   return { origin, requests, poster, close: () => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve())) };
 }
 
-export async function createMetadataHttpFixture(t, { onTmdbConfiguration } = {}) {
+export async function createMetadataHttpFixture(t, { onTmdbConfiguration, systemLifecycle } = {}) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'mm-metadata-http-'));
   let upstream, database, runtime;
   t.after(async () => {
@@ -98,7 +98,7 @@ export async function createMetadataHttpFixture(t, { onTmdbConfiguration } = {})
       purpose: 'library', returnAccess: 'isolated identification media' }],
   }));
   const errors = [];
-  runtime = await createTestRuntime({ database, programDataPath, configurationDirectoryPath: config, storageConfiguration, serverId: 'metadata-http',
+  runtime = await createTestRuntime({ database, programDataPath, configurationDirectoryPath: config, storageConfiguration, systemLifecycle, serverId: 'metadata-http',
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true, PreferredMetadataLanguage: 'fr', MetadataCountryCode: 'FR',
       MetadataOptions: [{ ItemType: 'Movie', DisabledImageFetchers: ['TheMovieDb'], MetadataFetcherOrder: ['TheMovieDb'] }] },
     pluginOptions: { options: { tmdb: { apiKey: credential, baseUrl: upstream.origin + '/3/' } } },

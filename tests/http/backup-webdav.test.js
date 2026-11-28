@@ -14,7 +14,12 @@ test('restore leaves both volumes and PostgreSQL intact when a WebDAV endpoint l
   const envName = 'MEDIAMANAGER_BACKUP_TEST_DAV', previous = process.env[envName];
   process.env[envName] = service.authorization;
   try {
-    const { runtime, database, request } = await createMetadataHttpFixture(t);
+    const reservations = [];
+    const systemLifecycle = { admit(action) {
+      reservations.push(action);
+      return { cancel: () => reservations.push('cancel'), commit: () => reservations.push('commit') };
+    } };
+    const { runtime, database, request } = await createMetadataHttpFixture(t, { systemLifecycle });
     const backups = runtime.backups, volume = path.join(service.media, 'volume'), detached = path.join(service.media, 'detached');
     const key = 'art.bin', identity = path.join(backups.paths.metadataPath, 'remote-art');
     await mkdir(volume);
@@ -40,6 +45,7 @@ test('restore leaves both volumes and PostgreSQL intact when a WebDAV endpoint l
     await mkdir(volume);
     await writeFile(path.join(volume, key), 'independent B');
     assert.equal((await request('/Backup/Restore', { method: 'POST', body: { ArchiveFileName: archive.Path } })).status, 422);
+    assert.deepEqual(reservations, ['restart', 'cancel']);
     await assert.rejects(stat(backups.pending), { code: 'ENOENT' });
     assert.equal((await database.rows('BaseItems', { where: { Id: metadataMovieId } }))[0].Name, 'current database');
     assert.deepEqual(await readFile(backups.storageConfigurationPath), selection);
