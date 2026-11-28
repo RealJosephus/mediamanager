@@ -83,7 +83,7 @@ export class LocalAdapter {
   static async open(configuration, options = {}) {
     const adapter = new LocalAdapter(configuration);
     await adapter.#target('/', { missing: true });
-    if (configuration.createRoot) await fs.mkdir(adapter.root, { recursive: true });
+    if (configuration.createRoot && !options.existingRootsOnly) await fs.mkdir(adapter.root, { recursive: true });
     await adapter.#target('/'); checkAbort(options.signal); return adapter;
   }
   constructor(configuration) {

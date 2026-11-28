@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdir, mkdtemp, open, readFile, stat, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, open, readFile, rename, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Readable } from 'node:stream';
 import { text } from 'node:stream/consumers';
@@ -9,7 +9,7 @@ import { quoteIdentifier } from '../../src/database/model.js';
 import { StorageFileSystem } from '../../src/storage/files.js';
 import { readZipDirectory } from '../../src/storage/zip-directory.js';
 import { BackupRestored, SystemBackups } from '../../src/system/backups.js';
-import { backupFormat, withBackupArchive, writeBackupArchive } from '../../src/system/backup-archive.js';
+import { backupFormat, legacyBackupFormat, withBackupArchive, writeBackupArchive } from '../../src/system/backup-archive.js';
 import { createMetadataHttpFixture, metadataMovieId } from '../helpers/metadata-http-fixture.js';
 
 export const requiredValidationServices = ['postgres'];
@@ -154,8 +154,7 @@ test('elevated Backup routes create, list and read genuine archives with selecta
 test('restore checks server and engine versions before restart admission and again before cold writes', async t => {
   const { runtime, request } = await createMetadataHttpFixture(t);
   const active = runtime.backups;
-  const server = serverVersion => new SystemBackups({ paths: active.paths, store: active.store, openStorage: active.openStorage,
-    serverId: active.serverId, serverVersion });
+  const server = serverVersion => new SystemBackups({ ...active, serverVersion });
   const producer = server('13.10.0'), older = server('13.9.0');
   const options = { Database: false, Metadata: false, Subtitles: false, Trickplay: false };
   const config = path.join(active.paths.configurationDirectoryPath, 'version-marker.xml');
@@ -197,7 +196,7 @@ test('a backup without local file attributes restores its bytes with private sta
   const contents = Buffer.from('{"version":1}');
   await writeBackupArchive(filename, stage, { DateCreated: new Date().toISOString(), ServerVersion: backups.serverVersion,
     BackupEngineVersion: '1.0.0', Options: { Database: false, Metadata: false, Subtitles: false, Trickplay: false } },
-    { format: backupFormat, serverId: backups.serverId }, save => save(key, [contents]));
+    { format: legacyBackupFormat, serverId: backups.serverId }, save => save(key, [contents]));
   await withBackupArchive(filename, archive => {
     assert.deepEqual(Object.keys(archive.json('mediamanager.json').files[0]).sort(), ['key', 'sha256', 'size']);
   });
@@ -206,4 +205,59 @@ test('a backup without local file attributes restores its bytes with private sta
   const restored = path.join(backups.paths.configurationDirectoryPath, 'legacy.json');
   assert.deepEqual(await readFile(restored), contents);
   if (process.platform !== 'win32') assert.equal((await stat(restored)).mode & 0o777, 0o600);
+});
+
+test('staging and cold restore reject an unidentified volume before replacing files or database rows', async t => {
+  const { runtime, request, database, programDataPath } = await createMetadataHttpFixture(t);
+  const backups = runtime.backups;
+  const volume = path.resolve(programDataPath, '../volume'), detached = volume + '-detached';
+  const key = 'poster.bin', identity = path.join(backups.paths.metadataPath, 'posters');
+  await mkdir(volume);
+  await writeFile(path.join(volume, key), 'archive');
+  const config = (await request('/Storage/Configuration')).body;
+  config.instances.push({ id: 'art', type: 'local', config: { root: volume, createRoot: true, writable: true } });
+  config.mounts.push({ instanceId: 'art', path: '/art', capabilities: { create: true, replace: true, mkdir: true, atomicReplace: true } });
+  config.prefixes.push({ identityRoot: identity, accessRoot: '/art', purpose: 'metadata',
+    style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Original artwork' });
+  assert.equal((await request('/Storage/Configuration', { method: 'POST', body: config })).status, 200);
+  const marker = path.join(backups.paths.configurationDirectoryPath, 'preferences.json');
+  await writeFile(marker, '1');
+  const archive = await backups.create({ Database: true, Metadata: true, Subtitles: false, Trickplay: false });
+  const legacy = path.join(backups.directory, 'legacy-mounted.zip');
+  const stage = await mkdtemp(path.join(backups.directory, '.legacy-'));
+  await withBackupArchive(archive.Path, zip => writeBackupArchive(legacy, stage, archive, {
+    format: legacyBackupFormat, serverId: backups.serverId, metadataPath: backups.paths.metadataPath,
+  }, async save => {
+    for (const file of zip.json('mediamanager.json').files) {
+      if (file.key !== 'Storage/configuration.json') await save(file.key, zip.stream(zip.directory.get(file.key)));
+    }
+  }));
+
+  const lifecycle = { admit: () => ({ cancel() {} }) };
+  await writeFile(path.join(volume, key), 'modified on A');
+  await writeFile(marker, '2');
+  await database.update('BaseItems', { Id: metadataMovieId }, { Name: 'after archive' });
+  const selection = await readFile(backups.storageConfigurationPath);
+  const retained = async () => {
+    assert.deepEqual(await readFile(backups.storageConfigurationPath), selection);
+    assert.equal(await readFile(marker, 'utf8'), '2');
+    assert.equal((await database.rows('BaseItems', { where: { Id: metadataMovieId } }))[0].Name, 'after archive');
+  };
+  await assert.rejects(backups.stageRestore(legacy, lifecycle), { status: 422, message: /original storage volume/u });
+  await assert.rejects(stat(backups.pending), { code: 'ENOENT' });
+  await retained();
+  await rename(volume, detached);
+  await assert.rejects(backups.stageRestore(archive.Path, lifecycle), { status: 422 });
+  await assert.rejects(stat(volume), { code: 'ENOENT' });
+  await retained();
+  await rename(detached, volume);
+  await backups.stageRestore(archive.Path, lifecycle);
+  await rename(volume, detached);
+  await mkdir(volume);
+  await writeFile(path.join(volume, key), 'independent B');
+  await assert.rejects(backups.restorePending(), { status: 422, message: /original storage volume/u });
+  await retained();
+  assert.equal(await readFile(path.join(detached, key), 'utf8'), 'modified on A');
+  assert.equal(await readFile(path.join(volume, key), 'utf8'), 'independent B');
+  assert.ok((await stat(backups.pending)).isDirectory());
 });

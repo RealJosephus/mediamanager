@@ -8,7 +8,8 @@ import { createInflateRaw, inflateRawSync } from 'node:zlib';
 import yazl from 'yazl';
 import { readArchiveBytes, readZipDirectory, zipEntryDataRange } from '../storage/zip-directory.js';
 
-export const backupFormat = 'MediaManager.PostgreSQL.1';
+export const legacyBackupFormat = 'MediaManager.PostgreSQL.1';
+export const backupFormat = 'MediaManager.PostgreSQL.2';
 const maxDescriptorSize = 64 * 1024 * 1024;
 
 export async function withBackupArchive(filename, operation) {

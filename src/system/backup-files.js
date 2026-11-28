@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { createReadStream } from 'node:fs';
 import * as fs from 'node:fs/promises';
+import { isDeepStrictEqual } from 'node:util';
 import { randomUUID } from 'node:crypto';
 import { identityPathStyle } from '../storage/uri.js';
 import { nativePathWithin } from '../library/native-path.js';
@@ -41,7 +42,28 @@ export function backupDestination(roots, key) {
   throw new Error('Backup entry is outside the selected file scopes.');
 }
 
-export async function captureBackupFiles(roots, backupDirectory, save, fileSystem) {
+export const storageDefinitionKey = 'Storage/configuration.json';
+
+export function storageDefinitionTarget(filename) {
+  return { root: path.dirname(filename), parts: [path.basename(filename)], api: path, local: true, filename };
+}
+
+function fileAttributes(stat) {
+  return { mtimeMs: Number(stat.mtimeNs) / 1e6, ...(process.platform !== 'win32' && { mode: Number(stat.mode & 0o777n) }) };
+}
+
+export async function captureStorageDefinition(filename, configuration, save) {
+  if (!(await fs.lstat(filename)).isFile()) throw new Error('The selected storage definition must be a regular file.');
+  const file = await fs.open(filename, 'r');
+  try {
+    const bytes = await file.readFile();
+    if (!isDeepStrictEqual(JSON.parse(bytes), configuration)) throw new Error('The selected storage definition differs from the active mounts.');
+    await save(storageDefinitionKey, [bytes], fileAttributes(await file.stat({ bigint: true })));
+  } finally { await file.close(); }
+}
+
+export async function captureBackupFiles(roots, backupDirectory, save, storageConfigurationPath, generation) {
+  const fileSystem = generation?.fileSystem;
   const prefixes = fileSystem?.identityMap.exportState().prefixes ?? [];
   for (const root of roots) {
     const files = root.local ? fs : fileSystem;
@@ -71,12 +93,11 @@ export async function captureBackupFiles(roots, backupDirectory, save, fileSyste
         if (root.topOnly && (!entry.isFile() || !configFile(entry.name))) continue;
         if (!portableName(entry.name)) throw new Error('A backup filename cannot be represented in this archive.');
         const filename = root.api.join(directory, entry.name), key = prefix + '/' + entry.name;
-        if (!root.api.relative(backupDirectory, filename) || mounted.size && mounted.has(files.accessPath(filename))) continue;
+        if (!root.api.relative(backupDirectory, filename) || !root.api.relative(storageConfigurationPath, filename) || mounted.size && mounted.has(files.accessPath(filename))) continue;
         if (entry.isDirectory()) { await visit(filename, key); continue; }
         if (!entry.isFile()) continue;
         const before = await files.stat(filename, { bigint: true });
-        const attributes = root.local ? { mtimeMs: Number(before.mtimeNs) / 1e6,
-          ...(process.platform !== 'win32' && { mode: Number(before.mode & 0o777n) }) } : undefined;
+        const attributes = root.local ? fileAttributes(before) : { binding: await generation.archiveBinding(filename) };
         const size = await save(key, root.local ? createReadStream(filename) : files.createReadStream(filename), attributes);
         const after = await files.stat(filename, { bigint: true });
         if (BigInt(size) !== before.size || before.size !== after.size || before.mtimeNs !== after.mtimeNs || root.local && before.mode !== after.mode) {

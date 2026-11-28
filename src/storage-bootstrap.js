@@ -118,6 +118,68 @@ function mountIdentityOverlays(vfs, declarations, groups) {
   }
 }
 
+function binding(owner, resolved) {
+  const instance = owner.definition.instances.find(value => value.id === resolved.mount.instanceId);
+  return createHash('sha256').update(JSON.stringify([instance.type, instance.config, resolved.path])).digest('hex');
+}
+
+async function buildStorage(definition, { extensions, environment, portableMountContract, tolerateUnavailable, strictType,
+  spoolRoot, existingRootsOnly = false }) {
+  const credential = reference => {
+    if (typeof reference !== 'string' || !/^[A-Za-z_][A-Za-z0-9_]*$/u.test(reference)) throw new TypeError('Storage credentialRef must name an environment variable.');
+    const token = environment[reference];
+    if (typeof token !== 'string' || !token || /[\r\n\0]/u.test(token)) throw new Error('The referenced storage credential is missing or invalid.');
+    return token;
+  };
+  validate(definition);
+  const registry = new StorageRegistry(), unavailable = [];
+  try {
+    for (const extension of extensions.values()) registry.registerType(extension.type,
+      (config, options) => extension.create(config,{...options,resolveCredential:credential}));
+    for (const instance of definition.instances) {
+      if (!extensions.has(instance.type)) { unavailable.push({id:instance.id,type:instance.type,error:'Storage plugin is unavailable.'}); continue; }
+      try {
+        if (instance.config.credentialRef !== undefined) credential(instance.config.credentialRef);
+        await registry.createInstance(instance.id, instance.type, instance.config, existingRootsOnly ? { existingRootsOnly } : {});
+      } catch (error) {
+        if (!tolerateUnavailable || instance.type === strictType) throw error;
+        unavailable.push({id:instance.id,type:instance.type,error:error.message});
+      }
+    }
+    const { vfs, identityMap, metadataIdentityMap, ignoreIdentityMap, contract } =
+      storageNamespace(definition, registry, portableMountContract);
+    const fileSystem = new StorageFileSystem({ vfs, identityMap: metadataIdentityMap });
+    const mediaFileSystem = new StorageFileSystem({ vfs, identityMap });
+    fileSystem.spoolRoot = spoolRoot;
+    return { registry,vfs,identityMap,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,unavailable,
+      portableMountContract:contract, definition, configurationHash: createHash('sha256').update(JSON.stringify(definition)).digest('hex'),
+      users: new Set(), reads: new Set() };
+  } catch (error) { await registry.close(); throw error; }
+}
+
+// A restore opens its own adapters without publishing a live generation or initializing missing roots.
+export async function withArchivedStorage(definition, { plugins, environment = process.env, portableMountContract }, operation) {
+  const extensions = new Map(plugins.entries('storage').map(extension => [extension.type, extension]));
+  const owner = await buildStorage(definition, { extensions, environment, portableMountContract, tolerateUnavailable: true, existingRootsOnly: true });
+  try { return await operation(owner.fileSystem, archiveBindings(owner)); }
+  finally { await closeStorage(owner); }
+}
+
+function archiveBindings(owner) {
+  const identities = new Map();
+  return async filename => {
+    const resolved = owner.fileSystem.resolve(filename);
+    const adapter = resolved.adapter;
+    if (!identities.has(adapter)) {
+      // Local adapters expose filesystem device and directory IDs. An unrelated
+      // directory mounted at the same configured path must not inherit its backup.
+      const root = await adapter.fileStat?.('/', { bigint: true });
+      identities.set(adapter, root?.ino ? [String(root.dev), String(root.ino)] : null);
+    }
+    return createHash('sha256').update(JSON.stringify([binding(owner, resolved), identities.get(adapter)])).digest('hex');
+  };
+}
+
 /** Independent identity prefixes select storage instances. Metadata and each
  * media root can use different plugins; the longest prefix wins. */
 export async function createConfiguredStorage(filename, { environment = process.env, portableMountContract, plugins, prepareConfiguration } = {}) {
@@ -133,38 +195,6 @@ export async function createConfiguredStorage(filename, { environment = process.
   const notifyBefore = async () => {
     // A stopped observer's cleanup failure must not strand the other observers.
     for (const listener of beforeListeners) try { await listener(); } catch (error) { await report(error); }
-  };
-  const credential = reference => {
-    if (typeof reference !== 'string' || !/^[A-Za-z_][A-Za-z0-9_]*$/u.test(reference)) throw new TypeError('Storage credentialRef must name an environment variable.');
-    const token = environment[reference];
-    if (typeof token !== 'string' || !token || /[\r\n\0]/u.test(token)) throw new Error('The referenced storage credential is missing or invalid.');
-    return token;
-  };
-  const build = async (definition, { tolerateUnavailable = false, strictType } = {}) => {
-    validate(definition);
-    const registry = new StorageRegistry(), unavailable = [];
-    try {
-      for (const extension of extensions.values()) registry.registerType(extension.type,
-        (config, options) => extension.create(config,{...options,resolveCredential:credential}));
-      for (const instance of definition.instances) {
-        if (!extensions.has(instance.type)) { unavailable.push({id:instance.id,type:instance.type,error:'Storage plugin is unavailable.'}); continue; }
-        try {
-          if (instance.config.credentialRef !== undefined) credential(instance.config.credentialRef);
-          await registry.createInstance(instance.id,instance.type,instance.config);
-        } catch (error) {
-          if (!tolerateUnavailable || instance.type === strictType) throw error;
-          unavailable.push({id:instance.id,type:instance.type,error:error.message});
-        }
-      }
-      const { vfs, identityMap, metadataIdentityMap, ignoreIdentityMap, contract } =
-        storageNamespace(definition, registry, portableMountContract);
-      const fileSystem = new StorageFileSystem({ vfs, identityMap: metadataIdentityMap });
-      const mediaFileSystem = new StorageFileSystem({ vfs, identityMap });
-      fileSystem.spoolRoot = current?.fileSystem.spoolRoot;
-      return { registry,vfs,identityMap,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,unavailable,
-        portableMountContract:contract, definition, configurationHash: createHash('sha256').update(JSON.stringify(definition)).digest('hex'),
-        users: new Set(), reads: new Set() };
-    } catch (error) { await registry.close(); throw error; }
   };
   const trackRetirement = operation => {
     const pending = operation.catch(report);
@@ -199,14 +229,10 @@ export async function createConfiguredStorage(filename, { environment = process.
     try { return await operations.run(scope, operation); }
     finally { scope.owner = null; release(); }
   }
-  function binding(owner, resolved) {
-    const instance = owner.definition.instances.find(value => value.id === resolved.mount.instanceId);
-    return createHash('sha256').update(JSON.stringify([instance.type, instance.config, resolved.path])).digest('hex');
-  }
   const retainGeneration = () => {
     if (closed) throw Object.assign(new Error('Storage is closed.'), { status: 503 });
     const owner = activeOwner(), { fileSystem, mediaFileSystem } = owner;
-    return { fileSystem, mediaFileSystem, isCurrent: () => current === owner,
+    return { fileSystem, mediaFileSystem, archiveBinding: archiveBindings(owner), isCurrent: () => current === owner,
       mediaBinding(filename) {
         return binding(owner, mediaFileSystem.resolve(filename));
       },
@@ -228,7 +254,8 @@ export async function createConfiguredStorage(filename, { environment = process.
     catch (error) { await close(); throw error; }
   };
   const change = async (definition, save = true, strictType, recover = true) => {
-    const candidate = await build(definition,{tolerateUnavailable:initializing || !save,strictType});
+    const candidate = await buildStorage(definition, { extensions, environment, portableMountContract,
+      tolerateUnavailable: initializing || !save, strictType, spoolRoot: current?.fileSystem.spoolRoot });
     try {
       if (save && !initializing) await prepareConfiguration?.(candidate.fileSystem);
       if (save) await persist(filename,definition);

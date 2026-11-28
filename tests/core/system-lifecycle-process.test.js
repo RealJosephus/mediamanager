@@ -110,7 +110,8 @@ async function observeMaintenanceDdl(client, sql, connectionString, backendPid, 
   return result;
 }
 
-test('the actual production CLI retains its selected target across HTTP restarts and uses a published replacement only in the next process', {
+for (const location of ['config', 'external', 'default']) test(
+  'the actual production CLI retains its selected target across restarts and restores mounted files with ' + location + ' storage configuration', {
   skip: !enabled, timeout: 300000,
 }, async t => discovery.run(async () => {
   const root = path.join(validationOutputRoot(), 'system-lifecycle-process-' + randomUUID()); await mkdir(root, { recursive: true });
@@ -169,7 +170,9 @@ test('the actual production CLI retains its selected target across HTTP restarts
     secrets.add(token);
     await database.insert('ApiKeys', { Name: 'System lifecycle CLI', AccessToken: token,
       DateCreated: '2026-10-27 00:00:00', DateLastActivity: '0001-01-01 00:00:00' });
-    const definitionFile = path.join(instance, 'config', 'storage.json');
+    const definitionFile = location === 'config' ? path.join(instance, 'config', 'storage.json')
+      : location === 'default' ? path.join(instance, 'data', 'plugins', 'node', 'storage.json') : path.join(root, 'external-storage.json');
+    await mkdir(path.dirname(definitionFile), { recursive: true });
     const storageDefinition = instanceRoot => ({ instances: [{ id: 'instance', type: 'local', config: { root: instanceRoot, writable: true } }],
       mounts: [{ path: '/instance', instanceId: 'instance', root: '/', capabilities: { create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true } }],
       prefixes: [{ identityRoot: instanceRoot, accessRoot: '/instance', style: process.platform === 'win32' ? 'windows' : 'posix',
@@ -187,7 +190,7 @@ test('the actual production CLI retains its selected target across HTTP restarts
     Object.assign(environment, { MEDIAMANAGER_TARGET: targetFile, [connectionEnvironment]: childConnectionString,
       JELLYFIN_FFMPEG: validationExecutable('ffmpeg') });
     const initialTarget = { instancePath: instance, postgresSchema: database.schemaName,
-      storageConfigurationPath: definitionFile, postgresUrlEnvironment: connectionEnvironment };
+      storageConfigurationPath: location === 'default' ? null : definitionFile, postgresUrlEnvironment: connectionEnvironment };
     const nextInstance = path.join(root, 'next-instance'), nextServerId = randomUUID().replaceAll('-', '');
     for (const relative of ['config', 'data/data', 'data/metadata', 'cache', 'log']) await mkdir(path.join(nextInstance, relative), { recursive: true });
     await writeFile(path.join(nextInstance, 'data/data/device.txt'), nextServerId);
@@ -492,7 +495,7 @@ test('the actual production CLI retains its selected target across HTTP restarts
     assert.equal((await call('/Users/New', { method: 'POST', body: { Name: 'After backup' } })).status, 200);
     report.backup = { manifest: backup.body, restore: restore.status, savedConfigurationReloaded: true,
       lateUserRemovedAndRecreated: true, metadata: report.original.sha256, restoredMembers: Object.keys(members),
-      mountedPoster: bytesValue(await readFile(poster)), subtitleRestored: true, excludedTrickplayRetained: true };
+      definitionLocation: location, mountedPoster: bytesValue(await readFile(poster)), replacementPoster: bytesValue(await readFile(replacementPoster)), subtitleRestored: true, excludedTrickplayRetained: true };
     t.diagnostic(JSON.stringify(report.backup));
     const beforeShutdown = await resources();
     const shutdown = await whileQueriesBlocked(() => call('/System/Shutdown', { method: 'POST', remote: '203.0.113.10' }));

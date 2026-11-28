@@ -21,7 +21,7 @@ import { LiveTvMediaSources } from './library/live-tv-media-sources.js';
 import { createIntroPathResolver } from './library/intro-path-resolver.js';
 import { guid, nonemptyId, libraryError, sameId } from './library/records.js';
 import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
-import { createConfiguredStorage } from './storage-bootstrap.js';
+import { createConfiguredStorage, defaultStorageConfigurationPath, withArchivedStorage } from './storage-bootstrap.js';
 import { DomainStore } from './database/domain-store.js';
 import { SystemBackups } from './system/backups.js';
 import { ActivityLogManager } from './activity/manager.js';
@@ -193,7 +193,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
     }
     return configuredStorage;
   };
-  const backups = dataPath && new SystemBackups({ paths: applicationPaths, openStorage, store, serverId, serverVersion });
+  const backups = dataPath && new SystemBackups({ paths: applicationPaths, openStorage, store, serverId, serverVersion,
+    storageConfigurationPath: storageConfiguration ?? defaultStorageConfigurationPath(plugins.directory),
+    withRestoreStorage: (definition, operation) => withArchivedStorage(definition, { plugins, environment, portableMountContract }, operation) });
   await backups?.restorePending();
   await openStorage();
   fileSystem = configuredStorage.fileSystem;
