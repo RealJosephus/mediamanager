@@ -2,13 +2,23 @@ import { epochTicks, maximumDateTicks } from '../syncplay/time.js';
 
 // EF's DateTimeKindValueConverter calls ToUniversalTime before persistence.
 // Local and Unspecified values use local wall time, and overflow is clamped.
-export function jsonDateTimeUtcTicks({ ticks, kind }) {
+export function jsonDateTimeUtcTicks({ ticks, kind, utcTicks }) {
+  if (utcTicks !== undefined) return utcTicks;
   if (kind === 'Utc') return ticks;
   const date = new Date(Number(ticks / 10000000n * 1000n - epochTicks / 10000n));
   const local = new Date(0);
   local.setFullYear(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
   local.setHours(date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), 0);
-  const utc = epochTicks + BigInt(local.valueOf()) * 10000n + ticks % 10000000n;
+  // Date chooses the first occurrence of a repeated wall time. The native
+  // unspecified-time conversion uses the offset after the autumn transition.
+  let milliseconds = local.valueOf();
+  const offset = local.getTimezoneOffset();
+  const followingOffset = new Date(milliseconds + 86400000).getTimezoneOffset();
+  if (followingOffset > offset) {
+    const later = milliseconds + (followingOffset - offset) * 60000;
+    if (new Date(later).getTimezoneOffset() === followingOffset) milliseconds = later;
+  }
+  const utc = epochTicks + BigInt(milliseconds) * 10000n + ticks % 10000000n;
   return utc < 0n ? 0n : utc > maximumDateTicks ? maximumDateTicks : utc;
 }
 
@@ -37,6 +47,7 @@ export function parseJsonDateTime(value) {
     local.setUTCFullYear(instant.getFullYear(), instant.getMonth(), instant.getDate());
     local.setUTCHours(instant.getHours(), instant.getMinutes(), instant.getSeconds(), 0);
     ticks = epochTicks + BigInt(local.valueOf()) * 10000n + utc % 10000000n;
+    if (ticks >= 0n && ticks <= maximumDateTicks) return { ticks, kind: 'Local', utcTicks: utc };
     // DateTimeOffset.LocalDateTime clamps when converting a valid UTC instant
     // to local wall time would overflow the DateTime range.
     ticks = ticks < 0n ? 0n : ticks > maximumDateTicks ? maximumDateTicks : ticks;
