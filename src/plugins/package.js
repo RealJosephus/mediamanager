@@ -68,7 +68,11 @@ export async function inspectPackage(directory, { installed = false } = {}) {
 }
 
 export async function stagePackage(source, root) {
-  const inspected = await inspectPackage(source), release = randomUUID();
+  return stageInspectedPackage(await inspectPackage(source), root);
+}
+
+async function stageInspectedPackage(inspected, root) {
+  const release = randomUUID();
   const directory = path.join(root, 'packages', release);
   await physicalDirectory(directory, { missing: true });
   await fs.mkdir(directory, {recursive:true});
@@ -138,12 +142,17 @@ async function checkedRelease(root, descriptor) {
     throw new Error('Installed plugin package integrity check failed.');
   }
   if(JSON.stringify(inspected.manifest)!==JSON.stringify(descriptor.manifest))throw new Error('Installed plugin manifest does not match its persisted descriptor.');
-  return { directory, digest: inspected.digest };
+  return { directory, inspected };
 }
 
 export async function upgradePackageDigest(root, descriptor) {
-  const { digest } = await checkedRelease(root, descriptor);
-  return { ...descriptor, digestVersion, digest };
+  const { inspected } = await checkedRelease(root, descriptor);
+  return { ...descriptor, digestVersion, digest: inspected.digest };
+}
+
+export async function stageInstalledPackage(sourceRoot, descriptor, destinationRoot) {
+  const { inspected } = await checkedRelease(sourceRoot, descriptor);
+  return stageInspectedPackage(inspected, destinationRoot);
 }
 
 export async function verifyRelease(root, descriptor) {

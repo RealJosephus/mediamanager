@@ -7,6 +7,12 @@ object. Write and watch capabilities require their corresponding methods.
 Every declared default mount supplies its own capabilities; a default does not
 implicitly acquire write access.
 
+Production target publication checks write permissions with a temporary plugin
+host. During this check the factory receives `capabilitiesOnly: true` and
+`existingRootsOnly: true`. It can return the configured adapter with its normal
+capabilities before opening a connection or initializing a root. The host
+reads the capabilities and closes the adapter.
+
 Adapters that accept an ISO modification time through `write(path, bytes,
 { modified })` may declare the optional boolean capability `writeModified`.
 Callers can verify the stored timestamp through `stat().modified`.

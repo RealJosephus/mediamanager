@@ -7,7 +7,7 @@ import { validateMetadataExtension } from '../metadata/registry.js';
 import { acquireOperationLease } from '../migration/operation-lease.js';
 import { liveTvSignalPositions, validateLiveTvExtension, validateLiveTvResult, validateLiveTvStreamRequest,
   validateOwnedLiveTvStream } from './live-tv-contract.js';
-import { inspectPackage, stagePackage, upgradePackageDigest, verifyRelease, physicalDirectory, officialPackagesPath, validPluginId } from './package.js';
+import { inspectPackage, stagePackage, stageInstalledPackage, upgradePackageDigest, verifyRelease, physicalDirectory, officialPackagesPath, validPluginId } from './package.js';
 import { createConfigurationBinding } from '../../packages/plugin-sdk/configuration.js';
 import { lyricSignalPositions, validateLyricExtension, copyLyricProviderResult } from '../lyrics/contract.js';
 import { subtitleSignalPositions, validateSubtitleExtension, copySubtitleProviderResult } from '../playback/remote-subtitles.js';
@@ -246,14 +246,18 @@ export class PluginHost {
   #sinks=new Map();
   #listeners=new Set();
   #lease;
-  static async open(options={}) {const host=new PluginHost(options);try{await host.#open();return host;}catch(e){await host.close().catch(()=>{});throw e;}}
+  static async open(options={}) {const host=new PluginHost(options);try{await host.#open(options.snapshotOf);return host;}catch(e){await host.close().catch(()=>{});throw e;}}
   constructor(paths={}) {
     const {directory,programDataPath,configurationDirectoryPath,dataPath,imageCachePath,preinstalled=officialPackagesPath,options={},configurationBindings=new Map(),onError=()=>{}}=paths;
     this.directory=directory??(programDataPath && defaultPluginDirectory(programDataPath));
     this.paths={programDataPath,configurationDirectoryPath,dataPath,get metadataPath(){return paths.metadataPath;},get cachePath(){return paths.cachePath;},imageCachePath};this.preinstalled=preinstalled;this.options=options;this.onError=onError;
     this.configurationBindings=configurationBindings;
   }
-  async #open() {
+  async #open(snapshotOf) {
+    if (snapshotOf) {
+      if (this.directory) throw new TypeError('A plugin snapshot requires an isolated temporary host.');
+      await physicalDirectory(snapshotOf, { missing: true });
+    }
     this.temporary=!this.directory;
     this.directory??=await fs.mkdtemp(path.join(os.tmpdir(),'mediamanager-plugins-'));
     this.paths.pluginStoragePath = this.directory;
@@ -265,7 +269,7 @@ export class PluginHost {
     const lock=path.join(this.directory,'host.lock');
     // This is diagnostic state; only the OS lease admits an owner.
     await atomicJson(lock,{pid:process.pid,token:randomUUID()});
-    try{this.#state=JSON.parse(await fs.readFile(path.join(this.directory,'state.json'),'utf8'));}
+    try{this.#state=JSON.parse(await fs.readFile(path.join(snapshotOf ?? this.directory,'state.json'),'utf8'));}
     catch(e){if(e.code!=='ENOENT')throw e;}
     if(!object(this.#state.plugins)||typeof this.#state.generation!=='string')throw new TypeError('Invalid plugin state.');
     for (const [id,record] of Object.entries(this.#state.plugins)) {
@@ -274,6 +278,10 @@ export class PluginHost {
         || record.package !== null && (!object(record.package) || record.package.manifest?.mediamanager?.id !== id
           || record.package.manifest.mediamanager.configurationKey !== record.configurationKey)) {
         throw new TypeError('Invalid persistent plugin record.');
+      }
+      if (snapshotOf && record.enabled && record.package) {
+        // Stage the verified bytes from the selected generation without acquiring its lease or changing its SDK files.
+        record.package = await stageInstalledPackage(snapshotOf, record.package, this.directory);
       }
     }
     // The state generation is the commit record. Interrupted preparations never replace it.

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { randomUUID } from 'node:crypto';
-import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
@@ -175,6 +175,33 @@ test('verified target publication preserves active HTTP writers and cold Postgre
       assert.match(failedStart.message, reason);
       assert.equal((await invalid.closed).code, 1);
     }
+    const requestedRoot = path.join(root, 'created-only-at-startup');
+    const requestedMount = { ...mount, capabilities: { create: true } };
+    const definition = (type, config) => ({ instances: [{ id: mount.instanceId, type, config }],
+      mounts: [requestedMount], prefixes: [] });
+    for (const [type, config, storageConfigurationPath] of [
+      ['local', { root, writable: false }, explicit], ['local', { root }, null],
+      ['http', {}, explicit], ['webdav', { baseUrl: 'https://example.invalid/', capabilities: { replace: true } }, explicit],
+      ['alist', { baseUrl: 'https://example.invalid/' }, explicit],
+    ]) {
+      await writeFile(storageConfigurationPath ?? implicit, JSON.stringify(definition(type, config)));
+      const rejected = await publish({ ...targets[1], storageConfigurationPath });
+      assert.equal(rejected.code, 1, rejected.stderr);
+      assert.match(rejected.stderr, /capability create cannot exceed/iu);
+      assert.deepEqual(await readFile(currentFile), originalSelection);
+      if (storageConfigurationPath === null) {
+        const invalid = launch(helper, [], { ...environment, [targetEnvironmentName]: proposal }, true);
+        processes.push(invalid);
+        const failedStart = await invalid.next();
+        assert.equal(failedStart.type, 'failure'); assert.match(failedStart.message, /capability create cannot exceed/iu);
+        assert.equal((await invalid.closed).code, 1);
+      }
+    }
+    await writeFile(explicit, JSON.stringify(definition('local', { root: requestedRoot, createRoot: true, writable: true })));
+    const allowed = await publish({ ...targets[1], storageConfigurationPath: explicit });
+    assert.equal(allowed.code, 0, allowed.stderr);
+    await assert.rejects(stat(requestedRoot), { code: 'ENOENT' });
+    assert.equal((await publish(targets[0])).code, 0);
     const started = await start(); firstProcess = started.worker;
     assert.equal(started.ready.schema, targets[0].postgresSchema); assert.equal(started.ready.instancePath, targets[0].instancePath);
     assert.equal(started.ready.serverId, '1'.repeat(32));

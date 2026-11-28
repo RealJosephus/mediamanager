@@ -7,7 +7,7 @@ import { StorageFileSystem } from './storage/files.js';
 import { assertPortableMountStorageConfiguration } from './storage/portable-mount-contract.js';
 import { isWithin, joinPath, normalizePath } from './storage/paths.js';
 import { parseSourceUri } from './storage/uri.js';
-import { operationFailure } from './core/operation-failure.js';
+import { operationFailure, withCleanup } from './core/operation-failure.js';
 
 const clone = value => structuredClone(value);
 const object = value => value && typeof value === 'object' && !Array.isArray(value);
@@ -54,11 +54,6 @@ function storageNamespace(definition, registry, portableMountContract) {
   }
   const contract = portableMountContract === undefined ? undefined : assertPortableMountStorageConfiguration(portableMountContract,definition);
   return { vfs, identityMap, metadataIdentityMap, ignoreIdentityMap, contract };
-}
-
-export function validateStorageConfiguration(definition, portableMountContract) {
-  validate(definition);
-  storageNamespace(definition, new StorageRegistry(), portableMountContract);
 }
 
 export const defaultStorageConfigurationPath = pluginDirectory => path.join(pluginDirectory, 'storage.json');
@@ -124,7 +119,7 @@ function binding(owner, resolved) {
 }
 
 async function buildStorage(definition, { extensions, environment, portableMountContract, tolerateUnavailable, strictType,
-  spoolRoot, existingRootsOnly = false }) {
+  spoolRoot, adapterOptions = {} }) {
   const credential = reference => {
     if (typeof reference !== 'string' || !/^[A-Za-z_][A-Za-z0-9_]*$/u.test(reference)) throw new TypeError('Storage credentialRef must name an environment variable.');
     const token = environment[reference];
@@ -140,7 +135,7 @@ async function buildStorage(definition, { extensions, environment, portableMount
       if (!extensions.has(instance.type)) { unavailable.push({id:instance.id,type:instance.type,error:'Storage plugin is unavailable.'}); continue; }
       try {
         if (instance.config.credentialRef !== undefined) credential(instance.config.credentialRef);
-        await registry.createInstance(instance.id, instance.type, instance.config, existingRootsOnly ? { existingRootsOnly } : {});
+        await registry.createInstance(instance.id, instance.type, instance.config, adapterOptions);
       } catch (error) {
         if (!tolerateUnavailable || instance.type === strictType) throw error;
         unavailable.push({id:instance.id,type:instance.type,error:error.message});
@@ -154,13 +149,30 @@ async function buildStorage(definition, { extensions, environment, portableMount
     return { registry,vfs,identityMap,metadataIdentityMap,ignoreIdentityMap,fileSystem,mediaFileSystem,unavailable,
       portableMountContract:contract, definition, configurationHash: createHash('sha256').update(JSON.stringify(definition)).digest('hex'),
       users: new Set(), reads: new Set() };
-  } catch (error) { await registry.close(); throw error; }
+  } catch (error) {
+    try { await registry.close(); } catch (cleanup) { throw operationFailure([error, cleanup], 'Storage initialization and cleanup failed.'); }
+    throw error;
+  }
+}
+
+export async function validateStorageConfiguration(definition, portableMountContract, { openPlugins, environment }) {
+  validate(definition);
+  storageNamespace(definition, new StorageRegistry(), portableMountContract);
+  if (!definition.mounts.some(mount => Object.values(mount.capabilities).includes(true))) return;
+  const plugins = await openPlugins();
+  await withCleanup(async () => {
+    const extensions = new Map(plugins.entries('storage').map(extension => [extension.type, extension]));
+    const owner = await buildStorage(definition, { extensions, environment, portableMountContract,
+      tolerateUnavailable: true, adapterOptions: { existingRootsOnly: true, capabilitiesOnly: true } });
+    await closeStorage(owner);
+  }, [() => plugins.close()], 'Storage inspection and plugin cleanup failed.');
 }
 
 // A restore opens its own adapters without publishing a live generation or initializing missing roots.
 export async function withArchivedStorage(definition, { plugins, environment = process.env, portableMountContract }, operation) {
   const extensions = new Map(plugins.entries('storage').map(extension => [extension.type, extension]));
-  const owner = await buildStorage(definition, { extensions, environment, portableMountContract, tolerateUnavailable: true, existingRootsOnly: true });
+  const owner = await buildStorage(definition, { extensions, environment, portableMountContract, tolerateUnavailable: true,
+    adapterOptions: { existingRootsOnly: true } });
   try { return await operation(owner.fileSystem, archiveBindings(owner)); }
   finally { await closeStorage(owner); }
 }

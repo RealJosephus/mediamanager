@@ -4,7 +4,8 @@ import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import {parse} from 'acorn';
 import {StorageRegistry} from '../../src/storage/registry.js';
-import {createConfiguredStorage} from '../../src/storage-bootstrap.js';
+import {createConfiguredStorage, validateStorageConfiguration} from '../../src/storage-bootstrap.js';
+import {PluginHost} from '../../src/plugins/host.js';
 import {pluginFixture} from './fixture.js';
 
 const sourceFiles=async directory=>{
@@ -60,12 +61,22 @@ test('third-party storage uses the same instance lifecycle and rolls back an unu
  storage=await createConfiguredStorage(undefined,{plugins:fixture.host});
  await storage.configure({instances:[{id:'external',type:'controlled',config:{}}],mounts:[{path:'/external',instanceId:'external',capabilities:{}}],prefixes:[]});
  assert.equal((await storage.vfs.stat('/external/file')).size,4n);
+ const candidate=storage.configuration();
+ candidate.mounts[0].capabilities.create=true;
+ const publishedState=await fs.readFile(path.join(fixture.host.directory,'state.json'));
+ const inspect=()=>validateStorageConfiguration(candidate,undefined,{
+   environment:{},openPlugins:()=>PluginHost.open({snapshotOf:fixture.host.directory,preinstalled:false}),
+ });
+ await assert.rejects(inspect(),/capability create cannot exceed/iu);
+ assert.deepEqual(await fs.readFile(path.join(fixture.host.directory,'state.json')),publishedState);
+ await assert.rejects(fs.stat(path.join(fixture.host.directory,'data','storage-fixture','closed')),{code:'ENOENT'});
  const before=fixture.host.get('storage-fixture');await fs.writeFile(path.join(source,'index.js'),packageCode(true));
  await assert.rejects(fixture.host.update('storage-fixture',source),/Controlled storage/);
  assert.equal(fixture.host.get('storage-fixture').digest,before.digest);
  assert.equal((await storage.vfs.stat('/external/file')).size,4n);
  const handle=await storage.vfs.openRead('/external/file');const chunks=[];for await(const value of handle.stream)chunks.push(value);await handle.close();assert.equal(Buffer.concat(chunks).toString(),'test');
  await fixture.host.setEnabled('storage-fixture',false);await assert.rejects(storage.vfs.stat('/external/file'),{code:'not-supported'});
+ await inspect();
  assert.equal(storage.configuration().instances.length,1);
  await fixture.host.setEnabled('storage-fixture',true);assert.equal(storage.status()[0].available,true);
  await fixture.host.uninstall('storage-fixture');assert.match(await fs.readFile(path.join(fixture.host.directory,'data','storage-fixture','closed'),'utf8'),/closed/);

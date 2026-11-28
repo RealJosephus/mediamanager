@@ -82,6 +82,7 @@ export class LocalAdapter {
   #closing;
   static async open(configuration, options = {}) {
     const adapter = new LocalAdapter(configuration);
+    if (options.capabilitiesOnly) return adapter;
     await adapter.#target('/', { missing: true });
     if (configuration.createRoot && !options.existingRootsOnly) await fs.mkdir(adapter.root, { recursive: true });
     await adapter.#target('/'); checkAbort(options.signal); return adapter;
