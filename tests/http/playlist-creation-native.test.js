@@ -62,8 +62,8 @@ test('legacy and body playlist creation match the designated server on readback'
       try {
         if (reference) {
           const stopped = await reference.stop(async () => (await fetch(origin + '/System/Shutdown', { method: 'POST',
-            headers: { 'X-Emby-Token': current.accessToken } })).status, () => portAvailable(port));
-          assert.ok(stopped.cleanShutdown && stopped.pidGone && stopped.portAvailable);
+            headers: { Authorization: 'MediaBrowser Token="' + current.accessToken + '"' } })).status, () => portAvailable(port));
+          assert.ok(stopped.cleanShutdown && stopped.pidGone && stopped.portAvailable, JSON.stringify(stopped));
         }
       } finally { try { await current.finish(); } finally { await rm(parent, { recursive: true, force: true }); } }
     }
